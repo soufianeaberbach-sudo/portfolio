@@ -1,2178 +1,338 @@
-<!--
-================================================================================
-  SOUFIANE ABERBACH — PORTFOLIO. THIS FILE IS THE ONLY PORTFOLIO FILE.
-  An older separate index file (a static zig-zag list with dead <a href> links)
-  existed before this and is now DELETED. If you see any other file calling
-  itself the portfolio page, it is stale — ignore and delete it. This single
-  file is both the category grid AND the click-to-open collection detail.
-  STATUS: DESIGN REVIEW COMP — NOT YET APPROVED.
-
-  CLAUDE CODE: do nothing with this file until Soufiane explicitly approves
-  it in conversation.
-
-  - This is Soufiane's own GSAP interaction code (via ChatGPT/Gemini),
-    RETHEMED to match the rest of the site. The animation mechanics
-    (initializeMechanicalStack, createTransition, setCard, the scroll-
-    scrubbed cascade) are UNTOUCHED — verified byte-identical to the
-    version he supplied. Do not "improve" or rewrite the mechanics.
-  - Only cosmetic layers were added: fonts (Archivo/Inter/JetBrains Mono),
-    colour tokens (#FFFFFF / #141412 / #C08552), nav + footer matching
-    every other page, real Unsplash placeholder images, and shortened
-    category/look copy.
-  - This file is currently STANDALONE (own <style>/<script>, not sharing
-    SOUFIANE-HOME.html's stylesheet block verbatim like the other pages)
-    because its structure is fundamentally different (GSAP timeline engine,
-    fixed fullscreen collection overlay). Wire it into the same site shell
-    Claude Code builds for the other five routes; keep colours/fonts in
-    sync with the shared tokens rather than duplicating values by hand.
-  - Every image is a placeholder. Soufiane will supply real photography.
-  - No brand names appear on this page, so no disclaimer is required here.
-
-  BUILD-MARKER: SA-PORTFOLIO-V5
-================================================================================
--->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-/>
-
-<title>
-    Soufiane Aberbach — Portfolio
-</title>
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-
-<!-- =====================================================
-     GSAP
-====================================================== -->
-
-<script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-
-<script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-
-
-<style is:inline>
-
-/* =====================================================
-   RESET
-===================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-html {
-    scroll-behavior: auto;
-}
-
-
-body {
-    overflow-x: hidden;
-}
-
-
-/* =====================================================
-   PORTFOLIO INTRO
-===================================================== */
-
-.hero {
-
-    height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-}
-
-
-.hero h1 {
-
-    font-size: clamp(60px, 10vw, 150px);
-
-    font-weight: 400;
-
-}
-
-
-/* =====================================================
-   CATEGORY SECTIONS
-===================================================== */
-
-.category {
-
-    min-height: 100vh;
-
-    display: grid;
-
-    grid-template-columns: 60% 40%;
-
-    align-items: center;
-
-    padding: 8vw;
-
-    border-top: 1px solid #ddd;
-
-    cursor: pointer;
-
-}
-
-
-.category:nth-child(even) {
-
-    direction: rtl;
-
-}
-
-
-.category-image {
-
-    width: 100%;
-
-    height: 75vh;
-
-    overflow: hidden;
-
-}
-
-
-.category-image img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    transition: transform 1.2s
-        cubic-bezier(.16,1,.3,1);
-
-}
-
-
-.category:hover
-.category-image img {
-
-    transform: scale(1.04);
-
-}
-
-
-.category-content {
-
-    direction: ltr;
-
-    padding: 5vw;
-
-}
-
-
-.category-number {
-
-    font-size: 10px;
-
-    margin-bottom: 30px;
-
-}
-
-
-.category-title {
-
-    font-size: clamp(45px, 6vw, 90px);
-
-    font-weight: 400;
-
-    line-height: .9;
-
-    margin-bottom: 30px;
-
-}
-
-
-.category-description {
-
-    max-width: 380px;
-
-    font-size: 13px;
-
-    line-height: 1.8;
-
-}
-
-
-/* =====================================================
-   COLLECTION
-===================================================== */
-
-.collection {
-
-    position: fixed;
-
-    inset: 0;
-
-    background: white;
-
-    z-index: 1000;
-
-    overflow-y: auto;
-
-    overflow-x: hidden;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-}
-
-
-.collection.active {
-
-    visibility: visible;
-
-}
-
-
-/* =====================================================
-   COLLECTION HEADER
-===================================================== */
-
-.collection-header {
-
-    position: fixed;
-
-    left: 0;
-
-    top: 0;
-
-    width: 100%;
-
-    height: 80px;
-
-    z-index: 100;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 0 5vw;
-
-    background: rgba(255,255,255,.85);
-
-    backdrop-filter: blur(10px);
-
-}
-
-
-.collection-name {
-
-    font-size: 12px;
-
-    letter-spacing: .12em;
-
-    text-transform: uppercase;
-
-}
-
-
-.collection-close {
-
-    font-size: 10px;
-
-    letter-spacing: .15em;
-
-    text-transform: uppercase;
-
-    cursor: pointer;
-
-}
-
-
-/* =====================================================
-   LOOK EXPERIENCE
-===================================================== */
-
-.looks {
-
-    width: 100%;
-
-}
-
-
-.look-section {
-
-    position: relative;
-
-    height: 560vh;
-
-}
-
-
-/* =====================================================
-   PINNED VIEW
-===================================================== */
-
-.look-stage {
-
-    position: sticky;
-
-    top: 0;
-
-    height: 100vh;
-
-    width: 100%;
-
-    overflow: hidden;
-
-}
-
-
-/* =====================================================
-   IMAGE VIEWPORT
-===================================================== */
-
-.look-visual {
-
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    width: 62%;
-
-    height: 100%;
-
-    overflow: hidden;
-
-}
-
-
-/* =====================================================
-   IMAGE CARDS
-===================================================== */
-
-.look-card {
-
-    position: absolute;
-
-    top: 50%;
-
-    left: 50%;
-
-    width: 42%;
-
-    height: 76%;
-
-    transform-origin: center center;
-
-    overflow: hidden;
-
-    will-change:
-        transform,
-        filter,
-        opacity;
-
-}
-
-
-.look-card img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-}
-
-
-/* =====================================================
-   CARD LABEL
-===================================================== */
-
-.current-label {
-
-    position: absolute;
-
-    left: 5vw;
-
-    bottom: 8vh;
-
-    z-index: 30;
-
-    font-size: 10px;
-
-    letter-spacing: .15em;
-
-}
-
-
-/* =====================================================
-   RIGHT DETAILS
-===================================================== */
-
-.look-details {
-
-    position: absolute;
-
-    top: 0;
-
-    right: 0;
-
-    width: 38%;
-
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 7vw;
-
-}
-
-
-.details-item {
-
-    position: absolute;
-
-    left: 7vw;
-
-    right: 5vw;
-
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    opacity: 0;
-
-    will-change:
-        opacity,
-        transform;
-
-}
-
-
-.details-item.active {
-
-    opacity: 1;
-
-}
-
-
-.details-index {
-
-    font-size: 10px;
-
-    margin-bottom: 25px;
-
-    color: #777;
-
-}
-
-
-.details-title {
-
-    font-size: clamp(40px, 5vw, 75px);
-
-    font-weight: 400;
-
-    line-height: .9;
-
-    margin-bottom: 30px;
-
-}
-
-
-.details-description {
-
-    max-width: 400px;
-
-    font-size: 12px;
-
-    line-height: 1.8;
-
-    color: #666;
-
-}
-
-
-/* =====================================================
-   PROGRESS
-===================================================== */
-
-.look-progress {
-
-    position: absolute;
-
-    right: 5vw;
-
-    bottom: 6vh;
-
-    font-size: 9px;
-
-    letter-spacing: .15em;
-
-    color: #777;
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width: 900px) {
-
-
-    .category {
-
-        display: block;
-
-        padding: 15vw 6vw;
-
-    }
-
-
-    .category-image {
-
-        height: 60vh;
-
-    }
-
-
-    .category-content {
-
-        padding: 40px 0;
-
-    }
-
-
-    .look-visual {
-
-        width: 100%;
-
-    }
-
-
-    .look-details {
-
-        width: 100%;
-
-        height: auto;
-
-        bottom: 0;
-
-        top: auto;
-
-        padding: 0 6vw 8vh;
-
-        align-items: flex-end;
-
-        pointer-events: none;
-
-    }
-
-
-    .details-item {
-
-        left: 6vw;
-
-        right: 6vw;
-
-        top: auto;
-
-        bottom: 8vh;
-
-        transform: translateY(20px);
-
-    }
-
-
-    .details-title {
-
-        font-size: 45px;
-
-    }
-
-
-    .look-card {
-
-        width: 58%;
-
-        height: 65%;
-
-    }
-
-}
-
-
-
-/* =====================================================
-   SITE THEME OVERLAY — colours, type, chrome.
-   Layered after the original rules on purpose: same
-   selectors, cosmetic properties only, so the GSAP-driven
-   layout/transform/opacity/filter values above are never
-   touched or overridden.
-===================================================== */
-
-:root{
-  --paper:#FFFFFF; --ink:#141412; --mute:#6C6C65;
-  --line:#E4E2DE; --accent:#C08552;
-}
-
-body{
-  font-family: Inter, system-ui, sans-serif;
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.hero h1{
-  font-family: Archivo, sans-serif;
-  font-variation-settings: 'wdth' 112;
-  font-weight: 800;
-  letter-spacing: -.035em;
-  color: var(--ink);
-}
-
-.category{ border-top-color: var(--line); }
-
-.category-number{
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.category-title{
-  font-family: Archivo, sans-serif;
-  font-variation-settings: 'wdth' 110;
-  font-weight: 800;
-  letter-spacing: -.03em;
-  color: var(--ink);
-}
-
-.category-description{
-  font-family: Inter, sans-serif;
-  color: var(--mute);
-  font-size: 14px;
-}
-
-.collection{ background: var(--paper); }
-
-.collection-header{ background: rgba(255,255,255,.86); }
-
-.collection-name{
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--ink);
-}
-
-.collection-close{
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--mute);
-  transition: color .25s;
-}
-.collection-close:hover{ color: var(--accent); }
-
-.current-label{
-  font-family: 'JetBrains Mono', monospace;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-.details-index{
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.details-title{
-  font-family: Archivo, sans-serif;
-  font-variation-settings: 'wdth' 110;
-  font-weight: 800;
-  letter-spacing: -.03em;
-  color: var(--ink);
-}
-
-.details-description{
-  font-family: Inter, sans-serif;
-  color: var(--mute);
-}
-
-.look-progress{
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--mute);
-}
-
-/* =====================================================
-   SITE CHROME — nav + footer, matching every other page.
-   nav sits BELOW the fullscreen collection overlay
-   (z-index 1000) so opening a collection covers it, same
-   as the modal already covering everything else.
-===================================================== */
-
-#siteNav{
-  position: fixed; top:0; left:0; right:0; z-index:50;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:15px 22px;
-  background: rgba(255,255,255,0);
-  border-bottom:1px solid transparent;
-  transition:.35s;
-}
-#siteNav.stuck{
-  background: rgba(255,255,255,.9);
-  backdrop-filter: blur(14px);
-  border-bottom-color: var(--line);
-}
-#siteNav .logo{
-  font-family: Archivo, sans-serif;
-  font-variation-settings: 'wdth' 125;
-  font-weight: 900; font-size:19px; letter-spacing:-.05em;
-  color: var(--ink); text-decoration:none;
-}
-#siteNav .logo b{ color: var(--accent); }
-#siteNav .links{ display:none; gap:28px; }
-@media(min-width:900px){
-  #siteNav .links{ display:flex; }
-  #siteNav .links a{
-    color:var(--ink); text-decoration:none;
-    font-family:'JetBrains Mono',monospace; font-size:11px;
-    letter-spacing:.15em; text-transform:uppercase;
-    padding-bottom:4px; border-bottom:1px solid transparent; transition:.3s;
-  }
-  #siteNav .links a:hover, #siteNav .links a.on{ border-bottom-color:var(--accent); }
-}
-#siteNav .burger{
-  width:40px;height:40px;display:flex;flex-direction:column;justify-content:center;
-  gap:5px;align-items:flex-end;background:none;border:0;
-}
-#siteNav .burger i{height:1.6px;background:var(--ink)}
-#siteNav .burger i:first-child{width:21px}
-#siteNav .burger i:last-child{width:13px}
-@media(min-width:900px){#siteNav .burger{display:none}}
-
-#siteFooter{
-  padding:34px 22px 48px; border-top:1px solid var(--line);
-  display:flex; justify-content:space-between; max-width:1280px; margin:0 auto;
-  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.15em;
-  text-transform:uppercase; color:var(--mute);
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-<nav id="siteNav">
-  <a class="logo" href="/">SA<b>.</b></a>
-  <div class="links">
-    <a href="/">Home</a><a href="/expertise/">Expertise</a>
-    <a class="on" href="/portfolio/">Portfolio</a><a href="/process/">Process</a>
-    <a href="/experience/">Experience</a><a href="/contact/">Contact</a>
-  </div>
-  <button class="burger" aria-label="Menu"><i></i><i></i></button>
-</nav>
-
-
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
-<section class="hero">
-
-    <h1>
-        Portfolio
-    </h1>
-
-</section>
-
-
-<!-- =====================================================
-     CATEGORIES
-===================================================== -->
-
-<main id="categories"></main>
-
-
-<!-- =====================================================
-     COLLECTION
-===================================================== -->
-
-<div
-    class="collection"
-    id="collection"
->
-
-
-    <header class="collection-header">
-
-        <div
-            class="collection-name"
-            id="collectionName"
-        >
-            Evening Dresses
-        </div>
-
-
-        <div
-            class="collection-close"
-            id="collectionClose"
-        >
-            Close
-        </div>
-
-    </header>
-
-
-    <main
-        class="looks"
-        id="looks"
-    ></main>
-
-
-</div>
-
-
-
-<footer id="siteFooter">
-  <span>Soufiane Aberbach &middot; Tangier</span>
-  <span>&copy; 2026</span>
-</footer>
-<script is:inline>
-
-/* =====================================================
-   GSAP
-===================================================== */
-
-gsap.registerPlugin(ScrollTrigger);
-
-
-/* =====================================================
-   PORTFOLIO DATA
-===================================================== */
-
-const portfolioData = [
-
-{
-
-    name: "Evening Dresses",
-
-    cover:
-    "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1200&q=80",
-
-    description:
-    "Structured bodices, complex drape, and the balance problems that only show up on a real body.",
-
-    looks: [
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1567631643547-67a2dd59f266?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 01",
-
-            description:
-            "Silhouette and fabric direction resolved before the first cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 02",
-
-            description:
-            "Grading checked against the full measurement chart."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 03",
-
-            description:
-            "Fit corrected across three rounds of sampling."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1612731486606-2614b4d74921?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 04",
-
-            description:
-            "3D simulation caught a drape problem before the sample was cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 05",
-
-            description:
-            "Tech pack signed off, ready for the factory floor."
-        }
-
-    ]
-
-},
-
-
-{
-
-    name: "Jersey & Knit",
-
-    cover:
-    "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1200&q=80",
-
-    description:
-    "Stretch behaves nothing like woven — negative ease, recovery, and a grade that holds through the run.",
-
-    looks: [
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1731589802397-6a1088d63630?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 01",
-
-            description:
-            "Silhouette and fabric direction resolved before the first cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 02",
-
-            description:
-            "Grading checked against the full measurement chart."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 03",
-
-            description:
-            "Fit corrected across three rounds of sampling."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1721578006568-17901600cff3?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 04",
-
-            description:
-            "3D simulation caught a drape problem before the sample was cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1578353022142-09264fd64295?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 05",
-
-            description:
-            "Tech pack signed off, ready for the factory floor."
-        }
-
-    ]
-
-},
-
-
-{
-
-    name: "Woven",
-
-    cover:
-    "https://images.unsplash.com/photo-1731589802397-6a1088d63630?auto=format&fit=crop&w=1200&q=80",
-
-    description:
-    "Tailoring, outerwear and shirting: construction a factory can repeat on the thousandth piece.",
-
-    looks: [
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1588497883177-f82b883ad0af?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 01",
-
-            description:
-            "Silhouette and fabric direction resolved before the first cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1457972657980-4c9fddebec8d?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 02",
-
-            description:
-            "Grading checked against the full measurement chart."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 03",
-
-            description:
-            "Fit corrected across three rounds of sampling."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1567631643547-67a2dd59f266?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 04",
-
-            description:
-            "3D simulation caught a drape problem before the sample was cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 05",
-
-            description:
-            "Tech pack signed off, ready for the factory floor."
-        }
-
-    ]
-
-},
-
-
-{
-
-    name: "Sport",
-
-    cover:
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
-
-    description:
-    "Performance panelling and four-way stretch. Fit tested for movement, not a mannequin standing still.",
-
-    looks: [
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 01",
-
-            description:
-            "Silhouette and fabric direction resolved before the first cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1612731486606-2614b4d74921?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 02",
-
-            description:
-            "Grading checked against the full measurement chart."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 03",
-
-            description:
-            "Fit corrected across three rounds of sampling."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 04",
-
-            description:
-            "3D simulation caught a drape problem before the sample was cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 05",
-
-            description:
-            "Tech pack signed off, ready for the factory floor."
-        }
-
-    ]
-
-},
-
-
-{
-
-    name: "Swimwear",
-
-    cover:
-    "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1200&q=80",
-
-    description:
-    "The least forgiving category there is — tolerances measured in millimetres.",
-
-    looks: [
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1721578006568-17901600cff3?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 01",
-
-            description:
-            "Silhouette and fabric direction resolved before the first cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1578353022142-09264fd64295?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 02",
-
-            description:
-            "Grading checked against the full measurement chart."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1588497883177-f82b883ad0af?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 03",
-
-            description:
-            "Fit corrected across three rounds of sampling."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1457972657980-4c9fddebec8d?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 04",
-
-            description:
-            "3D simulation caught a drape problem before the sample was cut."
-        },
-
-        {
-            image:
-            "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1000&q=80",
-
-            title:
-            "Look 05",
-
-            description:
-            "Tech pack signed off, ready for the factory floor."
-        }
-
-    ]
-
-}
-
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const image = (id: string, width = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=84`;
+
+const categories = [
+  { key: 'evening', number: '01', title: 'Evening Dresses', image: image('photo-1567631643547-67a2dd59f266'), description: 'Structured bodices, complex drape and fit decisions that only become visible in motion.' },
+  { key: 'jersey', number: '02', title: 'Jersey & Knit', image: image('photo-1588497883177-f82b883ad0af'), description: 'Negative ease, recovery and grade rules designed around stretch rather than imposed on it.' },
+  { key: 'woven', number: '03', title: 'Woven', image: image('photo-1601597565151-70c4020dc0e1'), description: 'Tailoring, outerwear and shirting resolved for repeatable construction at production scale.' },
+  { key: 'sport', number: '04', title: 'Sport', image: image('photo-1574015974293-817f0ebebb74'), description: 'Performance panelling and four-way stretch tested for bodies in motion.' },
+  { key: 'swim', number: '05', title: 'Swimwear', image: image('photo-1578353022142-09264fd64295'), description: 'A category where balance, recovery and millimetre-level tolerances leave nowhere to hide.' },
 ];
-
-
-/* =====================================================
-   CATEGORY CREATION
-===================================================== */
-
-const categories =
-document.getElementById("categories");
-
-
-portfolioData.forEach(
-    (category, index) => {
-
-
-        const section =
-        document.createElement("section");
-
-
-        section.className =
-        "category";
-
-
-        section.innerHTML = `
-
-            <div class="category-image">
-
-                <img
-                    src="${category.cover}"
-                    alt=""
-                >
-
-            </div>
-
-
-            <div class="category-content">
-
-                <div class="category-number">
-
-                    ${String(index + 1).padStart(2,"0")}
-                    /
-                    05
-
-                </div>
-
-
-                <h2 class="category-title">
-
-                    ${category.name}
-
-                </h2>
-
-
-                <p class="category-description">
-
-                    ${category.description}
-
-                </p>
-
-            </div>
-
-        `;
-
-
-        section.addEventListener(
-            "click",
-            () => openCollection(category)
-        );
-
-
-        categories.appendChild(section);
-
-    }
-);
-
-
-/* =====================================================
-   COLLECTION ELEMENTS
-===================================================== */
-
-const collection =
-document.getElementById("collection");
-
-
-const collectionName =
-document.getElementById("collectionName");
-
-
-const collectionClose =
-document.getElementById("collectionClose");
-
-
-const looksContainer =
-document.getElementById("looks");
-
-
-/* =====================================================
-   OPEN COLLECTION
-===================================================== */
-
-function openCollection(category) {
-
-
-    collectionName.textContent =
-    category.name;
-
-
-    looksContainer.innerHTML = "";
-
-
-    category.looks.forEach(
-        (look, index) => {
-
-            createLook(
-                look,
-                index,
-                category.looks.length
-            );
-
-        }
-    );
-
-
-    collection.classList.add("active");
-
-
-    gsap.to(
-        collection,
-        {
-            autoAlpha: 1,
-            duration: .7,
-            ease: "power4.out"
-        }
-    );
-
-
-    document.body.style.overflow =
-    "hidden";
-
-
-    collection.scrollTop = 0;
-
-
-    ScrollTrigger.refresh();
-
-}
-
-
-/* =====================================================
-   CLOSE COLLECTION
-===================================================== */
-
-collectionClose.addEventListener(
-    "click",
-    closeCollection
-);
-
-
-function closeCollection() {
-
-
-    gsap.to(
-        collection,
-        {
-
-            autoAlpha: 0,
-
-            duration: .5,
-
-            ease: "power3.inOut",
-
-            onComplete: () => {
-
-                collection.classList.remove(
-                    "active"
-                );
-
-                looksContainer.innerHTML = "";
-
-                document.body.style.overflow =
-                "";
-
-                ScrollTrigger
-                    .getAll()
-                    .forEach(
-                        trigger => trigger.kill()
-                    );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CREATE LOOK
-===================================================== */
-
-function createLook(
-    look,
-    index,
-    total
-) {
-
-
-    const section =
-    document.createElement("section");
-
-
-    section.className =
-    "look-section";
-
-
-    const cards =
-    [];
-
-
-    portfolioData;
-
-
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-
-        const card =
-        document.createElement("div");
-
-
-        card.className =
-        "look-card";
-
-
-        card.innerHTML = `
-
-            <img
-                src="${
-                    findLookImage(
-                        i,
-                        total,
-                        index,
-                        look
-                    )
-                }"
-                alt=""
-            >
-
-        `;
-
-
-        cards.push(card);
-
-    }
-
-
-    section.innerHTML = `
-
-        <div class="look-stage">
-
-
-            <div class="look-visual">
-
-            </div>
-
-
-            <div
-                class="current-label"
-            >
-
-                LOOK
-                ${String(index + 1).padStart(2,"0")}
-
-            </div>
-
-
-            <div class="look-details">
-
-            </div>
-
-
-            <div class="look-progress">
-
-                ${String(index + 1).padStart(2,"0")}
-                /
-                ${String(total).padStart(2,"0")}
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    const visual =
-    section.querySelector(
-        ".look-visual"
-    );
-
-
-    const details =
-    section.querySelector(
-        ".look-details"
-    );
-
-
-    cards.length = 0;
-
-
-    const categoryLooks =
-    getCurrentLookSet();
-
-
-    categoryLooks.forEach(
-        (item, cardIndex) => {
-
-            const card =
-            document.createElement("div");
-
-
-            card.className =
-            "look-card";
-
-
-            card.dataset.index =
-            cardIndex;
-
-
-            card.innerHTML = `
-
-                <img
-                    src="${item.image}"
-                    alt=""
-                >
-
-            `;
-
-
-            visual.appendChild(card);
-
-
-            cards.push(card);
-
-        }
-    );
-
-
-    categoryLooks.forEach(
-        (item, itemIndex) => {
-
-            const detail =
-            document.createElement("div");
-
-
-            detail.className =
-            "details-item";
-
-
-            detail.innerHTML = `
-
-                <div class="details-index">
-
-                    ${String(itemIndex + 1)
-                        .padStart(2,"0")}
-                    /
-                    ${String(total)
-                        .padStart(2,"0")}
-
-                </div>
-
-
-                <h2 class="details-title">
-
-                    ${item.title}
-
-                </h2>
-
-
-                <p class="details-description">
-
-                    ${item.description}
-
-                </p>
-
-            `;
-
-
-            details.appendChild(detail);
-
-        }
-    );
-
-
-    looksContainer.appendChild(section);
-
-
-    initializeMechanicalStack(
-        section,
-        cards,
-        details,
-        categoryLooks
-    );
-
-}
-
-
-/* =====================================================
-   CURRENT LOOK DATA
-===================================================== */
-
-let activeLookData = [];
-
-
-function getCurrentLookSet() {
-
-    return window.__activeCollectionLooks
-        || [];
-
-}
-
-
-/* =====================================================
-   COLLECTION OVERRIDE
-===================================================== */
-
-const originalOpenCollection =
-openCollection;
-
-
-function setCollectionLooks(category) {
-
-    window.__activeCollectionLooks =
-    category.looks;
-
-}
-
-
-window.openCollection =
-function(category) {
-
-    setCollectionLooks(category);
-
-    originalOpenCollection(category);
-
-};
-
-
-/* =====================================================
-   IMAGE FINDER
-===================================================== */
-
-function findLookImage(
-    index,
-    total,
-    current,
-    look
-) {
-
-    return "";
-
-}
-
-
-/* =====================================================
-   MECHANICAL STACK
-===================================================== */
-
-function initializeMechanicalStack(
-    section,
-    cards,
-    details,
-    looks
-) {
-
-
-    const total =
-    cards.length;
-
-
-    const slots = [
-
-        {
-            x: 0,
-            scale: 1,
-            blur: 0,
-            opacity: 1,
-            z: 10
-        },
-
-        {
-            x: -20,
-            scale: .90,
-            blur: 1.5,
-            opacity: .92,
-            z: 9
-        },
-
-        {
-            x: -40,
-            scale: .80,
-            blur: 3,
-            opacity: .70,
-            z: 8
-        },
-
-        {
-            x: -60,
-            scale: .70,
-            blur: 6,
-            opacity: .45,
-            z: 7
-        },
-
-        {
-            x: -80,
-            scale: .60,
-            blur: 13,
-            opacity: .20,
-            z: 6
-        }
-
-    ];
-
-
-    const outgoing = {
-
-        x: 115,
-
-        scale: .92,
-
-        blur: 5,
-
-        opacity: 0,
-
-        z: 20
-
+---
+
+<SiteLayout title="Portfolio — Soufiane Aberbach" description="A mechanical, scroll-driven fashion development portfolio across evening, jersey, woven, sport and swimwear." marker="SA-PORTFOLIO-V5" page="portfolio">
+  <!-- BUILD-MARKER: SA-PORTFOLIO-V5 -->
+  <section class="portfolio-hero">
+    <div class="portfolio-hero__meta label">Portfolio / 02 <span>Scroll to operate</span></div>
+    <div class="portfolio-hero__title" data-reveal>
+      <h1 class="display"><span>Port</span><span>folio</span></h1>
+    </div>
+    <div class="portfolio-hero__copy" data-reveal>
+      <p class="eyebrow">Five production categories</p>
+      <p>This is not a gallery wall. Each category behaves like a development stack: one layer advances while the last stays visible underneath.</p>
+      <div class="portfolio-hero__instruction label"><i aria-hidden="true">↓</i> Scroll / click a category</div>
+    </div>
+  </section>
+
+  <section class="portfolio-stack-shell section-shell">
+    <div class="stack-heading" data-reveal>
+      <p class="eyebrow">Mechanical index</p>
+      <p class="label">05 categories / fullscreen studies</p>
+    </div>
+    <div class="stack-stage" data-stack-stage>
+      {categories.map((category, index) => (
+        <button class="collection-card" type="button" data-category={category.key} style={`--card-index:${index}`} aria-label={`Open ${category.title} collection`}>
+          <img src={category.image} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
+          <span class="collection-card__shade"></span>
+          <span class="collection-card__top label"><b>{category.number} / 05</b><i>Open collection ↗</i></span>
+          <span class="collection-card__copy">
+            <strong>{category.title}</strong>
+            <small>{category.description}</small>
+          </span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <section class="portfolio-context section-shell section-rule">
+    <div data-reveal>
+      <p class="eyebrow">What the work represents</p>
+      <h2 class="display">Pattern logic.<br />Fit resolution.<br />Production intent.</h2>
+    </div>
+    <div data-reveal>
+      <p>These categories show the kinds of construction and development problems addressed across manufacturing programmes.</p>
+      <p>Project exposure through manufacturing contracts at Ava Marie—not direct employment or endorsement. Images are temporary visual references and do not claim authorship of the photographed garments.</p>
+      <a class="button" href="/process/">See the working process <span>↗</span></a>
+    </div>
+  </section>
+
+  <div class="collection-overlay" data-collection-overlay aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="collection-title">
+    <div class="collection-overlay__bar">
+      <a class="brand" href="/" aria-label="Home"><span>SA</span><i></i></a>
+      <p class="label">Collection study <span data-collection-count>01 / 05</span></p>
+      <button type="button" data-close-collection>Close <span aria-hidden="true">×</span></button>
+    </div>
+    <header class="collection-overlay__header">
+      <p class="eyebrow" data-collection-kicker>Category</p>
+      <h2 class="display" id="collection-title" data-collection-title></h2>
+      <p data-collection-description></p>
+      <span class="label">Scroll for the look cascade ↓</span>
+    </header>
+    <div class="look-cascade" data-look-cascade></div>
+    <div class="collection-overlay__end">
+      <p class="label">End of study</p>
+      <button class="button button--signal" type="button" data-close-collection>Return to categories <span>↑</span></button>
+    </div>
+  </div>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    const collectionData = {
+      evening: {
+        number: '01 / 05', title: 'Evening Dresses', description: 'Structure and drape are negotiated together: the internal architecture must hold without making the dress feel engineered.',
+        looks: [
+          ['Look 01', 'Drape / balance', 'photo-1509631179647-0177331693ae'],
+          ['Look 02', 'Bodice / support', 'photo-1515886657613-9f3515b0c78f'],
+          ['Look 03', 'Volume / movement', 'photo-1721578006568-17901600cff3'],
+        ],
+      },
+      jersey: {
+        number: '02 / 05', title: 'Jersey & Knit', description: 'Stretch changes every assumption. Ease, recovery, seam choice and grade rules are designed as a connected system.',
+        looks: [
+          ['Look 01', 'Recovery / shape', 'photo-1586079615844-c0abfb04dc79'],
+          ['Look 02', 'Ease / movement', 'photo-1613915617430-8ab0fd7c6baf'],
+          ['Look 03', 'Grade / consistency', 'photo-1731589802397-6a1088d63630'],
+        ],
+      },
+      woven: {
+        number: '03 / 05', title: 'Woven', description: 'Repeatable tailoring depends on construction order, controlled volume and a pattern that holds its balance through production.',
+        looks: [
+          ['Look 01', 'Tailoring / line', 'photo-1662532577856-e8ee8b138a8b'],
+          ['Look 02', 'Construction / repeat', 'photo-1457972657980-4c9fddebec8d'],
+          ['Look 03', 'Volume / control', 'photo-1612731486606-2614b4d74921'],
+        ],
+      },
+      sport: {
+        number: '04 / 05', title: 'Sport', description: 'Performance product is tested against movement: panel lines, stretch direction and recovery have to work on the body.',
+        looks: [
+          ['Look 01', 'Panel / articulation', 'photo-1574015974293-817f0ebebb74'],
+          ['Look 02', 'Stretch / direction', 'photo-1588497883177-f82b883ad0af'],
+          ['Look 03', 'Movement / fit', 'photo-1586079615844-c0abfb04dc79'],
+        ],
+      },
+      swim: {
+        number: '05 / 05', title: 'Swimwear', description: 'Swimwear exposes imbalance immediately. Recovery, edge tension and coverage are resolved within very small tolerances.',
+        looks: [
+          ['Look 01', 'Tension / edge', 'photo-1578353022142-09264fd64295'],
+          ['Look 02', 'Coverage / balance', 'photo-1601597565151-70c4020dc0e1'],
+          ['Look 03', 'Recovery / hold', 'photo-1567631643547-67a2dd59f266'],
+        ],
+      },
     };
 
+    const portfolioState = { stackTimeline: null, lookTriggers: [], lastFocus: null };
+    const imageUrl = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1900&q=84`;
 
-    cards.forEach(
-        (card, index) => {
+    function setCard(card, index, total) {
+      card.style.setProperty('--card-index', index);
+      card.style.zIndex = String(total + index);
+      gsap.set(card, { yPercent: index === 0 ? 0 : 108, rotate: index % 2 ? 1.2 : -1.2 });
+    }
 
-            const slot =
-            slots[index];
+    function createTransition(timeline, card, previousCards, index) {
+      const position = index - 1;
+      timeline.to(previousCards, {
+        scale: (itemIndex) => 1 - ((previousCards.length - itemIndex) * .025),
+        y: (itemIndex) => -10 * (previousCards.length - itemIndex),
+        filter: 'brightness(.72)',
+        duration: 1,
+        ease: 'none',
+      }, position);
+      timeline.to(card, { yPercent: 0, rotate: 0, duration: 1, ease: 'none' }, position);
+    }
 
+    function initializeMechanicalStack() {
+      const stage = document.querySelector('[data-stack-stage]');
+      const cards = Array.from(document.querySelectorAll('.collection-card'));
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!stage || !cards.length || reduce || window.innerWidth < 900) return;
 
-            setCard(
-                card,
-                slot
-            );
+      gsap.registerPlugin(ScrollTrigger);
+      stage.classList.add('is-mechanical');
+      cards.forEach((card, index) => setCard(card, index, cards.length));
 
-        }
-    );
-
-
-    details.forEach(
-        (detail, index) => {
-
-            gsap.set(
-                detail,
-                {
-
-                    opacity:
-                        index === 0
-                            ? 1
-                            : 0,
-
-                    y:
-                        index === 0
-                            ? "-50%"
-                            : "-45%"
-
-                }
-            );
-
-        }
-    );
-
-
-    const timeline =
-    gsap.timeline({
-
+      portfolioState.stackTimeline = gsap.timeline({
         scrollTrigger: {
-
-            trigger: section,
-
-            scroller: collection,
-
-            start: "top top",
-
-            end: "bottom bottom",
-
-            scrub: true,
-
-            invalidateOnRefresh: true
-
-        }
-
-    });
-
-
-    for (
-        let transition = 0;
-        transition < total - 1;
-        transition++
-    ) {
-
-
-        timeline.add(
-            createTransition(
-                cards,
-                details,
-                transition,
-                slots,
-                outgoing,
-                total
-            )
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   TRANSITION
-===================================================== */
-
-function createTransition(
-    cards,
-    details,
-    active,
-    slots,
-    outgoing,
-    total
-) {
-
-
-    const tl =
-    gsap.timeline();
-
-
-    const currentCard =
-    cards[active];
-
-
-    tl.to(
-        currentCard,
-        {
-
-            xPercent:
-                outgoing.x,
-
-            scale:
-                outgoing.scale,
-
-            filter:
-                `blur(${outgoing.blur}px)`,
-
-            opacity:
-                outgoing.opacity,
-
-            duration: 1,
-
-            ease:
-                "none"
-
+          trigger: stage,
+          start: 'top top+=90',
+          end: () => `+=${Math.max(2400, cards.length * window.innerHeight * .72)}`,
+          pin: true,
+          scrub: .75,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
-        0
-    );
+      });
 
+      cards.forEach((card, index) => {
+        if (index === 0) return;
+        createTransition(portfolioState.stackTimeline, card, cards.slice(0, index), index);
+      });
+    }
 
-    for (
-        let i = active + 1;
-        i < total;
-        i++
-    ) {
+    function createLook(look, index) {
+      const article = document.createElement('article');
+      article.className = 'look-panel';
+      article.innerHTML = `
+        <img src="${imageUrl(look[2])}" alt="" loading="lazy">
+        <span class="look-panel__shade"></span>
+        <div class="look-panel__meta">
+          <span class="label">${String(index + 1).padStart(2, '0')} / 03</span>
+          <h3>${look[0]}</h3>
+          <p>${look[1]}</p>
+        </div>`;
+      return article;
+    }
 
+    function createLookAnimations() {
+      portfolioState.lookTriggers.forEach((trigger) => trigger.kill?.());
+      portfolioState.lookTriggers = [];
+      const overlay = document.querySelector('[data-collection-overlay]');
+      const panels = Array.from(document.querySelectorAll('.look-panel'));
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        const card =
-        cards[i];
-
-
-        const relative =
-        i - active;
-
-
-        const from =
-        slots[relative];
-
-
-        const to =
-        slots[relative - 1];
-
-
-        if (
-            !from ||
-            !to
-        ) {
-            continue;
-        }
-
-
-        tl.to(
-            card,
-            {
-
-                xPercent:
-                    to.x,
-
-                scale:
-                    to.scale,
-
-                filter:
-                    `blur(${to.blur}px)`,
-
-                opacity:
-                    to.opacity,
-
-                duration: 1,
-
-                ease:
-                    "none"
-
-            },
-            0
+      panels.forEach((panel, index) => {
+        const animation = gsap.fromTo(panel.querySelector('img'),
+          { scale: 1.12, yPercent: 5 },
+          { scale: 1, yPercent: -5, ease: 'none', scrollTrigger: { trigger: panel, scroller: overlay, start: 'top bottom', end: 'bottom top', scrub: true } }
         );
-
-    }
-
-
-    const nextCard =
-    cards[active + 1];
-
-
-    tl.to(
-        nextCard,
-        {
-
-            xPercent:
-                slots[0].x,
-
-            scale:
-                slots[0].scale,
-
-            filter:
-                `blur(${slots[0].blur}px)`,
-
-            opacity:
-                slots[0].opacity,
-
-            duration: 1,
-
-            ease:
-                "none"
-
-        },
-        0
-    );
-
-
-    tl.set(
-        currentCard,
-        {
-
-            xPercent:
-                slots[total - 1].x,
-
-            scale:
-                slots[total - 1].scale,
-
-            filter:
-                `blur(${slots[total - 1].blur}px)`,
-
-            opacity:
-                slots[total - 1].opacity,
-
-            zIndex:
-                slots[total - 1].z
-
-        },
-        .65
-    );
-
-
-    tl.to(
-        currentCard,
-        {
-
-            xPercent:
-                slots[total - 1].x,
-
-            scale:
-                slots[total - 1].scale,
-
-            filter:
-                `blur(${slots[total - 1].blur}px)`,
-
-            opacity:
-                slots[total - 1].opacity,
-
-            duration: .35,
-
-            ease:
-                "none"
-
-        },
-        .65
-    );
-
-
-    const currentText =
-    details[active];
-
-
-    const nextText =
-    details[active + 1];
-
-
-    if (currentText) {
-
-        tl.to(
-            currentText,
-            {
-
-                opacity: 0,
-
-                y: "-55%",
-
-                duration: .45,
-
-                ease: "none"
-
-            },
-            0
+        const reveal = gsap.fromTo(panel.querySelector('.look-panel__meta'),
+          { y: 80, opacity: 0 },
+          { y: 0, opacity: 1, scrollTrigger: { trigger: panel, scroller: overlay, start: 'top 72%', end: 'top 38%', scrub: .7 } }
         );
-
+        portfolioState.lookTriggers.push(animation.scrollTrigger, reveal.scrollTrigger);
+        panel.style.zIndex = String(index + 1);
+      });
     }
 
+    function openCollection(category) {
+      const data = collectionData[category];
+      const overlay = document.querySelector('[data-collection-overlay]');
+      if (!data || !overlay) return;
+      portfolioState.lastFocus = document.activeElement;
+      overlay.querySelector('[data-collection-count]').textContent = data.number;
+      overlay.querySelector('[data-collection-kicker]').textContent = `Category ${data.number}`;
+      overlay.querySelector('[data-collection-title]').textContent = data.title;
+      overlay.querySelector('[data-collection-description]').textContent = data.description;
+      const cascade = overlay.querySelector('[data-look-cascade]');
+      cascade.replaceChildren(...data.looks.map(createLook));
+      overlay.setAttribute('aria-hidden', 'false');
+      overlay.classList.add('is-open');
+      document.body.classList.add('no-scroll');
+      overlay.scrollTop = 0;
 
-    if (nextText) {
-
-        tl.to(
-            nextText,
-            {
-
-                opacity: 1,
-
-                y: "-50%",
-
-                duration: .55,
-
-                ease: "none"
-
-            },
-            .25
-        );
-
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.fromTo(overlay, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .8, ease: 'power4.inOut', onComplete: createLookAnimations });
+        gsap.fromTo(overlay.querySelector('.collection-overlay__header h2'), { yPercent: 100 }, { yPercent: 0, duration: .9, delay: .25, ease: 'power4.out' });
+      } else {
+        overlay.style.clipPath = 'inset(0% 0 0 0)';
+      }
+      overlay.querySelector('[data-close-collection]')?.focus();
     }
 
-
-    return tl;
-
-}
-
-
-/* =====================================================
-   SET CARD
-===================================================== */
-
-function setCard(
-    card,
-    state
-) {
-
-
-    gsap.set(
-        card,
-        {
-
-            xPercent:
-                state.x,
-
-            x:
-                0,
-
-            yPercent:
-                -50,
-
-            y:
-                0,
-
-            scale:
-                state.scale,
-
-            filter:
-                `blur(${state.blur}px)`,
-
-            opacity:
-                state.opacity,
-
-            zIndex:
-                state.z
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   GLOBAL REFRESH
-===================================================== */
-
-window.addEventListener(
-    "load",
-    () => {
-
-        ScrollTrigger.refresh();
-
+    function closeCollection() {
+      const overlay = document.querySelector('[data-collection-overlay]');
+      if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
+      portfolioState.lookTriggers.forEach((trigger) => trigger.kill?.());
+      portfolioState.lookTriggers = [];
+      const finish = () => {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        overlay.style.clipPath = '';
+        document.body.classList.remove('no-scroll');
+        portfolioState.lastFocus?.focus?.();
+      };
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: .65, ease: 'power4.inOut', onComplete: finish });
+      } else finish();
     }
-);
 
+    document.querySelectorAll('[data-category]').forEach((card) => card.addEventListener('click', () => openCollection(card.dataset.category)));
+    document.querySelectorAll('[data-close-collection]').forEach((button) => button.addEventListener('click', closeCollection));
+    window.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeCollection(); });
+    window.addEventListener('load', initializeMechanicalStack, { once: true });
 
+  </script>
+</SiteLayout>
 
-/* nav scroll chrome — independent of GSAP, safe to coexist */
-(function(){
-  var nav = document.getElementById('siteNav');
-  if(!nav) return;
-  addEventListener('scroll', function(){
-    nav.classList.toggle('stuck', scrollY > 50);
-  }, {passive:true});
-})();
+<style>
+  .portfolio-hero { min-height: 100svh; display: grid; grid-template-columns: 1.35fr .65fr; grid-template-rows: auto 1fr; gap: 3rem 7vw; align-items: end; padding: calc(var(--header-h) + 2rem) var(--gutter) 4rem; background: var(--ink); color: var(--paper); }
+  .portfolio-hero__meta { grid-column: 1 / -1; align-self: start; display: flex; justify-content: space-between; color: #8f8e86; }
+  .portfolio-hero__title h1 { font-size: clamp(7rem, 17vw, 17rem); }
+  .portfolio-hero__title h1 span { display: block; }
+  .portfolio-hero__title h1 span:last-child { color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
+  .portfolio-hero__copy { padding-bottom: 1rem; }
+  .portfolio-hero__copy > p:nth-child(2) { max-width: 31rem; margin: 1.5rem 0 3rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
+  .portfolio-hero__instruction { display: flex; align-items: center; gap: 1rem; }
+  .portfolio-hero__instruction i { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid #4b4a44; border-radius: 50%; color: var(--signal); font-style: normal; }
+  .portfolio-stack-shell { padding-block: clamp(6rem, 10vw, 10rem); }
+  .stack-heading { display: flex; justify-content: space-between; align-items: center; padding-bottom: 2rem; border-bottom: 1px solid var(--line-strong); }
+  .stack-stage { display: grid; gap: 1.25rem; padding-top: 2rem; }
+  .collection-card { position: relative; min-height: min(76vh, 52rem); width: 100%; padding: 0; overflow: hidden; border: 0; background: #222; color: white; text-align: left; cursor: pointer; isolation: isolate; }
+  .collection-card img { position: absolute; z-index: -2; inset: 0; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+  .collection-card:hover img { transform: scale(1.035); }
+  .collection-card__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.1) 45%, rgba(0,0,0,.88)); }
+  .collection-card__top { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 1.5rem; }
+  .collection-card__top i { color: var(--acid); font-style: normal; }
+  .collection-card__copy { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1.2fr .8fr; gap: 4rem; align-items: end; padding: clamp(1.5rem, 4vw, 4rem); }
+  .collection-card__copy strong { font-family: var(--display); font-size: clamp(4rem, 10vw, 10rem); font-weight: 850; letter-spacing: -.07em; line-height: .82; }
+  .collection-card__copy small { max-width: 29rem; font-size: .9rem; line-height: 1.65; color: #d4d2ca; }
+  .stack-stage.is-mechanical { position: relative; height: calc(100svh - 7rem); min-height: 42rem; padding-top: 0; }
+  .stack-stage.is-mechanical .collection-card { position: absolute; inset: 0; min-height: 0; height: 100%; will-change: transform, filter; }
+  .portfolio-context { display: grid; grid-template-columns: 1.25fr .75fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
+  .portfolio-context h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
+  .portfolio-context > div:last-child { align-self: end; }
+  .portfolio-context > div:last-child p { color: var(--muted); line-height: 1.75; }
+  .portfolio-context .button { margin-top: 2rem; }
 
-</script>
+  .collection-overlay { position: fixed; z-index: 500; inset: 0; overflow-x: clip; overflow-y: auto; overscroll-behavior: contain; background: var(--ink); color: var(--paper); visibility: hidden; pointer-events: none; clip-path: inset(100% 0 0 0); }
+  .collection-overlay.is-open { visibility: visible; pointer-events: auto; }
+  .collection-overlay__bar { position: sticky; z-index: 10; top: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 5rem; padding-inline: var(--gutter); border-bottom: 1px solid #3d3d37; background: rgba(17,17,15,.88); backdrop-filter: blur(18px); }
+  .collection-overlay__bar > p { color: #96958d; }
+  .collection-overlay__bar > p span { color: var(--paper); margin-left: 1rem; }
+  .collection-overlay__bar button { justify-self: end; padding: .65rem 0; border: 0; background: transparent; color: white; font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+  .collection-overlay__bar button span { display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; margin-left: .7rem; border: 1px solid #55544d; border-radius: 50%; color: var(--signal); font-size: 1.1rem; }
+  .collection-overlay__header { min-height: 90svh; display: grid; grid-template-columns: 1fr .55fr; grid-template-rows: 1fr auto; gap: 3rem 8vw; align-items: end; padding: 8rem var(--gutter) 4rem; overflow: hidden; }
+  .collection-overlay__header .eyebrow { grid-column: 1 / -1; align-self: start; }
+  .collection-overlay__header h2 { font-size: clamp(6rem, 14vw, 14rem); }
+  .collection-overlay__header > p:not(.eyebrow) { max-width: 32rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
+  .collection-overlay__header > span { grid-column: 2; }
+  .look-cascade { padding-inline: var(--gutter); }
+  .look-panel { position: sticky; top: 5rem; height: calc(100svh - 5rem); overflow: hidden; margin-bottom: 16vh; background: #222; isolation: isolate; }
+  .look-panel img { position: absolute; z-index: -2; inset: 0; height: 110%; object-fit: cover; }
+  .look-panel__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.75)); }
+  .look-panel__meta { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 3rem; padding: clamp(1.5rem, 4vw, 4rem); }
+  .look-panel__meta h3 { margin: 0; font-family: var(--display); font-size: clamp(4.5rem, 10vw, 10rem); letter-spacing: -.07em; line-height: .85; }
+  .look-panel__meta p { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+  .collection-overlay__end { display: flex; justify-content: space-between; align-items: end; gap: 2rem; padding: 8rem var(--gutter); }
 
-</body>
-
-</html>
+  @media (max-width: 900px) {
+    .portfolio-hero { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; min-height: 92svh; }
+    .portfolio-hero__title h1 { font-size: clamp(6rem, 25vw, 11rem); }
+    .collection-card { min-height: 70svh; }
+    .collection-card__copy { grid-template-columns: 1fr; gap: 1.5rem; }
+    .collection-card__copy strong { font-size: clamp(3.6rem, 15vw, 7rem); }
+    .portfolio-context { grid-template-columns: minmax(0, 1fr); }
+    .portfolio-context > * { min-width: 0; }
+    .collection-overlay__header { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto auto; }
+    .collection-overlay__header > span { grid-column: 1; }
+    .look-panel__meta { grid-template-columns: 1fr; gap: 1rem; }
+  }
+  @media (max-width: 600px) {
+    .stack-heading { align-items: flex-start; flex-direction: column; gap: 1rem; }
+    .collection-card { min-height: 33rem; }
+    .collection-card__copy { padding: 1.25rem; }
+    .collection-card__copy small { font-size: .78rem; }
+    .portfolio-context h2 { font-size: 3.5rem; }
+    .collection-overlay__bar { grid-template-columns: 1fr auto; }
+    .collection-overlay__bar > p { display: none; }
+    .collection-overlay__header { min-height: 80svh; padding-top: 6rem; }
+    .collection-overlay__header h2 { font-size: clamp(4.5rem, 20vw, 7rem); }
+    .look-cascade { padding-inline: 0; }
+    .look-panel { top: 4.5rem; height: calc(100svh - 4.5rem); margin-bottom: 7vh; }
+    .collection-overlay__end { align-items: stretch; flex-direction: column; }
+  }
+</style>

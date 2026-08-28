@@ -1,0 +1,46 @@
+---
+const navItems = [
+  { href: '/', label: 'Home', index: '00' },
+  { href: '/expertise/', label: 'Expertise', index: '01' },
+  { href: '/portfolio/', label: 'Portfolio', index: '02' },
+  { href: '/process/', label: 'Process', index: '03' },
+  { href: '/experience/', label: 'Experience', index: '04' },
+  { href: '/contact/', label: 'Contact', index: '05' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="site-header" data-site-header>
+  <a class="brand" href="/" aria-label="Soufiane Aberbach — Home">
+    <span>SA</span><i aria-hidden="true"></i>
+  </a>
+
+  <nav class="desktop-nav" aria-label="Primary navigation">
+    {navItems.map((item) => (
+      <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+        <span>{item.index}</span>{item.label}
+      </a>
+    ))}
+  </nav>
+
+  <a class="header-brief" href="/contact/">Start a brief <span aria-hidden="true">↗</span></a>
+
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+    <span class="sr-only">Open menu</span>
+    <i></i><i></i>
+  </button>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true">
+    <div class="mobile-menu__meta label">Tangier, Morocco <span>GMT+1</span></div>
+    <nav aria-label="Mobile navigation">
+      {navItems.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+          <span>{item.index}</span><strong>{item.label}</strong><i aria-hidden="true">↗</i>
+        </a>
+      ))}
+    </nav>
+    <p>Fashion design, product development and production intelligence.</p>
+  </div>
+</header>
