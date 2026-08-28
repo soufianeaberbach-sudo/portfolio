@@ -1,7 +1,2178 @@
----
-import { readFileSync } from 'node:fs';
+<!--
+================================================================================
+  SOUFIANE ABERBACH — PORTFOLIO. THIS FILE IS THE ONLY PORTFOLIO FILE.
+  An older separate index file (a static zig-zag list with dead <a href> links)
+  existed before this and is now DELETED. If you see any other file calling
+  itself the portfolio page, it is stale — ignore and delete it. This single
+  file is both the category grid AND the click-to-open collection detail.
+  STATUS: DESIGN REVIEW COMP — NOT YET APPROVED.
 
-const document = readFileSync(new URL('../../public/portfolio/index.html', import.meta.url), 'utf8');
----
+  CLAUDE CODE: do nothing with this file until Soufiane explicitly approves
+  it in conversation.
 
-<Fragment set:html={document} />
+  - This is Soufiane's own GSAP interaction code (via ChatGPT/Gemini),
+    RETHEMED to match the rest of the site. The animation mechanics
+    (initializeMechanicalStack, createTransition, setCard, the scroll-
+    scrubbed cascade) are UNTOUCHED — verified byte-identical to the
+    version he supplied. Do not "improve" or rewrite the mechanics.
+  - Only cosmetic layers were added: fonts (Archivo/Inter/JetBrains Mono),
+    colour tokens (#FFFFFF / #141412 / #C08552), nav + footer matching
+    every other page, real Unsplash placeholder images, and shortened
+    category/look copy.
+  - This file is currently STANDALONE (own <style>/<script>, not sharing
+    SOUFIANE-HOME.html's stylesheet block verbatim like the other pages)
+    because its structure is fundamentally different (GSAP timeline engine,
+    fixed fullscreen collection overlay). Wire it into the same site shell
+    Claude Code builds for the other five routes; keep colours/fonts in
+    sync with the shared tokens rather than duplicating values by hand.
+  - Every image is a placeholder. Soufiane will supply real photography.
+  - No brand names appear on this page, so no disclaimer is required here.
+
+  BUILD-MARKER: SA-PORTFOLIO-V5
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+/>
+
+<title>
+    Soufiane Aberbach — Portfolio
+</title>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+
+<!-- =====================================================
+     GSAP
+====================================================== -->
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+
+
+<style is:inline>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: auto;
+}
+
+
+body {
+    overflow-x: hidden;
+}
+
+
+/* =====================================================
+   PORTFOLIO INTRO
+===================================================== */
+
+.hero {
+
+    height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.hero h1 {
+
+    font-size: clamp(60px, 10vw, 150px);
+
+    font-weight: 400;
+
+}
+
+
+/* =====================================================
+   CATEGORY SECTIONS
+===================================================== */
+
+.category {
+
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 60% 40%;
+
+    align-items: center;
+
+    padding: 8vw;
+
+    border-top: 1px solid #ddd;
+
+    cursor: pointer;
+
+}
+
+
+.category:nth-child(even) {
+
+    direction: rtl;
+
+}
+
+
+.category-image {
+
+    width: 100%;
+
+    height: 75vh;
+
+    overflow: hidden;
+
+}
+
+
+.category-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 1.2s
+        cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.category:hover
+.category-image img {
+
+    transform: scale(1.04);
+
+}
+
+
+.category-content {
+
+    direction: ltr;
+
+    padding: 5vw;
+
+}
+
+
+.category-number {
+
+    font-size: 10px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.category-title {
+
+    font-size: clamp(45px, 6vw, 90px);
+
+    font-weight: 400;
+
+    line-height: .9;
+
+    margin-bottom: 30px;
+
+}
+
+
+.category-description {
+
+    max-width: 380px;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =====================================================
+   COLLECTION
+===================================================== */
+
+.collection {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: white;
+
+    z-index: 1000;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+}
+
+
+.collection.active {
+
+    visibility: visible;
+
+}
+
+
+/* =====================================================
+   COLLECTION HEADER
+===================================================== */
+
+.collection-header {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100%;
+
+    height: 80px;
+
+    z-index: 100;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 5vw;
+
+    background: rgba(255,255,255,.85);
+
+    backdrop-filter: blur(10px);
+
+}
+
+
+.collection-name {
+
+    font-size: 12px;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+
+}
+
+
+.collection-close {
+
+    font-size: 10px;
+
+    letter-spacing: .15em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+}
+
+
+/* =====================================================
+   LOOK EXPERIENCE
+===================================================== */
+
+.looks {
+
+    width: 100%;
+
+}
+
+
+.look-section {
+
+    position: relative;
+
+    height: 560vh;
+
+}
+
+
+/* =====================================================
+   PINNED VIEW
+===================================================== */
+
+.look-stage {
+
+    position: sticky;
+
+    top: 0;
+
+    height: 100vh;
+
+    width: 100%;
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   IMAGE VIEWPORT
+===================================================== */
+
+.look-visual {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 62%;
+
+    height: 100%;
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   IMAGE CARDS
+===================================================== */
+
+.look-card {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    width: 42%;
+
+    height: 76%;
+
+    transform-origin: center center;
+
+    overflow: hidden;
+
+    will-change:
+        transform,
+        filter,
+        opacity;
+
+}
+
+
+.look-card img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+/* =====================================================
+   CARD LABEL
+===================================================== */
+
+.current-label {
+
+    position: absolute;
+
+    left: 5vw;
+
+    bottom: 8vh;
+
+    z-index: 30;
+
+    font-size: 10px;
+
+    letter-spacing: .15em;
+
+}
+
+
+/* =====================================================
+   RIGHT DETAILS
+===================================================== */
+
+.look-details {
+
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    width: 38%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 7vw;
+
+}
+
+
+.details-item {
+
+    position: absolute;
+
+    left: 7vw;
+
+    right: 5vw;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    opacity: 0;
+
+    will-change:
+        opacity,
+        transform;
+
+}
+
+
+.details-item.active {
+
+    opacity: 1;
+
+}
+
+
+.details-index {
+
+    font-size: 10px;
+
+    margin-bottom: 25px;
+
+    color: #777;
+
+}
+
+
+.details-title {
+
+    font-size: clamp(40px, 5vw, 75px);
+
+    font-weight: 400;
+
+    line-height: .9;
+
+    margin-bottom: 30px;
+
+}
+
+
+.details-description {
+
+    max-width: 400px;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+    color: #666;
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.look-progress {
+
+    position: absolute;
+
+    right: 5vw;
+
+    bottom: 6vh;
+
+    font-size: 9px;
+
+    letter-spacing: .15em;
+
+    color: #777;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width: 900px) {
+
+
+    .category {
+
+        display: block;
+
+        padding: 15vw 6vw;
+
+    }
+
+
+    .category-image {
+
+        height: 60vh;
+
+    }
+
+
+    .category-content {
+
+        padding: 40px 0;
+
+    }
+
+
+    .look-visual {
+
+        width: 100%;
+
+    }
+
+
+    .look-details {
+
+        width: 100%;
+
+        height: auto;
+
+        bottom: 0;
+
+        top: auto;
+
+        padding: 0 6vw 8vh;
+
+        align-items: flex-end;
+
+        pointer-events: none;
+
+    }
+
+
+    .details-item {
+
+        left: 6vw;
+
+        right: 6vw;
+
+        top: auto;
+
+        bottom: 8vh;
+
+        transform: translateY(20px);
+
+    }
+
+
+    .details-title {
+
+        font-size: 45px;
+
+    }
+
+
+    .look-card {
+
+        width: 58%;
+
+        height: 65%;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SITE THEME OVERLAY — colours, type, chrome.
+   Layered after the original rules on purpose: same
+   selectors, cosmetic properties only, so the GSAP-driven
+   layout/transform/opacity/filter values above are never
+   touched or overridden.
+===================================================== */
+
+:root{
+  --paper:#FFFFFF; --ink:#141412; --mute:#6C6C65;
+  --line:#E4E2DE; --accent:#C08552;
+}
+
+body{
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.hero h1{
+  font-family: Archivo, sans-serif;
+  font-variation-settings: 'wdth' 112;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  color: var(--ink);
+}
+
+.category{ border-top-color: var(--line); }
+
+.category-number{
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.category-title{
+  font-family: Archivo, sans-serif;
+  font-variation-settings: 'wdth' 110;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+
+.category-description{
+  font-family: Inter, sans-serif;
+  color: var(--mute);
+  font-size: 14px;
+}
+
+.collection{ background: var(--paper); }
+
+.collection-header{ background: rgba(255,255,255,.86); }
+
+.collection-name{
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink);
+}
+
+.collection-close{
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--mute);
+  transition: color .25s;
+}
+.collection-close:hover{ color: var(--accent); }
+
+.current-label{
+  font-family: 'JetBrains Mono', monospace;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.details-index{
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.details-title{
+  font-family: Archivo, sans-serif;
+  font-variation-settings: 'wdth' 110;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+
+.details-description{
+  font-family: Inter, sans-serif;
+  color: var(--mute);
+}
+
+.look-progress{
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--mute);
+}
+
+/* =====================================================
+   SITE CHROME — nav + footer, matching every other page.
+   nav sits BELOW the fullscreen collection overlay
+   (z-index 1000) so opening a collection covers it, same
+   as the modal already covering everything else.
+===================================================== */
+
+#siteNav{
+  position: fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:15px 22px;
+  background: rgba(255,255,255,0);
+  border-bottom:1px solid transparent;
+  transition:.35s;
+}
+#siteNav.stuck{
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(14px);
+  border-bottom-color: var(--line);
+}
+#siteNav .logo{
+  font-family: Archivo, sans-serif;
+  font-variation-settings: 'wdth' 125;
+  font-weight: 900; font-size:19px; letter-spacing:-.05em;
+  color: var(--ink); text-decoration:none;
+}
+#siteNav .logo b{ color: var(--accent); }
+#siteNav .links{ display:none; gap:28px; }
+@media(min-width:900px){
+  #siteNav .links{ display:flex; }
+  #siteNav .links a{
+    color:var(--ink); text-decoration:none;
+    font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:.15em; text-transform:uppercase;
+    padding-bottom:4px; border-bottom:1px solid transparent; transition:.3s;
+  }
+  #siteNav .links a:hover, #siteNav .links a.on{ border-bottom-color:var(--accent); }
+}
+#siteNav .burger{
+  width:40px;height:40px;display:flex;flex-direction:column;justify-content:center;
+  gap:5px;align-items:flex-end;background:none;border:0;
+}
+#siteNav .burger i{height:1.6px;background:var(--ink)}
+#siteNav .burger i:first-child{width:21px}
+#siteNav .burger i:last-child{width:13px}
+@media(min-width:900px){#siteNav .burger{display:none}}
+
+#siteFooter{
+  padding:34px 22px 48px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; max-width:1280px; margin:0 auto;
+  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--mute);
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<nav id="siteNav">
+  <a class="logo" href="/">SA<b>.</b></a>
+  <div class="links">
+    <a href="/">Home</a><a href="/expertise">Expertise</a>
+    <a class="on" href="/portfolio">Portfolio</a><a href="/process">Process</a>
+    <a href="/experience">Experience</a><a href="/contact">Contact</a>
+  </div>
+  <button class="burger" aria-label="Menu"><i></i><i></i></button>
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <h1>
+        Portfolio
+    </h1>
+
+</section>
+
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<main id="categories"></main>
+
+
+<!-- =====================================================
+     COLLECTION
+===================================================== -->
+
+<div
+    class="collection"
+    id="collection"
+>
+
+
+    <header class="collection-header">
+
+        <div
+            class="collection-name"
+            id="collectionName"
+        >
+            Evening Dresses
+        </div>
+
+
+        <div
+            class="collection-close"
+            id="collectionClose"
+        >
+            Close
+        </div>
+
+    </header>
+
+
+    <main
+        class="looks"
+        id="looks"
+    ></main>
+
+
+</div>
+
+
+
+<footer id="siteFooter">
+  <span>Soufiane Aberbach &middot; Tangier</span>
+  <span>&copy; 2026</span>
+</footer>
+<script is:inline>
+
+/* =====================================================
+   GSAP
+===================================================== */
+
+gsap.registerPlugin(ScrollTrigger);
+
+
+/* =====================================================
+   PORTFOLIO DATA
+===================================================== */
+
+const portfolioData = [
+
+{
+
+    name: "Evening Dresses",
+
+    cover:
+    "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1200&q=80",
+
+    description:
+    "Structured bodices, complex drape, and the balance problems that only show up on a real body.",
+
+    looks: [
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1567631643547-67a2dd59f266?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 01",
+
+            description:
+            "Silhouette and fabric direction resolved before the first cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 02",
+
+            description:
+            "Grading checked against the full measurement chart."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 03",
+
+            description:
+            "Fit corrected across three rounds of sampling."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1612731486606-2614b4d74921?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 04",
+
+            description:
+            "3D simulation caught a drape problem before the sample was cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 05",
+
+            description:
+            "Tech pack signed off, ready for the factory floor."
+        }
+
+    ]
+
+},
+
+
+{
+
+    name: "Jersey & Knit",
+
+    cover:
+    "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1200&q=80",
+
+    description:
+    "Stretch behaves nothing like woven — negative ease, recovery, and a grade that holds through the run.",
+
+    looks: [
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1731589802397-6a1088d63630?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 01",
+
+            description:
+            "Silhouette and fabric direction resolved before the first cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 02",
+
+            description:
+            "Grading checked against the full measurement chart."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 03",
+
+            description:
+            "Fit corrected across three rounds of sampling."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1721578006568-17901600cff3?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 04",
+
+            description:
+            "3D simulation caught a drape problem before the sample was cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1578353022142-09264fd64295?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 05",
+
+            description:
+            "Tech pack signed off, ready for the factory floor."
+        }
+
+    ]
+
+},
+
+
+{
+
+    name: "Woven",
+
+    cover:
+    "https://images.unsplash.com/photo-1731589802397-6a1088d63630?auto=format&fit=crop&w=1200&q=80",
+
+    description:
+    "Tailoring, outerwear and shirting: construction a factory can repeat on the thousandth piece.",
+
+    looks: [
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1588497883177-f82b883ad0af?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 01",
+
+            description:
+            "Silhouette and fabric direction resolved before the first cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1457972657980-4c9fddebec8d?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 02",
+
+            description:
+            "Grading checked against the full measurement chart."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 03",
+
+            description:
+            "Fit corrected across three rounds of sampling."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1567631643547-67a2dd59f266?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 04",
+
+            description:
+            "3D simulation caught a drape problem before the sample was cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 05",
+
+            description:
+            "Tech pack signed off, ready for the factory floor."
+        }
+
+    ]
+
+},
+
+
+{
+
+    name: "Sport",
+
+    cover:
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80",
+
+    description:
+    "Performance panelling and four-way stretch. Fit tested for movement, not a mannequin standing still.",
+
+    looks: [
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 01",
+
+            description:
+            "Silhouette and fabric direction resolved before the first cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1612731486606-2614b4d74921?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 02",
+
+            description:
+            "Grading checked against the full measurement chart."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 03",
+
+            description:
+            "Fit corrected across three rounds of sampling."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 04",
+
+            description:
+            "3D simulation caught a drape problem before the sample was cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 05",
+
+            description:
+            "Tech pack signed off, ready for the factory floor."
+        }
+
+    ]
+
+},
+
+
+{
+
+    name: "Swimwear",
+
+    cover:
+    "https://images.unsplash.com/photo-1586079615844-c0abfb04dc79?auto=format&fit=crop&w=1200&q=80",
+
+    description:
+    "The least forgiving category there is — tolerances measured in millimetres.",
+
+    looks: [
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1721578006568-17901600cff3?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 01",
+
+            description:
+            "Silhouette and fabric direction resolved before the first cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1578353022142-09264fd64295?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 02",
+
+            description:
+            "Grading checked against the full measurement chart."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1588497883177-f82b883ad0af?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 03",
+
+            description:
+            "Fit corrected across three rounds of sampling."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1457972657980-4c9fddebec8d?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 04",
+
+            description:
+            "3D simulation caught a drape problem before the sample was cut."
+        },
+
+        {
+            image:
+            "https://images.unsplash.com/photo-1601597565151-70c4020dc0e1?auto=format&fit=crop&w=1000&q=80",
+
+            title:
+            "Look 05",
+
+            description:
+            "Tech pack signed off, ready for the factory floor."
+        }
+
+    ]
+
+}
+
+];
+
+
+/* =====================================================
+   CATEGORY CREATION
+===================================================== */
+
+const categories =
+document.getElementById("categories");
+
+
+portfolioData.forEach(
+    (category, index) => {
+
+
+        const section =
+        document.createElement("section");
+
+
+        section.className =
+        "category";
+
+
+        section.innerHTML = `
+
+            <div class="category-image">
+
+                <img
+                    src="${category.cover}"
+                    alt=""
+                >
+
+            </div>
+
+
+            <div class="category-content">
+
+                <div class="category-number">
+
+                    ${String(index + 1).padStart(2,"0")}
+                    /
+                    05
+
+                </div>
+
+
+                <h2 class="category-title">
+
+                    ${category.name}
+
+                </h2>
+
+
+                <p class="category-description">
+
+                    ${category.description}
+
+                </p>
+
+            </div>
+
+        `;
+
+
+        section.addEventListener(
+            "click",
+            () => openCollection(category)
+        );
+
+
+        categories.appendChild(section);
+
+    }
+);
+
+
+/* =====================================================
+   COLLECTION ELEMENTS
+===================================================== */
+
+const collection =
+document.getElementById("collection");
+
+
+const collectionName =
+document.getElementById("collectionName");
+
+
+const collectionClose =
+document.getElementById("collectionClose");
+
+
+const looksContainer =
+document.getElementById("looks");
+
+
+/* =====================================================
+   OPEN COLLECTION
+===================================================== */
+
+function openCollection(category) {
+
+
+    collectionName.textContent =
+    category.name;
+
+
+    looksContainer.innerHTML = "";
+
+
+    category.looks.forEach(
+        (look, index) => {
+
+            createLook(
+                look,
+                index,
+                category.looks.length
+            );
+
+        }
+    );
+
+
+    collection.classList.add("active");
+
+
+    gsap.to(
+        collection,
+        {
+            autoAlpha: 1,
+            duration: .7,
+            ease: "power4.out"
+        }
+    );
+
+
+    document.body.style.overflow =
+    "hidden";
+
+
+    collection.scrollTop = 0;
+
+
+    ScrollTrigger.refresh();
+
+}
+
+
+/* =====================================================
+   CLOSE COLLECTION
+===================================================== */
+
+collectionClose.addEventListener(
+    "click",
+    closeCollection
+);
+
+
+function closeCollection() {
+
+
+    gsap.to(
+        collection,
+        {
+
+            autoAlpha: 0,
+
+            duration: .5,
+
+            ease: "power3.inOut",
+
+            onComplete: () => {
+
+                collection.classList.remove(
+                    "active"
+                );
+
+                looksContainer.innerHTML = "";
+
+                document.body.style.overflow =
+                "";
+
+                ScrollTrigger
+                    .getAll()
+                    .forEach(
+                        trigger => trigger.kill()
+                    );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREATE LOOK
+===================================================== */
+
+function createLook(
+    look,
+    index,
+    total
+) {
+
+
+    const section =
+    document.createElement("section");
+
+
+    section.className =
+    "look-section";
+
+
+    const cards =
+    [];
+
+
+    portfolioData;
+
+
+    for (
+        let i = 0;
+        i < total;
+        i++
+    ) {
+
+
+        const card =
+        document.createElement("div");
+
+
+        card.className =
+        "look-card";
+
+
+        card.innerHTML = `
+
+            <img
+                src="${
+                    findLookImage(
+                        i,
+                        total,
+                        index,
+                        look
+                    )
+                }"
+                alt=""
+            >
+
+        `;
+
+
+        cards.push(card);
+
+    }
+
+
+    section.innerHTML = `
+
+        <div class="look-stage">
+
+
+            <div class="look-visual">
+
+            </div>
+
+
+            <div
+                class="current-label"
+            >
+
+                LOOK
+                ${String(index + 1).padStart(2,"0")}
+
+            </div>
+
+
+            <div class="look-details">
+
+            </div>
+
+
+            <div class="look-progress">
+
+                ${String(index + 1).padStart(2,"0")}
+                /
+                ${String(total).padStart(2,"0")}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const visual =
+    section.querySelector(
+        ".look-visual"
+    );
+
+
+    const details =
+    section.querySelector(
+        ".look-details"
+    );
+
+
+    cards.length = 0;
+
+
+    const categoryLooks =
+    getCurrentLookSet();
+
+
+    categoryLooks.forEach(
+        (item, cardIndex) => {
+
+            const card =
+            document.createElement("div");
+
+
+            card.className =
+            "look-card";
+
+
+            card.dataset.index =
+            cardIndex;
+
+
+            card.innerHTML = `
+
+                <img
+                    src="${item.image}"
+                    alt=""
+                >
+
+            `;
+
+
+            visual.appendChild(card);
+
+
+            cards.push(card);
+
+        }
+    );
+
+
+    categoryLooks.forEach(
+        (item, itemIndex) => {
+
+            const detail =
+            document.createElement("div");
+
+
+            detail.className =
+            "details-item";
+
+
+            detail.innerHTML = `
+
+                <div class="details-index">
+
+                    ${String(itemIndex + 1)
+                        .padStart(2,"0")}
+                    /
+                    ${String(total)
+                        .padStart(2,"0")}
+
+                </div>
+
+
+                <h2 class="details-title">
+
+                    ${item.title}
+
+                </h2>
+
+
+                <p class="details-description">
+
+                    ${item.description}
+
+                </p>
+
+            `;
+
+
+            details.appendChild(detail);
+
+        }
+    );
+
+
+    looksContainer.appendChild(section);
+
+
+    initializeMechanicalStack(
+        section,
+        cards,
+        details,
+        categoryLooks
+    );
+
+}
+
+
+/* =====================================================
+   CURRENT LOOK DATA
+===================================================== */
+
+let activeLookData = [];
+
+
+function getCurrentLookSet() {
+
+    return window.__activeCollectionLooks
+        || [];
+
+}
+
+
+/* =====================================================
+   COLLECTION OVERRIDE
+===================================================== */
+
+const originalOpenCollection =
+openCollection;
+
+
+function setCollectionLooks(category) {
+
+    window.__activeCollectionLooks =
+    category.looks;
+
+}
+
+
+window.openCollection =
+function(category) {
+
+    setCollectionLooks(category);
+
+    originalOpenCollection(category);
+
+};
+
+
+/* =====================================================
+   IMAGE FINDER
+===================================================== */
+
+function findLookImage(
+    index,
+    total,
+    current,
+    look
+) {
+
+    return "";
+
+}
+
+
+/* =====================================================
+   MECHANICAL STACK
+===================================================== */
+
+function initializeMechanicalStack(
+    section,
+    cards,
+    details,
+    looks
+) {
+
+
+    const total =
+    cards.length;
+
+
+    const slots = [
+
+        {
+            x: 0,
+            scale: 1,
+            blur: 0,
+            opacity: 1,
+            z: 10
+        },
+
+        {
+            x: -20,
+            scale: .90,
+            blur: 1.5,
+            opacity: .92,
+            z: 9
+        },
+
+        {
+            x: -40,
+            scale: .80,
+            blur: 3,
+            opacity: .70,
+            z: 8
+        },
+
+        {
+            x: -60,
+            scale: .70,
+            blur: 6,
+            opacity: .45,
+            z: 7
+        },
+
+        {
+            x: -80,
+            scale: .60,
+            blur: 13,
+            opacity: .20,
+            z: 6
+        }
+
+    ];
+
+
+    const outgoing = {
+
+        x: 115,
+
+        scale: .92,
+
+        blur: 5,
+
+        opacity: 0,
+
+        z: 20
+
+    };
+
+
+    cards.forEach(
+        (card, index) => {
+
+            const slot =
+            slots[index];
+
+
+            setCard(
+                card,
+                slot
+            );
+
+        }
+    );
+
+
+    details.forEach(
+        (detail, index) => {
+
+            gsap.set(
+                detail,
+                {
+
+                    opacity:
+                        index === 0
+                            ? 1
+                            : 0,
+
+                    y:
+                        index === 0
+                            ? "-50%"
+                            : "-45%"
+
+                }
+            );
+
+        }
+    );
+
+
+    const timeline =
+    gsap.timeline({
+
+        scrollTrigger: {
+
+            trigger: section,
+
+            scroller: collection,
+
+            start: "top top",
+
+            end: "bottom bottom",
+
+            scrub: true,
+
+            invalidateOnRefresh: true
+
+        }
+
+    });
+
+
+    for (
+        let transition = 0;
+        transition < total - 1;
+        transition++
+    ) {
+
+
+        timeline.add(
+            createTransition(
+                cards,
+                details,
+                transition,
+                slots,
+                outgoing,
+                total
+            )
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TRANSITION
+===================================================== */
+
+function createTransition(
+    cards,
+    details,
+    active,
+    slots,
+    outgoing,
+    total
+) {
+
+
+    const tl =
+    gsap.timeline();
+
+
+    const currentCard =
+    cards[active];
+
+
+    tl.to(
+        currentCard,
+        {
+
+            xPercent:
+                outgoing.x,
+
+            scale:
+                outgoing.scale,
+
+            filter:
+                `blur(${outgoing.blur}px)`,
+
+            opacity:
+                outgoing.opacity,
+
+            duration: 1,
+
+            ease:
+                "none"
+
+        },
+        0
+    );
+
+
+    for (
+        let i = active + 1;
+        i < total;
+        i++
+    ) {
+
+
+        const card =
+        cards[i];
+
+
+        const relative =
+        i - active;
+
+
+        const from =
+        slots[relative];
+
+
+        const to =
+        slots[relative - 1];
+
+
+        if (
+            !from ||
+            !to
+        ) {
+            continue;
+        }
+
+
+        tl.to(
+            card,
+            {
+
+                xPercent:
+                    to.x,
+
+                scale:
+                    to.scale,
+
+                filter:
+                    `blur(${to.blur}px)`,
+
+                opacity:
+                    to.opacity,
+
+                duration: 1,
+
+                ease:
+                    "none"
+
+            },
+            0
+        );
+
+    }
+
+
+    const nextCard =
+    cards[active + 1];
+
+
+    tl.to(
+        nextCard,
+        {
+
+            xPercent:
+                slots[0].x,
+
+            scale:
+                slots[0].scale,
+
+            filter:
+                `blur(${slots[0].blur}px)`,
+
+            opacity:
+                slots[0].opacity,
+
+            duration: 1,
+
+            ease:
+                "none"
+
+        },
+        0
+    );
+
+
+    tl.set(
+        currentCard,
+        {
+
+            xPercent:
+                slots[total - 1].x,
+
+            scale:
+                slots[total - 1].scale,
+
+            filter:
+                `blur(${slots[total - 1].blur}px)`,
+
+            opacity:
+                slots[total - 1].opacity,
+
+            zIndex:
+                slots[total - 1].z
+
+        },
+        .65
+    );
+
+
+    tl.to(
+        currentCard,
+        {
+
+            xPercent:
+                slots[total - 1].x,
+
+            scale:
+                slots[total - 1].scale,
+
+            filter:
+                `blur(${slots[total - 1].blur}px)`,
+
+            opacity:
+                slots[total - 1].opacity,
+
+            duration: .35,
+
+            ease:
+                "none"
+
+        },
+        .65
+    );
+
+
+    const currentText =
+    details[active];
+
+
+    const nextText =
+    details[active + 1];
+
+
+    if (currentText) {
+
+        tl.to(
+            currentText,
+            {
+
+                opacity: 0,
+
+                y: "-55%",
+
+                duration: .45,
+
+                ease: "none"
+
+            },
+            0
+        );
+
+    }
+
+
+    if (nextText) {
+
+        tl.to(
+            nextText,
+            {
+
+                opacity: 1,
+
+                y: "-50%",
+
+                duration: .55,
+
+                ease: "none"
+
+            },
+            .25
+        );
+
+    }
+
+
+    return tl;
+
+}
+
+
+/* =====================================================
+   SET CARD
+===================================================== */
+
+function setCard(
+    card,
+    state
+) {
+
+
+    gsap.set(
+        card,
+        {
+
+            xPercent:
+                state.x,
+
+            x:
+                0,
+
+            yPercent:
+                -50,
+
+            y:
+                0,
+
+            scale:
+                state.scale,
+
+            filter:
+                `blur(${state.blur}px)`,
+
+            opacity:
+                state.opacity,
+
+            zIndex:
+                state.z
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GLOBAL REFRESH
+===================================================== */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        ScrollTrigger.refresh();
+
+    }
+);
+
+
+
+/* nav scroll chrome — independent of GSAP, safe to coexist */
+(function(){
+  var nav = document.getElementById('siteNav');
+  if(!nav) return;
+  addEventListener('scroll', function(){
+    nav.classList.toggle('stuck', scrollY > 50);
+  }, {passive:true});
+})();
+
+</script>
+
+</body>
+
+</html>
