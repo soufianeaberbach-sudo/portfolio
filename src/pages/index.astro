@@ -8,6 +8,25 @@ const stages = [
   ['04', '3D Simulation', 'Fit, balance and drape are resolved before sampling starts spending time.'],
   ['05', 'Final Garment', 'The factory receives a clear, repeatable production specification.'],
 ];
+
+const brandLogos = [
+  { src: '/LOGO/ZARA.png', alt: 'Zara' },
+  { src: '/LOGO/Bershka.png', alt: 'Bershka' },
+  { src: '/LOGO/OYSHO.png', alt: 'Oysho' },
+  { src: '/LOGO/Massimo Dutti.png', alt: 'Massimo Dutti' },
+  { src: '/LOGO/Mango.png', alt: 'Mango' },
+  { src: '/LOGO/ASOS.png', alt: 'ASOS' },
+  { src: '/LOGO/Adidas.png', alt: 'Adidas' },
+  { src: '/LOGO/RI.png', alt: 'River Island' },
+  { src: '/LOGO/PLT.png', alt: 'PrettyLittleThing' },
+  { src: '/LOGO/MISSGUIDED.png', alt: 'Missguided' },
+  { src: '/LOGO/ITS.png', alt: 'In The Style' },
+  { src: '/LOGO/FN.png', alt: 'Fashion Nova' },
+  { src: '/LOGO/ROMAN.png', alt: 'Roman' },
+  { src: '/LOGO/Boohoo.png', alt: 'Boohoo' },
+  { src: '/LOGO/ISIF.jpg', alt: 'I Saw It First' },
+  { src: '/LOGO/LM.png', alt: 'Little Mistress London' },
+];
 ---
 
 <SiteLayout
@@ -67,9 +86,13 @@ const stages = [
   <section class="brand-context">
     <div class="section-shell" data-reveal>
       <p class="eyebrow">Programme exposure</p>
-      <div class="brand-context__names" aria-label="Brand programme exposure">
-        <span>Zara</span><span>Bershka</span><span>Oysho</span><span>Massimo Dutti</span><span>Mango</span><span>ASOS</span><span>Adidas</span><span>River Island</span>
-      </div>
+      <ul class="brand-context__logos" aria-label="Brand programme exposure">
+        {brandLogos.map((logo) => (
+          <li>
+            <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
+          </li>
+        ))}
+      </ul>
       <p class="brand-context__note">Project exposure through manufacturing contracts at Ava Marie — not direct employment or endorsement.</p>
     </div>
   </section>
@@ -212,22 +235,7 @@ const stages = [
     align-items: flex-end;
     justify-content: center;
     border-left: 1px solid var(--line);
-    background:
-      linear-gradient(90deg, transparent 0 9%, var(--line) 9% calc(9% + 1px), transparent calc(9% + 1px)),
-      linear-gradient(180deg, rgba(255,255,255,.3), transparent 48%);
-  }
-  .home-hero__portrait::before {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    right: 0;
-    bottom: 1.2%;
-    width: 88%;
-    height: 5rem;
-    background: radial-gradient(ellipse at center, rgba(17,17,15,.22) 0, rgba(17,17,15,.09) 38%, transparent 72%);
-    filter: blur(7px);
-    transform: scaleY(.42);
-    transform-origin: center bottom;
+    background: linear-gradient(90deg, transparent 0 9%, var(--line) 9% calc(9% + 1px), transparent calc(9% + 1px));
   }
   .home-hero__portrait::after {
     content: '';
@@ -248,7 +256,6 @@ const stages = [
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
-    filter: drop-shadow(0 1.2rem 1.2rem rgba(17,17,15,.12));
     transform: translateX(2%) scale(1.035);
     transform-origin: center bottom;
   }
@@ -270,8 +277,36 @@ const stages = [
   .home-process__list p { margin: 0; color: var(--muted); line-height: 1.65; }
 
   .brand-context { padding-block: clamp(6rem, 10vw, 10rem); background: var(--ink); color: var(--paper); }
-  .brand-context__names { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 3rem; border-top: 1px solid #45443e; border-left: 1px solid #45443e; }
-  .brand-context__names span { padding: 2rem 1.25rem; border-right: 1px solid #45443e; border-bottom: 1px solid #45443e; font-family: var(--display); font-size: clamp(1.4rem, 2.5vw, 2.8rem); font-weight: 700; letter-spacing: -.04em; }
+  .brand-context__logos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 3rem 0 0;
+    padding: 0;
+    border-top: 1px solid #45443e;
+    border-left: 1px solid #45443e;
+    list-style: none;
+  }
+  .brand-context__logos li {
+    min-width: 0;
+    min-height: clamp(7rem, 10vw, 9rem);
+    display: grid;
+    place-items: center;
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    border-right: 1px solid #45443e;
+    border-bottom: 1px solid #45443e;
+  }
+  .brand-context__logos img {
+    display: block;
+    width: 100%;
+    max-width: 11rem;
+    height: 3rem;
+    object-fit: contain;
+    filter: grayscale(1) invert(1);
+    mix-blend-mode: screen;
+    opacity: .82;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .brand-context__logos li:hover img { opacity: 1; transform: scale(1.035); }
   .brand-context__note { max-width: 45rem; margin: 2rem 0 0; color: #96958d; font-size: .78rem; }
 
   .home-next { display: grid; grid-template-columns: 1fr .7fr; gap: 8vw; align-items: end; padding-block: clamp(7rem, 12vw, 12rem); }
@@ -305,7 +340,7 @@ const stages = [
     .positioning, .home-process, .home-next { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
-    .brand-context__names { grid-template-columns: repeat(2, 1fr); }
+    .brand-context__logos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 600px) {
     .home-hero {
@@ -337,11 +372,11 @@ const stages = [
       min-height: 22rem;
       margin-right: calc(var(--gutter) * -1);
     }
-    .home-hero__portrait::before { right: -2%; width: 92%; }
     .home-hero__portrait img { width: 110%; height: 105%; transform: translateX(3%) scale(1.02); }
     .home-process__list li { grid-template-columns: 2.5rem 1fr; }
     .home-process__list p { grid-column: 2; }
-    .brand-context__names span { padding: 1.4rem .8rem; font-size: 1.25rem; }
+    .brand-context__logos li { min-height: 6.5rem; padding: 1.25rem; }
+    .brand-context__logos img { max-width: 9rem; height: 2.6rem; }
   }
   @media (prefers-reduced-motion: reduce) { .home-hero__role-window::after { animation: none; } }
 </style>
