@@ -1,4 +1,5 @@
 ---
+import Arrow from './Arrow.astro';
 const navItems = [
   { href: '/', label: 'Home', index: '00' },
   { href: '/expertise/', label: 'Expertise', index: '01' },
@@ -25,7 +26,7 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
     ))}
   </nav>
 
-  <a class="header-brief" href="/contact/">Start a brief <span aria-hidden="true">↗</span></a>
+  <a class="header-brief" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
 
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
     <span class="sr-only">Open menu</span>
@@ -37,7 +38,7 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
     <nav aria-label="Mobile navigation">
       {navItems.map((item) => (
         <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-          <span>{item.index}</span><strong>{item.label}</strong><i aria-hidden="true">↗</i>
+          <span>{item.index}</span><strong>{item.label}</strong><i aria-hidden="true"><Arrow /></i>
         </a>
       ))}
     </nav>

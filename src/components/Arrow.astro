@@ -1,0 +1,39 @@
+---
+/*
+  The site used the Unicode glyphs U+2197 / U+2193 / U+2191 for its arrows.
+  All three carry an *emoji presentation* variant, so iOS and Android fall
+  through the font stack to the colour emoji font and paint them as blue
+  square emoji — a generic chat icon that has nothing to do with the design.
+  Desktop happened to look right only because the desktop font stack
+  resolved them as text glyphs first.
+
+  Drawing the arrow ourselves removes the font from the equation entirely.
+  It inherits `currentColor`, so every existing rule that paints an arrow
+  --signal keeps working untouched, and it is sized in `em`, so it tracks
+  the type size it sits next to exactly as the glyph did.
+*/
+interface Props {
+  dir?: 'ne' | 'down' | 'up';
+  class?: string;
+}
+
+const { dir = 'ne', class: className } = Astro.props;
+
+const paths: Record<NonNullable<Props['dir']>, string> = {
+  ne: 'M7 17 17 7M8.6 7H17v8.4',
+  down: 'M12 6v12M6.2 12.4 12 18.2l5.8-5.8',
+  up: 'M12 18V6M6.2 11.6 12 5.8l5.8 5.8',
+};
+---
+
+<svg
+  class={className ? `arrow ${className}` : 'arrow'}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  focusable="false"
+><path d={paths[dir]} /></svg>

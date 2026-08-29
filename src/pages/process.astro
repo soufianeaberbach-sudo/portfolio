@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
 
 const stages = [
   { number: '01', title: 'Sketch', subtitle: 'Concept locked before cost', body: 'Silhouette, fabric direction and production constraints are agreed in writing before anything is cut.', output: 'Development direction' },
@@ -48,7 +49,7 @@ const stages = [
       </div>
       <div data-reveal>
         <p>Production quality is decided upstream. The five stages make those decisions visible, testable and repeatable before they become factory problems.</p>
-        <a class="button button--signal" href="/contact/">Start at stage one <span>↗</span></a>
+        <a class="button button--signal" href="/contact/">Start at stage one <span><Arrow /></span></a>
       </div>
     </div>
   </section>

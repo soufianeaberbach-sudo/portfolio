@@ -142,6 +142,17 @@ button { color: inherit; }
 
 .section-rule { border-top: 1px solid var(--line); }
 
+/* Drawn arrow (components/Arrow.astro). Sized in em so it tracks whatever
+   type it sits beside, and coloured by currentColor so the existing
+   `... span { color: var(--signal) }` rules keep working unchanged. */
+.arrow {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  vertical-align: -.13em;
+}
+
 [data-reveal] { opacity: 1; transform: none; }
 .js [data-reveal] {
   opacity: 0;
@@ -207,6 +218,8 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 }
 
 .brand {
+  position: relative;
+  z-index: 161;
   display: inline-flex;
   align-items: flex-end;
   font-family: var(--display);
@@ -261,6 +274,11 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 
 .menu-toggle {
   display: none;
+  /* The menu panel is a sibling inside .site-header, so these two z-indexes
+     are compared directly. The toggle has to stay above the panel it opens,
+     otherwise the close button is unreachable. */
+  position: relative;
+  z-index: 161;
   width: 2.75rem;
   height: 2.75rem;
   padding: .75rem;
@@ -282,7 +300,10 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 .mobile-menu {
   display: none;
   position: fixed;
-  z-index: -1;
+  /* Was z-index: -1, which painted the panel behind the page content it is
+     supposed to cover. It has to sit above the header it belongs to and
+     above .scroll-progress (z-index 150). */
+  z-index: 160;
   inset: 0;
   padding: 7rem var(--gutter) 2rem;
   background: var(--ink);
@@ -292,7 +313,10 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   transition: opacity .35s, visibility .35s;
 }
 .menu-open .mobile-menu { opacity: 1; visibility: visible; }
+/* Raising the whole header lifts its subtree — the open panel included —
+   above .scroll-progress (z-index 150), which otherwise painted across it. */
 .menu-open .site-header {
+  z-index: 170;
   color: var(--paper) !important;
   background: var(--ink) !important;
   border-bottom-color: #393933 !important;
@@ -385,18 +409,39 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 
 @media (max-width: 720px) {
   :root { --header-h: 4.5rem; --gutter: 1.1rem; }
-  .site-header { border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 94%, transparent); }
+  /* The header was 92-94% opaque and leaned on backdrop-filter to hide the
+     rest. backdrop-filter needs -webkit- on iOS and is dropped entirely
+     under Android battery saver / reduced transparency, so the page text
+     showed straight through the bar and collided with the logo. There is
+     no room for translucency in a 4.5rem bar on a phone: make it solid. */
+  .site-header,
+  .site-header.is-scrolled {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
   html[data-page='portfolio'] .site-header:not(.is-scrolled),
   html[data-page='contact'] .site-header:not(.is-scrolled) {
-    background: color-mix(in srgb, var(--ink) 94%, transparent);
+    background: var(--ink);
     border-bottom-color: #393933;
   }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-grid > nav { margin-top: 1rem; }
   .footer-profiles { margin-top: .5rem; }
   .footer-meta { justify-content: space-between; margin-top: .5rem; }
-  .footer-callout a { align-items: center; }
-  .footer-callout a i { width: 3.2rem; font-size: 1.5rem; }
+  /* On a phone the bordered square read as a separate app icon bolted to
+     the headline. Drop the box and let the arrow sit as a piece of the
+     typography, at the same weight as the desktop mark. Desktop keeps its
+     framed square. */
+  .footer-callout a { align-items: center; gap: 1rem; }
+  .footer-callout a i {
+    width: auto;
+    aspect-ratio: auto;
+    border: 0;
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+  .footer-callout a:hover i { transform: none; }
   .page-intro { min-height: 72vh; padding-top: calc(var(--header-h) + 4rem); }
   .page-intro__title { font-size: clamp(3rem, 12.5vw, 5rem); }
   .lede { font-size: 1rem; }
