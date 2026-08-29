@@ -324,19 +324,22 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   letter-spacing: -.07em;
   line-height: .88;
 }
-.footer-callout a i { color: var(--signal); font-size: .5em; font-style: normal; transition: transform .3s; }
-.footer-callout a:hover i { transform: translate(.2em, -.2em); }
+.footer-callout a i { display: grid; flex: 0 0 auto; width: clamp(3.2rem, 5vw, 5.5rem); aspect-ratio: 1; place-items: center; border: 1px solid #4b4a43; color: var(--signal); font-size: clamp(1.5rem, 3vw, 3rem); font-style: normal; transition: border-color .3s, transform .3s; }
+.footer-callout a:hover i { border-color: var(--signal); transform: translate(.12em, -.12em); }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: auto .9fr 1.4fr auto;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
   padding-top: 2rem;
   font-size: .78rem;
 }
-.footer-grid strong { font-family: var(--display); font-size: 1rem; }
-.footer-grid p { color: #8e8d85; margin: .35rem 0 0; }
+.footer-signature { display: inline-flex; align-items: flex-end; font-family: var(--display); font-size: 1.35rem; font-weight: 900; line-height: 1; }
+.footer-signature i { width: .32rem; height: .32rem; margin: 0 0 .08rem .13rem; border-radius: 50%; background: var(--signal); }
+.footer-grid p { margin: 0; color: #77766f; }
 .footer-grid > nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1rem; }
 .footer-grid > nav a:hover { color: var(--signal); }
+.footer-profiles { display: grid; gap: 1rem; }
 .footer-meta { display: flex; justify-content: flex-end; gap: 2rem; color: #8e8d85; }
 
 .page-intro {
@@ -383,8 +386,10 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-grid > nav { margin-top: 1rem; }
-  .footer-meta { justify-content: space-between; margin-top: 1rem; }
+  .footer-profiles { margin-top: .5rem; }
+  .footer-meta { justify-content: space-between; margin-top: .5rem; }
   .footer-callout a { align-items: center; }
+  .footer-callout a i { width: 3.2rem; font-size: 1.5rem; }
   .page-intro { min-height: 72vh; padding-top: calc(var(--header-h) + 4rem); }
   .page-intro__title { font-size: clamp(3rem, 12.5vw, 5rem); }
   .lede { font-size: 1rem; }

@@ -5,9 +5,9 @@ const profiles = [
     mark: 'in',
     href: 'https://www.linkedin.com/in/soufiane-aberbach-6799b7155?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
   },
-  { name: 'Fiverr', mark: 'fi', href: 'https://fr.fiverr.com/s/RVmjkkl' },
+  { name: 'Fiverr', mark: 'fiverr.', href: 'https://fr.fiverr.com/s/RVmjkkl' },
   { name: 'Upwork', mark: 'up', href: 'https://www.upwork.com/freelancers/~01d3553078e04b156f?mp_source=share' },
-  { name: 'Freelancer', mark: 'fr', href: 'https://www.freelancer.com/u/soufianeaberbach?frm=soufianeaberbach&sb=t' },
+  { name: 'Freelancer', mark: 'freelancer', href: 'https://www.freelancer.com/u/soufianeaberbach?frm=soufianeaberbach&sb=t' },
 ];
 ---
 
@@ -15,44 +15,37 @@ const profiles = [
   {profiles.map((profile) => (
     <a href={profile.href} target="_blank" rel="noopener noreferrer" aria-label={`${profile.name} profile (opens in a new tab)`}>
       <span class="social-links__mark" aria-hidden="true">{profile.mark}</span>
-      <span>{profile.name}</span>
     </a>
   ))}
 </nav>
 
 <style>
-  .social-links { display: flex; flex-wrap: wrap; gap: .65rem 1rem; margin-top: 1.25rem; }
+  .social-links { display: flex; flex-wrap: wrap; gap: .55rem; }
   .social-links a {
     display: inline-flex;
     align-items: center;
-    gap: .5rem;
     color: #aaa89f;
-    font-family: var(--mono);
-    font-size: .62rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    transition: color .2s ease;
+    transition: color .2s ease, transform .2s ease;
   }
   .social-links__mark {
     display: grid;
-    width: 1.75rem;
-    height: 1.75rem;
+    min-width: 2.3rem;
+    height: 2.3rem;
     place-items: center;
+    padding-inline: .65rem;
     border: 1px solid #4b4a43;
     color: var(--paper);
     font-family: var(--display);
-    font-size: .7rem;
+    font-size: .72rem;
     font-weight: 800;
     letter-spacing: -.04em;
     line-height: 1;
     text-transform: lowercase;
-    transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+    transition: border-color .2s ease, background-color .2s ease, color .2s ease;
   }
-  .social-links a:hover { color: var(--paper); }
-  .social-links a:hover .social-links__mark { border-color: var(--signal); background: var(--signal); transform: translateY(-2px); }
+  .social-links a:hover { color: var(--ink); transform: translateY(-2px); }
+  .social-links a:hover .social-links__mark { border-color: var(--paper); background: var(--paper); color: var(--ink); }
   .social-links a:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
 
-  @media (max-width: 420px) {
-    .social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
+  @media (max-width: 420px) { .social-links { gap: .45rem; } }
 </style>
