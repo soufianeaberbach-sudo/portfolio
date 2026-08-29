@@ -1,2 +1,43 @@
-* text eol=lf
+# Text files are normalised to LF in the repository.
+#
+# IMPORTANT: this uses `text=auto`, NOT `text`. The previous rule was
+# `* text eol=lf`, which FORCES text treatment on every file in the repo and
+# only exempted *.png. Git then applied CRLF -> LF normalisation to binary
+# assets on check-in, silently deleting every CR byte that happened to sit
+# before an LF. That destroyed public/CLO3D.mp4 twice: the stored blob had
+# ~56 bytes removed from the middle of the H.264 stream, which shifted every
+# subsequent NAL length prefix and left roughly one second of playable video.
+#
+# `text=auto` lets Git detect binary content and leave it alone, and the
+# explicit `binary` rules below make that guarantee unconditional for the
+# asset types this project ships.
+* text=auto eol=lf
+
+# Images
 *.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+
+# Video / audio
+*.mp4 binary
+*.webm binary
+*.mov binary
+*.m4v binary
+*.mp3 binary
+*.wav binary
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+# Archives / documents
+*.pdf binary
+*.zip binary
+*.gz binary
