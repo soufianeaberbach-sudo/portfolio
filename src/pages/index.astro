@@ -75,23 +75,6 @@ const brandLogos = [
     </div>
   </section>
 
-  <section class="home-process section-shell section-rule">
-    <div class="home-process__head" data-reveal>
-      <p class="eyebrow">The production sequence</p>
-      <h2 class="display">Five stages.<br />No blind spots.</h2>
-      <a class="button" href="/process/">Explore the process <span>↗</span></a>
-    </div>
-    <ol class="home-process__list">
-      {stages.map(([index, title, text]) => (
-        <li data-reveal>
-          <span class="index-tag">{index}</span>
-          <h3>{title}</h3>
-          <p>{text}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
-
   <section class="brand-context">
     <div class="section-shell">
       <div class="brand-context__head" data-reveal>
@@ -114,26 +97,46 @@ const brandLogos = [
     </div>
   </section>
 
-  <section class="home-next section-shell" aria-labelledby="simulation-title">
-    <div class="home-next__intro" data-reveal>
-      <p class="label">CLO3D simulation / selected work</p>
-      <h2 class="display" id="simulation-title">See it move.<br />Before you make it.</h2>
-      <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette and fit decisions happen before the first physical sample.</p>
+  <section class="home-process section-shell">
+    <div class="home-process__head" data-reveal>
+      <p class="eyebrow">The production sequence</p>
+      <h2 class="display">Five stages.<br />No blind spots.</h2>
+      <a class="button" href="/process/">Explore the process <span>↗</span></a>
     </div>
-    <a href="/portfolio/" class="home-next__media" data-reveal aria-label="View the portfolio and CLO3D simulation work">
-      <video
-        class="home-next__video"
-        poster="/CLO3D-poster.jpg"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="none"
-        aria-label="Female and male digital fashion models presented in CLO3D"
-      >
-        <source src="/CLO3D.mp4" type="video/mp4" />
-      </video>
-    </a>
+    <ol class="home-process__list">
+      {stages.map(([index, title, text]) => (
+        <li data-reveal>
+          <span class="index-tag">{index}</span>
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="home-next" aria-labelledby="simulation-title">
+    <div class="section-shell home-next__grid">
+      <div class="home-next__intro" data-reveal>
+        <p class="label">CLO3D simulation / selected work</p>
+        <h2 class="display" id="simulation-title"><em>See</em> it move.<br />Before you make it.</h2>
+        <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette and fit decisions happen before the first physical sample.</p>
+        <a href="/portfolio/" class="text-link">View the portfolio <span>↗</span></a>
+      </div>
+      <div class="home-next__media" data-reveal>
+        <video
+          class="home-next__video"
+          poster="/CLO3D-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="Female and male digital fashion models walking, presented in CLO3D"
+        >
+          <source src="/CLO3D.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
   </section>
 </SiteLayout>
 
@@ -185,62 +188,47 @@ const brandLogos = [
     window.setTimeout(typeRole, 520);
   }
 
-  const simulationVideo = document.querySelector('.home-next__media video');
+  /* ------------------------------------------------------------------
+     CLO3D simulation video.
+
+     This used to run two IntersectionObservers: a "warm" one that called
+     video.load() and a "play" one that called play()/pause() on scroll.
+     video.load() re-runs the resource selection algorithm, which resets
+     currentTime to 0 — so any time the warm observer fired after playback
+     had begun, the video jumped back to the start. That is a premature
+     restart caused by our own code, and it is exactly the kind of logic
+     the browser already does better.
+
+     Native autoplay + muted + loop + playsinline covers the whole
+     requirement, so the element now drives itself. Nothing here ever
+     touches currentTime, calls load(), or pauses on scroll.
+
+     Two things still need JavaScript:
+       1. prefers-reduced-motion — hold on the poster frame instead of
+          looping motion at the user.
+       2. autoplay refusal (iOS Low Power Mode, data saver) — retry once
+          on the first real interaction rather than leaving a dead frame.
+     ------------------------------------------------------------------ */
+  const simulationVideo = document.querySelector('.home-next__video');
   if (simulationVideo instanceof HTMLVideoElement) {
-    const media = simulationVideo.closest('.home-next__media');
-
-    // If the file cannot be decoded, keep the poster frame showing rather than
-    // collapsing to a black box. The poster is already painted by the element,
-    // so this only needs to stop us from ever hiding it.
-    simulationVideo.addEventListener('error', () => {
-      media && media.classList.add('is-poster-only');
-    }, { once: true });
-    simulationVideo.addEventListener('playing', () => {
-      media && media.classList.add('is-playing');
-    }, { once: true });
-
     if (reduceMotion) {
+      simulationVideo.removeAttribute('autoplay');
       simulationVideo.pause();
-    } else if ('IntersectionObserver' in window) {
-      // Two observers, deliberately split:
-      //
-      // 1. WARM — a very generous rootMargin so the file starts downloading
-      //    roughly a screen and a half before the section arrives. The element
-      //    ships preload="none" so it never competes with the hero; this is
-      //    what upgrades it once the page is quiet.
-      let warmed = false;
-      const warm = () => {
-        if (warmed) return;
-        warmed = true;
-        simulationVideo.preload = 'auto';
-        simulationVideo.load();
-      };
-      const warmObserver = new IntersectionObserver((entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          warm();
-          warmObserver.disconnect();
-        }
-      }, { rootMargin: '150% 0px' });
-
-      // 2. PLAY — only once it is genuinely on screen.
-      const playObserver = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          warm();
-          simulationVideo.play().catch(() => {});
-        } else {
-          simulationVideo.pause();
-        }
-      }, { threshold: .25 });
-
-      const start = () => {
-        warmObserver.observe(simulationVideo);
-        playObserver.observe(simulationVideo);
-      };
-      // Wait for load so the warm-up never contends with above-the-fold work.
-      if (document.readyState === 'complete') start();
-      else window.addEventListener('load', start, { once: true });
     } else {
-      simulationVideo.preload = 'auto';
+      // Autoplay can still be refused outright (iOS Low Power Mode, data
+      // saver). Recover on the first interaction, but only once the frame
+      // is actually on screen, so a browser that is deliberately holding
+      // playback back until then keeps doing so.
+      const events = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
+      const recover = () => {
+        if (simulationVideo.paused) {
+          const box = simulationVideo.getBoundingClientRect();
+          if (box.top > window.innerHeight || box.bottom < 0) return;
+          simulationVideo.play().catch(() => {});
+        }
+        events.forEach((name) => window.removeEventListener(name, recover));
+      };
+      events.forEach((name) => window.addEventListener(name, recover, { passive: true }));
     }
   }
 </script>
@@ -350,7 +338,6 @@ const brandLogos = [
 
   .positioning { display: grid; grid-template-columns: 1.4fr .6fr; gap: 7vw; padding-block: clamp(7rem, 14vw, 14rem); }
   .positioning h2 { max-width: 68rem; font-size: clamp(4rem, 8vw, 8.5rem); }
-  .positioning h2 em { color: var(--signal); font-style: normal; }
   .positioning__copy { align-self: end; max-width: 30rem; }
   .positioning__copy p { color: var(--ink-soft); line-height: 1.75; }
   .text-link { display: inline-flex; gap: 1rem; margin-top: 1.5rem; padding-bottom: .3rem; border-bottom: 1px solid; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
@@ -412,25 +399,37 @@ const brandLogos = [
   /* Padding trimmed from 6-10rem now that the meta label, arrow and the
      bottom link rail are gone — the section keeps the same visual weight
      without the removed elements leaving a gap. */
-  .home-next { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .55fr); gap: clamp(3rem, 7vw, 8rem); align-items: center; padding-block: clamp(4.5rem, 7vw, 7.5rem); }
+  /* The 3D simulation section is pure black, not --ink (#11110f).
+     The video is mastered on #000: at 36rem wide a 17/255 tonal step
+     around it reads as a visible rectangle. Matching #000 exactly is what
+     makes the media dissolve into the section — there is no frame, card,
+     border, radius, shadow or scrim anywhere in here on purpose. */
+  .home-next { background: #000; color: var(--paper); }
+  .home-next__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .62fr);
+    gap: clamp(3rem, 7vw, 8rem);
+    align-items: center;
+    padding-block: clamp(5rem, 8vw, 8.5rem);
+  }
   .home-next__intro { align-self: center; }
+  .home-next .label { color: #8b897f; }
   .home-next h2 { margin-top: 2rem; font-size: clamp(3.8rem, 6.6vw, 7rem); }
-  .home-next__lede { max-width: 32rem; margin: 2rem 0 0; color: var(--muted); line-height: 1.75; }
-  .home-next__media { position: relative; width: min(100%, 36rem); aspect-ratio: 9 / 16; justify-self: end; overflow: hidden; background: var(--ink); color: var(--paper); isolation: isolate; }
-  /* The bottom scrim existed to seat the meta label and arrow. With those
-     removed there is nothing to seat, so the frame stays clean. */
-  /* The poster is painted by the element itself and sized identically to the
-     frame, so there is no layout shift and no empty/black box before playback.
-     The reserved aspect-ratio box above means the slot never collapses. */
-  .home-next__media video {
+  .home-next__lede { max-width: 32rem; margin: 2rem 0 0; color: #a3a199; line-height: 1.75; }
+  .home-next .text-link { border-color: #4a4842; color: var(--paper); }
+  .home-next .text-link:hover { border-color: var(--signal); }
+
+  /* aspect-ratio is the video's own 512x910, so `contain` never crops and
+     never distorts, and the reserved box means no layout shift. */
+  .home-next__media { width: min(100%, 36rem); justify-self: end; }
+  .home-next__video {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background: var(--ink) url('/CLO3D-poster.jpg') center / cover no-repeat;
-    transition: transform .8s var(--ease);
+    height: auto;
+    aspect-ratio: 512 / 910;
+    object-fit: contain;
+    background: #000;
   }
-  .home-next__media:hover video { transform: scale(1.018); }
 
   @media (max-width: 1100px) and (min-width: 901px) {
     .home-hero { grid-template-columns: minmax(0, 1fr) minmax(25rem, .9fr); gap: 1.5rem; }
@@ -455,7 +454,7 @@ const brandLogos = [
       margin-left: auto;
       border-left: 0;
     }
-    .positioning, .home-process, .home-next { grid-template-columns: 1fr; }
+    .positioning, .home-process, .home-next__grid { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
     /* 4 x 4 is the structure at every width — only the rhythm tightens. */
@@ -498,8 +497,8 @@ const brandLogos = [
     .brand-context__head > .label { text-align: left; }
     .brand-context__logos { gap: 1.15rem .9rem; padding-block: 1.6rem; }
     .brand-logo { height: 1.6rem; }
-    .home-next { gap: 2.5rem; }
-    .home-next__media { width: min(100%, 28rem); aspect-ratio: 9 / 16; justify-self: center; }
+    .home-next__grid { gap: 2.5rem; padding-block: clamp(3.5rem, 12vw, 5rem); }
+    .home-next__media { width: 100%; max-width: 30rem; justify-self: center; }
     .home-next__lede { margin-top: 1.5rem; }
   }
   @media (prefers-reduced-motion: reduce) { .home-hero__role-window::after { animation: none; } }

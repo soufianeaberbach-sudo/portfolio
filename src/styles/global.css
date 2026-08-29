@@ -102,6 +102,13 @@ button { color: inherit; }
   line-height: .86;
 }
 
+/* Single-keyword accent. One word per heading, never a whole line. */
+.display em,
+.accent-word {
+  color: var(--signal);
+  font-style: normal;
+}
+
 .lede {
   max-width: 45rem;
   color: var(--ink-soft);
