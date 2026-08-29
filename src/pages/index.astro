@@ -9,23 +9,32 @@ const stages = [
   ['05', 'Final Garment', 'The factory receives a clear, repeatable production specification.'],
 ];
 
+// 16 logos = a 4 x 4 grid. Each is painted as a CSS mask so the single
+// artwork can be recoloured (white by default, --signal on hover) without
+// shipping a second copy of every file.
+//
+// `w` is an optical max-width in rem. The marks range from 2.4:1 (ZARA) to
+// 10.5:1 (Little Mistress), so a single shared box would render ZARA roughly
+// three times taller than LM. Each `w` is set to the logo's own aspect ratio
+// x a common target height, which lands every mark on the same visual weight.
+// `mask` is only set where the source file has no usable alpha channel.
 const brandLogos = [
-  { src: '/LOGO/ZARA.png', alt: 'Zara' },
-  { src: '/LOGO/Bershka.png', alt: 'Bershka' },
-  { src: '/LOGO/OYSHO.png', alt: 'Oysho' },
-  { src: '/LOGO/Massimo Dutti.png', alt: 'Massimo Dutti' },
-  { src: '/LOGO/Mango.png', alt: 'Mango' },
-  { src: '/LOGO/ASOS.png', alt: 'ASOS' },
-  { src: '/LOGO/Adidas.png', alt: 'Adidas' },
-  { src: '/LOGO/RI.png', alt: 'River Island' },
-  { src: '/LOGO/PLT.png', alt: 'PrettyLittleThing' },
-  { src: '/LOGO/MISSGUIDED.png', alt: 'Missguided' },
-  { src: '/LOGO/ITS.png', alt: 'In The Style' },
-  { src: '/LOGO/FN.png', alt: 'Fashion Nova' },
-  { src: '/LOGO/ROMAN.png', alt: 'Roman' },
-  { src: '/LOGO/Boohoo.png', alt: 'Boohoo' },
-  { src: '/LOGO/ISIF.jpg', alt: 'I Saw It First' },
-  { src: '/LOGO/LM.png', alt: 'Little Mistress London' },
+  { src: '/LOGO/ZARA.png', alt: 'Zara', w: 6.1 },
+  { src: '/LOGO/Bershka.png', alt: 'Bershka', w: 11.6 },
+  { src: '/LOGO/OYSHO.png', alt: 'Oysho', w: 13.1 },
+  { src: '/LOGO/Massimo Dutti.png', alt: 'Massimo Dutti', w: 18.4 },
+  { src: '/LOGO/Mango.png', alt: 'Mango', w: 15.4 },
+  { src: '/LOGO/ASOS.png', alt: 'ASOS', w: 8.8 },
+  { src: '/LOGO/Adidas.png', alt: 'Adidas', w: 11.0 },
+  { src: '/LOGO/RI.png', alt: 'River Island', w: 14.5 },
+  { src: '/LOGO/PLT.png', alt: 'PrettyLittleThing', w: 22.2, mask: '/LOGO/PLT-mask.png' },
+  { src: '/LOGO/MISSGUIDED.png', alt: 'Missguided', w: 10.9, mask: '/LOGO/MISSGUIDED-mask.png' },
+  { src: '/LOGO/ITS.png', alt: 'In The Style', w: 19.2 },
+  { src: '/LOGO/FN.png', alt: 'Fashion Nova', w: 20.5 },
+  { src: '/LOGO/ROMAN.png', alt: 'Roman', w: 13.3 },
+  { src: '/LOGO/Boohoo.png', alt: 'Boohoo', w: 10.9 },
+  { src: '/LOGO/ISIF.jpg', alt: 'I Saw It First', w: 25.6, mask: '/LOGO/ISIF-mask.png' },
+  { src: '/LOGO/LM.png', alt: 'Little Mistress London', w: 26.8 },
 ];
 ---
 
@@ -92,7 +101,12 @@ const brandLogos = [
       <ul class="brand-context__logos" aria-label="Brand programme exposure">
         {brandLogos.map((logo) => (
           <li>
-            <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
+            <span
+              class="brand-logo"
+              role="img"
+              aria-label={logo.alt}
+              style={`--logo:url("${encodeURI(logo.mask ?? logo.src)}");--w:${logo.w}`}
+            />
           </li>
         ))}
       </ul>
@@ -107,7 +121,18 @@ const brandLogos = [
       <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette and fit decisions happen before the first physical sample.</p>
     </div>
     <a href="/portfolio/" class="home-next__media" data-reveal aria-label="View the portfolio and CLO3D simulation work">
-      <video src="/CLO3D.mp4" autoplay muted loop playsinline preload="auto" aria-label="Female and male digital fashion models presented in CLO3D"></video>
+      <video
+        class="home-next__video"
+        poster="/CLO3D-poster.jpg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label="Female and male digital fashion models presented in CLO3D"
+      >
+        <source src="/CLO3D.mp4" type="video/mp4" />
+      </video>
       <span class="home-next__media-meta label">Digital garment study <b>00:16</b></span>
       <i class="home-next__media-arrow" aria-hidden="true">↗</i>
     </a>
@@ -167,17 +192,60 @@ const brandLogos = [
 
   const simulationVideo = document.querySelector('.home-next__media video');
   if (simulationVideo instanceof HTMLVideoElement) {
+    const media = simulationVideo.closest('.home-next__media');
+
+    // If the file cannot be decoded, keep the poster frame showing rather than
+    // collapsing to a black box. The poster is already painted by the element,
+    // so this only needs to stop us from ever hiding it.
+    simulationVideo.addEventListener('error', () => {
+      media && media.classList.add('is-poster-only');
+    }, { once: true });
+    simulationVideo.addEventListener('playing', () => {
+      media && media.classList.add('is-playing');
+    }, { once: true });
+
     if (reduceMotion) {
       simulationVideo.pause();
     } else if ('IntersectionObserver' in window) {
-      const videoObserver = new IntersectionObserver(([entry]) => {
+      // Two observers, deliberately split:
+      //
+      // 1. WARM — a very generous rootMargin so the file starts downloading
+      //    roughly a screen and a half before the section arrives. The element
+      //    ships preload="none" so it never competes with the hero; this is
+      //    what upgrades it once the page is quiet.
+      let warmed = false;
+      const warm = () => {
+        if (warmed) return;
+        warmed = true;
+        simulationVideo.preload = 'auto';
+        simulationVideo.load();
+      };
+      const warmObserver = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          warm();
+          warmObserver.disconnect();
+        }
+      }, { rootMargin: '150% 0px' });
+
+      // 2. PLAY — only once it is genuinely on screen.
+      const playObserver = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
+          warm();
           simulationVideo.play().catch(() => {});
         } else {
           simulationVideo.pause();
         }
-      }, { threshold: .28 });
-      videoObserver.observe(simulationVideo);
+      }, { threshold: .25 });
+
+      const start = () => {
+        warmObserver.observe(simulationVideo);
+        playObserver.observe(simulationVideo);
+      };
+      // Wait for load so the warm-up never contends with above-the-fold work.
+      if (document.readyState === 'complete') start();
+      else window.addEventListener('load', start, { once: true });
+    } else {
+      simulationVideo.preload = 'auto';
     }
   }
 </script>
@@ -301,37 +369,50 @@ const brandLogos = [
   .home-process__list h3 { margin: .2rem 0 0; font-family: var(--display); font-size: clamp(1.7rem, 3vw, 3rem); line-height: 1; }
   .home-process__list p { margin: 0; color: var(--muted); line-height: 1.65; }
 
-  .brand-context { padding-block: clamp(4.5rem, 7vw, 7rem); background: var(--ink); color: var(--paper); }
+  .brand-context { padding-block: clamp(3rem, 4.4vw, 4.5rem); background: var(--ink); color: var(--paper); }
   .brand-context__head { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
   .brand-context__head > .label { color: #77766f; text-align: right; }
   .brand-context__logos {
     display: grid;
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    gap: clamp(2.5rem, 4vw, 4.5rem) clamp(1.25rem, 2.5vw, 3rem);
-    margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
-    padding: clamp(2.75rem, 4vw, 4rem) 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.5rem, 2.4vw, 2.5rem) clamp(1.25rem, 2.2vw, 2.25rem);
+    margin: clamp(1.5rem, 2.6vw, 2.25rem) 0 0;
+    padding: clamp(1.75rem, 2.6vw, 2.5rem) 0;
     border-block: 1px solid #34342f;
     list-style: none;
   }
   .brand-context__logos li {
     min-width: 0;
-    min-height: 3.5rem;
     display: grid;
     place-items: center;
   }
-  .brand-context__logos img {
+  /* One artwork, recoloured via mask: white at rest, --signal on hover.
+     mask-size: contain keeps every mark's own aspect ratio, so nothing
+     stretches or distorts. */
+  .brand-logo {
     display: block;
     width: 100%;
-    max-width: 9.5rem;
-    height: 2.65rem;
-    object-fit: contain;
-    filter: grayscale(1) invert(1);
-    mix-blend-mode: screen;
-    opacity: .74;
-    transition: opacity .25s ease, transform .25s ease;
+    max-width: min(100%, calc(var(--w, 14) * 1rem));
+    height: clamp(2.1rem, 3.1vw, 3.05rem);
+    background-color: #fff;
+    -webkit-mask-image: var(--logo);
+    mask-image: var(--logo);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    transition: background-color .38s var(--ease, ease), transform .38s var(--ease, ease);
   }
-  .brand-context__logos li:hover img { opacity: 1; transform: translateY(-2px); }
-  .brand-context__note { max-width: 45rem; margin: 1.5rem 0 0; color: #77766f; font-size: .72rem; }
+  /* Hover only where there is a real pointer, so touch devices keep white. */
+  @media (hover: hover) and (pointer: fine) {
+    .brand-context__logos li:hover .brand-logo {
+      background-color: var(--signal);
+      transform: translateY(-2px);
+    }
+  }
+  .brand-context__note { max-width: 45rem; margin: 1.25rem 0 0; color: #77766f; font-size: .72rem; }
 
   .home-next { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .55fr); gap: clamp(3rem, 7vw, 8rem); align-items: center; padding-block: clamp(6rem, 10vw, 10rem); }
   .home-next__intro { align-self: center; }
@@ -339,7 +420,17 @@ const brandLogos = [
   .home-next__lede { max-width: 32rem; margin: 2rem 0 0; color: var(--muted); line-height: 1.75; }
   .home-next__media { position: relative; width: min(100%, 36rem); aspect-ratio: 9 / 16; justify-self: end; overflow: hidden; background: var(--ink); color: var(--paper); isolation: isolate; }
   .home-next__media::after { content: ''; position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, transparent 58%, rgba(0,0,0,.52)); pointer-events: none; }
-  .home-next__media video { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+  /* The poster is painted by the element itself and sized identically to the
+     frame, so there is no layout shift and no empty/black box before playback.
+     The reserved aspect-ratio box above means the slot never collapses. */
+  .home-next__media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--ink) url('/CLO3D-poster.jpg') center / cover no-repeat;
+    transition: transform .8s var(--ease);
+  }
   .home-next__media:hover video { transform: scale(1.018); }
   .home-next__media-meta { position: absolute; z-index: 2; left: 1.25rem; bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; }
   .home-next__media-meta b { color: var(--signal); font-weight: 500; }
@@ -375,7 +466,8 @@ const brandLogos = [
     .positioning, .home-process, .home-next { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
-    .brand-context__logos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    /* 4 x 4 is the structure at every width — only the rhythm tightens. */
+    .brand-context__logos { gap: 1.5rem 1.5rem; }
   }
   @media (max-width: 600px) {
     .home-hero {
@@ -412,9 +504,8 @@ const brandLogos = [
     .home-process__list p { grid-column: 2; }
     .brand-context__head { align-items: flex-start; flex-direction: column; gap: 1rem; }
     .brand-context__head > .label { text-align: left; }
-    .brand-context__logos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.75rem; padding-block: 2.5rem; }
-    .brand-context__logos li { min-height: 3.25rem; }
-    .brand-context__logos img { max-width: 8.5rem; height: 2.35rem; }
+    .brand-context__logos { gap: 1.15rem .9rem; padding-block: 1.6rem; }
+    .brand-logo { height: 1.6rem; }
     .home-next { gap: 2.5rem; }
     .home-next__media { width: min(100%, 28rem); aspect-ratio: 9 / 16; justify-self: center; }
     .home-next__lede { margin-top: 1.5rem; }
