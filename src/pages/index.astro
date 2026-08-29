@@ -31,7 +31,6 @@ const stages = [
       <a class="button button--signal" href="/contact/">Send me your sketch <span aria-hidden="true">↗</span></a>
     </div>
     <figure class="home-hero__portrait" data-reveal>
-      <figcaption class="label"><span>Studio portrait</span><span>Tangier · Morocco</span></figcaption>
       <img src="/soufiane-drawing.png" width="680" height="846" alt="Soufiane Aberbach seated and drawing on a tablet" fetchpriority="high" />
     </figure>
   </section>
@@ -140,10 +139,10 @@ const stages = [
     min-height: 100svh;
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(24rem, .6fr);
-    gap: clamp(2.5rem, 4.5vw, 5.5rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(28rem, .95fr);
+    gap: clamp(1.5rem, 2.5vw, 3rem);
     align-items: stretch;
-    padding: calc(var(--header-h) + 1.25rem) var(--gutter) 0;
+    padding: calc(var(--header-h) + .75rem) var(--gutter) 0;
     overflow: hidden;
     border-bottom: 1px solid var(--line);
     background:
@@ -167,11 +166,11 @@ const stages = [
     z-index: 2;
     align-self: start;
     min-width: 0;
-    padding: clamp(3.5rem, 7vh, 5.25rem) 0 3rem;
+    padding: clamp(3rem, 6vh, 4.5rem) 0 3rem;
   }
   .home-hero__hello { margin: 0 0 clamp(1.25rem, 2.2vw, 2rem); color: var(--muted); }
   .home-hero__title { position: relative; z-index: 1; }
-  .home-hero__title h1 { font-size: clamp(5rem, 11.8vw, 11rem); }
+  .home-hero__title h1 { font-size: clamp(4.75rem, 9.3vw, 9rem); }
   .home-hero__title h1 span { display: block; }
   .home-hero__title h1 span:last-child { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
   .home-hero__role {
@@ -206,42 +205,52 @@ const stages = [
     position: relative;
     z-index: 1;
     align-self: end;
-    height: calc(100svh - var(--header-h) - 1.25rem);
+    height: calc(100svh - var(--header-h) - .75rem);
     min-height: 36rem;
     margin: 0;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     border-left: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(255,255,255,.28), transparent 45%);
+    background:
+      linear-gradient(90deg, transparent 0 9%, var(--line) 9% calc(9% + 1px), transparent calc(9% + 1px)),
+      linear-gradient(180deg, rgba(255,255,255,.3), transparent 48%);
+  }
+  .home-hero__portrait::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    right: 0;
+    bottom: 1.2%;
+    width: 88%;
+    height: 5rem;
+    background: radial-gradient(ellipse at center, rgba(17,17,15,.22) 0, rgba(17,17,15,.09) 38%, transparent 72%);
+    filter: blur(7px);
+    transform: scaleY(.42);
+    transform-origin: center bottom;
   }
   .home-hero__portrait::after {
     content: '';
     position: absolute;
-    z-index: -1;
-    left: 8%;
-    right: 8%;
-    bottom: 4%;
-    height: 34%;
+    z-index: 0;
+    left: -16%;
+    right: -4%;
+    bottom: -23%;
+    height: 68%;
     border: 1px solid var(--line);
-    border-radius: 50% 50% 0 0;
-  }
-  .home-hero__portrait figcaption {
-    position: absolute;
-    z-index: 2;
-    top: 1rem;
-    left: 1rem;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    color: var(--muted);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4.5vw var(--paper), 0 0 0 calc(4.5vw + 1px) var(--line);
   }
   .home-hero__portrait img {
-    width: min(100%, 43rem);
+    position: relative;
+    z-index: 1;
+    width: min(108%, 49rem);
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
-    filter: drop-shadow(0 1.5rem 1.8rem rgba(17,17,15,.1));
+    filter: drop-shadow(0 1.2rem 1.2rem rgba(17,17,15,.12));
+    transform: translateX(2%) scale(1.035);
+    transform-origin: center bottom;
   }
 
   .positioning { display: grid; grid-template-columns: 1.4fr .6fr; gap: 7vw; padding-block: clamp(7rem, 14vw, 14rem); }
@@ -270,6 +279,11 @@ const stages = [
   .home-next__link { display: flex; justify-content: space-between; gap: 2rem; padding: 2rem 0; border-block: 1px solid var(--line-strong); font-family: var(--mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; }
   .home-next__link i { color: var(--signal); font-style: normal; }
 
+  @media (max-width: 1100px) and (min-width: 901px) {
+    .home-hero { grid-template-columns: minmax(0, 1fr) minmax(25rem, .9fr); gap: 1.5rem; }
+    .home-hero__title h1 { font-size: clamp(4.75rem, 8.6vw, 7rem); }
+    .home-hero__portrait img { transform: translateX(4%) scale(1.02); }
+  }
   @media (max-width: 900px) {
     .home-hero {
       grid-template-columns: minmax(0, 1fr);
@@ -279,16 +293,15 @@ const stages = [
       background: var(--paper);
     }
     .home-hero__copy { padding: .75rem 0 0; }
-    .home-hero__title h1 { font-size: clamp(4.1rem, 18vw, 8rem); }
+    .home-hero__title h1 { font-size: clamp(4rem, 15.5vw, 7.25rem); }
     .home-hero__role { margin-top: 1.35rem; }
     .home-hero__portrait {
-      width: min(72%, 34rem);
-      height: 48svh;
-      min-height: 26rem;
+      width: min(82%, 38rem);
+      height: 50svh;
+      min-height: 27rem;
       margin-left: auto;
       border-left: 0;
     }
-    .home-hero__portrait figcaption { left: auto; right: 0; gap: 2rem; }
     .positioning, .home-process, .home-next { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
@@ -303,12 +316,29 @@ const stages = [
     .home-hero::before { display: none; }
     .home-hero__copy { padding-top: .5rem; }
     .home-hero__hello { margin-bottom: 1rem; }
+    .home-hero__title h1 { font-size: clamp(3.5rem, 15vw, 4.5rem); }
     .home-hero__role { display: block; min-height: 3.2rem; font-size: 1.35rem; }
     .home-hero__role > span:first-child { display: block; }
     .home-hero__role-window { display: inline-flex; margin-top: .1rem; }
-    .home-hero__copy > .button { margin-top: 1.35rem; }
-    .home-hero__portrait { width: 92%; height: 42svh; min-height: 21rem; }
-    .home-hero__portrait figcaption { top: .5rem; font-size: .56rem; }
+    .home-hero__copy > .button {
+      min-height: 0;
+      margin-top: 1.1rem;
+      padding: .72rem 0;
+      border: 0;
+      border-bottom: 1px solid var(--line-strong);
+      background: transparent;
+      color: var(--ink);
+    }
+    .home-hero__copy > .button span { color: var(--signal); }
+    .home-hero__copy > .button:hover { background: transparent; color: var(--ink); transform: none; }
+    .home-hero__portrait {
+      width: calc(100% + var(--gutter));
+      height: 45svh;
+      min-height: 22rem;
+      margin-right: calc(var(--gutter) * -1);
+    }
+    .home-hero__portrait::before { right: -2%; width: 92%; }
+    .home-hero__portrait img { width: 110%; height: 105%; transform: translateX(3%) scale(1.02); }
     .home-process__list li { grid-template-columns: 2.5rem 1fr; }
     .home-process__list p { grid-column: 2; }
     .brand-context__names span { padding: 1.4rem .8rem; font-size: 1.25rem; }
