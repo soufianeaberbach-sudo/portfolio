@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 ---
 
@@ -65,7 +66,7 @@ import SocialLinks from '../components/SocialLinks.astro';
       </div>
       <div class="form-action field--wide">
         <p>This button opens your email app with the brief prepared. Nothing is uploaded or stored on this site.</p>
-        <button class="button button--signal" type="submit">Prepare email brief <span>↗</span></button>
+        <button class="button button--signal" type="submit">Prepare email brief <span><Arrow /></span></button>
       </div>
       <p class="form-status field--wide" data-form-status aria-live="polite"></p>
     </form>
@@ -73,7 +74,7 @@ import SocialLinks from '../components/SocialLinks.astro';
 
   <section class="contact-direct">
     <div class="section-shell contact-direct__grid">
-      <div data-reveal><p class="label">Direct email</p><a href="mailto:soufiane.aberbach@gmail.com">soufiane.aberbach@gmail.com <span>↗</span></a></div>
+      <div data-reveal><p class="label">Direct email</p><a href="mailto:soufiane.aberbach@gmail.com">soufiane.aberbach@gmail.com <span><Arrow /></span></a></div>
       <div data-reveal><p class="label">Based in</p><strong>Tangier, Morocco</strong><span>GMT+1 · EU working hours</span></div>
       <div data-reveal><p class="label">Typical starting material</p><strong>A sketch, photo or fit issue</strong><span>No finished tech pack required</span></div>
     </div>

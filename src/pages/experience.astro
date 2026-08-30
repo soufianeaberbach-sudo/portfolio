@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
 
 const roles = [
   { company: 'Ava Marie', status: 'Current', text: 'Fashion design and product development across the full route from sketch, pattern and grading through production follow-through.' },
@@ -27,7 +28,7 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
 
   <section class="experience-statement section-shell">
     <p class="eyebrow" data-reveal>Perspective</p>
-    <blockquote class="display" data-reveal>“My job is invisible in the finished piece. It is the decision made before the fabric was cut.”</blockquote>
+    <blockquote class="display" data-reveal>“My job is invisible in the finished piece. It is the <em>decision</em> made before the fabric was cut.”</blockquote>
     <p class="experience-statement__note" data-reveal>Work has supported manufacturing programmes for European and North American retailers through Ava Marie’s contracts—project exposure, not direct employment or endorsement.</p>
   </section>
 
@@ -68,7 +69,7 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
       <p class="label">Not on the list</p>
       <p>Collection design, fabric sourcing, branding or hand sample sewing.</p>
     </div>
-    <a class="button button--signal" href="/contact/" data-reveal>Discuss a garment <span>↗</span></a>
+    <a class="button button--signal" href="/contact/" data-reveal>Discuss a garment <span><Arrow /></span></a>
   </section>
 </SiteLayout>
 

@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
 
 const image = (id: string, width = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=84`;
 
@@ -22,7 +23,7 @@ const categories = [
     <div class="portfolio-hero__copy" data-reveal>
       <p class="eyebrow">Five production categories</p>
       <p>This is not a gallery wall. Each category behaves like a development stack: one layer advances while the last stays visible underneath.</p>
-      <div class="portfolio-hero__instruction label"><i aria-hidden="true">↓</i> Scroll / click a category</div>
+      <div class="portfolio-hero__instruction label"><i aria-hidden="true"><Arrow dir="down" /></i> Scroll / click a category</div>
     </div>
   </section>
 
@@ -36,7 +37,7 @@ const categories = [
         <button class="collection-card" type="button" data-category={category.key} style={`--card-index:${index}`} aria-label={`Open ${category.title} collection`}>
           <img src={category.image} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
           <span class="collection-card__shade"></span>
-          <span class="collection-card__top label"><b>{category.number} / 05</b><i>Open collection ↗</i></span>
+          <span class="collection-card__top label"><b>{category.number} / 05</b><i>Open collection <Arrow /></i></span>
           <span class="collection-card__copy">
             <strong>{category.title}</strong>
             <small>{category.description}</small>
@@ -49,12 +50,12 @@ const categories = [
   <section class="portfolio-context section-shell section-rule">
     <div data-reveal>
       <p class="eyebrow">What the work represents</p>
-      <h2 class="display">Pattern logic.<br />Fit resolution.<br />Production intent.</h2>
+      <h2 class="display">Pattern logic.<br /><em>Fit</em> resolution.<br />Production intent.</h2>
     </div>
     <div data-reveal>
       <p>These categories show the kinds of construction and development problems addressed across manufacturing programmes.</p>
       <p>Project exposure through manufacturing contracts at Ava Marie—not direct employment or endorsement. Images are temporary visual references and do not claim authorship of the photographed garments.</p>
-      <a class="button" href="/process/">See the working process <span>↗</span></a>
+      <a class="button" href="/process/">See the working process <span><Arrow /></span></a>
     </div>
   </section>
 
@@ -68,12 +69,12 @@ const categories = [
       <p class="eyebrow" data-collection-kicker>Category</p>
       <h2 class="display" id="collection-title" data-collection-title></h2>
       <p data-collection-description></p>
-      <span class="label">Scroll for the look cascade ↓</span>
+      <span class="label">Scroll for the look cascade <Arrow dir="down" /></span>
     </header>
     <div class="look-cascade" data-look-cascade></div>
     <div class="collection-overlay__end">
       <p class="label">End of study</p>
-      <button class="button button--signal" type="button" data-close-collection>Return to categories <span>↑</span></button>
+      <button class="button button--signal" type="button" data-close-collection>Return to categories <span><Arrow dir="up" /></span></button>
     </div>
   </div>
 
