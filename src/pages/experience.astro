@@ -3,10 +3,12 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 
 const roles = [
-  { company: 'Ava Marie', status: 'Current', text: 'Fashion design and product development across the full route from sketch, pattern and grading through production follow-through.' },
-  { company: 'Lariconf', status: 'Earlier role', text: 'Pattern-room and garment-development experience within a manufacturing environment.' },
-  { company: 'Loratex', status: 'Earlier role', text: 'Technical product development with production constraints at the centre of decision-making.' },
-  { company: 'Roadtex', status: 'Earlier role', text: 'Hands-on development experience connecting design intent to repeatable factory execution.' },
+  { company: 'Loratex', title: 'Operations & Warehouse Coordinator', dates: 'Feb 2014 – Jan 2016' },
+  { company: 'Roadtex', title: 'Quality Control & Production Specialist', dates: 'Feb 2016 – Aug 2017' },
+  { company: 'Loratex', title: 'Production Planning Coordinator', dates: 'Sep 2017 – Sep 2018' },
+  { company: 'Loratex', title: 'CAD Development Supervisor', dates: 'Sep 2018 – May 2021' },
+  { company: 'Lariconf', title: 'CAD Fashion Developer', dates: 'Jun 2021 – May 2022' },
+  { company: 'Ava Marie', title: 'Senior Fashion Designer & Product Developer', dates: 'May 2022 – Present' },
 ];
 
 const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Adobe Illustrator'];
@@ -23,26 +25,45 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
       <p class="label">Senior Fashion Designer &amp; Product Developer</p>
       <p>Based in Tangier, working at the point where a visual idea becomes a pattern, a specification and a production decision.</p>
     </div>
-    <div class="experience-hero__measure" aria-hidden="true"><i></i><span>11+ years / production-led</span></div>
+    <div class="experience-hero__measure"><i aria-hidden="true"></i><span>11+ years / 9,000+ garments engineered</span></div>
   </section>
 
   <section class="experience-statement section-shell">
     <p class="eyebrow" data-reveal>Perspective</p>
     <blockquote class="display" data-reveal>“My job is invisible in the finished piece. It is the <em>decision</em> made before the fabric was cut.”</blockquote>
-    <p class="experience-statement__note" data-reveal>Work has supported manufacturing programmes for European and North American retailers through Ava Marie’s contracts—project exposure, not direct employment or endorsement.</p>
+    <p class="experience-statement__note" data-reveal>Project exposure through manufacturing contracts across Loratex, Lariconf and Ava Marie — not direct employment or endorsement by these brands.</p>
+  </section>
+
+  <section class="production-advantages section-shell section-rule" aria-labelledby="production-advantages-title">
+    <div data-reveal>
+      <p class="eyebrow">Production proximity</p>
+      <h2 class="display" id="production-advantages-title">Close to the decisions.</h2>
+    </div>
+    <div class="production-advantages__list">
+      <article data-reveal>
+        <span class="index-tag">01</span>
+        <h3>On the factory floor</h3>
+        <p>Based in Tangier, able to work directly with Moroccan production teams when an issue needs eyes on the garment—not another email chain.</p>
+      </article>
+      <article data-reveal>
+        <span class="index-tag">02</span>
+        <h3>Three languages. One decision.</h3>
+        <p>Arabic, French and English create a direct communication layer between European brand and design teams and Moroccan production, reducing ambiguity and accelerating issue resolution.</p>
+      </article>
+    </div>
   </section>
 
   <section class="roles section-shell section-rule">
     <div class="roles__head" data-reveal>
       <p class="eyebrow">Professional path</p>
-      <h2 class="display">Four manufacturing contexts.</h2>
+      <h2 class="display">Six roles. One production trajectory.</h2>
     </div>
     <div class="roles__list">
       {roles.map((role, index) => (
         <article data-reveal>
           <span class="index-tag">{String(index + 1).padStart(2, '0')}</span>
-          <div><p class="label">{role.status}</p><h3>{role.company}</h3></div>
-          <p>{role.text}</p>
+          <div><p class="label">{role.dates}</p><h3>{role.company}</h3></div>
+          <p>{role.title}</p>
         </article>
       ))}
     </div>
@@ -84,6 +105,12 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
   .experience-statement { padding-block: clamp(7rem, 12vw, 12rem); }
   .experience-statement blockquote { max-width: 83rem; margin: 3rem 0; font-size: clamp(4rem, 8vw, 8.6rem); }
   .experience-statement__note { max-width: 48rem; margin-left: auto; color: var(--muted); line-height: 1.75; }
+  .production-advantages { display: grid; grid-template-columns: .65fr 1.35fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
+  .production-advantages h2 { max-width: 35rem; margin-top: 2rem; font-size: clamp(3.8rem, 6.5vw, 7rem); }
+  .production-advantages__list { border-top: 1px solid var(--line-strong); }
+  .production-advantages article { display: grid; grid-template-columns: 3rem .8fr 1.2fr; gap: 2rem; align-items: start; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
+  .production-advantages h3 { margin: 0; font-family: var(--display); font-size: clamp(2rem, 3.2vw, 3.4rem); letter-spacing: -.05em; line-height: .95; }
+  .production-advantages article > p { margin: 0; color: var(--muted); line-height: 1.7; }
   .roles { display: grid; grid-template-columns: .6fr 1.4fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
   .roles__head { position: sticky; top: 8rem; align-self: start; }
   .roles__head h2 { margin-top: 2rem; font-size: clamp(3.8rem, 6vw, 6.5rem); }
@@ -91,14 +118,14 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
   .roles article { display: grid; grid-template-columns: 3rem 1fr 1.2fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
   .roles h3 { margin: .5rem 0 0; font-family: var(--display); font-size: clamp(2rem, 4vw, 4.3rem); letter-spacing: -.055em; line-height: 1; }
   .roles article > p { margin: 0; color: var(--muted); line-height: 1.7; }
-  .tools-band { padding-block: clamp(7rem, 12vw, 12rem); background: var(--signal); color: #fff; }
+  .tools-band { padding-block: clamp(7rem, 12vw, 12rem); background: var(--signal); color: var(--ink); }
   .tools-band__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
   .tools-band h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7.5rem); }
-  .tools-band__list { align-self: end; border-top: 1px solid rgba(255,255,255,.45); }
-  .tools-band__list span { display: flex; gap: 2rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,.35); font-family: var(--display); font-size: 1.5rem; font-weight: 650; }
-  .tools-band__list i { width: 2rem; font-family: var(--mono); font-size: .65rem; font-style: normal; opacity: .7; }
+  .tools-band__list { align-self: end; border-top: 1px solid rgba(17,17,15,.45); }
+  .tools-band__list span { display: flex; gap: 2rem; padding: 1rem 0; border-bottom: 1px solid rgba(17,17,15,.35); font-family: var(--display); font-size: 1.5rem; font-weight: 650; }
+  .tools-band__list i { width: 2rem; font-family: var(--mono); font-size: .65rem; font-style: normal; }
   .experience-close { display: grid; grid-template-columns: 1fr 1fr auto; gap: 5vw; align-items: end; padding-block: clamp(6rem, 10vw, 10rem); }
   .experience-close p:last-child { max-width: 29rem; color: var(--ink-soft); line-height: 1.65; }
-  @media (max-width: 900px) { .experience-hero, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
-  @media (max-width: 600px) { .experience-hero { min-height: 86svh; gap: 2rem; } .roles__head h2 { font-size: 2.9rem; } .roles article { grid-template-columns: 2.5rem minmax(0, 1fr); } .roles article > p { grid-column: 2; } .roles h3 { overflow-wrap: anywhere; } }
+  @media (max-width: 900px) { .experience-hero, .production-advantages, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .roles > *, .roles article > *, .production-advantages > * { min-width: 0; } .roles__head { position: static; } }
+  @media (max-width: 600px) { .experience-hero { min-height: 86svh; gap: 2rem; } .production-advantages article { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1.25rem; } .production-advantages article > p { grid-column: 2; } .roles__head h2 { font-size: 2.9rem; } .roles article { grid-template-columns: 2.5rem minmax(0, 1fr); } .roles article > p { grid-column: 2; } .roles h3 { overflow-wrap: anywhere; } .tools-band h2 { font-size: 3.4rem; } }
 </style>

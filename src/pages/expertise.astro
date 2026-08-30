@@ -50,6 +50,9 @@ const services = [
         <div class="service__copy">
           <h2>{service.title}</h2>
           <p>{service.description}</p>
+          <div class="service__trace" aria-hidden="true">
+            {service.outputs.map((_, index) => <span style={`--trace-index:${index}`}><i></i></span>)}
+          </div>
         </div>
         <ul>
           {service.outputs.map((output) => <li>{output}</li>)}
@@ -90,15 +93,22 @@ const services = [
   .service__number i { display: block; width: 3rem; height: 1px; margin-top: .55rem; background: var(--signal); }
   .service h2 { max-width: 44rem; margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 5vw, 5.7rem); font-weight: 800; letter-spacing: -.06em; line-height: .92; }
   .service__copy p { max-width: 39rem; margin: 1.5rem 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
+  .service__trace { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .45rem; max-width: 24rem; margin-top: 2rem; }
+  .service__trace span { position: relative; height: 2px; overflow: hidden; background: var(--line); }
+  .service__trace span::before { content: ''; position: absolute; z-index: 1; inset: 0 auto 0 0; width: 2px; background: var(--signal); }
+  .service__trace i { position: absolute; inset: 0; background: var(--signal); transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) calc(var(--trace-index) * 110ms + 120ms); }
+  .service.is-visible .service__trace i { transform: scaleX(1); }
   .service ul { margin: 0; padding: 0; list-style: none; }
   .service li { position: relative; padding: .85rem 0 .85rem 1.5rem; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .84rem; }
-  .service li::before { content: '↳'; position: absolute; left: 0; color: var(--signal); }
+  .service li::before { content: ''; position: absolute; left: .1rem; top: 1.05rem; width: .45rem; height: .45rem; border-right: 1px solid var(--signal); border-bottom: 1px solid var(--signal); transform: rotate(-45deg); }
   .boundary { padding-block: clamp(7rem, 12vw, 12rem); background: var(--ink); color: var(--paper); }
   .boundary__grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 8vw; }
   .boundary h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
   .boundary h2 em { color: var(--signal); font-style: normal; }
   .boundary__list { align-self: end; }
-  .boundary__list span { display: block; padding: 1.1rem 0; border-bottom: 1px solid #3f3f39; font-family: var(--display); font-size: clamp(1.2rem, 2vw, 1.8rem); }
+  .boundary__list span { position: relative; display: block; padding: 1.1rem 0 1.1rem 1.4rem; border-bottom: 1px solid #3f3f39; font-family: var(--display); font-size: clamp(1.2rem, 2vw, 1.8rem); }
+  .boundary__list span::before { content: ''; position: absolute; left: 0; top: 50%; width: .65rem; height: 1px; background: var(--signal); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
+  .boundary__list.is-visible span::before { transform: scaleX(1); }
   .boundary__list p { margin: 2rem 0 0; color: #aaa89f; line-height: 1.7; }
   .expertise-cta { padding-block: clamp(7rem, 12vw, 12rem); }
   .expertise-cta h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 9vw, 9.5rem); }

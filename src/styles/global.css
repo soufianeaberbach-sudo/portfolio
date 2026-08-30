@@ -131,7 +131,7 @@ button { color: inherit; }
   transition: color .25s, background .25s, transform .25s;
 }
 .button:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
-.button--signal { background: var(--signal); border-color: var(--signal); color: #fff; }
+.button--signal { background: var(--signal); border-color: var(--signal); color: var(--ink); }
 .button--signal:hover { background: var(--ink); border-color: var(--ink); }
 
 .section-shell {
@@ -367,7 +367,7 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 }
 .footer-signature { display: inline-flex; align-items: flex-end; font-family: var(--display); font-size: 1.35rem; font-weight: 900; line-height: 1; }
 .footer-signature i { width: .32rem; height: .32rem; margin: 0 0 .08rem .13rem; border-radius: 50%; background: var(--signal); }
-.footer-grid p { margin: 0; color: #77766f; }
+.footer-grid p { margin: 0; color: #96938a; }
 .footer-grid > nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1rem; }
 .footer-grid > nav a:hover { color: var(--signal); }
 .footer-profiles { display: grid; gap: 1rem; }
