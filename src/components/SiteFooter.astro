@@ -1,23 +1,48 @@
 ---
 import SocialLinks from './SocialLinks.astro';
 import Arrow from './Arrow.astro';
+
+interface Props {
+  page?: string;
+  showCallout?: boolean;
+}
+
+const { page = '', showCallout = true } = Astro.props;
+
+const footerLinks = [
+  { href: '/', label: 'Home', page: 'home' },
+  { href: '/expertise/', label: 'Expertise', page: 'expertise' },
+  { href: '/portfolio/', label: 'Portfolio', page: 'portfolio' },
+  { href: '/process/', label: 'Process', page: 'process' },
+  { href: '/experience/', label: 'Experience', page: 'experience' },
+  { href: '/contact/', label: 'Contact', page: 'contact' },
+];
+
+const calloutLead = {
+  home: 'Ready to reduce the expensive round?',
+  expertise: 'Not sure where the problem sits?',
+  portfolio: 'Seen enough to start a brief?',
+  process: 'Ready to lock the first stage?',
+  experience: 'Need production judgement on a garment?',
+}[page] ?? 'Have a garment to develop?';
 ---
 
 <footer class="site-footer">
-  <div class="footer-callout">
-    <p class="label">Have a garment to develop?</p>
-    <a href="/contact/">
-      <span>Send the sketch.</span>
-      <i aria-hidden="true"><Arrow /></i>
-    </a>
-  </div>
+  {showCallout && (
+    <div class="footer-callout">
+      <p class="label">{calloutLead}</p>
+      <a href="/contact/">
+        <span>Send the sketch.</span>
+        <i aria-hidden="true"><Arrow /></i>
+      </a>
+    </div>
+  )}
   <div class="footer-grid">
     <a class="footer-signature" href="/" aria-label="Soufiane Aberbach — Home"><span>SA</span><i aria-hidden="true"></i></a>
     <nav aria-label="Footer navigation">
-      <a href="/expertise/">Expertise</a>
-      <a href="/portfolio/">Portfolio</a>
-      <a href="/process/">Process</a>
-      <a href="/experience/">Experience</a>
+      {footerLinks.map((link) => (
+        <a href={link.href} aria-current={page === link.page ? 'page' : undefined}>{link.label}</a>
+      ))}
     </nav>
     <div class="footer-profiles">
       <p class="label">Professional profiles</p>

@@ -81,11 +81,19 @@ const brandLogos = [
     </div>
   </section>
 
+  <section class="home-stats section-shell section-rule" aria-labelledby="production-record-title">
+    <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
+    <div class="home-stats__grid">
+      <article data-reveal><strong>11+</strong><span>Years</span></article>
+      <article data-reveal><strong>9,000+</strong><span>Garments engineered</span></article>
+    </div>
+  </section>
+
   <section class="brand-context">
     <div class="section-shell">
       <div class="brand-context__head" data-reveal>
         <p class="eyebrow">Programme exposure</p>
-        <p class="label">16 brand programmes / manufacturing development</p>
+        <p class="label">16+ brand programmes / manufacturing development</p>
       </div>
       <ul class="brand-context__logos" aria-label="Brand programme exposure">
         {brandLogos.map((logo) => (
@@ -99,7 +107,8 @@ const brandLogos = [
           </li>
         ))}
       </ul>
-      <p class="brand-context__note">Project exposure through manufacturing contracts at Ava Marie — not direct employment or endorsement.</p>
+      <p class="brand-context__additional"><span>Additional programme exposure</span> Topshop · Friend Like This</p>
+      <p class="brand-context__note">Project exposure through manufacturing contracts across Loratex, Lariconf and Ava Marie — not direct employment or endorsement by these brands.</p>
     </div>
   </section>
 
@@ -349,6 +358,13 @@ const brandLogos = [
   .text-link { display: inline-flex; gap: 1rem; margin-top: 1.5rem; padding-bottom: .3rem; border-bottom: 1px solid; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
   .text-link span { color: var(--signal); }
 
+  .home-stats { display: grid; grid-template-columns: .42fr 1.58fr; gap: 6vw; align-items: start; padding-block: clamp(4rem, 7vw, 7rem); }
+  .home-stats__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); }
+  .home-stats__grid article { display: grid; gap: 1rem; padding: clamp(2rem, 4vw, 4rem) 0; border-bottom: 1px solid var(--line); }
+  .home-stats__grid article + article { padding-left: clamp(2rem, 4vw, 4rem); border-left: 1px solid var(--line); }
+  .home-stats__grid strong { font-family: var(--display); font-size: clamp(5rem, 10vw, 10rem); font-weight: 850; letter-spacing: -.08em; line-height: .8; }
+  .home-stats__grid span { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
+
   .home-process { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
   .home-process__head { position: sticky; top: 8rem; align-self: start; }
   .home-process__head h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 7vw, 7rem); }
@@ -359,7 +375,7 @@ const brandLogos = [
 
   .brand-context { padding-block: clamp(3rem, 4.4vw, 4.5rem); background: var(--ink); color: var(--paper); }
   .brand-context__head { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
-  .brand-context__head > .label { color: #77766f; text-align: right; }
+  .brand-context__head > .label { color: #96938a; text-align: right; }
   .brand-context__logos {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -400,7 +416,9 @@ const brandLogos = [
       transform: translateY(-2px);
     }
   }
-  .brand-context__note { max-width: 45rem; margin: 1.25rem 0 0; color: #77766f; font-size: .72rem; }
+  .brand-context__note { max-width: 45rem; margin: 1.25rem 0 0; color: #96938a; font-size: .72rem; }
+  .brand-context__additional { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: 1.25rem 0 0; color: var(--paper); font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+  .brand-context__additional span { color: #96938a; }
 
   /* Padding trimmed from 6-10rem now that the meta label, arrow and the
      bottom link rail are gone — the section keeps the same visual weight
@@ -460,7 +478,7 @@ const brandLogos = [
       margin-left: auto;
       border-left: 0;
     }
-    .positioning, .home-process, .home-next__grid { grid-template-columns: 1fr; }
+    .positioning, .home-stats, .home-process, .home-next__grid { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
     /* 4 x 4 is the structure at every width — only the rhythm tightens. */
@@ -479,17 +497,7 @@ const brandLogos = [
     .home-hero__role { display: block; min-height: 3.2rem; font-size: 1.35rem; }
     .home-hero__role > span:first-child { display: block; }
     .home-hero__role-window { display: inline-flex; margin-top: .1rem; }
-    .home-hero__copy > .button {
-      min-height: 0;
-      margin-top: 1.1rem;
-      padding: .72rem 0;
-      border: 0;
-      border-bottom: 1px solid var(--line-strong);
-      background: transparent;
-      color: var(--ink);
-    }
-    .home-hero__copy > .button span { color: var(--signal); }
-    .home-hero__copy > .button:hover { background: transparent; color: var(--ink); transform: none; }
+    .home-hero__copy > .button { margin-top: 1.1rem; }
     .home-hero__portrait {
       width: calc(100% + var(--gutter));
       height: 45svh;
@@ -504,6 +512,8 @@ const brandLogos = [
     .home-next__grid { gap: 2.5rem; padding-block: clamp(3.5rem, 12vw, 5rem); }
     .home-next__media { width: 100%; max-width: 30rem; justify-self: center; }
     .home-next__lede { margin-top: 1.5rem; }
+    .home-stats__grid { grid-template-columns: 1fr; }
+    .home-stats__grid article + article { padding-left: 0; border-left: 0; }
   }
   /* MOBILE BRAND LAYOUT
      The 4-column grid does not survive a phone. At 390px a column is ~78px,

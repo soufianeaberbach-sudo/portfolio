@@ -1,0 +1,35 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<SiteLayout
+  title="Page not found — Soufiane Aberbach"
+  description="The requested page is not available. Return to Soufiane Aberbach's portfolio or start a project brief."
+  marker="SA-404-V1"
+  page="404"
+  noindex
+>
+  <section class="page-intro section-shell not-found">
+    <div>
+      <p class="eyebrow">404 / Page not found</p>
+      <h1 class="display page-intro__title">Wrong turn.<br /><em>Clear route.</em></h1>
+    </div>
+    <div class="page-intro__aside">
+      <p>The page may have moved, but the portfolio and project brief are still one step away.</p>
+      <div class="not-found__actions">
+        <a class="button button--signal" href="/">Return home <span aria-hidden="true"><Arrow /></span></a>
+        <a class="button" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .not-found { min-height: 78svh; }
+  .not-found__actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  @media (max-width: 540px) {
+    .not-found__actions { align-items: stretch; flex-direction: column; }
+    .not-found__actions .button { justify-content: space-between; width: 100%; }
+  }
+</style>
