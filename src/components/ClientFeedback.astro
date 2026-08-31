@@ -1,0 +1,49 @@
+---
+interface Testimonial {
+  quote: string;
+  platform: string;
+  rating: number;
+  context?: string;
+}
+
+interface Props {
+  items: Testimonial[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="client-feedback section-shell" aria-labelledby="client-feedback-title">
+    <div class="client-feedback__head" data-reveal>
+      <p class="eyebrow">Verified client feedback</p>
+      <h2 class="display" id="client-feedback-title">The work,<br />in their words.</h2>
+    </div>
+    <div class="client-feedback__list">
+      {items.map((item, index) => (
+        <blockquote data-reveal>
+          <div class="client-feedback__meta">
+            <span class="label">{item.platform}</span>
+            <span class="label" aria-label={`${item.rating} out of 5 stars`}>{item.rating.toFixed(1)} / 5</span>
+          </div>
+          <p>“{item.quote}”</p>
+          {item.context && <cite>{item.context}</cite>}
+          <span class="client-feedback__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        </blockquote>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .client-feedback { display: grid; grid-template-columns: .55fr 1.45fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); border-top: 1px solid var(--line); }
+  .client-feedback__head h2 { margin-top: 2rem; font-size: clamp(3.8rem, 6vw, 6.5rem); }
+  .client-feedback__list { border-top: 1px solid var(--line-strong); }
+  .client-feedback blockquote { position: relative; margin: 0; padding: 2.5rem 4rem 3rem 0; border-bottom: 1px solid var(--line); }
+  .client-feedback__meta { display: flex; justify-content: space-between; gap: 2rem; color: var(--signal-dark); }
+  .client-feedback blockquote > p { max-width: 55rem; margin: 2rem 0; font-family: var(--display); font-size: clamp(2rem, 3.6vw, 4rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.02; }
+  .client-feedback cite { color: var(--muted); font-size: .78rem; font-style: normal; }
+  .client-feedback__index { position: absolute; right: 0; bottom: 3rem; color: var(--muted); font-family: var(--mono); font-size: .65rem; }
+  @media (max-width: 900px) { .client-feedback { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 600px) { .client-feedback blockquote { padding-right: 2rem; } }
+</style>

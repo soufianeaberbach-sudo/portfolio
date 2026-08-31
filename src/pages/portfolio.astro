@@ -69,9 +69,22 @@ const categories = [
       <p class="eyebrow" data-collection-kicker>Category</p>
       <h2 class="display" id="collection-title" data-collection-title></h2>
       <p data-collection-description></p>
-      <span class="label">Scroll for the look cascade <Arrow dir="down" /></span>
+      <span class="label">Drag or scroll through the runway <Arrow dir="down" /></span>
     </header>
-    <div class="look-cascade" data-look-cascade></div>
+    <section class="look-runway" aria-label="Collection looks">
+      <div class="look-runway__layout">
+        <div class="look-runway__stage" data-runway-stage tabindex="0" aria-label="Drag, swipe or scroll to explore collection looks">
+          <div class="look-runway__cards" data-runway-cards></div>
+          <p class="look-runway__hint label" aria-hidden="true">Drag to explore ↔</p>
+        </div>
+        <aside class="look-runway__details" data-runway-details aria-live="polite"></aside>
+      </div>
+      <div class="look-runway__scrubber" data-runway-scrubber>
+        <label class="label" for="collection-scrubber">Scrub collection</label>
+        <input id="collection-scrubber" type="range" min="0" max="1" step="0.001" value="0" aria-label="Scrub through collection looks" />
+        <span class="label" data-runway-total>03 looks</span>
+      </div>
+    </section>
     <div class="collection-overlay__end">
       <p class="label">End of study</p>
       <button class="button button--signal" type="button" data-close-collection>Return to categories <span><Arrow dir="up" /></span></button>
@@ -86,46 +99,46 @@ const categories = [
       evening: {
         number: '01 / 05', title: 'Evening Dresses', description: 'Structure and drape are negotiated together: the internal architecture must hold without making the dress feel engineered.',
         looks: [
-          ['Look 01', 'Drape / balance', 'photo-1509631179647-0177331693ae'],
-          ['Look 02', 'Bodice / support', 'photo-1515886657613-9f3515b0c78f'],
-          ['Look 03', 'Volume / movement', 'photo-1721578006568-17901600cff3'],
+          { title: 'Look 01', description: 'Drape / balance', image: 'photo-1509631179647-0177331693ae' },
+          { title: 'Look 02', description: 'Bodice / support', image: 'photo-1515886657613-9f3515b0c78f' },
+          { title: 'Look 03', description: 'Volume / movement', image: 'photo-1721578006568-17901600cff3' },
         ],
       },
       jersey: {
         number: '02 / 05', title: 'Jersey & Knit', description: 'Stretch changes every assumption. Ease, recovery, seam choice and grade rules are designed as a connected system.',
         looks: [
-          ['Look 01', 'Recovery / shape', 'photo-1586079615844-c0abfb04dc79'],
-          ['Look 02', 'Ease / movement', 'photo-1613915617430-8ab0fd7c6baf'],
-          ['Look 03', 'Grade / consistency', 'photo-1731589802397-6a1088d63630'],
+          { title: 'Look 01', description: 'Recovery / shape', image: 'photo-1586079615844-c0abfb04dc79' },
+          { title: 'Look 02', description: 'Ease / movement', image: 'photo-1613915617430-8ab0fd7c6baf' },
+          { title: 'Look 03', description: 'Grade / consistency', image: 'photo-1731589802397-6a1088d63630' },
         ],
       },
       woven: {
         number: '03 / 05', title: 'Woven', description: 'Repeatable tailoring depends on construction order, controlled volume and a pattern that holds its balance through production.',
         looks: [
-          ['Look 01', 'Tailoring / line', 'photo-1662532577856-e8ee8b138a8b'],
-          ['Look 02', 'Construction / repeat', 'photo-1457972657980-4c9fddebec8d'],
-          ['Look 03', 'Volume / control', 'photo-1612731486606-2614b4d74921'],
+          { title: 'Look 01', description: 'Tailoring / line', image: 'photo-1662532577856-e8ee8b138a8b' },
+          { title: 'Look 02', description: 'Construction / repeat', image: 'photo-1457972657980-4c9fddebec8d' },
+          { title: 'Look 03', description: 'Volume / control', image: 'photo-1612731486606-2614b4d74921' },
         ],
       },
       sport: {
         number: '04 / 05', title: 'Sport', description: 'Performance product is tested against movement: panel lines, stretch direction and recovery have to work on the body.',
         looks: [
-          ['Look 01', 'Panel / articulation', 'photo-1574015974293-817f0ebebb74'],
-          ['Look 02', 'Stretch / direction', 'photo-1588497883177-f82b883ad0af'],
-          ['Look 03', 'Movement / fit', 'photo-1586079615844-c0abfb04dc79'],
+          { title: 'Look 01', description: 'Panel / articulation', image: 'photo-1574015974293-817f0ebebb74' },
+          { title: 'Look 02', description: 'Stretch / direction', image: 'photo-1588497883177-f82b883ad0af' },
+          { title: 'Look 03', description: 'Movement / fit', image: 'photo-1586079615844-c0abfb04dc79' },
         ],
       },
       swim: {
         number: '05 / 05', title: 'Swimwear', description: 'Swimwear exposes imbalance immediately. Recovery, edge tension and coverage are resolved within very small tolerances.',
         looks: [
-          ['Look 01', 'Tension / edge', 'photo-1578353022142-09264fd64295'],
-          ['Look 02', 'Coverage / balance', 'photo-1601597565151-70c4020dc0e1'],
-          ['Look 03', 'Recovery / hold', 'photo-1567631643547-67a2dd59f266'],
+          { title: 'Look 01', description: 'Tension / edge', image: 'photo-1578353022142-09264fd64295' },
+          { title: 'Look 02', description: 'Coverage / balance', image: 'photo-1601597565151-70c4020dc0e1' },
+          { title: 'Look 03', description: 'Recovery / hold', image: 'photo-1567631643547-67a2dd59f266' },
         ],
       },
     };
 
-    const portfolioState = { stackTimeline: null, lookTriggers: [], lastFocus: null };
+    const portfolioState = { stackTimeline: null, runway: null, lastFocus: null };
     const imageUrl = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1900&q=84`;
 
     function setCard(card, index, total) {
@@ -174,39 +187,253 @@ const categories = [
       });
     }
 
-    function createLook(look, index) {
-      const article = document.createElement('article');
-      article.className = 'look-panel';
-      article.innerHTML = `
-        <img src="${imageUrl(look[2])}" alt="" loading="lazy">
-        <span class="look-panel__shade"></span>
-        <div class="look-panel__meta">
-          <span class="label">${String(index + 1).padStart(2, '0')} / 03</span>
-          <h3>${look[0]}</h3>
-          <p>${look[1]}</p>
-        </div>`;
-      return article;
-    }
+    const modulo = (value, length) => ((value % length) + length) % length;
+    const mix = (from, to, progress) => from + ((to - from) * progress);
 
-    function createLookAnimations() {
-      portfolioState.lookTriggers.forEach((trigger) => trigger.kill?.());
-      portfolioState.lookTriggers = [];
-      const overlay = document.querySelector('[data-collection-overlay]');
-      const panels = Array.from(document.querySelectorAll('.look-panel'));
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function createRunway(initialItems) {
+      const stage = document.querySelector('[data-runway-stage]');
+      const cardsRoot = document.querySelector('[data-runway-cards]');
+      const detailsRoot = document.querySelector('[data-runway-details]');
+      const scrubber = document.querySelector('[data-runway-scrubber] input');
+      const total = document.querySelector('[data-runway-total]');
+      if (!stage || !cardsRoot || !detailsRoot || !scrubber || !total || !initialItems.length) return null;
 
-      panels.forEach((panel, index) => {
-        const animation = gsap.fromTo(panel.querySelector('img'),
-          { scale: 1.12, yPercent: 5 },
-          { scale: 1, yPercent: -5, ease: 'none', scrollTrigger: { trigger: panel, scroller: overlay, start: 'top bottom', end: 'bottom top', scrub: true } }
-        );
-        const reveal = gsap.fromTo(panel.querySelector('.look-panel__meta'),
-          { y: 80, opacity: 0 },
-          { y: 0, opacity: 1, scrollTrigger: { trigger: panel, scroller: overlay, start: 'top 72%', end: 'top 38%', scrub: .7 } }
-        );
-        portfolioState.lookTriggers.push(animation.scrollTrigger, reveal.scrollTrigger);
-        panel.style.zIndex = String(index + 1);
+      const cardNodes = Array.from({ length: 6 }, () => {
+        const card = document.createElement('article');
+        card.className = 'runway-card';
+        const image = document.createElement('img');
+        image.alt = '';
+        image.draggable = false;
+        const shade = document.createElement('span');
+        shade.className = 'runway-card__shade';
+        card.append(image, shade);
+        return card;
       });
+      cardsRoot.replaceChildren(...cardNodes);
+
+      const detailNodes = Array.from({ length: 2 }, () => {
+        const detail = document.createElement('article');
+        detail.className = 'runway-detail';
+        const count = document.createElement('span');
+        count.className = 'label';
+        const title = document.createElement('h3');
+        const description = document.createElement('p');
+        detail.append(count, title, description);
+        return detail;
+      });
+      detailsRoot.replaceChildren(...detailNodes);
+
+      const state = {
+        items: [...initialItems],
+        position: 0,
+        width: stage.clientWidth,
+        frame: 0,
+        base: Number.NaN,
+        pointerId: null,
+        pointerStartX: 0,
+        pointerStartPosition: 0,
+        scrubbing: false,
+        wheelTimer: 0,
+        tween: null,
+      };
+
+      const slotSet = () => {
+        const mobile = window.innerWidth < 700;
+        return mobile ? [
+          { x: .14, scale: 1, blur: 0, opacity: 1, z: 50 },
+          { x: -.13, scale: .79, blur: 0, opacity: .94, z: 40 },
+          { x: -.34, scale: .63, blur: 2.5, opacity: .78, z: 30 },
+          { x: -.49, scale: .50, blur: 7, opacity: .5, z: 20 },
+          { x: -.59, scale: .39, blur: 14, opacity: .22, z: 10 },
+          { x: -.67, scale: .32, blur: 21, opacity: 0, z: 5 },
+        ] : [
+          { x: .20, scale: 1, blur: 0, opacity: 1, z: 50 },
+          { x: -.06, scale: .83, blur: 0, opacity: .96, z: 40 },
+          { x: -.26, scale: .68, blur: 2.5, opacity: .82, z: 30 },
+          { x: -.41, scale: .55, blur: 7, opacity: .56, z: 20 },
+          { x: -.52, scale: .44, blur: 15, opacity: .25, z: 10 },
+          { x: -.60, scale: .36, blur: 22, opacity: 0, z: 5 },
+        ];
+      };
+
+      const outgoingState = () => ({ x: window.innerWidth < 700 ? .55 : .62, scale: 1.06, blur: 3.5, opacity: 0, z: 60 });
+
+      function fillDetail(node, item, virtualIndex) {
+        node.querySelector('span').textContent = `${String(modulo(virtualIndex, state.items.length) + 1).padStart(2, '0')} / ${String(state.items.length).padStart(2, '0')}`;
+        node.querySelector('h3').textContent = item.title;
+        node.querySelector('p').textContent = item.description;
+      }
+
+      function syncContent(base) {
+        if (state.base === base) return;
+        state.base = base;
+        cardNodes.forEach((card, offset) => {
+          const itemIndex = modulo(base + offset, state.items.length);
+          const item = state.items[itemIndex];
+          const image = card.querySelector('img');
+          const source = imageUrl(item.image);
+          if (image.src !== source) image.src = source;
+          card.dataset.itemIndex = String(itemIndex);
+        });
+        fillDetail(detailNodes[0], state.items[modulo(base, state.items.length)], base);
+        fillDetail(detailNodes[1], state.items[modulo(base + 1, state.items.length)], base + 1);
+        for (let offset = -1; offset <= 6; offset += 1) {
+          const nearby = state.items[modulo(base + offset, state.items.length)];
+          const preload = new Image();
+          preload.src = imageUrl(nearby.image);
+        }
+      }
+
+      function draw() {
+        state.frame = 0;
+        const base = Math.floor(state.position);
+        const progress = state.position - base;
+        const slots = slotSet();
+        syncContent(base);
+
+        cardNodes.forEach((card, offset) => {
+          const from = offset === 0 ? slots[0] : slots[offset];
+          const to = offset === 0 ? outgoingState() : slots[offset - 1];
+          const x = mix(from.x, to.x, progress) * state.width;
+          const scale = mix(from.scale, to.scale, progress);
+          const blur = mix(from.blur, to.blur, progress);
+          const opacity = mix(from.opacity, to.opacity, progress);
+          card.style.transform = `translate3d(calc(-50% + ${x}px), -50%, 0) scale(${scale})`;
+          card.style.filter = `blur(${blur}px)`;
+          card.style.opacity = String(opacity);
+          card.style.zIndex = String(Math.round(mix(from.z, to.z, progress)));
+          card.setAttribute('aria-hidden', opacity < .08 ? 'true' : 'false');
+        });
+
+        detailNodes[0].style.opacity = String(1 - progress);
+        detailNodes[0].style.transform = `translate3d(0, ${-1.2 * progress}rem, 0)`;
+        detailNodes[0].setAttribute('aria-hidden', progress > .55 ? 'true' : 'false');
+        detailNodes[1].style.opacity = String(progress);
+        detailNodes[1].style.transform = `translate3d(0, ${(1 - progress) * 1.2}rem, 0)`;
+        detailNodes[1].setAttribute('aria-hidden', progress < .45 ? 'true' : 'false');
+
+        if (!state.scrubbing) scrubber.value = String(modulo(state.position, state.items.length));
+      }
+
+      function scheduleDraw() {
+        if (!state.frame) state.frame = requestAnimationFrame(draw);
+      }
+
+      function setPosition(value) {
+        state.position = Number(value);
+        scheduleDraw();
+      }
+
+      function snap(origin = null) {
+        state.tween?.kill?.();
+        const delta = origin === null ? 1 : state.position - origin;
+        let target;
+        if (origin !== null && Math.abs(delta) < .48) target = origin;
+        else if (origin !== null) target = delta > 0 ? Math.ceil(state.position) : Math.floor(state.position);
+        else target = Math.round(state.position);
+        state.tween = gsap.to(state, {
+          position: target,
+          duration: Math.min(.7, .32 + (Math.abs(target - state.position) * .32)),
+          ease: 'power3.out',
+          onUpdate: scheduleDraw,
+        });
+      }
+
+      const onPointerDown = (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        state.tween?.kill?.();
+        state.pointerId = event.pointerId;
+        state.pointerStartX = event.clientX;
+        state.pointerStartPosition = state.position;
+        stage.setPointerCapture?.(event.pointerId);
+        stage.classList.add('is-dragging');
+      };
+      const onPointerMove = (event) => {
+        if (event.pointerId !== state.pointerId) return;
+        const distance = Math.max(150, state.width * (window.innerWidth < 700 ? .42 : .30));
+        setPosition(state.pointerStartPosition + ((state.pointerStartX - event.clientX) / distance));
+      };
+      const finishPointer = (event) => {
+        if (event.pointerId !== state.pointerId) return;
+        stage.releasePointerCapture?.(event.pointerId);
+        state.pointerId = null;
+        stage.classList.remove('is-dragging');
+        snap(state.pointerStartPosition);
+      };
+      const onWheel = (event) => {
+        event.preventDefault();
+        state.tween?.kill?.();
+        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+        setPosition(state.position + (delta / 420));
+        window.clearTimeout(state.wheelTimer);
+        state.wheelTimer = window.setTimeout(() => snap(), 150);
+      };
+      const onKeyDown = (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        state.tween?.kill?.();
+        setPosition(Math.round(state.position) + (event.key === 'ArrowRight' ? 1 : -1));
+        snap();
+      };
+      const onScrubStart = () => { state.scrubbing = true; state.tween?.kill?.(); };
+      const onScrub = () => {
+        const desired = Number(scrubber.value);
+        const nearest = desired + (Math.round((state.position - desired) / state.items.length) * state.items.length);
+        setPosition(nearest);
+      };
+      const onScrubEnd = () => { state.scrubbing = false; snap(); };
+
+      stage.addEventListener('pointerdown', onPointerDown);
+      stage.addEventListener('pointermove', onPointerMove);
+      stage.addEventListener('pointerup', finishPointer);
+      stage.addEventListener('pointercancel', finishPointer);
+      stage.addEventListener('wheel', onWheel, { passive: false });
+      stage.addEventListener('keydown', onKeyDown);
+      scrubber.addEventListener('pointerdown', onScrubStart);
+      scrubber.addEventListener('input', onScrub);
+      scrubber.addEventListener('change', onScrubEnd);
+      scrubber.addEventListener('pointerup', onScrubEnd);
+
+      const resizeObserver = new ResizeObserver(() => { state.width = stage.clientWidth; scheduleDraw(); });
+      resizeObserver.observe(stage);
+
+      function replaceItems(items) {
+        if (!Array.isArray(items) || items.length < 2) return;
+        state.items = [...items];
+        state.position = 0;
+        state.base = Number.NaN;
+        scrubber.max = String(state.items.length);
+        total.textContent = `${String(state.items.length).padStart(2, '0')} looks`;
+        scheduleDraw();
+      }
+
+      function destroy() {
+        state.tween?.kill?.();
+        window.clearTimeout(state.wheelTimer);
+        if (state.frame) cancelAnimationFrame(state.frame);
+        resizeObserver.disconnect();
+        stage.removeEventListener('pointerdown', onPointerDown);
+        stage.removeEventListener('pointermove', onPointerMove);
+        stage.removeEventListener('pointerup', finishPointer);
+        stage.removeEventListener('pointercancel', finishPointer);
+        stage.removeEventListener('wheel', onWheel);
+        stage.removeEventListener('keydown', onKeyDown);
+        scrubber.removeEventListener('pointerdown', onScrubStart);
+        scrubber.removeEventListener('input', onScrub);
+        scrubber.removeEventListener('change', onScrubEnd);
+        scrubber.removeEventListener('pointerup', onScrubEnd);
+      }
+
+      const controller = {
+        destroy,
+        replaceItems,
+        setPosition,
+        snap,
+        getItems: () => [...state.items],
+        getState: () => ({ position: state.position, activeIndex: modulo(Math.round(state.position), state.items.length), count: state.items.length }),
+      };
+      replaceItems(initialItems);
+      return controller;
     }
 
     function openCollection(category) {
@@ -218,15 +445,16 @@ const categories = [
       overlay.querySelector('[data-collection-kicker]').textContent = `Category ${data.number}`;
       overlay.querySelector('[data-collection-title]').textContent = data.title;
       overlay.querySelector('[data-collection-description]').textContent = data.description;
-      const cascade = overlay.querySelector('[data-look-cascade]');
-      cascade.replaceChildren(...data.looks.map(createLook));
       overlay.setAttribute('aria-hidden', 'false');
       overlay.classList.add('is-open');
       document.body.classList.add('no-scroll');
       overlay.scrollTop = 0;
+      portfolioState.runway?.destroy?.();
+      portfolioState.runway = createRunway(data.looks);
+      window.__portfolioRunway = portfolioState.runway;
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        gsap.fromTo(overlay, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .8, ease: 'power4.inOut', onComplete: createLookAnimations });
+        gsap.fromTo(overlay, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .8, ease: 'power4.inOut' });
         gsap.fromTo(overlay.querySelector('.collection-overlay__header h2'), { yPercent: 100 }, { yPercent: 0, duration: .9, delay: .25, ease: 'power4.out' });
       } else {
         overlay.style.clipPath = 'inset(0% 0 0 0)';
@@ -237,9 +465,10 @@ const categories = [
     function closeCollection() {
       const overlay = document.querySelector('[data-collection-overlay]');
       if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
-      portfolioState.lookTriggers.forEach((trigger) => trigger.kill?.());
-      portfolioState.lookTriggers = [];
       const finish = () => {
+        portfolioState.runway?.destroy?.();
+        portfolioState.runway = null;
+        window.__portfolioRunway = null;
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
         overlay.style.clipPath = '';
@@ -301,13 +530,27 @@ const categories = [
   .collection-overlay__header h2 { font-size: clamp(6rem, 14vw, 14rem); }
   .collection-overlay__header > p:not(.eyebrow) { max-width: 32rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
   .collection-overlay__header > span { grid-column: 2; }
-  .look-cascade { padding-inline: var(--gutter); }
-  .look-panel { position: sticky; top: 5rem; height: calc(100svh - 5rem); overflow: hidden; margin-bottom: 16vh; background: #222; isolation: isolate; }
-  .look-panel img { position: absolute; z-index: -2; inset: 0; height: 110%; object-fit: cover; }
-  .look-panel__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.75)); }
-  .look-panel__meta { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 3rem; padding: clamp(1.5rem, 4vw, 4rem); }
-  .look-panel__meta h3 { margin: 0; font-family: var(--display); font-size: clamp(4.5rem, 10vw, 10rem); letter-spacing: -.07em; line-height: .85; }
-  .look-panel__meta p { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+  .look-runway { padding: 0 var(--gutter) clamp(4rem, 7vw, 7rem); }
+  .look-runway__layout { display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(18rem, .78fr); gap: clamp(2rem, 5vw, 6rem); min-height: min(76rem, 86svh); }
+  .look-runway__stage { position: relative; min-height: 44rem; overflow: hidden; outline: 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .look-runway__stage:focus-visible { outline: 1px solid var(--signal); outline-offset: 4px; }
+  .look-runway__stage.is-dragging { cursor: grabbing; }
+  .look-runway__cards { position: absolute; inset: 0; }
+  :global(.runway-card) { position: absolute; left: 50%; top: 50%; width: min(54%, 34rem); height: 84%; overflow: hidden; margin: 0; background: #222; isolation: isolate; transform-origin: center; will-change: transform, filter, opacity; pointer-events: none; }
+  :global(.runway-card img) { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  :global(.runway-card__shade) { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.14)); }
+  .look-runway__details { position: relative; align-self: center; min-height: 23rem; border-top: 1px solid #46463f; border-bottom: 1px solid #46463f; }
+  :global(.runway-detail) { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem 0; will-change: transform, opacity; }
+  :global(.runway-detail > span) { color: var(--signal); }
+  :global(.runway-detail h3) { margin: 2rem 0 .75rem; font-family: var(--display); font-size: clamp(4rem, 7vw, 7rem); letter-spacing: -.07em; line-height: .84; }
+  :global(.runway-detail p) { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+  .look-runway__hint { display: none; }
+  .look-runway__scrubber { display: grid; grid-template-columns: auto minmax(8rem, 1fr) auto; gap: 1.5rem; align-items: center; padding-top: 1.5rem; border-top: 1px solid #3d3d37; color: #96958d; }
+  .look-runway__scrubber input { width: 100%; height: 1.5rem; margin: 0; appearance: none; background: transparent; cursor: ew-resize; }
+  .look-runway__scrubber input::-webkit-slider-runnable-track { height: 1px; background: #55544d; }
+  .look-runway__scrubber input::-webkit-slider-thumb { width: 3rem; height: 5px; margin-top: -2px; appearance: none; border: 0; border-radius: 0; background: var(--signal); }
+  .look-runway__scrubber input::-moz-range-track { height: 1px; background: #55544d; }
+  .look-runway__scrubber input::-moz-range-thumb { width: 3rem; height: 5px; border: 0; border-radius: 0; background: var(--signal); }
   .collection-overlay__end { display: flex; justify-content: space-between; align-items: end; gap: 2rem; padding: 8rem var(--gutter); }
 
   @media (max-width: 900px) {
@@ -320,7 +563,9 @@ const categories = [
     .portfolio-context > * { min-width: 0; }
     .collection-overlay__header { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto auto; }
     .collection-overlay__header > span { grid-column: 1; }
-    .look-panel__meta { grid-template-columns: 1fr; gap: 1rem; }
+    .look-runway__layout { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .look-runway__stage { min-height: min(70rem, 72svh); }
+    .look-runway__details { min-height: 18rem; }
   }
   @media (max-width: 600px) {
     .stack-heading { align-items: flex-start; flex-direction: column; gap: 1rem; }
@@ -332,8 +577,14 @@ const categories = [
     .collection-overlay__bar > p { display: none; }
     .collection-overlay__header { min-height: 80svh; padding-top: 6rem; }
     .collection-overlay__header h2 { font-size: clamp(4.5rem, 20vw, 7rem); }
-    .look-cascade { padding-inline: 0; }
-    .look-panel { top: 4.5rem; height: calc(100svh - 4.5rem); margin-bottom: 7vh; }
+    .look-runway { padding-inline: 0; }
+    .look-runway__layout { gap: 1.5rem; }
+    .look-runway__stage { min-height: 68svh; }
+    :global(.runway-card) { width: 74%; height: 88%; }
+    .look-runway__details { min-height: 13rem; margin-inline: var(--gutter); }
+    :global(.runway-detail h3) { font-size: clamp(3.8rem, 17vw, 6rem); }
+    .look-runway__hint { position: absolute; z-index: 80; left: var(--gutter); bottom: 1rem; display: block; color: var(--paper); }
+    .look-runway__scrubber { display: none; }
     .collection-overlay__end { align-items: stretch; flex-direction: column; }
   }
 </style>

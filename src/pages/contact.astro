@@ -1,6 +1,12 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import ClientFeedback from '../components/ClientFeedback.astro';
+
+// This collection is intentionally empty until approved review text and
+// attribution are present in the project. The component supports any number
+// of verified entries without exposing unpublished placeholders.
+const testimonials = [];
 ---
 
 <SiteLayout title="Contact — Soufiane Aberbach" description="Start a fashion development brief with Soufiane Aberbach in Tangier." marker="SA-CONTACT-V5" page="contact">
@@ -14,6 +20,19 @@ import Arrow from '../components/Arrow.astro';
       <p>No contract and no call to book. Describe the garment, reference or fit problem; the next useful production step comes back in writing.</p>
       <div class="contact-availability"><i aria-hidden="true"></i><span class="label">Development briefs open</span></div>
     </aside>
+  </section>
+
+  <section class="contact-workspace" aria-label="Soufiane's freelance workspace">
+    <div class="contact-workspace__grid">
+      <div class="contact-workspace__note" data-reveal>
+        <p class="eyebrow">Working environment</p>
+        <p>Pattern, fit and technical decisions are developed here before they move to production.</p>
+      </div>
+      <figure data-reveal>
+        <img src="/contact.png" width="1536" height="1024" alt="Soufiane Aberbach at his desk beside a monitor displaying his current portfolio website" loading="lazy" decoding="async" />
+        <figcaption class="label">Freelance workspace / Tangier</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="brief-section" id="brief">
@@ -80,6 +99,7 @@ import Arrow from '../components/Arrow.astro';
   </section>
 
   <!-- AWAITING: real client testimonial text and attribution from Soufiane -->
+  <ClientFeedback items={testimonials} />
 
   <section class="contact-faq section-shell">
     <div data-reveal><p class="eyebrow">Before you write</p><h2 class="display">Useful answers.</h2></div>
@@ -125,6 +145,13 @@ import Arrow from '../components/Arrow.astro';
   .contact-hero aside > p { color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
   .contact-availability { display: flex; align-items: center; gap: .75rem; margin-top: 2rem; }
   .contact-availability i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--acid); box-shadow: 0 0 0 .35rem rgba(215,230,98,.12); }
+  .contact-workspace { padding: 0 var(--gutter) clamp(7rem, 10vw, 10rem); background: var(--paper-bright); color: var(--ink); }
+  .contact-workspace__grid { display: grid; grid-template-columns: minmax(12rem, .34fr) minmax(0, 1.66fr); gap: 4vw; align-items: end; }
+  .contact-workspace__note { padding: 2rem 0; border-top: 1px solid var(--line-strong); }
+  .contact-workspace__note > p:last-child { max-width: 20rem; color: var(--muted); line-height: 1.7; }
+  .contact-workspace figure { position: relative; z-index: 1; margin: -8rem 0 0; }
+  .contact-workspace img { display: block; width: 100%; height: auto; }
+  .contact-workspace figcaption { position: absolute; right: 1.5rem; bottom: 1.5rem; padding: .6rem .75rem; background: rgba(17,17,15,.88); color: var(--paper); }
   .brief-section { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding: clamp(7rem, 12vw, 12rem) var(--gutter); background: var(--paper-bright); }
   .brief-section__intro { position: sticky; top: 8rem; align-self: start; }
   .brief-section__intro h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 7vw, 7.5rem); }
@@ -142,14 +169,14 @@ import Arrow from '../components/Arrow.astro';
   .form-action { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 1rem; }
   .form-action p { max-width: 26rem; margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.6; }
   .form-status { min-height: 1.5rem; margin: 0; color: var(--signal-dark); font-size: .8rem; }
-  .contact-direct { padding-block: 4rem; background: var(--signal); color: var(--ink); }
+  .contact-direct { padding-block: 4rem; background: var(--signal); color: var(--paper); }
   .contact-direct__grid { display: grid; grid-template-columns: 1.2fr .7fr .9fr; gap: 5vw; }
-  .contact-direct p { opacity: 1; }
+  .contact-direct p { opacity: .72; }
   .contact-direct a { font-family: var(--display); font-size: clamp(1.25rem, 2.4vw, 2.6rem); font-weight: 700; letter-spacing: -.04em; }
   .contact-direct a span { font-size: .65em; }
   .contact-direct strong, .contact-direct div > span { display: block; }
   .contact-direct strong { margin-top: 1rem; }
-  .contact-direct div > span { margin-top: .4rem; font-size: .78rem; opacity: 1; }
+  .contact-direct div > span { margin-top: .4rem; font-size: .78rem; opacity: .75; }
   .contact-faq { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
   .contact-faq h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7rem); }
   .faq-list { border-top: 1px solid var(--line-strong); }
@@ -159,6 +186,6 @@ import Arrow from '../components/Arrow.astro';
   .faq-list summary::after { content: '+'; color: var(--signal); }
   .faq-list details[open] summary::after { content: '−'; }
   .faq-list details p { max-width: 42rem; margin: 0; padding: 0 0 1.5rem; color: var(--muted); line-height: 1.7; }
-  @media (max-width: 900px) { .contact-hero, .brief-section, .contact-faq { grid-template-columns: minmax(0, 1fr); } .contact-hero > * { min-width: 0; } .brief-section__intro { position: static; } .contact-direct__grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 600px) { .contact-hero { min-height: 88svh; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-top: calc(var(--header-h) + 4rem); } .contact-hero h1 { font-size: clamp(3.6rem, 15vw, 5rem); } .brief-form { grid-template-columns: 1fr; } .field--wide { grid-column: 1; } .form-action { align-items: stretch; flex-direction: column; } .contact-direct__grid { grid-template-columns: 1fr; } .contact-direct__grid > div { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(17,17,15,.35); } }
+  @media (max-width: 900px) { .contact-hero, .brief-section, .contact-faq { grid-template-columns: minmax(0, 1fr); } .contact-hero > * { min-width: 0; } .contact-workspace__grid { grid-template-columns: minmax(0, 1fr); } .contact-workspace__note { max-width: 30rem; } .contact-workspace figure { margin-top: 0; } .brief-section__intro { position: static; } .contact-direct__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .contact-hero { min-height: 88svh; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-top: calc(var(--header-h) + 4rem); } .contact-hero h1 { font-size: clamp(3.6rem, 15vw, 5rem); } .contact-workspace { padding-top: 3rem; padding-bottom: 5rem; } .contact-workspace__note { padding-bottom: .5rem; } .contact-workspace figcaption { right: .75rem; bottom: .75rem; } .brief-form { grid-template-columns: 1fr; } .field--wide { grid-column: 1; } .form-action { align-items: stretch; flex-direction: column; } .contact-direct__grid { grid-template-columns: 1fr; } .contact-direct__grid > div { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,.35); } }
 </style>
