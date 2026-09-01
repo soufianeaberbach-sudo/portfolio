@@ -1,34 +1,63 @@
 ---
+interface Rating { label: string; score: number; }
 interface Testimonial {
+  reviewer: string;
+  role: string;
+  proof: string;
   quote: string;
-  platform: string;
   rating: number;
-  context?: string;
+  ratings: Rating[];
+  highlights: string[];
 }
-
-interface Props {
-  items: Testimonial[];
-}
-
+interface Props { items: Testimonial[]; }
 const { items } = Astro.props;
+const stars = [1, 2, 3, 4, 5];
 ---
 
 {items.length > 0 && (
   <section class="client-feedback section-shell" aria-labelledby="client-feedback-title">
     <div class="client-feedback__head" data-reveal>
-      <p class="eyebrow">Verified client feedback</p>
-      <h2 class="display" id="client-feedback-title">The work,<br />in their words.</h2>
+      <div>
+        <p class="eyebrow">Client proof / three contexts</p>
+        <h2 class="display" id="client-feedback-title">Trusted where<br /><em>precision</em> matters.</h2>
+      </div>
+      <p>Freelance service, factory reliability and international design-intent protection—three perspectives on the same production discipline.</p>
     </div>
-    <div class="client-feedback__list">
+
+    <div class="client-feedback__grid">
       {items.map((item, index) => (
-        <blockquote data-reveal>
-          <div class="client-feedback__meta">
-            <span class="label">{item.platform}</span>
-            <span class="label" aria-label={`${item.rating} out of 5 stars`}>{item.rating.toFixed(1)} / 5</span>
+        <blockquote class:list={['review', { 'review--lead': index === 0 }]} data-reveal>
+          <header>
+            <div>
+              <span class="label">{item.proof}</span>
+              <h3>{item.reviewer}</h3>
+              <p>{item.role}</p>
+            </div>
+            <div class="rating rating--overall" aria-label={`${item.rating} out of 5 stars`}>
+              <span aria-hidden="true">{stars.map(() => <svg viewBox="0 0 24 24" focusable="false"><path d="m12 2.5 2.92 5.91 6.53.95-4.73 4.61 1.12 6.51L12 17.41l-5.84 3.07 1.12-6.51-4.73-4.61 6.53-.95L12 2.5Z" /></svg>)}</span>
+              <strong>5</strong>
+            </div>
+          </header>
+
+          <p class="review__quote">“{item.quote}”</p>
+
+          <div class="review__ratings" aria-label="Category ratings">
+            {item.ratings.map((rating) => (
+              <div>
+                <span>{rating.label}</span>
+                <div class="rating" aria-label={`${rating.label}: ${rating.score} out of 5 stars`}>
+                  <span aria-hidden="true">{stars.map(() => <svg viewBox="0 0 24 24" focusable="false"><path d="m12 2.5 2.92 5.91 6.53.95-4.73 4.61 1.12 6.51L12 17.41l-5.84 3.07 1.12-6.51-4.73-4.61 6.53-.95L12 2.5Z" /></svg>)}</span>
+                  <strong>{rating.score}</strong>
+                </div>
+              </div>
+            ))}
           </div>
-          <p>“{item.quote}”</p>
-          {item.context && <cite>{item.context}</cite>}
-          <span class="client-feedback__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+
+          <div class="review__highlights">
+            <span class="label">Things that went well</span>
+            <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>
+          </div>
+          <span class="review__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
         </blockquote>
       ))}
     </div>
@@ -36,14 +65,34 @@ const { items } = Astro.props;
 )}
 
 <style>
-  .client-feedback { display: grid; grid-template-columns: .55fr 1.45fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); border-top: 1px solid var(--line); }
-  .client-feedback__head h2 { margin-top: 2rem; font-size: clamp(3.8rem, 6vw, 6.5rem); }
-  .client-feedback__list { border-top: 1px solid var(--line-strong); }
-  .client-feedback blockquote { position: relative; margin: 0; padding: 2.5rem 4rem 3rem 0; border-bottom: 1px solid var(--line); }
-  .client-feedback__meta { display: flex; justify-content: space-between; gap: 2rem; color: var(--signal-dark); }
-  .client-feedback blockquote > p { max-width: 55rem; margin: 2rem 0; font-family: var(--display); font-size: clamp(2rem, 3.6vw, 4rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.02; }
-  .client-feedback cite { color: var(--muted); font-size: .78rem; font-style: normal; }
-  .client-feedback__index { position: absolute; right: 0; bottom: 3rem; color: var(--muted); font-family: var(--mono); font-size: .65rem; }
-  @media (max-width: 900px) { .client-feedback { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 600px) { .client-feedback blockquote { padding-right: 2rem; } }
+  .client-feedback { padding-block: clamp(7rem, 11vw, 11rem); }
+  .client-feedback__head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(18rem, .45fr); gap: 7vw; align-items: end; margin-bottom: clamp(4rem, 7vw, 7rem); }
+  .client-feedback__head h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7.5rem); }
+  .client-feedback__head > p { max-width: 31rem; margin: 0 0 .5rem; color: var(--muted); line-height: 1.75; }
+  .client-feedback__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(24rem, .75fr); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+  .review { position: relative; min-width: 0; margin: 0; padding: clamp(2rem, 3vw, 3.25rem); border-bottom: 1px solid var(--line); }
+  .review--lead { grid-row: span 2; padding-left: 0; padding-right: clamp(2.5rem, 5vw, 5rem); border-right: 1px solid var(--line); border-bottom: 0; }
+  .review:last-child { border-bottom: 0; }
+  .review header { display: flex; justify-content: space-between; gap: 2rem; align-items: flex-start; }
+  .review header .label { color: var(--signal-dark); }
+  .review h3 { margin: 1.25rem 0 .25rem; font-family: var(--display); font-size: clamp(2rem, 3vw, 3.25rem); letter-spacing: -.05em; line-height: .95; }
+  .review header p { margin: 0; color: var(--muted); font-size: .8rem; }
+  .rating { display: inline-flex; align-items: center; gap: .45rem; color: var(--signal); white-space: nowrap; }
+  .rating > span { display: inline-flex; gap: .08rem; }
+  .rating svg { display: block; width: .78rem; height: .78rem; fill: currentColor; }
+  .rating strong { color: var(--ink); font-family: var(--mono); font-size: .72rem; }
+  .rating--overall svg { width: 1rem; height: 1rem; }
+  .rating--overall strong { font-size: 1rem; }
+  .review__quote { margin: clamp(3rem, 5vw, 5rem) 0; font-family: var(--display); font-size: clamp(1.85rem, 3.1vw, 3.65rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.05; }
+  .review:not(.review--lead) .review__quote { margin-block: 2.5rem; font-size: clamp(1.45rem, 2vw, 2.15rem); }
+  .review__ratings { border-top: 1px solid var(--line); }
+  .review__ratings > div { display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+  .review__ratings > div > span { max-width: 20rem; color: var(--ink-soft); font-size: .72rem; line-height: 1.4; }
+  .review__highlights { margin-top: 2.5rem; }
+  .review__highlights > .label { color: var(--muted); }
+  .review__highlights ul { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+  .review__highlights li { padding: .5rem .65rem; border: 1px solid var(--line); font-family: var(--mono); font-size: .58rem; letter-spacing: .05em; text-transform: uppercase; }
+  .review__index { position: absolute; right: 1rem; bottom: 1rem; color: var(--line-strong); font-family: var(--mono); font-size: .62rem; }
+  @media (max-width: 1000px) { .client-feedback__grid { grid-template-columns: minmax(0, 1fr); } .review, .review--lead { grid-row: auto; padding: clamp(2rem, 5vw, 3.25rem) 0; border-right: 0; border-bottom: 1px solid var(--line); } .review:last-child { border-bottom: 0; } }
+  @media (max-width: 760px) { .client-feedback__head { grid-template-columns: minmax(0, 1fr); } .review header { flex-direction: column; } .review__quote, .review:not(.review--lead) .review__quote { font-size: clamp(1.6rem, 7vw, 2.25rem); } .review__ratings > div { align-items: flex-start; flex-direction: column; gap: .6rem; } }
 </style>
