@@ -131,7 +131,7 @@ button { color: inherit; }
   transition: color .25s, background .25s, transform .25s;
 }
 .button:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
-.button--signal { background: var(--signal); border-color: var(--signal); color: var(--paper); }
+.button--signal { background: color-mix(in srgb, var(--signal) 84%, var(--ink)); border-color: color-mix(in srgb, var(--signal) 84%, var(--ink)); color: #fff; }
 .button--signal:hover { background: var(--ink); border-color: var(--ink); }
 
 .section-shell {

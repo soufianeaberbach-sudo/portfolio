@@ -1,28 +1,37 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import ServiceEvidence from '../components/ServiceEvidence.astro';
 
 const services = [
   {
     number: '01',
+    kind: 'development',
+    evidenceTitle: 'Sketch → production geometry',
     title: 'Sketch to production',
     description: 'A sketch, reference or half-finished idea becomes a garment a factory can cut, grade and repeat.',
     outputs: ['Block selection and 2D pattern', 'Full grade to measurement chart', '3D fit and drape resolution', 'Complete tech pack and marker'],
   },
   {
     number: '02',
+    kind: 'monitoring',
+    evidenceTitle: 'Line audit / checkpoints',
     title: 'Production monitoring',
     description: 'The first cut, first sewn piece and the line are checked so drift is corrected before final inspection.',
     outputs: ['Pre-production sample sign-off', 'First-cut and first-piece checks', 'In-line measurement audits', 'Defect diagnosis and correction'],
   },
   {
     number: '03',
+    kind: 'consulting',
+    evidenceTitle: 'Manufacturability analysis',
     title: 'Consulting and advice',
     description: 'A practical view of manufacturability, cost pressure, pattern risk and supplier capability before money is committed.',
     outputs: ['Manufacturability review', 'Consumption and costing input', 'Supplier capability assessment', 'Tech pack audit before hand-off'],
   },
   {
     number: '04',
+    kind: 'tracking',
+    evidenceTitle: 'Approval and delivery trace',
     title: 'Tracking',
     description: 'Cut ticket to shipment visibility, with critical dates flagged while there is still time to act.',
     outputs: ['Milestone visibility', 'Early slippage flags', 'Factory communication', 'Written status updates'],
@@ -51,16 +60,7 @@ const services = [
           <h2>{service.title}</h2>
           <p>{service.description}</p>
         </div>
-        <div class="service__evidence">
-          <div class="service__evidence-head">
-            <span class="label">Production record</span>
-            <span class="label">{service.number} / 04</span>
-          </div>
-          <div class="service__draft" aria-hidden="true"><i></i><i></i><b></b></div>
-          <ul>
-            {service.outputs.map((output, index) => <li><span>{String(index + 1).padStart(2, '0')}</span>{output}</li>)}
-          </ul>
-        </div>
+        <ServiceEvidence kind={service.kind} number={service.number} title={service.evidenceTitle} outputs={service.outputs} />
       </article>
     ))}
   </section>
@@ -91,26 +91,12 @@ const services = [
 <style>
   .expertise-intro { background: var(--paper-bright); }
   .services { padding-block: clamp(4rem, 8vw, 8rem); }
-  .service { display: grid; grid-template-columns: .28fr 1fr .8fr; gap: 4vw; padding: 3.5rem 0; border-top: 1px solid var(--line-strong); }
+  .service { display: grid; grid-template-columns: .18fr minmax(18rem, .72fr) minmax(30rem, 1.1fr); gap: 4vw; padding: clamp(3.5rem, 6vw, 6rem) 0; border-top: 1px solid var(--line-strong); }
   .service:last-child { border-bottom: 1px solid var(--line-strong); }
   .service__number { display: flex; align-items: flex-start; gap: 1rem; font-family: var(--mono); font-size: .7rem; }
   .service__number i { display: block; width: 3rem; height: 1px; margin-top: .55rem; background: var(--signal); }
   .service h2 { max-width: 44rem; margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 5vw, 5.7rem); font-weight: 800; letter-spacing: -.06em; line-height: .92; }
   .service__copy p { max-width: 39rem; margin: 1.5rem 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
-  .service__evidence { position: relative; align-self: start; padding: 1rem 1rem .4rem; overflow: hidden; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper-bright) 60%, transparent); }
-  .service__evidence-head { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: .8rem; border-bottom: 1px solid var(--line); color: var(--muted); }
-  .service__draft { position: relative; height: 2.7rem; border-bottom: 1px solid var(--line); }
-  .service__draft i { position: absolute; display: block; background: var(--line-strong); transform-origin: left; transform: scaleX(0); transition: transform .75s var(--ease); }
-  .service__draft i:first-child { left: 0; right: 0; top: 1.35rem; height: 1px; }
-  .service__draft i:nth-child(2) { left: 28%; top: .55rem; width: 48%; height: 1px; }
-  .service__draft b { position: absolute; left: 28%; top: .2rem; width: 1px; height: 2.3rem; background: var(--signal); transform: scaleY(0); transform-origin: top; transition: transform .55s var(--ease) .34s; }
-  .service.is-visible .service__draft i { transform: scaleX(1); }
-  .service.is-visible .service__draft i:nth-child(2) { transition-delay: .18s; }
-  .service.is-visible .service__draft b { transform: scaleY(1); }
-  .service ul { margin: 0; padding: 0; list-style: none; }
-  .service li { position: relative; display: grid; grid-template-columns: 2rem 1fr; gap: .75rem; padding: .78rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .82rem; }
-  .service li:last-child { border-bottom: 0; }
-  .service li span { color: var(--signal-dark); font-family: var(--mono); font-size: .62rem; letter-spacing: .08em; }
   .boundary { padding-block: clamp(7rem, 12vw, 12rem); background: var(--ink); color: var(--paper); }
   .boundary__grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 8vw; }
   .boundary h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
@@ -121,6 +107,6 @@ const services = [
   .boundary__list p { margin: 2rem 0 0; color: #aaa89f; line-height: 1.7; }
   .expertise-cta { padding-block: clamp(7rem, 12vw, 12rem); }
   .expertise-cta h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 9vw, 9.5rem); }
-  @media (max-width: 900px) { .service { grid-template-columns: 4rem 1fr; } .service__evidence { grid-column: 2; } .boundary__grid { grid-template-columns: 1fr; } }
-  @media (max-width: 600px) { .service { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2.5rem 0; } .service__evidence { grid-column: 1; } .service h2 { font-size: 2.7rem; } }
+  @media (max-width: 1100px) { .service { grid-template-columns: 4rem minmax(0, 1fr); } .service > :global(.technical-proof) { grid-column: 2; } .boundary__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .service { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 2.5rem 0; } .service > :global(.technical-proof) { grid-column: 1; } .service h2 { font-size: 2.7rem; } }
 </style>
