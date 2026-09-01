@@ -1,0 +1,124 @@
+---
+interface Props {
+  kind: 'development' | 'monitoring' | 'consulting' | 'tracking';
+  number: string;
+  title: string;
+  outputs: string[];
+}
+
+const { kind, number, title, outputs } = Astro.props;
+---
+
+<div class="technical-proof" data-kind={kind}>
+  <div class="technical-proof__head">
+    <span class="label">{title}</span>
+    <span class="label">Evidence / {number}</span>
+  </div>
+
+  <div class="technical-proof__visual">
+    {kind === 'development' && (
+      <svg viewBox="0 0 520 250" role="img" aria-labelledby={`proof-${number}-title`}>
+        <title id={`proof-${number}-title`}>A garment sketch resolving into production pattern geometry</title>
+        <g class="grid-lines">
+          <path d="M0 50H520M0 100H520M0 150H520M0 200H520M65 0V250M130 0V250M195 0V250M260 0V250M325 0V250M390 0V250M455 0V250" />
+        </g>
+        <path class="draft-line" d="M55 198C83 151 94 93 119 49c21 32 48 45 78 52l-20 46 24 75H66l22-76-24-8" />
+        <path class="measure-line" d="M237 36v178M224 48h26M224 202h26" />
+        <path class="production-line" d="M302 42l53 20 55-20 40 39-30 36 9 105H280l10-105-29-36 41-39Z" />
+        <path class="production-line production-line--detail" d="M355 62v160M290 117h130M323 52l32 48 32-48" />
+        <text x="43" y="232">SKETCH</text><text x="238" y="232">RESOLVE</text><text x="421" y="232">PATTERN</text>
+      </svg>
+    )}
+
+    {kind === 'monitoring' && (
+      <svg viewBox="0 0 520 250" role="img" aria-labelledby={`proof-${number}-title`}>
+        <title id={`proof-${number}-title`}>A production line with measurement audit checkpoints</title>
+        <g class="grid-lines"><path d="M0 42H520M0 84H520M0 126H520M0 168H520M0 210H520" /></g>
+        <path class="production-line" d="M38 126H482" />
+        <g class="audit-nodes">
+          <circle cx="72" cy="126" r="10" /><circle cx="184" cy="126" r="10" /><circle cx="296" cy="126" r="10" /><circle cx="408" cy="126" r="10" />
+          <path d="M72 82v88M184 68v116M296 90v72M408 58v136" />
+        </g>
+        <path class="measure-line" d="M142 68h84M142 62v12M226 62v12M254 90h84M254 84v12M338 84v12" />
+        <text x="45" y="228">FIRST CUT</text><text x="161" y="228">FIRST PIECE</text><text x="281" y="228">IN-LINE</text><text x="405" y="228">CORRECT</text>
+      </svg>
+    )}
+
+    {kind === 'consulting' && (
+      <svg viewBox="0 0 520 250" role="img" aria-labelledby={`proof-${number}-title`}>
+        <title id={`proof-${number}-title`}>An annotated garment manufacturability review</title>
+        <g class="grid-lines"><path d="M0 50H520M0 100H520M0 150H520M0 200H520M104 0V250M208 0V250M312 0V250M416 0V250" /></g>
+        <path class="production-line" d="M208 38l52 22 52-22 43 48-31 34 8 101H188l8-101-31-34 43-48Z" />
+        <path class="production-line production-line--detail" d="M260 60v161M200 120h124M228 48l32 48 32-48" />
+        <g class="callouts">
+          <path d="M215 80H82V55" /><circle cx="215" cy="80" r="4" /><text x="22" y="47">CONSTRUCTION</text>
+          <path d="M311 126h133V92" /><circle cx="311" cy="126" r="4" /><text x="390" y="84">COST</text>
+          <path d="M246 187H96v30" /><circle cx="246" cy="187" r="4" /><text x="24" y="237">MATERIAL</text>
+        </g>
+      </svg>
+    )}
+
+    {kind === 'tracking' && (
+      <svg viewBox="0 0 520 250" role="img" aria-labelledby={`proof-${number}-title`}>
+        <title id={`proof-${number}-title`}>A production approval trace across four controlled milestones</title>
+        <g class="grid-lines"><path d="M0 50H520M0 100H520M0 150H520M0 200H520" /></g>
+        <path class="trace-line" d="M42 184H132V142H238V101H344V58H478" />
+        <g class="trace-nodes">
+          <circle cx="42" cy="184" r="7" /><circle cx="132" cy="142" r="7" /><circle cx="238" cy="101" r="7" /><circle cx="344" cy="58" r="7" /><circle cx="478" cy="58" r="7" />
+        </g>
+        <path class="measure-line" d="M132 142v76M238 101v117M344 58v160" />
+        <text x="24" y="231">TICKET</text><text x="113" y="231">SAMPLE</text><text x="218" y="231">APPROVAL</text><text x="326" y="231">LINE</text><text x="438" y="231">SHIP</text>
+      </svg>
+    )}
+  </div>
+
+  <ol class="technical-proof__outputs">
+    {outputs.map((output, index) => <li><span>{String(index + 1).padStart(2, '0')}</span>{output}</li>)}
+  </ol>
+</div>
+
+<style>
+  .technical-proof { position: relative; align-self: start; overflow: hidden; border: 1px solid var(--line); background: var(--paper-bright); }
+  .technical-proof__head { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .technical-proof__visual { padding: .25rem 1rem 0; border-bottom: 1px solid var(--line); }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  svg :global(path), svg :global(circle) { vector-effect: non-scaling-stroke; }
+  svg :global(text) { fill: var(--muted); font-family: var(--mono); font-size: 8px; letter-spacing: .08em; }
+  .grid-lines { fill: none; stroke: var(--line); stroke-width: 1; }
+  .draft-line { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; stroke-dasharray: 380; stroke-dashoffset: 380; }
+  .production-line { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 600; stroke-dashoffset: 600; }
+  .production-line--detail { stroke: var(--line-strong); stroke-dasharray: 280; stroke-dashoffset: 280; }
+  .measure-line { fill: none; stroke: var(--signal); stroke-width: 1; stroke-dasharray: 200; stroke-dashoffset: 200; }
+  .audit-nodes, .trace-nodes { fill: var(--paper-bright); stroke: var(--signal); stroke-width: 1.2; }
+  .audit-nodes path { fill: none; stroke: var(--line-strong); stroke-dasharray: 140; stroke-dashoffset: 140; }
+  .callouts { fill: none; stroke: var(--signal); stroke-width: 1; }
+  .callouts path { stroke-dasharray: 190; stroke-dashoffset: 190; }
+  .callouts circle { fill: var(--signal); }
+  .callouts text { fill: var(--ink-soft); stroke: none; }
+  .trace-line { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 700; stroke-dashoffset: 700; }
+  .trace-nodes circle { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+  :global(.service.is-visible) .draft-line,
+  :global(.service.is-visible) .production-line,
+  :global(.service.is-visible) .measure-line,
+  :global(.service.is-visible) .audit-nodes path,
+  :global(.service.is-visible) .callouts path,
+  :global(.service.is-visible) .trace-line { animation: proof-draw .85s var(--ease) forwards; }
+  :global(.service.is-visible) .production-line { animation-delay: .12s; }
+  :global(.service.is-visible) .measure-line,
+  :global(.service.is-visible) .callouts path { animation-delay: .28s; }
+  :global(.service.is-visible) .trace-nodes circle { animation: proof-node .32s var(--ease) forwards; }
+  :global(.service.is-visible) .trace-nodes circle:nth-child(2) { animation-delay: .12s; }
+  :global(.service.is-visible) .trace-nodes circle:nth-child(3) { animation-delay: .24s; }
+  :global(.service.is-visible) .trace-nodes circle:nth-child(4) { animation-delay: .36s; }
+  :global(.service.is-visible) .trace-nodes circle:nth-child(5) { animation-delay: .48s; }
+  .technical-proof__outputs { display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0 1rem .4rem; list-style: none; }
+  .technical-proof__outputs li { display: grid; grid-template-columns: 2rem 1fr; gap: .6rem; padding: .78rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .78rem; }
+  .technical-proof__outputs li:nth-last-child(-n + 2) { border-bottom: 0; }
+  .technical-proof__outputs li:nth-child(odd) { padding-right: .75rem; }
+  .technical-proof__outputs li:nth-child(even) { padding-left: .75rem; border-left: 1px solid var(--line); }
+  .technical-proof__outputs span { color: var(--signal-dark); font-family: var(--mono); font-size: .6rem; letter-spacing: .08em; }
+  @keyframes proof-draw { to { stroke-dashoffset: 0; } }
+  @keyframes proof-node { to { transform: scale(1); } }
+  @media (max-width: 600px) { .technical-proof__outputs { grid-template-columns: 1fr; } .technical-proof__outputs li, .technical-proof__outputs li:nth-child(odd), .technical-proof__outputs li:nth-child(even) { padding-inline: 0; border-left: 0; border-bottom: 1px solid var(--line); } .technical-proof__outputs li:last-child { border-bottom: 0; } }
+  @media (prefers-reduced-motion: reduce) { .draft-line, .production-line, .measure-line, .audit-nodes path, .callouts path, .trace-line { stroke-dashoffset: 0; } .trace-nodes circle { transform: none; } }
+</style>

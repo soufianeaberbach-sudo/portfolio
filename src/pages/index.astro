@@ -85,20 +85,19 @@ const brandLogos = [
     <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
     <div class="home-stats__grid">
       <article class="home-stat home-stat--major" data-reveal>
-        <strong>11+</strong><span>Years in production</span>
-        <small>From quality control and planning to CAD development.</small>
+        <strong data-count="12" data-suffix="+" aria-label="12 plus">12+</strong><span>Years in<br />production</span>
       </article>
       <article class="home-stat home-stat--major" data-reveal>
-        <strong>9,000+</strong><span>Garments engineered</span>
-        <small>Patterns, fit decisions and specifications prepared for manufacture.</small>
+        <strong data-count="9000" data-suffix="+" data-grouped aria-label="9,000 plus">9,000+</strong><span>Garments<br />engineered</span>
+      </article>
+      <article class="home-stat home-stat--brand" data-reveal>
+        <strong data-count="16" data-suffix="+" aria-label="16 plus">16+</strong><span>Brand<br />programmes</span>
       </article>
       <article class="home-stat home-stat--support" data-reveal>
-        <strong>6</strong><span>Production roles</span>
-        <small>A documented trajectory from the factory floor to senior product development.</small>
+        <strong data-count="6">6</strong><span>Production<br />roles</span>
       </article>
       <article class="home-stat home-stat--support" data-reveal>
-        <strong>3</strong><span>Working languages</span>
-        <small>Arabic · French · English</small>
+        <strong data-count="6">6</strong><span>Software<br />systems</span>
       </article>
     </div>
   </section>
@@ -259,6 +258,42 @@ const brandLogos = [
       events.forEach((name) => window.addEventListener(name, recover, { passive: true }));
     }
   }
+
+  const metricNumbers = document.querySelectorAll('[data-count]');
+  const formatMetric = (value, grouped) => grouped ? Math.round(value).toLocaleString('en-US') : String(Math.round(value));
+
+  const revealMetric = (element) => {
+    const target = Number(element.dataset.count || 0);
+    const suffix = element.dataset.suffix || '';
+    const grouped = element.hasAttribute('data-grouped');
+    if (reduceMotion) {
+      element.textContent = `${formatMetric(target, grouped)}${suffix}`;
+      return;
+    }
+
+    const duration = 680;
+    const start = performance.now();
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = `${formatMetric(target * eased, grouped)}${suffix}`;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    const metricObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        revealMetric(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .45 });
+    metricNumbers.forEach((metric) => metricObserver.observe(metric));
+  } else {
+    metricNumbers.forEach(revealMetric);
+  }
 </script>
 
 <style>
@@ -370,14 +405,20 @@ const brandLogos = [
   .positioning__copy p { color: var(--ink-soft); line-height: 1.75; }
   .positioning__copy .button { margin-top: 1.5rem; }
 
-  .home-stats { display: grid; grid-template-columns: .42fr 1.58fr; gap: 6vw; align-items: start; padding-block: clamp(4rem, 7vw, 7rem); }
-  .home-stats__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); }
-  .home-stat { display: grid; grid-template-columns: minmax(0, auto) 1fr; gap: 1rem clamp(1.25rem, 2.4vw, 2.75rem); align-items: end; padding: clamp(2rem, 3.5vw, 3.5rem) clamp(1.5rem, 3vw, 3rem) clamp(2rem, 3.5vw, 3.5rem) 0; border-bottom: 1px solid var(--line); }
-  .home-stat:nth-child(even) { padding-right: 0; padding-left: clamp(1.5rem, 3vw, 3rem); border-left: 1px solid var(--line); }
-  .home-stat strong { grid-row: 1 / 3; font-family: var(--display); font-size: clamp(4.6rem, 7.8vw, 8rem); font-weight: 850; letter-spacing: -.08em; line-height: .78; }
-  .home-stat--support strong { font-size: clamp(3.8rem, 5.5vw, 5.8rem); }
-  .home-stat span { align-self: end; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
-  .home-stat small { max-width: 24rem; color: var(--muted); font-size: .78rem; line-height: 1.55; }
+  .home-stats { display: grid; grid-template-columns: .34fr 1.66fr; gap: 5vw; align-items: start; padding-block: clamp(4rem, 7vw, 7rem); }
+  .home-stats__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+  .home-stat { position: relative; grid-column: span 4; min-height: clamp(12rem, 18vw, 18rem); display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; padding: clamp(1.5rem, 2.6vw, 2.75rem); overflow: hidden; border-right: 1px solid var(--line); }
+  .home-stat--major { grid-column: span 6; min-height: clamp(16rem, 24vw, 24rem); border-bottom: 1px solid var(--line); }
+  .home-stat:nth-child(2), .home-stat:last-child { border-right: 0; }
+  .home-stat::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--signal); transform: scaleX(.12); transform-origin: left; transition: transform .42s var(--ease); }
+  .home-stat strong { display: block; font-family: var(--display); font-size: clamp(4.4rem, 7vw, 7.8rem); font-weight: 850; letter-spacing: -.08em; line-height: .78; transition: color .32s var(--ease), transform .32s var(--ease); }
+  .home-stat--major strong { font-size: clamp(6rem, 10.5vw, 11rem); }
+  .home-stat span { max-width: 13rem; font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; line-height: 1.45; text-transform: uppercase; transition: transform .32s var(--ease); }
+  @media (hover: hover) and (pointer: fine) {
+    .home-stat:hover::after { transform: scaleX(1); }
+    .home-stat:hover strong { color: var(--signal-dark); transform: translateY(-.08em); }
+    .home-stat:hover span { transform: translateX(.35rem); }
+  }
 
   .home-process { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
   .home-process__head { position: sticky; top: 8rem; align-self: start; }
@@ -524,10 +565,14 @@ const brandLogos = [
     .home-next__grid { gap: 2.5rem; padding-block: clamp(3.5rem, 12vw, 5rem); }
     .home-next__media { width: 100%; max-width: 30rem; justify-self: center; }
     .home-next__lede { margin-top: 1.5rem; }
-    .home-stats__grid { grid-template-columns: 1fr; }
-    .home-stat, .home-stat:nth-child(even) { padding-inline: 0; border-left: 0; }
-    .home-stat { grid-template-columns: minmax(5.5rem, auto) 1fr; }
-    .home-stat strong, .home-stat--support strong { font-size: clamp(4.2rem, 20vw, 6rem); }
+    .home-stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .home-stat { grid-column: span 1; min-height: 13rem; border-bottom: 1px solid var(--line); }
+    .home-stat--major { grid-column: 1 / -1; min-height: 11rem; border-right: 0; }
+    .home-stat:nth-child(2), .home-stat:nth-child(4), .home-stat:last-child { border-right: 0; }
+    .home-stat:nth-child(3) { border-right: 1px solid var(--line); }
+    .home-stat:last-child { grid-column: 1 / -1; min-height: 10rem; }
+    .home-stat:not(.home-stat--major) strong { font-size: clamp(3.8rem, 17vw, 5rem); }
+    .home-stat--major strong { font-size: clamp(4.5rem, 23vw, 6rem); }
     .brand-context__note { margin-left: 0; text-align: left; }
   }
   /* MOBILE BRAND LAYOUT
