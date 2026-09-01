@@ -25,6 +25,14 @@ const calloutLead = {
   process: 'Ready to lock the first stage?',
   experience: 'Need production judgement on a garment?',
 }[page] ?? 'Have a garment to develop?';
+
+const calloutAction = {
+  home: 'Send the sketch.',
+  expertise: 'Discuss the technical problem.',
+  portfolio: 'Discuss the collection.',
+  process: 'Start the development brief.',
+  experience: 'Discuss production collaboration.',
+}[page] ?? 'Start a conversation.';
 ---
 
 <footer class="site-footer">
@@ -32,7 +40,7 @@ const calloutLead = {
     <div class="footer-callout">
       <p class="label">{calloutLead}</p>
       <a href="/contact/">
-        <span>Send the sketch.</span>
+        <span>{calloutAction}</span>
         <i aria-hidden="true"><Arrow /></i>
       </a>
     </div>

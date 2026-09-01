@@ -35,7 +35,7 @@ const stages = [
             <h2>{stage.title}</h2>
           </div>
           <p class="protocol__body">{stage.body}</p>
-          <div class="protocol__output"><span class="label">Output</span><strong>{stage.output}</strong><i aria-hidden="true"></i></div>
+          <div class="protocol__output"><span class="label">Stage result / {stage.number}</span><strong>{stage.output}</strong><i aria-hidden="true"></i></div>
         </li>
       ))}
     </ol>
@@ -49,7 +49,7 @@ const stages = [
       </div>
       <div data-reveal>
         <p>Production quality is decided upstream. The five stages make those decisions visible, testable and repeatable before they become factory problems.</p>
-        <a class="button button--signal" href="/contact/">Start at stage one <span><Arrow /></span></a>
+        <a class="button button--signal" href="/contact/">Start a development brief <span><Arrow /></span></a>
       </div>
     </div>
   </section>
@@ -69,14 +69,14 @@ const stages = [
   .protocol__number { font-family: var(--mono); font-size: .72rem; color: var(--signal-dark); }
   .protocol__title h2 { margin: .8rem 0 0; font-family: var(--display); font-size: clamp(3.2rem, 6vw, 7rem); font-weight: 850; letter-spacing: -.07em; line-height: .88; }
   .protocol__body { max-width: 31rem; margin: 0; color: var(--ink-soft); line-height: 1.75; }
-  .protocol__output { position: relative; display: grid; gap: .6rem; padding: 1rem 3rem 1rem 1rem; overflow: hidden; border: 1px solid var(--line); transition: border-color .45s var(--ease), background-color .45s var(--ease); }
+  .protocol__output { position: relative; display: grid; gap: .6rem; padding: 1rem 1rem 1.5rem; overflow: hidden; border: 1px solid var(--line); }
   .protocol__output span { color: var(--muted); }
   .protocol__output strong { font-size: .85rem; clip-path: inset(0 100% 0 0); transition: clip-path .65s var(--ease) .18s; }
-  .protocol__output i { position: absolute; top: .85rem; right: .85rem; width: 1.4rem; height: 1.4rem; border: 1px solid var(--line-strong); border-radius: 50%; transform: scale(.72); opacity: 0; transition: transform .4s var(--ease) .48s, opacity .4s var(--ease) .48s, border-color .4s var(--ease) .48s; }
-  .protocol__output i::before { content: ''; position: absolute; left: .43rem; top: .27rem; width: .3rem; height: .58rem; border-right: 1px solid var(--signal); border-bottom: 1px solid var(--signal); transform: rotate(45deg); }
-  .protocol__list li.is-visible .protocol__output { border-color: color-mix(in srgb, var(--signal) 45%, var(--line)); background: color-mix(in srgb, var(--signal) 3%, transparent); }
+  .protocol__output i { position: absolute; left: 1rem; right: 1rem; bottom: .72rem; height: 1px; background: var(--line-strong); transform: scaleX(0); transform-origin: left; transition: transform .72s var(--ease) .34s; }
+  .protocol__output i::before { content: ''; position: absolute; right: 0; bottom: -.24rem; width: 1px; height: .5rem; background: var(--signal); }
+  .protocol__output i::after { content: ''; position: absolute; right: 0; top: 0; width: 28%; height: 1px; background: var(--signal); transform: scaleX(0); transform-origin: right; transition: transform .42s var(--ease) .88s; }
   .protocol__list li.is-visible .protocol__output strong { clip-path: inset(0); }
-  .protocol__list li.is-visible .protocol__output i { border-color: var(--signal); transform: scale(1); opacity: 1; }
+  .protocol__list li.is-visible .protocol__output i, .protocol__list li.is-visible .protocol__output i::after { transform: scaleX(1); }
   .process-principle { padding-block: clamp(7rem, 13vw, 13rem); background: var(--ink); color: var(--paper); }
   .process-principle__grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 8vw; }
   .process-principle h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
