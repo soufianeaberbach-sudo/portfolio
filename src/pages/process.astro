@@ -79,13 +79,13 @@ const stages = [
   .protocol__map ol::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 20%; height: 2px; background: var(--signal); }
   .protocol__map li { position: relative; display: grid; gap: .7rem; padding-right: 1rem; }
   .protocol__map li::after { content: ''; position: absolute; left: 0; bottom: -1.33rem; width: .45rem; height: .45rem; border: 1px solid var(--signal); border-radius: 50%; background: var(--paper); }
-  .protocol__map li span { color: var(--signal-dark); font-family: var(--mono); font-size: .62rem; }
+  .protocol__map li span { color: var(--signal); font-family: var(--mono); font-size: .62rem; }
   .protocol__map li strong { max-width: 8rem; font-family: var(--display); font-size: clamp(1rem, 1.4vw, 1.35rem); line-height: 1; }
   .protocol__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
   .protocol__list > li { position: relative; display: grid; grid-template-columns: 4rem minmax(18rem, .8fr) minmax(17rem, .72fr) minmax(14rem, .55fr); gap: 2.5rem; align-items: start; min-height: 22rem; padding: clamp(3rem, 5vw, 5rem) 0; overflow: hidden; border-bottom: 1px solid var(--line-strong); }
   .protocol__list > li::before { content: ''; position: absolute; left: 0; top: 0; width: calc(var(--stage) * 20%); height: 2px; background: var(--signal); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
   .protocol__list > li.is-visible::before { transform: scaleX(1); }
-  .protocol__number { font-family: var(--mono); font-size: .72rem; color: var(--signal-dark); }
+  .protocol__number { font-family: var(--mono); font-size: .72rem; color: var(--signal); }
   .protocol__title h2 { margin: .8rem 0 0; font-family: var(--display); font-size: clamp(3.2rem, 6vw, 7rem); font-weight: 850; letter-spacing: -.07em; line-height: .88; }
   .protocol__body { max-width: 31rem; margin: 0; color: var(--ink-soft); line-height: 1.75; }
   .protocol__decision { grid-column: 3; align-self: end; display: grid; gap: .8rem; }

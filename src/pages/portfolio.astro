@@ -2,14 +2,22 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 
-const image = (id: string, width = 1800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=84`;
+/* Real photography, replacing the Unsplash placeholders.
+   Sources live in assets/source/<CATEGORY>/N.png at ~1792x2390 and ~6 MB each
+   (297 MB across all 49) — outside public/, so they are versioned but never
+   deployed. .devtools/gen-portfolio.sh derives two WebP renditions per source
+   into public/portfolio/<key>/N-{900,1400}.webp (7.2 MB in total) and the page
+   only ever references those. Regenerate after adding or replacing a source. */
+const RENDITIONS = [900, 1400] as const;
+const look = (key: string, n: number, width: 900 | 1400 = 1400) => `/portfolio/${key}/${n}-${width}.webp`;
+const lookSrcSet = (key: string, n: number) => RENDITIONS.map((w) => `${look(key, n, w)} ${w}w`).join(', ');
 
 const categories = [
-  { key: 'evening', number: '01', title: 'Evening Dresses', image: image('photo-1567631643547-67a2dd59f266'), description: 'Structured bodices, complex drape and fit decisions that only become visible in motion.' },
-  { key: 'jersey', number: '02', title: 'Jersey & Knit', image: image('photo-1588497883177-f82b883ad0af'), description: 'Negative ease, recovery and grade rules designed around stretch rather than imposed on it.' },
-  { key: 'woven', number: '03', title: 'Woven', image: image('photo-1601597565151-70c4020dc0e1'), description: 'Tailoring, outerwear and shirting resolved for repeatable construction at production scale.' },
-  { key: 'sport', number: '04', title: 'Sport', image: image('photo-1574015974293-817f0ebebb74'), description: 'Performance panelling and four-way stretch tested for bodies in motion.' },
-  { key: 'swim', number: '05', title: 'Swimwear', image: image('photo-1578353022142-09264fd64295'), description: 'A category where balance, recovery and millimetre-level tolerances leave nowhere to hide.' },
+  { key: 'evening', number: '01', title: 'Evening Dresses', cover: 1, description: 'Structured bodices, complex drape and fit decisions that only become visible in motion.' },
+  { key: 'jersey', number: '02', title: 'Jersey & Knit', cover: 1, description: 'Negative ease, recovery and grade rules designed around stretch rather than imposed on it.' },
+  { key: 'woven', number: '03', title: 'Woven', cover: 1, description: 'Tailoring, outerwear and shirting resolved for repeatable construction at production scale.' },
+  { key: 'sport', number: '04', title: 'Sport', cover: 1, description: 'Performance panelling and four-way stretch tested for bodies in motion.' },
+  { key: 'swim', number: '05', title: 'Swimwear', cover: 1, description: 'A category where balance, recovery and millimetre-level tolerances leave nowhere to hide.' },
 ];
 ---
 
@@ -35,7 +43,14 @@ const categories = [
     <div class="stack-stage" data-stack-stage>
       {categories.map((category, index) => (
         <button class="collection-card" type="button" data-category={category.key} style={`--card-index:${index}`} aria-label={`Open ${category.title} collection`}>
-          <img src={category.image} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
+          <img
+            src={look(category.key, category.cover)}
+            srcset={lookSrcSet(category.key, category.cover)}
+            sizes="(max-width: 768px) 100vw, 60vw"
+            alt=""
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
           <span class="collection-card__shade"></span>
           <span class="collection-card__top label"><b>{category.number} / 05</b><i>Open collection <Arrow /></i></span>
           <span class="collection-card__copy">
@@ -99,47 +114,85 @@ const categories = [
       evening: {
         number: '01 / 05', title: 'Evening Dresses', description: 'Structure and drape are negotiated together: the internal architecture must hold without making the dress feel engineered.',
         looks: [
-          { title: 'Look 01', description: 'Drape / balance', image: 'photo-1509631179647-0177331693ae' },
-          { title: 'Look 02', description: 'Bodice / support', image: 'photo-1515886657613-9f3515b0c78f' },
-          { title: 'Look 03', description: 'Volume / movement', image: 'photo-1721578006568-17901600cff3' },
+          { title: 'Look 01', description: 'Drape / balance', image: 'evening/1' },
+          { title: 'Look 02', description: 'Bodice / support', image: 'evening/2' },
+          { title: 'Look 03', description: 'Volume / movement', image: 'evening/3' },
+          { title: 'Look 04', description: 'Seam / structure', image: 'evening/4' },
+          { title: 'Look 05', description: 'Hem / weight', image: 'evening/5' },
+          { title: 'Look 06', description: 'Drape / balance', image: 'evening/6' },
+          { title: 'Look 07', description: 'Bodice / support', image: 'evening/7' },
+          { title: 'Look 08', description: 'Volume / movement', image: 'evening/8' },
+          { title: 'Look 09', description: 'Seam / structure', image: 'evening/9' },
+          { title: 'Look 10', description: 'Hem / weight', image: 'evening/10' },
         ],
       },
       jersey: {
         number: '02 / 05', title: 'Jersey & Knit', description: 'Stretch changes every assumption. Ease, recovery, seam choice and grade rules are designed as a connected system.',
         looks: [
-          { title: 'Look 01', description: 'Recovery / shape', image: 'photo-1586079615844-c0abfb04dc79' },
-          { title: 'Look 02', description: 'Ease / movement', image: 'photo-1613915617430-8ab0fd7c6baf' },
-          { title: 'Look 03', description: 'Grade / consistency', image: 'photo-1731589802397-6a1088d63630' },
+          { title: 'Look 01', description: 'Recovery / shape', image: 'jersey/1' },
+          { title: 'Look 02', description: 'Ease / movement', image: 'jersey/2' },
+          { title: 'Look 03', description: 'Grade / consistency', image: 'jersey/3' },
+          { title: 'Look 04', description: 'Rib / tension', image: 'jersey/4' },
+          { title: 'Look 05', description: 'Neckline / hold', image: 'jersey/5' },
+          { title: 'Look 06', description: 'Recovery / shape', image: 'jersey/6' },
+          { title: 'Look 07', description: 'Ease / movement', image: 'jersey/7' },
+          { title: 'Look 08', description: 'Grade / consistency', image: 'jersey/8' },
+          { title: 'Look 09', description: 'Rib / tension', image: 'jersey/9' },
+          { title: 'Look 10', description: 'Neckline / hold', image: 'jersey/10' },
         ],
       },
       woven: {
         number: '03 / 05', title: 'Woven', description: 'Repeatable tailoring depends on construction order, controlled volume and a pattern that holds its balance through production.',
         looks: [
-          { title: 'Look 01', description: 'Tailoring / line', image: 'photo-1662532577856-e8ee8b138a8b' },
-          { title: 'Look 02', description: 'Construction / repeat', image: 'photo-1457972657980-4c9fddebec8d' },
-          { title: 'Look 03', description: 'Volume / control', image: 'photo-1612731486606-2614b4d74921' },
+          { title: 'Look 01', description: 'Tailoring / line', image: 'woven/1' },
+          { title: 'Look 02', description: 'Construction / repeat', image: 'woven/2' },
+          { title: 'Look 03', description: 'Volume / control', image: 'woven/3' },
+          { title: 'Look 04', description: 'Collar / roll', image: 'woven/4' },
+          { title: 'Look 05', description: 'Grain / balance', image: 'woven/5' },
+          { title: 'Look 06', description: 'Tailoring / line', image: 'woven/6' },
+          { title: 'Look 07', description: 'Construction / repeat', image: 'woven/7' },
+          { title: 'Look 08', description: 'Volume / control', image: 'woven/8' },
+          { title: 'Look 09', description: 'Collar / roll', image: 'woven/9' },
+          { title: 'Look 10', description: 'Grain / balance', image: 'woven/10' },
         ],
       },
       sport: {
         number: '04 / 05', title: 'Sport', description: 'Performance product is tested against movement: panel lines, stretch direction and recovery have to work on the body.',
         looks: [
-          { title: 'Look 01', description: 'Panel / articulation', image: 'photo-1574015974293-817f0ebebb74' },
-          { title: 'Look 02', description: 'Stretch / direction', image: 'photo-1588497883177-f82b883ad0af' },
-          { title: 'Look 03', description: 'Movement / fit', image: 'photo-1586079615844-c0abfb04dc79' },
+          { title: 'Look 01', description: 'Panel / articulation', image: 'sport/1' },
+          { title: 'Look 02', description: 'Stretch / direction', image: 'sport/2' },
+          { title: 'Look 03', description: 'Movement / fit', image: 'sport/3' },
+          { title: 'Look 04', description: 'Seam / abrasion', image: 'sport/4' },
+          { title: 'Look 05', description: 'Coverage / support', image: 'sport/5' },
+          { title: 'Look 06', description: 'Panel / articulation', image: 'sport/6' },
+          { title: 'Look 07', description: 'Stretch / direction', image: 'sport/7' },
+          { title: 'Look 08', description: 'Movement / fit', image: 'sport/8' },
+          { title: 'Look 09', description: 'Seam / abrasion', image: 'sport/9' },
+          { title: 'Look 10', description: 'Coverage / support', image: 'sport/10' },
         ],
       },
       swim: {
         number: '05 / 05', title: 'Swimwear', description: 'Swimwear exposes imbalance immediately. Recovery, edge tension and coverage are resolved within very small tolerances.',
         looks: [
-          { title: 'Look 01', description: 'Tension / edge', image: 'photo-1578353022142-09264fd64295' },
-          { title: 'Look 02', description: 'Coverage / balance', image: 'photo-1601597565151-70c4020dc0e1' },
-          { title: 'Look 03', description: 'Recovery / hold', image: 'photo-1567631643547-67a2dd59f266' },
+          { title: 'Look 01', description: 'Tension / edge', image: 'swim/1' },
+          { title: 'Look 02', description: 'Coverage / balance', image: 'swim/2' },
+          { title: 'Look 03', description: 'Recovery / hold', image: 'swim/3' },
+          { title: 'Look 04', description: 'Elastic / gather', image: 'swim/4' },
+          { title: 'Look 05', description: 'Lining / grade', image: 'swim/5' },
+          { title: 'Look 06', description: 'Tension / edge', image: 'swim/6' },
+          { title: 'Look 07', description: 'Coverage / balance', image: 'swim/7' },
+          { title: 'Look 08', description: 'Recovery / hold', image: 'swim/8' },
+          { title: 'Look 09', description: 'Elastic / gather', image: 'swim/9' },
         ],
       },
     };
 
     const portfolioState = { stackTimeline: null, runway: null, lastFocus: null };
-    const imageUrl = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1900&q=84`;
+    /* One rendition is chosen per session from the viewport, so a phone never
+       pulls the 1400w file. The carousel still receives a plain URL string and
+       assigns it to img.src exactly as before — no mechanics changed. */
+    const RUNWAY_WIDTH = window.matchMedia('(max-width: 768px)').matches ? 900 : 1400;
+    const imageUrl = (id) => `/portfolio/${id}-${RUNWAY_WIDTH}.webp`;
 
     function setCard(card, index, total) {
       card.style.setProperty('--card-index', index);
