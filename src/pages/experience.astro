@@ -108,32 +108,28 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
 </SiteLayout>
 
 <style>
-  .experience-hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr); grid-template-rows: 1fr auto auto; gap: 2rem 4vw; align-items: end; overflow: hidden; padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem; background: var(--paper-bright); border-bottom: 1px solid var(--line); }
-  /* The figure is a cut-out, so it belongs IN the composition, not in a column
-     next to it. The source carried 193px of empty canvas down its left edge,
-     which is what held it away from the type; that is trimmed off now, and the
-     figure is pulled left far enough that the outlined "pattern room." runs
-     across its shoulder. The headline keeps the higher z-index so the stroke
-     reads over the suit — the two share the same space rather than sitting
-     side by side. The old full-height rule at 47% is gone: it drew exactly the
-     column boundary this section is trying not to have. */
-  /* The full-height rule at 47% drew exactly the column boundary this section
-     is trying not to have, and any stub of it now crosses the figure. Gone. */
-  .experience-hero__title { position: relative; z-index: 2; grid-column: 1 / 3; grid-row: 1; align-self: center; pointer-events: none; }
-  /* Line two is set to run the full measure so it actually reaches the figure;
-     at the old 10vw it stopped ~150px short and the two could never meet. */
-  .experience-hero__title h1 { max-width: 88rem; font-size: clamp(5rem, 11.4vw, 12rem); line-height: .82; }
-  /* Where the outline crosses the black suit an ink stroke would vanish, so
-     the stroke lightens over the figure only. */
-  .experience-hero__title h1 span { mix-blend-mode: difference; -webkit-text-stroke-color: #f3f0e9; }
+  /* The figure's rendered width is derived once and reused, so the headline's
+     measure is defined by where the figure actually starts rather than by a
+     margin that happens to look right at one viewport. */
+  .experience-hero { --figure-w: clamp(15rem, 25.5vw, 29rem); --figure-h: calc(var(--figure-w) / 0.497); --figure-offset: clamp(0rem, 9vw, 11rem); position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr); grid-template-rows: 1fr auto auto; gap: 2rem 4vw; align-items: end; overflow: hidden; padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem; background: var(--paper-bright); border-bottom: 1px solid var(--line); }
+  /* The full-height rule that used to split this section at 47% is gone: it
+     drew exactly the column boundary the composition is trying not to have. */
+  /* The figure stands IN FRONT of the typography, not under it. With the old
+     z-order the outlined line printed straight across the arm, suit and leg.
+     Silhouette profile measured off the source's alpha channel: the band from
+     16% to 44% of the figure's height — shoulders, chest, hands, laptop —
+     spans the FULL width of its box, so there is no clear lane for type at
+     headline height. The line runs to the figure and stops; only the outer
+     edge of the arm may pass in front of the final glyph. */
+  .experience-hero__title { position: relative; z-index: 1; grid-column: 1 / 3; grid-row: 1; align-self: center; pointer-events: none; }
+  /* Hard-stopped short of the figure: the type runs to the silhouette and
+     terminates there, so it can never cross the face, torso or hands. */
+  .experience-hero__title h1 { max-width: calc(100% - var(--figure-w) - var(--figure-offset) - 1.25rem); font-size: clamp(3.4rem, 10vw, 11rem); line-height: .82; }
   .experience-hero__title h1 span { color: transparent; -webkit-text-stroke: 1.4px var(--ink); }
-  /* The box is given the figure's own 754:1517 ratio and driven by height, so
-     `contain` has no slack to leave. Previously the box was 46vw wide while
-     contain drew the figure into only its rightmost ~400px, and that 240px of
-     empty box was the gap holding it away from the headline. With the ratio
-     matched, the negative left margin moves the figure itself, and the
-     outlined "pattern room." crosses its shoulder. */
-  .experience-hero__portrait { position: relative; z-index: 1; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: auto; aspect-ratio: 754 / 1517; height: calc(100svh - var(--header-h) - 1rem); min-height: 40rem; max-width: none; margin: 0 clamp(1.5rem, 4.6vw, 5rem) -3rem 0; overflow: visible; }
+  /* The box carries the figure's own 754:1517 ratio and is driven by height, so
+     `contain` has no slack to leave and --figure-w above is an exact
+     prediction of where the figure starts. */
+  .experience-hero__portrait { position: relative; z-index: 2; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: var(--figure-w); aspect-ratio: 754 / 1517; height: auto; max-width: none; margin: 0 var(--figure-offset) -3rem 0; overflow: visible; }
   .experience-hero__portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; }
   /* Sits on the measure axis, clear of the figure's legs — it used to print
      straight across the trousers. */
@@ -175,7 +171,7 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
   .tools-band__list i { width: 2.4rem; font-family: var(--mono); font-size: .8rem; font-weight: 700; font-style: normal; }
   .experience-close { display: grid; grid-template-columns: 1fr 1fr auto; gap: 5vw; align-items: end; padding-block: clamp(6rem, 10vw, 10rem); }
   .experience-close p:last-child { max-width: 29rem; color: var(--ink-soft); line-height: 1.65; }
-  @media (max-width: 900px) { .experience-hero, .experience-difference, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .experience-hero { grid-template-rows: auto auto auto auto; } .experience-hero::before { left: 50%; } .experience-hero__title { grid-column: 1; grid-row: 1; } .experience-hero__portrait { grid-column: 1; grid-row: 2; width: auto; aspect-ratio: 754 / 1517; height: min(58svh, 38rem); min-height: 26rem; margin: -2rem -2vw -2rem auto; } .experience-hero__portrait figcaption { top: auto; right: 100%; bottom: 1rem; margin-right: 1.25rem; } .experience-hero__title h1 span { mix-blend-mode: normal; -webkit-text-stroke-color: var(--ink); } .experience-hero__intro, .experience-hero__measure { grid-column: 1; grid-row: auto; } .experience-difference__proofs { grid-template-columns: minmax(0, 1fr); } .experience-difference__proofs article, .experience-difference__proofs article:first-child, .experience-difference__proofs article:last-child { min-height: 0; padding: 2.5rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .experience-difference__proofs article:last-child { border-bottom: 0; } .experience-difference__proofs h3 { margin-top: 3rem; } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
+  @media (max-width: 900px) { .experience-hero, .experience-difference, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .experience-hero { grid-template-rows: auto auto auto auto; } .experience-hero::before { left: 50%; } .experience-hero__title { grid-column: 1; grid-row: 1; } .experience-hero__title h1 { max-width: none; font-size: clamp(3.4rem, 9.4vw, 7rem); } .experience-hero__portrait { grid-column: 1; grid-row: 2; width: auto; aspect-ratio: 754 / 1517; height: min(58svh, 38rem); min-height: 26rem; margin: -2rem -2vw -2rem auto; } .experience-hero__portrait figcaption { top: auto; right: 100%; bottom: 1rem; margin-right: 1.25rem; } .experience-hero__intro, .experience-hero__measure { grid-column: 1; grid-row: auto; } .experience-difference__proofs { grid-template-columns: minmax(0, 1fr); } .experience-difference__proofs article, .experience-difference__proofs article:first-child, .experience-difference__proofs article:last-child { min-height: 0; padding: 2.5rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .experience-difference__proofs article:last-child { border-bottom: 0; } .experience-difference__proofs h3 { margin-top: 3rem; } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
   @media (max-width: 600px) { .experience-hero { min-height: 0; gap: 1.5rem; padding-top: calc(var(--header-h) + 4rem); } .experience-hero__title h1 { font-size: clamp(3.8rem, 16vw, 5rem); } /* The caption goes back into flow at this width, so the figure must size to
        its contents — a fixed height pushed the caption outside the box and it
        collided with the intro label underneath. The ratio moves to the img. */

@@ -414,7 +414,12 @@ const brandLogos = [
   .home-stats { padding-block: clamp(4rem, 7vw, 7rem); }
   .home-stats > .eyebrow { margin: 0 0 clamp(1.75rem, 3vw, 3rem); }
   .home-stats__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
-  .home-stat { position: relative; min-width: 0; min-height: clamp(11rem, 15vw, 15rem); display: flex; flex-direction: column; justify-content: space-between; gap: clamp(1.5rem, 2.5vw, 2.5rem); padding: clamp(1.4rem, 2vw, 2.1rem) clamp(1rem, 1.5vw, 1.6rem); overflow: hidden; border-right: 1px solid var(--line); }
+  /* A number and its label are ONE fact. justify-content: space-between with a
+     15rem min-height pinned them to opposite ends of the cell and put a void
+     between them, so five metrics read as five empty boxes with text in the
+     corners. They stack tight now, and the strip takes whatever height the
+     content needs — the grid still equalises the cells so the rules line up. */
+  .home-stat { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; padding: clamp(1.6rem, 2.2vw, 2.2rem) clamp(1rem, 1.5vw, 1.6rem) clamp(1.9rem, 2.6vw, 2.6rem); overflow: hidden; border-right: 1px solid var(--line); }
   .home-stat:first-child { padding-left: 0; }
   .home-stat:last-child { padding-right: 0; border-right: 0; }
   .home-stat::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--signal); transform: scaleX(.12); transform-origin: left; transition: transform .42s var(--ease); }
@@ -618,8 +623,8 @@ const brandLogos = [
   /* ---- PRODUCTION RECORD: tablet 3 + 2 ---- */
   @media (max-width: 900px) {
     .home-stats__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    .home-stat { grid-column: span 2; min-height: 12rem; padding-inline: clamp(.9rem, 2vw, 1.5rem); border-bottom: 1px solid var(--line); }
-    .home-stat:nth-child(n+4) { grid-column: span 3; border-bottom: 0; }
+    .home-stat { grid-column: span 2; min-height: 0; gap: .5rem; padding: 1.5rem clamp(.9rem, 2vw, 1.5rem) 1.8rem; border-bottom: 1px solid var(--line); }
+    .home-stat:nth-child(n+4) { grid-column: span 3; min-height: 0; border-bottom: 0; }
     .home-stat:first-child { padding-left: 0; }
     .home-stat:nth-child(3) { padding-right: 0; border-right: 0; }
     .home-stat:nth-child(4) { padding-left: 0; border-right: 1px solid var(--line); }
@@ -634,10 +639,10 @@ const brandLogos = [
     /* :nth-child(n+4) from the tablet tier outranks a bare .home-stat, so the
        span has to be reset at equal specificity or metrics 4 and 5 keep the
        three-column span and burst out of a two-column grid. */
-    .home-stat, .home-stat:nth-child(n+4) { grid-column: span 1; min-height: 9.5rem; gap: 1.1rem; padding: 1.4rem 1rem 1.6rem; border-right: 0; border-bottom: 1px solid var(--line); }
+    .home-stat, .home-stat:nth-child(n+4) { grid-column: span 1; min-height: 0; gap: .45rem; padding: 1.35rem 1rem 1.5rem; border-right: 0; border-bottom: 1px solid var(--line); }
     .home-stat:nth-child(odd) { padding-left: 0; border-right: 1px solid var(--line); }
     .home-stat:nth-child(even) { padding-right: 0; }
-    .home-stat:last-child, .home-stat:nth-child(5) { grid-column: 1 / -1; min-height: 8.5rem; padding-inline: 0; border-right: 0; border-bottom: 0; }
+    .home-stat:last-child, .home-stat:nth-child(5) { grid-column: 1 / -1; min-height: 0; padding-inline: 0; border-right: 0; border-bottom: 0; }
     /* Sized against the longest value (9,000+) in a ~161px cell: the numbers
        are set nowrap, so anything larger overruns into the next metric. */
     .home-stat strong { font-size: clamp(2.3rem, 10.4vw, 3.1rem); }
