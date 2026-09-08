@@ -22,7 +22,16 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
       <h1 class="display">Built in the<br /><span>pattern room.</span></h1>
     </div>
     <figure class="experience-hero__portrait" data-reveal>
-      <img src="/experience.png" width="1024" height="1536" alt="Soufiane Aberbach in a black suit holding an open laptop" fetchpriority="high" decoding="async" />
+      <img
+        src="/experience-figure-900.webp"
+        srcset="/experience-figure-600.webp 600w, /experience-figure-900.webp 900w"
+        sizes="(max-width: 900px) 78vw, 42vw"
+        width="754"
+        height="1517"
+        alt="Soufiane Aberbach in a black suit holding an open laptop"
+        fetchpriority="high"
+        decoding="async"
+      />
       <figcaption class="label">Corporate experience / Tangier</figcaption>
     </figure>
     <div class="experience-hero__intro" data-reveal>
@@ -99,14 +108,35 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
 </SiteLayout>
 
 <style>
-  .experience-hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr); grid-template-rows: 1fr auto auto; gap: 2rem 4vw; align-items: end; overflow: hidden; padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem; background: var(--paper-bright); border-bottom: 1px solid var(--line); }
-  .experience-hero::before { content: ''; position: absolute; left: 47%; top: var(--header-h); bottom: 0; width: 1px; background: var(--line); }
-  .experience-hero__title { position: relative; z-index: 2; grid-column: 1 / 3; grid-row: 1; align-self: center; pointer-events: none; }
-  .experience-hero__title h1 { max-width: 88rem; font-size: clamp(5rem, 10vw, 10.6rem); line-height: .82; }
+  /* The figure's rendered width is derived once and reused, so the headline's
+     measure is defined by where the figure actually starts rather than by a
+     margin that happens to look right at one viewport. */
+  .experience-hero { --figure-w: clamp(15rem, 25.5vw, 29rem); --figure-h: calc(var(--figure-w) / 0.497); --figure-offset: clamp(0rem, 9vw, 11rem); position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr); grid-template-rows: 1fr auto auto; gap: 2rem 4vw; align-items: end; overflow: hidden; padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem; background: var(--paper-bright); border-bottom: 1px solid var(--line); }
+  /* The full-height rule that used to split this section at 47% is gone: it
+     drew exactly the column boundary the composition is trying not to have. */
+  /* The figure stands IN FRONT of the typography, not under it. With the old
+     z-order the outlined line printed straight across the arm, suit and leg.
+     Silhouette profile measured off the source's alpha channel: the band from
+     16% to 44% of the figure's height — shoulders, chest, hands, laptop —
+     spans the FULL width of its box, so there is no clear lane for type at
+     headline height. The line runs to the figure and stops; only the outer
+     edge of the arm may pass in front of the final glyph. */
+  .experience-hero__title { position: relative; z-index: 1; grid-column: 1 / 3; grid-row: 1; align-self: center; pointer-events: none; }
+  /* Hard-stopped short of the figure: the type runs to the silhouette and
+     terminates there, so it can never cross the face, torso or hands. */
+  .experience-hero__title h1 { max-width: calc(100% - var(--figure-w) - var(--figure-offset) - 1.25rem); font-size: clamp(3.4rem, 10vw, 11rem); line-height: .82; }
   .experience-hero__title h1 span { color: transparent; -webkit-text-stroke: 1.4px var(--ink); }
-  .experience-hero__portrait { position: relative; z-index: 1; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: min(58vw, 59rem); height: calc(100svh - var(--header-h) - 1rem); min-height: 43rem; margin: 0 -2vw -3rem 0; overflow: visible; }
-  .experience-hero__portrait img { width: 100%; height: 100%; object-fit: contain; object-position: right bottom; filter: drop-shadow(0 1.5rem 2.5rem rgba(17,17,15,.08)); }
-  .experience-hero__portrait figcaption { position: absolute; right: 1rem; bottom: 4rem; padding-top: .65rem; border-top: 1px solid var(--ink); color: var(--ink); }
+  /* The box carries the figure's own 754:1517 ratio and is driven by height, so
+     `contain` has no slack to leave and --figure-w above is an exact
+     prediction of where the figure starts. */
+  .experience-hero__portrait { position: relative; z-index: 2; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: var(--figure-w); aspect-ratio: 754 / 1517; height: auto; max-width: none; margin: 0 var(--figure-offset) -3rem 0; overflow: visible; }
+  .experience-hero__portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; }
+  /* Sits on the measure axis, clear of the figure's legs — it used to print
+     straight across the trousers. */
+  /* Parked immediately left of the figure at the top, which is the one area
+     the composition leaves clear — it used to print across the trousers, and
+     across the face once the figure moved up. */
+  .experience-hero__portrait figcaption { position: absolute; right: 100%; top: 2rem; margin-right: 1.5rem; padding-top: .65rem; border-top: 1px solid var(--ink); color: var(--ink); white-space: nowrap; }
   .experience-hero__intro { position: relative; z-index: 3; grid-column: 1; grid-row: 2; padding-bottom: 0; }
   .experience-hero__intro > p:last-child { max-width: 32rem; margin-top: 1.5rem; color: var(--ink-soft); font-size: 1.15rem; line-height: 1.7; }
   .experience-hero__measure { position: relative; z-index: 3; grid-column: 1; grid-row: 3; display: flex; align-items: center; gap: 1rem; font-family: var(--mono); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; }
@@ -118,7 +148,7 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
   .experience-difference__proofs article { min-height: 22rem; padding: clamp(2rem, 3vw, 3rem); border-right: 1px solid var(--line); }
   .experience-difference__proofs article:first-child { padding-left: 0; }
   .experience-difference__proofs article:last-child { padding-right: 0; border-right: 0; }
-  .experience-difference__proofs .label { color: var(--signal-dark); }
+  .experience-difference__proofs .label { color: var(--signal); }
   .experience-difference__proofs h3 { max-width: 23rem; margin: clamp(4rem, 7vw, 7rem) 0 1.5rem; font-family: var(--display); font-size: clamp(2.2rem, 3.7vw, 4rem); letter-spacing: -.055em; line-height: .92; }
   .experience-difference__proofs p { max-width: 29rem; margin: 0; color: var(--muted); line-height: 1.7; }
   .roles { display: grid; grid-template-columns: .6fr 1.4fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
@@ -127,17 +157,25 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
   .roles__list { border-top: 1px solid var(--line-strong); }
   .roles article { display: grid; grid-template-columns: 3rem 1fr 1.2fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
   .roles h3 { margin: .5rem 0 0; font-family: var(--display); font-size: clamp(2rem, 4vw, 4.3rem); letter-spacing: -.055em; line-height: 1; }
-  .role-note { display: inline-block; margin-top: .8rem; color: var(--signal-dark); font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+  .role-note { display: inline-block; margin-top: .8rem; color: var(--signal); font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
   .roles article > p { margin: 0; color: var(--muted); line-height: 1.7; }
-  .tools-band { padding-block: clamp(7rem, 12vw, 12rem); background: color-mix(in srgb, var(--signal) 84%, var(--ink)); color: #fff; }
+  .tools-band { padding-block: clamp(7rem, 12vw, 12rem); background: var(--signal); color: #fff; }
+    /* Same rule as .contact-direct: no opacity on white-over-orange, and the
+     small labels carry weight instead of the band being darkened. */
   .tools-band .eyebrow, .tools-band h2, .tools-band__list span { color: #fff; }
+  .tools-band .eyebrow { font-size: .8rem; font-weight: 700; }
   .tools-band__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
   .tools-band h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7.5rem); }
   .tools-band__list { align-self: end; border-top: 1px solid rgba(255,255,255,.45); }
   .tools-band__list span { display: flex; gap: 2rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,.35); font-family: var(--display); font-size: 1.5rem; font-weight: 650; }
-  .tools-band__list i { width: 2rem; font-family: var(--mono); font-size: .65rem; font-style: normal; }
+  .tools-band__list i { width: 2.4rem; font-family: var(--mono); font-size: .8rem; font-weight: 700; font-style: normal; }
   .experience-close { display: grid; grid-template-columns: 1fr 1fr auto; gap: 5vw; align-items: end; padding-block: clamp(6rem, 10vw, 10rem); }
   .experience-close p:last-child { max-width: 29rem; color: var(--ink-soft); line-height: 1.65; }
-  @media (max-width: 900px) { .experience-hero, .experience-difference, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .experience-hero { grid-template-rows: auto auto auto auto; } .experience-hero::before { left: 50%; } .experience-hero__title { grid-column: 1; grid-row: 1; } .experience-hero__portrait { grid-column: 1; grid-row: 2; width: min(100%, 43rem); height: min(72svh, 48rem); min-height: 34rem; margin: -5rem -8vw -3rem auto; } .experience-hero__intro, .experience-hero__measure { grid-column: 1; grid-row: auto; } .experience-difference__proofs { grid-template-columns: minmax(0, 1fr); } .experience-difference__proofs article, .experience-difference__proofs article:first-child, .experience-difference__proofs article:last-child { min-height: 0; padding: 2.5rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .experience-difference__proofs article:last-child { border-bottom: 0; } .experience-difference__proofs h3 { margin-top: 3rem; } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
-  @media (max-width: 600px) { .experience-hero { min-height: 0; gap: 1.5rem; padding-top: calc(var(--header-h) + 4rem); } .experience-hero__title h1 { font-size: clamp(3.8rem, 16vw, 5rem); } .experience-hero__portrait { width: 118%; height: 35rem; min-height: 0; margin: -4rem -14% -2rem auto; } .experience-hero__portrait figcaption { right: 14%; bottom: 2.5rem; } .experience-difference__head h2 { font-size: 3.7rem; } .roles__head h2 { font-size: 2.9rem; } .roles article { grid-template-columns: 2.5rem minmax(0, 1fr); } .roles article > p { grid-column: 2; } .roles h3 { overflow-wrap: anywhere; } .tools-band h2 { font-size: 3.4rem; } }
+  @media (max-width: 900px) { .experience-hero, .experience-difference, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .experience-hero { grid-template-rows: auto auto auto auto; } .experience-hero::before { left: 50%; } .experience-hero__title { grid-column: 1; grid-row: 1; } .experience-hero__title h1 { max-width: none; font-size: clamp(3.4rem, 9.4vw, 7rem); } .experience-hero__portrait { grid-column: 1; grid-row: 2; width: auto; aspect-ratio: 754 / 1517; height: min(58svh, 38rem); min-height: 26rem; margin: -2rem -2vw -2rem auto; } .experience-hero__portrait figcaption { top: auto; right: 100%; bottom: 1rem; margin-right: 1.25rem; } .experience-hero__intro, .experience-hero__measure { grid-column: 1; grid-row: auto; } .experience-difference__proofs { grid-template-columns: minmax(0, 1fr); } .experience-difference__proofs article, .experience-difference__proofs article:first-child, .experience-difference__proofs article:last-child { min-height: 0; padding: 2.5rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .experience-difference__proofs article:last-child { border-bottom: 0; } .experience-difference__proofs h3 { margin-top: 3rem; } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
+  @media (max-width: 600px) { .experience-hero { min-height: 0; gap: 1.5rem; padding-top: calc(var(--header-h) + 4rem); } .experience-hero__title h1 { font-size: clamp(3.8rem, 16vw, 5rem); } /* The caption goes back into flow at this width, so the figure must size to
+       its contents — a fixed height pushed the caption outside the box and it
+       collided with the intro label underneath. The ratio moves to the img. */
+    .experience-hero__portrait { width: auto; height: auto; aspect-ratio: auto; min-height: 0; margin: -1rem 0 0 auto; }
+    .experience-hero__portrait img { height: auto; aspect-ratio: 754 / 1517; max-height: 26rem; width: auto; margin-left: auto; }
+    .experience-hero__portrait figcaption { position: static; display: block; margin: 1.1rem 0 0; text-align: right; white-space: normal; } .experience-difference__head h2 { font-size: 3.7rem; } .roles__head h2 { font-size: 2.9rem; } .roles article { grid-template-columns: 2.5rem minmax(0, 1fr); } .roles article > p { grid-column: 2; } .roles h3 { overflow-wrap: anywhere; } .tools-band h2 { font-size: 3.4rem; } }
 </style>

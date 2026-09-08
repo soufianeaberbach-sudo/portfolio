@@ -7,6 +7,19 @@ interface Props {
 }
 
 const { kind, number, title, outputs } = Astro.props;
+
+/* Evidence stills from Soufiane's own development work (assets/source/),
+   cropped and graded by .devtools/gen-evidence.sh. Each is a front + back
+   pair, which is what makes them evidence rather than decoration: the pair is
+   how a garment is actually checked. The line drawing stays underneath as a
+   diagram of the intervention. */
+const PHOTOS = {
+  development: { alt: 'Front and back of a tailored jumpsuit showing the princess seams and waist geometry drafted for production' },
+  monitoring: { alt: 'Front and back of an activewear set, the contrast side taping aligned across the side seam' },
+  consulting: { alt: 'Front and back of a draped occasion dress, the case where fabric behaviour drives cost and pattern risk' },
+  tracking: { alt: 'Front and back of a knit separates programme, the repeat product a production run is tracked against' },
+};
+const photo = PHOTOS[kind];
 ---
 
 <div class="technical-proof" data-kind={kind}>
@@ -14,6 +27,19 @@ const { kind, number, title, outputs } = Astro.props;
     <span class="label">{title}</span>
     <span class="label">Evidence / {number}</span>
   </div>
+
+  <figure class="technical-proof__photo">
+    <img
+      src={`/evidence/${kind}-1000.webp`}
+      srcset={`/evidence/${kind}-640.webp 640w, /evidence/${kind}-1000.webp 1000w`}
+      sizes="(max-width: 1100px) 92vw, 46vw"
+      width="1792"
+      height="1195"
+      alt={photo.alt}
+      loading="lazy"
+      decoding="async"
+    />
+  </figure>
 
   <div class="technical-proof__visual">
     {kind === 'development' && (
@@ -80,6 +106,14 @@ const { kind, number, title, outputs } = Astro.props;
 <style>
   .technical-proof { position: relative; align-self: start; overflow: hidden; border: 1px solid var(--line); background: var(--paper-bright); }
   .technical-proof__head { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); color: var(--muted); }
+  /* The photograph is the evidence; the line drawing below it is the diagram
+     of what the service does to that garment. Together they stop the four
+     panels reading as one template applied four times. */
+  .technical-proof__photo { position: relative; margin: 0; border-bottom: 1px solid var(--line); background: var(--paper); }
+  /* The stills are shot on pure white; the panel is --paper-bright. multiply
+     lets the panel colour come through the ground so there is no white
+     rectangle sitting inside a cream card. */
+  .technical-proof__photo img { display: block; width: 100%; height: auto; aspect-ratio: 1792 / 1195; object-fit: cover; mix-blend-mode: multiply; }
   .technical-proof__visual { padding: .25rem 1rem 0; border-bottom: 1px solid var(--line); }
   svg { display: block; width: 100%; height: auto; overflow: visible; }
   svg :global(path), svg :global(circle) { vector-effect: non-scaling-stroke; }
@@ -116,7 +150,7 @@ const { kind, number, title, outputs } = Astro.props;
   .technical-proof__outputs li:nth-last-child(-n + 2) { border-bottom: 0; }
   .technical-proof__outputs li:nth-child(odd) { padding-right: .75rem; }
   .technical-proof__outputs li:nth-child(even) { padding-left: .75rem; border-left: 1px solid var(--line); }
-  .technical-proof__outputs span { color: var(--signal-dark); font-family: var(--mono); font-size: .6rem; letter-spacing: .08em; }
+  .technical-proof__outputs span { color: var(--signal); font-family: var(--mono); font-size: .6rem; letter-spacing: .08em; }
   @keyframes proof-draw { to { stroke-dashoffset: 0; } }
   @keyframes proof-node { to { transform: scale(1); } }
   @media (max-width: 600px) { .technical-proof__outputs { grid-template-columns: 1fr; } .technical-proof__outputs li, .technical-proof__outputs li:nth-child(odd), .technical-proof__outputs li:nth-child(even) { padding-inline: 0; border-left: 0; border-bottom: 1px solid var(--line); } .technical-proof__outputs li:last-child { border-bottom: 0; } }

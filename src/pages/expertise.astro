@@ -96,6 +96,10 @@ const services = [
   .service__number { display: flex; align-items: flex-start; gap: 1rem; font-family: var(--mono); font-size: .7rem; }
   .service__number i { display: block; width: 3rem; height: 1px; margin-top: .55rem; background: var(--signal); }
   .service h2 { max-width: 44rem; margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 5vw, 5.7rem); font-weight: 800; letter-spacing: -.06em; line-height: .92; }
+  /* The evidence column is much taller than the copy, so the copy centres
+     against it — otherwise all of the slack collects underneath the paragraph
+     as one large void. */
+  .service__copy { align-self: center; }
   .service__copy p { max-width: 39rem; margin: 1.5rem 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
   .boundary { padding-block: clamp(7rem, 12vw, 12rem); background: var(--ink); color: var(--paper); }
   .boundary__grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 8vw; }

@@ -6,8 +6,13 @@
   --muted: #6e6d64;
   --line: rgba(17, 17, 15, 0.18);
   --line-strong: rgba(17, 17, 15, 0.42);
+  /* THE accent colour. One value, one token. Every orange on the site —
+     accent words, filled buttons, stars, rules, dots, SVG strokes, dividers
+     and the full-bleed orange bands — resolves to this and nothing else.
+     There is deliberately no second orange: the previous --signal-dark
+     (#9d3c1f) and the color-mix(--signal 84%, --ink) button/band variant
+     (#b55330) put three different oranges on screen at once. */
   --signal: #d45f36;
-  --signal-dark: #9d3c1f;
   --acid: #d7e662;
   --max: 1600px;
   --gutter: clamp(1.25rem, 3.2vw, 4rem);
@@ -131,7 +136,7 @@ button { color: inherit; }
   transition: color .25s, background .25s, transform .25s;
 }
 .button:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
-.button--signal { background: color-mix(in srgb, var(--signal) 84%, var(--ink)); border-color: color-mix(in srgb, var(--signal) 84%, var(--ink)); color: #fff; }
+.button--signal { background: var(--signal); border-color: var(--signal); color: #fff; font-size: .76rem; font-weight: 600; }
 .button--signal:hover { background: var(--ink); border-color: var(--ink); }
 
 .section-shell {
