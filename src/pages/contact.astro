@@ -1,68 +1,49 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
-import ClientFeedback from '../components/ClientFeedback.astro';
-
-const testimonials = [
-  {
-    reviewer: 'halaelhn',
-    role: 'Fiverr client',
-    proof: 'Client experience / freelance service',
-    rating: 5,
-    quote: 'Exceptional service provider! He far exceeded my expectations by doing much more than what was asked. Always available, highly professional, and perfectly mastering his craft. He is also a human and pleasant person. I highly recommend him without any hesitation!',
-    ratings: [
-      { label: 'Level of communication with the freelancer', score: 5 },
-      { label: 'Quality of delivery', score: 5 },
-      { label: 'Value of delivery', score: 5 },
-    ],
-    highlights: ['Quick responsiveness', 'Language fluency', 'Level of cooperation', 'Politeness', 'Deep understanding', 'Went above and beyond', 'Proactive communication', 'Attention to details', 'Creativity', 'Professionalism', 'Brand alignment', 'Visual appeal', 'Exceeded expectations'],
-  },
-  {
-    reviewer: 'Khalid',
-    role: 'Managing Director, Loratex',
-    proof: 'Factory proof / manufacturing reliability',
-    rating: 5,
-    quote: "Soufiane is relentlessly precise. What stood out during his 7 years with us wasn't just his CAD expertise, but his absolute refusal to compromise on manufacturing accuracy. Working with him means you never have to worry about what happens on the cutting room floor—he solves the problem before it even gets there. A true technical backbone for any mass production line.",
-    ratings: [
-      { label: 'Technical Problem Solving', score: 5 },
-      { label: 'Quality of Production Files', score: 5 },
-      { label: 'Value & Cost Efficiency', score: 5 },
-    ],
-    highlights: ['Flawless pattern grading', 'Manufacturing readiness', 'Deep technical understanding', 'Attention to details', 'Proactive risk management', 'Factory floor communication', 'Exceeded expectations', 'High-volume reliability'],
-  },
-  {
-    reviewer: 'Head of Buying',
-    role: 'ASOS',
-    proof: 'Brand proof / design-intent protection',
-    rating: 5,
-    quote: "The hardest part of offshore production is losing the design intent in translation. Soufiane ruthlessly engineers the aesthetic vision for mass production. He doesn't just execute instructions; he actively challenges them if he foresees a manufacturing risk. His 3D validation process saved us countless rounds of physical sampling and gave us complete confidence to move straight to production.",
-    ratings: [
-      { label: '3D Simulation Accuracy', score: 5 },
-      { label: 'Protection of Design Intent', score: 5 },
-      { label: 'Timeline & Delivery', score: 5 },
-    ],
-    highlights: ['Cost and time saving', '3D digital validation', 'Deep understanding', 'Attention to details', 'Structural engineering', 'Brand alignment', 'Proactive communication', 'Exceptional professionalism'],
-  },
-];
+import BriefForm from '../components/BriefForm.astro';
+import References from '../components/References.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 ---
 
-<SiteLayout title="Contact — Soufiane Aberbach" description="Start a fashion development brief with Soufiane Aberbach in Tangier." marker="SA-CONTACT-V5" page="contact">
-  <!-- BUILD-MARKER: SA-CONTACT-V5 -->
+<SiteLayout
+  title="Contact — Soufiane Aberbach"
+  description="Start a fashion development brief with Soufiane Aberbach in Tangier."
+  marker="SA-CONTACT-V6"
+  page="contact"
+>
+  <!-- BUILD-MARKER: SA-CONTACT-V6 -->
   <section class="contact-hero">
     <div class="contact-hero__copy" data-reveal>
       <p class="eyebrow">Contact / 05</p>
-      <h1 class="display">Send a sketch.<br /><span>Get a production answer.</span></h1>
+      <h1 class="display">Start with<br /><span>what you have.</span></h1>
     </div>
     <aside data-reveal>
-      <p>No contract and no call to book. Describe the garment, reference or fit problem; the next useful production step comes back in writing.</p>
-      <div class="contact-availability"><i aria-hidden="true"></i><span class="label">Development briefs open</span></div>
+      <p>A sketch, a reference, an existing sample, a fit issue or a production question is enough to begin.</p>
+      <p class="contact-availability label">Available for selected freelance development work</p>
     </aside>
   </section>
 
-  <section class="contact-workspace" aria-label="Soufiane's freelance workspace">
-    <div class="contact-workspace__grid">
+  <section class="brief-section" id="brief" aria-labelledby="brief-title">
+    <div class="brief-section__head section-shell" data-reveal>
+      <div>
+        <p class="eyebrow">02 / Development brief</p>
+        <h2 class="display" id="brief-title">The first step<br />of the process.</h2>
+      </div>
+      <p>Share the point where the product is now and the problem that needs resolving. The brief is read personally and assessed against real production constraints.</p>
+    </div>
+
+    <div class="brief-section__grid section-shell">
+      <div data-reveal><BriefForm /></div>
+      <div data-reveal><References /></div>
+    </div>
+  </section>
+
+  <section class="contact-workspace" aria-labelledby="workspace-title">
+    <div class="contact-workspace__grid section-shell">
       <div class="contact-workspace__note" data-reveal>
-        <p class="eyebrow">Working environment</p>
+        <p class="eyebrow">03 / Workspace</p>
+        <h2 class="display" id="workspace-title">Where the brief<br />becomes a route.</h2>
         <p>Pattern, fit and technical decisions are developed here before they move to production.</p>
       </div>
       <figure data-reveal>
@@ -81,195 +62,141 @@ const testimonials = [
     </div>
   </section>
 
-  <section class="brief-section" id="brief">
-    <div class="brief-section__intro" data-reveal>
-      <p class="eyebrow">Development brief</p>
-      <h2 class="display">Five fields.<br />Two minutes.</h2>
-      <div class="brief-steps">
-        <div><span>01</span><p>You describe the garment or production issue.</p></div>
-        <div><span>02</span><p>The brief is read personally and scoped honestly.</p></div>
-        <div><span>03</span><p>You receive a written route and realistic next step.</p></div>
-      </div>
+  <section class="contact-routes" aria-labelledby="routes-title">
+    <div class="contact-routes__head section-shell" data-reveal>
+      <p class="eyebrow">04 / Direct routes + business status</p>
+      <h2 class="display" id="routes-title">A credible route<br />to production.</h2>
     </div>
 
-    <form class="brief-form" data-brief-form data-reveal>
-      <div class="field">
-        <label for="name">Your name</label>
-        <input id="name" name="name" autocomplete="name" required placeholder="Name / company" />
-      </div>
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@company.com" />
-      </div>
-      <div class="field">
-        <label for="project">What are you developing?</label>
-        <select id="project" name="project" required>
-          <option value="">Select a category</option>
-          <option>Evening dress</option>
-          <option>Jersey or knit</option>
-          <option>Woven garment</option>
-          <option>Sport</option>
-          <option>Swimwear</option>
-          <option>Other garment</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="stage">Where is it now?</label>
-        <select id="stage" name="stage" required>
-          <option value="">Select a stage</option>
-          <option>Sketch or reference</option>
-          <option>Pattern in progress</option>
-          <option>Sample or fit problem</option>
-          <option>Preparing for production</option>
-          <option>Production already running</option>
-        </select>
-      </div>
-      <div class="field field--wide">
-        <label for="message">What needs solving?</label>
-        <textarea id="message" name="message" rows="5" required placeholder="Describe the garment, the problem and any deadline that matters."></textarea>
-      </div>
-      <div class="form-action field--wide">
-        <p>This button opens your email app with the brief prepared. Nothing is uploaded or stored on this site.</p>
-        <button class="button button--signal" type="submit">Prepare email brief <span><Arrow /></span></button>
-      </div>
-      <p class="form-status field--wide" data-form-status aria-live="polite"></p>
-    </form>
-  </section>
+    <div class="contact-routes__grid section-shell">
+      <article class="business-status" data-reveal>
+        <p class="label">Business status</p>
+        <h3>Registered Moroccan Auto-Entrepreneur</h3>
+        <p>Since 2018 · B2B invoicing available</p>
+        <p>Tangier, Morocco · GMT+1</p>
+      </article>
 
-  <section class="contact-direct">
-    <div class="section-shell contact-direct__grid">
-      <div data-reveal><p class="label">Direct email</p><a href="mailto:soufiane.aberbach@gmail.com">soufiane.aberbach@gmail.com <span><Arrow /></span></a></div>
-      <div data-reveal><p class="label">Based in</p><strong>Tangier, Morocco</strong><span>GMT+1 · EU working hours</span></div>
-      <div data-reveal><p class="label">Business status</p><strong>Registered Moroccan auto-entrepreneur since 2018</strong><span>Able to invoice companies directly.</span></div>
+      <div class="direct-routes" data-reveal>
+        <div>
+          <p class="label">Direct email</p>
+          <a href="mailto:soufiane.aberbach@gmail.com">soufiane.aberbach@gmail.com <span><Arrow /></span></a>
+        </div>
+        <div>
+          <p class="label">Professional platforms</p>
+          <SocialLinks />
+        </div>
+        <p>The development brief is the primary route. Direct email and existing professional profiles remain available when they fit the conversation better.</p>
+      </div>
     </div>
   </section>
 
-  <ClientFeedback items={testimonials} />
-
-  <section class="contact-faq section-shell">
-    <div data-reveal><p class="eyebrow">Before you write</p><h2 class="display">Useful answers.</h2></div>
+  <section class="contact-faq section-shell" aria-labelledby="faq-title">
+    <div data-reveal>
+      <p class="eyebrow">05 / Before you send</p>
+      <h2 class="display" id="faq-title">Useful answers.</h2>
+    </div>
     <div class="faq-list" data-reveal>
-      <details><summary>Do I need a finished design?</summary><p>No. A rough sketch, a reference photo or a written description is enough to discuss whether the garment is producible.</p></details>
-      <details><summary>Can you diagnose an existing fit problem?</summary><p>Yes. A pattern plus fit photos often makes the balance problem visible faster than starting again.</p></details>
-      <details><summary>Do you work with small runs?</summary><p>The pattern and technical development principles are the same; the production route depends on the run and factory.</p></details>
-      <details><summary>Will my material stay private?</summary><p>Nothing sent is shared, published or added to this portfolio without written permission.</p></details>
+      <details>
+        <summary>Do I need a finished design?</summary>
+        <p>No. A sketch, reference, existing sample or written description is enough to begin identifying the next useful step.</p>
+      </details>
+      <details>
+        <summary>Can I contact you with an existing fit or development problem?</summary>
+        <p>Yes. Describe what is not working and share a private link to the relevant pattern, sample or fit references if available.</p>
+      </details>
+      <details>
+        <summary>Do you work remotely and internationally?</summary>
+        <p>Yes. Work is coordinated remotely from Tangier, Morocco, with professional communication across international production and development teams.</p>
+      </details>
+      <details>
+        <summary>How do I share files?</summary>
+        <p>Paste a Drive, Dropbox, WeTransfer or web-reference link in the brief. Check the link’s own sharing permissions before sending it.</p>
+      </details>
+      <details>
+        <summary>How is project material handled?</summary>
+        <p>The submitted brief is stored for project follow-up and sent through the site’s email infrastructure. It is not published as portfolio material.</p>
+      </details>
     </div>
   </section>
-
 </SiteLayout>
 
-<script is:inline>
-  (() => {
-    const form = document.querySelector('[data-brief-form]');
-    const status = document.querySelector('[data-form-status]');
-    form?.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      const data = new FormData(form);
-      const subject = `Development brief — ${data.get('project')}`;
-      const body = [
-        `Name / company: ${data.get('name')}`,
-        `Email: ${data.get('email')}`,
-        `Garment category: ${data.get('project')}`,
-        `Current stage: ${data.get('stage')}`,
-        '',
-        'What needs solving:',
-        data.get('message'),
-      ].join('\n');
-      status.textContent = 'Your email app is opening with the brief prepared.';
-      window.location.href = `mailto:soufiane.aberbach@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    });
-  })();
-</script>
-
 <style>
-  .contact-hero { min-height: 100svh; display: grid; grid-template-columns: 1.4fr .6fr; gap: 8vw; align-items: end; padding: calc(var(--header-h) + 5rem) var(--gutter) 4rem; background: var(--ink); color: var(--paper); }
-  .contact-hero h1 { margin-top: 2rem; font-size: clamp(5rem, 11vw, 11.5rem); }
-  .contact-hero h1 span { color: var(--signal); }
-  .contact-hero aside { max-width: 30rem; padding-bottom: 1rem; }
-  .contact-hero aside > p { color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
-  .contact-availability { display: flex; align-items: center; gap: .75rem; margin-top: 2rem; }
-  .contact-availability i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--acid); box-shadow: 0 0 0 .35rem rgba(215,230,98,.12); }
-  .contact-workspace { position: relative; z-index: 2; padding: 0 var(--gutter); background: var(--paper-bright); color: var(--ink); }
-  /* HE IS IN THE PAGE, THE PAGE IS NOT AROUND HIM.
-     The previous version made the photo small and centred with the copy
-     stranded in its own column two-thirds of a screen away — a picture placed
-     on a page. The image is now the dominant element at full measure, and the
-     copy sits inside it, in the upper-left corner where the cut-out is
-     genuinely empty. Measured off the alpha channel: x 0-20% / y 0-20% of the
-     source is 0-3% opaque, so nothing prints over the desk, the monitor or
-     the figure. */
-  .contact-workspace__grid { position: relative; display: block; }
-  .contact-workspace__note {
-    position: absolute;
-    z-index: 2;
-    left: 0;
-    top: 1.5%;
-    width: min(24%, 17rem);
-    padding: 1.25rem 0 0;
-    border-top: 1px solid var(--line-strong);
+  .contact-hero {
+    min-height: min(68svh, 42rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr);
+    gap: 8vw;
+    align-items: end;
+    padding: calc(var(--header-h) + clamp(3rem, 7vw, 7rem)) var(--gutter) clamp(3rem, 5vw, 5rem);
+    background: var(--ink);
+    color: var(--paper);
   }
-  .contact-workspace__note > p:last-child { max-width: none; margin: .7rem 0 0; color: var(--muted); font-size: .82rem; line-height: 1.5; }
-  /* CUT-OUT, NOT A PICTURE IN A BOX.
-     This was cropping badly for a non-obvious reason: the <img> carries
-     width/height attributes, and the author CSS only overrode `width`. The
-     `height` presentational hint therefore survived as height: 1024px, which
-     made `aspect-ratio` inert (both axes were definite) and left object-fit:
-     cover cropping a 1.5 image into a 1.07 box — head and feet cut off, and
-     0.35 on a phone. Pinning `height: auto` restores the real proportions,
-     and with the transparent canvas trimmed off the source there is no box,
-     no clip and no edge left to see. */
-  .contact-workspace figure { position: relative; z-index: 1; margin: clamp(-6rem, -5vw, -3rem) 0 clamp(-3rem, -2.5vw, -1.5rem); }
-  .contact-workspace img { display: block; width: calc(100% - 7rem); height: auto; margin-left: auto; }
+  .contact-hero h1 { margin-top: 1.5rem; font-size: clamp(5rem, 10.5vw, 11rem); }
+  .contact-hero h1 span { color: var(--signal); }
+  .contact-hero aside { max-width: 30rem; padding-bottom: .5rem; }
+  .contact-hero aside > p:first-child { color: #aaa89f; font-size: 1.05rem; line-height: 1.7; }
+  .contact-availability { margin: 1.75rem 0 0; padding-top: 1rem; border-top: 1px solid #4b4a43; color: var(--paper); }
+
+  .brief-section { padding-block: clamp(6rem, 10vw, 10rem); background: var(--paper-bright); }
+  .brief-section__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .45fr); gap: 7vw; align-items: end; margin-bottom: clamp(4rem, 7vw, 7rem); }
+  .brief-section__head h2 { margin-top: 1.5rem; font-size: clamp(4rem, 7.5vw, 8rem); }
+  .brief-section__head > p { max-width: 31rem; margin: 0 0 .5rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+  .brief-section__grid { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(20rem, .78fr); gap: clamp(3rem, 7vw, 8rem); align-items: start; }
+  .brief-section__grid > div { min-width: 0; }
+
+  .contact-workspace { padding-block: clamp(6rem, 10vw, 10rem); background: var(--paper); }
+  .contact-workspace__grid { display: grid; grid-template-columns: minmax(18rem, .55fr) minmax(0, 1.45fr); gap: clamp(3rem, 7vw, 8rem); align-items: center; }
+  .contact-workspace__note { position: relative; z-index: 2; }
+  .contact-workspace__note h2 { margin: 1.5rem 0 2rem; font-size: clamp(3.5rem, 6vw, 6.5rem); }
+  .contact-workspace__note > p:last-child { max-width: 27rem; color: var(--muted); line-height: 1.7; }
+  .contact-workspace figure { position: relative; margin: 0; }
+  .contact-workspace figure::before { content: ''; position: absolute; z-index: 0; inset: 10% 4% 0 12%; border-top: 1px solid var(--line-strong); }
+  .contact-workspace img { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
   .contact-workspace figcaption { margin-top: .75rem; color: var(--muted); text-align: right; }
-  .brief-section { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding: clamp(10rem, 15vw, 15rem) var(--gutter) clamp(7rem, 12vw, 12rem); background: var(--paper-bright); }
-  .brief-section__intro { position: sticky; top: 8rem; align-self: start; }
-  .brief-section__intro h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 7vw, 7.5rem); }
-  .brief-steps { border-top: 1px solid var(--line-strong); }
-  .brief-steps div { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
-  .brief-steps span { font-family: var(--mono); font-size: .65rem; color: var(--signal); }
-  .brief-steps p { margin: 0; color: var(--muted); font-size: .84rem; }
-  .brief-form { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding-top: 1rem; }
-  .field { position: relative; display: grid; gap: .7rem; }
-  .field--wide { grid-column: 1 / -1; }
-  .field label { font-family: var(--mono); font-size: .67rem; letter-spacing: .1em; text-transform: uppercase; }
-  .field input, .field select, .field textarea { width: 100%; border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; padding: 1rem 0; background: transparent; color: var(--ink); outline: 0; }
-  .field textarea { resize: vertical; min-height: 10rem; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--signal); box-shadow: 0 1px 0 var(--signal); }
-  .form-action { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 1rem; }
-  .form-action p { max-width: 26rem; margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.6; }
-  .form-status { min-height: 1.5rem; margin: 0; color: var(--signal); font-size: .8rem; }
-  .contact-direct { padding-block: 4rem; background: var(--signal); color: #fff; }
-  .contact-direct__grid { display: grid; grid-template-columns: 1.2fr .7fr .9fr; gap: 5vw; }
-    /* White on --signal is 3.83:1. Opacity on top of that was throwing away
-     contrast for free, so it is gone, and each label carries enough size and
-     weight to clear the 3:1 large-text bar instead of the background being
-     darkened to a second orange. */
-  .contact-direct p { color: #fff; font-size: .8rem; font-weight: 700; opacity: 1; }
-  .contact-direct a { font-family: var(--display); font-size: clamp(1.25rem, 2.4vw, 2.6rem); font-weight: 700; letter-spacing: -.04em; }
-  .contact-direct a span { font-size: .65em; }
-  .contact-direct strong, .contact-direct div > span { display: block; }
-  .contact-direct strong { margin-top: 1rem; font-size: 1.2rem; font-weight: 700; line-height: 1.35; }
-  .contact-direct div > span { margin-top: .5rem; font-size: .95rem; font-weight: 600; opacity: 1; }
-  .contact-faq { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
+
+  .contact-routes { padding-block: clamp(6rem, 10vw, 10rem); background: var(--ink); color: var(--paper); }
+  .contact-routes__head { margin-bottom: clamp(3rem, 6vw, 6rem); }
+  .contact-routes__head h2 { margin-top: 1.5rem; font-size: clamp(4rem, 7.5vw, 8rem); }
+  .contact-routes__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-top: 1px solid #4b4a43; border-bottom: 1px solid #4b4a43; }
+  .business-status, .direct-routes { padding: clamp(2rem, 5vw, 5rem) 0; }
+  .business-status { padding-right: clamp(2rem, 5vw, 5rem); border-right: 1px solid #4b4a43; }
+  .business-status .label, .direct-routes .label { color: var(--signal); }
+  .business-status h3 { max-width: 16ch; margin: 2rem 0 1.25rem; font-family: var(--display); font-size: clamp(2.5rem, 4.5vw, 5rem); letter-spacing: -.055em; line-height: .95; }
+  .business-status p:not(.label) { margin: .45rem 0 0; color: #c7c5bb; }
+  .direct-routes { display: grid; align-content: start; gap: 2.5rem; padding-left: clamp(2rem, 5vw, 5rem); }
+  .direct-routes > div { padding-bottom: 2rem; border-bottom: 1px solid #4b4a43; }
+  .direct-routes a { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .45rem; margin-top: .9rem; font-family: var(--display); font-size: clamp(1.15rem, 2.2vw, 2.2rem); font-weight: 700; letter-spacing: -.04em; }
+  .direct-routes a span { color: var(--signal); font-size: .75em; }
+  .direct-routes > p { max-width: 34rem; margin: 0; color: #aaa89f; font-size: .9rem; line-height: 1.7; }
+
+  .contact-faq { display: grid; grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr); gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
   .contact-faq h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7rem); }
   .faq-list { border-top: 1px solid var(--line-strong); }
   .faq-list details { border-bottom: 1px solid var(--line); }
-  .faq-list summary { display: flex; justify-content: space-between; gap: 2rem; padding: 1.5rem 0; cursor: pointer; font-family: var(--display); font-size: clamp(1.25rem, 2vw, 1.8rem); font-weight: 650; list-style: none; }
+  .faq-list summary { display: flex; min-height: 3.5rem; justify-content: space-between; gap: 2rem; align-items: center; padding: 1.25rem 0; cursor: pointer; font-family: var(--display); font-size: clamp(1.2rem, 2vw, 1.7rem); font-weight: 650; list-style: none; }
   .faq-list summary::-webkit-details-marker { display: none; }
-  .faq-list summary::after { content: '+'; color: var(--signal); }
+  .faq-list summary::after { content: '+'; flex: 0 0 auto; color: var(--signal); }
   .faq-list details[open] summary::after { content: '−'; }
   .faq-list details p { max-width: 42rem; margin: 0; padding: 0 0 1.5rem; color: var(--muted); line-height: 1.7; }
-  @media (max-width: 900px) { .contact-hero, .brief-section, .contact-faq { grid-template-columns: minmax(0, 1fr); } .contact-hero > * { min-width: 0; } .contact-workspace { padding-top: 3rem; } .contact-workspace__note { position: static; width: auto; max-width: 34rem; margin: 0 0 1.75rem; } .contact-workspace figure { margin: 0 0 -2rem; } .contact-workspace img { width: 100%; } .brief-section { padding-top: clamp(8rem, 13vw, 11rem); } .brief-section__intro { position: static; } .contact-direct__grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 600px) { .contact-hero { min-height: 88svh; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-top: calc(var(--header-h) + 4rem); } .contact-hero h1 { font-size: clamp(3.6rem, 15vw, 5rem); } .contact-workspace { padding-top: 2rem; } .contact-workspace__note { padding-bottom: .5rem; }
-    /* 390px: a 1.54 desk scene shown whole is only ~230px tall, so it is bled
-       to the full viewport width to keep the detail legible. Still uncropped. */
-    /* A 1.54 desk scene shown whole at 390px is ~250px tall and he is a
-       thumbnail inside it. The mobile version therefore crops toward the
-       figure — a deliberate portrait crop centred on him and the chair
-       (he occupies x 18-58% of the source) — so he still reads as a person
-       in the page rather than a detail in a wide photo. */
-    .contact-workspace figure { width: calc(100% + (var(--gutter) * 2)); margin: .5rem calc(var(--gutter) * -1) -1rem; }
-    .contact-workspace img { aspect-ratio: 71 / 100; object-fit: cover; object-position: 37% 46%; }
-    .contact-workspace figcaption { margin-top: .6rem; padding-inline: var(--gutter); } .brief-form { grid-template-columns: 1fr; } .field--wide { grid-column: 1; } .form-action { align-items: stretch; flex-direction: column; } .contact-direct__grid { grid-template-columns: 1fr; } .contact-direct__grid > div { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,.45); } }
+
+  @media (max-width: 1024px) {
+    .brief-section__grid { grid-template-columns: minmax(0, 1fr); }
+    .contact-workspace__grid { grid-template-columns: minmax(16rem, .65fr) minmax(0, 1.35fr); }
+  }
+  @media (max-width: 800px) {
+    .contact-hero, .brief-section__head, .contact-workspace__grid, .contact-faq { grid-template-columns: minmax(0, 1fr); }
+    .contact-hero { gap: 2.5rem; }
+    .contact-hero aside { max-width: 38rem; }
+    .contact-workspace figure { width: calc(100% + (var(--gutter) * 2)); margin-inline: calc(var(--gutter) * -1); }
+    .contact-workspace figcaption { padding-inline: var(--gutter); }
+    .contact-routes__grid { grid-template-columns: minmax(0, 1fr); }
+    .business-status { padding-right: 0; border-right: 0; border-bottom: 1px solid #4b4a43; }
+    .direct-routes { padding-left: 0; }
+  }
+  @media (max-width: 480px) {
+    .contact-hero { min-height: min(68svh, 36rem); padding-top: calc(var(--header-h) + 3.5rem); }
+    .contact-hero h1 { font-size: clamp(3.65rem, 16vw, 5.1rem); }
+    .brief-section__head h2, .contact-routes__head h2 { font-size: clamp(3.5rem, 15vw, 5rem); }
+    .contact-workspace__note h2 { font-size: clamp(3.25rem, 14vw, 4.5rem); }
+  }
 </style>

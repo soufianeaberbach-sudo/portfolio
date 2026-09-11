@@ -1,0 +1,54 @@
+<section class="references" aria-labelledby="references-title">
+  <header class="references__head">
+    <p class="eyebrow">Professional references</p>
+    <h2 class="display" id="references-title">Trust, before<br />the first brief.</h2>
+  </header>
+
+  <div class="references__editorial">
+    <blockquote>
+      <p>“Soufiane has a strong instinct for protecting the look of a garment while staying realistic about how it will actually be made. He doesn’t simply follow a sketch; he questions proportion, construction and fit when something could weaken the final product. That balance between design sensitivity and technical thinking is what makes working with him valuable.”</p>
+      <footer><strong>KATHARINE</strong><span>Professional reference</span></footer>
+    </blockquote>
+
+    <blockquote>
+      <p>“Soufiane is the person I trust when a garment has to move from a technical idea to something the production floor can actually work with. He notices small risks early, asks the right questions, and stays precise until the solution is clear. What I value most is that he understands production from the inside, not only from the screen.”</p>
+      <footer><strong>KHALID</strong><span>Professional reference</span></footer>
+    </blockquote>
+  </div>
+
+  <blockquote class="references__platform">
+    <div>
+      <p class="label">Verified platform review</p>
+      <p class="references__rating" aria-label="5 out of 5 stars"><span aria-hidden="true">5★</span></p>
+    </div>
+    <p>“Exceptional service provider! He far exceeded my expectations by doing much more than what was asked. Always available, highly professional, and perfectly mastering his craft. He is also a human and pleasant person. I highly recommend him without any hesitation!”</p>
+    <footer><strong>H.</strong><span>Freelance client · Fiverr</span></footer>
+  </blockquote>
+</section>
+
+<style>
+  .references { min-width: 0; }
+  .references__head { margin-bottom: 2.5rem; }
+  .references__head h2 { margin-top: 1.25rem; font-size: clamp(3.2rem, 5.5vw, 6rem); }
+  .references blockquote { margin: 0; }
+  .references__editorial { border-top: 1px solid var(--line-strong); }
+  .references__editorial blockquote { padding: 2rem 0; border-bottom: 1px solid var(--line); }
+  .references__editorial blockquote:nth-child(2) { margin-left: clamp(0rem, 5vw, 5rem); }
+  .references blockquote > p { margin: 0; font-family: var(--display); font-size: clamp(1.15rem, 1.7vw, 1.45rem); font-weight: 620; letter-spacing: -.025em; line-height: 1.35; }
+  .references footer { display: grid; gap: .2rem; margin-top: 1.5rem; }
+  .references footer strong { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; }
+  .references footer span { color: var(--muted); font-size: .78rem; }
+  .references__platform { margin-top: 2rem !important; padding: 1.5rem; border: 1px solid var(--line-strong); }
+  .references__platform > div { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 1.5rem; }
+  .references__platform .label { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .66rem; }
+  .references__rating { margin: 0; color: var(--signal); font-family: var(--display); font-size: 1.15rem; font-weight: 800; letter-spacing: -.03em; }
+  .references__platform > p { font-size: clamp(1.25rem, 2vw, 1.75rem); }
+  @media (max-width: 900px) {
+    .references__editorial { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .references__editorial blockquote:nth-child(2) { margin-left: 0; }
+  }
+  @media (max-width: 600px) {
+    .references__editorial { grid-template-columns: 1fr; gap: 0; }
+    .references__head h2 { font-size: clamp(3rem, 15vw, 4.5rem); }
+  }
+</style>
