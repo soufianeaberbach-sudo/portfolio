@@ -1,86 +1,57 @@
-# Expertise page — temporary visual placeholders
+# Expertise page — temporary visual assets
 
-**TEMPORARY PLACEHOLDER — REPLACE WITH SOUFIANE'S OWN WORK.**
+**TEMPORARY STAND-INS — REPLACE WITH SOUFIANE'S OWN PROJECT IMAGES.**
 
-None of the four images referenced by `/expertise-temp/` is Soufiane Aberbach's
-work. They are free-use stock photographs standing in for his own photography
-of each of the four systems. Nothing in the page layout depends on anything
-inside them, so replacing one means overwriting two files and nothing else.
+The four images referenced by `/expertise-temp/` are the active visuals on the
+Expertise page. They were supplied directly for this purpose and are temporary:
+they stand in until Soufiane replaces them with images of his own real project
+work. They are not documentation of a specific Soufiane project, and nothing on
+the page attributes them to him.
 
 Alt text in `src/components/ExpertiseVisual.astro` describes only what each
-photograph literally depicts and never attributes it to Soufiane.
+image literally shows.
 
----
+## Files
 
-## 01 — Design intent
+| Stage | Files | Image content |
+|---|---|---|
+| 01 Design intent | `01-design-intent-{800,1400}.webp` | Atelier worktable — a large garment sketch on board beside the same design draped in toile on a dress form, with fabric swatches and pattern paper |
+| 02 Fit system | `02-fit-system-{800,1400}.webp` | Dress form carrying an in-progress toile with a measuring tape at the waist, beside a worktable holding a measurement sheet and graded pattern paper |
+| 03 Technical translation | `03-technical-translation-{800,1400}.webp` | One shirt design across four technical representations — flat drawing, cut paper pattern pieces, the digital pattern on screen, technical specification sheet |
+| 04 Production control | `04-production-control-{800,1400}.webp` | Two jackets on a quality control table, a measuring tape across one, a checked inspection sheet, the rest of the production run on a rail behind |
 
-| | |
-|---|---|
-| Pexels photo ID | `7256861` |
-| Title | Sketchbook with design of clothes |
-| Photographer | Anete Lusina |
-| Source page | https://www.pexels.com/photo/7256861/ |
-| Licence | Pexels License (free to use, no attribution required) |
-| Files | `public/expertise-temp/01-design-intent-{800,1400}.webp` |
+All eight live in `public/expertise-temp/`.
 
-## 02 — Fit system
+## Processing
 
-| | |
-|---|---|
-| Pexels photo ID | `9852972` |
-| Title | Women Designing Clothes |
-| Photographer | Ron Lach |
-| Source page | https://www.pexels.com/photo/9852972/ |
-| Licence | Pexels License (free to use, no attribution required) |
-| Files | `public/expertise-temp/02-fit-system-{800,1400}.webp` |
+Each source arrived at 1448×1086, which is exactly 4:3 — the same ratio as the
+widest frame the stage uses. Cover-scaling to 800×600 and 1400×1050 therefore
+crops nothing, and every compositional element listed above survives intact:
 
-## 03 — Technical translation
-
-| | |
-|---|---|
-| Pexels photo ID | `36731157` |
-| Title | Fashion Designer Working in Studio with Designs |
-| Photographer | Vitaly Gariev |
-| Source page | https://www.pexels.com/photo/36731157/ |
-| Licence | Pexels License (free to use, no attribution required) |
-| Files | `public/expertise-temp/03-technical-translation-{800,1400}.webp` |
-
-## 04 — Production control
-
-| | |
-|---|---|
-| Pexels photo ID | `31091547` |
-| Title | Textile Factory Worker in Quality Control Department |
-| Photographer | EqualStock IN |
-| Source page | https://www.pexels.com/photo/31091547/ |
-| Licence | Pexels License (free to use, no attribution required) |
-| Files | `public/expertise-temp/04-production-control-{800,1400}.webp` |
-
----
-
-## Current state of the files in `public/expertise-temp/`
-
-The four photographs above **could not be downloaded in the environment this
-page was built in**: its egress proxy permits only package registries, so
-`www.pexels.com`, `images.pexels.com` and `api.pexels.com` all return
-`connect_rejected`.
-
-The eight files currently in `public/expertise-temp/` are therefore neutral
-holding plates — a plain toned field carrying the stage number only. They are
-not photographs, they do not pretend to be, and they exist so the page has no
-broken image requests and no layout shift while the real files are pending.
-
-## Getting the real images in
-
-From any machine with network access, in the repository root:
-
-```sh
-bash .devtools/fetch-expertise-temp.sh
+```
+scale=W:H:force_original_aspect_ratio=increase:flags=lanczos, crop=W:H
+-c:v libwebp -quality 88 -compression_level 6
 ```
 
-That downloads the four photo IDs above and writes the eight WebP renditions at
-the exact paths the page already references. No code change is required.
+Because the sources are exact 4:3 and centre-weighted, every stage's
+`object-position` is `50% 50%`. The frame narrows to 3:2, then 5:4, then 1:1 as
+the viewport does, so a true centre keeps the trim even on both edges instead of
+biasing it off one.
 
-To use Soufiane's own photography instead, overwrite the same eight filenames
-(or change the `file` value for that stage in `ExpertiseVisual.astro`'s
-`STAGES` array) and delete this note.
+## Replacing them
+
+Overwrite the eight filenames above with the new renditions at the same
+dimensions, then update that stage's `alt` (and `position`, if the new framing
+is not centre-weighted) in `ExpertiseVisual.astro`'s `STAGES` array. Nothing
+else on the page depends on image content.
+
+Finally, delete this file once the images are Soufiane's own work, and remove
+the "TEMPORARY PLACEHOLDERS" note from the header comment of
+`ExpertiseVisual.astro`.
+
+## Note on `.devtools/fetch-expertise-temp.sh`
+
+That script predates these images. It downloads a set of stock photographs and
+writes them to **these same eight filenames**, so running it now would
+overwrite the current assets. It is retained only as a record of the earlier
+approach — do not run it unless you intend to replace these images.
