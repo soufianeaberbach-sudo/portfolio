@@ -36,10 +36,18 @@ for e in "${ENTRIES[@]}"; do
     exit 1
   fi
   for w in 800 1400; do
-    # 4:3 centre crop matches the widest frame the stage uses; the component
-    # fine-tunes the focal point per stage with object-position.
+    h=$(( w * 3 / 4 ))
+    # Cover, then centre-crop to exactly 4:3 — the widest frame the stage uses;
+    # the component fine-tunes the focal point per stage with object-position.
+    #
+    # force_original_aspect_ratio=increase is load-bearing. A plain
+    # `scale=${w}:-2` only guarantees the width: any source wider than 4:3
+    # (several of these are) then lands shorter than ${h}, and the crop asks
+    # for more height than the scaled frame has and fails outright. `increase`
+    # enlarges until BOTH target dimensions are covered before cropping, so
+    # the crop is always a subset. Aspect ratio is never distorted.
     "$FF" -hide_banner -v error -y -i "$RAW/$name.jpg" \
-      -vf "scale=${w}:-2:flags=lanczos,crop=${w}:$(( w * 3 / 4 ))" \
+      -vf "scale=${w}:${h}:force_original_aspect_ratio=increase:flags=lanczos,crop=${w}:${h}" \
       -c:v libwebp -quality 82 -compression_level 5 "$OUT/$name-$w.webp"
   done
 done
