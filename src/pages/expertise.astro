@@ -1,13 +1,15 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
-import GarmentPlate from '../components/GarmentPlate.astro';
+import ExpertiseVisual from '../components/ExpertiseVisual.astro';
 
 /* Expertise answers "does he understand the problems between my idea and
    production?" — so it reads DEPTH, not time. Process owns the sequence of
    decisions; Portfolio owns the evidence. Nothing here repeats either.
-   The page is one garment examined four ways, and each layer gets the kind of
-   supporting detail its own nature calls for rather than a shared template. */
+   Each of the four systems gets its own photograph and its own kind of
+   supporting structure, so they read as one system seen four ways rather than
+   four copies of a template. All technical vocabulary is typographic: nothing
+   is drawn on the photographs. */
 const systems = [
   { n: '01', slug: 'design-intent', name: 'Design intent' },
   { n: '02', slug: 'fit-system', name: 'Fit system' },
@@ -19,10 +21,11 @@ const systems = [
 <SiteLayout
   title="Expertise — Soufiane Aberbach"
   description="One garment, read four ways: design intent, fit system, technical translation and production control — the four systems that have to agree before a visual idea survives production."
-  marker="SA-EXPERTISE-V2"
+  marker="SA-EXPERTISE-V3"
   page="expertise"
+  footerCallout={false}
 >
-  <!-- BUILD-MARKER: SA-EXPERTISE-V2 -->
+  <!-- BUILD-MARKER: SA-EXPERTISE-V3 -->
 
   <section class="ex-hero" aria-labelledby="ex-hero-title">
     <div class="ex-hero__grid section-shell">
@@ -31,8 +34,8 @@ const systems = [
         One garment.<br />Four systems<br />have to <em>agree</em>.
       </h1>
       <p class="ex-hero__thought" data-reveal>
-        The job is not to make four documents. It is to make design intent, fit,
-        technical information and production reality describe the same product.
+        Design intent, fit, technical information and production reality must
+        describe the same product. When one drifts, the product drifts with it.
       </p>
     </div>
     <nav class="ex-index section-shell" aria-label="The four systems">
@@ -44,82 +47,87 @@ const systems = [
 
   <div class="ex-stack section-shell">
     <div class="ex-stack__rail" aria-hidden="true">
-      <GarmentPlate mode="rail" />
+      <ExpertiseVisual mode="stage" />
     </div>
 
     <div class="ex-stack__chapters">
-      <!-- 01 — primarily visual: the garment is allowed to be a garment here,
-           and the only supporting line is editorial rather than technical. -->
-      <article class="ch ch--intent" id="design-intent" data-layer-index="1">
+      <!-- 01 — editorial and open. No measurement vocabulary here: this layer
+           establishes the designer, not the technician. -->
+      <article class="ch ch--intent" id="design-intent" data-stage-index="01">
         <p class="label ch__tag" data-reveal>01 / Design intent</p>
         <h2 class="display ch__q" data-reveal>Will it still look like the idea?</h2>
         <p class="ch__meaning" data-reveal>
-          Silhouette, proportion, fabric behaviour and construction are resolved
-          before technical decisions start changing the design.
+          Silhouette, proportion, volume and material behaviour must be defined
+          clearly enough that engineering supports the idea instead of quietly
+          reshaping it.
         </p>
-        <div class="ch__visual" data-reveal><GarmentPlate layer={1} /></div>
+        <div class="ch__visual" data-reveal><ExpertiseVisual stage={1} /></div>
+        <ul class="ch__terms" data-reveal>
+          <li>Silhouette</li>
+          <li>Proportion</li>
+          <li>Volume</li>
+          <li>Material behaviour</li>
+        </ul>
         <p class="ch__editorial" data-reveal>
-          A garment can be technically perfect and still be the wrong garment.
-          This is the layer where the visual idea is protected — before
-          engineering gets a vote on it.
+          The technical solution should serve the design — not replace it.
         </p>
       </article>
 
-      <!-- 02 — geometry: controls paired with what each one actually governs. -->
-      <article class="ch" id="fit-system" data-layer-index="2">
+      <!-- 02 — a structured definition grid. The fitting photograph already
+           says BODY and FIT; the vocabulary carries the engineering. -->
+      <article class="ch" id="fit-system" data-stage-index="02">
         <p class="label ch__tag" data-reveal>02 / Fit system</p>
         <h2 class="display ch__q" data-reveal>Will it work on the body — and across sizes?</h2>
         <p class="ch__meaning" data-reveal>
-          Balance, ease, grading and tolerances are engineered as one system,
-          not corrected one sample at a time.
+          Balance, ease, grading and tolerance work as one system so fit remains
+          coherent beyond the base size.
         </p>
-        <div class="ch__visual" data-reveal><GarmentPlate layer={2} /></div>
+        <div class="ch__visual" data-reveal><ExpertiseVisual stage={2} /></div>
         <dl class="ch__geometry" data-reveal>
-          <div><dt>Block logic</dt><dd>where the shape originates</dd></div>
-          <div><dt>Balance</dt><dd>how it hangs standing still</dd></div>
-          <div><dt>Ease</dt><dd>what the body is allowed to do</dd></div>
-          <div><dt>POM relationships</dt><dd>what stays true between sizes</dd></div>
-          <div><dt>Grade rules</dt><dd>how the shape survives the range</dd></div>
-          <div><dt>Tolerance</dt><dd>where accept becomes reject</dd></div>
+          <div><dt>Block architecture</dt><dd>how the shape is generated from a controlled base</dd></div>
+          <div><dt>Balance</dt><dd>how front and back hang and align</dd></div>
+          <div><dt>Ease</dt><dd>the allowance required for fit and movement</dd></div>
+          <div><dt>POM relationships</dt><dd>linked measurements that preserve proportion</dd></div>
+          <div><dt>Grade rules</dt><dd>how geometry evolves through the size range</dd></div>
+          <div><dt>Tolerance</dt><dd>acceptable production variation</dd></div>
         </dl>
       </article>
 
-      <!-- 03 — communication: each field framed by the ambiguity it removes. -->
-      <article class="ch" id="technical-translation" data-layer-index="3">
+      <!-- 03 — controlled specification rows: what each document defines,
+           stated without promising a saving it cannot guarantee. -->
+      <article class="ch" id="technical-translation" data-stage-index="03">
         <p class="label ch__tag" data-reveal>03 / Technical translation</p>
         <h2 class="display ch__q" data-reveal>Will the factory understand the same garment?</h2>
         <p class="ch__meaning" data-reveal>
-          Pattern, 3D validation, measurements and construction information
-          remove interpretation before sampling and hand-off.
+          Pattern geometry, measurements, construction information and digital
+          validation remove interpretation before hand-off.
         </p>
-        <div class="ch__visual" data-reveal><GarmentPlate layer={3} /></div>
+        <div class="ch__visual" data-reveal><ExpertiseVisual stage={3} /></div>
         <ul class="ch__spec" data-reveal>
-          <li><b>Production pattern</b><span>removes redrafting on the floor</span></li>
-          <li><b>Construction notes</b><span>removes assembly guesswork</span></li>
-          <li><b>POM set &amp; tolerance</b><span>removes the measurement argument</span></li>
-          <li><b>3D simulation</b><span>removes a round of physical sampling</span></li>
+          <li><b>Production pattern</b><span>defines cut-ready geometry and construction intent</span></li>
+          <li><b>Construction specification</b><span>defines seams, operations and critical details</span></li>
+          <li><b>Measurements &amp; tolerances</b><span>define acceptance criteria across the size range</span></li>
+          <li><b>3D validation</b><span>helps resolve fit, proportion and drape before physical sampling</span></li>
         </ul>
       </article>
 
-      <!-- 04 — repeatability: reference, drift, correction. Deliberately not a
-           monitoring dashboard; the same drafting language as every other
-           layer, held in the page's editorial register. -->
-      <article class="ch" id="production-control" data-layer-index="4">
+      <!-- 04 — a three-stage logic, not a monitoring readout. -->
+      <article class="ch" id="production-control" data-stage-index="04">
         <p class="label ch__tag" data-reveal>04 / Production control</p>
         <h2 class="display ch__q" data-reveal>Will it stay correct when repetition begins?</h2>
         <p class="ch__meaning" data-reveal>
-          Manufacturability, first-piece checks and in-line decisions stop a good
-          sample from becoming an inconsistent production run.
+          Manufacturability, first-piece verification and in-line control protect
+          the approved product as production begins to repeat it.
         </p>
-        <div class="ch__visual" data-reveal><GarmentPlate layer={4} /></div>
+        <div class="ch__visual" data-reveal><ExpertiseVisual stage={4} /></div>
         <ol class="ch__states" data-reveal>
-          <li><b>Reference</b><span>the approved garment, as measured</span></li>
-          <li><b>Deviation</b><span>the run leaving it, found while it is cheap</span></li>
-          <li><b>Corrected</b><span>the line brought back before the order is cut through</span></li>
+          <li><b>Reference</b><span>the approved product standard</span></li>
+          <li><b>Deviation</b><span>production moving away from the approved reference</span></li>
+          <li><b>Correction</b><span>the cause resolved before deviation multiplies through bulk</span></li>
         </ol>
         <p class="ch__risk" data-reveal>
-          A good sample is not proof of a good production system. The question is
-          whether the approved product can be repeated.
+          A good sample is not proof of a good production system. The real test is
+          whether the approved product can be repeated consistently.
         </p>
       </article>
     </div>
@@ -132,7 +140,7 @@ const systems = [
         Control is a claim<br />until the work <em>proves</em> it.
       </h2>
       <p class="ex-bridge__line" data-reveal>
-        The portfolio is where these four systems become visible in real garments.
+        The portfolio is where the thinking becomes evidence in real work.
       </p>
       <a class="button button--signal ex-bridge__cta" href="/portfolio/" data-reveal>
         See the work <span><Arrow /></span>
@@ -142,18 +150,18 @@ const systems = [
 </SiteLayout>
 
 <script>
-  /* The sticky rail only exists at >=1100px. Whichever chapter is crossing the
-     viewport centre sets the rail's analytical layer — the page scrolls
-     normally, nothing is hijacked. */
-  const rail = document.querySelector<HTMLElement>('.ex-stack__rail .plate');
-  const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-layer-index]'));
+  /* The sticky stage only exists at >=1100px. Whichever chapter is crossing
+     the viewport centre selects the lens — the page scrolls normally, nothing
+     is hijacked and there are no controls to operate. */
+  const stage = document.querySelector<HTMLElement>('.ex-stack__rail .exv');
+  const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-stage-index]'));
 
-  if (rail && chapters.length && 'IntersectionObserver' in window) {
+  if (stage && chapters.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.target instanceof HTMLElement) {
-            rail.dataset.layer = entry.target.dataset.layerIndex ?? '1';
+            stage.dataset.active = entry.target.dataset.stageIndex ?? '01';
           }
         });
       },
@@ -219,16 +227,43 @@ const systems = [
   .ch__meaning { max-width: 42rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: clamp(1rem, 1.15vw, 1.12rem); line-height: 1.7; }
   .ch__visual { margin-top: clamp(2rem, 3.5vw, 3rem); }
 
-  /* Each layer's supporting detail has its own shape — an editorial line, a
-     geometry index, a specification list, a state sequence. */
-  .ch__editorial {
-    max-width: 38rem;
+  /* Each layer's supporting detail has its own shape and rhythm — an open term
+     row and a single editorial line, a definition grid, specification rows, a
+     three-stage logic. None of it is drawn on the photographs. */
+
+  /* 01 — the design vocabulary, set as an open row rather than a data table. */
+  .ch__terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem clamp(1.5rem, 3vw, 3rem);
     margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
-    padding-left: 1.25rem;
-    border-left: 1px solid var(--signal);
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.7;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .ch__terms li { position: relative; padding-left: 1.15rem; }
+  .ch__terms li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: .45em;
+    width: .55rem;
+    height: 1px;
+    background: var(--signal);
+  }
+
+  .ch__editorial {
+    max-width: 34rem;
+    margin: clamp(2rem, 3.5vw, 3rem) 0 0;
+    color: var(--ink-soft);
+    font-family: var(--display);
+    font-size: clamp(1.25rem, 1.9vw, 1.7rem);
+    font-weight: 650;
+    letter-spacing: -.02em;
+    line-height: 1.3;
   }
 
   .ch__geometry {
@@ -281,10 +316,10 @@ const systems = [
   .ex-bridge__line { grid-column: 2; max-width: 26rem; margin: 0 0 .5rem; color: #aaa89f; line-height: 1.75; }
   .ex-bridge__cta { grid-column: 1; justify-self: start; margin-top: clamp(2rem, 4vw, 3.5rem); }
 
-  /* ---------- DESKTOP: sticky analytical rail ---------- */
-  /* Only above 1100px, and only with JS + motion allowed — the inline
-     chapter plates are the fallback everywhere else, which means every layer
-     stays reachable without an observer or a transition. */
+  /* ---------- DESKTOP: sticky analytical stage ---------- */
+  /* Only above 1100px, and only with JS + motion allowed. Everywhere else each
+     chapter carries its own image inline, so all four systems stay reachable
+     without an observer or a transition. */
   @media (min-width: 1100px) {
     :global(html.js) .ex-stack {
       display: grid;
