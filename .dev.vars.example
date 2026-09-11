@@ -1,0 +1,12 @@
+# Local development values for the brief Worker. Copy to `.dev.vars`, which is
+# gitignored. NAMES ONLY IN THIS FILE — never commit real keys.
+#
+# In production these two are set with `npx wrangler secret put <NAME>`, not
+# from a file.
+
+# Transactional email provider key (Resend, or an equivalent HTTP API).
+RESEND_API_KEY=
+
+# Cloudflare Turnstile secret key. Leave empty to skip verification locally;
+# the honeypot and timing screens still run.
+TURNSTILE_SECRET=

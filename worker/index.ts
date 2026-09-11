@@ -1,0 +1,362 @@
+/* Cloudflare Worker for the development-brief endpoint.
+ *
+ * The site itself stays a fully static Astro build. This Worker exists only to
+ * give the Contact form a real submission path: every request that matches a
+ * built asset is served by Cloudflare before this code runs, so in practice
+ * the only thing that reaches here is POST /api/brief. Anything else that does
+ * arrive is handed straight to the ASSETS binding, which keeps the site
+ * serving normally even if this file has a problem.
+ *
+ * Order of operations is deliberate: validate, screen for spam, PERSIST, then
+ * send. The brief is written to KV before the email is attempted, so a mail
+ * provider outage cannot lose a brief and the success response stays truthful
+ * — it says the brief was received, which is exactly what was guaranteed.
+ *
+ * Types are declared locally rather than imported from @cloudflare/workers-
+ * types: this project has no runtime dependencies and adding one for two
+ * interfaces is not worth it.
+ */
+
+interface KVNamespaceLike {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+}
+
+interface Env {
+  /* Static assets from ./dist. Always present. */
+  ASSETS: { fetch(request: Request): Promise<Response> };
+  /* Durable store for submitted briefs. Absent until the namespace is bound. */
+  BRIEFS?: KVNamespaceLike;
+  BRIEF_TO?: string;
+  BRIEF_FROM?: string;
+  RESEND_API_KEY?: string;
+  /* When absent, Turnstile is not enforced — see verifyTurnstile. */
+  TURNSTILE_SECRET?: string;
+}
+
+const STAGES = [
+  'Idea / reference',
+  'In development',
+  'Fit / sample',
+  'Pre-production',
+  'Production issue',
+] as const;
+
+const LIMITS = {
+  name: 120,
+  company: 120,
+  email: 254,
+  message: 5000,
+  link: 2000,
+  messageMin: 10,
+  /* A human cannot read the form, type a brief and submit inside 3 seconds. */
+  minElapsedMs: 3_000,
+  maxElapsedMs: 24 * 60 * 60 * 1000,
+  perIpPerHour: 5,
+};
+
+interface Brief {
+  name: string;
+  company: string;
+  email: string;
+  stage: string;
+  message: string;
+  link: string;
+}
+
+type Invalid = { field: string; error: string };
+
+function str(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+/* Deliberately permissive: the goal is to catch typos, not to adjudicate the
+   RFC. A wrong-but-plausible address is better rejected by the mail server
+   than by a regex that refuses somebody's real address. */
+function emailLooksValid(value: string): boolean {
+  return /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(value);
+}
+
+function validate(form: Record<string, unknown>): { brief: Brief } | { invalid: Invalid } {
+  const name = str(form.name);
+  const company = str(form.company);
+  const email = str(form.email);
+  const stage = str(form.stage);
+  const message = str(form.message);
+  const link = str(form.link);
+
+  if (!name) return { invalid: { field: 'name', error: 'Please add your name.' } };
+  if (name.length > LIMITS.name) return { invalid: { field: 'name', error: 'That name is too long.' } };
+  if (company.length > LIMITS.company) return { invalid: { field: 'company', error: 'That company name is too long.' } };
+  if (!email) return { invalid: { field: 'email', error: 'Please add an email address so a reply can reach you.' } };
+  if (email.length > LIMITS.email || !emailLooksValid(email)) {
+    return { invalid: { field: 'email', error: 'That email address does not look complete.' } };
+  }
+  if (!STAGES.includes(stage as (typeof STAGES)[number])) {
+    return { invalid: { field: 'stage', error: 'Please choose where the product is now.' } };
+  }
+  if (message.length < LIMITS.messageMin) {
+    return { invalid: { field: 'message', error: 'A sentence or two about what needs solving is enough.' } };
+  }
+  if (message.length > LIMITS.message) {
+    return { invalid: { field: 'message', error: 'That is longer than the form accepts — send the detail by email instead.' } };
+  }
+  if (link) {
+    if (link.length > LIMITS.link) return { invalid: { field: 'link', error: 'That link is too long.' } };
+    let parsed: URL;
+    try {
+      parsed = new URL(link);
+    } catch {
+      return { invalid: { field: 'link', error: 'That does not look like a complete link.' } };
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return { invalid: { field: 'link', error: 'Links need to start with http:// or https://' } };
+    }
+  }
+
+  return { brief: { name, company, email, stage, message, link } };
+}
+
+/* Two cheap screens that need no third party, plus Turnstile when configured.
+   The honeypot is a field no visible UI fills in; the timestamp catches bots
+   that post instantly. */
+function screenSpam(form: Record<string, unknown>): Invalid | null {
+  if (str(form.website)) return { field: '', error: 'spam' };
+
+  /* The timestamp is stamped by the page's script, so a visitor with
+     JavaScript disabled sends none. An absent stamp therefore cannot be
+     treated as suspicious — doing so would break the no-JS path completely,
+     which is the one path that has no other way to submit. Those submissions
+     are screened by the honeypot and, once configured, by Turnstile. */
+  const raw = str(form.t);
+  if (!raw) return null;
+
+  const started = Number(raw);
+  if (!Number.isFinite(started) || started <= 0) return { field: '', error: 'spam' };
+  const elapsed = Date.now() - started;
+  if (elapsed < LIMITS.minElapsedMs || elapsed > LIMITS.maxElapsedMs) {
+    return { field: '', error: 'timing' };
+  }
+  return null;
+}
+
+/* Returns true when the request may proceed. With no secret configured there
+   is nothing to verify against, so the check is skipped rather than failing
+   every submission — the honeypot and timing screens still apply. That keeps
+   the form coherent both before and after Turnstile is set up. */
+async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boolean> {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  try {
+    const body = new FormData();
+    body.append('secret', env.TURNSTILE_SECRET);
+    body.append('response', token);
+    if (ip) body.append('remoteip', ip);
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body,
+    });
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    /* A Turnstile outage must not silently swallow a real brief. Fail open on
+       the network error; the honeypot and timing screens still stand. */
+    return true;
+  }
+}
+
+/* KV is eventually consistent, so this is a throttle rather than a hard
+   ceiling. That is the right trade for spam control: approximate is enough,
+   and no brief is ever rejected because a counter was a second stale. */
+async function overRateLimit(env: Env, ip: string): Promise<boolean> {
+  if (!env.BRIEFS || !ip) return false;
+  const key = `rate:${ip}:${new Date().toISOString().slice(0, 13)}`;
+  try {
+    const current = Number((await env.BRIEFS.get(key)) ?? '0');
+    if (current >= LIMITS.perIpPerHour) return true;
+    await env.BRIEFS.put(key, String(current + 1), { expirationTtl: 3600 });
+  } catch {
+    return false;
+  }
+  return false;
+}
+
+function emailText(brief: Brief, id: string): string {
+  return [
+    `Name:     ${brief.name}`,
+    `Company:  ${brief.company || '—'}`,
+    `Email:    ${brief.email}`,
+    `Stage:    ${brief.stage}`,
+    `Link:     ${brief.link || '—'}`,
+    '',
+    'What needs solving',
+    '------------------',
+    brief.message,
+    '',
+    `Reference: ${id}`,
+  ].join('\n');
+}
+
+async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
+  if (!env.RESEND_API_KEY || !env.BRIEF_TO || !env.BRIEF_FROM) return false;
+  const payload = {
+    from: env.BRIEF_FROM,
+    to: [env.BRIEF_TO],
+    /* So replying in the mail client answers the client directly. */
+    reply_to: brief.email,
+    subject: `Development brief — ${brief.stage} — ${brief.name}`,
+    text: emailText(brief, id),
+  };
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${env.RESEND_API_KEY}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) return true;
+    } catch {
+      /* fall through to the retry */
+    }
+  }
+  return false;
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}
+
+/* The no-JS error path. A JSON body would be useless to somebody without
+   scripting, so this is a small readable page with a way back; browsers
+   restore the typed values on back navigation. */
+function htmlError(message: string, status = 400): Response {
+  const body = `<!doctype html><html lang="en"><head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" /><title>Brief not sent</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:2rem;
+background:#f3f0e9;color:#11110f;font:16px/1.6 system-ui,sans-serif}
+main{max-width:32rem}h1{font-size:1.5rem;margin:0 0 1rem}
+a{color:#11110f;text-decoration:underline;text-underline-offset:3px}</style></head>
+<body><main><h1>The brief was not sent</h1><p>${escapeHtml(message)}</p>
+<p><a href="/contact/#brief">Go back to the form</a></p></main></body></html>`;
+  return new Response(body, { status, headers: { 'content-type': 'text/html; charset=utf-8' } });
+}
+
+function json(status: number, data: Record<string, unknown>): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+  });
+}
+
+async function readBody(request: Request): Promise<{ form: Record<string, unknown>; wantsJson: boolean }> {
+  const type = request.headers.get('content-type') ?? '';
+  if (type.includes('application/json')) {
+    return { form: (await request.json()) as Record<string, unknown>, wantsJson: true };
+  }
+  const data = await request.formData();
+  const form: Record<string, unknown> = {};
+  data.forEach((value, key) => {
+    form[key] = typeof value === 'string' ? value : '';
+  });
+  return { form, wantsJson: false };
+}
+
+async function handleBrief(request: Request, env: Env): Promise<Response> {
+  let form: Record<string, unknown>;
+  let wantsJson = true;
+  try {
+    const parsed = await readBody(request);
+    form = parsed.form;
+    wantsJson = parsed.wantsJson;
+  } catch {
+    return json(400, { ok: false, error: 'That submission could not be read.' });
+  }
+
+  const fail = (status: number, error: string, field = '') =>
+    wantsJson ? json(status, { ok: false, error, field }) : htmlError(error, status);
+
+  const spam = screenSpam(form);
+  if (spam) {
+    return fail(
+      400,
+      spam.error === 'timing'
+        ? 'That submission looked automated. Please reload the page and try again.'
+        : 'That submission was rejected as automated. Please reload the page and try again.',
+    );
+  }
+
+  const checked = validate(form);
+  if ('invalid' in checked) return fail(400, checked.invalid.error, checked.invalid.field);
+  const brief = checked.brief;
+
+  const ip = request.headers.get('CF-Connecting-IP') ?? '';
+  if (await overRateLimit(env, ip)) {
+    return fail(429, 'Several briefs have already been sent from this connection. Please email directly instead.');
+  }
+
+  const token = str(form['cf-turnstile-response']);
+  if (!(await verifyTurnstile(env, token, ip))) {
+    return fail(400, 'The spam check did not pass. Please reload the page and try again.');
+  }
+
+  /* Persist BEFORE sending. Without a store there is nothing durable to
+     promise, so the brief is refused rather than accepted and dropped. */
+  if (!env.BRIEFS) {
+    return fail(503, 'The form is not accepting briefs yet. Please email directly — the address is below the form.');
+  }
+
+  const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
+  try {
+    await env.BRIEFS.put(
+      `brief:${id}`,
+      JSON.stringify({
+        ...brief,
+        id,
+        receivedAt: new Date().toISOString(),
+        country: (request as Request & { cf?: { country?: string } }).cf?.country ?? '',
+        userAgent: request.headers.get('user-agent') ?? '',
+      }),
+    );
+  } catch {
+    return fail(502, 'The brief could not be saved. Please email directly — the address is below the form.');
+  }
+
+  const delivered = await sendEmail(env, brief, id);
+  if (!delivered) {
+    /* The brief is safe in KV, so this is not a failure for the sender. Record
+       it so the gap is visible, and still report receipt, which is true. */
+    try {
+      await env.BRIEFS.put(`undelivered:${id}`, JSON.stringify({ id, email: brief.email, at: new Date().toISOString() }));
+    } catch {
+      /* nothing further to do */
+    }
+  }
+
+  if (!wantsJson) {
+    return new Response(null, { status: 303, headers: { location: '/contact/sent/' } });
+  }
+  return json(200, { ok: true, id });
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    try {
+      const url = new URL(request.url);
+      if (url.pathname === '/api/brief') {
+        if (request.method !== 'POST') {
+          return json(405, { ok: false, error: 'Use POST.' });
+        }
+        return await handleBrief(request, env);
+      }
+      /* Everything else is the static site. */
+      return await env.ASSETS.fetch(request);
+    } catch {
+      /* Never let a fault here take the site down. */
+      return env.ASSETS.fetch(request);
+    }
+  },
+};

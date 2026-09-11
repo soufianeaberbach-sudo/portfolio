@@ -1,0 +1,142 @@
+---
+/* Three references, three source treatments.
+ *
+ * Katharine and Khalid are PERSONAL professional references. They are not
+ * corporate endorsements, so no employer, company, job title or logo appears
+ * anywhere in this component and the type below has no field that could carry
+ * one. Their quotes communicate the angle on their own.
+ *
+ * H. is the real Fiverr review already in the repository, reproduced exactly,
+ * non-native phrasing included — an unedited platform review is the authentic
+ * one. It is the only reference with a star rating, and it carries no
+ * sub-ratings or highlight tags: those were invented and are gone.
+ *
+ * The union type is the guarantee. A `personal` reference has no `rating` and
+ * no `platform` to render, so the presentation cannot drift back toward three
+ * identical review cards.
+ */
+type Reference =
+  | { kind: 'personal'; name: string; quote: string }
+  | { kind: 'platform'; name: string; quote: string; platform: string; rating: number; privacyNote: string };
+
+export const REFERENCES: Reference[] = [
+  {
+    kind: 'personal',
+    name: 'Katharine',
+    quote:
+      'Soufiane has a strong instinct for protecting the look of a garment while staying realistic about how it will actually be made. He doesn’t simply follow a sketch; he questions proportion, construction and fit when something could weaken the final product. That balance between design sensitivity and technical thinking is what makes working with him valuable.',
+  },
+  {
+    kind: 'personal',
+    name: 'Khalid',
+    quote:
+      'Soufiane is the person I trust when a garment has to move from a technical idea to something the production floor can actually work with. He notices small risks early, asks the right questions, and stays precise until the solution is clear. What I value most is that he understands production from the inside, not only from the screen.',
+  },
+  {
+    kind: 'platform',
+    name: 'H.',
+    quote:
+      'Exceptional service provider! He far exceeded my expectations by doing much more than what was asked. Always available, highly professional, and perfectly mastering his craft. He is also a human and pleasant person. I highly recommend him without any hesitation!',
+    platform: 'Fiverr',
+    rating: 5,
+    privacyNote: 'Name abbreviated for privacy',
+  },
+];
+
+interface Props {
+  /* 'list'  — names only, shown beside the form while it is being filled in.
+     'full'  — the quotes. */
+  mode: 'list' | 'full';
+}
+const { mode } = Astro.props;
+const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} review` : 'Professional reference');
+---
+
+{mode === 'list' && (
+  <aside class="vouch" aria-label="References">
+    <p class="label vouch__head">References</p>
+    <ul>
+      {REFERENCES.map((r) => (
+        <li>
+          <strong>{r.name}</strong>
+          <span class="label">{sourceLabel(r)}</span>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}
+
+{mode === 'full' && (
+  <div class="refs">
+    {REFERENCES.map((r) => (
+      <figure class:list={['ref', `ref--${r.kind}`]} data-reveal>
+        <blockquote class="ref__quote"><p>{r.quote}</p></blockquote>
+        <figcaption class="ref__source">
+          <span class="ref__name">{r.name}</span>
+          {r.kind === 'personal' ? (
+            <span class="label ref__meta">Professional reference</span>
+          ) : (
+            <span class="ref__platform">
+              <span class="label ref__meta">Freelance client &middot; {r.platform}</span>
+              <span class="ref__stars" aria-label={`${r.rating} out of 5`}>
+                <span aria-hidden="true">
+                  {Array.from({ length: r.rating }).map(() => (
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <path d="m12 2.5 2.92 5.91 6.53.95-4.73 4.61 1.12 6.51L12 17.41l-5.84 3.07 1.12-6.51-4.73-4.61 6.53-.95L12 2.5Z" />
+                    </svg>
+                  ))}
+                </span>
+              </span>
+              <span class="label ref__privacy">{r.privacyNote}</span>
+            </span>
+          )}
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+)}
+
+<style>
+  /* --- list mode: who vouches, visible while the form is being filled in --- */
+  .vouch { align-self: start; }
+  .vouch__head { margin: 0 0 1rem; color: var(--muted); }
+  .vouch ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .vouch li { display: grid; gap: .3rem; padding: .9rem 0; border-bottom: 1px solid var(--line); }
+  .vouch strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: 1.1rem; line-height: 1; }
+  .vouch span { color: var(--muted); }
+
+  /* --- full mode --- */
+  .refs { display: grid; gap: clamp(2.5rem, 5vw, 4.5rem); }
+  .ref { margin: 0; }
+  .ref__quote { margin: 0; }
+  .ref__quote p { margin: 0; color: var(--ink-soft); line-height: 1.7; text-wrap: pretty; }
+  .ref__source { display: grid; gap: .55rem; margin-top: 1.5rem; padding-top: .9rem; border-top: 1px solid var(--line-strong); }
+  .ref__name { font-family: var(--display); font-weight: 850; letter-spacing: -.035em; line-height: 1; }
+  .ref__meta { color: var(--muted); }
+
+  /* The two personal references share one editorial quote family: a generous
+     measure, larger type, and the name standing alone over a rule. They differ
+     from each other only in measure, because they carry identical information
+     — a name, and that it is a personal reference. */
+  .ref--personal .ref__quote p { font-size: clamp(1.05rem, 1.45vw, 1.3rem); }
+  .ref--personal .ref__name { font-size: clamp(1.3rem, 1.8vw, 1.65rem); }
+  .ref--personal:nth-of-type(1) .ref__quote p { max-width: 38rem; }
+  .ref--personal:nth-of-type(2) .ref__quote p { max-width: 34rem; }
+
+  /* The platform review is a different kind of object, not a restyled one:
+     smaller type, a review chrome, and the only stars on the site's
+     testimonials. */
+  .ref--platform { padding: clamp(1.5rem, 3vw, 2.25rem); border: 1px solid var(--line); background: var(--paper-bright); }
+  .ref--platform .ref__quote p { max-width: 34rem; font-size: 1rem; }
+  .ref--platform .ref__name { font-size: 1.15rem; }
+  .ref__platform { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+  .ref__stars { display: inline-flex; gap: .12rem; }
+  .ref__stars svg { width: .8rem; height: .8rem; fill: var(--signal); }
+  .ref__privacy { flex-basis: 100%; color: var(--muted); }
+
+  @media (min-width: 1000px) {
+    .refs { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+    /* The first personal reference takes the wider measure it was sized for. */
+    .ref--platform { grid-column: 2; }
+  }
+</style>

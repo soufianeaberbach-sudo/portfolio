@@ -1,0 +1,48 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Arrow from '../../components/Arrow.astro';
+
+/* Success page for the no-JavaScript path only.
+ *
+ * With JavaScript the brief form swaps itself for an inline confirmation and
+ * never navigates. Without it, the native POST goes to the Worker, which
+ * answers 303 to this page — so the no-JS route still ends in a real success
+ * state instead of a JSON payload. noindex because it is a flow endpoint, not
+ * a page anyone should arrive at from search.
+ */
+---
+
+<SiteLayout
+  title="Brief received — Soufiane Aberbach"
+  description="Your development brief has been received."
+  marker="SA-CONTACT-SENT-V1"
+  page="contact"
+  noindex={true}
+>
+  <!-- BUILD-MARKER: SA-CONTACT-SENT-V1 -->
+  <section class="sent section-shell">
+    <div class="sent__inner">
+      <p class="eyebrow">Contact / brief received</p>
+      <h1 class="display sent__title">That’s everything<br />needed to <em>start</em>.</h1>
+      <p class="sent__line">
+        The brief has been received. The reply comes back to the email address you
+        gave, in writing, with an honest scope and a realistic next step.
+      </p>
+      <div class="sent__routes">
+        <a class="button" href="/portfolio/">See the work <span><Arrow /></span></a>
+        <a class="sent__home" href="/">Back to the start <span><Arrow /></span></a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .sent { display: grid; align-items: center; min-height: min(74svh, 44rem); padding-block: calc(var(--header-h) + 4rem) clamp(4rem, 8vw, 8rem); }
+  .sent__inner { max-width: 44rem; }
+  .sent .eyebrow { color: var(--muted); }
+  .sent__title { margin: clamp(1.5rem, 3vw, 2.5rem) 0 0; font-size: clamp(2.4rem, 6.4vw, 5.4rem); }
+  .sent__line { max-width: 34rem; margin: clamp(1.75rem, 3vw, 2.5rem) 0 0; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.75; }
+  .sent__routes { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; margin-top: clamp(2.25rem, 4vw, 3.5rem); }
+  .sent__home { display: inline-flex; align-items: center; gap: .5rem; color: var(--muted); font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; transition: color .2s var(--ease); }
+  .sent__home:hover { color: var(--signal); }
+</style>

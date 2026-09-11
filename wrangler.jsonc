@@ -5,7 +5,50 @@
   "build": {
     "command": "npm run build"
   },
+  // The site is a fully static Astro build. The Worker exists only so the
+  // Contact form has a real submission path: Cloudflare serves any request
+  // that matches a built asset before the Worker runs, so effectively only
+  // POST /api/brief reaches it. Anything else it does receive is passed to
+  // the ASSETS binding below, so the site keeps serving either way.
+  "main": "./worker/index.ts",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // run_worker_first is load-bearing, not a precaution. Without it the asset
+    // router claims /api/brief before the Worker runs — a browser navigation
+    // POST (Accept: text/html) gets matched by not_found_handling and answered
+    // 405, so the no-JavaScript form path breaks while a fetch() POST still
+    // works. Routing the API prefix to the Worker first fixes both.
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    // Destination and verified sender for submitted briefs. BRIEF_FROM must be
+    // on a domain verified with the email provider or mail will be rejected.
+    "BRIEF_TO": "soufiane.aberbach@gmail.com",
+    "BRIEF_FROM": "brief@soufianeaberbach.com"
   }
+  // DEPLOYMENT PREREQUISITES — the form declines briefs until these exist.
+  //
+  // 1. Durable storage. Create the namespace, then uncomment this block with
+  //    the real id. Until it is bound, POST /api/brief answers 503 and the
+  //    page tells the visitor to email directly; nothing is ever accepted and
+  //    then dropped.
+  //
+  //      npx wrangler kv namespace create BRIEFS
+  //
+  //    "kv_namespaces": [{ "binding": "BRIEFS", "id": "<id from the command>" }]
+  //
+  // 2. Secrets (never committed — see .dev.vars.example):
+  //
+  //      npx wrangler secret put RESEND_API_KEY
+  //      npx wrangler secret put TURNSTILE_SECRET
+  //
+  // 3. Turnstile site key at BUILD time, so the widget renders:
+  //
+  //      PUBLIC_TURNSTILE_SITEKEY=0x... npm run build
+  //
+  //    With no site key the widget is omitted; with no TURNSTILE_SECRET the
+  //    Worker skips verification. The honeypot and timing screens apply in
+  //    every combination, so the form is coherent at each step of setup.
 }
