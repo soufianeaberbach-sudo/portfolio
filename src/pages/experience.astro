@@ -2,25 +2,115 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 
-const roles = [
-  { company: 'Loratex', title: 'Operations & Warehouse Coordinator', dates: 'Feb 2014 – Jan 2016' },
-  { company: 'Roadtex', title: 'Quality Control & Production Specialist', dates: 'Feb 2016 – Aug 2017' },
-  { company: 'Loratex', title: 'Production Planning Coordinator', dates: 'Sep 2017 – Sep 2018', note: 'Return to Loratex' },
-  { company: 'Loratex', title: 'CAD Development Supervisor', dates: 'Sep 2018 – May 2021', note: 'Internal progression' },
-  { company: 'Lariconf', title: 'CAD Fashion Developer', dates: 'Jun 2021 – May 2022' },
-  { company: 'Ava Marie', title: 'Senior Fashion Designer & Product Developer', dates: 'May 2022 – Present' },
+/* Experience — six positions, one expanding view.
+ *
+ * This page answers WHY the judgment is credible. Expertise covers what can be
+ * seen and controlled, Process covers when decisions happen; here the argument
+ * is that the current role is informed by having occupied six different seats
+ * in product development and production.
+ *
+ * Two rules govern the content:
+ *
+ * 1. The six roles are FACTUAL and LOCKED — employer, title and dates are
+ *    reproduced exactly. `lens` is an interpretive reading of what each
+ *    position adds to the current working perspective, labelled "Perspective
+ *    added" so it is never read as a duty, achievement or responsibility.
+ *    Nothing beyond the job title itself is asserted.
+ *
+ * 2. Pattern-making is never the identity. The earlier production and CAD
+ *    positions explain why the current Senior Fashion Designer & Product
+ *    Developer role is stronger; they do not define it backward.
+ *
+ * Accumulation is carried by the strata (one rule per position reached) and by
+ * composition, NOT by a 01 -> 06 type-scale ladder: roles 01-05 share one
+ * heading range so none of them reads as less important, and role 06 is more
+ * open and more resolved because it is the current culmination.
+ */
+
+interface Role {
+  n: string;
+  company: string;
+  title: string;
+  dates: string;
+  note?: string;
+  /* Interpretive lens, not a responsibility. Derived from the position only. */
+  lens: string;
+}
+
+const roles: Role[] = [
+  {
+    n: '01',
+    company: 'Loratex',
+    title: 'Operations & Warehouse Coordinator',
+    dates: 'Feb 2014 – Jan 2016',
+    lens: 'Movement / coordination / production flow',
+  },
+  {
+    n: '02',
+    company: 'Roadtex',
+    title: 'Quality Control & Production Specialist',
+    dates: 'Feb 2016 – Aug 2017',
+    lens: 'Quality / standards / deviation',
+  },
+  {
+    n: '03',
+    company: 'Loratex',
+    title: 'Production Planning Coordinator',
+    dates: 'Sep 2017 – Sep 2018',
+    note: 'Return to Loratex',
+    lens: 'Planning / sequence / dependencies',
+  },
+  {
+    n: '04',
+    company: 'Loratex',
+    title: 'CAD Development Supervisor',
+    dates: 'Sep 2018 – May 2021',
+    note: 'Internal progression',
+    lens: 'Geometry / technical development systems',
+  },
+  {
+    n: '05',
+    company: 'Lariconf',
+    title: 'CAD Fashion Developer',
+    dates: 'Jun 2021 – May 2022',
+    lens: 'Technical product translation',
+  },
+  {
+    n: '06',
+    company: 'Ava Marie',
+    title: 'Senior Fashion Designer & Product Developer',
+    dates: 'May 2022 – Present',
+    lens: 'Integration of design, development and production understanding',
+  },
 ];
 
-const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Adobe Illustrator'];
+/* Career-wide, deliberately attached to no single employer or role. */
+const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Adobe Illustrator'];
 ---
 
-<SiteLayout title="Experience — Soufiane Aberbach" description="Experience and production perspective of Soufiane Aberbach, fashion designer and product developer in Tangier." marker="SA-EXPERIENCE-V4" page="experience">
-  <!-- BUILD-MARKER: SA-EXPERIENCE-V4 -->
+<SiteLayout
+  title="Experience — Soufiane Aberbach"
+  description="Six positions across operations, quality control, production planning, CAD development and product development — and how each one widened the view of the product that the current design and development work is decided with."
+  marker="SA-EXPERIENCE-V5"
+  page="experience"
+  footerCallout={false}
+>
+  <!-- BUILD-MARKER: SA-EXPERIENCE-V5 -->
+
   <section class="experience-hero">
     <div class="experience-hero__title" data-reveal>
       <p class="eyebrow">Experience / 04</p>
-      <h1 class="display">Built in the<br /><span>pattern room.</span></h1>
+      {/* The two mid-sentence breaks are a desktop composition only: they are
+          hidden once the hero stacks, so the headline reflows naturally rather
+          than forcing fragments into a narrow column. Each one is preceded by a
+          real space — display:none removes the break but would not supply a
+          word boundary, so without it the stacked hero reads "expandingview".
+          At desktop that space sits at end-of-line and collapses. */}
+      <h1 class="display">
+        Six positions.<br />One <em>expanding</em> <br class="hero-br" />view of the <br class="hero-br" />product.
+      </h1>
     </div>
+
     <figure class="experience-hero__portrait" data-reveal>
       <img
         src="/experience-figure-900.webp"
@@ -32,150 +122,317 @@ const tools = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Ad
         fetchpriority="high"
         decoding="async"
       />
-      <figcaption class="label">Corporate experience / Tangier</figcaption>
+      <figcaption class="label">Tangier / Product development</figcaption>
     </figure>
+
     <div class="experience-hero__intro" data-reveal>
       <p class="label">Senior Fashion Designer &amp; Product Developer</p>
-      <p>Based in Tangier, working at the point where a visual idea becomes a pattern, a specification and a production decision.</p>
+      <p>
+        Operations, quality control, production planning, CAD development,
+        fashion development, and now senior fashion design and product
+        development. Each position added another part of the
+        product-development and production system to the way the work is
+        decided today.
+      </p>
     </div>
-    <div class="experience-hero__measure"><i aria-hidden="true"></i><span>12+ years / 9,000+ garments engineered</span></div>
+
+    <div class="experience-hero__measure"><i aria-hidden="true"></i><span>2014 — present / six positions</span></div>
   </section>
 
-  <section class="experience-difference section-shell" aria-labelledby="difference-title">
-    <div class="experience-difference__head" data-reveal>
-      <p class="eyebrow">Production perspective</p>
-      <h2 class="display" id="difference-title">The whole line,<br />in <em>one</em> profile.</h2>
+  <section class="trajectory section-shell" aria-labelledby="trajectory-title">
+    <div class="trajectory__head" data-reveal>
+      <p class="eyebrow">Professional trajectory</p>
+      <h2 class="display" id="trajectory-title">One position at a time.</h2>
     </div>
-    <p class="experience-difference__lead" data-reveal>Not a designer observing manufacturing from the outside. Pattern, product development and factory reality sit in the same working method.</p>
-    <div class="experience-difference__proofs">
-      <article data-reveal>
-        <span class="label">01 / Factory intelligence</span>
-        <h3>Built from the floor up.</h3>
-        <p>Progression through planning, quality, warehouse, CAD and product development means production constraints are recognised before they become line problems.</p>
-      </article>
-      <article data-reveal>
-        <span class="label">02 / Technical translation</span>
-        <h3>Design intent, made repeatable.</h3>
-        <p>Pattern geometry, 3D validation and technical documentation bridge the aesthetic idea to a garment a factory can cut, grade and reproduce.</p>
-      </article>
-      <article data-reveal>
-        <span class="label">03 / Direct B2B bridge</span>
-        <h3>One clear communication layer.</h3>
-        <p>Arabic, French and English connect brand teams with Moroccan production, backed by registered B2B invoicing capability.</p>
-      </article>
-    </div>
-  </section>
 
-  <section class="roles section-shell section-rule">
-    <div class="roles__head" data-reveal>
-      <p class="eyebrow">Professional path</p>
-      <h2 class="display">Six roles. One production trajectory.</h2>
-    </div>
-    <div class="roles__list">
-      {roles.map((role, index) => (
-        <article data-reveal>
-          <span class="index-tag">{String(index + 1).padStart(2, '0')}</span>
-          <div><p class="label">{role.dates}</p><h3>{role.company}</h3>{role.note && <span class="role-note">{role.note}</span>}</div>
-          <p>{role.title}</p>
-        </article>
+    <ol class="trajectory__list">
+      {roles.map((role, i) => (
+        <li class:list={['tr', i === roles.length - 1 && 'tr--current']} data-reveal>
+          <div class="tr__mark">
+            <p class="label tr__n">{role.n} / 06</p>
+            {/* One rule per position reached: the margin thickens as the page
+                descends. The newest layer is longer and darker than the ones
+                already settled beneath it. */}
+            <div class="tr__strata" aria-hidden="true">
+              {Array.from({ length: i + 1 }).map(() => <i></i>)}
+            </div>
+          </div>
+
+          <div class="tr__body">
+            <p class="label tr__meta">
+              {role.company} <span>·</span> {role.dates}
+              {role.note && <span class="tr__note">{role.note}</span>}
+            </p>
+            <h3 class="tr__pos">{role.title}</h3>
+            {i === roles.length - 1 && <p class="label tr__badge">Current position</p>}
+          </div>
+
+          <div class="tr__lens">
+            <p class="label tr__lens-label">Perspective added</p>
+            <p class="tr__lens-text">{role.lens}</p>
+          </div>
+        </li>
       ))}
+    </ol>
+  </section>
+
+  <section class="synthesis" aria-labelledby="synthesis-title">
+    <div class="section-shell synthesis__grid">
+      <p class="eyebrow" data-reveal>Synthesis</p>
+      <h2 class="display synthesis__title" id="synthesis-title" data-reveal>
+        The current role<br />is built on all <em>six</em>.
+      </h2>
+      <p class="synthesis__line" data-reveal>
+        Operations, quality, planning, CAD and product development now meet in
+        one working perspective — design decisions made with production reality
+        already in view.
+      </p>
+
+      <div class="synthesis__facts" data-reveal>
+        <div class="fact">
+          <p class="label">Technical systems across the career</p>
+          <p class="fact__value">{systems.join(' · ')}</p>
+        </div>
+        <div class="fact">
+          <p class="label">Working languages</p>
+          <p class="fact__value">Arabic / French / English</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="tools-band">
-    <div class="section-shell tools-band__grid">
-      <div data-reveal>
-        <p class="eyebrow">Technical environment</p>
-        <h2 class="display">Tools follow the production problem.</h2>
+  <section class="ex-bridge" aria-labelledby="ex-bridge-title">
+    <div class="section-shell ex-bridge__grid">
+      <p class="eyebrow" data-reveal>Next / Contact</p>
+      <h2 class="display ex-bridge__title" id="ex-bridge-title" data-reveal>
+        You've seen<br />how the judgment<br />was <em>built</em>.
+      </h2>
+      <div class="ex-bridge__side">
+        <p class="ex-bridge__line" data-reveal>
+          The next conversation can be about your product.
+        </p>
+        <a class="button button--signal" href="/contact/" data-reveal>
+          Discuss your product <span><Arrow /></span>
+        </a>
       </div>
-      <div class="tools-band__list" data-reveal>
-        {tools.map((tool, index) => <span><i>{String(index + 1).padStart(2, '0')}</i>{tool}</span>)}
-      </div>
     </div>
-  </section>
-
-  <section class="experience-close section-shell">
-    <div data-reveal>
-      <p class="label">The working boundary</p>
-      <p>Pattern, fit, gradation, 3D simulation, technical packs and production follow-through.</p>
-    </div>
-    <div data-reveal>
-      <p class="label">Not on the list</p>
-      <p>Collection design, fabric sourcing, branding or hand sample sewing.</p>
-    </div>
-    <a class="button button--signal" href="/contact/" data-reveal>Discuss production collaboration <span><Arrow /></span></a>
   </section>
 </SiteLayout>
 
 <style>
-  /* The figure's rendered width is derived once and reused, so the headline's
+  /* ---------------------------------------------------------------------------
+     HERO — geometry preserved from V4.
+
+     The figure's rendered width is derived once and reused, so the headline's
      measure is defined by where the figure actually starts rather than by a
-     margin that happens to look right at one viewport. */
-  .experience-hero { --figure-w: clamp(15rem, 25.5vw, 29rem); --figure-h: calc(var(--figure-w) / 0.497); --figure-offset: clamp(0rem, 9vw, 11rem); position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr); grid-template-rows: 1fr auto auto; gap: 2rem 4vw; align-items: end; overflow: hidden; padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem; background: var(--paper-bright); border-bottom: 1px solid var(--line); }
-  /* The full-height rule that used to split this section at 47% is gone: it
-     drew exactly the column boundary the composition is trying not to have. */
-  /* The figure stands IN FRONT of the typography, not under it. With the old
-     z-order the outlined line printed straight across the arm, suit and leg.
-     Silhouette profile measured off the source's alpha channel: the band from
-     16% to 44% of the figure's height — shoulders, chest, hands, laptop —
-     spans the FULL width of its box, so there is no clear lane for type at
-     headline height. The line runs to the figure and stops; only the outer
-     edge of the arm may pass in front of the final glyph. */
+     margin that happens to look right at one viewport.
+
+     The figure stands IN FRONT of the typography. Silhouette profile measured
+     off the source's alpha channel: the band from 16% to 44% of the figure's
+     height — shoulders, chest, hands, laptop — spans the FULL width of its
+     box, so there is no clear lane for type at headline height. The line runs
+     to the figure and stops; only the outer edge of the arm may pass in front
+     of the final glyph.
+     ------------------------------------------------------------------------ */
+  .experience-hero {
+    --figure-w: clamp(15rem, 25.5vw, 29rem);
+    --figure-offset: clamp(0rem, 9vw, 11rem);
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(28rem, 1.15fr);
+    grid-template-rows: 1fr auto auto;
+    gap: 2rem 4vw;
+    align-items: end;
+    overflow: hidden;
+    padding: calc(var(--header-h) + 3rem) var(--gutter) 3rem;
+    background: var(--paper-bright);
+    border-bottom: 1px solid var(--line);
+  }
   .experience-hero__title { position: relative; z-index: 1; grid-column: 1 / 3; grid-row: 1; align-self: center; pointer-events: none; }
   /* Hard-stopped short of the figure: the type runs to the silhouette and
-     terminates there, so it can never cross the face, torso or hands. */
-  .experience-hero__title h1 { max-width: calc(100% - var(--figure-w) - var(--figure-offset) - 1.25rem); font-size: clamp(3.4rem, 10vw, 11rem); line-height: .82; }
-  .experience-hero__title h1 span { color: transparent; -webkit-text-stroke: 1.4px var(--ink); }
-  /* The box carries the figure's own 754:1517 ratio and is driven by height, so
-     `contain` has no slack to leave and --figure-w above is an exact
-     prediction of where the figure starts. */
+     terminates there, so it can never cross the face, torso or hands. The cap
+     is lower than V4's 11rem because the longest line is now "One expanding"
+     rather than "Built in the" — derived against this measure, not guessed. */
+  .experience-hero__title h1 {
+    max-width: calc(100% - var(--figure-w) - var(--figure-offset) - 1.25rem);
+    font-size: clamp(3rem, 7.6vw, 7.6rem);
+    line-height: .84;
+  }
   .experience-hero__portrait { position: relative; z-index: 2; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: var(--figure-w); aspect-ratio: 754 / 1517; height: auto; max-width: none; margin: 0 var(--figure-offset) -3rem 0; overflow: visible; }
   .experience-hero__portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; }
-  /* Sits on the measure axis, clear of the figure's legs — it used to print
-     straight across the trousers. */
-  /* Parked immediately left of the figure at the top, which is the one area
-     the composition leaves clear — it used to print across the trousers, and
-     across the face once the figure moved up. */
-  .experience-hero__portrait figcaption { position: absolute; right: 100%; top: 2rem; margin-right: 1.5rem; padding-top: .65rem; border-top: 1px solid var(--ink); color: var(--ink); white-space: nowrap; }
+  /* Outside the figure's left edge, low. V4 parked it at top:2rem, which was
+     clear against a two-line headline; this headline is four lines and reaches
+     further right, so the top of that lane is now type. Inside the figure box
+     is not an option either — the source is framed with the head at the very
+     top edge, so there is no empty ground above it. The clear pocket is below
+     the headline and to the right of the intro's measure, which is where this
+     sits: narrow and right-aligned so it reads as a margin note and cannot
+     reach the intro's measure. Verified against rendered text line boxes, not
+     block boxes, at ten desktop sizes. */
+  .experience-hero__portrait figcaption { position: absolute; right: 100%; top: 58%; width: 8.5rem; margin-right: 1.5rem; padding-top: .65rem; border-top: 1px solid var(--ink); color: var(--ink); text-align: right; }
   .experience-hero__intro { position: relative; z-index: 3; grid-column: 1; grid-row: 2; padding-bottom: 0; }
-  .experience-hero__intro > p:last-child { max-width: 32rem; margin-top: 1.5rem; color: var(--ink-soft); font-size: 1.15rem; line-height: 1.7; }
+  .experience-hero__intro > p:last-child { max-width: 34rem; margin-top: 1.5rem; color: var(--ink-soft); font-size: 1.08rem; line-height: 1.7; }
   .experience-hero__measure { position: relative; z-index: 3; grid-column: 1; grid-row: 3; display: flex; align-items: center; gap: 1rem; font-family: var(--mono); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; }
   .experience-hero__measure i { width: 8rem; height: 1px; background: var(--signal); }
-  .experience-difference { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, .55fr); gap: 3rem 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
-  .experience-difference__head h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8rem); }
-  .experience-difference__lead { align-self: end; max-width: 34rem; margin: 0 0 .6rem; color: var(--ink-soft); font-size: clamp(1.1rem, 1.5vw, 1.35rem); line-height: 1.7; }
-  .experience-difference__proofs { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr .95fr .9fr; margin-top: clamp(2rem, 4vw, 4rem); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
-  .experience-difference__proofs article { min-height: 22rem; padding: clamp(2rem, 3vw, 3rem); border-right: 1px solid var(--line); }
-  .experience-difference__proofs article:first-child { padding-left: 0; }
-  .experience-difference__proofs article:last-child { padding-right: 0; border-right: 0; }
-  .experience-difference__proofs .label { color: var(--signal); }
-  .experience-difference__proofs h3 { max-width: 23rem; margin: clamp(4rem, 7vw, 7rem) 0 1.5rem; font-family: var(--display); font-size: clamp(2.2rem, 3.7vw, 4rem); letter-spacing: -.055em; line-height: .92; }
-  .experience-difference__proofs p { max-width: 29rem; margin: 0; color: var(--muted); line-height: 1.7; }
-  .roles { display: grid; grid-template-columns: .6fr 1.4fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
-  .roles__head { position: sticky; top: 8rem; align-self: start; }
-  .roles__head h2 { margin-top: 2rem; font-size: clamp(3.8rem, 6vw, 6.5rem); }
-  .roles__list { border-top: 1px solid var(--line-strong); }
-  .roles article { display: grid; grid-template-columns: 3rem 1fr 1.2fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
-  .roles h3 { margin: .5rem 0 0; font-family: var(--display); font-size: clamp(2rem, 4vw, 4.3rem); letter-spacing: -.055em; line-height: 1; }
-  .role-note { display: inline-block; margin-top: .8rem; color: var(--signal); font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
-  .roles article > p { margin: 0; color: var(--muted); line-height: 1.7; }
-  .tools-band { padding-block: clamp(7rem, 12vw, 12rem); background: var(--signal); color: #fff; }
-    /* Same rule as .contact-direct: no opacity on white-over-orange, and the
-     small labels carry weight instead of the band being darkened. */
-  .tools-band .eyebrow, .tools-band h2, .tools-band__list span { color: #fff; }
-  .tools-band .eyebrow { font-size: .8rem; font-weight: 700; }
-  .tools-band__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
-  .tools-band h2 { margin-top: 2rem; font-size: clamp(4rem, 7vw, 7.5rem); }
-  .tools-band__list { align-self: end; border-top: 1px solid rgba(255,255,255,.45); }
-  .tools-band__list span { display: flex; gap: 2rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,.35); font-family: var(--display); font-size: 1.5rem; font-weight: 650; }
-  .tools-band__list i { width: 2.4rem; font-family: var(--mono); font-size: .8rem; font-weight: 700; font-style: normal; }
-  .experience-close { display: grid; grid-template-columns: 1fr 1fr auto; gap: 5vw; align-items: end; padding-block: clamp(6rem, 10vw, 10rem); }
-  .experience-close p:last-child { max-width: 29rem; color: var(--ink-soft); line-height: 1.65; }
-  @media (max-width: 900px) { .experience-hero, .experience-difference, .roles, .tools-band__grid, .experience-close { grid-template-columns: minmax(0, 1fr); } .experience-hero { grid-template-rows: auto auto auto auto; } .experience-hero::before { left: 50%; } .experience-hero__title { grid-column: 1; grid-row: 1; } .experience-hero__title h1 { max-width: none; font-size: clamp(3.4rem, 9.4vw, 7rem); } .experience-hero__portrait { grid-column: 1; grid-row: 2; width: auto; aspect-ratio: 754 / 1517; height: min(58svh, 38rem); min-height: 26rem; margin: -2rem -2vw -2rem auto; } .experience-hero__portrait figcaption { top: auto; right: 100%; bottom: 1rem; margin-right: 1.25rem; } .experience-hero__intro, .experience-hero__measure { grid-column: 1; grid-row: auto; } .experience-difference__proofs { grid-template-columns: minmax(0, 1fr); } .experience-difference__proofs article, .experience-difference__proofs article:first-child, .experience-difference__proofs article:last-child { min-height: 0; padding: 2.5rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .experience-difference__proofs article:last-child { border-bottom: 0; } .experience-difference__proofs h3 { margin-top: 3rem; } .roles > *, .roles article > * { min-width: 0; } .roles__head { position: static; } }
-  @media (max-width: 600px) { .experience-hero { min-height: 0; gap: 1.5rem; padding-top: calc(var(--header-h) + 4rem); } .experience-hero__title h1 { font-size: clamp(3.8rem, 16vw, 5rem); } /* The caption goes back into flow at this width, so the figure must size to
+
+  /* ---------------------------------------------------------------------------
+     TRAJECTORY
+     ------------------------------------------------------------------------ */
+  .trajectory { --mark: 8rem; padding-block: clamp(4.5rem, 8vw, 8rem) clamp(5rem, 9vw, 9rem); }
+  .trajectory__head { margin-bottom: clamp(3rem, 5vw, 5rem); }
+  .trajectory__head h2 { margin-top: 1.75rem; font-size: clamp(2.4rem, 5vw, 5rem); }
+
+  .trajectory__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+
+  .tr {
+    display: grid;
+    grid-template-columns: var(--mark) minmax(0, 1fr) minmax(13rem, 19rem);
+    column-gap: clamp(1.5rem, 3.5vw, 3.5rem);
+    padding-block: clamp(2.25rem, 3.4vw, 3.4rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tr__mark { grid-column: 1; }
+  .tr__n { margin: 0; color: var(--muted); }
+  /* The accumulation. One rule per position reached; the layer this role adds
+     is longer and darker than the ones already settled beneath it. */
+  .tr__strata { display: grid; gap: .3rem; margin-top: 1.1rem; }
+  .tr__strata i { display: block; width: 1.9rem; height: 1px; background: var(--line-strong); transform-origin: left; }
+  .tr__strata i:last-child { width: 3.1rem; background: var(--ink); }
+
+  .tr__body { grid-column: 2; min-width: 0; }
+  /* Company and dates are credibility metadata, never the loudest element. */
+  .tr__meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; margin: 0; color: var(--muted); }
+  .tr__meta > span { opacity: .7; }
+  .tr__note { padding-left: .5rem; border-left: 1px solid var(--line-strong); }
+  /* The POSITION is the dominant element: what he was doing, not where. Roles
+     01-05 and 06 share this range; only .tr--current steps up. */
+  .tr__pos {
+    max-width: 26rem;
+    margin: .95rem 0 0;
+    font-family: var(--display);
+    font-weight: 850;
+    letter-spacing: -.05em;
+    line-height: .98;
+    font-size: clamp(1.6rem, 2.9vw, 2.5rem);
+    text-wrap: balance;
+  }
+
+  .tr__lens { grid-column: 3; align-self: start; padding-top: 1.75rem; }
+  .tr__lens-label { margin: 0 0 .75rem; color: var(--muted); }
+  .tr__lens-text { margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.55; }
+
+  /* Role 06 is the sixth band of the same trajectory, given more air and more
+     resolution because it is where the six arrive. No scale ladder leads to
+     it — the five before it are deliberately equal. */
+  .tr--current { padding-block: clamp(3.25rem, 5.5vw, 5.5rem); border-bottom: 0; background: var(--paper-bright); }
+  .tr--current .tr__strata i:last-child { background: var(--signal); }
+  .tr--current .tr__pos { max-width: 34rem; font-size: clamp(2rem, 4.1vw, 3.6rem); }
+  .tr__badge { display: inline-block; margin: 1.5rem 0 0; padding: .5rem .7rem; border: 1px solid var(--line-strong); color: var(--ink-soft); }
+  .tr--current .tr__lens { padding-top: 2.5rem; }
+  .tr--current .tr__lens-text { color: var(--ink); font-size: 1.05rem; }
+
+  /* ---------------------------------------------------------------------------
+     SYNTHESIS — a conclusion, not an argument with a misconception.
+     ------------------------------------------------------------------------ */
+  .synthesis { padding-block: clamp(5rem, 9vw, 9rem); border-top: 1px solid var(--line-strong); }
+  .synthesis__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 26rem); align-items: end; gap: clamp(2.5rem, 6vw, 6vw); }
+  .synthesis .eyebrow { grid-column: 1; grid-row: 1; margin: 0 0 clamp(1.5rem, 3vw, 2.5rem); color: var(--muted); }
+  .synthesis__title { grid-column: 1; grid-row: 2; font-size: clamp(2.3rem, 5.4vw, 5.4rem); }
+  .synthesis__line { grid-column: 2; grid-row: 2; max-width: 27rem; margin: 0; color: var(--ink-soft); font-size: clamp(1rem, 1.15vw, 1.15rem); line-height: 1.7; }
+
+  /* Secondary evidence: small, factual, career-wide, attached to no employer.
+     Two hairlines — if either fact is withdrawn nothing else reflows. */
+  .synthesis__facts { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); margin-top: clamp(3rem, 5vw, 5rem); }
+  .fact { padding-top: .9rem; border-top: 1px solid var(--line-strong); }
+  .fact > .label { margin: 0; color: var(--muted); }
+  .fact__value { margin: .8rem 0 0; color: var(--ink-soft); font-family: var(--mono); font-size: .8rem; line-height: 1.75; }
+
+  /* ---------------------------------------------------------------------------
+     BRIDGE — same handoff grammar as Expertise -> Portfolio and
+     Process -> Experience.
+     ------------------------------------------------------------------------ */
+  .ex-bridge { padding-block: clamp(5rem, 10vw, 10rem); background: var(--ink); color: var(--paper); }
+  .ex-bridge__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 24rem); align-items: end; gap: clamp(2.5rem, 6vw, 6rem); }
+  .ex-bridge .eyebrow { grid-column: 1; grid-row: 1; margin: 0 0 clamp(1.5rem, 3vw, 2.5rem); color: color-mix(in srgb, var(--paper) 58%, var(--ink)); }
+  .ex-bridge__title { grid-column: 1; grid-row: 2; font-size: clamp(2.4rem, 5.6vw, 5.6rem); }
+  .ex-bridge__side { grid-column: 2; grid-row: 2; }
+  .ex-bridge__line { margin: 0 0 2.25rem; color: color-mix(in srgb, var(--paper) 66%, var(--ink)); font-size: 1.05rem; line-height: 1.7; }
+  .ex-bridge .button--signal { color: #fff; }
+
+  /* ---------------------------------------------------------------------------
+     Motion. Every state below is the JS-driven one — without JS the reveal
+     observer never runs, so the defaults above must already be the finished
+     reading: every stratum drawn, every role complete.
+     ------------------------------------------------------------------------ */
+  :global(html.js) .tr__strata i { transform: scaleX(0); transition: transform .6s var(--ease); }
+  :global(html.js) .tr.is-visible .tr__strata i { transform: scaleX(1); }
+  :global(html.js) .tr.is-visible .tr__strata i:nth-child(2) { transition-delay: .05s; }
+  :global(html.js) .tr.is-visible .tr__strata i:nth-child(3) { transition-delay: .1s; }
+  :global(html.js) .tr.is-visible .tr__strata i:nth-child(4) { transition-delay: .15s; }
+  :global(html.js) .tr.is-visible .tr__strata i:nth-child(5) { transition-delay: .2s; }
+  :global(html.js) .tr.is-visible .tr__strata i:nth-child(6) { transition-delay: .25s; }
+
+  /* ---------------------------------------------------------------------------
+     Responsive
+     ------------------------------------------------------------------------ */
+  @media (max-width: 1199px) {
+    .tr { grid-template-columns: var(--mark) minmax(0, 1fr); }
+    .tr__lens { grid-column: 2; padding-top: 1.5rem; }
+    .synthesis__grid { grid-template-columns: minmax(0, 1fr); }
+    .synthesis__title, .synthesis__line { grid-column: 1; }
+    .synthesis__line { grid-row: 3; max-width: 38rem; margin-top: 1.75rem; }
+    .synthesis__facts { grid-row: 4; }
+  }
+
+  @media (max-width: 900px) {
+    /* The desktop line breaks come out here: the headline gets the full column
+       and reflows, so no one-word fragment is ever forced. */
+    .hero-br { display: none; }
+    .experience-hero,
+    .synthesis__grid,
+    .ex-bridge__grid { grid-template-columns: minmax(0, 1fr); }
+    .experience-hero { grid-template-rows: auto auto auto auto; }
+    .experience-hero__title { grid-column: 1; grid-row: 1; }
+    .experience-hero__title h1 { max-width: none; font-size: clamp(3rem, 8.4vw, 6rem); text-wrap: pretty; }
+    .experience-hero__portrait { grid-column: 1; grid-row: 2; width: auto; aspect-ratio: 754 / 1517; height: min(58svh, 38rem); min-height: 26rem; margin: -2rem -2vw -2rem auto; }
+    .experience-hero__portrait figcaption { left: auto; top: auto; right: 100%; bottom: 1rem; margin-right: 1.25rem; }
+    .experience-hero__intro,
+    .experience-hero__measure { grid-column: 1; grid-row: auto; }
+    .ex-bridge__title, .ex-bridge__side { grid-column: 1; }
+    .ex-bridge__side { grid-row: 3; margin-top: 2.5rem; }
+    .trajectory { --mark: 6rem; }
+  }
+
+  @media (max-width: 600px) {
+    .experience-hero { min-height: 0; gap: 1.5rem; padding-top: calc(var(--header-h) + 4rem); }
+    .experience-hero__title h1 { font-size: clamp(2.5rem, 11vw, 3.6rem); }
+    /* The caption goes back into flow at this width, so the figure must size to
        its contents — a fixed height pushed the caption outside the box and it
        collided with the intro label underneath. The ratio moves to the img. */
     .experience-hero__portrait { width: auto; height: auto; aspect-ratio: auto; min-height: 0; margin: -1rem 0 0 auto; }
     .experience-hero__portrait img { height: auto; aspect-ratio: 754 / 1517; max-height: 26rem; width: auto; margin-left: auto; }
-    .experience-hero__portrait figcaption { position: static; display: block; margin: 1.1rem 0 0; text-align: right; white-space: normal; } .experience-difference__head h2 { font-size: 3.7rem; } .roles__head h2 { font-size: 2.9rem; } .roles article { grid-template-columns: 2.5rem minmax(0, 1fr); } .roles article > p { grid-column: 2; } .roles h3 { overflow-wrap: anywhere; } .tools-band h2 { font-size: 3.4rem; } }
+    .experience-hero__portrait figcaption { position: static; display: block; inset: auto; width: auto; margin: 1.1rem 0 0; text-align: right; }
+    .trajectory__head h2 { font-size: clamp(2rem, 9vw, 2.6rem); }
+    .synthesis__facts { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    /* One clear vertical trajectory. The strata cannot be read at this width,
+       so the count carries the accumulation as text instead — nothing is
+       lost to a device that no longer fits. */
+    .trajectory { --mark: 0rem; }
+    .tr { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+    .tr__mark, .tr__body, .tr__lens { grid-column: 1; }
+    .tr__strata { display: none; }
+    .tr__n { margin-bottom: .9rem; }
+    .tr__pos { font-size: clamp(1.5rem, 7.4vw, 2.1rem); }
+    .tr--current .tr__pos { font-size: clamp(1.75rem, 8.6vw, 2.5rem); }
+    .tr--current { margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .tr__strata i { transform: none; }
+  }
 </style>
