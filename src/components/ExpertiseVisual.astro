@@ -1,0 +1,164 @@
+---
+/* The visual stage for the Expertise control stack.
+ *
+ * Photography carries context, craft and human reality. Nothing technical is
+ * ever drawn on top of it — the structured vocabulary in expertise.astro
+ * carries the expertise. That separation is deliberate: annotations over a
+ * photograph imply information the photograph does not actually prove.
+ *
+ * The four images are TEMPORARY PLACEHOLDERS and are not Soufiane's work.
+ * See assets/source/expertise-temp/SOURCES.md. No layout geometry depends on
+ * anything inside them, so replacing one is a single path change in STAGES
+ * below plus the two files it names.
+ *
+ * mode="stage"  — all four stacked, crossfaded by data-active (desktop rail)
+ * mode="single" — one stage rendered inline (tablet, mobile, reduced motion)
+ */
+export interface Stage {
+  key: string;
+  n: string;
+  name: string;
+  file: string;
+  alt: string;
+  /* Focal point for the responsive crop; the photos are not all framed alike. */
+  position: string;
+}
+
+export const STAGES: Stage[] = [
+  {
+    key: 'intent',
+    n: '01',
+    name: 'Design intent',
+    file: '01-design-intent',
+    alt: 'A fashion design sketchbook open on garment concepts beside fabric swatches and drawing tools.',
+    position: '50% 45%',
+  },
+  {
+    key: 'fit',
+    n: '02',
+    name: 'Fit system',
+    file: '02-fit-system',
+    alt: 'A designer taking measurements on a garment worn by a model during a studio fitting.',
+    position: '50% 38%',
+  },
+  {
+    key: 'translation',
+    n: '03',
+    name: 'Technical translation',
+    file: '03-technical-translation',
+    alt: 'A fashion designer working between hand-drawn designs and a laptop in a studio.',
+    position: '50% 42%',
+  },
+  {
+    key: 'production',
+    n: '04',
+    name: 'Production control',
+    file: '04-production-control',
+    alt: 'A worker inspecting finished garments in the quality control department of a textile factory.',
+    position: '50% 45%',
+  },
+];
+
+interface Props {
+  mode?: 'stage' | 'single';
+  stage?: number;
+}
+
+const { mode = 'single', stage = 1 } = Astro.props;
+const shown = mode === 'stage' ? STAGES : [STAGES[stage - 1]];
+const src = (file: string, w: 800 | 1400) => `/expertise-temp/${file}-${w}.webp`;
+---
+
+<figure class:list={['exv', `exv--${mode}`]} data-active={mode === 'stage' ? '1' : String(stage)}>
+  <div class="exv__frame">
+    {shown.map((s, i) => (
+      <img
+        class="exv__img"
+        data-stage={s.n}
+        src={src(s.file, 1400)}
+        srcset={`${src(s.file, 800)} 800w, ${src(s.file, 1400)} 1400w`}
+        sizes="(min-width: 1100px) 46vw, 100vw"
+        width="1400"
+        height="1050"
+        alt={s.alt}
+        style={`object-position:${s.position}`}
+        loading={mode === 'stage' ? (i === 0 ? 'eager' : 'lazy') : stage === 1 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    ))}
+  </div>
+
+  <figcaption class="exv__state label">
+    {shown.map((s) => (
+      <span data-stage={s.n}>{s.n} / {s.name}</span>
+    ))}
+  </figcaption>
+</figure>
+
+<style>
+  .exv { position: relative; margin: 0; }
+
+  .exv__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-bright);
+    border: 1px solid var(--line);
+  }
+
+  .exv__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Stage mode stacks the four and changes lens rather than sliding a gallery:
+     a clip from the top edge plus a slight settle, so the new reading arrives
+     in place instead of travelling in from somewhere. */
+  .exv--stage .exv__img {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    transform: scale(1.03);
+    transition: clip-path .62s var(--ease), opacity .45s var(--ease), transform .8s var(--ease);
+  }
+  .exv--stage[data-active='01'] [data-stage='01'],
+  .exv--stage[data-active='02'] [data-stage='02'],
+  .exv--stage[data-active='03'] [data-stage='03'],
+  .exv--stage[data-active='04'] [data-stage='04'] {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: none;
+  }
+
+  .exv__state {
+    display: grid;
+    padding: .9rem 0 0;
+    color: var(--muted);
+  }
+  .exv--single .exv__state { padding-top: .8rem; }
+  .exv--stage .exv__state span {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(.35rem);
+    transition: opacity .34s var(--ease), transform .34s var(--ease);
+  }
+  .exv--stage[data-active='01'] .exv__state [data-stage='01'],
+  .exv--stage[data-active='02'] .exv__state [data-stage='02'],
+  .exv--stage[data-active='03'] .exv__state [data-stage='03'],
+  .exv--stage[data-active='04'] .exv__state [data-stage='04'] { opacity: 1; transform: none; }
+
+  /* Responsive crop rather than a shrinking thumbnail: the frame gets taller
+     as it gets narrower so the subject keeps its presence. */
+  @media (max-width: 1099px) {
+    .exv__frame { aspect-ratio: 3 / 2; }
+  }
+  @media (max-width: 760px) {
+    .exv__frame { aspect-ratio: 5 / 4; }
+  }
+  @media (max-width: 520px) {
+    .exv__frame { aspect-ratio: 1 / 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exv--stage .exv__img,
+    .exv--stage .exv__state span { transition: none; }
+  }
+</style>

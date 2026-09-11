@@ -9,10 +9,22 @@ interface Props {
   marker: string;
   page: string;
   footer?: boolean;
+  /* Opt a single route out of the footer's contact callout without removing
+     the footer. Expertise uses it because that page hands off to Portfolio,
+     not to Contact. Defaults to true, so every other route is unchanged. */
+  footerCallout?: boolean;
   noindex?: boolean;
 }
 
-const { title, description, marker, page, footer = true, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  marker,
+  page,
+  footer = true,
+  footerCallout = true,
+  noindex = false,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const socialImageURL = new URL('/soufiane-drawing.png', Astro.site ?? Astro.url.origin);
 ---
@@ -57,7 +69,7 @@ const socialImageURL = new URL('/soufiane-drawing.png', Astro.site ?? Astro.url.
     <main id="main-content">
       <slot />
     </main>
-    {footer && <SiteFooter page={page} showCallout={page !== 'contact'} />}
+    {footer && <SiteFooter page={page} showCallout={footerCallout && page !== 'contact'} />}
 
     <script is:inline>
       (() => {
