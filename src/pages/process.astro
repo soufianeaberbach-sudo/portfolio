@@ -2,116 +2,705 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 
-const stages = [
-  { number: '01', title: 'Sketch', subtitle: 'Concept locked before cost', body: 'Silhouette, fabric direction and production constraints are agreed in writing before anything is cut.', output: 'Development direction' },
-  { number: '02', title: '2D Pattern', subtitle: 'Geometry, not guesswork', body: 'Drafted in Gerber, Lectra or Optitex to the block, tolerances and seam allowances the garment needs.', output: 'Production pattern' },
-  { number: '03', title: 'Gradation', subtitle: 'A size run that holds', body: 'The full nest is checked against the measurement chart at every size, with repeatable grade rules.', output: 'Graded size set' },
-  { number: '04', title: '3D Simulation', subtitle: 'Fit resolved before sampling', body: 'Drape, balance and tension are reviewed on screen so costly physical rounds are reduced.', output: 'Fit resolution' },
-  { number: '05', title: 'Final Garment', subtitle: 'A specification the floor can follow', body: 'Construction, trims, stitch types, marker and consumption are documented for consistent execution.', output: 'Factory-ready pack' },
+/* Process — the decision spine.
+ *
+ * Expertise covers WHAT can be seen and controlled. This page covers WHEN
+ * decisions happen and HOW a project moves, so nothing here re-teaches design
+ * intent, grading or production-control theory.
+ *
+ * Every stage runs: what enters -> what gets resolved -> the gate -> what
+ * leaves. The gate is the dominant element and sits at the END of the stage,
+ * because that is where the decision actually happens. The four parts are four
+ * different kinds of typographic object, never four repeated boxes, and the
+ * five stages are deliberately uneven in weight.
+ *
+ * Gate questions are stated as conditions to be met, never as acts performed
+ * by a named party. No approval owner is asserted anywhere on this page.
+ *
+ * VISUALS — the three files under /process-temp/ are NEUTRAL HOLDING PLATES,
+ * not photographs. They exist only so the layout and responsive behaviour can
+ * be validated. Nothing is drawn inside them, and no copy on the page refers
+ * to them, so the page never reads as unfinished. While a plate is in place
+ * its `alt` stays empty and the frame is presentational — truthful, because a
+ * flat plate conveys nothing. Replacing one is asset-only: drop both
+ * renditions at the same paths and dimensions, then write the real `alt` (and
+ * `position`, if the framing is not centre-weighted). No layout geometry
+ * depends on image content. See assets/source/process-temp/SOURCES.md.
+ */
+
+interface Visual {
+  file: string;
+  widths: [number, number];
+  ratio: string;
+  tall?: boolean;
+  /* Empty while the holding plate stands in. */
+  alt: string;
+  position: string;
+}
+
+interface Stage {
+  n: string;
+  slug: string;
+  name: string;
+  tag: string;
+  inputLabel: string;
+  input: string[];
+  /* 01 only: the input IS the client's material, so it carries the weight. */
+  inputLead?: boolean;
+  note?: string;
+  resolved: string;
+  terms?: string[];
+  spec?: string[];
+  receive?: string[];
+  gate: string;
+  output: string;
+  visual?: Visual;
+}
+
+const stages: Stage[] = [
+  {
+    n: '01',
+    slug: 'brief',
+    name: 'Brief / Intent lock',
+    tag: 'Where the project starts',
+    inputLabel: 'What enters — from you',
+    inputLead: true,
+    input: [
+      'A sketch, or reference imagery',
+      'Measurements, if they exist',
+      'Fabric information',
+      'The target product and market',
+      'Commercial constraints',
+    ],
+    note: 'None of this has to be complete. Closing the gap is what this stage is for.',
+    resolved:
+      'Unclear design intent, missing information, open feasibility questions and development priorities are settled here, in writing, before anything is cut. Two people can describe the same garment and mean two different products; this stage removes that distance while it still costs nothing.',
+    gate: 'Are we developing the same product?',
+    output: 'Development direction',
+    visual: {
+      file: '01-brief',
+      widths: [900, 1500],
+      ratio: '3 / 2',
+      alt: '',
+      position: '50% 50%',
+    },
+  },
+  {
+    n: '02',
+    slug: 'technical-build',
+    name: 'Technical build',
+    tag: 'Structure before opinion',
+    inputLabel: 'What enters',
+    input: ['The agreed development direction'],
+    resolved:
+      'Pattern architecture, construction logic, initial measurements and the seam and assembly implications of the design are built and tested against each other. Whether a product can be built is a separate question from whether it is wanted, and it gets answered before fit is discussed.',
+    terms: ['Pattern architecture', 'Construction logic', 'Seam & assembly implication'],
+    gate: 'Is the product technically buildable?',
+    output: 'First technical build',
+  },
+  {
+    n: '03',
+    slug: 'fit-validation',
+    name: 'Fit / Validation',
+    tag: 'Evaluated before it is locked',
+    inputLabel: 'What enters',
+    input: ['The first technical build', 'Physical fit information'],
+    resolved:
+      'Proportion, balance, drape and construction corrections are worked through against physical fit information and 3D simulation. Digital validation helps resolve fit, proportion and drape before physical sampling, and every correction is recorded against the build it changes, so nothing is carried forward on memory.',
+    gate: 'Is the product ready to be locked?',
+    output: 'Validated fit direction',
+    visual: {
+      file: '03-validation',
+      widths: [720, 1120],
+      ratio: '4 / 5',
+      tall: true,
+      alt: '',
+      position: '50% 50%',
+    },
+  },
+  {
+    n: '04',
+    slug: 'specification-lock',
+    name: 'Size / Specification lock',
+    tag: 'Repeatable, or not finished',
+    inputLabel: 'What enters',
+    input: ['The validated fit direction', 'The required size range'],
+    resolved:
+      'Grading, size relationships, points of measure, tolerances and construction specification are fixed into technical documentation. A garment that works in one size is not yet a product; this stage is where it becomes something a line can repeat.',
+    spec: [
+      'Grade rules and size relationships',
+      'Points of measure',
+      'Tolerances',
+      'Construction specification',
+      'Trim and material references',
+    ],
+    gate: 'Can the approved product be repeated across the required range?',
+    output: 'Production specification',
+  },
+  {
+    n: '05',
+    slug: 'handoff',
+    name: 'Pre-production / Handoff',
+    tag: 'The line works from the reference',
+    inputLabel: 'What enters',
+    input: ['The production specification', 'The approved reference'],
+    resolved:
+      'Handoff, critical-risk clarification and first-piece and pre-production verification happen against the specification rather than against an interpretation of it. Production questions and corrective decisions are resolved at the point they appear, not after the run.',
+    receive: [
+      'The reference the line works from',
+      'Complete technical documentation',
+      'Verification at first piece and pre-production',
+      'Named milestones, with visibility at each one',
+    ],
+    gate: 'Is production working from the approved reference?',
+    output: 'Controlled production handoff',
+    visual: {
+      file: '05-handoff',
+      widths: [900, 1500],
+      ratio: '3 / 2',
+      alt: '',
+      position: '50% 50%',
+    },
+  },
 ];
+
+const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 ---
 
-<SiteLayout title="Process — Soufiane Aberbach" description="A five-stage fashion development process from sketch and pattern through gradation, 3D simulation and final garment." marker="SA-PROCESS-V1" page="process">
-  <!-- BUILD-MARKER: SA-PROCESS-V1 -->
-  <section class="page-intro process-intro">
-    <div data-reveal>
-      <p class="eyebrow">Process / 03</p>
-      <h1 class="display page-intro__title">Five stages.<br />No blind spots.</h1>
+<SiteLayout
+  title="Process — Soufiane Aberbach"
+  description="How a development project actually moves: five stages — brief and intent lock, technical build, fit validation, specification lock and pre-production handoff — each one ending with a decision."
+  marker="SA-PROCESS-V2"
+  page="process"
+  footerCallout={false}
+>
+  <!-- BUILD-MARKER: SA-PROCESS-V2 -->
+
+  <section class="pr-hero" aria-labelledby="pr-hero-title">
+    <div class="pr-hero__grid section-shell">
+      <p class="eyebrow" data-reveal>Process / 03</p>
+      <h1 class="display pr-hero__title" id="pr-hero-title" data-reveal>
+        Every stage<br />ends with<br />a <em>decision</em>.
+      </h1>
+      <p class="pr-hero__thought" data-reveal>
+        Development moves forward only when the current question is resolved
+        and the next person knows exactly what they are receiving.
+      </p>
     </div>
-    <aside class="page-intro__aside" data-reveal>
-      <p class="label">The production protocol</p>
-      <p>A written output closes each stage. Everyone knows what was decided, what comes next and where responsibility sits.</p>
-    </aside>
+
+    <div class="pr-ledger section-shell" data-reveal>
+      <p class="label pr-ledger__head">The five decisions</p>
+      <nav aria-label="The five decisions">
+        <ol>
+          {stages.map((s) => (
+            <li>
+              <a href={`#${s.slug}`}>
+                <span class="pr-ledger__n">{s.n}</span>
+                <span class="pr-ledger__name">{s.name}</span>
+                <span class="pr-ledger__q">{s.gate}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <p class="pr-ledger__rule">No stage advances with an unresolved decision.</p>
+    </div>
   </section>
 
-  <section class="protocol section-shell">
-    <div class="protocol__map" aria-label="Five-stage production sequence">
-      <span class="label">Sequence / decision flow</span>
-      <ol>
-        {stages.map((stage) => <li><span>{stage.number}</span><strong>{stage.title}</strong></li>)}
-      </ol>
-    </div>
-    <ol class="protocol__list">
-      {stages.map((stage, stageIndex) => (
-        <li data-reveal style={`--stage:${stageIndex + 1}`}>
-          <div class="protocol__number">{stage.number}</div>
-          <div class="protocol__title">
-            <p class="label">{stage.subtitle}</p>
-            <h2>{stage.title}</h2>
-          </div>
-          <p class="protocol__body">{stage.body}</p>
-          <div class="protocol__decision" aria-label={`Stage ${stage.number} of 05`}>
-            <div aria-hidden="true">
-              {stages.map((_, index) => <i class={index <= stageIndex ? 'is-resolved' : ''}></i>)}
+  <section class="pr-dossier section-shell">
+    <ol class="pr-stages">
+      {stages.map((s, i) => (
+        <li class="pr-stage" id={s.slug} data-reveal>
+          <p class="label pr-stage__n" aria-hidden="true">{s.n}</p>
+
+          <div class="pr-stage__read">
+            <p class="label pr-stage__tag">{s.tag}</p>
+            <h2 class="display pr-stage__name">{s.name}</h2>
+
+            <div class:list={['pr-in', s.inputLead && 'pr-in--lead']}>
+              <p class="label pr-in__label">{s.inputLabel}</p>
+              <ul>
+                {s.input.map((x) => <li>{x}</li>)}
+              </ul>
+              {s.note && <p class="pr-in__note">{s.note}</p>}
             </div>
-            <span class="label">Decision {stage.number} / 05</span>
+
+            <div class="pr-res">
+              <p class="label pr-res__label">What gets resolved</p>
+              <p>{s.resolved}</p>
+            </div>
+
+            {s.terms && (
+              <ul class="pr-terms">
+                {s.terms.map((t) => <li>{t}</li>)}
+              </ul>
+            )}
+
+            {s.spec && (
+              <div class="pr-spec">
+                <p class="label">What the specification fixes</p>
+                <ul>
+                  {s.spec.map((x) => <li>{x}</li>)}
+                </ul>
+              </div>
+            )}
+
+            {s.visual && (
+              <figure class:list={['pr-media', s.visual.tall && 'pr-media--tall']}>
+                <div class="pr-media__frame" style={`aspect-ratio:${s.visual.ratio}`}>
+                  <img
+                    src={src(s.visual.file, s.visual.widths[1])}
+                    srcset={`${src(s.visual.file, s.visual.widths[0])} ${s.visual.widths[0]}w, ${src(s.visual.file, s.visual.widths[1])} ${s.visual.widths[1]}w`}
+                    sizes={s.visual.tall ? '(min-width: 1200px) 25rem, 100vw' : '(min-width: 1200px) 52vw, 100vw'}
+                    width={s.visual.widths[1]}
+                    height={Math.round(s.visual.widths[1] * (s.visual.tall ? 1.25 : 2 / 3))}
+                    alt={s.visual.alt}
+                    role={s.visual.alt === '' ? 'presentation' : undefined}
+                    style={`object-position:${s.visual.position}`}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
+              </figure>
+            )}
+
+            {s.receive && (
+              <div class="pr-receive">
+                <p class="label">What you get back</p>
+                <ul>
+                  {s.receive.map((x) => <li>{x}</li>)}
+                </ul>
+              </div>
+            )}
           </div>
-          <div class="protocol__output"><span class="label">Production output / {stage.number}</span><strong>{stage.output}</strong><i aria-hidden="true"></i></div>
+
+          <div class="pr-gate">
+            <p class="label pr-gate__label">Gate {s.n} / 05 &middot; Decision required</p>
+            <p class="display pr-gate__q">{s.gate}</p>
+          </div>
+
+          <div class="pr-file">
+            <p class="label pr-file__label">What leaves / {s.n}</p>
+            <p class="pr-file__out">{s.output}</p>
+            <i class="pr-file__mark" aria-hidden="true"></i>
+            {i > 0 && (
+              <div class="pr-file__prior">
+                <p class="label">Already in the file</p>
+                <ul>
+                  {stages.slice(0, i).map((p) => (
+                    <li><span aria-hidden="true">{p.n}</span>{p.output}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {i === stages.length - 1 && <i class="pr-stage__term" aria-hidden="true"></i>}
         </li>
       ))}
     </ol>
   </section>
 
-  <section class="process-principle">
-    <div class="section-shell process-principle__grid">
-      <div data-reveal>
-        <p class="eyebrow">Why the sequence matters</p>
-        <h2 class="display">A sewing line cannot correct an unresolved pattern.</h2>
-      </div>
-      <div data-reveal>
-        <p>Production quality is decided upstream. The five stages make those decisions visible, testable and repeatable before they become factory problems.</p>
-        <a class="button button--signal" href="/contact/">Start a development brief <span><Arrow /></span></a>
+  <section class="pr-bridge" aria-labelledby="pr-bridge-title">
+    <div class="section-shell pr-bridge__grid">
+      <p class="eyebrow" data-reveal>Next / Experience</p>
+      <h2 class="display pr-bridge__title" id="pr-bridge-title" data-reveal>
+        A process is only<br />as strong as the person<br />making the <em>decisions</em>.
+      </h2>
+      <div class="pr-bridge__side">
+        <p class="pr-bridge__line" data-reveal>
+          Six production roles shaped how those decisions are made.
+        </p>
+        <a class="button button--signal pr-bridge__cta" href="/experience/" data-reveal>
+          See the experience <span><Arrow /></span>
+        </a>
       </div>
     </div>
   </section>
 </SiteLayout>
 
 <style>
-  .process-intro {
-    background:
-      linear-gradient(90deg, transparent 0 68%, var(--line) 68% calc(68% + 1px), transparent calc(68% + 1px)),
-      var(--paper-bright);
+  /* One geometry drives the ledger numbers and the spine, so the page has a
+     single vertical axis from the hero all the way to the handoff. */
+  .pr-hero,
+  .pr-dossier {
+    --spine-col: 4.5rem;
+    --spine: 2.25rem;
+    --gap: clamp(2rem, 4vw, 4rem);
   }
-  .protocol { position: relative; padding-block: clamp(6rem, 10vw, 10rem); }
-  .protocol__map { display: grid; grid-template-columns: .35fr 1.65fr; gap: 5vw; align-items: end; margin-bottom: clamp(4rem, 7vw, 7rem); }
-  .protocol__map > .label { color: var(--muted); }
-  .protocol__map ol { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0 0 1rem; border-bottom: 1px solid var(--line-strong); list-style: none; }
-  .protocol__map ol::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 20%; height: 2px; background: var(--signal); }
-  .protocol__map li { position: relative; display: grid; gap: .7rem; padding-right: 1rem; }
-  .protocol__map li::after { content: ''; position: absolute; left: 0; bottom: -1.33rem; width: .45rem; height: .45rem; border: 1px solid var(--signal); border-radius: 50%; background: var(--paper); }
-  .protocol__map li span { color: var(--signal); font-family: var(--mono); font-size: .62rem; }
-  .protocol__map li strong { max-width: 8rem; font-family: var(--display); font-size: clamp(1rem, 1.4vw, 1.35rem); line-height: 1; }
-  .protocol__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
-  .protocol__list > li { position: relative; display: grid; grid-template-columns: 4rem minmax(18rem, .8fr) minmax(17rem, .72fr) minmax(14rem, .55fr); gap: 2.5rem; align-items: start; min-height: 22rem; padding: clamp(3rem, 5vw, 5rem) 0; overflow: hidden; border-bottom: 1px solid var(--line-strong); }
-  .protocol__list > li::before { content: ''; position: absolute; left: 0; top: 0; width: calc(var(--stage) * 20%); height: 2px; background: var(--signal); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
-  .protocol__list > li.is-visible::before { transform: scaleX(1); }
-  .protocol__number { font-family: var(--mono); font-size: .72rem; color: var(--signal); }
-  .protocol__title h2 { margin: .8rem 0 0; font-family: var(--display); font-size: clamp(3.2rem, 6vw, 7rem); font-weight: 850; letter-spacing: -.07em; line-height: .88; }
-  .protocol__body { max-width: 31rem; margin: 0; color: var(--ink-soft); line-height: 1.75; }
-  .protocol__decision { grid-column: 3; align-self: end; display: grid; gap: .8rem; }
-  .protocol__decision > div { display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem; }
-  .protocol__decision i { display: block; height: 2px; background: var(--line); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
-  .protocol__decision i.is-resolved { background: var(--signal); }
-  .protocol__decision span { color: var(--muted); }
-  .protocol__list > li.is-visible .protocol__decision i { transform: scaleX(1); }
-  .protocol__list > li.is-visible .protocol__decision i:nth-child(2) { transition-delay: .08s; }
-  .protocol__list > li.is-visible .protocol__decision i:nth-child(3) { transition-delay: .16s; }
-  .protocol__list > li.is-visible .protocol__decision i:nth-child(4) { transition-delay: .24s; }
-  .protocol__list > li.is-visible .protocol__decision i:nth-child(5) { transition-delay: .32s; }
-  .protocol__output { position: relative; grid-column: 4; grid-row: 1 / 3; align-self: end; display: grid; gap: .75rem; min-height: 7.5rem; padding: 1.1rem 1.1rem 1.75rem; overflow: hidden; border: 1px solid var(--line); background: var(--paper-bright); }
-  .protocol__output::before { content: ''; position: absolute; top: -.1rem; right: -.1rem; width: 1.2rem; height: 1.2rem; border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper); }
-  .protocol__output span { color: var(--muted); }
-  .protocol__output strong { align-self: end; font-family: var(--display); font-size: clamp(1.05rem, 1.5vw, 1.35rem); line-height: 1; clip-path: inset(0 100% 0 0); transition: clip-path .65s var(--ease) .18s; }
-  .protocol__output i { position: absolute; left: 1rem; right: 1rem; bottom: .72rem; height: 1px; background: var(--line-strong); transform: scaleX(0); transform-origin: left; transition: transform .72s var(--ease) .34s; }
-  .protocol__output i::before { content: ''; position: absolute; right: 0; bottom: -.24rem; width: 1px; height: .5rem; background: var(--signal); }
-  .protocol__output i::after { content: ''; position: absolute; right: 0; top: 0; width: 28%; height: 1px; background: var(--signal); transform: scaleX(0); transform-origin: right; transition: transform .42s var(--ease) .88s; }
-  .protocol__list > li.is-visible .protocol__output strong { clip-path: inset(0); }
-  .protocol__list > li.is-visible .protocol__output i, .protocol__list > li.is-visible .protocol__output i::after { transform: scaleX(1); }
-  .process-principle { padding-block: clamp(7rem, 13vw, 13rem); background: var(--ink); color: var(--paper); }
-  .process-principle__grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 8vw; }
-  .process-principle h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
-  .process-principle__grid > div:last-child { align-self: end; }
-  .process-principle__grid > div:last-child p { margin: 0 0 2.5rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
-  @media (max-width: 1100px) { .protocol__list > li { grid-template-columns: 3rem minmax(0, 1fr) minmax(15rem, .7fr); } .protocol__body { grid-column: 2; } .protocol__decision { grid-column: 2; } .protocol__output { grid-column: 3; grid-row: 1 / 4; } .process-principle__grid { grid-template-columns: minmax(0, 1fr); } .process-principle__grid > * { min-width: 0; } }
-  @media (max-width: 760px) { .protocol__map { grid-template-columns: 1fr; } .protocol__map ol { overflow-x: auto; grid-template-columns: repeat(5, minmax(7rem, 1fr)); padding-bottom: 1rem; } .protocol__list > li { grid-template-columns: 2rem minmax(0, 1fr); gap: 1.25rem; min-height: 0; } .protocol__body, .protocol__decision, .protocol__output { grid-column: 2; } .protocol__output { grid-row: auto; } .protocol__title h2 { font-size: 3.2rem; } .process-principle h2 { font-size: 3.5rem; } }
+
+  /* ---------- Hero ---------- */
+  .pr-hero {
+    padding-top: calc(var(--header-h) + clamp(3.5rem, 7vw, 6.5rem));
+    background: var(--paper-bright);
+    border-bottom: 1px solid var(--line);
+  }
+  .pr-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(15rem, .55fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 5rem);
+    padding-bottom: clamp(3rem, 6vw, 5.5rem);
+  }
+  .pr-hero .eyebrow { grid-column: 1; grid-row: 1; margin: 0 0 clamp(1.5rem, 3vw, 2.5rem); color: var(--muted); }
+  .pr-hero__title { grid-column: 1; grid-row: 2; font-size: clamp(3rem, 9.2vw, 9rem); }
+  .pr-hero__thought {
+    grid-column: 2;
+    grid-row: 2;
+    max-width: 26rem;
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: clamp(1rem, 1.15vw, 1.15rem);
+    line-height: 1.7;
+  }
+
+  /* The five decisions, named before the visitor commits to reading: the
+     answer to "what will I be asked" is the reassurance this page exists for. */
+  .pr-ledger { padding-bottom: clamp(3rem, 5vw, 4.5rem); }
+  .pr-ledger__head { margin: 0 0 1rem; color: var(--muted); }
+  .pr-ledger ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .pr-ledger li { border-bottom: 1px solid var(--line); }
+  .pr-ledger a {
+    display: grid;
+    grid-template-columns: var(--spine-col) minmax(0, 14rem) minmax(0, 1fr);
+    align-items: baseline;
+    gap: clamp(.75rem, 3vw, 2.5rem);
+    padding: .95rem 0;
+    transition: color .25s var(--ease);
+  }
+  .pr-ledger a:hover { color: var(--signal); }
+  .pr-ledger__n { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; color: var(--muted); }
+  .pr-ledger__name {
+    font-family: var(--display);
+    font-weight: 850;
+    letter-spacing: -.035em;
+    font-size: clamp(1.02rem, 1.4vw, 1.3rem);
+    line-height: 1.05;
+  }
+  .pr-ledger__q { color: var(--ink-soft); font-size: .95rem; line-height: 1.4; }
+
+  /* The one rule. Stated once, on the hairline the spine descends from —
+     no orange, so the hero keeps a single accent word. */
+  .pr-ledger__rule {
+    max-width: 34rem;
+    margin: clamp(1.75rem, 3.5vw, 2.75rem) 0 0;
+    font-family: var(--display);
+    font-weight: 850;
+    letter-spacing: -.05em;
+    line-height: .95;
+    font-size: clamp(1.5rem, 3.4vw, 2.9rem);
+    text-wrap: balance;
+  }
+
+  /* ---------- The dossier ---------- */
+  .pr-dossier { padding-block: clamp(3.5rem, 7vw, 7rem) clamp(4.5rem, 9vw, 9rem); }
+  .pr-stages { margin: 0; padding: 0; list-style: none; }
+
+  .pr-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--spine-col) minmax(0, 1fr) minmax(13rem, 20rem);
+    column-gap: var(--gap);
+    padding-block: clamp(3rem, 5.5vw, 5.5rem);
+  }
+  .pr-stage:first-child { padding-top: 0; }
+
+  /* The spine: a dotted track the whole way down, with each stage resolving
+     its own segment to solid as it arrives. Segments are contiguous, so the
+     line reads as ground already settled behind you. Not a progress bar —
+     no track fill across the viewport, no percentage, nothing to operate. */
+  .pr-stage::before,
+  .pr-stage::after {
+    content: '';
+    position: absolute;
+    left: var(--spine);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+  .pr-stage::before {
+    background-image: linear-gradient(var(--line-strong) 0 3px, transparent 3px 7px);
+    background-size: 1px 7px;
+  }
+  .pr-stage::after {
+    background: var(--ink);
+    transform-origin: top;
+    transition: transform 1.05s var(--ease);
+  }
+  /* Every state below is the JS-driven one. Without JS the reveal observer
+     never runs, so the defaults above must already be the finished reading:
+     spine solid, output written, gate resolved. */
+  :global(html.js) .pr-stage::after { transform: scaleY(0); }
+  :global(html.js) .pr-stage.is-visible::after { transform: scaleY(1); }
+
+  /* The spine leaves the page rather than stopping dead. */
+  .pr-stage__term {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 6rem;
+    height: 1px;
+    background: var(--ink);
+    transform-origin: left;
+    transition: transform .8s var(--ease) .5s;
+  }
+  :global(html.js) .pr-stage__term { transform: scaleX(0); }
+  :global(html.js) .pr-stage.is-visible .pr-stage__term { transform: scaleX(1); }
+
+  .pr-stage__n { grid-column: 1; grid-row: 1; margin: .35rem 0 0; color: var(--muted); }
+  .pr-stage__read { grid-column: 2; grid-row: 1; min-width: 0; }
+
+  .pr-stage__tag { margin: 0; color: var(--muted); }
+  .pr-stage__name {
+    margin: .8rem 0 clamp(1.75rem, 3vw, 2.5rem);
+    font-size: clamp(1.75rem, 3.4vw, 2.9rem);
+  }
+
+  /* INPUT — a receiving note. Quiet, on leader rules, deliberately the
+     lightest thing in the stage. */
+  .pr-in ul { margin: .7rem 0 0; padding: 0; list-style: none; }
+  .pr-in li {
+    padding: .5rem 0;
+    border-bottom: 1px dotted var(--line-strong);
+    color: var(--ink-soft);
+    font-size: .95rem;
+  }
+  .pr-in__label { margin: 0; color: var(--muted); }
+  .pr-in__note { margin: .9rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+
+  /* 01 only: the input is the visitor's own material, so it carries weight
+     the other four stages do not give it. */
+  .pr-in--lead {
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: var(--paper-bright);
+  }
+  .pr-in--lead ul { columns: 2; column-gap: 2rem; }
+  .pr-in--lead li { break-inside: avoid; }
+
+  /* RESOLUTION — prose. The stage's longest text, and its only prose. */
+  .pr-res { margin-top: clamp(1.75rem, 3vw, 2.5rem); }
+  .pr-res__label { margin: 0 0 .8rem; color: var(--muted); }
+  .pr-res p { max-width: 34rem; margin: 0; color: var(--ink-soft); line-height: 1.75; }
+
+  /* 02 — structural, and nothing else. The sparsest stage on the page. */
+  .pr-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 2rem;
+    margin: clamp(1.75rem, 3vw, 2.25rem) 0 0;
+    padding: .85rem 0 0;
+    border-top: 1px solid var(--line-strong);
+    list-style: none;
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* 04 — a document leaf. Named categories only: no values, no nest, no
+     tolerances, nothing that would be invented data. */
+  .pr-spec {
+    position: relative;
+    margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: var(--paper-bright);
+  }
+  .pr-spec::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .pr-spec > .label { margin: 0; color: var(--muted); }
+  .pr-spec ul {
+    display: grid;
+    gap: .45rem;
+    margin: .9rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--ink-soft);
+  }
+
+  /* 05 — the deliverables, stated as material returned. No approval verbs. */
+  .pr-receive { margin: clamp(1.75rem, 3vw, 2.5rem) 0 0; }
+  .pr-receive > .label { margin: 0; color: var(--muted); }
+  .pr-receive ul { margin: .8rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .pr-receive li { padding: .6rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .95rem; }
+
+  .pr-media { margin: clamp(1.75rem, 3vw, 2.75rem) 0 0; }
+  .pr-media__frame { overflow: hidden; border: 1px solid var(--line); background: var(--paper-bright); }
+  .pr-media__frame img { width: 100%; height: 100%; object-fit: cover; }
+  /* The portrait frame is offset rather than stacked, so 03 does not compose
+     like 01 and 05. */
+  .pr-media--tall { max-width: 25rem; margin-left: auto; }
+
+  /* DECISION — the dominant element, at the end of the stage, crossing the
+     spine. The node is the single orange in the stage. */
+  .pr-gate {
+    position: relative;
+    grid-column: 1 / 3;
+    grid-row: 2;
+    margin-top: clamp(2.25rem, 4vw, 3.5rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem) 0 0 calc(var(--spine-col) + var(--gap));
+    border-top: 1px solid var(--line-strong);
+  }
+  .pr-gate::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--spine) - .31rem);
+    top: -.31rem;
+    width: .62rem;
+    height: .62rem;
+    background: var(--signal);
+    border: 1px solid var(--signal);
+    transition: background .45s var(--ease) .25s, border-color .45s var(--ease) .25s;
+  }
+  :global(html.js) .pr-gate::before { background: var(--paper); border-color: var(--line-strong); }
+  :global(html.js) .pr-stage.is-visible .pr-gate::before { background: var(--signal); border-color: var(--signal); }
+  .pr-gate__label { margin: 0 0 1rem; color: var(--muted); }
+  /* Sized to stay clearly above .pr-stage__name at every width — the decision
+     outranks the stage that produced it. */
+  .pr-gate__q {
+    max-width: 40rem;
+    margin: 0;
+    font-size: clamp(2.1rem, 5vw, 4rem);
+    text-wrap: balance;
+  }
+
+  /* OUTPUT — written into the file, and inherited by every stage after it. */
+  .pr-file { grid-column: 3; grid-row: 1 / 3; align-self: start; min-width: 0; }
+  .pr-file__label { margin: .35rem 0 .9rem; color: var(--muted); }
+  .pr-file__out {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 850;
+    letter-spacing: -.035em;
+    font-size: clamp(1.3rem, 1.9vw, 1.85rem);
+    line-height: 1.05;
+    transition: clip-path .7s var(--ease) .2s;
+  }
+  :global(html.js) .pr-file__out { clip-path: inset(0 100% 0 0); }
+  :global(html.js) .pr-stage.is-visible .pr-file__out { clip-path: inset(0); }
+  /* A filing stroke, not a tick: nothing here claims an approval happened. */
+  .pr-file__mark {
+    display: block;
+    height: 1px;
+    margin-top: .9rem;
+    background: var(--line-strong);
+    transform-origin: left;
+    transition: transform .75s var(--ease) .38s;
+  }
+  :global(html.js) .pr-file__mark { transform: scaleX(0); }
+  :global(html.js) .pr-stage.is-visible .pr-file__mark { transform: scaleX(1); }
+
+  /* Already-filed material is quiet and never re-animates — accumulation,
+     not a second performance. */
+  .pr-file__prior { margin-top: 1.75rem; }
+  .pr-file__prior > .label { margin: 0; color: var(--muted); }
+  .pr-file__prior ul { display: grid; gap: .5rem; margin: .8rem 0 0; padding: 0; list-style: none; }
+  .pr-file__prior li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .7rem;
+    line-height: 1.4;
+  }
+
+  /* ---------- Bridge ---------- */
+  .pr-bridge { padding-block: clamp(5rem, 10vw, 10rem); background: var(--ink); color: var(--paper); }
+  .pr-bridge__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 24rem);
+    align-items: end;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+  .pr-bridge .eyebrow {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+    color: color-mix(in srgb, var(--paper) 58%, var(--ink));
+  }
+  /* Sized so the three forced line breaks actually hold across 1081-1920px.
+     Measured in the widest fallback face, so Archivo has margin on top. */
+  .pr-bridge__title { grid-column: 1; grid-row: 2; font-size: clamp(2.4rem, 5.2vw, 5rem); }
+  .pr-bridge__side { grid-column: 2; grid-row: 2; }
+  .pr-bridge__line {
+    margin: 0 0 2.25rem;
+    color: color-mix(in srgb, var(--paper) 66%, var(--ink));
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .pr-bridge__cta { color: #fff; }
+
+  /* ---------- Tablet: the dossier column drops below, it is not squeezed ---------- */
+  @media (max-width: 1199px) {
+    .pr-stage { grid-template-columns: var(--spine-col) minmax(0, 1fr); }
+    .pr-gate { grid-row: 2; }
+    .pr-file {
+      grid-column: 1 / 3;
+      grid-row: 3;
+      margin-top: clamp(2.25rem, 4vw, 3rem);
+      padding-left: calc(var(--spine-col) + var(--gap));
+    }
+    .pr-file__prior ul { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
+    .pr-file__prior li { grid-template-columns: 1.6rem minmax(0, auto); }
+    .pr-media--tall { max-width: min(100%, 30rem); margin-left: 0; }
+  }
+
+  @media (max-width: 1080px) {
+    .pr-hero__grid { grid-template-columns: minmax(0, 1fr); }
+    .pr-hero .eyebrow,
+    .pr-hero__title,
+    .pr-hero__thought { grid-column: 1; }
+    .pr-hero__title { grid-row: 2; }
+    .pr-hero__thought { grid-row: 3; max-width: 38rem; margin-top: 1.75rem; }
+    .pr-bridge__grid { grid-template-columns: minmax(0, 1fr); }
+    .pr-bridge__title,
+    .pr-bridge__side { grid-column: 1; }
+    .pr-bridge__side { grid-row: 3; margin-top: 2.5rem; }
+  }
+
+  @media (max-width: 900px) {
+    .pr-hero,
+    .pr-dossier { --spine-col: 2.75rem; --spine: 1.25rem; --gap: 1.5rem; }
+    .pr-ledger a { grid-template-columns: var(--spine-col) minmax(0, 1fr); row-gap: .35rem; }
+    .pr-ledger__q { grid-column: 2; }
+  }
+
+  /* ---------- Mobile: one vertical decision path ---------- */
+  @media (max-width: 560px) {
+    .pr-hero,
+    .pr-dossier { --spine-col: 1.9rem; --spine: .8rem; --gap: 1rem; }
+    .pr-in--lead { padding: 1rem; }
+    .pr-in--lead ul { columns: 1; }
+    .pr-stage__name { font-size: clamp(1.4rem, 6vw, 1.9rem); }
+    .pr-gate__q { font-size: clamp(1.9rem, 8.8vw, 2.6rem); }
+    .pr-gate { padding-left: calc(var(--spine-col) + var(--gap)); }
+    .pr-file { padding-left: calc(var(--spine-col) + var(--gap)); }
+    /* Vertical order already carries accumulation; the inherited list would
+       only repeat what the visitor has just scrolled past. */
+    .pr-file__prior { display: none; }
+    .pr-ledger__rule { font-size: clamp(1.45rem, 7vw, 1.9rem); }
+  }
+
+  /* Reduced motion resolves straight to the finished reading. Same specificity
+     as the JS states above and declared after them, so it wins on order. */
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .pr-stage::after,
+    :global(html.js) .pr-stage__term,
+    :global(html.js) .pr-file__mark { transform: none; }
+    :global(html.js) .pr-file__out { clip-path: none; }
+    :global(html.js) .pr-gate::before { background: var(--signal); border-color: var(--signal); }
+  }
 </style>
