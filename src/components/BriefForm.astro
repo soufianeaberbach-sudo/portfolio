@@ -83,8 +83,9 @@ const email = 'soufiane.aberbach@gmail.com';
         {stages.map((stage, i) => (
           <label class="stage">
             <input type="radio" name="stage" value={stage} required={i === 0} />
-            <span class="stage__box" aria-hidden="true"></span>
+            <span class="stage__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <span class="stage__text">{stage}</span>
+            <span class="stage__pick" aria-hidden="true"></span>
           </label>
         ))}
       </div>
@@ -170,25 +171,49 @@ const email = 'soufiane.aberbach@gmail.com';
   .field label { color: var(--ink-soft); font-size: .92rem; }
   /* 16px minimum: anything smaller makes iOS Safari zoom the viewport on
      focus, which visibly breaks the page mid-form. */
+  /* An entry on a ruled line, not a browser form control: no box, no fill, no
+     rounding. The rule under the text is the whole chrome. 16px minimum is
+     load-bearing — anything smaller makes iOS Safari zoom the viewport on
+     focus, which visibly breaks the page mid-form. */
   .field input,
   .field textarea {
     width: 100%;
-    min-height: 3rem;
-    padding: .8rem .9rem;
-    border: 1px solid var(--line-strong);
+    min-height: 2.9rem;
+    padding: .6rem .1rem .55rem;
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
     border-radius: 0;
-    background: var(--paper-bright);
+    background: transparent;
     color: var(--ink);
     font-family: var(--body);
     font-size: 16px;
     line-height: 1.5;
-    transition: border-color .2s var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color .18s var(--ease), background-color .18s var(--ease), box-shadow .18s var(--ease);
   }
-  .field textarea { min-height: 9rem; resize: vertical; }
-  .field input:focus-visible,
-  .field textarea:focus-visible { border-color: var(--ink); }
+  .field textarea { min-height: 6.5rem; padding-top: .5rem; resize: vertical; }
+  /* The field affordance hangs off plain :focus, so it shows for pointer and
+     keyboard alike and never depends on :focus-visible resolving. The rule
+     doubles to 2px via a zero-blur shadow rather than a border-width change,
+     so nothing below it shifts, and the ground lifts a shade. No glow.
+     Keyboard focus additionally keeps a real outline. */
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--signal);
+    box-shadow: 0 1px 0 0 var(--signal);
+    background-color: var(--paper-bright);
+    outline: none;
+  }
+  /* No outline on the fields: a text input always matches :focus-visible when
+     focused, so an outline would draw the full rectangle this design exists to
+     remove. The indicator is the 2px signal rule plus the lifted ground —
+     3.36:1 against the paper, the full width of the field. */
   .field input[aria-invalid='true'],
-  .field textarea[aria-invalid='true'] { border-color: var(--signal); border-width: 2px; }
+  .field textarea[aria-invalid='true'] {
+    border-bottom-color: var(--signal);
+    box-shadow: 0 1px 0 0 var(--signal);
+  }
   .field input::placeholder,
   .field textarea::placeholder { color: var(--muted); }
 
@@ -196,27 +221,49 @@ const email = 'soufiane.aberbach@gmail.com';
   /* Errors carry text, never colour alone. */
   .field__err { color: var(--signal); font-size: .85rem; font-weight: 600; line-height: 1.5; }
 
-  /* All five states visible without interaction — no select to open. */
-  .bf__stages { display: grid; gap: .5rem; }
+  /* All five states visible without interaction — no select to open. Rows on
+     hairlines with a mono index, the way a numbered clause reads in a
+     technical document; not five bordered tiles. */
+  .bf__stages { display: grid; border-top: 1px solid var(--line-strong); }
   .stage {
+    position: relative;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 2.4rem minmax(0, 1fr) auto;
     align-items: center;
-    gap: .85rem;
-    min-height: 3rem;
-    padding: .7rem .9rem;
-    border: 1px solid var(--line);
-    background: var(--paper-bright);
+    gap: .9rem;
+    min-height: 3.25rem;
+    padding: .8rem .1rem;
+    border-bottom: 1px solid var(--line);
     cursor: pointer;
-    transition: border-color .2s var(--ease), background .2s var(--ease);
+    transition: background-color .18s var(--ease);
   }
-  .stage:hover { border-color: var(--line-strong); }
-  .stage input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-  .stage__box { width: .7rem; height: .7rem; border: 1px solid var(--line-strong); background: transparent; }
-  .stage__text { font-size: 16px; line-height: 1.4; }
-  .stage:has(input:checked) { border-color: var(--ink); background: var(--paper); }
-  .stage:has(input:checked) .stage__box { background: var(--signal); border-color: var(--signal); }
-  .stage:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 3px; }
+  .stage:hover { background-color: var(--paper-bright); }
+  .stage input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; }
+  .stage__n { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; color: var(--muted); transition: color .18s var(--ease); }
+  .stage__text { font-size: 16px; line-height: 1.35; }
+  /* Round, so it reads as one-of-five rather than as a checkbox. */
+  .stage__pick {
+    width: .8rem;
+    height: .8rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
+  }
+  /* Driven by a plain sibling selector, not :has() — the native radio is
+     visually hidden, so the selected state must never depend on a selector a
+     browser might not support. */
+  .stage input:checked ~ .stage__n { color: var(--ink); }
+  .stage input:checked ~ .stage__text { font-weight: 600; }
+  .stage input:checked ~ .stage__pick {
+    border-color: var(--signal);
+    box-shadow: inset 0 0 0 3px var(--signal);
+  }
+  /* Keyboard focus lands on the indicator through a sibling selector, so it
+     cannot depend on :has() either. */
+  .stage input:focus-visible ~ .stage__pick { outline: 2px solid var(--signal); outline-offset: 3px; }
+  /* Row-level emphasis only; decorative, so :has() is safe here. */
+  .stage:has(input:checked) { border-bottom-color: var(--ink); }
+  .stage:has(input:focus-visible) { background-color: var(--paper-bright); }
 
   .bf__turnstile { min-height: 65px; }
 
@@ -240,7 +287,10 @@ const email = 'soufiane.aberbach@gmail.com';
   .bf__done-ref { margin-top: 1.5rem !important; color: var(--muted) !important; font-family: var(--mono); font-size: .72rem; }
 
   @media (max-width: 560px) {
-    .bf__row { grid-template-columns: minmax(0, 1fr); }
+    .bf__row { grid-template-columns: minmax(0, 1fr); gap: .9rem; }
+    .bf { gap: 1.6rem; }
+    .bf__group legend { padding-bottom: .8rem; }
+    .bf__done { padding: 1.25rem; }
   }
 </style>
 

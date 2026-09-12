@@ -1,5 +1,10 @@
 ---
-const profiles = [
+/* Exported so a page can render its own presentation of the same
+   destinations. The markup and styles below are unchanged and still assume a
+   dark ground: .social-links__mark paints its glyph in var(--paper), which is
+   correct in the footer and invisible on a paper background. Anything placing
+   these on paper should render from this data instead of reusing the nav. */
+export const profiles = [
   {
     name: 'LinkedIn',
     mark: 'in',

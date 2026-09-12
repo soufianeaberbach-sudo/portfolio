@@ -3,7 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 import BriefForm from '../components/BriefForm.astro';
 import References from '../components/References.astro';
-import SocialLinks from '../components/SocialLinks.astro';
+import { profiles } from '../components/SocialLinks.astro';
 
 /* Contact — the first step of the process, not another sales page.
  *
@@ -129,7 +129,21 @@ const faqs = [
       </div>
       <div data-reveal>
         <p class="label">Professional profiles</p>
-        <SocialLinks />
+        {/* Rendered here rather than reusing the footer's SocialLinks nav: that
+            component paints its glyph in var(--paper) for a dark ground, so on
+            this paper background it showed four empty bordered boxes. Names
+            are also plainer than "in" / "up" / "fiverr." abbreviations. */}
+        <ul class="ct-profiles">
+          {profiles.map((profile) => (
+            <li>
+              <a href={profile.href} target="_blank" rel="noopener noreferrer">
+                <span>{profile.name}</span>
+                <span class="sr-only">(opens in a new tab)</span>
+                <i aria-hidden="true"><Arrow /></i>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
       <div class="ct-direct__business" data-reveal>
         <p class="label">Business status</p>
@@ -209,8 +223,15 @@ const faqs = [
   /* height:auto is load-bearing: the height="980" attribute otherwise survives
      as a presentational hint, makes aspect-ratio inert and lets object-fit
      crop the photograph into the wrong box. */
-  .ct-workspace img { width: 100%; height: auto; border: 1px solid var(--line); }
-  .ct-workspace figcaption { margin-top: .9rem; color: var(--muted); }
+  /* No frame: the photograph sits in the composition rather than in a card.
+     height:auto is load-bearing — the height="980" attribute otherwise
+     survives as a presentational hint, makes aspect-ratio inert and lets
+     object-fit crop the image into the wrong box. */
+  .ct-workspace img { display: block; width: 100%; height: auto; }
+  /* Editorial metadata under the image: spacing alone. A rule across the full
+     column width read as the bottom edge of a card, which is the framing this
+     pass removes. */
+  .ct-workspace figcaption { margin-top: 1.1rem; color: var(--muted); }
 
   /* ---------- Direct routes: deliberately quiet next to the form ---------- */
   .ct-direct { padding-block: clamp(3.5rem, 6vw, 6rem); border-top: 1px solid var(--line-strong); }
@@ -219,12 +240,30 @@ const faqs = [
   .ct-direct__email { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.5vw, 1.35rem); overflow-wrap: anywhere; transition: color .2s var(--ease); }
   .ct-direct__email:hover { color: var(--signal); }
   .ct-direct__business { display: grid; gap: .4rem; }
-  .ct-direct__business strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.15; }
-  .ct-direct__business span { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.6; }
-  /* SocialLinks is built for the dark footer; on paper it needs ink. */
-  .ct-direct :global(.social-links a) { color: var(--ink-soft); }
-  .ct-direct :global(.social-links a:hover) { color: var(--signal); }
-  .ct-direct :global(.social-links__mark) { border-color: var(--line-strong); }
+  .ct-direct__business strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.25; }
+  .ct-direct__business span { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.65; }
+
+  /* Platform names on hairlines. Text first, arrow second — a missing icon can
+     never leave the row unreadable. */
+  .ct-profiles { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .ct-profiles li { border-bottom: 1px solid var(--line); }
+  .ct-profiles a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.9rem;
+    padding: .5rem .1rem;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: color .18s var(--ease);
+  }
+  .ct-profiles a:hover { color: var(--signal); }
+  .ct-profiles i { display: inline-flex; flex: 0 0 auto; color: var(--muted); transition: color .18s var(--ease), transform .18s var(--ease); }
+  .ct-profiles a:hover i { color: var(--signal); transform: translate(2px, -2px); }
 
   /* ---------- FAQ ---------- */
   .ct-faq { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(2rem, 5vw, 5rem); padding-block: clamp(4rem, 7vw, 7rem); border-top: 1px solid var(--line); }
