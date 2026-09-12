@@ -22,6 +22,19 @@ interface KVNamespaceLike {
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 }
 
+/* Only the two methods used. Binary uploads must NOT go in KV — it is a
+   metadata store with a small value ceiling — so an uploaded reference goes
+   to a private R2 bucket and KV keeps the pointer. */
+interface R2BucketLike {
+  put(
+    key: string,
+    value: ArrayBuffer,
+    options?: { httpMetadata?: { contentType?: string }; customMetadata?: Record<string, string> },
+  ): Promise<unknown>;
+  /* Used only to roll back an object whose brief then failed to persist. */
+  delete(key: string): Promise<unknown>;
+}
+
 interface Env {
   /* Static assets from ./dist. Always present. */
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -35,6 +48,12 @@ interface Env {
   /* Comma-separated hostnames a Turnstile solve may come from. Not a secret.
      Required once TURNSTILE_SECRET is set — see verifyTurnstile. */
   TURNSTILE_HOSTNAMES?: string;
+  /* PRIVATE bucket for uploaded reference files. Absent until the bucket is
+     bound, in which case an attached file is refused with a clear message
+     rather than silently dropped — see handleBrief. Never served to the
+     public: the bucket has no public URL and the Worker exposes no read
+     route, so a stored reference is reachable only with account access. */
+  BRIEF_FILES?: R2BucketLike;
 }
 
 /* Must match data-action on the widget in BriefForm. A solve from any other
@@ -54,6 +73,55 @@ const STAGES = [
   'Pre-production',
   'Production issue',
 ] as const;
+
+/* Upload policy.
+ *
+ * 10 MB is deliberate rather than generous. A Worker reads the whole body into
+ * memory to validate it, the runtime gives 128 MB, and the files this actually
+ * exists for — a sketch, a phone photo of a fitting, a tech pack PDF, a spec
+ * sheet — are comfortably under it. A larger ceiling would buy nothing and
+ * risk the request being the thing that fails.
+ *
+ * Extension, declared type AND leading bytes all have to agree. An extension
+ * is a claim by the sender and a Content-Type is a claim by the browser, so
+ * neither decides alone: the magic prefix is what the bytes actually are.
+ *
+ * Executables and scripts are absent by design — .exe, .js, .sh, .bat, .cmd,
+ * .apk, .dmg and anything else not listed simply has no entry, so the
+ * allowlist refuses it without needing a blocklist to stay ahead of.
+ *
+ * The launch allowlist is four formats: PDF, JPEG, PNG and WebP. Each has a
+ * distinctive magic prefix that identifies the format itself, so the bytes can
+ * actually be checked.
+ *
+ * Office formats are deliberately absent. DOCX/XLSX/PPTX are ZIP containers and
+ * DOC/XLS/PPT are OLE2 containers, so their magic proves only the CONTAINER —
+ * it says nothing about whether the document inside is the claimed format or
+ * safe, and both container types can carry macros or an executable payload.
+ * Accepting them would mean admitting files whose contents cannot be verified
+ * with the checks available here. A bare .zip is out for the same reason. The
+ * optional link field covers larger files and any other document type. */
+const UPLOAD = {
+  maxBytes: 10 * 1024 * 1024,
+  maxNameLength: 120,
+};
+
+interface FileKind {
+  ext: string;
+  /* Content-Type values a browser plausibly sends for this extension. */
+  types: string[];
+  /* Leading bytes, as hex. At least one must match. */
+  magic: string[];
+  label: string;
+}
+
+const ACCEPTED_FILES: FileKind[] = [
+  { ext: 'pdf', types: ['application/pdf'], magic: ['25504446'], label: 'PDF' },
+  { ext: 'jpg', types: ['image/jpeg'], magic: ['ffd8ff'], label: 'JPEG image' },
+  { ext: 'jpeg', types: ['image/jpeg'], magic: ['ffd8ff'], label: 'JPEG image' },
+  { ext: 'png', types: ['image/png'], magic: ['89504e470d0a1a0a'], label: 'PNG image' },
+  { ext: 'webp', types: ['image/webp'], magic: ['52494646'], label: 'WebP image' },
+];
 
 const LIMITS = {
   name: 120,
@@ -80,6 +148,18 @@ interface Brief {
   stage: string;
   message: string;
   link: string;
+}
+
+/* What is recorded about an accepted upload. `key` is the R2 object key and is
+   random, so it is not derivable from anything the sender controls; `name` is
+   the sanitized display name, kept only so the brief email can say what the
+   file was called. */
+interface StoredFile {
+  key: string;
+  name: string;
+  size: number;
+  type: string;
+  label: string;
 }
 
 type Invalid = { field: string; error: string };
@@ -278,23 +358,146 @@ function sameOrigin(request: Request): boolean {
   return true;
 }
 
-function emailText(brief: Brief, id: string): string {
+/* Reduced to a plain, safe display name. Path separators, control characters
+   and anything non-printable are gone, so the stored name cannot traverse a
+   directory, inject a header into the brief email, or carry a surprise into a
+   filesystem when it is eventually downloaded. The result is never used to
+   build the storage key — that is random — so a hostile name is only ever
+   inert text. */
+function sanitizeFilename(raw: string): string {
+  const base = raw.split(/[/\\]/).pop() ?? '';
+  const cleaned = base
+    /* eslint-disable-next-line no-control-regex */
+    .replace(/[\u0000-\u001f\u007f-\u009f]/g, '')
+    .replace(/[^A-Za-z0-9._ -]/g, '_')
+    .replace(/\s+/g, ' ')
+    .replace(/^[._ ]+/, '')
+    .trim();
+  if (!cleaned || cleaned === '.' || cleaned === '..') return 'reference';
+  return cleaned.length > UPLOAD.maxNameLength ? cleaned.slice(0, UPLOAD.maxNameLength) : cleaned;
+}
+
+function extensionOf(name: string): string {
+  const dot = name.lastIndexOf('.');
+  return dot > 0 ? name.slice(dot + 1).toLowerCase() : '';
+}
+
+function hexPrefix(bytes: Uint8Array, length: number): string {
+  return [...bytes.slice(0, length)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+type UploadCheck = { kind: FileKind; bytes: ArrayBuffer; name: string } | { error: string };
+
+/* Order matters: size before bytes, because reading a 2 GB body into memory to
+   discover it is too large is the failure this is meant to avoid. */
+async function validateUpload(file: File): Promise<UploadCheck> {
+  const name = sanitizeFilename(file.name || 'reference');
+
+  if (file.size === 0) {
+    return { error: 'That file appears to be empty. Please choose the file again.' };
+  }
+  if (file.size > UPLOAD.maxBytes) {
+    const mb = (UPLOAD.maxBytes / (1024 * 1024)).toFixed(0);
+    return { error: `That file is larger than ${mb} MB. Please send a smaller version, or add a link to it instead.` };
+  }
+
+  const ext = extensionOf(name);
+  const kind = ACCEPTED_FILES.find((candidate) => candidate.ext === ext);
+  if (!kind) {
+    return {
+      error: 'That file type is not accepted. Please attach a PDF or an image (JPEG, PNG, WebP), or add a link to it instead.',
+    };
+  }
+
+  /* The browser's Content-Type is advisory: some send an empty string for an
+     unfamiliar extension, and a few send application/octet-stream. An empty
+     value is tolerated; a value that names a DIFFERENT accepted format is not,
+     because that is the mismatch worth catching. */
+  const declared = (file.type || '').split(';')[0].trim().toLowerCase();
+  if (declared && declared !== 'application/octet-stream' && !kind.types.includes(declared)) {
+    return { error: 'That file does not look like the type its name suggests. Please check the file and try again.' };
+  }
+
+  const bytes = await file.arrayBuffer();
+  if (bytes.byteLength === 0) {
+    return { error: 'That file appears to be empty. Please choose the file again.' };
+  }
+  if (bytes.byteLength > UPLOAD.maxBytes) {
+    const mb = (UPLOAD.maxBytes / (1024 * 1024)).toFixed(0);
+    return { error: `That file is larger than ${mb} MB. Please send a smaller version, or add a link to it instead.` };
+  }
+
+  const head = new Uint8Array(bytes);
+  const matches = kind.magic.some((magic) => hexPrefix(head, magic.length / 2) === magic);
+  /* WebP is RIFF....WEBP: the container magic alone would also match a WAV, so
+     the format tag is checked too. */
+  const webpOk = kind.ext !== 'webp' || hexPrefix(head.slice(8), 4) === '57454250';
+  if (!matches || !webpOk) {
+    return {
+      error: 'That file’s contents do not match its type. If it was renamed, please attach the original, or add a link instead.',
+    };
+  }
+
+  return { kind, bytes, name };
+}
+
+/* The key is random and carries no part of the sender's filename, so objects
+   are not enumerable or guessable from anything a visitor supplies. The
+   display name rides along as metadata instead. */
+async function storeUpload(env: Env, id: string, check: { kind: FileKind; bytes: ArrayBuffer; name: string }): Promise<StoredFile | null> {
+  if (!env.BRIEF_FILES) return null;
+  const key = `briefs/${id}/${crypto.randomUUID()}.${check.kind.ext}`;
+  await env.BRIEF_FILES.put(key, check.bytes, {
+    httpMetadata: { contentType: check.kind.types[0] },
+    customMetadata: {
+      brief: id,
+      filename: check.name,
+      receivedAt: new Date().toISOString(),
+    },
+  });
+  return {
+    key,
+    name: check.name,
+    size: check.bytes.byteLength,
+    type: check.kind.types[0],
+    label: check.kind.label,
+  };
+}
+
+function formatBytes(size: number): string {
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(0)} KB`;
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function emailText(brief: Brief, id: string, file: StoredFile | null): string {
   return [
     `Name:     ${brief.name}`,
     `Company:  ${brief.company || '—'}`,
     `Email:    ${brief.email}`,
     `Stage:    ${brief.stage}`,
     `Link:     ${brief.link || '—'}`,
+    `File:     ${file ? `${file.name} (${file.label}, ${formatBytes(file.size)})` : '—'}`,
     '',
     'What needs solving',
     '------------------',
     brief.message,
     '',
     `Reference: ${id}`,
+    ...(file
+      ? [
+          '',
+          'Uploaded reference',
+          '------------------',
+          'Stored privately. It is not on a public URL and there is no link to',
+          'share — open it from the R2 bucket with account access:',
+          `  ${file.key}`,
+        ]
+      : []),
   ].join('\n');
 }
 
-async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
+async function sendEmail(env: Env, brief: Brief, id: string, file: StoredFile | null): Promise<boolean> {
   if (!env.RESEND_API_KEY || !env.BRIEF_TO || !env.BRIEF_FROM) return false;
   const payload = {
     from: env.BRIEF_FROM,
@@ -302,7 +505,7 @@ async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
     /* So replying in the mail client answers the client directly. */
     reply_to: brief.email,
     subject: `Development brief — ${brief.stage} — ${brief.name}`,
-    text: emailText(brief, id),
+    text: emailText(brief, id, file),
   };
   /* Derived from the brief reference, which is already unique per submission,
      and computed once so BOTH attempts present the same key. Without it a
@@ -372,28 +575,54 @@ function isFormObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-async function readBody(request: Request): Promise<{ form: Record<string, unknown>; wantsJson: boolean }> {
+/* `wantsJson` is about the RESPONSE, and it is no longer the same question as
+   how the body arrived. A file cannot travel in JSON, so the page posts
+   multipart when one is attached — but it is still a scripted caller that
+   needs a JSON answer, and it says so with an Accept header. A native
+   no-JavaScript form post sends neither, and still gets HTML and a redirect. */
+async function readBody(
+  request: Request,
+): Promise<{ form: Record<string, unknown>; wantsJson: boolean; file: File | null }> {
   const type = request.headers.get('content-type') ?? '';
+  const wantsJsonReply = (request.headers.get('accept') ?? '').includes('application/json');
+
   if (type.includes('application/json')) {
     const parsed: unknown = await request.json();
     if (!isFormObject(parsed)) throw new Error('body is not an object');
-    return { form: parsed, wantsJson: true };
+    return { form: parsed, wantsJson: true, file: null };
   }
+
   const data = await request.formData();
   const form: Record<string, unknown> = {};
+  let file: File | null = null;
   data.forEach((value, key) => {
-    form[key] = typeof value === 'string' ? value : '';
+    if (typeof value === 'string') {
+      form[key] = value;
+      return;
+    }
+    /* Only the one known field carries a file. Anything else arriving as a
+       blob is recorded as empty rather than stored, so an extra part cannot
+       smuggle a second upload past the checks. */
+    if (key === 'file' && value && typeof (value as File).arrayBuffer === 'function') {
+      const candidate = value as File;
+      if (candidate.size > 0 || candidate.name) file = candidate;
+      form[key] = candidate.name ?? '';
+      return;
+    }
+    form[key] = '';
   });
-  return { form, wantsJson: false };
+  return { form, wantsJson: wantsJsonReply, file };
 }
 
 async function handleBrief(request: Request, env: Env): Promise<Response> {
   let form: Record<string, unknown>;
   let wantsJson = true;
+  let upload: File | null = null;
   try {
     const parsed = await readBody(request);
     form = parsed.form;
     wantsJson = parsed.wantsJson;
+    upload = parsed.file;
   } catch {
     return json(400, { ok: false, error: 'That submission could not be read.' });
   }
@@ -435,6 +664,26 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     );
   }
 
+  /* The attached file is checked AFTER the spam screens and Turnstile, so a
+     bot never gets 10 MB of validation work out of the endpoint, and BEFORE
+     anything is persisted, so a rejected file cannot leave a half-recorded
+     brief behind. */
+  let pendingFile: { kind: FileKind; bytes: ArrayBuffer; name: string } | null = null;
+  if (upload) {
+    if (!env.BRIEF_FILES) {
+      /* Refused, not silently dropped: accepting the brief while discarding
+         the reference the sender thought they had attached would be a lie. */
+      return fail(
+        503,
+        'Attachments are not switched on yet. Please send the brief without the file and email it separately, or add a link to it instead.',
+        'file',
+      );
+    }
+    const result = await validateUpload(upload);
+    if ('error' in result) return fail(400, result.error, 'file');
+    pendingFile = result;
+  }
+
   /* Persist BEFORE sending. Without a store there is nothing durable to
      promise, so the brief is refused rather than accepted and dropped. */
   if (!env.BRIEFS) {
@@ -442,19 +691,56 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   }
 
   const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
+
+  /* The file goes to R2 first, so the KV record can name it and never points
+     at an object that does not exist. If this fails the brief is refused
+     outright: the alternative is a stored brief that claims an attachment
+     nobody can find, and the sender still has their typed text to retry with. */
+  let stored: StoredFile | null = null;
+  if (pendingFile) {
+    try {
+      stored = await storeUpload(env, id, pendingFile);
+    } catch {
+      return fail(
+        502,
+        'The brief was not sent because the attached file could not be saved. Nothing you typed has been lost — please try again, or submit without the file.',
+        'file',
+      );
+    }
+  }
+
   try {
     /* Only what is needed to read and answer the brief. Request country and
-       user agent were being stored and were never used, so they are gone. */
+       user agent were being stored and were never used, so they are gone.
+       An upload contributes its pointer and display name — never its bytes,
+       which live in R2. */
     await env.BRIEFS.put(
       `brief:${id}`,
-      JSON.stringify({ ...brief, id, receivedAt: new Date().toISOString() }),
+      JSON.stringify({ ...brief, id, receivedAt: new Date().toISOString(), file: stored }),
       { expirationTtl: RETENTION_SECONDS },
     );
   } catch {
+    /* The object is already in R2 but there is now no brief that references
+       it: nothing will ever read it and the retention rule is the only thing
+       that would eventually remove it. Roll it back rather than leave it
+       orphaned. The rollback is best-effort — if the delete also fails there
+       is nothing further this request can do, and the lifecycle rule remains
+       the backstop — so its outcome never changes what the sender is told.
+       The response is the same truthful 502 either way: the brief was not
+       saved. */
+    if (stored) {
+      try {
+        await env.BRIEF_FILES?.delete(stored.key);
+      } catch {
+        /* Deliberately swallowed. Reporting a failed cleanup to the sender
+           would be noise about something they cannot act on, and claiming the
+           rollback worked when it did not would be worse. */
+      }
+    }
     return fail(502, 'The brief could not be saved. Please email directly — the address is below the form.');
   }
 
-  const delivered = await sendEmail(env, brief, id);
+  const delivered = await sendEmail(env, brief, id, stored);
   if (!delivered) {
     /* The brief is safe in KV, so this is not a failure for the sender. Record
        it so the gap is visible, and still report receipt, which is true. */
@@ -475,7 +761,7 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   if (!wantsJson) {
     return new Response(null, { status: 303, headers: { location: '/contact/sent/' } });
   }
-  return json(200, { ok: true, id });
+  return json(200, { ok: true, id, file: stored ? { name: stored.name, size: stored.size } : null });
 }
 
 /* The canonical website host. The apex only: www must never be independently
@@ -534,6 +820,21 @@ export default {
       try {
         if (request.method !== 'POST') {
           return json(405, { ok: false, error: 'Use POST.' });
+        }
+        /* Cheap gate before any parsing. formData() reads the whole body into
+           memory, so an oversized upload is refused on its declared length
+           rather than after it has already been buffered. The real check still
+           happens on the bytes — Content-Length is a claim — but this stops the
+           obvious case costing anything. Generous headroom over the file
+           ceiling covers the text fields and the multipart framing. */
+        const declaredLength = Number(request.headers.get('content-length') ?? '0');
+        if (Number.isFinite(declaredLength) && declaredLength > UPLOAD.maxBytes + 1024 * 1024) {
+          const mb = (UPLOAD.maxBytes / (1024 * 1024)).toFixed(0);
+          return json(413, {
+            ok: false,
+            field: 'file',
+            error: `That submission is too large. Attachments are limited to ${mb} MB.`,
+          });
         }
         return await handleBrief(request, env);
       } catch {

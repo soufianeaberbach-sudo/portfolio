@@ -69,7 +69,27 @@ const brandLogos = [
           the composition and the cut-out transparency are unchanged. The PNG
           stays in the repo because og:image still points at it. width/height
           carry the renditions' true intrinsic ratio. */}
+      {/* The cast shadow IS the portrait: the same cached asset, mirrored about
+          the floor line, flattened, blurred and blackened. A gradient pool
+          cannot do this — the figure's contact points are a chair with four
+          legs and a cup set 30cm to its right, and one ellipse under all of
+          them reads as a grey slab rather than a shadow. Mirroring the
+          silhouette gives each contact point its own shadow, which is what
+          makes it plausible. Decorative, so it is hidden from assistive tech
+          and never eager-loaded. */}
       <img
+        class="home-hero__shadow"
+        src="/soufiane-drawing-800.webp"
+        srcset="/soufiane-drawing-480.webp 480w, /soufiane-drawing-800.webp 800w, /soufiane-drawing-1200.webp 1200w"
+        sizes="(max-width: 900px) 82vw, 46vw"
+        width="1200"
+        height="1486"
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+      />
+      <img
+        class="home-hero__figure"
         src="/soufiane-drawing-800.webp"
         srcset="/soufiane-drawing-480.webp 480w, /soufiane-drawing-800.webp 800w, /soufiane-drawing-1200.webp 1200w"
         sizes="(max-width: 900px) 82vw, 46vw"
@@ -418,6 +438,11 @@ const brandLogos = [
   }
   @keyframes role-caret { 50% { opacity: 0; } }
   .home-hero__copy > .button { margin-top: clamp(1.75rem, 3vw, 2.75rem); }
+  /* No border and no inner rule. Those two lines were the invisible rectangle:
+     a cut-out sitting inside a bordered, internally-ruled column reads as a
+     framed picture however transparent the PNG is. The column's structure now
+     comes from the rings behind the figure and the page rule at 68%, which the
+     figure is allowed to cross. */
   .home-hero__portrait {
     position: relative;
     z-index: 1;
@@ -428,30 +453,50 @@ const brandLogos = [
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    border-left: 1px solid var(--line);
-    background: linear-gradient(90deg, transparent 0 9%, var(--line) 9% calc(9% + 1px), transparent calc(9% + 1px));
   }
-  .home-hero__portrait::after {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    left: -16%;
-    right: -4%;
-    bottom: -23%;
-    height: 68%;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    box-shadow: 0 0 0 4.5vw var(--paper), 0 0 0 calc(4.5vw + 1px) var(--line);
-  }
+
+  /* Both copies share one geometry so the shadow cannot drift out of
+     register with the figure. */
   .home-hero__portrait img {
-    position: relative;
-    z-index: 1;
     width: min(108%, 49rem);
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
+  }
+
+  .home-hero__figure {
+    position: relative;
+    z-index: 1;
     transform: translateX(2%) scale(1.035);
     transform-origin: center bottom;
+    /* A short, faint ambient shadow hugging the silhouette — the darkening
+       you get where an object nearly touches a surface, not a cast shadow.
+       It follows the alpha, so it never draws a box. */
+    filter: drop-shadow(0.15rem 0.2rem 0.5rem rgba(17, 17, 15, .10));
+  }
+
+  /* The cast shadow. transform-origin sits on the measured floor line —
+     93.47% down the asset, because the cut-out carries 6.53% transparent
+     padding below the figure — so the mirror pivots exactly where the chair
+     legs, shoes and cup meet the ground. scaleY flattens it to a floor plane;
+     skewX throws it away from the name block, which is the brightest and
+     heaviest element in the composition and therefore reads as the light
+     source; blur and brightness(0) turn the photograph into shade. */
+  .home-hero__shadow {
+    position: absolute;
+    z-index: 0;
+    inset-inline: 0;
+    bottom: 0;
+    transform: translateX(2%) scale(1.035) scaleY(-0.17) skewX(-19deg);
+    transform-origin: 50% 93.47%;
+    filter: blur(8px) brightness(0) opacity(0.23);
+    pointer-events: none;
+  }
+
+  /* A cast shadow implies a light source, and a light source implies a
+     direction; under reduced motion nothing here animates, so both stay. */
+  @media (forced-colors: active) {
+    .home-hero__shadow { display: none; }
   }
 
   .positioning { display: grid; grid-template-columns: 1.4fr .6fr; gap: 7vw; padding-block: clamp(7rem, 14vw, 14rem); }
@@ -569,12 +614,16 @@ const brandLogos = [
   /* Padding trimmed from 6-10rem now that the meta label, arrow and the
      bottom link rail are gone — the section keeps the same visual weight
      without the removed elements leaving a gap. */
-  /* The 3D simulation section is pure black, not --ink (#11110f).
-     The video is mastered on #000: at 36rem wide a 17/255 tonal step
-     around it reads as a visible rectangle. Matching #000 exactly is what
-     makes the media dissolve into the section — there is no frame, card,
-     border, radius, shadow or scrim anywhere in here on purpose. */
-  .home-next { background: #000; color: var(--paper); }
+  /* One dark surface value across the site. This band used to be pure #000
+     while the brand strip above it and the footer below it both resolve to
+     --ink (#11110f), so scrolling Home crossed three surfaces and one of them
+     was 17/255 off — a mismatch, not a decision.
+     The #000 was not arbitrary, though: the video is mastered on black, and
+     against a 17/255-lighter ground its letterbox reads as a visible
+     rectangle. That is what the blend below solves, so the section can join
+     the rest of the site without the media growing a frame. There is still no
+     card, border, radius, shadow or scrim anywhere in here on purpose. */
+  .home-next { background: var(--ink); color: var(--paper); }
   .home-next__grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .62fr);
@@ -598,7 +647,17 @@ const brandLogos = [
     height: auto;
     aspect-ratio: 512 / 910;
     object-fit: contain;
-    background: #000;
+    background: var(--ink);
+  }
+
+  /* Screen makes the video's mastered black resolve to exactly whatever is
+     behind it, so the letterbox disappears on any dark ground instead of only
+     on a ground that matches it byte for byte. Bright simulation pixels lift
+     by about 3/255 against --ink, which is below the threshold of noticing.
+     Behind @supports so a browser without blend modes keeps the previous
+     behaviour — a faint edge — rather than losing the video. */
+  @supports (mix-blend-mode: screen) {
+    .home-next__video { mix-blend-mode: screen; background: transparent; }
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {

@@ -247,7 +247,13 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 
             {s.visual && (
               <figure class:list={['pr-media', s.visual.tall && 'pr-media--tall']}>
-                <div class="pr-media__frame" style={`aspect-ratio:${s.visual.ratio}`}>
+                {/* One ratio for every stage. The frames previously took a
+                    per-stage ratio from the data — 3/2 here, 4/5 there, plus a
+                    "tall" variant — so the five stages read as differently
+                    sized objects instead of one system. The sources still
+                    differ; object-fit: cover absorbs that without distorting
+                    anything. */}
+                <div class="pr-media__frame">
                   <img
                     src={src(s.visual.file, s.visual.widths[1])}
                     srcset={`${src(s.visual.file, s.visual.widths[0])} ${s.visual.widths[0]}w, ${src(s.visual.file, s.visual.widths[1])} ${s.visual.widths[1]}w`}
@@ -542,11 +548,22 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
   .pr-receive li { padding: .6rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .95rem; }
 
   .pr-media { margin: clamp(1.75rem, 3vw, 2.75rem) 0 0; }
-  .pr-media__frame { overflow: hidden; border: 1px solid var(--line); background: var(--paper-bright); }
+  /* The single frame ratio for all five stages. 4/3 suits both the landscape
+     and the portrait sources: cover crops each to the same footprint, so
+     perceived scale, alignment and compositional weight match down the page. */
+  .pr-media__frame {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--paper-bright);
+  }
   .pr-media__frame img { width: 100%; height: 100%; object-fit: cover; }
   /* The portrait frame is offset rather than stacked, so 03 does not compose
      like 01 and 05. */
-  .pr-media--tall { max-width: 25rem; margin-left: auto; }
+  /* Deliberately no longer narrows or right-aligns one stage: that was the
+     other half of the inconsistency. Kept as a no-op so the data flag cannot
+     silently reintroduce it. */
+  .pr-media--tall { max-width: none; margin-left: 0; }
 
   /* DECISION — the dominant element, at the end of the stage, crossing the
      spine. The node is the single orange in the stage. */
@@ -659,7 +676,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
     }
     .pr-file__prior ul { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
     .pr-file__prior li { grid-template-columns: 1.6rem minmax(0, auto); }
-    .pr-media--tall { max-width: min(100%, 30rem); margin-left: 0; }
+    .pr-media--tall { max-width: none; margin-left: 0; }
   }
 
   @media (max-width: 1080px) {
