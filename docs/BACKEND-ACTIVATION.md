@@ -26,6 +26,7 @@ one real brief has arrived end to end. A green build proves none of it.
 | `BRIEF_TO` | var | already in `wrangler.jsonc` |
 | `BRIEF_FROM` | var | already in `wrangler.jsonc` |
 | `BRIEFS` | KV binding | step 2 |
+| `BRIEF_FILES` | R2 binding | step 2b |
 | `RESEND_API_KEY` | Worker secret | step 3 |
 | `TURNSTILE_SECRET` | Worker secret | step 4 |
 | `PUBLIC_TURNSTILE_SITEKEY` | **build-time** env var | step 4 |
@@ -81,6 +82,48 @@ npx wrangler kv key list --binding BRIEFS --remote --prefix brief:
 
 Until `BRIEFS` is bound, `POST /api/brief` answers **503** and the page tells
 the visitor to email directly. Nothing is ever accepted and then dropped.
+
+## 2b. Create the private R2 bucket for uploaded references
+
+The Contact form accepts a file — a sketch, a fitting photo, a tech pack. Those
+bytes must **not** go in KV; they go to a private R2 bucket, and KV keeps only
+the pointer.
+
+```sh
+npx wrangler r2 bucket list
+npx wrangler r2 bucket create portfolio-brief-files
+```
+
+Then uncomment the `r2_buckets` block in `wrangler.jsonc` with the bucket name
+exactly as created. Until the binding exists, a submission **with** a file is
+refused with a clear message and the form still works without one — nothing is
+accepted and then discarded.
+
+**Keep the bucket private.** Do not attach a custom domain and do not enable
+public access: these are client design files. Object keys are random UUIDs under
+`briefs/<reference>/`, so nothing is guessable from anything a visitor supplies,
+and the Worker exposes no read route — files are reachable only with account
+access.
+
+Retention has to be configured on the bucket, because R2 does not expire
+objects from `wrangler.jsonc`:
+
+```sh
+npx wrangler r2 bucket lifecycle add portfolio-brief-files \
+  --name expire-briefs --prefix briefs/ --expire-days 90
+npx wrangler r2 bucket lifecycle list portfolio-brief-files
+```
+
+Check the flags against `npx wrangler r2 bucket lifecycle add --help` first —
+this is the one step in the runbook whose flag names are most likely to drift.
+**Without this rule, uploaded files outlive the 90-day brief retention that
+`/privacy/` states**, which would make that page untrue.
+
+To retrieve a file named in a brief email:
+
+```sh
+npx wrangler r2 object get portfolio-brief-files/<key from the email> --file ./reference.pdf
+```
 
 ## 3. Resend
 
@@ -172,6 +215,10 @@ Check all of:
 - [ ] `brief:<reference>` exists in KV and its content matches what was typed
 - [ ] the stored record contains **no** IP address, country or user agent
 - [ ] the brief's TTL is roughly 90 days
+- [ ] with a file attached: the brief email names the file and its storage key
+- [ ] that key exists in R2 and downloads to the file that was sent
+- [ ] the file is **not** reachable from any public URL
+- [ ] the KV record holds a pointer, not bytes
 - [ ] the email arrives at `BRIEF_TO`
 - [ ] `Reply-To` is the submitted address, so replying answers the sender
 - [ ] the subject contains the stage and the name

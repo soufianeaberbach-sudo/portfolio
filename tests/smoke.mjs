@@ -217,7 +217,101 @@ try {
     check('required fields report errors', form.errors >= 3, `${form.errors} shown`);
     check('did not navigate away', form.navigated === '/contact/');
     check('endpoint contract intact', form.action === '/api/brief', form.action);
-    check('field names unchanged', form.names === 'company,email,link,message,name,stage,t,website', form.names);
+    /* `file` joined the set when the upload control landed. The assertion still
+       pins the EXACT set — it is a wire contract with the Worker, not a
+       minimum — so an accidental rename or a dropped field still fails here. */
+    check('field names match the Worker contract', form.names === 'company,email,file,link,message,name,stage,t,website', form.names);
+    await c.close();
+  }
+
+  // ---- the upload control is present, usable and honestly labelled
+  console.log('\nreference upload control');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
+
+    const up = await p.evaluate(() => {
+      const input = document.getElementById('bf-file');
+      const label = document.querySelector('.bf__drop-label');
+      const cs = input ? getComputedStyle(input) : null;
+      return {
+        exists: !!input,
+        type: input?.type,
+        name: input?.name,
+        /* Visually hidden, but never display:none — that would drop it from
+           the tab order and from assistive tech. */
+        notDisplayNone: cs?.display !== 'none',
+        focusable: input ? input.tabIndex !== -1 : false,
+        labelFor: label?.getAttribute('for'),
+        describedBy: input?.getAttribute('aria-describedby') ?? '',
+        accept: input?.getAttribute('accept') ?? '',
+        hint: document.getElementById('bf-file-hint')?.textContent.trim() ?? '',
+        chosenHidden: document.querySelector('[data-file-chosen]')?.hidden,
+        chosenLive: document.querySelector('[data-file-chosen]')?.getAttribute('aria-live'),
+        linkIsSecondary: !!document.querySelector('.bf__attach-alt-tag'),
+        errSlot: !!document.querySelector('[data-err="file"]'),
+      };
+    });
+
+    check('upload input exists and is a file input', up.exists && up.type === 'file', String(up.type));
+    check('it posts as the field the Worker reads', up.name === 'file', String(up.name));
+    check('it is not display:none, so it stays focusable', up.notDisplayNone && up.focusable);
+    check('its label points at it', up.labelFor === 'bf-file', String(up.labelFor));
+    check('it is described by the hint and the error slot', up.describedBy.includes('bf-file-hint') && up.describedBy.includes('bf-file-err'), up.describedBy);
+    check('it has a file-type error slot', up.errSlot);
+    check('accept lists the real formats', ['pdf', 'jpg', 'png', 'webp', 'docx', 'xlsx', 'pptx'].every((e) => up.accept.includes(e)), up.accept);
+    check('accept offers no executable type', !/exe|\.js|sh|bat|cmd|apk|dmg/.test(up.accept), up.accept);
+    check('the hint states the size limit', /10 MB/.test(up.hint), up.hint);
+    check('nothing is shown as chosen on load', up.chosenHidden === true);
+    check('the chosen row announces politely', up.chosenLive === 'polite', String(up.chosenLive));
+    check('the link is presented as the alternative', up.linkIsSecondary);
+
+    /* Selecting a real file must surface its name and size, and removing it
+       must restore the empty state — the whole point for a non-technical
+       visitor is that they can see what they attached. */
+    await p.setInputFiles('#bf-file', {
+      name: 'tech-pack.pdf',
+      mimeType: 'application/pdf',
+      buffer: Buffer.from('%PDF-1.7\n' + 'x'.repeat(4000)),
+    });
+    await p.waitForTimeout(200);
+    const picked = await p.evaluate(() => ({
+      shown: !document.querySelector('[data-file-chosen]').hidden,
+      name: document.querySelector('[data-file-name]').textContent,
+      size: document.querySelector('[data-file-size]').textContent,
+      noError: document.querySelector('[data-err="file"]').hidden,
+    }));
+    check('the chosen filename becomes visible', picked.shown && picked.name === 'tech-pack.pdf', String(picked.name));
+    check('the file size becomes visible', /KB|MB|B/.test(picked.size), String(picked.size));
+    check('a valid file raises no error', picked.noError);
+
+    await p.click('[data-file-remove]');
+    await p.waitForTimeout(150);
+    const removed = await p.evaluate(() => ({
+      hidden: document.querySelector('[data-file-chosen]').hidden,
+      empty: document.getElementById('bf-file').files.length === 0,
+      focused: document.activeElement.id === 'bf-file',
+    }));
+    check('remove clears the selection', removed.hidden && removed.empty);
+    check('remove returns focus to the control', removed.focused);
+
+    /* An oversized file is reported here rather than after a round trip, and
+       reporting it must not discard what the visitor typed. */
+    await p.fill('[name="name"]', 'Test Client');
+    await p.fill('[name="message"]', 'We need a fit correction on a jersey top.');
+    await p.setInputFiles('#bf-file', { name: 'huge.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(11 * 1024 * 1024, 1) });
+    await p.waitForTimeout(200);
+    const over = await p.evaluate(() => ({
+      err: document.querySelector('[data-err="file"]').textContent,
+      shown: !document.querySelector('[data-err="file"]').hidden,
+      nameKept: document.querySelector('[name="name"]').value,
+      messageKept: document.querySelector('[name="message"]').value.length,
+    }));
+    check('an oversized file is refused in the page', over.shown && /10 MB/.test(over.err), over.err);
+    check('and nothing typed is lost', over.nameKept === 'Test Client' && over.messageKept > 20);
+
     await c.close();
   }
 

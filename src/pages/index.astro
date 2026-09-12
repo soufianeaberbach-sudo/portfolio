@@ -569,12 +569,16 @@ const brandLogos = [
   /* Padding trimmed from 6-10rem now that the meta label, arrow and the
      bottom link rail are gone — the section keeps the same visual weight
      without the removed elements leaving a gap. */
-  /* The 3D simulation section is pure black, not --ink (#11110f).
-     The video is mastered on #000: at 36rem wide a 17/255 tonal step
-     around it reads as a visible rectangle. Matching #000 exactly is what
-     makes the media dissolve into the section — there is no frame, card,
-     border, radius, shadow or scrim anywhere in here on purpose. */
-  .home-next { background: #000; color: var(--paper); }
+  /* One dark surface value across the site. This band used to be pure #000
+     while the brand strip above it and the footer below it both resolve to
+     --ink (#11110f), so scrolling Home crossed three surfaces and one of them
+     was 17/255 off — a mismatch, not a decision.
+     The #000 was not arbitrary, though: the video is mastered on black, and
+     against a 17/255-lighter ground its letterbox reads as a visible
+     rectangle. That is what the blend below solves, so the section can join
+     the rest of the site without the media growing a frame. There is still no
+     card, border, radius, shadow or scrim anywhere in here on purpose. */
+  .home-next { background: var(--ink); color: var(--paper); }
   .home-next__grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .62fr);
@@ -598,7 +602,17 @@ const brandLogos = [
     height: auto;
     aspect-ratio: 512 / 910;
     object-fit: contain;
-    background: #000;
+    background: var(--ink);
+  }
+
+  /* Screen makes the video's mastered black resolve to exactly whatever is
+     behind it, so the letterbox disappears on any dark ground instead of only
+     on a ground that matches it byte for byte. Bright simulation pixels lift
+     by about 3/255 against --ink, which is below the threshold of noticing.
+     Behind @supports so a browser without blend modes keeps the previous
+     behaviour — a faint edge — rather than losing the video. */
+  @supports (mix-blend-mode: screen) {
+    .home-next__video { mix-blend-mode: screen; background: transparent; }
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {
