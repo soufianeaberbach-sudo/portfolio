@@ -28,6 +28,12 @@ jobs:
       - name: Validate Worker configuration
         run: npx wrangler deploy --dry-run --outdir /tmp/worker-dry
 
+      # Backend behaviour: the Worker driven directly with a stub KV and a stub
+      # fetch. No Cloudflare account, no network, no browser — so it runs before
+      # the slower browser install and fails fast.
+      - name: Worker backend tests
+        run: npm run test:worker
+
       # Uses the Playwright pinned in devDependencies, so the browser build
       # always matches the package the tests import. No temporary npx package.
       - name: Install Chromium for Playwright

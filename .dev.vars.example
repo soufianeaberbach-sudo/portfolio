@@ -2,11 +2,24 @@
 # gitignored. NAMES ONLY IN THIS FILE — never commit real keys.
 #
 # In production these two are set with `npx wrangler secret put <NAME>`, not
-# from a file.
+# from a file. See docs/BACKEND-ACTIVATION.md.
 
-# Transactional email provider key (Resend, or an equivalent HTTP API).
+# Resend API key. The Worker posts to api.resend.com; with this empty no mail
+# is attempted, the brief is still stored, and an undelivered:<reference>
+# record is written so the gap is visible.
 RESEND_API_KEY=
 
-# Cloudflare Turnstile secret key. Leave empty to skip verification locally;
-# the honeypot and timing screens still run.
+# Cloudflare Turnstile SECRET key. Leave empty to skip verification locally;
+# the honeypot, timing, rate-limit and origin screens still run. Setting it
+# means every submission needs a valid token, so the matching site key has to
+# be present at build time too — see below.
 TURNSTILE_SECRET=
+
+# NOT A WORKER SECRET, and deliberately not set here. The Turnstile SITE key is
+# public, read by Astro at build time, and belongs in a gitignored `.env` at
+# the project root (or inline on the deploy):
+#
+#   PUBLIC_TURNSTILE_SITEKEY=0x...
+#
+# A value in .dev.vars would reach the Worker and never the build, so the
+# widget would not render.

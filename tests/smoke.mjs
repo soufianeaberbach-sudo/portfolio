@@ -14,7 +14,8 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
-const BASE = `http://127.0.0.1:${PORT}`;
+const HOST = '127.0.0.1';
+const BASE = `http://${HOST}:${PORT}`;
 const ROUTES = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/'];
 const WIDTHS = [390, 430, 768, 1024, 1440];
 
@@ -25,19 +26,58 @@ const check = (name, ok, detail = '') => {
   else { failures.push(`${name}${detail ? ' — ' + detail : ''}`); console.log(`  FAIL ${name}${detail ? ' — ' + detail : ''}`); }
 };
 
-const server = spawn('npx', ['astro', 'preview', '--port', String(PORT)], { stdio: 'ignore' });
-const stop = () => { try { server.kill('SIGTERM'); } catch {} };
+/* --host is load-bearing, not tidiness. Left to itself `astro preview` binds
+   to whatever `localhost` resolves to first, and on a GitHub Actions runner
+   /etc/hosts maps localhost to ::1 as well as 127.0.0.1, so the server came up
+   IPv6-only while these tests fetched 127.0.0.1 and every request was refused
+   until the timeout. Binding the same address the tests dial removes the
+   ambiguity on any host. */
+/* detached so the whole process group can be signalled. npx spawns a shell
+   which spawns node, and killing only npx left the real preview server behind
+   holding the piped stdio open — which looks exactly like a hung test run. */
+const server = spawn('npx', ['astro', 'preview', '--host', HOST, '--port', String(PORT)], {
+  stdio: ['ignore', 'pipe', 'pipe'],
+  detached: true,
+});
+
+/* Kept so a startup failure reports what the server actually said instead of
+   the bare timeout that used to be all CI showed. */
+let serverLog = '';
+server.stdout?.on('data', (chunk) => { serverLog += chunk; });
+server.stderr?.on('data', (chunk) => { serverLog += chunk; });
+let serverExit = null;
+server.on('exit', (code, signal) => { serverExit = signal ? `signal ${signal}` : `code ${code}`; });
+
+let stopped = false;
+const stop = () => {
+  if (stopped) return;
+  stopped = true;
+  /* Negative pid: the group, not just npx. */
+  try { process.kill(-server.pid, 'SIGTERM'); } catch {}
+  try { server.kill('SIGKILL'); } catch {}
+};
 process.on('exit', stop);
+process.on('SIGINT', () => { stop(); process.exit(130); });
 
 async function waitForServer() {
+  let lastError = '';
   for (let i = 0; i < 60; i += 1) {
+    if (serverExit !== null) break;
     try {
       const res = await fetch(BASE + '/');
       if (res.ok) return true;
-    } catch {}
+      lastError = `HTTP ${res.status}`;
+    } catch (error) {
+      lastError = error?.cause?.code ?? error?.code ?? String(error?.message ?? error);
+    }
     await new Promise((r) => setTimeout(r, 500));
   }
-  throw new Error('preview server did not start');
+  throw new Error(
+    `preview server did not start at ${BASE}\n` +
+      `  last error: ${lastError || 'none'}\n` +
+      `  process:    ${serverExit === null ? 'still running' : 'exited with ' + serverExit}\n` +
+      `  output:     ${serverLog.trim() || '(none)'}`,
+  );
 }
 
 await waitForServer();

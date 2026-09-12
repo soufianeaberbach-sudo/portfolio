@@ -304,10 +304,22 @@ function json(status: number, data: Record<string, unknown>): Response {
   });
 }
 
+/* A parsed body that is not a plain object is treated as unreadable rather
+   than passed on. `JSON.parse('null')` succeeds and yields null, so a body of
+   literal `null` used to reach the screens and throw on the first property
+   read — answering 500 for what is plainly a malformed request. Arrays and
+   scalars never threw, but they are not form bodies either, so all of them are
+   refused in one place with the 400 that already exists for this. */
+function isFormObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 async function readBody(request: Request): Promise<{ form: Record<string, unknown>; wantsJson: boolean }> {
   const type = request.headers.get('content-type') ?? '';
   if (type.includes('application/json')) {
-    return { form: (await request.json()) as Record<string, unknown>, wantsJson: true };
+    const parsed: unknown = await request.json();
+    if (!isFormObject(parsed)) throw new Error('body is not an object');
+    return { form: parsed, wantsJson: true };
   }
   const data = await request.formData();
   const form: Record<string, unknown> = {};

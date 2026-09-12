@@ -28,23 +28,39 @@
     "BRIEF_TO": "soufiane.aberbach@gmail.com",
     "BRIEF_FROM": "brief@soufianeaberbach.com"
   }
-  // DEPLOYMENT PREREQUISITES — the form declines briefs until these exist.
+  // ── ACTIVATION ───────────────────────────────────────────────────────────
+  // The form declines briefs until 1-3 below exist. Verified against the
+  // wrangler in devDependencies (4.x); `npx wrangler kv namespace --help` is
+  // the authority if the CLI moves on.
   //
-  // 1. Durable storage. Create the namespace, then uncomment this block with
-  //    the real id. Until it is bound, POST /api/brief answers 503 and the
-  //    page tells the visitor to email directly; nothing is ever accepted and
-  //    then dropped.
+  // 1. DURABLE STORAGE — required. Until BRIEFS is bound, POST /api/brief
+  //    answers 503 and the page tells the visitor to email directly. Nothing
+  //    is ever accepted and then dropped.
   //
-  //      npx wrangler kv namespace create BRIEFS
+  //      npx wrangler kv namespace list          # check before creating
+  //      npx wrangler kv namespace create portfolio-BRIEFS \
+  //        --binding BRIEFS --update-config
   //
-  //    "kv_namespaces": [{ "binding": "BRIEFS", "id": "<id from the command>" }]
+  //    --update-config writes the kv_namespaces entry into this file with the
+  //    real id, so the id is never typed by hand. Doing it manually instead,
+  //    the entry is a sibling of "vars" above:
   //
-  // 2. Secrets (never committed — see .dev.vars.example):
+  //      "kv_namespaces": [{ "binding": "BRIEFS", "id": "<real id>" }]
+  //
+  //    NO PLACEHOLDER. An invented or preview id here deploys a Worker that
+  //    writes into a namespace nobody reads, which is worse than the 503.
+  //
+  // 2. SECRETS — never committed, never in this file. See .dev.vars.example
+  //    for the local equivalents.
   //
   //      npx wrangler secret put RESEND_API_KEY
   //      npx wrangler secret put TURNSTILE_SECRET
   //
-  // 3. Turnstile. ACTIVATE BOTH HALVES TOGETHER OR NEITHER.
+  //    BRIEF_FROM above must be on a domain verified in Resend, or Resend
+  //    rejects the send. The brief still survives: it is already in KV and an
+  //    undelivered:<reference> record is written alongside it.
+  //
+  // 3. TURNSTILE — ACTIVATE BOTH HALVES TOGETHER OR NEITHER.
   //
   //    TURNSTILE_SECRET is what the Worker verifies against. When it is
   //    ABSENT, Turnstile verification is disabled entirely and submissions are
@@ -70,6 +86,9 @@
   //
   //      PUBLIC_TURNSTILE_SITEKEY=0x... npx wrangler deploy
   //
+  //    It is the SITE key, which is public and appears in the page source.
+  //    The secret key never goes in this variable.
+  //
   //    If TURNSTILE_SECRET is set but PUBLIC_TURNSTILE_SITEKEY was missing
   //    from the deploy build, the Worker demands a token the page cannot
   //    produce and the form rejects every submission. If the site key is set
@@ -82,4 +101,7 @@
   //    worker/index.ts), which /privacy/ states verbatim — change both
   //    together. Rate-limit keys hold a truncated SHA-256 of the caller's IP,
   //    never the address itself, and expire after an hour.
+  //
+  //    docs/BACKEND-ACTIVATION.md is the step-by-step runbook, including how
+  //    to verify each piece and what to check after the first live brief.
 }
