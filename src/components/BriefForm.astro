@@ -133,15 +133,60 @@ const email = 'soufianeaberbach@gmail.com';
       </p>
     </fieldset>
 
-    <fieldset class="bf__group">
-      <legend class="label">Reference or file link <span class="field__opt">optional</span></legend>
-      <p class="field">
-        <label for="bf-link">Paste a link</label>
+    <fieldset class="field bf__attach">
+      <legend class="label">Upload a reference <span class="field__opt">optional</span></legend>
+      <p class="bf__attach-lede">
+        A sketch, a photo of a fitting, a tech pack, a screenshot — whatever you already
+        have, as a PDF or an image. It goes straight to Soufiane; nothing is published.
+      </p>
+
+      {/* The input is the control; the label is its visible surface. Clicking or
+          pressing Enter/Space on the label opens the picker, which on a phone is
+          the native Photos / Files sheet — no cloud link, no copy-paste. The
+          input is visually hidden but never display:none, so it stays focusable
+          and reachable by assistive tech. */}
+      <input
+        class="bf__file-input"
+        id="bf-file"
+        name="file"
+        type="file"
+        accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
+        aria-describedby="bf-file-hint bf-file-err"
+        data-file
+      />
+
+      <div class="bf__drop" data-drop>
+        <label class="bf__drop-label" for="bf-file">
+          <span class="bf__drop-action">Choose a file</span>
+          <span class="bf__drop-or" aria-hidden="true">or drag it here</span>
+        </label>
+      </div>
+
+      {/* Announced politely so a screen reader hears the selection without the
+          focus being stolen from the picker's return point. */}
+      <div class="bf__file-chosen" data-file-chosen hidden aria-live="polite">
+        <span class="bf__file-meta">
+          <strong data-file-name></strong>
+          <span data-file-size></span>
+        </span>
+        <button class="bf__file-remove" type="button" data-file-remove>
+          Remove<span class="sr-only"> the selected file</span>
+        </button>
+      </div>
+
+      <span class="field__hint" id="bf-file-hint">
+        PDF or image (JPEG, PNG, WebP). Up to 10 MB. For anything else, add a link below.
+      </span>
+      <span class="field__err" id="bf-file-err" data-err="file" hidden></span>
+
+      <p class="bf__attach-alt">
+        <span class="bf__attach-alt-tag">or add a link</span>
+        <label class="sr-only" for="bf-link">Link to a reference</label>
         <input id="bf-link" name="link" type="url" inputmode="url" maxlength="2000"
                placeholder="https://" aria-describedby="bf-link-err bf-link-hint" />
         <span class="field__hint" id="bf-link-hint">
-          Google Drive, Dropbox, WeTransfer or a web reference. There is no upload on this
-          page — and a link you paste is only as private as that link.
+          Google Drive, Dropbox, Figma or a web reference — useful if the file is
+          large or already online. A link you paste is only as private as that link.
         </span>
         <span class="field__err" id="bf-link-err" data-err="link" hidden></span>
       </p>
@@ -304,6 +349,106 @@ const email = 'soufianeaberbach@gmail.com';
   .stage:has(input:checked) { border-bottom-color: var(--ink); }
   .stage:has(input:focus-visible) { background-color: var(--paper-bright); }
 
+  /* Upload. Ruled and editorial like every other field — the drop zone is a
+     baseline rule that thickens on hover and focus, not a dashed box. */
+  .bf__attach-lede { margin: 0 0 1rem; color: var(--ink-soft); font-size: .88rem; line-height: 1.65; max-width: 34rem; }
+
+  /* Visually hidden but focusable: display:none would take it out of the tab
+     order and hide it from assistive tech. */
+  .bf__file-input {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .bf__drop { position: relative; }
+  .bf__drop-label {
+    display: flex;
+    align-items: baseline;
+    gap: .75rem;
+    padding: .85rem 0;
+    border-bottom: 2px solid var(--line-strong);
+    cursor: pointer;
+    transition: border-color .2s var(--ease);
+  }
+  .bf__drop-action {
+    font-family: var(--display);
+    font-weight: 750;
+    font-size: 1rem;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--signal);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+  .bf__drop-or { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .bf__drop-label:hover { border-color: var(--signal); }
+  /* The real focus ring sits on the hidden input, so it is mirrored here. */
+  .bf__file-input:focus-visible + .bf__drop .bf__drop-label { border-color: var(--signal); outline: 2px solid var(--signal); outline-offset: 4px; }
+  .bf__drop.is-over .bf__drop-label { border-color: var(--signal); background: color-mix(in srgb, var(--signal) 7%, transparent); }
+  /* Only the two-word action is hidden on a touch-only device; dragging is not
+     a thing there, and inviting it would be a lie. */
+  @media (hover: none) { .bf__drop-or { display: none; } }
+
+  .bf__file-chosen {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .85rem;
+    padding: .6rem 0 .7rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .bf__file-meta { display: flex; align-items: baseline; gap: .6rem; min-width: 0; }
+  .bf__file-meta strong {
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: .9rem;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  .bf__file-meta span { font-family: var(--mono); font-size: .68rem; color: var(--muted); white-space: nowrap; }
+  .bf__file-remove {
+    flex: none;
+    padding: .2rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    background: none;
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .bf__file-remove:hover { color: var(--signal); border-color: var(--signal); }
+  /* On a touch device the text alone measured 44x23 — wide enough, less than
+     half tall enough. The padding is added only where the pointer is coarse,
+     so the desktop rule stays tight against the filename baseline. */
+  @media (pointer: coarse) {
+    .bf__file-chosen { align-items: center; }
+    .bf__file-remove { padding-block: .9rem; }
+  }
+
+  /* The link is the alternative, not the equal: set back, smaller, introduced
+     by its own quiet tag so the hierarchy reads at a glance. */
+  .bf__attach-alt { margin: 1.75rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+  .bf__attach-alt-tag {
+    display: block;
+    margin-bottom: .5rem;
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   .bf__turnstile { min-height: 65px; }
 
   .bf__submit { display: grid; gap: 1rem; justify-items: start; }
@@ -382,6 +527,16 @@ const email = 'soufianeaberbach@gmail.com';
       alertText.textContent = '';
     }
 
+    /* Clears one field's slot without wiping the others — the attachment
+       control revalidates on every change and must not silently drop an error
+       still standing on another field. */
+    function clearFieldError(name) {
+      const slot = errorFor(name);
+      const control = controlFor(name);
+      if (slot) { slot.hidden = true; slot.textContent = ''; }
+      if (control) control.removeAttribute('aria-invalid');
+    }
+
     function showFieldError(name, message) {
       const slot = errorFor(name);
       const control = controlFor(name);
@@ -406,6 +561,8 @@ const email = 'soufianeaberbach@gmail.com';
       if (value('message').length < 10) problems.push(['message', 'A sentence or two about what needs solving is enough.']);
       const link = value('link');
       if (link && !/^https?:\/\/.+/i.test(link)) problems.push(['link', 'Links need to start with http:// or https://']);
+      const badFile = fileProblem();
+      if (badFile) problems.push(['file', badFile]);
       return problems;
     }
 
@@ -457,6 +614,93 @@ const email = 'soufianeaberbach@gmail.com';
        cf-turnstile class exactly as before. Everything here is guarded: with
        no build-time site key there is no widget and no api.js, so this is a
        no-op. */
+    /* ---- attachment state -------------------------------------------- */
+    const fileInput = form.querySelector('[data-file]');
+    const drop = form.querySelector('[data-drop]');
+    const chosenRow = form.querySelector('[data-file-chosen]');
+    const chosenName = form.querySelector('[data-file-name]');
+    const chosenSize = form.querySelector('[data-file-size]');
+    const removeBtn = form.querySelector('[data-file-remove]');
+
+    const MAX_BYTES = 10 * 1024 * 1024;
+    const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
+
+    function prettySize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function showChosen() {
+      const file = fileInput?.files?.[0];
+      if (!file) {
+        chosenRow.hidden = true;
+        return;
+      }
+      chosenName.textContent = file.name;
+      chosenSize.textContent = prettySize(file.size);
+      chosenRow.hidden = false;
+    }
+
+    function clearFile() {
+      if (!fileInput) return;
+      fileInput.value = '';
+      chosenRow.hidden = true;
+      clearFieldError('file');
+    }
+
+    /* Checked here purely so the visitor hears about it immediately instead of
+       after a round trip. The server validates independently and is the
+       authority — this is courtesy, not security. */
+    function fileProblem() {
+      const file = fileInput?.files?.[0];
+      if (!file) return null;
+      const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+      if (!ALLOWED_EXT.includes(ext)) {
+        return 'That file type is not accepted. Please choose a PDF or an image, or add a link to it below.';
+      }
+      if (file.size === 0) return 'That file appears to be empty. Please choose it again.';
+      if (file.size > MAX_BYTES) {
+        return 'That file is larger than 10 MB. Please choose a smaller one, or add a link to it instead.';
+      }
+      return null;
+    }
+
+    fileInput?.addEventListener('change', () => {
+      clearFieldError('file');
+      showChosen();
+      const problem = fileProblem();
+      if (problem) showFieldError('file', problem);
+    });
+
+    removeBtn?.addEventListener('click', () => {
+      clearFile();
+      /* Focus lands back on the control that opened the picker, not nowhere. */
+      fileInput?.focus();
+    });
+
+    if (drop && fileInput && 'DataTransfer' in window) {
+      const stop = (event) => { event.preventDefault(); event.stopPropagation(); };
+      ['dragenter', 'dragover'].forEach((type) =>
+        drop.addEventListener(type, (event) => { stop(event); drop.classList.add('is-over'); }),
+      );
+      ['dragleave', 'dragend'].forEach((type) =>
+        drop.addEventListener(type, (event) => { stop(event); drop.classList.remove('is-over'); }),
+      );
+      drop.addEventListener('drop', (event) => {
+        stop(event);
+        drop.classList.remove('is-over');
+        const dropped = event.dataTransfer?.files?.[0];
+        if (!dropped) return;
+        /* Assigning a DataTransfer list is the only way to put a dropped file
+           into a real file input, which keeps one source of truth for submit. */
+        const carrier = new DataTransfer();
+        carrier.items.add(dropped);
+        fileInput.files = carrier.files;
+        fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }
+
     const TURNSTILE_TARGET = '#brief-turnstile';
 
     function resetTurnstile() {
@@ -486,15 +730,32 @@ const email = 'soufianeaberbach@gmail.com';
       }
 
       const data = Object.fromEntries(new FormData(form).entries());
+      /* The file never belongs in `data`: FormData gives a File object, which
+         JSON.stringify would flatten to {}. It is sent as its own part below
+         and deleted here so the mailto fallback never shows "[object File]". */
+      delete data.file;
       setBusy(true);
+
+      const chosen = fileInput?.files?.[0] ?? null;
 
       let res;
       try {
-        res = await fetch(form.dataset.endpoint, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+        /* Multipart when there is a file — JSON cannot carry bytes — and JSON
+           otherwise, which keeps the smaller, unchanged path for the common
+           case. Accept says what the answer should be either way. */
+        let body;
+        const headers = { accept: 'application/json' };
+        if (chosen) {
+          body = new FormData();
+          Object.entries(data).forEach(([key, value]) => body.append(key, value));
+          body.append('file', chosen, chosen.name);
+          /* No content-type header: the browser must set the multipart
+             boundary itself. */
+        } else {
+          headers['content-type'] = 'application/json';
+          body = JSON.stringify(data);
+        }
+        res = await fetch(form.dataset.endpoint, { method: 'POST', headers, body });
       } catch {
         setBusy(false);
         /* The client cannot know whether the server received the request and

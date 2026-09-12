@@ -81,6 +81,73 @@ function makeKv({ failPut = () => false, failGet = false } = {}) {
   };
 }
 
+/* Stub R2. Records every put so a test can assert the key shape, the metadata
+   and — importantly — that bytes never reach KV. */
+function makeR2({ failPut = false, failDelete = false } = {}) {
+  return {
+    objects: new Map(),
+    puts: [],
+    deletes: [],
+    async put(key, value, options = {}) {
+      this.puts.push({ key, size: value.byteLength, options });
+      if (failPut) throw new Error('r2 unavailable');
+      this.objects.set(key, { value, options });
+    },
+    async delete(key) {
+      this.deletes.push(key);
+      if (failDelete) throw new Error('r2 delete unavailable');
+      this.objects.delete(key);
+    },
+    keys() { return [...this.objects.keys()]; },
+  };
+}
+
+/* Minimal real file bodies. Each begins with the magic its extension claims,
+   so validation is exercised on bytes rather than on a label. */
+const MAGIC = {
+  pdf: [0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x37],
+  jpg: [0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46],
+  png: [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
+  webp: [0x52, 0x49, 0x46, 0x46, 0x24, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50],
+  zip: [0x50, 0x4b, 0x03, 0x04, 0x14, 0x00, 0x00, 0x00],
+  ole2: [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1],
+  exe: [0x4d, 0x5a, 0x90, 0x00, 0x03, 0x00, 0x00, 0x00],
+  none: [0x00, 0x01, 0x02, 0x03],
+};
+
+function makeFile(name, kind, { type, bytes = 2048 } = {}) {
+  const head = MAGIC[kind] ?? MAGIC.none;
+  const buf = new Uint8Array(Math.max(bytes, head.length));
+  buf.set(head, 0);
+  for (let i = head.length; i < buf.length; i += 1) buf[i] = i % 251;
+  const MIME = {
+    pdf: 'application/pdf',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    webp: 'image/webp',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    doc: 'application/msword',
+    xls: 'application/vnd.ms-excel',
+  };
+  const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+  return new File([buf], name, { type: type ?? MIME[ext] ?? 'application/octet-stream' });
+}
+
+/* Scripted multipart: what the page sends when a file is attached. Accept
+   names JSON, so the Worker answers JSON even though the body is multipart. */
+function multipartRequest(fields, file, { ip = '203.0.113.9', headers = {} } = {}) {
+  const body = new FormData();
+  Object.entries(fields).forEach(([k, v]) => body.append(k, String(v)));
+  if (file) body.append('file', file, file.name);
+  return new Request(ENDPOINT, {
+    method: 'POST',
+    headers: { accept: 'application/json', origin: ORIGIN, 'CF-Connecting-IP': ip, ...headers },
+    body,
+  });
+}
+
 let assetsCalls = 0;
 function makeEnv(overrides = {}) {
   return {
@@ -774,6 +841,434 @@ group('the Turnstile hostname allowlist is the new domain');
   const to = config.match(/"BRIEF_TO":\s*"([^"]*)"/)?.[1] ?? '';
   check('BRIEF_TO is the public Gmail mailbox', to === 'soufianeaberbach@gmail.com', to);
   check('BRIEF_TO is not the dotted display form', to !== 'soufiane' + '.' + 'aberbach@gmail.com', to);
+}
+
+/* ================================================== file upload ========== */
+
+group('U1. accepted types are stored in R2, never in KV');
+{
+  for (const [name, kind, label] of [
+    ['tech-pack.pdf', 'pdf', 'PDF'],
+    ['fitting.jpg', 'jpg', 'JPEG image'],
+    ['sketch.png', 'png', 'PNG image'],
+    ['reference.webp', 'webp', 'WebP image'],
+  ]) {
+    resetOutbound({ 'api.resend.com': resendOk });
+    const kv = makeKv();
+    const r2 = makeR2();
+    const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const { status, body } = await call(multipartRequest(goodFields(), makeFile(name, kind)), env);
+
+    check(`${name} accepted`, status === 200, `status ${status}`);
+    check(`${name} reports ok`, body?.ok === true);
+    check(`${name} echoes the filename back`, body?.file?.name === name, JSON.stringify(body?.file));
+    check(`${name} stored exactly once in R2`, r2.keys().length === 1, `${r2.keys().length} objects`);
+
+    const key = r2.keys()[0];
+    check(`${name} key is namespaced by reference`, key.startsWith(`briefs/${body.id}/`), key);
+    check(`${name} key does not contain the sender filename`, !key.includes(name.split('.')[0]), key);
+    check(`${name} key ends with the real extension`, key.endsWith('.' + name.split('.').pop().toLowerCase()), key);
+    check(`${name} R2 metadata carries the display name`, r2.puts[0].options.customMetadata.filename === name);
+
+    /* The whole point of R2: KV holds a pointer, never bytes. */
+    const record = kv.read(`brief:${body.id}`);
+    check(`${name} KV holds only a pointer`, record?.file?.key === key, JSON.stringify(record?.file));
+    check(`${name} KV record has no byte payload`, !JSON.stringify(record).includes('ArrayBuffer') && JSON.stringify(record).length < 1200, String(JSON.stringify(record).length));
+    check(`${name} label recorded as ${label}`, record?.file?.label === label, String(record?.file?.label));
+
+    const mail = outbound.find((c) => c.url.includes('api.resend.com'));
+    const text = JSON.parse(mail.init.body).text;
+    check(`${name} email names the file`, text.includes(name), text.slice(0, 80));
+    check(`${name} email carries the storage key`, text.includes(key));
+  }
+}
+
+group('U2. oversized files are rejected');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const big = makeFile('huge.pdf', 'pdf', { bytes: 11 * 1024 * 1024 });
+  const { status, body } = await call(multipartRequest(goodFields(), big), env);
+  check('rejects over the 10 MB ceiling', status === 400 || status === 413, `status ${status}`);
+  check('names the file field so the UI can point at it', body?.field === 'file', String(body?.field));
+  check('the message states the limit', /10 MB/.test(String(body?.error)), String(body?.error));
+  check('nothing stored in R2', r2.keys().length === 0);
+  check('nothing persisted in KV', kv.keys('brief:').length === 0);
+  check('no email attempted', outbound.length === 0);
+}
+
+group('U3. executables and scripts are rejected');
+{
+  for (const [name, kind, why] of [
+    ['payload.exe', 'exe', 'extension not on the allowlist'],
+    ['script.js', 'none', 'extension not on the allowlist'],
+    ['run.sh', 'none', 'extension not on the allowlist'],
+    ['install.bat', 'none', 'extension not on the allowlist'],
+    ['thing.cmd', 'none', 'extension not on the allowlist'],
+    ['app.apk', 'zip', 'extension not on the allowlist even though it is a ZIP'],
+    ['disk.dmg', 'none', 'extension not on the allowlist'],
+    ['archive.zip', 'zip', 'bare archives are deliberately excluded'],
+    /* Office formats are out for launch: their magic proves only the ZIP or
+       OLE2 container, never that the document inside is the claimed format or
+       free of macros. The link field covers them. */
+    ['spec.docx', 'zip', 'ZIP container proves nothing about the document'],
+    ['costing.xlsx', 'zip', 'ZIP container proves nothing about the document'],
+    ['lookbook.pptx', 'zip', 'ZIP container proves nothing about the document'],
+    ['legacy.doc', 'ole2', 'OLE2 container can carry macros'],
+    ['legacy.xls', 'ole2', 'OLE2 container can carry macros'],
+    ['legacy.ppt', 'ole2', 'OLE2 container can carry macros'],
+    ['payload.pdf', 'exe', 'extension says PDF, bytes say MZ executable'],
+    ['sketch.png', 'exe', 'renamed executable'],
+  ]) {
+    resetOutbound({});
+    const kv = makeKv();
+    const r2 = makeR2();
+    const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const { status, body } = await call(multipartRequest(goodFields(), makeFile(name, kind)), env);
+    check(`${name} rejected (${why})`, status === 400, `status ${status}`);
+    check(`${name} nothing stored`, r2.keys().length === 0 && kv.keys('brief:').length === 0);
+    check(`${name} does not claim success`, body?.ok === false);
+  }
+}
+
+group('U4. a declared type that contradicts the extension is rejected');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 });
+  const lying = makeFile('sketch.png', 'png', { type: 'application/pdf' });
+  const { status } = await call(multipartRequest(goodFields(), lying), env);
+  check('rejected', status === 400, `status ${status}`);
+  check('nothing stored', r2.keys().length === 0);
+}
+
+group('U4b. an empty or absent Content-Type is tolerated when the bytes agree');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const vague = makeFile('sketch.png', 'png', { type: 'application/octet-stream' });
+  const { status } = await call(multipartRequest(goodFields(), vague), env);
+  check('accepted on its bytes', status === 200, `status ${status}`);
+  check('stored', r2.keys().length === 1);
+}
+
+group('U5. an empty file is rejected');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 });
+  const empty = new File([new Uint8Array(0)], 'empty.pdf', { type: 'application/pdf' });
+  const { status, body } = await call(multipartRequest(goodFields(), empty), env);
+  check('rejected', status === 400, `status ${status}`);
+  check('named as a file problem', body?.field === 'file', String(body?.field));
+  check('nothing stored', r2.keys().length === 0 && kv.keys('brief:').length === 0);
+}
+
+group('U6. storage failure refuses the brief rather than half-accepting it');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2({ failPut: true });
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('responds 502', status === 502, `status ${status}`);
+  check('does NOT claim success', body?.ok === false);
+  check('no reference handed out', body?.id === undefined);
+  check('nothing persisted in KV — no brief claiming a missing file', kv.keys('brief:').length === 0);
+  check('no email sent', outbound.length === 0);
+  check('the message says nothing was lost', /Nothing you typed has been lost/i.test(String(body?.error)), String(body?.error));
+}
+
+group('U7. an attachment with no bucket bound is refused, not silently dropped');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const env = makeEnv({ BRIEFS: kv, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('responds 503', status === 503, `status ${status}`);
+  check('names the file field', body?.field === 'file', String(body?.field));
+  check('nothing persisted', kv.keys('brief:').length === 0);
+  check('no email claiming receipt', outbound.length === 0);
+}
+
+group('U8. filename sanitization');
+{
+  const cases = [
+    ['../../etc/passwd.pdf', 'passwd.pdf', 'path traversal stripped'],
+    ['..\\windows\\system32\\x.pdf', 'x.pdf', 'windows separators stripped'],
+    ['  leading spaces.pdf', 'leading spaces.pdf', 'leading whitespace trimmed'],
+    ['a"b<c>d|e.pdf', 'a_b_c_d_e.pdf', 'shell and markup characters neutralised'],
+    /* Control characters are removed outright rather than substituted, so the
+       newline simply disappears — which is what matters: nothing survives that
+       could start a new line in the brief email. */
+    ['tech\npack.pdf', 'techpack.pdf', 'newline removed — no email header injection'],
+    ['résumé croquis.pdf', 'r_sum_ croquis.pdf', 'non-ASCII replaced, spacing kept'],
+  ];
+  for (const [raw, expected, why] of cases) {
+    resetOutbound({ 'api.resend.com': resendOk });
+    const kv = makeKv();
+    const r2 = makeR2();
+    const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const file = new File([new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x37, 1, 2, 3])], raw, { type: 'application/pdf' });
+    const { status, body } = await call(multipartRequest(goodFields(), file), env);
+    check(`"${raw.replace(/\n/g, '\\n')}" accepted (${why})`, status === 200, `status ${status}`);
+    check(`  stored as "${expected}"`, body?.file?.name === expected, String(body?.file?.name));
+    check('  no newline or control character survives', !/[\u0000-\u001f]/.test(String(body?.file?.name)));
+    check('  no path separator survives', !/[\\/]/.test(String(body?.file?.name)), String(body?.file?.name));
+    const key = r2.keys()[0] ?? '';
+    check('  key has no path segment from the name', key.split('/').length === 3, key);
+  }
+}
+
+group('U6b. R2 succeeds but KV fails — the object is rolled back, not orphaned');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  /* The brief write fails; the rate-limit write must still succeed, or the
+     request would never reach the persist step being tested. */
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+
+  check('the upload did reach R2', r2.puts.length === 1, `${r2.puts.length} puts`);
+  check('responds 502', status === 502, `status ${status}`);
+  check('does NOT claim success', body?.ok === false);
+  check('no reference handed out', body?.id === undefined);
+  check('nothing persisted in KV', kv.keys('brief:').length === 0);
+  check('no email sent', outbound.length === 0);
+
+  /* The point of the test: no object left behind that nothing references. */
+  check('the object was deleted', r2.deletes.length === 1, `${r2.deletes.length} deletes`);
+  check('the deleted key is the one just written', r2.deletes[0] === r2.puts[0].key, `${r2.deletes[0]} vs ${r2.puts[0].key}`);
+  check('the bucket is empty afterwards', r2.keys().length === 0, JSON.stringify(r2.keys()));
+}
+
+group('U6c. a failed rollback still tells the sender the truth');
+{
+  /* If the cleanup also fails there is nothing more the request can do, and
+     the lifecycle rule is the backstop. What must NOT happen is the response
+     changing — the brief was not saved either way. */
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2({ failDelete: true });
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('still responds 502', status === 502, `status ${status}`);
+  check('still does not claim success', body?.ok === false);
+  check('the rollback was attempted', r2.deletes.length === 1);
+  check('the response does not claim the rollback worked', !/remov|delet|clean/i.test(String(body?.error)), String(body?.error));
+  check('no email sent', outbound.length === 0);
+  check('nothing persisted', kv.keys('brief:').length === 0);
+}
+
+group('U6d. nothing is deleted when there was no upload to roll back');
+{
+  resetOutbound({});
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status } = await call(multipartRequest(goodFields(), null), env);
+  check('responds 502', status === 502, `status ${status}`);
+  check('no put and no delete', r2.puts.length === 0 && r2.deletes.length === 0);
+}
+
+group('U6e. a successful brief never deletes its own upload');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('responds 200', status === 200, `status ${status}`);
+  check('no delete attempted', r2.deletes.length === 0, JSON.stringify(r2.deletes));
+  check('the object is still there', r2.keys().length === 1);
+  check('and the brief points at it', kv.read(`brief:${body.id}`)?.file?.key === r2.keys()[0]);
+}
+
+group('U3b. the launch allowlist is exactly the four verifiable formats');
+{
+  /* Read from the Worker source so the policy cannot drift from the UI without
+     a test noticing. */
+  const source = await readFile(new URL('../worker/index.ts', import.meta.url), 'utf8');
+  const block = source.match(/const ACCEPTED_FILES: FileKind\[\] = \[([\s\S]*?)\];/)?.[1] ?? '';
+  const exts = [...block.matchAll(/ext: '([a-z0-9]+)'/g)].map((m) => m[1]);
+  check('exactly five entries (jpg and jpeg both map to JPEG)', exts.length === 5, JSON.stringify(exts));
+  check('the set is pdf/jpg/jpeg/png/webp', JSON.stringify([...new Set(exts)].sort()) === JSON.stringify(['jpeg', 'jpg', 'pdf', 'png', 'webp']), JSON.stringify(exts));
+  for (const gone of ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip']) {
+    check(`${gone} is not accepted`, !exts.includes(gone));
+  }
+
+  /* And the form's accept attribute agrees with it. */
+  const form = await readFile(new URL('../src/components/BriefForm.astro', import.meta.url), 'utf8');
+  const accept = form.match(/accept="([^"]+)"/)?.[1] ?? '';
+  check('the accept attribute lists the same four formats', ['.pdf', '.jpg', '.jpeg', '.png', '.webp'].every((e) => accept.includes(e)), accept);
+  check('the accept attribute offers no Office format', !/docx?|xlsx?|pptx?/.test(accept), accept);
+  check('the client-side list agrees', /ALLOWED_EXT = \['pdf', 'jpg', 'jpeg', 'png', 'webp'\]/.test(form));
+}
+
+group('U9. duplicate filenames do not collide');
+{
+  const keys = [];
+  for (let i = 0; i < 3; i += 1) {
+    resetOutbound({ 'api.resend.com': resendOk });
+    const kv = makeKv();
+    const r2 = makeR2();
+    const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const { body } = await call(multipartRequest(goodFields(), makeFile('sketch.pdf', 'pdf')), env);
+    keys.push(r2.keys()[0]);
+    check(`submission ${i + 1} kept the display name`, body?.file?.name === 'sketch.pdf');
+  }
+  check('three identical filenames produced three distinct keys', new Set(keys).size === 3, JSON.stringify(keys));
+}
+
+group('U10. submitting without a file still works, both ways');
+{
+  /* multipart with no file part */
+  resetOutbound({ 'api.resend.com': resendOk });
+  let kv = makeKv();
+  let r2 = makeR2();
+  let env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  let res = await call(multipartRequest(goodFields(), null), env);
+  check('multipart without a file responds 200', res.status === 200, `status ${res.status}`);
+  check('no R2 object written', r2.keys().length === 0);
+  check('KV records file: null', kv.read(`brief:${res.body.id}`)?.file === null);
+  check('the response reports no file', res.body?.file === null);
+  let mail = outbound.find((c) => c.url.includes('api.resend.com'));
+  check('email shows File: —', JSON.parse(mail.init.body).text.includes('File:     —'));
+
+  /* the original JSON path, untouched */
+  resetOutbound({ 'api.resend.com': resendOk });
+  kv = makeKv();
+  env = makeEnv({ BRIEFS: kv, RESEND_API_KEY: FAKE_RESEND_KEY });
+  res = await call(jsonRequest(goodFields()), env);
+  check('JSON submission still responds 200', res.status === 200, `status ${res.status}`);
+  check('JSON submission needs no bucket', kv.keys('brief:').length === 1);
+}
+
+group('U11. the optional reference link still works alongside uploads');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const fields = goodFields({ link: 'https://drive.example.com/folder/abc' });
+  const { status, body } = await call(multipartRequest(fields, makeFile('spec.pdf', 'pdf')), env);
+  check('link and file together are accepted', status === 200, `status ${status}`);
+  const record = kv.read(`brief:${body.id}`);
+  check('the link is recorded', record?.link === fields.link);
+  check('the file is recorded', record?.file?.name === 'spec.pdf');
+  const text = JSON.parse(outbound.find((c) => c.url.includes('api.resend.com')).init.body).text;
+  check('the email shows both', text.includes(fields.link) && text.includes('spec.pdf'));
+
+  /* link-only, no file — the pre-upload behaviour */
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv2 = makeKv();
+  const env2 = makeEnv({ BRIEFS: kv2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const linkOnly = await call(jsonRequest(goodFields({ link: 'https://example.com/ref' })), env2);
+  check('link-only submission still works', linkOnly.status === 200, `status ${linkOnly.status}`);
+}
+
+group('U12. field validation still runs on a multipart submission');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 });
+  const { status, body } = await call(multipartRequest(goodFields({ email: 'nope' }), makeFile('spec.pdf', 'pdf')), env);
+  check('invalid email still rejected', status === 400, `status ${status}`);
+  check('still names the email field', body?.field === 'email', String(body?.field));
+  check('the file was NOT stored for an invalid brief', r2.keys().length === 0);
+}
+
+group('U13. Turnstile still governs a multipart submission');
+{
+  /* Nothing about attachments may become a way around the spam check. */
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
+  const noToken = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('multipart with no token is rejected', noToken.status === 400, `status ${noToken.status}`);
+  check('no file stored for an unverified submission', r2.keys().length === 0);
+  check('siteverify not called without a token', outbound.length === 0);
+
+  resetOutbound({ 'challenges.cloudflare.com': turnstileOk, 'api.resend.com': resendOk });
+  const kv2 = makeKv();
+  const r22 = makeR2();
+  const env2 = makeEnv({ BRIEFS: kv2, BRIEF_FILES: r22, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const withToken = await call(multipartRequest(goodFields({ 'cf-turnstile-response': 'a-good-token' }), makeFile('spec.pdf', 'pdf')), env2);
+  check('a verified multipart submission is accepted', withToken.status === 200, `status ${withToken.status}`);
+  check('and the file is stored', r22.keys().length === 1);
+
+  resetOutbound({ 'challenges.cloudflare.com': turnstileBad });
+  const kv3 = makeKv();
+  const r23 = makeR2();
+  const env3 = makeEnv({ BRIEFS: kv3, BRIEF_FILES: r23, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
+  const bad = await call(multipartRequest(goodFields({ 'cf-turnstile-response': 'bogus' }), makeFile('spec.pdf', 'pdf')), env3);
+  check('an invalid token still rejects a multipart submission', bad.status === 400, `status ${bad.status}`);
+  check('nothing stored', r23.keys().length === 0);
+}
+
+group('U14. the spam screens still run on a multipart submission');
+{
+  resetOutbound({});
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 });
+  const honeypot = await call(multipartRequest(goodFields({ website: 'https://spam.example' }), makeFile('spec.pdf', 'pdf')), env);
+  check('honeypot still rejects', honeypot.status === 400, `status ${honeypot.status}`);
+  check('no file stored', r2.keys().length === 0);
+
+  resetOutbound({});
+  const r22 = makeR2();
+  const env2 = makeEnv({ BRIEFS: makeKv(), BRIEF_FILES: r22 });
+  const fast = await call(multipartRequest(goodFields({ t: String(Date.now()) }), makeFile('spec.pdf', 'pdf')), env2);
+  check('timing screen still rejects', fast.status === 400, `status ${fast.status}`);
+  check('no file stored', r22.keys().length === 0);
+}
+
+group('U15. an extra file part cannot smuggle a second upload');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const body = new FormData();
+  Object.entries(goodFields()).forEach(([k, v]) => body.append(k, String(v)));
+  body.append('file', makeFile('legit.pdf', 'pdf'), 'legit.pdf');
+  body.append('extra', makeFile('payload.exe', 'exe'), 'payload.exe');
+  const request = new Request(ENDPOINT, {
+    method: 'POST',
+    headers: { accept: 'application/json', origin: ORIGIN, 'CF-Connecting-IP': '203.0.113.9' },
+    body,
+  });
+  const { status } = await call(request, env);
+  check('accepted, on the one known field only', status === 200, `status ${status}`);
+  check('exactly one object stored', r2.keys().length === 1, `${r2.keys().length}`);
+  check('the stored object is the legitimate one', r2.keys()[0].endsWith('.pdf'), r2.keys()[0]);
+}
+
+group('U16. no upload route is exposed for reading files back');
+{
+  /* The bucket is private and the Worker must not become a way to read it.
+     Anything other than POST /api/brief has to fall through to the static
+     site or answer 405 — never serve an object. */
+  resetOutbound({});
+  assetsCalls = 0;
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: makeKv(), BRIEF_FILES: r2 });
+  for (const path of ['/api/files/x', '/api/brief/file', '/briefs/abc/def.pdf', '/api/upload']) {
+    const res = await worker.fetch(new Request(`${ORIGIN}${path}`, { method: 'GET' }), env);
+    check(`GET ${path} does not serve a stored object`, res.status === 200 || res.status === 405, `status ${res.status}`);
+    const text = await res.text();
+    check(`GET ${path} returns no file bytes`, text === 'static asset' || text.includes('"ok":false'), text.slice(0, 40));
+  }
 }
 
 /* ------------------------------------------------------ 14-15. method + faults */

@@ -25,22 +25,22 @@ const stages = [
 // phone. They take a full-width row in the mobile layout instead; on desktop
 // the flag is unused and the grid stays 4 x 4.
 const brandLogos = [
-  { src: '/LOGO/ZARA.png', alt: 'Zara', w: 6.1 },
-  { src: '/LOGO/Bershka.png', alt: 'Bershka', w: 11.6 },
-  { src: '/LOGO/OYSHO.png', alt: 'Oysho', w: 13.1 },
-  { src: '/LOGO/Massimo Dutti.png', alt: 'Massimo Dutti', w: 18.4, wide: true },
-  { src: '/LOGO/Mango.png', alt: 'Mango', w: 15.4 },
-  { src: '/LOGO/ASOS.png', alt: 'ASOS', w: 8.8 },
-  { src: '/LOGO/Adidas.png', alt: 'Adidas', w: 11.0 },
-  { src: '/LOGO/RI.png', alt: 'River Island', w: 14.5 },
-  { src: '/LOGO/PLT.png', alt: 'PrettyLittleThing', w: 22.2, mask: '/LOGO/PLT-mask.png', wide: true },
-  { src: '/LOGO/MISSGUIDED.png', alt: 'Missguided', w: 10.9, mask: '/LOGO/MISSGUIDED-mask.png' },
-  { src: '/LOGO/ITS.png', alt: 'In The Style', w: 19.2, wide: true },
-  { src: '/LOGO/FN.png', alt: 'Fashion Nova', w: 20.5, wide: true },
-  { src: '/LOGO/ROMAN.png', alt: 'Roman', w: 13.3 },
-  { src: '/LOGO/Boohoo.png', alt: 'Boohoo', w: 10.9 },
-  { src: '/LOGO/ISIF.jpg', alt: 'I Saw It First', w: 25.6, mask: '/LOGO/ISIF-mask.png', wide: true },
-  { src: '/LOGO/LM.png', alt: 'Little Mistress London', w: 26.8, wide: true },
+  { src: '/LOGO/ZARA.png', alt: 'Zara', w: 6.1, mobileOrder: 1 },
+  { src: '/LOGO/Bershka.png', alt: 'Bershka', w: 11.6, mobileOrder: 2 },
+  { src: '/LOGO/OYSHO.png', alt: 'Oysho', w: 13.1, mobileOrder: 4 },
+  { src: '/LOGO/Massimo Dutti.png', alt: 'Massimo Dutti', w: 18.4, wide: true, mobileOrder: 3 },
+  { src: '/LOGO/Mango.png', alt: 'Mango', w: 15.4, mobileOrder: 5 },
+  { src: '/LOGO/ASOS.png', alt: 'ASOS', w: 8.8, mobileOrder: 6 },
+  { src: '/LOGO/Adidas.png', alt: 'Adidas', w: 11.0, mobileOrder: 7 },
+  { src: '/LOGO/RI.png', alt: 'River Island', w: 14.5, mobileOrder: 9 },
+  { src: '/LOGO/PLT.png', alt: 'PrettyLittleThing', w: 22.2, mask: '/LOGO/PLT-mask.png', wide: true, mobileOrder: 8 },
+  { src: '/LOGO/MISSGUIDED.png', alt: 'Missguided', w: 10.9, mask: '/LOGO/MISSGUIDED-mask.png', mobileOrder: 10 },
+  { src: '/LOGO/ITS.png', alt: 'In The Style', w: 19.2, wide: true, mobileOrder: 11 },
+  { src: '/LOGO/FN.png', alt: 'Fashion Nova', w: 20.5, wide: true, mobileOrder: 12 },
+  { src: '/LOGO/ROMAN.png', alt: 'Roman', w: 13.3, mobileOrder: 13 },
+  { src: '/LOGO/Boohoo.png', alt: 'Boohoo', w: 10.9, mobileOrder: 14 },
+  { src: '/LOGO/ISIF.jpg', alt: 'I Saw It First', w: 25.6, mask: '/LOGO/ISIF-mask.png', wide: true, mobileOrder: 15 },
+  { src: '/LOGO/LM.png', alt: 'Little Mistress London', w: 26.8, wide: true, mobileOrder: 16 },
 ];
 ---
 
@@ -70,6 +70,7 @@ const brandLogos = [
           stays in the repo because og:image still points at it. width/height
           carry the renditions' true intrinsic ratio. */}
       <img
+        class="home-hero__figure"
         src="/soufiane-drawing-800.webp"
         srcset="/soufiane-drawing-480.webp 480w, /soufiane-drawing-800.webp 800w, /soufiane-drawing-1200.webp 1200w"
         sizes="(max-width: 900px) 82vw, 46vw"
@@ -80,17 +81,6 @@ const brandLogos = [
         decoding="async"
       />
     </figure>
-  </section>
-
-  <section class="business-ready" aria-labelledby="business-ready-title">
-    <div class="section-shell business-ready__row" data-reveal>
-      <p class="label business-ready__tag" id="business-ready-title">Business ready</p>
-      <p class="business-ready__facts">
-        Registered Moroccan Auto-Entrepreneur <span aria-hidden="true">·</span> Since 2018
-        <span aria-hidden="true">·</span> B2B invoicing available
-        <span aria-hidden="true">·</span> Tangier, Morocco
-      </p>
-    </div>
   </section>
 
   <section class="positioning section-shell">
@@ -106,7 +96,19 @@ const brandLogos = [
   </section>
 
   <section class="home-stats section-shell section-rule" aria-labelledby="production-record-title">
-    <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
+    <div class="home-stats__head">
+      <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
+      <aside class="business-ready" aria-labelledby="business-ready-title" data-reveal>
+        <p class="label business-ready__tag" id="business-ready-title">Business ready</p>
+        <p class="business-ready__lead">Ready for a direct professional engagement.</p>
+        <p class="business-ready__facts">
+          <span>Registered Moroccan <strong>Auto-Entrepreneur</strong></span>
+          <span>Registered since <strong>2018</strong></span>
+          <span><strong>B2B invoicing</strong> available</span>
+          <span>Based in <strong>Tangier, Morocco</strong></span>
+        </p>
+      </aside>
+    </div>
     <div class="home-stats__grid">
       <article class="home-stat" data-reveal>
         <strong data-count="12" data-suffix="+" aria-label="12 plus">12+</strong><span>Years in<br />production</span>
@@ -134,7 +136,7 @@ const brandLogos = [
       </div>
       <ul class="brand-context__logos" aria-label="Brand programme exposure">
         {brandLogos.map((logo) => (
-          <li data-wide={logo.wide ? '' : undefined}>
+          <li data-wide={logo.wide ? '' : undefined} style={`--mobile-order:${logo.mobileOrder}`}>
             <span
               class="brand-logo"
               role="img"
@@ -418,6 +420,11 @@ const brandLogos = [
   }
   @keyframes role-caret { 50% { opacity: 0; } }
   .home-hero__copy > .button { margin-top: clamp(1.75rem, 3vw, 2.75rem); }
+  /* No border and no inner rule. Those two lines were the invisible rectangle:
+     a cut-out sitting inside a bordered, internally-ruled column reads as a
+     framed picture however transparent the PNG is. The column's structure now
+     comes from the rings behind the figure and the page rule at 68%, which the
+     figure is allowed to cross. */
   .home-hero__portrait {
     position: relative;
     z-index: 1;
@@ -428,33 +435,46 @@ const brandLogos = [
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    border-left: 1px solid var(--line);
-    background: linear-gradient(90deg, transparent 0 9%, var(--line) 9% calc(9% + 1px), transparent calc(9% + 1px));
   }
+
+  /* The cut-out meets one measured floor trace at the source image's actual
+     contact line (the asset has 6.53% transparent padding beneath it). It is
+     deliberately a tapered directional mark—not a second portrait, ellipse,
+     blur, glow or theatrical shadow. The trace runs away from the name/CTA
+     side, so the light logic and the figure's footing agree. */
   .home-hero__portrait::after {
     content: '';
     position: absolute;
     z-index: 0;
-    left: -16%;
-    right: -4%;
-    bottom: -23%;
-    height: 68%;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    box-shadow: 0 0 0 4.5vw var(--paper), 0 0 0 calc(4.5vw + 1px) var(--line);
+    right: 1%;
+    bottom: 6.35%;
+    width: 72%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(17, 17, 15, .32) 22%, rgba(17, 17, 15, .14) 72%, transparent);
+    transform: skewX(-18deg);
+    transform-origin: left;
+    pointer-events: none;
   }
+
   .home-hero__portrait img {
-    position: relative;
-    z-index: 1;
     width: min(108%, 49rem);
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
+  }
+
+  .home-hero__figure {
+    position: relative;
+    z-index: 1;
     transform: translateX(2%) scale(1.035);
     transform-origin: center bottom;
   }
 
-  .positioning { display: grid; grid-template-columns: 1.4fr .6fr; gap: 7vw; padding-block: clamp(7rem, 14vw, 14rem); }
+  @media (forced-colors: active) {
+    .home-hero__portrait::after { display: none; }
+  }
+
+  .positioning { display: grid; grid-template-columns: 1.4fr .6fr; gap: 7vw; padding-block: clamp(5.5rem, 9vw, 9rem); }
   .positioning h2 { max-width: 68rem; font-size: clamp(4rem, 8vw, 8.5rem); }
   .positioning__copy { align-self: end; max-width: 30rem; }
   .positioning__copy p { color: var(--ink-soft); line-height: 1.75; }
@@ -466,15 +486,22 @@ const brandLogos = [
      grid and made the numbers compete with each other instead of reading as a
      strip. The eyebrow moved above the row so the five cells get the whole
      measure rather than surrendering a third of it to a one-line label. */
-  .home-stats { padding-block: clamp(4rem, 7vw, 7rem); }
-  .home-stats > .eyebrow { margin: 0 0 clamp(1.75rem, 3vw, 3rem); }
+  .home-stats { padding-block: clamp(3.5rem, 5vw, 5.5rem); }
+  .home-stats__head {
+    display: grid;
+    grid-template-columns: minmax(13rem, .55fr) minmax(0, 1.45fr);
+    align-items: start;
+    gap: clamp(2rem, 5vw, 5rem);
+    margin-bottom: clamp(2rem, 3.5vw, 3rem);
+  }
+  .home-stats__head > .eyebrow { margin: .45rem 0 0; }
   .home-stats__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
   /* A number and its label are ONE fact. justify-content: space-between with a
      15rem min-height pinned them to opposite ends of the cell and put a void
      between them, so five metrics read as five empty boxes with text in the
      corners. They stack tight now, and the strip takes whatever height the
      content needs — the grid still equalises the cells so the rules line up. */
-  .home-stat { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; padding: clamp(1.6rem, 2.2vw, 2.2rem) clamp(1rem, 1.5vw, 1.6rem) clamp(1.9rem, 2.6vw, 2.6rem); overflow: hidden; border-right: 1px solid var(--line); }
+  .home-stat { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; padding: clamp(1.35rem, 1.8vw, 1.8rem) clamp(1rem, 1.5vw, 1.6rem) clamp(1.55rem, 2vw, 2rem); overflow: hidden; border-right: 1px solid var(--line); }
   .home-stat:first-child { padding-left: 0; }
   .home-stat:last-child { padding-right: 0; border-right: 0; }
   .home-stat::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--signal); transform: scaleX(.12); transform-origin: left; transition: transform .42s var(--ease); }
@@ -488,30 +515,30 @@ const brandLogos = [
     .home-stat:hover span { transform: translateX(.35rem); }
   }
 
-  /* A procurement credential, deliberately quiet: two hairlines, mono type, no
-     fill and no badge. It reads as the legal line on a document, which is why
-     it sits apart from the Production record grid rather than inside it. */
-  .business-ready { border-block: 1px solid var(--line); background: var(--paper-bright); }
-  .business-ready__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: .6rem clamp(1.25rem, 3vw, 2.5rem);
-    padding-block: clamp(1rem, 1.8vw, 1.35rem);
-  }
-  /* Muted, not signal: this is small mono text on a light ground and signal
-     reaches only 3.4:1. Orange stays available for rules, indicators and
-     larger accents elsewhere. Muted also keeps the tag quieter than the
-     facts beside it, which are --ink-soft. */
+  /* Procurement readiness is supporting evidence for the production record,
+     so it lives in the same header rather than as a detached legal strip. */
+  .business-ready { padding: 0 0 0 clamp(1.4rem, 2.5vw, 2.5rem); border-left: 3px solid var(--signal); }
   .business-ready__tag { margin: 0; color: var(--muted); }
-  .business-ready__facts {
-    margin: 0;
-    color: var(--ink-soft);
-    font-family: var(--mono);
-    font-size: .74rem;
-    line-height: 1.7;
+  .business-ready__lead {
+    margin: .7rem 0 1rem;
+    font-family: var(--display);
+    font-size: clamp(1.25rem, 2vw, 1.8rem);
+    font-weight: 750;
+    letter-spacing: -.035em;
+    line-height: 1.05;
   }
-  .business-ready__facts span { color: var(--muted); padding-inline: .15rem; }
+  .business-ready__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem clamp(1rem, 3vw, 2.5rem);
+    margin: 0;
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .035em;
+    line-height: 1.5;
+  }
+  .business-ready__facts span { padding-top: .45rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
+  .business-ready__facts strong { font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
   .home-process { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
   .home-process__head { position: sticky; top: 8rem; align-self: start; }
@@ -569,12 +596,16 @@ const brandLogos = [
   /* Padding trimmed from 6-10rem now that the meta label, arrow and the
      bottom link rail are gone — the section keeps the same visual weight
      without the removed elements leaving a gap. */
-  /* The 3D simulation section is pure black, not --ink (#11110f).
-     The video is mastered on #000: at 36rem wide a 17/255 tonal step
-     around it reads as a visible rectangle. Matching #000 exactly is what
-     makes the media dissolve into the section — there is no frame, card,
-     border, radius, shadow or scrim anywhere in here on purpose. */
-  .home-next { background: #000; color: var(--paper); }
+  /* One dark surface value across the site. This band used to be pure #000
+     while the brand strip above it and the footer below it both resolve to
+     --ink (#11110f), so scrolling Home crossed three surfaces and one of them
+     was 17/255 off — a mismatch, not a decision.
+     The #000 was not arbitrary, though: the video is mastered on black, and
+     against a 17/255-lighter ground its letterbox reads as a visible
+     rectangle. That is what the blend below solves, so the section can join
+     the rest of the site without the media growing a frame. There is still no
+     card, border, radius, shadow or scrim anywhere in here on purpose. */
+  .home-next { background: var(--ink); color: var(--paper); }
   .home-next__grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .62fr);
@@ -598,7 +629,17 @@ const brandLogos = [
     height: auto;
     aspect-ratio: 512 / 910;
     object-fit: contain;
-    background: #000;
+    background: var(--ink);
+  }
+
+  /* Screen makes the video's mastered black resolve to exactly whatever is
+     behind it, so the letterbox disappears on any dark ground instead of only
+     on a ground that matches it byte for byte. Bright simulation pixels lift
+     by about 3/255 against --ink, which is below the threshold of noticing.
+     Behind @supports so a browser without blend modes keeps the previous
+     behaviour — a faint edge — rather than losing the video. */
+  @supports (mix-blend-mode: screen) {
+    .home-next__video { mix-blend-mode: screen; background: transparent; }
   }
 
   @media (max-width: 1100px) and (min-width: 901px) {
@@ -627,6 +668,7 @@ const brandLogos = [
     .positioning, .home-process, .home-next__grid { grid-template-columns: 1fr; }
     .positioning__copy { max-width: 40rem; }
     .home-process__head { position: static; }
+    .home-stats__head { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
     /* 4 x 4 is the structure at every width — only the rhythm tightens. */
     .brand-context__logos { gap: 1.5rem 1.5rem; }
   }
@@ -651,6 +693,7 @@ const brandLogos = [
       margin-right: calc(var(--gutter) * -1);
     }
     .home-hero__portrait img { width: 110%; height: 105%; transform: translateX(3%) scale(1.02); }
+    .home-hero__portrait::after { right: -4%; bottom: 5.8%; width: 78%; }
     .home-process__list li { grid-template-columns: 2.5rem 1fr; }
     .home-process__list p { grid-column: 2; }
     .brand-context__head { align-items: flex-start; flex-direction: column; gap: 1rem; }
@@ -684,11 +727,10 @@ const brandLogos = [
       padding-block: clamp(1.75rem, 6vw, 2.5rem);
       align-items: center;
     }
-    /* The compact marks pair up first, then the wide wordmarks stack. Purely
-       a mobile ordering; it keeps the grid free of half-empty rows without
-       reordering the markup. */
-    .brand-context__logos li { order: 1; }
-    .brand-context__logos li[data-wide] { order: 2; grid-column: 1 / -1; }
+    /* Intentional reading rhythm: compact pairs are punctuated by full-width
+       wordmarks instead of sending every wide mark to one monotonous tail. */
+    .brand-context__logos li { order: var(--mobile-order); }
+    .brand-context__logos li[data-wide] { grid-column: 1 / -1; }
     .brand-logo {
       /* A single shared height every mark can actually reach: the widest
          half-column mark (Mango, 6.1:1) needs 151px at 25px tall and has
