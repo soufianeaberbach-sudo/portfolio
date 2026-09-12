@@ -88,7 +88,7 @@ Two different addresses, and they are not interchangeable:
 
 | | Value | What it is |
 |---|---|---|
-| `BRIEF_TO` | `soufiane.aberbach@gmail.com` | The **public contact address**. Also shown on `/contact/`, in the no-JavaScript fallback and in every mailto link. Needs no verification. |
+| `BRIEF_TO` | `soufianeaberbach@gmail.com` | The **public contact address**. Also shown on `/contact/`, in the no-JavaScript fallback and in every mailto link. Needs no verification. |
 | `BRIEF_FROM` | `brief@aberbach.co` | The **transactional sender**. Nobody writes to it. Resend requires the From domain to be one it has verified, and a `gmail.com` sender cannot be verified by a third-party relay — hence the owned domain. |
 
 So **`aberbach.co` must be a verified sending domain in Resend**, or Resend

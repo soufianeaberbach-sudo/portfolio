@@ -19,13 +19,13 @@ they are not re-argued.
 | `src/pages/sitemap.xml.ts` | Dev fallback origin. |
 | `src/pages/robots.txt.ts` | Dev fallback origin. |
 | `wrangler.jsonc` | `TURNSTILE_HOSTNAMES` → `aberbach.co,www.aberbach.co`. `BRIEF_FROM` → `brief@aberbach.co`. Docs. |
-| `worker/index.ts` | `www` → apex 301, as a second line of defence. |
+| `worker/index.ts` | `www` → apex 301, as a second line of defence. Matches the host **exactly** and excludes `/api/`. |
 | `tests/worker.mjs` | Origin, sender and hostname fixtures; redirect assertions. |
 | `tests/domain.mjs` | **New.** The guard described below. |
 | `docs/BACKEND-ACTIVATION.md` | Separates the website domain from the email sending domain. |
 
 **Deliberately unchanged:** `BRIEF_TO`, and the public contact address
-`soufiane.aberbach@gmail.com` wherever it appears — on `/contact/`, in the
+`soufianeaberbach@gmail.com` wherever it appears — on `/contact/`, in the
 no-JavaScript fallback, in `/privacy/` and in every mailto link. That address
 is a Gmail mailbox, not a website URL. The domain migration does not touch it,
 and `npm run test:domain` asserts it is still present so a future sweep cannot
@@ -67,27 +67,53 @@ must be created **after** the domain is live so it is bound to the right host.
 
 ### 2. www → apex redirect — Cloudflare dashboard
 
-This is the authoritative mechanism. Rules → **Redirect Rules** → create:
+This is the authoritative mechanism. Rules → **Redirect Rules** → create a
+rule with a **custom filter expression** (not the simple hostname builder — the
+`/api/` carve-out below needs an expression):
 
-- **When:** incoming requests match — `Hostname` `equals` `www.aberbach.co`
-- **Then:** Dynamic redirect
+- **When incoming requests match** — edit as expression:
+
+  ```
+  http.host eq "www.aberbach.co" and not starts_with(http.request.uri.path, "/api/")
+  ```
+
+- **Then** — Dynamic redirect
 - **Expression:** `concat("https://aberbach.co", http.request.uri.path)`
 - **Preserve query string:** on
 - **Status:** `301` permanent
 
-Why a Redirect Rule and not the Worker: it runs at the edge before the Worker
-is invoked, costs no Worker invocation, and keeps working even if the Worker
-errors. The Worker carries the same redirect as a fallback in case this rule is
-ever removed, but the rule is what should actually serve it.
+**The `/api/` exclusion is not optional.** Browsers downgrade a 301 on a POST
+to a GET and discard the request body, so a rule that redirected
+`www.aberbach.co/api/brief` would silently destroy a submitted brief instead of
+delivering it. The Worker fallback carries the identical carve-out, and
+`npm run test:worker` asserts that both layers agree — including that the
+expression above still excludes the prefix.
 
-Verify with a **deep path and a query**, not just the root:
+An API request on `www` should not arise in practice: the page GET is redirected
+long before a form exists to submit. But the rule must not be the thing that
+turns a rare case into a lost enquiry.
+
+Why a Redirect Rule rather than relying on the Worker: it runs at the edge
+before the Worker is invoked, costs no Worker invocation, and keeps working even
+if the Worker errors. The Worker carries the same redirect only as a fallback,
+in case this rule is ever removed or mis-scoped.
+
+Verify with a **deep path and a query**, the apex, and the endpoint — not just
+the root:
 
 ```sh
+# 1. a normal page on www redirects, preserving path and query
 curl -sSI "https://www.aberbach.co/process/?utm_source=linkedin" | head -n 5
 # expect: HTTP/2 301
 #         location: https://aberbach.co/process/?utm_source=linkedin
+
+# 2. the apex does NOT redirect — anything else here is a loop
 curl -sSI "https://aberbach.co/process/" | head -n 3
-# expect: HTTP/2 200   (the apex must NOT redirect — that would be a loop)
+# expect: HTTP/2 200
+
+# 3. the endpoint on www is NOT redirected by the rule
+curl -sSI "https://www.aberbach.co/api/brief" | head -n 3
+# expect: 405 (the endpoint answering for itself), NOT 301
 ```
 
 ### 3. Worker route

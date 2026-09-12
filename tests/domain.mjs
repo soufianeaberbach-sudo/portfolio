@@ -5,10 +5,13 @@
  * what actually ships — so a reintroduced old-domain URL fails CI instead of
  * quietly splitting the site's canonical identity across two hosts.
  *
- * The one string it must NEVER complain about is the public contact address,
- * soufiane.aberbach@gmail.com. That is a Gmail mailbox, not a website URL, and
- * it is deliberately unchanged. This file asserts it is still PRESENT, so a
- * careless future sweep cannot delete it either.
+ * It also pins the public contact address. That address is a Gmail mailbox,
+ * not a website URL, so the domain migration does not touch it — but the
+ * DISPLAYED form matters, because it is the public identity. The chosen form
+ * has no dot in the local part. This file asserts the exact address is PRESENT
+ * wherever the site shows it, and that the dotted variant is absent: Gmail
+ * routes both to the same mailbox, which is precisely why the wrong one could
+ * otherwise be reintroduced and never noticed.
  *
  *   npm run build && npm run test:domain
  */
@@ -23,7 +26,10 @@ const ROOT = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
 const ALLOW_MARKER = 'domain-guard-allow';
 const OLD_WEBSITE_DOMAIN = 'soufianeaberbach' + '.com';
 const NEW_ORIGIN = 'https://aberbach.co';
-const PUBLIC_EMAIL = 'soufiane.aberbach@gmail.com';
+const PUBLIC_EMAIL = 'soufianeaberbach@gmail.com';
+/* Assembled rather than written out, so this file does not itself count as an
+   occurrence of the form it forbids. */
+const DOTTED_EMAIL = 'soufiane' + '.' + 'aberbach@gmail.com';
 
 let passed = 0;
 const failures = [];
@@ -75,7 +81,7 @@ group('source carries no old website domain');
   console.log(`       ${allowed.length} deliberate mention(s): ${allowed.join(', ') || 'none'}`);
 }
 
-group('the public contact email is untouched');
+group('the public contact email is exactly the chosen form');
 {
   const expected = [
     'src/components/BriefForm.astro',
@@ -85,8 +91,35 @@ group('the public contact email is untouched');
   ];
   for (const file of expected) {
     const text = await readFile(join(ROOT, file), 'utf8');
-    check(`${file} still uses ${PUBLIC_EMAIL}`, text.includes(PUBLIC_EMAIL));
+    check(`${file} uses ${PUBLIC_EMAIL}`, text.includes(PUBLIC_EMAIL));
+    check(`${file} does not use the dotted form`, !text.includes(DOTTED_EMAIL));
   }
+
+  /* Every mailto on the site is built from one constant per file, so pinning
+     the constant pins the links — but assert the rendered result too, because
+     that is what a visitor actually clicks. */
+  const files = await walk(ROOT);
+  const dotted = [];
+  for (const file of files) {
+    const text = await readFile(file, 'utf8');
+    text.split('\n').forEach((line, i) => {
+      if (!line.includes(DOTTED_EMAIL)) return;
+      if (line.includes(ALLOW_MARKER)) return;
+      dotted.push(`${relative(ROOT, file)}:${i + 1}`);
+    });
+  }
+  check(
+    'the dotted display form appears nowhere in source',
+    dotted.length === 0,
+    dotted.slice(0, 6).join(', '),
+  );
+
+  const to = (await readFile(join(ROOT, 'wrangler.jsonc'), 'utf8')).match(/"BRIEF_TO":\s*"([^"]*)"/)?.[1] ?? '';
+  check(`BRIEF_TO is ${PUBLIC_EMAIL}`, to === PUBLIC_EMAIL, to);
+
+  const from = (await readFile(join(ROOT, 'wrangler.jsonc'), 'utf8')).match(/"BRIEF_FROM":\s*"([^"]*)"/)?.[1] ?? '';
+  check('BRIEF_FROM is still brief@aberbach.co', from === 'brief@aberbach.co', from);
+  check('BRIEF_FROM is not the public address', from !== PUBLIC_EMAIL, from);
 }
 
 group('configured origin');
@@ -125,7 +158,23 @@ if (!hasDist) {
     check(`${label} canonical is not www`, !canonical.includes('//www.'), canonical);
   }
 
-  group('built social image is absolute on the apex');
+  group('built mailto links use the chosen address');
+{
+  for (const route of ['contact', 'privacy']) {
+    const html = await readFile(join(distPath, route, 'index.html'), 'utf8');
+    const mailtos = [...html.matchAll(/href="mailto:([^"?]+)/g)].map((m) => m[1]);
+    check(`/${route}/ renders at least one mailto link`, mailtos.length > 0, `${mailtos.length} found`);
+    check(`/${route}/ mailto links all use ${PUBLIC_EMAIL}`, mailtos.every((m) => m === PUBLIC_EMAIL), mailtos.join(' '));
+    check(`/${route}/ shows no dotted address anywhere`, !html.includes(DOTTED_EMAIL));
+  }
+  /* The no-JavaScript fallback on Contact is the one route a visitor without
+     scripting has, so its address is asserted separately. */
+  const contact = await readFile(join(distPath, 'contact', 'index.html'), 'utf8');
+  const noscript = contact.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] ?? '';
+  check('the no-JavaScript fallback carries the chosen address', noscript.includes(PUBLIC_EMAIL), noscript.slice(0, 120));
+}
+
+group('built social image is absolute on the apex');
   {
     const html = await readFile(join(distPath, 'index.html'), 'utf8');
     const image = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1] ?? '';

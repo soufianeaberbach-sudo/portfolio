@@ -85,7 +85,7 @@ let assetsCalls = 0;
 function makeEnv(overrides = {}) {
   return {
     ASSETS: { async fetch() { assetsCalls += 1; return new Response('static asset', { status: 200 }); } },
-    BRIEF_TO: 'soufiane.aberbach@gmail.com',
+    BRIEF_TO: 'soufianeaberbach@gmail.com',
     BRIEF_FROM: 'brief@aberbach.co',
     ...overrides,
   };
@@ -219,7 +219,7 @@ group('1. valid submission, no Turnstile configured');
   check('subject contains the stage', String(payload.subject).includes(fields.stage), String(payload.subject));
   check('subject contains the name', String(payload.subject).includes(fields.name), String(payload.subject));
   check('sends from BRIEF_FROM', payload.from === 'brief@aberbach.co', String(payload.from));
-  check('sends to BRIEF_TO', Array.isArray(payload.to) && payload.to[0] === 'soufiane.aberbach@gmail.com');
+  check('sends to BRIEF_TO', Array.isArray(payload.to) && payload.to[0] === 'soufianeaberbach@gmail.com');
   check('email body carries the reference', String(payload.text).includes(body.id));
   check('no undelivered record on success', kv.keys('undelivered:').length === 0);
   check('ASSETS never served the API route', assetsCalls === 0, `${assetsCalls} calls`);
@@ -699,9 +699,32 @@ group('www -> apex redirect (secondary net behind the Cloudflare rule)');
     String(query.location),
   );
 
+  const upper = await redirect('https://WWW.ABERBACH.CO/process/?q=1');
+  check(
+    'the match is case-insensitive',
+    upper.location === 'https://aberbach.co/process/?q=1',
+    String(upper.location),
+  );
+
   const apex = await redirect('https://aberbach.co/contact/');
   check('the apex is NOT redirected — no loop', apex.status === 200, `status ${apex.status}`);
   check('the apex is served from ASSETS', assetsCalls > 0);
+
+  /* The match is exact, not a `www.` prefix test. An earlier version rewrote
+     any host beginning `www.`, which would have redirected hosts this Worker
+     has no business rewriting — including a lookalike domain that merely
+     contains the canonical name. */
+  for (const host of [
+    'https://www.example.com/contact/',
+    'https://www.aberbach.co.evil.example/contact/',
+    'https://aberbach.co.evil.example/contact/',
+    'https://portfolio.workers.dev/contact/',
+    'https://staging.aberbach.co/contact/',
+  ]) {
+    const other = await redirect(host);
+    check(`${new URL(host).hostname} is NOT redirected`, other.status !== 301, `status ${other.status}`);
+    check(`${new URL(host).hostname} gets no Location`, other.location === null, String(other.location));
+  }
 
   /* A 301 on a POST is downgraded to GET by browsers and the body is dropped,
      so the endpoint must never be redirected — a brief would vanish. */
@@ -711,6 +734,29 @@ group('www -> apex redirect (secondary net behind the Cloudflare rule)');
 
   const apiGet = await redirect('https://www.aberbach.co/api/brief', 'GET');
   check('GET /api/brief on www still answers 405, not a redirect', apiGet.status === 405, `status ${apiGet.status}`);
+
+  /* The carve-out covers the whole /api/ prefix, not just the one endpoint, so
+     a future endpoint inherits it rather than needing to be remembered. */
+  for (const path of ['/api/', '/api/brief', '/api/anything']) {
+    const api = await redirect(`https://www.aberbach.co${path}`);
+    check(`www${path} is not redirected`, api.status !== 301, `status ${api.status}`);
+  }
+}
+
+group('the documented Cloudflare rule carries the same /api/ carve-out');
+{
+  /* The Worker is the fallback; the Cloudflare Redirect Rule is authoritative
+     and runs first. If only the Worker excluded /api/, the rule would still
+     301 a POST to the endpoint and drop the brief — so the documented
+     expression has to exclude it too, and that is asserted here rather than
+     left to a reader noticing. */
+  const doc = await readFile(new URL('../docs/DOMAIN-MIGRATION.md', import.meta.url), 'utf8');
+  const expr = doc.match(/^\s*http\.host eq .*$/m)?.[0]?.trim() ?? '';
+  check('a Cloudflare match expression is documented', expr.length > 0, expr);
+  check('it pins the exact www host', expr.includes('http.host eq "www.aberbach.co"'), expr);
+  check('it excludes the /api/ prefix', /not\s+starts_with\(http\.request\.uri\.path,\s*"\/api\/"\)/.test(expr), expr);
+  check('the rule is documented as a 301', /\b301\b/.test(doc));
+  check('query-string preservation is documented', /[Pp]reserve query string/.test(doc));
 }
 
 group('the Turnstile hostname allowlist is the new domain');
@@ -726,7 +772,8 @@ group('the Turnstile hostname allowlist is the new domain');
   check('BRIEF_FROM is not a gmail sender', !from.endsWith('@gmail.com'), from);
 
   const to = config.match(/"BRIEF_TO":\s*"([^"]*)"/)?.[1] ?? '';
-  check('BRIEF_TO is unchanged — still the public Gmail mailbox', to === 'soufiane.aberbach@gmail.com', to);
+  check('BRIEF_TO is the public Gmail mailbox', to === 'soufianeaberbach@gmail.com', to);
+  check('BRIEF_TO is not the dotted display form', to !== 'soufiane' + '.' + 'aberbach@gmail.com', to);
 }
 
 /* ------------------------------------------------------ 14-15. method + faults */
