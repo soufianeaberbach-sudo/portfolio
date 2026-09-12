@@ -44,5 +44,8 @@ import Arrow from '../../components/Arrow.astro';
   .sent__line { max-width: 34rem; margin: clamp(1.75rem, 3vw, 2.5rem) 0 0; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.75; }
   .sent__routes { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; margin-top: clamp(2.25rem, 4vw, 3.5rem); }
   .sent__home { display: inline-flex; align-items: center; gap: .5rem; color: var(--muted); font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; transition: color .2s var(--ease); }
-  .sent__home:hover { color: var(--signal); }
+  /* Hover keeps the text in ink and moves the orange to the underline:
+     signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
+     small text needs. */
+  .sent__home:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 </style>

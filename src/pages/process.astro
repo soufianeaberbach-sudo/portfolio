@@ -309,7 +309,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
       </h2>
       <div class="pr-bridge__side">
         <p class="pr-bridge__line" data-reveal>
-          Six production roles shaped how those decisions are made.
+          Six positions shaped how those decisions are made.
         </p>
         <a class="button button--signal pr-bridge__cta" href="/experience/" data-reveal>
           See the experience <span><Arrow /></span>
@@ -368,7 +368,11 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
     padding: .95rem 0;
     transition: color .25s var(--ease);
   }
-  .pr-ledger a:hover { color: var(--signal); }
+  /* Hover keeps the text in ink and moves the orange to the underline:
+     signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
+     small text needs. */
+  .pr-ledger a:hover { color: var(--ink); }
+  .pr-ledger a:hover .pr-ledger__name { text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .pr-ledger__n { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; color: var(--muted); }
   .pr-ledger__name {
     font-family: var(--display);

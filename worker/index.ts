@@ -55,6 +55,11 @@ const LIMITS = {
   perIpPerHour: 5,
 };
 
+/* How long a submitted brief is kept. Stated verbatim on /privacy/, so the two
+   must be changed together. */
+const RETENTION_DAYS = 90;
+const RETENTION_SECONDS = RETENTION_DAYS * 24 * 60 * 60;
+
 interface Brief {
   name: string;
   company: string;
@@ -123,11 +128,10 @@ function validate(form: Record<string, unknown>): { brief: Brief } | { invalid: 
 function screenSpam(form: Record<string, unknown>): Invalid | null {
   if (str(form.website)) return { field: '', error: 'spam' };
 
-  /* The timestamp is stamped by the page's script, so a visitor with
-     JavaScript disabled sends none. An absent stamp therefore cannot be
-     treated as suspicious — doing so would break the no-JS path completely,
-     which is the one path that has no other way to submit. Those submissions
-     are screened by the honeypot and, once configured, by Turnstile. */
+  /* The timestamp is stamped by the page's script, so a submission without one
+     is either a pre-Turnstile native POST or a bot. An absent stamp is not
+     treated as suspicious by itself — the honeypot, the rate limit, the origin
+     check and, once configured, Turnstile decide. */
   const raw = str(form.t);
   if (!raw) return null;
 
@@ -140,10 +144,25 @@ function screenSpam(form: Record<string, unknown>): Invalid | null {
   return null;
 }
 
-/* Returns true when the request may proceed. With no secret configured there
-   is nothing to verify against, so the check is skipped rather than failing
-   every submission — the honeypot and timing screens still apply. That keeps
-   the form coherent both before and after Turnstile is set up. */
+/* Returns true when the request may proceed.
+ *
+ * Once TURNSTILE_SECRET is configured, EVERY submission must present a valid
+ * token — scripted or not. Content type is not a credential: keying the
+ * requirement off it meant anyone could skip the check by posting
+ * form-urlencoded, which is trivial to do and defeats the point of having it.
+ *
+ * The consequence is deliberate: a visitor with JavaScript disabled cannot
+ * produce a token and so cannot use the form once Turnstile is live. They get
+ * the <noscript> direct-email route in BriefForm instead. Weakening the server
+ * for that case would have meant weakening it for everyone.
+ *
+ * Verification fails CLOSED. A Turnstile outage or a malformed response
+ * rejects the submission rather than waving it through — the visitor is told
+ * to retry and the direct email address is on the page either way.
+ *
+ * With no secret configured there is nothing to verify against, so the check
+ * is skipped. That is the pre-activation state and it is safe: the honeypot,
+ * timing screen, rate limit and origin check all still apply. */
 async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boolean> {
   if (!env.TURNSTILE_SECRET) return true;
   if (!token) return false;
@@ -156,13 +175,23 @@ async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boo
       method: 'POST',
       body,
     });
+    if (!res.ok) return false;
     const data = (await res.json()) as { success?: boolean };
     return data.success === true;
   } catch {
-    /* A Turnstile outage must not silently swallow a real brief. Fail open on
-       the network error; the honeypot and timing screens still stand. */
-    return true;
+    return false;
   }
+}
+
+/* The raw IP is never persisted. It is hashed and truncated first: enough to
+   count repeat submissions within an hour, not enough to be a stored identifier
+   once the key expires. */
+async function hashIp(ip: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip));
+  return [...new Uint8Array(digest)]
+    .slice(0, 8)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /* KV is eventually consistent, so this is a throttle rather than a hard
@@ -170,7 +199,7 @@ async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boo
    and no brief is ever rejected because a counter was a second stale. */
 async function overRateLimit(env: Env, ip: string): Promise<boolean> {
   if (!env.BRIEFS || !ip) return false;
-  const key = `rate:${ip}:${new Date().toISOString().slice(0, 13)}`;
+  const key = `rate:${await hashIp(ip)}:${new Date().toISOString().slice(0, 13)}`;
   try {
     const current = Number((await env.BRIEFS.get(key)) ?? '0');
     if (current >= LIMITS.perIpPerHour) return true;
@@ -179,6 +208,26 @@ async function overRateLimit(env: Env, ip: string): Promise<boolean> {
     return false;
   }
   return false;
+}
+
+/* Native form posts get an origin check: a form POST from this site carries an
+   Origin or Referer pointing back at it. This is an extra screen, never a
+   substitute for Turnstile — once the secret is configured a valid token is
+   required here too. Absent headers are allowed through, since some privacy
+   tools strip them and the honeypot, timing and rate limit still stand. */
+function sameOrigin(request: Request): boolean {
+  const target = new URL(request.url).origin;
+  const origin = request.headers.get('origin');
+  if (origin) return origin === target;
+  const referer = request.headers.get('referer');
+  if (referer) {
+    try {
+      return new URL(referer).origin === target;
+    } catch {
+      return false;
+    }
+  }
+  return true;
 }
 
 function emailText(brief: Brief, id: string): string {
@@ -242,7 +291,10 @@ main{max-width:32rem}h1{font-size:1.5rem;margin:0 0 1rem}
 a{color:#11110f;text-decoration:underline;text-underline-offset:3px}</style></head>
 <body><main><h1>The brief was not sent</h1><p>${escapeHtml(message)}</p>
 <p><a href="/contact/#brief">Go back to the form</a></p></main></body></html>`;
-  return new Response(body, { status, headers: { 'content-type': 'text/html; charset=utf-8' } });
+  return new Response(body, {
+    status,
+    headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' },
+  });
 }
 
 function json(status: number, data: Record<string, unknown>): Response {
@@ -298,9 +350,19 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     return fail(429, 'Several briefs have already been sent from this connection. Please email directly instead.');
   }
 
+  /* Native form posts get an origin check as well. It is not a substitute for
+     Turnstile — it is an additional, cheap screen on the path that cannot run
+     the page's script. */
+  if (!wantsJson && !sameOrigin(request)) {
+    return fail(400, 'That submission did not come from this site. Please reload the page and try again.');
+  }
+
   const token = str(form['cf-turnstile-response']);
   if (!(await verifyTurnstile(env, token, ip))) {
-    return fail(400, 'The spam check did not pass. Please reload the page and try again.');
+    return fail(
+      400,
+      'The spam check did not pass. Please reload the page and try again, or email the brief directly.',
+    );
   }
 
   /* Persist BEFORE sending. Without a store there is nothing durable to
@@ -311,15 +373,12 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
 
   const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
   try {
+    /* Only what is needed to read and answer the brief. Request country and
+       user agent were being stored and were never used, so they are gone. */
     await env.BRIEFS.put(
       `brief:${id}`,
-      JSON.stringify({
-        ...brief,
-        id,
-        receivedAt: new Date().toISOString(),
-        country: (request as Request & { cf?: { country?: string } }).cf?.country ?? '',
-        userAgent: request.headers.get('user-agent') ?? '',
-      }),
+      JSON.stringify({ ...brief, id, receivedAt: new Date().toISOString() }),
+      { expirationTtl: RETENTION_SECONDS },
     );
   } catch {
     return fail(502, 'The brief could not be saved. Please email directly — the address is below the form.');
@@ -330,12 +389,19 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     /* The brief is safe in KV, so this is not a failure for the sender. Record
        it so the gap is visible, and still report receipt, which is true. */
     try {
-      await env.BRIEFS.put(`undelivered:${id}`, JSON.stringify({ id, email: brief.email, at: new Date().toISOString() }));
+      await env.BRIEFS.put(
+        `undelivered:${id}`,
+        JSON.stringify({ id, email: brief.email, at: new Date().toISOString() }),
+        { expirationTtl: RETENTION_SECONDS },
+      );
     } catch {
       /* nothing further to do */
     }
   }
 
+  /* Native form posts get a redirect to a real page rather than JSON. Reachable
+     before Turnstile is activated; afterwards such a submission is rejected
+     earlier, and BriefForm hides the form from no-JavaScript visitors. */
   if (!wantsJson) {
     return new Response(null, { status: 303, headers: { location: '/contact/sent/' } });
   }
@@ -344,18 +410,34 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    try {
-      const url = new URL(request.url);
-      if (url.pathname === '/api/brief') {
+    const url = new URL(request.url);
+    const isApi = url.pathname === '/api/brief';
+
+    if (isApi) {
+      /* The API answers for itself. Falling through to ASSETS on an exception
+         would have served the 404 page — or a 405 — in place of an error, so a
+         real fault looked like a routing mistake and the caller had no way to
+         tell a bug from a bad request. */
+      try {
         if (request.method !== 'POST') {
           return json(405, { ok: false, error: 'Use POST.' });
         }
         return await handleBrief(request, env);
+      } catch {
+        const wantsJson = (request.headers.get('content-type') ?? '').includes('application/json');
+        const message =
+          'Something went wrong handling the brief. Nothing was saved — please try again, or email it directly.';
+        return wantsJson
+          ? json(500, { ok: false, error: message })
+          : htmlError(message, 500);
       }
-      /* Everything else is the static site. */
+    }
+
+    /* Only non-API routes fall back to the static site, and that fallback is
+       still guarded so a fault here cannot take the site down. */
+    try {
       return await env.ASSETS.fetch(request);
     } catch {
-      /* Never let a fault here take the site down. */
       return env.ASSETS.fetch(request);
     }
   },

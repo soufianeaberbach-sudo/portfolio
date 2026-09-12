@@ -110,6 +110,9 @@ const categories = [
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+    /* Read live rather than once at load: the setting can change mid-session. */
+    const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const collectionData = {
       evening: {
         number: '01 / 05', title: 'Evening Dresses', description: 'Structure and drape are negotiated together: the internal architecture must hold without making the dress feel engineered.',
@@ -215,7 +218,7 @@ const categories = [
     function initializeMechanicalStack() {
       const stage = document.querySelector('[data-stack-stage]');
       const cards = Array.from(document.querySelectorAll('.collection-card'));
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduce = prefersReducedMotion();
       if (!stage || !cards.length || reduce || window.innerWidth < 900) return;
 
       gsap.registerPlugin(ScrollTrigger);
@@ -330,7 +333,9 @@ const categories = [
         });
         fillDetail(detailNodes[0], state.items[modulo(base, state.items.length)], base);
         fillDetail(detailNodes[1], state.items[modulo(base + 1, state.items.length)], base + 1);
-        for (let offset = -1; offset <= 6; offset += 1) {
+        /* Nearby only. The six visible cards fetch themselves through their own
+           <img> elements; this just warms what is immediately either side. */
+        for (let offset = -2; offset <= 2; offset += 1) {
           const nearby = state.items[modulo(base + offset, state.items.length)];
           const preload = new Image();
           preload.src = imageUrl(nearby.image);
@@ -384,6 +389,12 @@ const categories = [
         if (origin !== null && Math.abs(delta) < .48) target = origin;
         else if (origin !== null) target = delta > 0 ? Math.ceil(state.position) : Math.floor(state.position);
         else target = Math.round(state.position);
+        /* Only the opening wipe used to check this, which left the runway's own
+           snapping animated after motion had been disabled. Jump instead. */
+        if (prefersReducedMotion()) {
+          setPosition(target);
+          return;
+        }
         state.tween = gsap.to(state, {
           position: target,
           duration: Math.min(.7, .32 + (Math.abs(target - state.position) * .32)),
@@ -455,7 +466,9 @@ const categories = [
         state.items = [...items];
         state.position = 0;
         state.base = Number.NaN;
-        scrubber.max = String(state.items.length);
+        /* length - 1, not length: the old maximum allowed a phantom position
+           one past the end that wrapped straight back to Look 01. */
+        scrubber.max = String(state.items.length - 1);
         total.textContent = `${String(state.items.length).padStart(2, '0')} looks`;
         scheduleDraw();
       }
@@ -489,11 +502,77 @@ const categories = [
       return controller;
     }
 
-    function openCollection(category) {
+    /* Real modal behaviour, no dependency.
+     *
+     * Two layers, deliberately. `inert` on every ancestor-sibling of the
+     * overlay removes the whole background from focus, pointer and assistive
+     * tech in one attribute — the correct primitive, supported everywhere
+     * current. The Tab cycle below is the fallback for anything that does not
+     * honour it, so focus is contained either way. */
+    const FOCUSABLE = [
+      'a[href]', 'button:not([disabled])', 'input:not([disabled])',
+      'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]:not([tabindex="-1"])',
+    ].join(',');
+
+    let inertedNodes = [];
+
+    function setBackgroundInert(overlay, on) {
+      if (!on) {
+        inertedNodes.forEach((el) => el.removeAttribute('inert'));
+        inertedNodes = [];
+        return;
+      }
+      inertedNodes = [];
+      let node = overlay;
+      while (node && node !== document.body) {
+        const parent = node.parentElement;
+        if (!parent) break;
+        for (const sibling of parent.children) {
+          if (sibling !== node) inertedNodes.push(sibling);
+        }
+        node = parent;
+      }
+      inertedNodes.forEach((el) => el.setAttribute('inert', ''));
+    }
+
+    function visibleFocusable(overlay) {
+      return [...overlay.querySelectorAll(FOCUSABLE)].filter((el) => {
+        if (el.hasAttribute('inert') || el.getAttribute('aria-hidden') === 'true') return false;
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 || rect.height > 0;
+      });
+    }
+
+    function trapTab(event) {
+      if (event.key !== 'Tab') return;
+      const overlay = document.querySelector('[data-collection-overlay]');
+      if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
+      const items = visibleFocusable(overlay);
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (!overlay.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+        return;
+      }
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    function openCollection(category, trigger = null) {
       const data = collectionData[category];
       const overlay = document.querySelector('[data-collection-overlay]');
       if (!data || !overlay) return;
-      portfolioState.lastFocus = document.activeElement;
+      /* The button that opened it, not whatever happened to be focused: a
+         mouse click may not focus the card at all. */
+      portfolioState.lastFocus = trigger ?? document.activeElement;
       overlay.querySelector('[data-collection-count]').textContent = data.number;
       overlay.querySelector('[data-collection-kicker]').textContent = `Category ${data.number}`;
       overlay.querySelector('[data-collection-title]').textContent = data.title;
@@ -501,12 +580,14 @@ const categories = [
       overlay.setAttribute('aria-hidden', 'false');
       overlay.classList.add('is-open');
       document.body.classList.add('no-scroll');
+      setBackgroundInert(overlay, true);
+      document.addEventListener('keydown', trapTab, true);
       overlay.scrollTop = 0;
       portfolioState.runway?.destroy?.();
       portfolioState.runway = createRunway(data.looks);
       window.__portfolioRunway = portfolioState.runway;
 
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!prefersReducedMotion()) {
         gsap.fromTo(overlay, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .8, ease: 'power4.inOut' });
         gsap.fromTo(overlay.querySelector('.collection-overlay__header h2'), { yPercent: 100 }, { yPercent: 0, duration: .9, delay: .25, ease: 'power4.out' });
       } else {
@@ -526,14 +607,19 @@ const categories = [
         overlay.setAttribute('aria-hidden', 'true');
         overlay.style.clipPath = '';
         document.body.classList.remove('no-scroll');
+        /* Inert comes off before the focus call, or the restore target is
+           still unfocusable. */
+        setBackgroundInert(overlay, false);
+        document.removeEventListener('keydown', trapTab, true);
         portfolioState.lastFocus?.focus?.();
+        portfolioState.lastFocus = null;
       };
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!prefersReducedMotion()) {
         gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: .65, ease: 'power4.inOut', onComplete: finish });
       } else finish();
     }
 
-    document.querySelectorAll('[data-category]').forEach((card) => card.addEventListener('click', () => openCollection(card.dataset.category)));
+    document.querySelectorAll('[data-category]').forEach((card) => card.addEventListener('click', () => openCollection(card.dataset.category, card)));
     document.querySelectorAll('[data-close-collection]').forEach((button) => button.addEventListener('click', closeCollection));
     window.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeCollection(); });
     window.addEventListener('load', initializeMechanicalStack, { once: true });

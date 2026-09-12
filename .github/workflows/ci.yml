@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build and smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22 is what the project is developed against and what Astro 5 and
+      # Wrangler 4 both support.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Validates worker/index.ts and wrangler.jsonc without deploying or
+      # needing any Cloudflare credential.
+      - name: Validate Worker configuration
+        run: npx wrangler deploy --dry-run --outdir /tmp/worker-dry
+
+      # Uses the Playwright pinned in devDependencies, so the browser build
+      # always matches the package the tests import. No temporary npx package.
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - run: npm run test:smoke

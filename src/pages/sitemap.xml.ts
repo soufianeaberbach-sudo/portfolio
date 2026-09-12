@@ -1,4 +1,4 @@
-const routes = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/'];
+const routes = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/', '/privacy/'];
 
 export const prerender = true;
 

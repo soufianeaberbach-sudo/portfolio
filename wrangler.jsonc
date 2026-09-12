@@ -16,10 +16,10 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     // run_worker_first is load-bearing, not a precaution. Without it the asset
-    // router claims /api/brief before the Worker runs — a browser navigation
-    // POST (Accept: text/html) gets matched by not_found_handling and answered
-    // 405, so the no-JavaScript form path breaks while a fetch() POST still
-    // works. Routing the API prefix to the Worker first fixes both.
+    // router claims /api/brief before the Worker runs: a request carrying
+    // Accept: text/html gets matched by not_found_handling and answered 405,
+    // so any browser-navigation POST to the endpoint fails while a fetch()
+    // POST still works. Routing the API prefix to the Worker first fixes it.
     "run_worker_first": ["/api/*"]
   },
   "vars": {
@@ -44,11 +44,42 @@
   //      npx wrangler secret put RESEND_API_KEY
   //      npx wrangler secret put TURNSTILE_SECRET
   //
-  // 3. Turnstile site key at BUILD time, so the widget renders:
+  // 3. Turnstile. ACTIVATE BOTH HALVES TOGETHER OR NEITHER.
   //
-  //      PUBLIC_TURNSTILE_SITEKEY=0x... npm run build
+  //    TURNSTILE_SECRET is what the Worker verifies against. When it is
+  //    ABSENT, Turnstile verification is disabled entirely and submissions are
+  //    screened by the honeypot, the submit-timing check, the per-IP rate
+  //    limit, full field validation and — for native form posts — an origin
+  //    check. That is the safe pre-activation state.
   //
-  //    With no site key the widget is omitted; with no TURNSTILE_SECRET the
-  //    Worker skips verification. The honeypot and timing screens apply in
-  //    every combination, so the form is coherent at each step of setup.
+  //    When TURNSTILE_SECRET IS CONFIGURED, EVERY submission to /api/brief
+  //    requires a valid Turnstile token, whatever its content type. Content
+  //    type is not a credential, so there is no form-urlencoded or "no-JS"
+  //    exemption. Verification FAILS CLOSED: a missing or invalid token, a
+  //    non-ok siteverify response, or a thrown fetch all reject the
+  //    submission. Visitors without JavaScript cannot produce a token and so
+  //    do not use the form at all — BriefForm hides it and shows a direct
+  //    email fallback instead.
+  //
+  //    PUBLIC_TURNSTILE_SITEKEY is read by Astro AT BUILD TIME and is what
+  //    renders the widget. `wrangler deploy` runs the build command above
+  //    itself, so the variable must be present in the environment of THAT
+  //    deploy — not merely exported for some earlier, separate build. Set it
+  //    in the Cloudflare project's build environment variables, or inline on
+  //    the deploy itself:
+  //
+  //      PUBLIC_TURNSTILE_SITEKEY=0x... npx wrangler deploy
+  //
+  //    If TURNSTILE_SECRET is set but PUBLIC_TURNSTILE_SITEKEY was missing
+  //    from the deploy build, the Worker demands a token the page cannot
+  //    produce and the form rejects every submission. If the site key is set
+  //    but the secret is not, the widget renders and is simply not verified.
+  //    The first failure mode is the dangerous one — activate them together.
+  //
+  // 4. NOT PRODUCTION READY until 1-3 above are done and one real brief has
+  //    been received end to end. A successful build proves none of that.
+  //    Submitted briefs are kept for 90 days (RETENTION_DAYS in
+  //    worker/index.ts), which /privacy/ states verbatim — change both
+  //    together. Rate-limit keys hold a truncated SHA-256 of the caller's IP,
+  //    never the address itself, and expire after an hour.
 }

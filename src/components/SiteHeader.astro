@@ -34,7 +34,7 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
   </button>
 
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true">
-    <div class="mobile-menu__meta label">Tangier, Morocco <span>GMT+1</span></div>
+    <div class="mobile-menu__meta label">Tangier, Morocco <span>Remote collaboration</span></div>
     <nav aria-label="Mobile navigation">
       {navItems.map((item) => (
         <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>

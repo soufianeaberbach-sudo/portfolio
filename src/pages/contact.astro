@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: 'Do you work remotely and internationally?',
-    a: 'Yes. The work is done from Tangier on GMT+1, which overlaps the full European working day, and companies can be invoiced directly.',
+    a: 'Yes. Work is coordinated remotely from Tangier, with strong overlap with European working hours, and companies can be invoiced directly.',
   },
   {
     q: 'How do I share files?',
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: 'How is project material handled?',
-    a: 'A submitted brief travels from your browser to this site’s Cloudflare hosting, is stored there so nothing is lost in transit, and is emailed on to Soufiane. It is not published, shared or added to this portfolio. The spam check on the form is Cloudflare Turnstile, which loads a script from Cloudflare — the only third-party script on the site.',
+    a: 'The form collects your name, an optional company or brand, your email, the product stage, your message and an optional reference link. Submitted material is processed through this site&rsquo;s hosting and email providers only to receive and respond to the brief — it is stored so nothing is lost in transit, then emailed on. It is not published or used as portfolio material. The spam check is Cloudflare Turnstile, which loads a script from Cloudflare and is the only third-party script on the site. Full detail is on the privacy page.',
   },
 ];
 ---
@@ -61,7 +61,7 @@ const faqs = [
           A sketch, a reference, an existing sample, a fit issue or a production
           question is enough to begin. Nothing has to be resolved before you write.
         </p>
-        <p class="label ct-hero__availability">Available for selected freelance development work</p>
+        <p class="label ct-hero__availability">Available for selected freelance and professional opportunities</p>
       </aside>
     </div>
   </section>
@@ -149,7 +149,7 @@ const faqs = [
         <p class="label">Business status</p>
         <strong>Registered Moroccan Auto-Entrepreneur</strong>
         <span>Since 2018 &middot; B2B invoicing available</span>
-        <span>Tangier, Morocco &middot; GMT+1</span>
+        <span>Tangier, Morocco &middot; Remote collaboration</span>
       </div>
     </div>
   </section>
@@ -238,7 +238,10 @@ const faqs = [
   .ct-direct__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 4rem); }
   .ct-direct .label { margin: 0 0 1rem; color: var(--muted); }
   .ct-direct__email { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.5vw, 1.35rem); overflow-wrap: anywhere; transition: color .2s var(--ease); }
-  .ct-direct__email:hover { color: var(--signal); }
+  /* Hover keeps the text in ink and moves the orange to the underline:
+     signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
+     small text needs. */
+  .ct-direct__email:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .ct-direct__business { display: grid; gap: .4rem; }
   .ct-direct__business strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.25; }
   .ct-direct__business span { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.65; }
@@ -261,7 +264,8 @@ const faqs = [
     text-transform: uppercase;
     transition: color .18s var(--ease);
   }
-  .ct-profiles a:hover { color: var(--signal); }
+  .ct-profiles a:hover { color: var(--ink); }
+  .ct-profiles a:hover span:not(.sr-only) { text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .ct-profiles i { display: inline-flex; flex: 0 0 auto; color: var(--muted); transition: color .18s var(--ease), transform .18s var(--ease); }
   .ct-profiles a:hover i { color: var(--signal); transform: translate(2px, -2px); }
 

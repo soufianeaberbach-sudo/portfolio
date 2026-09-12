@@ -107,7 +107,7 @@ const systems = [
           <li><b>Production pattern</b><span>defines cut-ready geometry and construction intent</span></li>
           <li><b>Construction specification</b><span>defines seams, operations and critical details</span></li>
           <li><b>Measurements &amp; tolerances</b><span>define acceptance criteria across the size range</span></li>
-          <li><b>3D validation</b><span>helps resolve fit, proportion and drape before physical sampling</span></li>
+          <li><b>3D validation</b><span>supports fit, proportion and drape decisions before and alongside physical sampling</span></li>
         </ul>
       </article>
 
@@ -216,7 +216,10 @@ const systems = [
   /* Small mono on paper fails 4.5:1 in signal; orange stays on the rules,
      indicators and large accent words. */
   .ex-index a span { color: var(--muted); }
-  .ex-index a:hover { color: var(--signal); }
+  /* Hover keeps the text in ink and moves the orange to the underline:
+     signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
+     small text needs. */
+  .ex-index a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
   /* ---------- CONTROL STACK ---------- */
   .ex-stack { padding-block: clamp(4rem, 7vw, 7rem); }
