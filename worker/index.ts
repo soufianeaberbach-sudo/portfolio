@@ -256,6 +256,15 @@ async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
     subject: `Development brief — ${brief.stage} — ${brief.name}`,
     text: emailText(brief, id),
   };
+  /* Derived from the brief reference, which is already unique per submission,
+     and computed once so BOTH attempts present the same key. Without it a
+     retry after a request that actually reached Resend — a timeout, a dropped
+     response, a 5xx returned after the send — delivers the brief twice. The
+     body is built above and is never rebuilt, so the two attempts are
+     byte-identical as well, which is what makes the key meaningful. */
+  const idempotencyKey = `brief/${id}`;
+  const body = JSON.stringify(payload);
+
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch('https://api.resend.com/emails', {
@@ -263,8 +272,9 @@ async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
         headers: {
           authorization: `Bearer ${env.RESEND_API_KEY}`,
           'content-type': 'application/json',
+          'Idempotency-Key': idempotencyKey,
         },
-        body: JSON.stringify(payload),
+        body,
       });
       if (res.ok) return true;
     } catch {

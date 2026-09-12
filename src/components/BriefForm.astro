@@ -434,6 +434,29 @@ const email = 'soufiane.aberbach@gmail.com';
       alertBox.focus?.();
     }
 
+    /* Turnstile tokens are single-use, and siteverify consumes one as soon as
+       the Worker checks it. If any later step then fails — a KV outage, a 500,
+       or a connection that dropped after the request left — the token in the
+       form is already spent, so retrying from the same page would present a
+       used token and be rejected a second time for the wrong reason.
+       Cloudflare's documented reset for an implicitly rendered widget is
+       turnstile.reset(container); it re-runs the challenge in place and
+       replaces the hidden cf-turnstile-response input with a fresh token.
+
+       The container is looked up on each call rather than cached, because a
+       reset re-renders the widget. Everything here is guarded: with no site
+       key there is no widget and no api.js, so this is a no-op. */
+    function resetTurnstile() {
+      const widget = form.querySelector('.cf-turnstile');
+      if (!widget || !window.turnstile || typeof window.turnstile.reset !== 'function') return;
+      try {
+        window.turnstile.reset(widget);
+      } catch {
+        /* A widget that never finished rendering has nothing to reset. The
+           submission already failed; do not turn that into a second error. */
+      }
+    }
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       clearErrors();
@@ -461,6 +484,9 @@ const email = 'soufiane.aberbach@gmail.com';
         });
       } catch {
         setBusy(false);
+        /* The client cannot know whether the server received the request and
+           consumed the token, so assume it did. */
+        resetTurnstile();
         fail('The brief could not be sent — the connection failed. Nothing you typed has been lost.', data);
         return;
       }
@@ -483,6 +509,13 @@ const email = 'soufiane.aberbach@gmail.com';
         wrap.querySelector('[data-done-heading]').focus();
         return;
       }
+
+      /* Past this point the submission did not succeed, whatever the reason,
+         so the next attempt needs a fresh token. Deliberately not reached on
+         success: the form is replaced by the success state and never
+         resubmitted. Client-side validation returns earlier still, before any
+         request is made, so no token is spent there either. */
+      resetTurnstile();
 
       if (payload.field) {
         showFieldError(payload.field, payload.error || 'Please check this field.');

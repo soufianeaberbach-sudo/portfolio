@@ -216,6 +216,110 @@ try {
     await c.close();
   }
 
+  // ---- Turnstile token lifecycle
+  //
+  // Turnstile tokens are single-use and siteverify consumes one, so a failed
+  // submission must leave the form with a FRESH token or the retry is rejected
+  // for the wrong reason. The real widget cannot run here — it needs a site key
+  // baked in at build time and a reachable challenges.cloudflare.com — so the
+  // widget container and window.turnstile are stubbed and window.fetch is
+  // scripted. What is under test is the page's own reset decision, which is the
+  // part that regressed.
+  console.log('\nTurnstile reset on failed submission');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+
+    /* Installs the stubs, fills the form validly, submits, and reports how many
+       times turnstile.reset was called. `outcome` scripts what the endpoint
+       returns: a rejection, an error payload, or a success. */
+    const submitWith = async (outcome) => {
+      await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
+      await p.evaluate((mode) => {
+        const form = document.querySelector('[data-brief-form]');
+        /* The container the real api.js would have rendered into. */
+        const widget = document.createElement('div');
+        widget.className = 'cf-turnstile';
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'cf-turnstile-response';
+        hidden.value = 'stub-token';
+        widget.appendChild(hidden);
+        form.appendChild(widget);
+
+        window.__resets = [];
+        window.turnstile = { reset: (el) => { window.__resets.push(el?.className ?? 'no-arg'); } };
+
+        window.fetch = () => {
+          if (mode === 'network') return Promise.reject(new TypeError('fetch failed'));
+          if (mode === 'error') {
+            return Promise.resolve(new Response(JSON.stringify({ ok: false, error: 'The brief could not be saved.' }), {
+              status: 502, headers: { 'content-type': 'application/json' },
+            }));
+          }
+          if (mode === 'field') {
+            return Promise.resolve(new Response(JSON.stringify({ ok: false, error: 'That email address does not look complete.', field: 'email' }), {
+              status: 400, headers: { 'content-type': 'application/json' },
+            }));
+          }
+          return Promise.resolve(new Response(JSON.stringify({ ok: true, id: 'smoke-test-reference' }), {
+            status: 200, headers: { 'content-type': 'application/json' },
+          }));
+        };
+
+        form.querySelector('[name="name"]').value = 'Smoke Test';
+        form.querySelector('[name="email"]').value = 'smoke@example.com';
+        form.querySelector('[name="message"]').value = 'A message long enough to pass validation.';
+        form.querySelector('[name="stage"]').checked = true;
+      }, outcome);
+
+      await p.click('[data-submit]');
+      await p.waitForTimeout(350);
+      return p.evaluate(() => ({
+        resets: window.__resets.length,
+        target: window.__resets[0] ?? null,
+        formHidden: document.querySelector('[data-brief-form]').hidden,
+      }));
+    };
+
+    const serverError = await submitWith('error');
+    check('reset once after a server error', serverError.resets === 1, `${serverError.resets} resets`);
+    check('reset targets the widget container', serverError.target === 'cf-turnstile', String(serverError.target));
+
+    const fieldError = await submitWith('field');
+    check('reset once after a field error', fieldError.resets === 1, `${fieldError.resets} resets`);
+
+    const networkError = await submitWith('network');
+    check('reset once after a network failure', networkError.resets === 1, `${networkError.resets} resets`);
+
+    const ok = await submitWith('ok');
+    check('NOT reset after a successful submission', ok.resets === 0, `${ok.resets} resets`);
+    check('success still replaces the form', ok.formHidden === true);
+
+    /* The guard matters as much as the call: with no site key there is no
+       widget and no api.js, and the page must not throw on submit. */
+    await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
+    const bare = await p.evaluate(async () => {
+      const errors = [];
+      window.addEventListener('error', (e) => errors.push(String(e.message)));
+      const form = document.querySelector('[data-brief-form]');
+      window.fetch = () => Promise.reject(new TypeError('fetch failed'));
+      form.querySelector('[name="name"]').value = 'Smoke Test';
+      form.querySelector('[name="email"]').value = 'smoke@example.com';
+      form.querySelector('[name="message"]').value = 'A message long enough to pass validation.';
+      form.querySelector('[name="stage"]').checked = true;
+      form.querySelector('[data-submit]').click();
+      await new Promise((r) => setTimeout(r, 300));
+      return { errors, hasWidget: !!document.querySelector('.cf-turnstile'), alertShown: !document.querySelector('[data-alert]').hidden };
+    });
+    check('no Turnstile widget without a build-time site key', bare.hasWidget === false);
+    check('failed submit throws nothing when Turnstile is absent', bare.errors.length === 0, JSON.stringify(bare.errors));
+    check('the failure is still reported to the visitor', bare.alertShown === true);
+
+    await c.close();
+  }
+
   // ---- privacy page reachable from the footer
   console.log('\nprivacy page');
   {

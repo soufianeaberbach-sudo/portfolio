@@ -156,6 +156,14 @@ async function call(request, env) {
 
 const noStore = (res) => (res.headers.get('cache-control') ?? '').includes('no-store');
 
+/* Outbound headers are recorded as the plain object the Worker passed, so the
+   lookup is case-insensitive rather than assuming a particular spelling. */
+function headerOf(call, name) {
+  const headers = call?.init?.headers ?? {};
+  const hit = Object.keys(headers).find((k) => k.toLowerCase() === name.toLowerCase());
+  return hit ? headers[hit] : undefined;
+}
+
 /* ----------------------------------------------------------------- 1. happy */
 
 group('1. valid submission, no Turnstile configured');
@@ -379,8 +387,47 @@ group('10. Resend failure after successful KV persistence');
   check('undelivered record keyed by the same reference', undelivered[0] === `undelivered:${body.id}`);
   check('undelivered record has the 90-day TTL', kv.ttl(undelivered[0]) === RETENTION_SECONDS, String(kv.ttl(undelivered[0])));
   check('undelivered record holds no raw IP', !JSON.stringify(kv.read(undelivered[0])).includes('203.0.113.9'));
-  const attempts = outbound.filter((c) => c.url.includes('api.resend.com')).length;
-  check('delivery was retried once before giving up', attempts === 2, `${attempts} attempts`);
+  const calls = outbound.filter((c) => c.url.includes('api.resend.com'));
+  check('delivery was retried once before giving up', calls.length === 2, `${calls.length} attempts`);
+
+  /* Without an idempotency key, a retry after a request that actually reached
+     Resend — a timeout, a dropped response, a 5xx returned after the send —
+     delivers the brief twice. */
+  const keys = calls.map((c) => headerOf(c, 'idempotency-key'));
+  check('both attempts carry an Idempotency-Key', keys.every(Boolean), JSON.stringify(keys));
+  check('both attempts use the SAME key', keys[0] === keys[1], JSON.stringify(keys));
+  check('the key derives from the brief reference', keys[0] === `brief/${body.id}`, String(keys[0]));
+  check('the key contains the brief id', String(keys[0]).includes(body.id), String(keys[0]));
+  check('the retry payload is byte-identical', calls[0].init.body === calls[1].init.body);
+  check('the key carries no secret', !String(keys[0]).includes(FAKE_RESEND_KEY) && !String(keys[0]).includes(FAKE_TURNSTILE_SECRET));
+}
+
+group('10c. different briefs get different idempotency keys');
+{
+  const seen = [];
+  for (let i = 0; i < 3; i += 1) {
+    resetOutbound({ 'api.resend.com': resendOk });
+    const kv = makeKv();
+    const env = makeEnv({ BRIEFS: kv, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const { body } = await call(jsonRequest(goodFields()), env);
+    const call0 = outbound.find((c) => c.url.includes('api.resend.com'));
+    const key = headerOf(call0, 'idempotency-key');
+    check(`submission ${i + 1} key matches its own reference`, key === `brief/${body.id}`, String(key));
+    seen.push(key);
+  }
+  check('three submissions produced three distinct keys', new Set(seen).size === 3, JSON.stringify(seen));
+}
+
+group('10d. a delivery that succeeds first time is not retried');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const env = makeEnv({ BRIEFS: kv, RESEND_API_KEY: FAKE_RESEND_KEY });
+  await call(jsonRequest(goodFields()), env);
+  const calls = outbound.filter((c) => c.url.includes('api.resend.com'));
+  check('exactly one attempt', calls.length === 1, `${calls.length} attempts`);
+  check('it still carries an Idempotency-Key', Boolean(headerOf(calls[0], 'idempotency-key')));
+  check('the API key is sent as a bearer token, not in the idempotency key', String(headerOf(calls[0], 'authorization')).startsWith('Bearer '));
 }
 
 group('10b. email is skipped, not failed, when Resend is unconfigured');
