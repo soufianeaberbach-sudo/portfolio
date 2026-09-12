@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: 'How is project material handled?',
-    a: 'The form collects your name, an optional company or brand, your email, the product stage, your message and an optional reference link. Submitted material is processed through this site&rsquo;s hosting and email providers only to receive and respond to the brief — it is stored so nothing is lost in transit, then emailed on. It is not published or used as portfolio material. The spam check is Cloudflare Turnstile, which loads a script from Cloudflare and is the only third-party script on the site. Full detail is on the privacy page.',
+    a: 'The form collects your name, an optional company or brand, your email, the product stage, your message, an optional uploaded reference file and an optional reference link. Submitted material is processed through this site&rsquo;s hosting and email providers only to receive and respond to the brief — it is stored so nothing is lost in transit, then emailed on. It is not published or used as portfolio material. The spam check is Cloudflare Turnstile, which loads a script from Cloudflare and is the only third-party script on the site. Full detail is on the privacy page.',
   },
 ];
 ---
@@ -95,7 +95,7 @@ const faqs = [
           </li>
         </ul>
         <p class="ct-reach__note">
-          Working hours are Morocco time (GMT+1). The development brief reaches the
+          Tangier, Morocco · Remote collaboration. The development brief reaches the
           same inbox and keeps your reference attached to it.
         </p>
       </div>
@@ -332,7 +332,15 @@ const faqs = [
   .ct-credential__facts div { display: grid; grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr); gap: .75rem; align-items: baseline; }
   .ct-credential__facts dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .ct-credential__facts dd { margin: 0; font-size: .9rem; font-weight: 500; color: var(--ink); }
-  .ct-credential__facts em { font-style: normal; font-weight: 600; color: var(--signal); }
+  .ct-credential__facts em {
+    color: var(--ink);
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--signal);
+    text-decoration-thickness: .14em;
+    text-underline-offset: .24em;
+  }
   .ct-credential__note { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .8rem; line-height: 1.65; }
 
   /* ---------- Professional proof: one editorial sequence ---------- */
