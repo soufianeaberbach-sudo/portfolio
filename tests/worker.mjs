@@ -106,7 +106,16 @@ globalThis.fetch = async (input, init = {}) => {
 };
 const resetOutbound = (newRoutes = {}) => { outbound = []; routes = newRoutes; };
 
-const turnstileOk = () => new Response(JSON.stringify({ success: true }), { status: 200 });
+/* The action and hostname the Worker requires. TURNSTILE_ACTION must match
+   data-action on the widget in BriefForm; ALLOWED_HOSTS mirrors the
+   TURNSTILE_HOSTNAMES var in wrangler.jsonc. */
+const TURNSTILE_ACTION = 'contact_brief';
+const ALLOWED_HOSTS = 'soufianeaberbach.com,www.soufianeaberbach.com';
+
+const siteverify = (extra = {}) =>
+  new Response(JSON.stringify({ success: true, action: TURNSTILE_ACTION, hostname: 'soufianeaberbach.com', ...extra }), { status: 200 });
+
+const turnstileOk = () => siteverify();
 const turnstileBad = () => new Response(JSON.stringify({ success: false, 'error-codes': ['invalid-input-response'] }), { status: 200 });
 const turnstileDown = () => { throw new TypeError('fetch failed'); };
 const resendOk = () => new Response(JSON.stringify({ id: 'msg_fake' }), { status: 200 });
@@ -448,7 +457,7 @@ group('11. Turnstile secret enabled + missing token');
 {
   resetOutbound({});
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
   const { status, body } = await call(jsonRequest(goodFields()), env);
   check('rejects', status === 400, `status ${status}`);
   check('does not claim success', body?.ok === false);
@@ -461,7 +470,7 @@ group('11b. a form-urlencoded post cannot skip Turnstile');
 {
   resetOutbound({});
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
   const { status, text } = await call(formRequest(goodFields()), env);
   check('rejects', status === 400, `status ${status}`);
   check('nothing persisted', kv.keys('brief:').length === 0);
@@ -472,7 +481,7 @@ group('12. Turnstile invalid token');
 {
   resetOutbound({ 'challenges.cloudflare.com': turnstileBad });
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
   const { status, body } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'bogus-token' })), env);
   check('rejects', status === 400, `status ${status}`);
   check('siteverify was consulted', outbound.length === 1, `${outbound.length} calls`);
@@ -484,7 +493,7 @@ group('13. Turnstile siteverify network failure fails CLOSED');
 {
   resetOutbound({ 'challenges.cloudflare.com': turnstileDown });
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
   const { status, body } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-token' })), env);
   check('rejects rather than waving through', status === 400, `status ${status}`);
   check('does not claim success', body?.ok === false);
@@ -495,7 +504,7 @@ group('13b. Turnstile non-ok siteverify response fails CLOSED');
 {
   resetOutbound({ 'challenges.cloudflare.com': () => new Response('nope', { status: 500 }) });
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS });
   const { status } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-token' })), env);
   check('rejects', status === 400, `status ${status}`);
   check('nothing persisted', kv.keys('brief:').length === 0);
@@ -505,7 +514,7 @@ group('13c. a valid token is accepted and the secret is sent only to Cloudflare'
 {
   resetOutbound({ 'challenges.cloudflare.com': turnstileOk, 'api.resend.com': resendOk });
   const kv = makeKv();
-  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS, RESEND_API_KEY: FAKE_RESEND_KEY });
   const { status, body } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-good-token' })), env);
   check('responds 200', status === 200, `status ${status}`);
   check('brief persisted', kv.keys(`brief:${body.id}`).length === 1);
@@ -574,6 +583,95 @@ group('frontend and Worker agree on the stage list');
     const { status } = await call(jsonRequest(goodFields({ stage })), env);
     check(`Worker accepts the rendered stage "${stage}"`, status === 200, `status ${status}`);
   }
+}
+
+group('13d. Turnstile context: success alone is not enough');
+{
+  /* A token only proves some widget on the account was solved somewhere. The
+     action pins it to this form and the hostname pins it to this site. */
+  const cases = [
+    ['accepted: success + correct action + allowed hostname', {}, 200],
+    ['accepted: the second allowed hostname', { hostname: 'www.soufianeaberbach.com' }, 200],
+    ['accepted: hostname differing only in case', { hostname: 'Soufianeaberbach.COM' }, 200],
+    ['rejected: wrong action', { action: 'newsletter_signup' }, 400],
+    ['rejected: missing action', { action: undefined }, 400],
+    ['rejected: wrong hostname', { hostname: 'soufianeaberbach.com.evil.example' }, 400],
+    ['rejected: hostname not on the list', { hostname: 'staging.soufianeaberbach.com' }, 400],
+    ['rejected: missing hostname', { hostname: undefined }, 400],
+    ['rejected: localhost', { hostname: 'localhost' }, 400],
+    ['rejected: 127.0.0.1', { hostname: '127.0.0.1' }, 400],
+  ];
+
+  for (const [label, extraFields, expected] of cases) {
+    resetOutbound({ 'challenges.cloudflare.com': () => siteverify(extraFields), 'api.resend.com': resendOk });
+    const kv = makeKv();
+    const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS, RESEND_API_KEY: FAKE_RESEND_KEY });
+    const { status } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-token' })), env);
+    check(label, status === expected, `status ${status}`);
+    check(`  ${expected === 200 ? 'persisted' : 'persisted nothing'}`, kv.keys('brief:').length === (expected === 200 ? 1 : 0));
+  }
+}
+
+group('13e. a missing hostname allowlist fails CLOSED');
+{
+  /* Silently skipping hostname validation is the one failure nobody notices,
+     so an unset or empty allowlist rejects instead — and rejects before
+     siteverify is called, so the visitor's single-use token is not spent on a
+     check that cannot pass. */
+  for (const [label, hostnames] of [
+    ['unset', undefined],
+    ['empty string', ''],
+    ['only separators', ' , , '],
+    ['only loopback names', 'localhost,127.0.0.1'],
+  ]) {
+    resetOutbound({ 'challenges.cloudflare.com': turnstileOk });
+    const kv = makeKv();
+    const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, RESEND_API_KEY: FAKE_RESEND_KEY });
+    if (hostnames !== undefined) env.TURNSTILE_HOSTNAMES = hostnames;
+    const { status, body } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-token' })), env);
+    check(`allowlist ${label} rejects`, status === 400, `status ${status}`);
+    check(`allowlist ${label} does not claim success`, body?.ok === false);
+    check(`allowlist ${label} persists nothing`, kv.keys('brief:').length === 0);
+    check(`allowlist ${label} does not spend the token`, outbound.length === 0, `${outbound.length} siteverify calls`);
+  }
+}
+
+group('13f. the allowlist is not consulted before Turnstile is enabled');
+{
+  /* Pre-activation the var is present but the secret is not, so verification
+     is skipped entirely and the form still works. */
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status } = await call(jsonRequest(goodFields()), env);
+  check('responds 200 with no secret configured', status === 200, `status ${status}`);
+  check('no siteverify call', outbound.filter((c) => c.url.includes('challenges')).length === 0);
+}
+
+group('13g. the widget action in BriefForm matches the Worker');
+{
+  /* data-action and TURNSTILE_ACTION are separate literals in separate files;
+     a change to one without the other would reject every submission. */
+  const source = await readFile(new URL('../src/components/BriefForm.astro', import.meta.url), 'utf8');
+  const found = source.match(/data-action="([^"]+)"/);
+  check('BriefForm declares a data-action', Boolean(found), String(found));
+  check(`BriefForm action is "${TURNSTILE_ACTION}"`, found?.[1] === TURNSTILE_ACTION, String(found?.[1]));
+
+  /* And the same string is what the Worker actually accepts. */
+  resetOutbound({ 'challenges.cloudflare.com': () => siteverify({ action: found?.[1] }), 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const env = makeEnv({ BRIEFS: kv, TURNSTILE_SECRET: FAKE_TURNSTILE_SECRET, TURNSTILE_HOSTNAMES: ALLOWED_HOSTS, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status } = await call(jsonRequest(goodFields({ 'cf-turnstile-response': 'a-token' })), env);
+  check('the Worker accepts the action BriefForm sends', status === 200, `status ${status}`);
+}
+
+group('13h. the hostname allowlist matches wrangler.jsonc');
+{
+  const config = await readFile(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
+  const found = config.match(/"TURNSTILE_HOSTNAMES":\s*"([^"]*)"/);
+  check('wrangler.jsonc declares TURNSTILE_HOSTNAMES', Boolean(found), String(found));
+  check('it matches what these tests assert against', found?.[1] === ALLOWED_HOSTS, String(found?.[1]));
+  check('it contains no loopback name', !/localhost|127\.0\.0\.1/.test(found?.[1] ?? ''), String(found?.[1]));
 }
 
 /* ------------------------------------------------------ 14-15. method + faults */

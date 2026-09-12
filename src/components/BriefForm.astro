@@ -148,7 +148,13 @@ const email = 'soufiane.aberbach@gmail.com';
     </fieldset>
 
     {turnstileKey && (
-      <div class="bf__turnstile cf-turnstile" data-sitekey={turnstileKey} data-theme="light"></div>
+      <div
+        id="brief-turnstile"
+        class="bf__turnstile cf-turnstile"
+        data-sitekey={turnstileKey}
+        data-action="contact_brief"
+        data-theme="light"
+      ></div>
     )}
 
     <div class="bf__submit">
@@ -439,18 +445,25 @@ const email = 'soufiane.aberbach@gmail.com';
        or a connection that dropped after the request left — the token in the
        form is already spent, so retrying from the same page would present a
        used token and be rejected a second time for the wrong reason.
-       Cloudflare's documented reset for an implicitly rendered widget is
-       turnstile.reset(container); it re-runs the challenge in place and
-       replaces the hidden cf-turnstile-response input with a fresh token.
+       turnstile.reset() re-runs the challenge in place and replaces the hidden
+       cf-turnstile-response input with a fresh token.
 
-       The container is looked up on each call rather than cached, because a
-       reset re-renders the widget. Everything here is guarded: with no site
-       key there is no widget and no api.js, so this is a no-op. */
+       The target is the documented one: a CSS selector string for the widget's
+       own id. Passing the element itself is not part of the documented surface,
+       and a stubbed widget in a test cannot prove the real api.js would accept
+       it, so the id is fixed in the markup above and named here.
+
+       Rendering stays implicit — api.js finds the container by its
+       cf-turnstile class exactly as before. Everything here is guarded: with
+       no build-time site key there is no widget and no api.js, so this is a
+       no-op. */
+    const TURNSTILE_TARGET = '#brief-turnstile';
+
     function resetTurnstile() {
-      const widget = form.querySelector('.cf-turnstile');
-      if (!widget || !window.turnstile || typeof window.turnstile.reset !== 'function') return;
+      if (!document.querySelector(TURNSTILE_TARGET)) return;
+      if (!window.turnstile || typeof window.turnstile.reset !== 'function') return;
       try {
-        window.turnstile.reset(widget);
+        window.turnstile.reset(TURNSTILE_TARGET);
       } catch {
         /* A widget that never finished rendering has nothing to reset. The
            submission already failed; do not turn that into a second error. */
