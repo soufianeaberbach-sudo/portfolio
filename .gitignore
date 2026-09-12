@@ -2,3 +2,7 @@ node_modules/
 dist/
 .astro/
 .wrangler/
+
+# Local Worker secrets
+.dev.vars
+wrangler.dev.jsonc
