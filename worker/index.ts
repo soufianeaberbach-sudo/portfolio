@@ -32,7 +32,20 @@ interface Env {
   RESEND_API_KEY?: string;
   /* When absent, Turnstile is not enforced — see verifyTurnstile. */
   TURNSTILE_SECRET?: string;
+  /* Comma-separated hostnames a Turnstile solve may come from. Not a secret.
+     Required once TURNSTILE_SECRET is set — see verifyTurnstile. */
+  TURNSTILE_HOSTNAMES?: string;
 }
+
+/* Must match data-action on the widget in BriefForm. A solve from any other
+   widget on the account — a different form, a different site — carries a
+   different action and is not accepted here. */
+const TURNSTILE_ACTION = 'contact_brief';
+
+/* Never accepted as a Turnstile hostname, even if someone puts one in the
+   allowlist. A solve that claims to come from a loopback name did not come
+   from the production site. */
+const TURNSTILE_HOSTNAME_DENY = ['localhost', '127.0.0.1', '::1', '[::1]', '0.0.0.0'];
 
 const STAGES = [
   'Idea / reference',
@@ -160,12 +173,39 @@ function screenSpam(form: Record<string, unknown>): Invalid | null {
  * rejects the submission rather than waving it through — the visitor is told
  * to retry and the direct email address is on the page either way.
  *
+ * success:true alone is NOT the whole check. A token is just proof that some
+ * widget on this Cloudflare account was solved somewhere, so the response's
+ * context is checked too:
+ *
+ *   - action must equal TURNSTILE_ACTION, which pins the solve to this form
+ *     rather than any other widget on the account
+ *   - hostname must appear in TURNSTILE_HOSTNAMES, so a token minted on a
+ *     copy of the page hosted elsewhere is refused
+ *
+ * The allowlist is required once the secret is set. If it is missing or empty
+ * the request is rejected BEFORE siteverify is called — silently skipping
+ * hostname validation would be the one failure nobody notices, and failing
+ * before the call also avoids spending the visitor's single-use token on a
+ * check that cannot pass. Loopback names are never accepted whatever the
+ * allowlist says.
+ *
  * With no secret configured there is nothing to verify against, so the check
  * is skipped. That is the pre-activation state and it is safe: the honeypot,
  * timing screen, rate limit and origin check all still apply. */
+function allowedTurnstileHostnames(env: Env): string[] {
+  return (env.TURNSTILE_HOSTNAMES ?? '')
+    .split(',')
+    .map((host) => host.trim().toLowerCase())
+    .filter((host) => host.length > 0 && !TURNSTILE_HOSTNAME_DENY.includes(host));
+}
+
 async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boolean> {
   if (!env.TURNSTILE_SECRET) return true;
   if (!token) return false;
+
+  const allowed = allowedTurnstileHostnames(env);
+  if (allowed.length === 0) return false;
+
   try {
     const body = new FormData();
     body.append('secret', env.TURNSTILE_SECRET);
@@ -176,8 +216,16 @@ async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boo
       body,
     });
     if (!res.ok) return false;
-    const data = (await res.json()) as { success?: boolean };
-    return data.success === true;
+    const data = (await res.json()) as {
+      success?: boolean;
+      action?: string;
+      hostname?: string;
+    };
+    if (data.success !== true) return false;
+    if (data.action !== TURNSTILE_ACTION) return false;
+    const hostname = (data.hostname ?? '').trim().toLowerCase();
+    if (!hostname || !allowed.includes(hostname)) return false;
+    return true;
   } catch {
     return false;
   }
@@ -256,6 +304,15 @@ async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
     subject: `Development brief — ${brief.stage} — ${brief.name}`,
     text: emailText(brief, id),
   };
+  /* Derived from the brief reference, which is already unique per submission,
+     and computed once so BOTH attempts present the same key. Without it a
+     retry after a request that actually reached Resend — a timeout, a dropped
+     response, a 5xx returned after the send — delivers the brief twice. The
+     body is built above and is never rebuilt, so the two attempts are
+     byte-identical as well, which is what makes the key meaningful. */
+  const idempotencyKey = `brief/${id}`;
+  const body = JSON.stringify(payload);
+
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch('https://api.resend.com/emails', {
@@ -263,8 +320,9 @@ async function sendEmail(env: Env, brief: Brief, id: string): Promise<boolean> {
         headers: {
           authorization: `Bearer ${env.RESEND_API_KEY}`,
           'content-type': 'application/json',
+          'Idempotency-Key': idempotencyKey,
         },
-        body: JSON.stringify(payload),
+        body,
       });
       if (res.ok) return true;
     } catch {
@@ -304,10 +362,22 @@ function json(status: number, data: Record<string, unknown>): Response {
   });
 }
 
+/* A parsed body that is not a plain object is treated as unreadable rather
+   than passed on. `JSON.parse('null')` succeeds and yields null, so a body of
+   literal `null` used to reach the screens and throw on the first property
+   read — answering 500 for what is plainly a malformed request. Arrays and
+   scalars never threw, but they are not form bodies either, so all of them are
+   refused in one place with the 400 that already exists for this. */
+function isFormObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 async function readBody(request: Request): Promise<{ form: Record<string, unknown>; wantsJson: boolean }> {
   const type = request.headers.get('content-type') ?? '';
   if (type.includes('application/json')) {
-    return { form: (await request.json()) as Record<string, unknown>, wantsJson: true };
+    const parsed: unknown = await request.json();
+    if (!isFormObject(parsed)) throw new Error('body is not an object');
+    return { form: parsed, wantsJson: true };
   }
   const data = await request.formData();
   const form: Record<string, unknown> = {};

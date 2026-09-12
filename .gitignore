@@ -6,3 +6,9 @@ dist/
 # Local Worker secrets
 .dev.vars
 wrangler.dev.jsonc
+
+# Astro build-time env files. PUBLIC_TURNSTILE_SITEKEY lives here locally, and
+# anything else that lands in one must not be committed by accident.
+.env
+.env.*
+!.env.example
