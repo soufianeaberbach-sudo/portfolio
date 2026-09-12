@@ -136,8 +136,8 @@ const email = 'soufianeaberbach@gmail.com';
     <fieldset class="field bf__attach">
       <legend class="label">Upload a reference <span class="field__opt">optional</span></legend>
       <p class="bf__attach-lede">
-        A sketch, a photo of a fitting, a tech pack, a spec sheet, a screenshot — whatever
-        you already have. It goes straight to Soufiane; nothing is published.
+        A sketch, a photo of a fitting, a tech pack, a screenshot — whatever you already
+        have, as a PDF or an image. It goes straight to Soufiane; nothing is published.
       </p>
 
       {/* The input is the control; the label is its visible surface. Clicking or
@@ -150,7 +150,7 @@ const email = 'soufianeaberbach@gmail.com';
         id="bf-file"
         name="file"
         type="file"
-        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,application/pdf,image/jpeg,image/png,image/webp"
+        accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
         aria-describedby="bf-file-hint bf-file-err"
         data-file
       />
@@ -175,7 +175,7 @@ const email = 'soufianeaberbach@gmail.com';
       </div>
 
       <span class="field__hint" id="bf-file-hint">
-        PDF, image (JPEG, PNG, WebP) or Word / Excel / PowerPoint. Up to 10 MB.
+        PDF or image (JPEG, PNG, WebP). Up to 10 MB. For anything else, add a link below.
       </span>
       <span class="field__err" id="bf-file-err" data-err="file" hidden></span>
 
@@ -623,7 +623,7 @@ const email = 'soufianeaberbach@gmail.com';
     const removeBtn = form.querySelector('[data-file-remove]');
 
     const MAX_BYTES = 10 * 1024 * 1024;
-    const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+    const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
 
     function prettySize(bytes) {
       if (bytes < 1024) return bytes + ' B';
@@ -657,7 +657,7 @@ const email = 'soufianeaberbach@gmail.com';
       if (!file) return null;
       const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
       if (!ALLOWED_EXT.includes(ext)) {
-        return 'That file type is not accepted. Please choose a PDF, an image, or a Word, Excel or PowerPoint file.';
+        return 'That file type is not accepted. Please choose a PDF or an image, or add a link to it below.';
       }
       if (file.size === 0) return 'That file appears to be empty. Please choose it again.';
       if (file.size > MAX_BYTES) {

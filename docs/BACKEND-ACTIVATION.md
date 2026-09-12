@@ -119,6 +119,36 @@ this is the one step in the runbook whose flag names are most likely to drift.
 **Without this rule, uploaded files outlive the 90-day brief retention that
 `/privacy/` states**, which would make that page untrue.
 
+### What happens when something fails
+
+The file is written to R2 before the brief is written to KV, so the brief record
+can name an object that already exists rather than one that might not.
+
+| Failure | Response | State left behind |
+|---|---|---|
+| File rejected (type, size, empty) | 400, field `file` | nothing written |
+| No bucket bound | 503, field `file` | nothing written |
+| R2 put fails | 502 | nothing written |
+| **KV put fails after R2 succeeded** | **502** | **the R2 object is deleted** |
+| Resend fails after both succeeded | 200 — receipt was real | brief + file kept, `undelivered:` record written |
+
+The KV-after-R2 case is the one worth stating: the object is already stored but
+no brief references it, so nothing would ever read it. The Worker deletes it.
+That rollback is **best-effort** — if the delete also fails there is nothing
+further the request can do and the lifecycle rule is the backstop — so its
+outcome never changes what the sender is told. Either way the response is the
+same truthful 502: the brief was not saved.
+
+### Accepted formats
+
+PDF, JPEG, PNG and WebP only. Each has a magic prefix that identifies the
+format itself, so the bytes can actually be verified.
+
+Office formats are deliberately excluded for launch. DOCX/XLSX/PPTX are ZIP
+containers and DOC/XLS/PPT are OLE2 containers, so their magic proves only the
+*container* — nothing about whether the document inside is the claimed format or
+free of macros. The optional link field covers them, and larger files.
+
 To retrieve a file named in a brief email:
 
 ```sh

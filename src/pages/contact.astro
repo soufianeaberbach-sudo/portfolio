@@ -17,6 +17,11 @@ import { profiles } from '../components/SocialLinks.astro';
  * covers the same need without storage, size or privacy complexity.
  */
 const email = 'soufianeaberbach@gmail.com';
+/* One source for all three renderings of the number: the readable form, the
+   tel: target and the wa.me path, which takes no + and no separators. */
+const phoneDisplay = '+212 657 872 090';
+const phoneDial = '+212657872090';
+const whatsapp = 'https://wa.me/212657872090';
 
 const faqs = [
   {
@@ -121,35 +126,88 @@ const faqs = [
   </section>
 
   <section class="ct-direct" aria-labelledby="ct-direct-title">
-    <div class="section-shell ct-direct__grid">
+    <div class="section-shell">
       <h2 class="sr-only" id="ct-direct-title">Direct contact and business status</h2>
-      <div data-reveal>
-        <p class="label">Direct email</p>
-        <a class="ct-direct__email" href={`mailto:${email}`}>{email} <span><Arrow /></span></a>
+
+      {/* Direct contact and the business credential carry this section. The
+          three ways to reach Soufiane are one block, at display size, because
+          they are the primary action on the page; the platforms that used to
+          sit beside them at equal weight are now a quiet row underneath. */}
+      <div class="ct-direct__top">
+        <div class="ct-reach" data-reveal>
+          <p class="eyebrow">Reach Soufiane directly</p>
+          <ul class="ct-reach__list">
+            <li>
+              <span class="label">Email</span>
+              <a class="ct-reach__value" href={`mailto:${email}`}>
+                {email}<i aria-hidden="true"><Arrow /></i>
+              </a>
+            </li>
+            <li>
+              <span class="label">Phone</span>
+              {/* Readable, not icon-only — and a tel: link so a phone dials it. */}
+              <a class="ct-reach__value" href={`tel:${phoneDial}`}>
+                {phoneDisplay}<i aria-hidden="true"><Arrow /></i>
+              </a>
+            </li>
+            <li>
+              <span class="label">WhatsApp</span>
+              <a class="ct-reach__value" href={whatsapp} target="_blank" rel="noopener noreferrer">
+                {phoneDisplay}
+                <span class="sr-only">on WhatsApp (opens in a new tab)</span>
+                <i aria-hidden="true"><Arrow /></i>
+              </a>
+            </li>
+          </ul>
+          <p class="ct-reach__note">
+            Working hours are Morocco time (GMT+1). A brief through the form reaches the
+            same inbox and keeps your reference attached to it.
+          </p>
+        </div>
+
+        {/* A credential, not fine print: ruled, weighted and given the same
+            vertical space as the contact block beside it. */}
+        <aside class="ct-credential" data-reveal aria-labelledby="ct-credential-title">
+          <p class="eyebrow" id="ct-credential-title">Registered business</p>
+          <p class="ct-credential__head">
+            Registered Moroccan<br />Auto&#8209;Entrepreneur
+          </p>
+          <dl class="ct-credential__facts">
+            <div>
+              <dt>Registered since</dt>
+              <dd>2018</dd>
+            </div>
+            <div>
+              <dt>Invoicing</dt>
+              <dd><em>B2B invoicing available</em></dd>
+            </div>
+            <div>
+              <dt>Based in</dt>
+              <dd>Tangier, Morocco</dd>
+            </div>
+          </dl>
+          <p class="ct-credential__note">
+            Formal engagement with a company is straightforward — contracts and invoices
+            in your own procurement process.
+          </p>
+        </aside>
       </div>
-      <div data-reveal>
-        <p class="label">Professional profiles</p>
-        {/* Rendered here rather than reusing the footer's SocialLinks nav: that
-            component paints its glyph in var(--paper) for a dark ground, so on
-            this paper background it showed four empty bordered boxes. Names
-            are also plainer than "in" / "up" / "fiverr." abbreviations. */}
-        <ul class="ct-profiles">
+
+      {/* Available, secondary, and stated once on this page. The footer keeps
+          the site-wide profile nav; this row exists only so somebody who
+          prefers a marketplace can find one. */}
+      <div class="ct-platforms" data-reveal>
+        <p class="ct-platforms__tag">Or work through a platform, if you prefer</p>
+        <ul class="ct-platforms__list">
           {profiles.map((profile) => (
             <li>
               <a href={profile.href} target="_blank" rel="noopener noreferrer">
-                <span>{profile.name}</span>
+                {profile.name}
                 <span class="sr-only">(opens in a new tab)</span>
-                <i aria-hidden="true"><Arrow /></i>
               </a>
             </li>
           ))}
         </ul>
-      </div>
-      <div class="ct-direct__business" data-reveal>
-        <p class="label">Business status</p>
-        <strong>Registered Moroccan Auto-Entrepreneur</strong>
-        <span>Since 2018 &middot; B2B invoicing available</span>
-        <span>Tangier, Morocco &middot; Remote collaboration</span>
       </div>
     </div>
   </section>
@@ -235,22 +293,102 @@ const faqs = [
 
   /* ---------- Direct routes: deliberately quiet next to the form ---------- */
   .ct-direct { padding-block: clamp(3.5rem, 6vw, 6rem); border-top: 1px solid var(--line-strong); }
-  .ct-direct__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 4rem); }
+  .ct-direct__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(17rem, .75fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  /* Direct contact. Display-size values on their own rules, so the three ways
+     in read as the loudest thing in the section. */
+  .ct-reach__list { margin: clamp(1.5rem, 3vw, 2.25rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .ct-reach__list li { padding: clamp(.9rem, 1.6vw, 1.15rem) 0; border-bottom: 1px solid var(--line); }
+  .ct-reach__list .label { display: block; margin-bottom: .3rem; color: var(--muted); }
+  .ct-reach__value {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    font-size: clamp(1.15rem, 2.1vw, 1.75rem);
+    line-height: 1.1;
+    color: var(--ink);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    /* The signal underline is the orange: it marks the action without putting
+       orange on text that has to stay readable. */
+    box-shadow: inset 0 -2px 0 var(--signal);
+    transition: color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .ct-reach__value i { flex: none; color: var(--signal); transition: transform .2s var(--ease); }
+  .ct-reach__value:hover { color: var(--signal); }
+  .ct-reach__value:hover i { transform: translate(2px, -2px); }
+  .ct-reach__note { max-width: 30rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.7; }
+
+  /* The credential. A ruled panel on the brighter ground with the signal rule
+     at its head — the visual language the site already uses for something that
+     matters, rather than three lines of grey. */
+  .ct-credential {
+    padding: clamp(1.35rem, 2.4vw, 1.9rem);
+    border: 1px solid var(--line-strong);
+    border-top: 3px solid var(--signal);
+    background: var(--paper-bright);
+  }
+  .ct-credential__head {
+    margin: clamp(.9rem, 1.6vw, 1.2rem) 0 clamp(1.1rem, 2vw, 1.5rem);
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(1.25rem, 1.9vw, 1.55rem);
+    letter-spacing: -.03em;
+    line-height: 1.08;
+  }
+  .ct-credential__facts { margin: 0; display: grid; gap: .7rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  .ct-credential__facts div { display: grid; grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr); gap: .75rem; align-items: baseline; }
+  .ct-credential__facts dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .ct-credential__facts dd { margin: 0; font-size: .9rem; font-weight: 500; color: var(--ink); }
+  /* The one procurement fact a company actually screens for. */
+  .ct-credential__facts em { font-style: normal; font-weight: 600; color: var(--signal); }
+  .ct-credential__note { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .8rem; line-height: 1.65; }
+
+  /* Platforms: one quiet row, once. */
+  .ct-platforms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .6rem clamp(1.25rem, 3vw, 2.5rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+  }
+  .ct-platforms__tag { margin: 0; font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .ct-platforms__list { display: flex; flex-wrap: wrap; gap: .5rem clamp(1rem, 2.4vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
+  .ct-platforms__list a {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: .12rem;
+    transition: color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .ct-platforms__list a:hover { color: var(--signal); border-color: var(--signal); }
+
+  @media (max-width: 860px) {
+    .ct-direct__top { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  }
   .ct-direct .label { margin: 0 0 1rem; color: var(--muted); }
-  .ct-direct__email { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.5vw, 1.35rem); overflow-wrap: anywhere; transition: color .2s var(--ease); }
   /* Hover keeps the text in ink and moves the orange to the underline:
      signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
      small text needs. */
-  .ct-direct__email:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .ct-direct__business { display: grid; gap: .4rem; }
   .ct-direct__business strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.25; }
   .ct-direct__business span { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.65; }
 
   /* Platform names on hairlines. Text first, arrow second — a missing icon can
      never leave the row unreadable. */
-  .ct-profiles { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
-  .ct-profiles li { border-bottom: 1px solid var(--line); }
-  .ct-profiles a {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -264,10 +402,6 @@ const faqs = [
     text-transform: uppercase;
     transition: color .18s var(--ease);
   }
-  .ct-profiles a:hover { color: var(--ink); }
-  .ct-profiles a:hover span:not(.sr-only) { text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-  .ct-profiles i { display: inline-flex; flex: 0 0 auto; color: var(--muted); transition: color .18s var(--ease), transform .18s var(--ease); }
-  .ct-profiles a:hover i { color: var(--signal); transform: translate(2px, -2px); }
 
   /* ---------- FAQ ---------- */
   .ct-faq { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(2rem, 5vw, 5rem); padding-block: clamp(4rem, 7vw, 7rem); border-top: 1px solid var(--line); }

@@ -261,9 +261,11 @@ try {
     check('its label points at it', up.labelFor === 'bf-file', String(up.labelFor));
     check('it is described by the hint and the error slot', up.describedBy.includes('bf-file-hint') && up.describedBy.includes('bf-file-err'), up.describedBy);
     check('it has a file-type error slot', up.errSlot);
-    check('accept lists the real formats', ['pdf', 'jpg', 'png', 'webp', 'docx', 'xlsx', 'pptx'].every((e) => up.accept.includes(e)), up.accept);
+    check('accept lists the four launch formats', ['pdf', 'jpg', 'jpeg', 'png', 'webp'].every((e) => up.accept.includes(e)), up.accept);
+    check('accept offers no Office format', !/docx?|xlsx?|pptx?/.test(up.accept), up.accept);
     check('accept offers no executable type', !/exe|\.js|sh|bat|cmd|apk|dmg/.test(up.accept), up.accept);
     check('the hint states the size limit', /10 MB/.test(up.hint), up.hint);
+    check('the hint names only PDF and images', /PDF/.test(up.hint) && !/Word|Excel|PowerPoint/.test(up.hint), up.hint);
     check('nothing is shown as chosen on load', up.chosenHidden === true);
     check('the chosen row announces politely', up.chosenLive === 'polite', String(up.chosenLive));
     check('the link is presented as the alternative', up.linkIsSecondary);
@@ -546,6 +548,50 @@ try {
       if (staticServer) await new Promise((r) => staticServer.close(r));
       rmSync(outDir, { recursive: true, force: true });
     }
+  }
+
+  // ---- direct contact dominates, and the number is readable
+  console.log('\ndirect contact hierarchy');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
+
+    const d = await p.evaluate(() => {
+      const size = (el) => (el ? parseFloat(getComputedStyle(el).fontSize) : 0);
+      const reach = [...document.querySelectorAll('.ct-reach__value')];
+      const platform = document.querySelector('.ct-platforms__list a');
+      const hrefs = reach.map((a) => a.getAttribute('href'));
+      return {
+        count: reach.length,
+        hrefs,
+        text: reach.map((a) => a.textContent.replace(/\s+/g, ' ').trim()),
+        reachSize: size(reach[0]),
+        platformSize: size(platform),
+        /* Stated once on the page — the footer nav is separate and site-wide. */
+        platformGroups: document.querySelectorAll('.ct-platforms').length,
+        credentialExists: !!document.querySelector('.ct-credential'),
+        credentialB2B: document.querySelector('.ct-credential__facts em')?.textContent ?? '',
+        credentialHeadSize: size(document.querySelector('.ct-credential__head')),
+        oldEqualGrid: !!document.querySelector('.ct-direct__grid'),
+      };
+    });
+
+    check('three direct routes are offered', d.count === 3, String(d.count));
+    check('email is a mailto link', d.hrefs.some((h) => h === 'mailto:soufianeaberbach@gmail.com'), JSON.stringify(d.hrefs));
+    check('phone is a tel link', d.hrefs.some((h) => h === 'tel:+212657872090'), JSON.stringify(d.hrefs));
+    check('WhatsApp is a wa.me link', d.hrefs.some((h) => h === 'https://wa.me/212657872090'), JSON.stringify(d.hrefs));
+    check('the number is readable text, not icon-only', d.text.filter((t) => t.includes('+212 657 872 090')).length === 2, JSON.stringify(d.text));
+    /* The hierarchy the brief asks for, asserted rather than eyeballed. */
+    check('direct contact is set larger than the platform links', d.reachSize > d.platformSize * 1.6, `${d.reachSize} vs ${d.platformSize}`);
+    check('the platform group appears exactly once', d.platformGroups === 1, String(d.platformGroups));
+    check('the old three-equal-column grid is gone', d.oldEqualGrid === false);
+    check('the business credential is present', d.credentialExists);
+    check('B2B invoicing is called out', /B2B invoicing available/.test(d.credentialB2B), d.credentialB2B);
+    check('the credential headline outranks the platform links', d.credentialHeadSize > d.platformSize * 1.4, `${d.credentialHeadSize} vs ${d.platformSize}`);
+
+    await c.close();
   }
 
   // ---- privacy page reachable from the footer

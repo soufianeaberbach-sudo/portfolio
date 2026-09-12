@@ -83,14 +83,20 @@ function makeKv({ failPut = () => false, failGet = false } = {}) {
 
 /* Stub R2. Records every put so a test can assert the key shape, the metadata
    and — importantly — that bytes never reach KV. */
-function makeR2({ failPut = false } = {}) {
+function makeR2({ failPut = false, failDelete = false } = {}) {
   return {
     objects: new Map(),
     puts: [],
+    deletes: [],
     async put(key, value, options = {}) {
       this.puts.push({ key, size: value.byteLength, options });
       if (failPut) throw new Error('r2 unavailable');
       this.objects.set(key, { value, options });
+    },
+    async delete(key) {
+      this.deletes.push(key);
+      if (failDelete) throw new Error('r2 delete unavailable');
+      this.objects.delete(key);
     },
     keys() { return [...this.objects.keys()]; },
   };
@@ -846,11 +852,6 @@ group('U1. accepted types are stored in R2, never in KV');
     ['fitting.jpg', 'jpg', 'JPEG image'],
     ['sketch.png', 'png', 'PNG image'],
     ['reference.webp', 'webp', 'WebP image'],
-    ['spec.docx', 'zip', 'Word document'],
-    ['costing.xlsx', 'zip', 'Excel workbook'],
-    ['lookbook.pptx', 'zip', 'PowerPoint deck'],
-    ['legacy.doc', 'ole2', 'Word document'],
-    ['legacy.xls', 'ole2', 'Excel workbook'],
   ]) {
     resetOutbound({ 'api.resend.com': resendOk });
     const kv = makeKv();
@@ -909,6 +910,15 @@ group('U3. executables and scripts are rejected');
     ['app.apk', 'zip', 'extension not on the allowlist even though it is a ZIP'],
     ['disk.dmg', 'none', 'extension not on the allowlist'],
     ['archive.zip', 'zip', 'bare archives are deliberately excluded'],
+    /* Office formats are out for launch: their magic proves only the ZIP or
+       OLE2 container, never that the document inside is the claimed format or
+       free of macros. The link field covers them. */
+    ['spec.docx', 'zip', 'ZIP container proves nothing about the document'],
+    ['costing.xlsx', 'zip', 'ZIP container proves nothing about the document'],
+    ['lookbook.pptx', 'zip', 'ZIP container proves nothing about the document'],
+    ['legacy.doc', 'ole2', 'OLE2 container can carry macros'],
+    ['legacy.xls', 'ole2', 'OLE2 container can carry macros'],
+    ['legacy.ppt', 'ole2', 'OLE2 container can carry macros'],
     ['payload.pdf', 'exe', 'extension says PDF, bytes say MZ executable'],
     ['sketch.png', 'exe', 'renamed executable'],
   ]) {
@@ -1014,6 +1024,92 @@ group('U8. filename sanitization');
     const key = r2.keys()[0] ?? '';
     check('  key has no path segment from the name', key.split('/').length === 3, key);
   }
+}
+
+group('U6b. R2 succeeds but KV fails — the object is rolled back, not orphaned');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  /* The brief write fails; the rate-limit write must still succeed, or the
+     request would never reach the persist step being tested. */
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+
+  check('the upload did reach R2', r2.puts.length === 1, `${r2.puts.length} puts`);
+  check('responds 502', status === 502, `status ${status}`);
+  check('does NOT claim success', body?.ok === false);
+  check('no reference handed out', body?.id === undefined);
+  check('nothing persisted in KV', kv.keys('brief:').length === 0);
+  check('no email sent', outbound.length === 0);
+
+  /* The point of the test: no object left behind that nothing references. */
+  check('the object was deleted', r2.deletes.length === 1, `${r2.deletes.length} deletes`);
+  check('the deleted key is the one just written', r2.deletes[0] === r2.puts[0].key, `${r2.deletes[0]} vs ${r2.puts[0].key}`);
+  check('the bucket is empty afterwards', r2.keys().length === 0, JSON.stringify(r2.keys()));
+}
+
+group('U6c. a failed rollback still tells the sender the truth');
+{
+  /* If the cleanup also fails there is nothing more the request can do, and
+     the lifecycle rule is the backstop. What must NOT happen is the response
+     changing — the brief was not saved either way. */
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2({ failDelete: true });
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('still responds 502', status === 502, `status ${status}`);
+  check('still does not claim success', body?.ok === false);
+  check('the rollback was attempted', r2.deletes.length === 1);
+  check('the response does not claim the rollback worked', !/remov|delet|clean/i.test(String(body?.error)), String(body?.error));
+  check('no email sent', outbound.length === 0);
+  check('nothing persisted', kv.keys('brief:').length === 0);
+}
+
+group('U6d. nothing is deleted when there was no upload to roll back');
+{
+  resetOutbound({});
+  const kv = makeKv({ failPut: (key) => key.startsWith('brief:') });
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status } = await call(multipartRequest(goodFields(), null), env);
+  check('responds 502', status === 502, `status ${status}`);
+  check('no put and no delete', r2.puts.length === 0 && r2.deletes.length === 0);
+}
+
+group('U6e. a successful brief never deletes its own upload');
+{
+  resetOutbound({ 'api.resend.com': resendOk });
+  const kv = makeKv();
+  const r2 = makeR2();
+  const env = makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY });
+  const { status, body } = await call(multipartRequest(goodFields(), makeFile('spec.pdf', 'pdf')), env);
+  check('responds 200', status === 200, `status ${status}`);
+  check('no delete attempted', r2.deletes.length === 0, JSON.stringify(r2.deletes));
+  check('the object is still there', r2.keys().length === 1);
+  check('and the brief points at it', kv.read(`brief:${body.id}`)?.file?.key === r2.keys()[0]);
+}
+
+group('U3b. the launch allowlist is exactly the four verifiable formats');
+{
+  /* Read from the Worker source so the policy cannot drift from the UI without
+     a test noticing. */
+  const source = await readFile(new URL('../worker/index.ts', import.meta.url), 'utf8');
+  const block = source.match(/const ACCEPTED_FILES: FileKind\[\] = \[([\s\S]*?)\];/)?.[1] ?? '';
+  const exts = [...block.matchAll(/ext: '([a-z0-9]+)'/g)].map((m) => m[1]);
+  check('exactly five entries (jpg and jpeg both map to JPEG)', exts.length === 5, JSON.stringify(exts));
+  check('the set is pdf/jpg/jpeg/png/webp', JSON.stringify([...new Set(exts)].sort()) === JSON.stringify(['jpeg', 'jpg', 'pdf', 'png', 'webp']), JSON.stringify(exts));
+  for (const gone of ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip']) {
+    check(`${gone} is not accepted`, !exts.includes(gone));
+  }
+
+  /* And the form's accept attribute agrees with it. */
+  const form = await readFile(new URL('../src/components/BriefForm.astro', import.meta.url), 'utf8');
+  const accept = form.match(/accept="([^"]+)"/)?.[1] ?? '';
+  check('the accept attribute lists the same four formats', ['.pdf', '.jpg', '.jpeg', '.png', '.webp'].every((e) => accept.includes(e)), accept);
+  check('the accept attribute offers no Office format', !/docx?|xlsx?|pptx?/.test(accept), accept);
+  check('the client-side list agrees', /ALLOWED_EXT = \['pdf', 'jpg', 'jpeg', 'png', 'webp'\]/.test(form));
 }
 
 group('U9. duplicate filenames do not collide');

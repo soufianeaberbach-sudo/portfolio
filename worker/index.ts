@@ -31,6 +31,8 @@ interface R2BucketLike {
     value: ArrayBuffer,
     options?: { httpMetadata?: { contentType?: string }; customMetadata?: Record<string, string> },
   ): Promise<unknown>;
+  /* Used only to roll back an object whose brief then failed to persist. */
+  delete(key: string): Promise<unknown>;
 }
 
 interface Env {
@@ -88,9 +90,17 @@ const STAGES = [
  * .apk, .dmg and anything else not listed simply has no entry, so the
  * allowlist refuses it without needing a blocklist to stay ahead of.
  *
- * A bare .zip is deliberately NOT accepted. The Office formats below are
- * already ZIP containers, so nothing legitimate is lost, and a bare archive is
- * the easiest way to post an executable payload into the bucket. */
+ * The launch allowlist is four formats: PDF, JPEG, PNG and WebP. Each has a
+ * distinctive magic prefix that identifies the format itself, so the bytes can
+ * actually be checked.
+ *
+ * Office formats are deliberately absent. DOCX/XLSX/PPTX are ZIP containers and
+ * DOC/XLS/PPT are OLE2 containers, so their magic proves only the CONTAINER —
+ * it says nothing about whether the document inside is the claimed format or
+ * safe, and both container types can carry macros or an executable payload.
+ * Accepting them would mean admitting files whose contents cannot be verified
+ * with the checks available here. A bare .zip is out for the same reason. The
+ * optional link field covers larger files and any other document type. */
 const UPLOAD = {
   maxBytes: 10 * 1024 * 1024,
   maxNameLength: 120,
@@ -105,26 +115,12 @@ interface FileKind {
   label: string;
 }
 
-/* PK\x03\x04 is the ZIP header the modern Office formats share; D0CF11E0 is
-   the legacy OLE2 container. They cannot be told apart by magic alone, so for
-   those the extension and declared type carry the distinction — which is safe
-   here because a stored file is never executed or served, only downloaded by
-   its recipient. */
-const ZIP_MAGIC = ['504b0304', '504b0506', '504b0708'];
-const OLE2_MAGIC = ['d0cf11e0a1b11ae1'];
-
 const ACCEPTED_FILES: FileKind[] = [
   { ext: 'pdf', types: ['application/pdf'], magic: ['25504446'], label: 'PDF' },
   { ext: 'jpg', types: ['image/jpeg'], magic: ['ffd8ff'], label: 'JPEG image' },
   { ext: 'jpeg', types: ['image/jpeg'], magic: ['ffd8ff'], label: 'JPEG image' },
   { ext: 'png', types: ['image/png'], magic: ['89504e470d0a1a0a'], label: 'PNG image' },
   { ext: 'webp', types: ['image/webp'], magic: ['52494646'], label: 'WebP image' },
-  { ext: 'docx', types: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'], magic: ZIP_MAGIC, label: 'Word document' },
-  { ext: 'doc', types: ['application/msword'], magic: OLE2_MAGIC, label: 'Word document' },
-  { ext: 'xlsx', types: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], magic: ZIP_MAGIC, label: 'Excel workbook' },
-  { ext: 'xls', types: ['application/vnd.ms-excel'], magic: OLE2_MAGIC, label: 'Excel workbook' },
-  { ext: 'pptx', types: ['application/vnd.openxmlformats-officedocument.presentationml.presentation'], magic: ZIP_MAGIC, label: 'PowerPoint deck' },
-  { ext: 'ppt', types: ['application/vnd.ms-powerpoint'], magic: OLE2_MAGIC, label: 'PowerPoint deck' },
 ];
 
 const LIMITS = {
@@ -409,7 +405,7 @@ async function validateUpload(file: File): Promise<UploadCheck> {
   const kind = ACCEPTED_FILES.find((candidate) => candidate.ext === ext);
   if (!kind) {
     return {
-      error: 'That file type is not accepted. Please attach a PDF, an image (JPEG, PNG, WebP) or an Office document, or add a link to it instead.',
+      error: 'That file type is not accepted. Please attach a PDF or an image (JPEG, PNG, WebP), or add a link to it instead.',
     };
   }
 
@@ -724,6 +720,23 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
       { expirationTtl: RETENTION_SECONDS },
     );
   } catch {
+    /* The object is already in R2 but there is now no brief that references
+       it: nothing will ever read it and the retention rule is the only thing
+       that would eventually remove it. Roll it back rather than leave it
+       orphaned. The rollback is best-effort — if the delete also fails there
+       is nothing further this request can do, and the lifecycle rule remains
+       the backstop — so its outcome never changes what the sender is told.
+       The response is the same truthful 502 either way: the brief was not
+       saved. */
+    if (stored) {
+      try {
+        await env.BRIEF_FILES?.delete(stored.key);
+      } catch {
+        /* Deliberately swallowed. Reporting a failed cleanup to the sender
+           would be noise about something they cannot act on, and claiming the
+           rollback worked when it did not would be worse. */
+      }
+    }
     return fail(502, 'The brief could not be saved. Please email directly — the address is below the form.');
   }
 
