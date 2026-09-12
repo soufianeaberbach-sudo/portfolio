@@ -455,7 +455,11 @@ const brandLogos = [
     gap: .6rem clamp(1.25rem, 3vw, 2.5rem);
     padding-block: clamp(1rem, 1.8vw, 1.35rem);
   }
-  .business-ready__tag { margin: 0; color: var(--signal); }
+  /* Muted, not signal: this is small mono text on a light ground and signal
+     reaches only 3.4:1. Orange stays available for rules, indicators and
+     larger accents elsewhere. Muted also keeps the tag quieter than the
+     facts beside it, which are --ink-soft. */
+  .business-ready__tag { margin: 0; color: var(--muted); }
   .business-ready__facts {
     margin: 0;
     color: var(--ink-soft);

@@ -218,8 +218,11 @@ const email = 'soufiane.aberbach@gmail.com';
   .field textarea::placeholder { color: var(--muted); }
 
   .field__hint { color: var(--muted); font-size: .85rem; line-height: 1.55; }
-  /* Errors carry text, never colour alone. */
-  .field__err { color: var(--signal); font-size: .85rem; font-weight: 600; line-height: 1.5; }
+  /* Errors carry text, never colour alone. The text itself is ink-soft, not
+     signal: at .85rem/600 it is not WCAG large text, and signal reaches only
+     3.4:1 on paper. The orange stays on the field's own rule and shadow, so
+     the invalid field is still marked in the brand colour. */
+  .field__err { color: var(--ink-soft); font-size: .85rem; font-weight: 600; line-height: 1.5; }
 
   /* All five states visible without interaction — no select to open. Rows on
      hairlines with a mono index, the way a numbered clause reads in a
