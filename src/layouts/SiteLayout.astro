@@ -35,7 +35,9 @@ const origin = (Astro.site ?? new URL(Astro.url.origin)).origin;
    four public profile links. Deliberately absent: registration or tax numbers,
    any street address, client or brand relationships, and the working languages
    — that last one is published but not yet verified, and structured data is a
-   machine-readable claim, so it stays out until it is. */
+   machine-readable claim, so it stays out until it is. areaServed is absent
+   for the same reason — no geographic reach is claimed until a precise one is
+   intentionally approved. */
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -56,7 +58,6 @@ const structuredData = {
       url: origin + '/',
       description:
         'Fashion product development: pattern construction, fit validation, grading, technical documentation and pre-production handoff.',
-      areaServed: 'Worldwide',
       provider: { '@id': `${origin}/#soufiane` },
       address: { '@type': 'PostalAddress', addressLocality: 'Tangier', addressCountry: 'MA' },
     },
