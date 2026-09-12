@@ -478,9 +478,52 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   return json(200, { ok: true, id });
 }
 
+/* The canonical website host. The apex only: www must never be independently
+   indexable, and these two are the whole of the redirect below. Kept as
+   literals rather than derived from the request, so a Worker reached on any
+   other hostname — a workers.dev subdomain, a preview alias, a future
+   subdomain — is never rewritten to somewhere it did not ask for. */
+const CANONICAL_HOST = 'aberbach.co';
+const WWW_HOST = `www.${CANONICAL_HOST}`;
+
+/* www -> apex, as a SECOND line of defence only.
+ *
+ * The authoritative redirect is a Cloudflare Redirect Rule, which runs at the
+ * edge before this Worker is invoked — see docs/DOMAIN-MIGRATION.md. This
+ * exists because that rule lives in a dashboard and nothing in the repository
+ * can prove it is still there; if it is ever removed or mis-scoped, this
+ * catches the request instead of serving the site on a second indexable host.
+ *
+ * The match is EXACT. An earlier version redirected any hostname beginning
+ * `www.`, which would have rewritten hosts this Worker has no business
+ * rewriting; only www.aberbach.co is redirected and everything else passes
+ * through untouched. It cannot loop, because the target host is not WWW_HOST.
+ *
+ * /api/* is deliberately NOT redirected, and the Cloudflare rule carries the
+ * same carve-out. Browsers downgrade a 301 on a POST to a GET and drop the
+ * body, so redirecting the endpoint could silently discard a brief. In
+ * practice the form is only ever served from the apex — the page GET is
+ * redirected long before the form exists — so an API request on www should not
+ * occur; if one does it is handled normally, and the existing origin check
+ * still applies. */
+function redirectToApex(url: URL): Response | null {
+  /* WHATWG URL lowercases the hostname, so this is already case-insensitive. */
+  if (url.hostname !== WWW_HOST) return null;
+  if (url.pathname === '/api' || url.pathname.startsWith('/api/')) return null;
+  const target = new URL(url.href);
+  target.hostname = CANONICAL_HOST;
+  /* 301: permanent, so search engines transfer authority to the apex rather
+     than keeping both hosts. Path and query are preserved by construction. */
+  return Response.redirect(target.href, 301);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+
+    const apexRedirect = redirectToApex(url);
+    if (apexRedirect) return apexRedirect;
+
     const isApi = url.pathname === '/api/brief';
 
     if (isApi) {

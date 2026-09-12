@@ -84,16 +84,23 @@ the visitor to email directly. Nothing is ever accepted and then dropped.
 
 ## 3. Resend
 
-`BRIEF_FROM` is `brief@soufianeaberbach.com`, so **`soufianeaberbach.com` must
-be a verified sending domain in Resend** or Resend refuses the send.
+Two different addresses, and they are not interchangeable:
 
-1. Add the domain in the Resend dashboard.
+| | Value | What it is |
+|---|---|---|
+| `BRIEF_TO` | `soufianeaberbach@gmail.com` | The **public contact address**. Also shown on `/contact/`, in the no-JavaScript fallback and in every mailto link. Needs no verification. |
+| `BRIEF_FROM` | `brief@aberbach.co` | The **transactional sender**. Nobody writes to it. Resend requires the From domain to be one it has verified, and a `gmail.com` sender cannot be verified by a third-party relay — hence the owned domain. |
+
+So **`aberbach.co` must be a verified sending domain in Resend**, or Resend
+refuses the send. It is **not verified yet**.
+
+1. Add `aberbach.co` in the Resend dashboard.
 2. Resend then generates the DNS records for that domain and displays them.
    Copy them exactly as shown — they are per-domain values (selector names and
    key material differ per account), so they cannot be written down in advance
    and must not be guessed.
-3. Add them at the DNS host for `soufianeaberbach.com`, then press Verify in
-   Resend and wait for the domain to report verified.
+3. Add them at the DNS host for `aberbach.co`, then press Verify in Resend and
+   wait for the domain to report verified.
 4. Create an API key and set it as a Worker secret:
 
 ```sh
@@ -108,9 +115,15 @@ it. The visitor is still told the brief was received, which is true.
 ## 4. Turnstile — both halves together
 
 Create a Turnstile widget in the Cloudflare dashboard for the production
-hostname (`soufianeaberbach.com`, plus `www.` if that serves the site). Do not
-use Cloudflare's test keys in production. That yields a **site key** (public)
-and a **secret key**.
+hostname. The canonical host is the apex, `aberbach.co`; `www.aberbach.co`
+only ever 301s to it, so in normal operation a widget is solved on the apex
+alone. Add `www.aberbach.co` to the widget as well while the redirect is still
+new — if the redirect is mis-set, a visitor could reach the Contact page on
+`www` and a widget bound to the apex only would refuse them. Narrow the widget
+and `TURNSTILE_HOSTNAMES` to the apex once the redirect is verified stable.
+
+Do not use Cloudflare's test keys in production. The widget yields a **site
+key** (public) and a **secret key**.
 
 ```sh
 npx wrangler secret put TURNSTILE_SECRET   # the SECRET key

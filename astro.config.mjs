@@ -1,7 +1,11 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://soufianeaberbach.com',
+  /* The canonical website origin. Apex only — www.aberbach.co is a permanent
+     redirect to this host and must never be independently indexable. This one
+     value drives the canonical link, og:url, the sitemap and robots.txt, so it
+     is the only place the website domain is written. */
+  site: 'https://aberbach.co',
   output: 'static',
   vite: {
     css: {

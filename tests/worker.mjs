@@ -46,7 +46,7 @@ const group = (name) => console.log(`\n${name}`);
 const FAKE_TURNSTILE_SECRET = '0xFAKE-TURNSTILE-SECRET-FOR-TESTS';
 const FAKE_RESEND_KEY = 're_FAKE_KEY_FOR_TESTS';
 
-const ORIGIN = 'https://soufianeaberbach.com';
+const ORIGIN = 'https://aberbach.co';
 const ENDPOINT = `${ORIGIN}/api/brief`;
 const RETENTION_SECONDS = 90 * 24 * 60 * 60;
 
@@ -85,8 +85,8 @@ let assetsCalls = 0;
 function makeEnv(overrides = {}) {
   return {
     ASSETS: { async fetch() { assetsCalls += 1; return new Response('static asset', { status: 200 }); } },
-    BRIEF_TO: 'soufiane.aberbach@gmail.com',
-    BRIEF_FROM: 'brief@soufianeaberbach.com',
+    BRIEF_TO: 'soufianeaberbach@gmail.com',
+    BRIEF_FROM: 'brief@aberbach.co',
     ...overrides,
   };
 }
@@ -110,10 +110,10 @@ const resetOutbound = (newRoutes = {}) => { outbound = []; routes = newRoutes; }
    data-action on the widget in BriefForm; ALLOWED_HOSTS mirrors the
    TURNSTILE_HOSTNAMES var in wrangler.jsonc. */
 const TURNSTILE_ACTION = 'contact_brief';
-const ALLOWED_HOSTS = 'soufianeaberbach.com,www.soufianeaberbach.com';
+const ALLOWED_HOSTS = 'aberbach.co,www.aberbach.co';
 
 const siteverify = (extra = {}) =>
-  new Response(JSON.stringify({ success: true, action: TURNSTILE_ACTION, hostname: 'soufianeaberbach.com', ...extra }), { status: 200 });
+  new Response(JSON.stringify({ success: true, action: TURNSTILE_ACTION, hostname: 'aberbach.co', ...extra }), { status: 200 });
 
 const turnstileOk = () => siteverify();
 const turnstileBad = () => new Response(JSON.stringify({ success: false, 'error-codes': ['invalid-input-response'] }), { status: 200 });
@@ -218,8 +218,8 @@ group('1. valid submission, no Turnstile configured');
   check('Reply-To equals the submitted email', payload.reply_to === fields.email, String(payload.reply_to));
   check('subject contains the stage', String(payload.subject).includes(fields.stage), String(payload.subject));
   check('subject contains the name', String(payload.subject).includes(fields.name), String(payload.subject));
-  check('sends from BRIEF_FROM', payload.from === 'brief@soufianeaberbach.com', String(payload.from));
-  check('sends to BRIEF_TO', Array.isArray(payload.to) && payload.to[0] === 'soufiane.aberbach@gmail.com');
+  check('sends from BRIEF_FROM', payload.from === 'brief@aberbach.co', String(payload.from));
+  check('sends to BRIEF_TO', Array.isArray(payload.to) && payload.to[0] === 'soufianeaberbach@gmail.com');
   check('email body carries the reference', String(payload.text).includes(body.id));
   check('no undelivered record on success', kv.keys('undelivered:').length === 0);
   check('ASSETS never served the API route', assetsCalls === 0, `${assetsCalls} calls`);
@@ -591,12 +591,12 @@ group('13d. Turnstile context: success alone is not enough');
      action pins it to this form and the hostname pins it to this site. */
   const cases = [
     ['accepted: success + correct action + allowed hostname', {}, 200],
-    ['accepted: the second allowed hostname', { hostname: 'www.soufianeaberbach.com' }, 200],
-    ['accepted: hostname differing only in case', { hostname: 'Soufianeaberbach.COM' }, 200],
+    ['accepted: the second allowed hostname', { hostname: 'www.aberbach.co' }, 200],
+    ['accepted: hostname differing only in case', { hostname: 'Aberbach.CO' }, 200],
     ['rejected: wrong action', { action: 'newsletter_signup' }, 400],
     ['rejected: missing action', { action: undefined }, 400],
-    ['rejected: wrong hostname', { hostname: 'soufianeaberbach.com.evil.example' }, 400],
-    ['rejected: hostname not on the list', { hostname: 'staging.soufianeaberbach.com' }, 400],
+    ['rejected: wrong hostname', { hostname: 'aberbach.co.evil.example' }, 400],
+    ['rejected: hostname not on the list', { hostname: 'staging.aberbach.co' }, 400],
     ['rejected: missing hostname', { hostname: undefined }, 400],
     ['rejected: localhost', { hostname: 'localhost' }, 400],
     ['rejected: 127.0.0.1', { hostname: '127.0.0.1' }, 400],
@@ -672,6 +672,108 @@ group('13h. the hostname allowlist matches wrangler.jsonc');
   check('wrangler.jsonc declares TURNSTILE_HOSTNAMES', Boolean(found), String(found));
   check('it matches what these tests assert against', found?.[1] === ALLOWED_HOSTS, String(found?.[1]));
   check('it contains no loopback name', !/localhost|127\.0\.0\.1/.test(found?.[1] ?? ''), String(found?.[1]));
+}
+
+group('www -> apex redirect (secondary net behind the Cloudflare rule)');
+{
+  resetOutbound({});
+  assetsCalls = 0;
+  const env = makeEnv({ BRIEFS: makeKv() });
+
+  const redirect = async (url, method = 'GET') => {
+    const res = await worker.fetch(new Request(url, { method }), env);
+    return { status: res.status, location: res.headers.get('location') };
+  };
+
+  const root = await redirect('https://www.aberbach.co/');
+  check('www root redirects 301', root.status === 301, `status ${root.status}`);
+  check('to the apex root', root.location === 'https://aberbach.co/', String(root.location));
+
+  const deep = await redirect('https://www.aberbach.co/process/');
+  check('path is preserved', deep.location === 'https://aberbach.co/process/', String(deep.location));
+
+  const query = await redirect('https://www.aberbach.co/contact/?utm_source=linkedin&utm_medium=profile');
+  check(
+    'query string is preserved',
+    query.location === 'https://aberbach.co/contact/?utm_source=linkedin&utm_medium=profile',
+    String(query.location),
+  );
+
+  const upper = await redirect('https://WWW.ABERBACH.CO/process/?q=1');
+  check(
+    'the match is case-insensitive',
+    upper.location === 'https://aberbach.co/process/?q=1',
+    String(upper.location),
+  );
+
+  const apex = await redirect('https://aberbach.co/contact/');
+  check('the apex is NOT redirected — no loop', apex.status === 200, `status ${apex.status}`);
+  check('the apex is served from ASSETS', assetsCalls > 0);
+
+  /* The match is exact, not a `www.` prefix test. An earlier version rewrote
+     any host beginning `www.`, which would have redirected hosts this Worker
+     has no business rewriting — including a lookalike domain that merely
+     contains the canonical name. */
+  for (const host of [
+    'https://www.example.com/contact/',
+    'https://www.aberbach.co.evil.example/contact/',
+    'https://aberbach.co.evil.example/contact/',
+    'https://portfolio.workers.dev/contact/',
+    'https://staging.aberbach.co/contact/',
+  ]) {
+    const other = await redirect(host);
+    check(`${new URL(host).hostname} is NOT redirected`, other.status !== 301, `status ${other.status}`);
+    check(`${new URL(host).hostname} gets no Location`, other.location === null, String(other.location));
+  }
+
+  /* A 301 on a POST is downgraded to GET by browsers and the body is dropped,
+     so the endpoint must never be redirected — a brief would vanish. */
+  const api = await redirect('https://www.aberbach.co/api/brief', 'POST');
+  check('POST /api/brief on www is NOT redirected', api.status !== 301, `status ${api.status}`);
+  check('and gets no Location header', api.location === null, String(api.location));
+
+  const apiGet = await redirect('https://www.aberbach.co/api/brief', 'GET');
+  check('GET /api/brief on www still answers 405, not a redirect', apiGet.status === 405, `status ${apiGet.status}`);
+
+  /* The carve-out covers the whole /api/ prefix, not just the one endpoint, so
+     a future endpoint inherits it rather than needing to be remembered. */
+  for (const path of ['/api/', '/api/brief', '/api/anything']) {
+    const api = await redirect(`https://www.aberbach.co${path}`);
+    check(`www${path} is not redirected`, api.status !== 301, `status ${api.status}`);
+  }
+}
+
+group('the documented Cloudflare rule carries the same /api/ carve-out');
+{
+  /* The Worker is the fallback; the Cloudflare Redirect Rule is authoritative
+     and runs first. If only the Worker excluded /api/, the rule would still
+     301 a POST to the endpoint and drop the brief — so the documented
+     expression has to exclude it too, and that is asserted here rather than
+     left to a reader noticing. */
+  const doc = await readFile(new URL('../docs/DOMAIN-MIGRATION.md', import.meta.url), 'utf8');
+  const expr = doc.match(/^\s*http\.host eq .*$/m)?.[0]?.trim() ?? '';
+  check('a Cloudflare match expression is documented', expr.length > 0, expr);
+  check('it pins the exact www host', expr.includes('http.host eq "www.aberbach.co"'), expr);
+  check('it excludes the /api/ prefix', /not\s+starts_with\(http\.request\.uri\.path,\s*"\/api\/"\)/.test(expr), expr);
+  check('the rule is documented as a 301', /\b301\b/.test(doc));
+  check('query-string preservation is documented', /[Pp]reserve query string/.test(doc));
+}
+
+group('the Turnstile hostname allowlist is the new domain');
+{
+  const config = await readFile(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
+  const hosts = config.match(/"TURNSTILE_HOSTNAMES":\s*"([^"]*)"/)?.[1] ?? '';
+  check('allowlist is aberbach.co,www.aberbach.co', hosts === 'aberbach.co,www.aberbach.co', hosts);
+  const oldWebsiteDomain = 'soufianeaberbach.com'; // domain-guard-allow: naming it is the point
+  check('allowlist carries no old website domain', !hosts.includes(oldWebsiteDomain), hosts);
+
+  const from = config.match(/"BRIEF_FROM":\s*"([^"]*)"/)?.[1] ?? '';
+  check('BRIEF_FROM is on the owned domain', from === 'brief@aberbach.co', from);
+  check('BRIEF_FROM is not a gmail sender', !from.endsWith('@gmail.com'), from);
+
+  const to = config.match(/"BRIEF_TO":\s*"([^"]*)"/)?.[1] ?? '';
+  check('BRIEF_TO is the public Gmail mailbox', to === 'soufianeaberbach@gmail.com', to);
+  check('BRIEF_TO is not the dotted display form', to !== 'soufiane' + '.' + 'aberbach@gmail.com', to);
 }
 
 /* ------------------------------------------------------ 14-15. method + faults */
