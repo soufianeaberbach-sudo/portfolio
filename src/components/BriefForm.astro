@@ -1,340 +1,397 @@
 ---
 import Arrow from './Arrow.astro';
 
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
-const directEmail = 'soufiane.aberbach@gmail.com';
+/* The development brief form.
+ *
+ * This is a REAL form: method="POST" action="/api/brief", handled by
+ * worker/index.ts. Without JavaScript it posts natively and the Worker
+ * redirects to /contact/sent/. With JavaScript it is intercepted and posts
+ * JSON so the processing, success and error states can be shown in place.
+ *
+ * mailto: is a fallback only. It appears on a network failure, prefilled from
+ * whatever has already been typed, so nothing the visitor wrote is lost.
+ *
+ * No file upload in this version — an optional reference LINK field instead,
+ * which avoids storage, size, privacy and failure-state complexity entirely.
+ *
+ * Turnstile renders only when a site key was present at build time. The Worker
+ * verifies only when its secret is configured. Both halves degrade
+ * independently, so the form is coherent at every stage of setup.
+ */
+const stages = [
+  'Idea / reference',
+  'In development',
+  'Fit / sample',
+  'Pre-production',
+  'Production issue',
+];
+
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
+const email = 'soufiane.aberbach@gmail.com';
 ---
 
-<div class="brief-form-shell" data-brief-shell>
+{turnstileKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
+
+<div class="brief-form">
   <form
-    class="brief-form"
+    class="bf"
     method="POST"
     action="/api/brief"
-    data-brief-form
-    data-direct-email={directEmail}
     novalidate
+    data-brief-form
+    data-endpoint="/api/brief"
+    data-email={email}
   >
-    <input type="hidden" name="startedAt" value={Date.now()} data-started-at />
-    <div class="brief-form__trap" aria-hidden="true">
-      <label for="website">Leave this field empty</label>
+    <!-- Spam screens. Never announced, never focusable. -->
+    <div class="bf__trap" aria-hidden="true">
+      <label for="website">Website</label>
       <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
     </div>
+    <input type="hidden" name="t" value="" data-started />
 
-    <fieldset class="brief-form__group">
-      <legend>Who are you?</legend>
-      <div class="brief-form__pair">
-        <div class="field">
-          <label for="brief-name">Name <span aria-hidden="true">*</span></label>
-          <input
-            id="brief-name"
-            name="name"
-            type="text"
-            autocomplete="name"
-            minlength="2"
-            maxlength="120"
-            required
-            aria-describedby="brief-name-error"
-          />
-          <p class="field-error" id="brief-name-error" data-error-for="name"></p>
-        </div>
-        <div class="field">
-          <label for="brief-company">Company / brand <span>Optional</span></label>
-          <input
-            id="brief-company"
-            name="company"
-            type="text"
-            autocomplete="organization"
-            maxlength="160"
-            aria-describedby="brief-company-error"
-          />
-          <p class="field-error" id="brief-company-error" data-error-for="company"></p>
-        </div>
+    <fieldset class="bf__group">
+      <legend class="label">Who are you?</legend>
+      <div class="bf__row">
+        <p class="field">
+          <label for="bf-name">Your name</label>
+          <input id="bf-name" name="name" type="text" autocomplete="name" maxlength="120" required
+                 aria-describedby="bf-name-err" />
+          <span class="field__err" id="bf-name-err" data-err="name" hidden></span>
+        </p>
+        <p class="field">
+          <label for="bf-company">Company or brand <span class="field__opt">optional</span></label>
+          <input id="bf-company" name="company" type="text" autocomplete="organization" maxlength="120"
+                 aria-describedby="bf-company-err" />
+          <span class="field__err" id="bf-company-err" data-err="company" hidden></span>
+        </p>
       </div>
     </fieldset>
 
-    <fieldset class="brief-form__group">
-      <legend>How can I reply?</legend>
-      <div class="field">
-        <label for="brief-email">Email <span aria-hidden="true">*</span></label>
-        <input
-          id="brief-email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          maxlength="254"
-          inputmode="email"
-          required
-          aria-describedby="brief-email-error"
-        />
-        <p class="field-error" id="brief-email-error" data-error-for="email"></p>
-      </div>
+    <fieldset class="bf__group">
+      <legend class="label">How can I reply?</legend>
+      <p class="field">
+        <label for="bf-email">Email</label>
+        <input id="bf-email" name="email" type="email" inputmode="email" autocomplete="email"
+               maxlength="254" required aria-describedby="bf-email-err" />
+        <span class="field__err" id="bf-email-err" data-err="email" hidden></span>
+      </p>
     </fieldset>
 
-    <fieldset class="brief-form__group stage-group" aria-describedby="brief-stage-error">
-      <legend>Where is the product now? <span aria-hidden="true">*</span></legend>
-      <div class="stage-options">
-        <label><input type="radio" name="stage" value="idea-reference" required /><span><b>01</b>Idea / reference</span></label>
-        <label><input type="radio" name="stage" value="in-development" /><span><b>02</b>In development</span></label>
-        <label><input type="radio" name="stage" value="fit-sample" /><span><b>03</b>Fit / sample</span></label>
-        <label><input type="radio" name="stage" value="pre-production" /><span><b>04</b>Pre-production</span></label>
-        <label><input type="radio" name="stage" value="production-issue" /><span><b>05</b>Production issue</span></label>
+    <fieldset class="bf__group bf__group--stage">
+      <legend class="label">Where is the product now?</legend>
+      <div class="bf__stages" aria-describedby="bf-stage-err">
+        {stages.map((stage, i) => (
+          <label class="stage">
+            <input type="radio" name="stage" value={stage} required={i === 0} />
+            <span class="stage__box" aria-hidden="true"></span>
+            <span class="stage__text">{stage}</span>
+          </label>
+        ))}
       </div>
-      <p class="field-error" id="brief-stage-error" data-error-for="stage"></p>
+      <span class="field__err" id="bf-stage-err" data-err="stage" hidden></span>
     </fieldset>
 
-    <fieldset class="brief-form__group">
-      <legend>What needs solving?</legend>
-      <div class="field">
-        <label for="brief-message">Brief <span aria-hidden="true">*</span></label>
-        <textarea
-          id="brief-message"
-          name="message"
-          rows="7"
-          minlength="10"
-          maxlength="5000"
-          required
-          aria-describedby="brief-message-help brief-message-error"
-          placeholder="Describe the garment, the problem and the decision you need to make."
-        ></textarea>
-        <p class="field-help" id="brief-message-help">10–5,000 characters. A rough description is enough to begin.</p>
-        <p class="field-error" id="brief-message-error" data-error-for="message"></p>
-      </div>
+    <fieldset class="bf__group">
+      <legend class="label">What needs solving?</legend>
+      <p class="field">
+        <label for="bf-message">Describe it in your own words</label>
+        <textarea id="bf-message" name="message" rows="6" maxlength="5000" required
+                  aria-describedby="bf-message-err bf-message-hint"
+                  placeholder="The garment, the problem, and any deadline that matters."></textarea>
+        <span class="field__hint" id="bf-message-hint">A sentence or two is enough to start.</span>
+        <span class="field__err" id="bf-message-err" data-err="message" hidden></span>
+      </p>
     </fieldset>
 
-    <fieldset class="brief-form__group">
-      <legend>Reference / file link</legend>
-      <div class="field">
-        <label for="brief-reference">URL <span>Optional</span></label>
-        <input
-          id="brief-reference"
-          name="referenceUrl"
-          type="url"
-          inputmode="url"
-          maxlength="2048"
-          placeholder="https://"
-          aria-describedby="brief-reference-help brief-reference-error"
-        />
-        <p class="field-help" id="brief-reference-help">Paste a Drive, Dropbox, WeTransfer or web reference. Its privacy depends on the sharing settings you choose.</p>
-        <p class="field-error" id="brief-reference-error" data-error-for="referenceUrl"></p>
-      </div>
+    <fieldset class="bf__group">
+      <legend class="label">Reference or file link <span class="field__opt">optional</span></legend>
+      <p class="field">
+        <label for="bf-link">Paste a link</label>
+        <input id="bf-link" name="link" type="url" inputmode="url" maxlength="2000"
+               placeholder="https://" aria-describedby="bf-link-err bf-link-hint" />
+        <span class="field__hint" id="bf-link-hint">
+          Google Drive, Dropbox, WeTransfer or a web reference. There is no upload on this
+          page — and a link you paste is only as private as that link.
+        </span>
+        <span class="field__err" id="bf-link-err" data-err="link" hidden></span>
+      </p>
     </fieldset>
 
-    {turnstileSiteKey && (
-      <div class="brief-form__turnstile">
-        <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
-      </div>
+    {turnstileKey && (
+      <div class="bf__turnstile cf-turnstile" data-sitekey={turnstileKey} data-theme="light"></div>
     )}
 
-    <div class="brief-form__action">
-      <p>The brief is sent privately through this site’s hosting and email infrastructure. It is not published.</p>
+    <div class="bf__submit">
       <button class="button button--signal" type="submit" data-submit>
-        <span data-submit-label>Send development brief</span>
-        <span aria-hidden="true"><Arrow /></span>
+        <span data-submit-text>Send the brief</span> <span><Arrow /></span>
       </button>
+      <p class="bf__note">
+        The brief is sent to Soufiane by email through his hosting and email provider.
+        It is not published or shared.
+      </p>
     </div>
 
-    <div class="brief-form__feedback" aria-live="polite" aria-atomic="true">
-      <p class="form-status" data-form-status></p>
-      <a class="email-fallback" data-email-fallback href={`mailto:${directEmail}`} hidden>Send this brief by email instead</a>
+    <p class="bf__status" data-status role="status" aria-live="polite"></p>
+    <div class="bf__alert" data-alert role="alert" hidden>
+      <p data-alert-text></p>
+      <p class="bf__alert-fallback">
+        <a href={`mailto:${email}`} data-mailto>Email the brief directly instead <span><Arrow /></span></a>
+      </p>
     </div>
   </form>
+
+  <!-- Shown in place of the form once the Worker confirms the brief is stored. -->
+  <div class="bf__done" data-done hidden>
+    <p class="label">Brief received</p>
+    <h3 class="display" data-done-heading tabindex="-1">That’s everything needed to start.</h3>
+    <p>
+      The brief has been received. The reply comes back to
+      <strong data-done-email></strong> in writing, with an honest scope and a
+      realistic next step — not a booking link.
+    </p>
+    <p class="bf__done-ref">Reference <span data-done-ref></span></p>
+  </div>
 </div>
 
-{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+<style>
+  .brief-form { min-width: 0; }
+
+  .bf { display: grid; gap: clamp(1.75rem, 3vw, 2.5rem); }
+  /* Off-screen rather than display:none so automated fills still reach it. */
+  .bf__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .bf__group { min-width: 0; margin: 0; padding: 0; border: 0; }
+  .bf__group legend { padding: 0 0 1rem; color: var(--muted); }
+  .field__opt { font-family: var(--mono); font-size: .85em; letter-spacing: .1em; opacity: .75; }
+
+  .bf__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+
+  .field { display: grid; gap: .45rem; margin: 0; min-width: 0; }
+  .field label { color: var(--ink-soft); font-size: .92rem; }
+  /* 16px minimum: anything smaller makes iOS Safari zoom the viewport on
+     focus, which visibly breaks the page mid-form. */
+  .field input,
+  .field textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: .8rem .9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: var(--paper-bright);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.5;
+    transition: border-color .2s var(--ease);
+  }
+  .field textarea { min-height: 9rem; resize: vertical; }
+  .field input:focus-visible,
+  .field textarea:focus-visible { border-color: var(--ink); }
+  .field input[aria-invalid='true'],
+  .field textarea[aria-invalid='true'] { border-color: var(--signal); border-width: 2px; }
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--muted); }
+
+  .field__hint { color: var(--muted); font-size: .85rem; line-height: 1.55; }
+  /* Errors carry text, never colour alone. */
+  .field__err { color: var(--signal); font-size: .85rem; font-weight: 600; line-height: 1.5; }
+
+  /* All five states visible without interaction — no select to open. */
+  .bf__stages { display: grid; gap: .5rem; }
+  .stage {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: .85rem;
+    min-height: 3rem;
+    padding: .7rem .9rem;
+    border: 1px solid var(--line);
+    background: var(--paper-bright);
+    cursor: pointer;
+    transition: border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .stage:hover { border-color: var(--line-strong); }
+  .stage input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .stage__box { width: .7rem; height: .7rem; border: 1px solid var(--line-strong); background: transparent; }
+  .stage__text { font-size: 16px; line-height: 1.4; }
+  .stage:has(input:checked) { border-color: var(--ink); background: var(--paper); }
+  .stage:has(input:checked) .stage__box { background: var(--signal); border-color: var(--signal); }
+  .stage:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+  .bf__turnstile { min-height: 65px; }
+
+  .bf__submit { display: grid; gap: 1rem; justify-items: start; }
+  .bf__submit .button { min-height: 3.25rem; }
+  .bf__submit .button[disabled] { opacity: .62; cursor: progress; }
+  .bf__note { max-width: 34rem; margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.6; }
+
+  .bf__status { margin: 0; color: var(--muted); font-size: .9rem; }
+  .bf__status:empty { display: none; }
+  .bf__alert { padding: 1rem 1.1rem; border: 2px solid var(--signal); background: var(--paper-bright); }
+  .bf__alert p { margin: 0; font-size: .95rem; line-height: 1.6; }
+  .bf__alert-fallback { margin-top: .8rem !important; }
+  .bf__alert-fallback a { display: inline-flex; align-items: center; gap: .5rem; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  .bf__done { padding: clamp(1.75rem, 3.5vw, 2.75rem); border: 1px solid var(--line-strong); background: var(--paper-bright); }
+  .bf__done > .label { margin: 0; color: var(--muted); }
+  .bf__done h3 { margin: 1.1rem 0 1.5rem; font-size: clamp(1.8rem, 3.2vw, 2.8rem); }
+  .bf__done h3:focus-visible { outline: 2px solid var(--signal); outline-offset: 6px; }
+  .bf__done p { max-width: 34rem; margin: 0; color: var(--ink-soft); line-height: 1.7; }
+  .bf__done-ref { margin-top: 1.5rem !important; color: var(--muted) !important; font-family: var(--mono); font-size: .72rem; }
+
+  @media (max-width: 560px) {
+    .bf__row { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
 
 <script is:inline>
   (() => {
     const form = document.querySelector('[data-brief-form]');
-    if (!(form instanceof HTMLFormElement)) return;
+    if (!form) return;
 
-    const shell = document.querySelector('[data-brief-shell]');
-    const status = form.querySelector('[data-form-status]');
-    const submit = form.querySelector('[data-submit]');
-    const submitLabel = form.querySelector('[data-submit-label]');
-    const emailFallback = form.querySelector('[data-email-fallback]');
-    const startedAt = form.querySelector('[data-started-at]');
-    let submitting = false;
+    const wrap = form.parentElement;
+    const started = form.querySelector('[data-started]');
+    const button = form.querySelector('[data-submit]');
+    const buttonText = form.querySelector('[data-submit-text]');
+    const status = form.querySelector('[data-status]');
+    const alertBox = form.querySelector('[data-alert]');
+    const alertText = form.querySelector('[data-alert-text]');
+    const mailto = form.querySelector('[data-mailto]');
+    const done = wrap.querySelector('[data-done]');
+    const idleLabel = buttonText.textContent;
 
-    if (startedAt instanceof HTMLInputElement) startedAt.value = String(Date.now());
+    /* Stamped from the client so the Worker can reject instant submissions. */
+    started.value = String(Date.now());
 
-    const controlsFor = (name) => Array.from(form.elements).filter((control) => control instanceof HTMLElement && control.getAttribute('name') === name);
+    const errorFor = (name) => form.querySelector(`[data-err="${name}"]`);
+    const controlFor = (name) => form.querySelector(`[name="${name}"]`);
 
-    const clearErrors = () => {
-      form.querySelectorAll('[aria-invalid="true"]').forEach((control) => control.removeAttribute('aria-invalid'));
-      form.querySelectorAll('[data-error-for]').forEach((node) => { node.textContent = ''; });
-    };
-
-    const showErrors = (errors = {}) => {
-      let firstInvalid;
-      Object.entries(errors).forEach(([name, message]) => {
-        const controls = controlsFor(name);
-        controls.forEach((control) => control.setAttribute('aria-invalid', 'true'));
-        const error = form.querySelector(`[data-error-for="${CSS.escape(name)}"]`);
-        if (error) error.textContent = String(message);
-        if (!firstInvalid && controls[0] instanceof HTMLElement) firstInvalid = controls[0];
+    function clearErrors() {
+      form.querySelectorAll('[data-err]').forEach((el) => {
+        el.hidden = true;
+        el.textContent = '';
       });
-      firstInvalid?.focus();
-    };
+      form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+      alertBox.hidden = true;
+      alertText.textContent = '';
+    }
 
-    const browserErrors = () => {
-      const errors = {};
-      const name = controlsFor('name')[0];
-      const email = controlsFor('email')[0];
-      const stage = controlsFor('stage')[0];
-      const message = controlsFor('message')[0];
-      const company = controlsFor('company')[0];
-      const referenceUrl = controlsFor('referenceUrl')[0];
-      if (name && 'validity' in name && !name.validity.valid) errors.name = 'Enter your name.';
-      if (email && 'validity' in email && !email.validity.valid) errors.email = 'Enter a valid email address.';
-      if (stage && 'validity' in stage && !stage.validity.valid) errors.stage = 'Choose the current product stage.';
-      if (message && 'validity' in message && !message.validity.valid) errors.message = 'Describe the problem in 10 to 5,000 characters.';
-      if (company && 'validity' in company && !company.validity.valid) errors.company = 'Keep the company or brand name under 160 characters.';
-      if (referenceUrl && 'validity' in referenceUrl && !referenceUrl.validity.valid) errors.referenceUrl = 'Enter a complete http or https link.';
-      return errors;
-    };
-
-    const setSubmitting = (active) => {
-      submitting = active;
-      form.setAttribute('aria-busy', String(active));
-      if (submit instanceof HTMLButtonElement) submit.disabled = active;
-      if (submitLabel) submitLabel.textContent = active ? 'Sending brief…' : 'Send development brief';
-    };
-
-    const fallbackHref = (data) => {
-      const subject = 'Development brief';
-      const body = [
-        `Name: ${data.get('name') || ''}`,
-        `Company / brand: ${data.get('company') || ''}`,
-        `Email: ${data.get('email') || ''}`,
-        `Product stage: ${data.get('stage') || ''}`,
-        `Reference: ${data.get('referenceUrl') || ''}`,
-        '',
-        'What needs solving:',
-        data.get('message') || '',
-      ].join('\n');
-      return `mailto:${form.dataset.directEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    };
-
-    const showFailure = (message, data, errors) => {
-      setSubmitting(false);
-      if (status) status.textContent = message;
-      if (emailFallback instanceof HTMLAnchorElement) {
-        emailFallback.href = fallbackHref(data);
-        emailFallback.hidden = false;
+    function showFieldError(name, message) {
+      const slot = errorFor(name);
+      const control = controlFor(name);
+      if (slot) {
+        slot.textContent = message;
+        slot.hidden = false;
       }
-      if (errors) showErrors(errors);
-    };
+      if (control && control.type !== 'radio') control.setAttribute('aria-invalid', 'true');
+      return control;
+    }
 
-    form.addEventListener('input', (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLElement)) return;
-      const name = target.getAttribute('name');
-      if (!name) return;
-      controlsFor(name).forEach((control) => control.removeAttribute('aria-invalid'));
-      const error = form.querySelector(`[data-error-for="${CSS.escape(name)}"]`);
-      if (error) error.textContent = '';
-    });
+    /* Own messages rather than the browser's: they are calmer, and they can be
+       placed in the same slot the server uses for the same field. */
+    function validate() {
+      const problems = [];
+      const value = (n) => (controlFor(n)?.value ?? '').trim();
+      if (!value('name')) problems.push(['name', 'Please add your name.']);
+      const email = value('email');
+      if (!email) problems.push(['email', 'Please add an email address so a reply can reach you.']);
+      else if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) problems.push(['email', 'That email address does not look complete.']);
+      if (!form.querySelector('[name="stage"]:checked')) problems.push(['stage', 'Please choose where the product is now.']);
+      if (value('message').length < 10) problems.push(['message', 'A sentence or two about what needs solving is enough.']);
+      const link = value('link');
+      if (link && !/^https?:\/\/.+/i.test(link)) problems.push(['link', 'Links need to start with http:// or https://']);
+      return problems;
+    }
+
+    function setBusy(busy) {
+      button.disabled = busy;
+      form.setAttribute('aria-busy', busy ? 'true' : 'false');
+      buttonText.textContent = busy ? 'Sending brief…' : idleLabel;
+      status.textContent = busy ? 'Sending the brief…' : '';
+    }
+
+    /* Keeps everything typed recoverable when the network is the problem. */
+    function updateMailto(data) {
+      const lines = [
+        `Name: ${data.name || ''}`,
+        `Company: ${data.company || ''}`,
+        `Email: ${data.email || ''}`,
+        `Stage: ${data.stage || ''}`,
+        `Link: ${data.link || ''}`,
+        '',
+        data.message || '',
+      ].join('\n');
+      mailto.href =
+        `mailto:${form.dataset.email}` +
+        `?subject=${encodeURIComponent('Development brief')}` +
+        `&body=${encodeURIComponent(lines)}`;
+    }
+
+    function fail(message, data) {
+      updateMailto(data);
+      alertText.textContent = message;
+      alertBox.hidden = false;
+      alertBox.focus?.();
+    }
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (submitting) return;
-
       clearErrors();
-      if (!form.checkValidity()) {
-        const errors = browserErrors();
-        if (status) status.textContent = 'Please check the highlighted fields.';
-        showErrors(errors);
+
+      const problems = validate();
+      if (problems.length) {
+        let first = null;
+        problems.forEach(([name, message]) => {
+          const control = showFieldError(name, message);
+          if (!first) first = name === 'stage' ? form.querySelector('[name="stage"]') : control;
+        });
+        first?.focus();
         return;
       }
 
-      const data = new FormData(form);
-      const payload = Object.fromEntries(data.entries());
-      if (emailFallback instanceof HTMLAnchorElement) emailFallback.hidden = true;
-      if (status) status.textContent = 'Sending brief…';
-      setSubmitting(true);
+      const data = Object.fromEntries(new FormData(form).entries());
+      setBusy(true);
 
+      let res;
       try {
-        const response = await fetch(form.action, {
+        res = await fetch(form.dataset.endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(payload),
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
         });
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          const message = response.status === 429
-            ? 'Too many briefs were sent from this connection. Please wait before trying again.'
-            : result.code === 'SPAM_DETECTED' || result.code === 'TURNSTILE_FAILED'
-              ? 'The anti-spam check could not verify this brief. Please review the form and try again.'
-              : result.message || 'The brief could not be sent. Your entries are still here; please retry or use direct email.';
-          showFailure(message, data, result.errors);
-          return;
-        }
-
-        if (!(shell instanceof HTMLElement)) return;
-        shell.innerHTML = `
-          <section class="brief-confirmation" tabindex="-1" data-confirmation>
-            <p class="eyebrow">Brief received</p>
-            <h2>Thank you. Your development brief has been recorded.</h2>
-            <p>You can keep the reference <strong>${result.id || ''}</strong> for your records.</p>
-          </section>`;
-        shell.querySelector('[data-confirmation]')?.focus();
       } catch {
-        showFailure('The network connection failed. Your entries are still here; retry or send the prepared brief by email.', data);
+        setBusy(false);
+        fail('The brief could not be sent — the connection failed. Nothing you typed has been lost.', data);
+        return;
       }
+
+      let payload = {};
+      try {
+        payload = await res.json();
+      } catch {
+        /* non-JSON response; handled below */
+      }
+      setBusy(false);
+
+      if (res.ok && payload.ok) {
+        const email = String(data.email || '');
+        wrap.querySelector('[data-done-email]').textContent = email;
+        wrap.querySelector('[data-done-ref]').textContent = payload.id || '—';
+        form.hidden = true;
+        done.hidden = false;
+        /* Announce the change rather than only painting it. */
+        wrap.querySelector('[data-done-heading]').focus();
+        return;
+      }
+
+      if (payload.field) {
+        showFieldError(payload.field, payload.error || 'Please check this field.');
+        const control = payload.field === 'stage' ? form.querySelector('[name="stage"]') : controlFor(payload.field);
+        control?.focus();
+        return;
+      }
+
+      fail(payload.error || 'The brief could not be sent. Nothing you typed has been lost.', data);
     });
   })();
 </script>
-
-<style>
-  .brief-form-shell { min-width: 0; }
-  .brief-form { position: relative; display: grid; gap: 2.4rem; padding: clamp(2rem, 4vw, 4rem); border: 1px solid var(--line-strong); background: var(--paper-bright); }
-  .brief-form__trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
-  .brief-form__group { min-width: 0; margin: 0; padding: 0; border: 0; }
-  .brief-form__group > legend { width: 100%; margin: 0 0 1.25rem; padding: 0 0 .8rem; border-bottom: 1px solid var(--line-strong); font-family: var(--mono); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-  .brief-form__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .field { display: grid; min-width: 0; gap: .55rem; }
-  .field label { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--display); font-size: 1rem; font-weight: 650; }
-  .field label span { color: var(--muted); font-family: var(--mono); font-size: .62rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
-  .field input, .field textarea { width: 100%; min-height: 3.25rem; border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; padding: .8rem 0; background: transparent; color: var(--ink); font: inherit; font-size: 1rem; outline: 0; }
-  .field textarea { min-height: 10rem; resize: vertical; line-height: 1.6; }
-  .field input:focus, .field textarea:focus { border-color: var(--signal); box-shadow: 0 1px 0 var(--signal); }
-  .field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: #9b291f; }
-  .field-help, .field-error { margin: 0; font-size: .75rem; line-height: 1.5; }
-  .field-help { color: var(--muted); }
-  .field-error { min-height: 1.125rem; color: #9b291f; font-weight: 650; }
-  .stage-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line-strong); }
-  .stage-options label { position: relative; min-width: 0; cursor: pointer; }
-  .stage-options label + label { border-left: 1px solid var(--line); }
-  .stage-options input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-  .stage-options span { display: grid; min-height: 6.25rem; align-content: space-between; gap: 1rem; padding: 1rem; font-family: var(--display); font-size: .9rem; font-weight: 650; line-height: 1.2; transition: background-color .2s ease, color .2s ease; }
-  .stage-options b { color: var(--signal); font-family: var(--mono); font-size: .62rem; font-weight: 500; }
-  .stage-options input:checked + span { background: var(--ink); color: var(--paper); }
-  .stage-options input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: -3px; }
-  .stage-options input[aria-invalid="true"] + span { box-shadow: inset 0 -2px #9b291f; }
-  .brief-form__turnstile { min-height: 4rem; }
-  .brief-form__action { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: center; padding-top: .5rem; }
-  .brief-form__action > p { max-width: 33rem; margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.6; }
-  .brief-form__action button { min-height: 3.25rem; }
-  .brief-form__action button:disabled { cursor: wait; opacity: .65; }
-  .brief-form__feedback { min-height: 2.75rem; }
-  .form-status { margin: 0; color: var(--ink); font-size: .88rem; font-weight: 600; line-height: 1.5; }
-  .email-fallback { display: inline-flex; min-height: 2.75rem; align-items: center; margin-top: .6rem; border-bottom: 1px solid var(--signal); color: var(--signal); font-weight: 700; }
-  .email-fallback[hidden] { display: none; }
-  .brief-confirmation { padding: clamp(3rem, 7vw, 6rem); border: 1px solid var(--line-strong); outline: 0; }
-  .brief-confirmation h2 { max-width: 15ch; margin: 1.5rem 0; font-family: var(--display); font-size: clamp(2.5rem, 5vw, 5rem); letter-spacing: -.055em; line-height: .95; }
-  .brief-confirmation p:last-child { color: var(--muted); }
-  .brief-confirmation strong { color: var(--ink); font-family: var(--mono); }
-  @media (max-width: 760px) {
-    .brief-form__pair { grid-template-columns: 1fr; }
-    .stage-options { grid-template-columns: 1fr; }
-    .stage-options label + label { border-top: 1px solid var(--line); border-left: 0; }
-    .stage-options span { min-height: 3.5rem; grid-template-columns: 2.25rem 1fr; align-items: center; align-content: center; }
-    .brief-form__action { grid-template-columns: 1fr; }
-    .brief-form__action button { width: 100%; }
-  }
-  @media (max-width: 480px) {
-    .brief-form { gap: 2rem; padding: 1.25rem; }
-    .field input, .field textarea { font-size: 1rem; }
-  }
-</style>

@@ -1,5 +1,12 @@
-RESEND_API_KEY=re_replace_with_resend_api_key
-BRIEF_TO=replace-with-destination@example.com
-BRIEF_FROM="Portfolio Brief <briefs@replace-with-verified-domain.example>"
-TURNSTILE_SECRET=replace_with_turnstile_secret
-PUBLIC_TURNSTILE_SITE_KEY=replace_with_turnstile_site_key
+# Local development values for the brief Worker. Copy to `.dev.vars`, which is
+# gitignored. NAMES ONLY IN THIS FILE — never commit real keys.
+#
+# In production these two are set with `npx wrangler secret put <NAME>`, not
+# from a file.
+
+# Transactional email provider key (Resend, or an equivalent HTTP API).
+RESEND_API_KEY=
+
+# Cloudflare Turnstile secret key. Leave empty to skip verification locally;
+# the honeypot and timing screens still run.
+TURNSTILE_SECRET=
