@@ -3,11 +3,11 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 
 const stages = [
-  ['01', 'Sketch', 'The idea is tested against fabric, construction and cost before development begins.'],
-  ['02', '2D Pattern', 'Geometry is drafted to the block, tolerances and seam logic the factory will use.'],
-  ['03', 'Gradation', 'The full size run is engineered and checked against the measurement chart.'],
-  ['04', '3D Simulation', 'Fit, balance and drape are resolved before sampling starts spending time.'],
-  ['05', 'Final Garment', 'The factory receives a clear, repeatable production specification.'],
+  ['01', 'Brief / Intent lock', 'Design intent, missing information and open feasibility questions are settled before anything is cut.'],
+  ['02', 'Technical build', 'Pattern architecture, construction logic and initial measurements are built and tested against each other.'],
+  ['03', 'Fit / Validation', 'Proportion, balance, drape and construction corrections are worked through and recorded.'],
+  ['04', 'Size / Specification lock', 'Grading, points of measure and tolerances are fixed into technical documentation.'],
+  ['05', 'Pre-production / Handoff', 'The line works from the approved reference, verified at first piece and pre-production.'],
 ];
 
 // 16 logos = a 4 x 4 grid. Each is painted as a CSS mask so the single
@@ -62,11 +62,22 @@ const brandLogos = [
         <span class="home-hero__role-window" aria-hidden="true"><strong data-role-word></strong></span>
         <span class="sr-only">Fashion Designer, Product Developer, Pattern Maker, Grading Specialist, 3D Simulation Developer, Tech Pack Author, and Production Follower.</span>
       </p>
-      <a class="button button--signal" href="/contact/">Send your sketch <span aria-hidden="true"><Arrow /></span></a>
+      <a class="button button--signal" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
     </div>
     <figure class="home-hero__portrait" data-reveal>
       <img src="/soufiane-drawing.png" width="680" height="846" alt="Soufiane Aberbach seated and drawing on a tablet" fetchpriority="high" />
     </figure>
+  </section>
+
+  <section class="business-ready" aria-labelledby="business-ready-title">
+    <div class="section-shell business-ready__row" data-reveal>
+      <p class="label business-ready__tag" id="business-ready-title">Business ready</p>
+      <p class="business-ready__facts">
+        Registered Moroccan Auto-Entrepreneur <span aria-hidden="true">·</span> Since 2018
+        <span aria-hidden="true">·</span> B2B invoicing available
+        <span aria-hidden="true">·</span> Tangier, Morocco
+      </p>
+    </div>
   </section>
 
   <section class="positioning section-shell">
@@ -94,7 +105,7 @@ const brandLogos = [
         <strong data-count="16" data-suffix="+" aria-label="16 plus">16+</strong><span>Brand<br />programmes</span>
       </article>
       <article class="home-stat" data-reveal>
-        <strong data-count="6">6</strong><span>Production<br />roles</span>
+        <strong data-count="6">6</strong><span>Career<br />roles</span>
       </article>
       <article class="home-stat" data-reveal>
         <strong data-count="6">6</strong><span>Software<br />systems</span>
@@ -433,12 +444,33 @@ const brandLogos = [
     .home-stat:hover span { transform: translateX(.35rem); }
   }
 
+  /* A procurement credential, deliberately quiet: two hairlines, mono type, no
+     fill and no badge. It reads as the legal line on a document, which is why
+     it sits apart from the Production record grid rather than inside it. */
+  .business-ready { border-block: 1px solid var(--line); background: var(--paper-bright); }
+  .business-ready__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .6rem clamp(1.25rem, 3vw, 2.5rem);
+    padding-block: clamp(1rem, 1.8vw, 1.35rem);
+  }
+  .business-ready__tag { margin: 0; color: var(--signal); }
+  .business-ready__facts {
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: .74rem;
+    line-height: 1.7;
+  }
+  .business-ready__facts span { color: var(--muted); padding-inline: .15rem; }
+
   .home-process { display: grid; grid-template-columns: .7fr 1.3fr; gap: 8vw; padding-block: clamp(6rem, 10vw, 10rem); }
   .home-process__head { position: sticky; top: 8rem; align-self: start; }
   .home-process__head h2 { margin: 2rem 0 3rem; font-size: clamp(4rem, 7vw, 7rem); }
   .home-process__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
   .home-process__list li { display: grid; grid-template-columns: 3rem 1fr 1.15fr; gap: 1.5rem; align-items: start; padding: 2rem 0; border-bottom: 1px solid var(--line); }
-  .home-process__list h3 { margin: .2rem 0 0; font-family: var(--display); font-size: clamp(1.7rem, 3vw, 3rem); line-height: 1; }
+  .home-process__list h3 { margin: .2rem 0 0; font-family: var(--display); font-size: clamp(1.25rem, 2vw, 1.9rem); letter-spacing: -.03em; line-height: 1.08; text-wrap: balance; }
   .home-process__list p { margin: 0; color: var(--muted); line-height: 1.65; }
 
   .brand-context { padding-block: clamp(3rem, 4.4vw, 4.5rem); background: var(--ink); color: var(--paper); }
