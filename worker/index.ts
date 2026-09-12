@@ -128,11 +128,10 @@ function validate(form: Record<string, unknown>): { brief: Brief } | { invalid: 
 function screenSpam(form: Record<string, unknown>): Invalid | null {
   if (str(form.website)) return { field: '', error: 'spam' };
 
-  /* The timestamp is stamped by the page's script, so a visitor with
-     JavaScript disabled sends none. An absent stamp therefore cannot be
-     treated as suspicious — doing so would break the no-JS path completely,
-     which is the one path that has no other way to submit. Those submissions
-     are screened by the honeypot and, once configured, by Turnstile. */
+  /* The timestamp is stamped by the page's script, so a submission without one
+     is either a pre-Turnstile native POST or a bot. An absent stamp is not
+     treated as suspicious by itself — the honeypot, the rate limit, the origin
+     check and, once configured, Turnstile decide. */
   const raw = str(form.t);
   if (!raw) return null;
 
@@ -211,10 +210,11 @@ async function overRateLimit(env: Env, ip: string): Promise<boolean> {
   return false;
 }
 
-/* The no-JS path cannot present a Turnstile token, so it gets an origin check
-   in its place: a native form POST from this site carries an Origin or Referer
-   pointing back at it. Absent headers are allowed through — some privacy tools
-   strip them, and the honeypot, timing and rate limit still stand. */
+/* Native form posts get an origin check: a form POST from this site carries an
+   Origin or Referer pointing back at it. This is an extra screen, never a
+   substitute for Turnstile — once the secret is configured a valid token is
+   required here too. Absent headers are allowed through, since some privacy
+   tools strip them and the honeypot, timing and rate limit still stand. */
 function sameOrigin(request: Request): boolean {
   const target = new URL(request.url).origin;
   const origin = request.headers.get('origin');
@@ -399,6 +399,9 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     }
   }
 
+  /* Native form posts get a redirect to a real page rather than JSON. Reachable
+     before Turnstile is activated; afterwards such a submission is rejected
+     earlier, and BriefForm hides the form from no-JavaScript visitors. */
   if (!wantsJson) {
     return new Response(null, { status: 303, headers: { location: '/contact/sent/' } });
   }

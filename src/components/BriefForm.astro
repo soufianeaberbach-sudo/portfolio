@@ -4,19 +4,35 @@ import Arrow from './Arrow.astro';
 /* The development brief form.
  *
  * This is a REAL form: method="POST" action="/api/brief", handled by
- * worker/index.ts. Without JavaScript it posts natively and the Worker
- * redirects to /contact/sent/. With JavaScript it is intercepted and posts
- * JSON so the processing, success and error states can be shown in place.
+ * worker/index.ts. With JavaScript the submit is intercepted and posted as
+ * JSON, so the processing, success and error states show in place.
  *
- * mailto: is a fallback only. It appears on a network failure, prefilled from
+ * WHAT NO-JAVASCRIPT VISITORS GET depends on whether Turnstile is live:
+ *
+ *   - Before activation (no TURNSTILE_SECRET): the native POST genuinely
+ *     works. The Worker validates it, screens it with the honeypot, the rate
+ *     limit and an origin check, and answers 303 to /contact/sent/.
+ *   - In production with Turnstile enabled: only the page's script can mint a
+ *     token, and the Worker requires one from every submission, so a native
+ *     POST would always be rejected. The interactive form therefore needs
+ *     JavaScript, and the <noscript> block below offers the direct email route
+ *     instead.
+ *
+ * Because the second case is the production one, the form itself is hidden
+ * whenever the `js` class is absent from <html> — showing a form that cannot
+ * succeed is worse than not showing one. Nothing changes for visitors with
+ * JavaScript: the class is set by an inline script in <head> before the body
+ * paints, so there is no flash.
+ *
+ * mailto: is also the in-form fallback on a network failure, prefilled from
  * whatever has already been typed, so nothing the visitor wrote is lost.
  *
  * No file upload in this version — an optional reference LINK field instead,
  * which avoids storage, size, privacy and failure-state complexity entirely.
  *
- * Turnstile renders only when a site key was present at build time. The Worker
- * verifies only when its secret is configured. Both halves degrade
- * independently, so the form is coherent at every stage of setup.
+ * Turnstile renders only when a site key was present at build time; see the
+ * activation note in wrangler.jsonc — the secret and the site key have to go
+ * live together.
  */
 const stages = [
   'Idea / reference',
@@ -35,8 +51,9 @@ const email = 'soufiane.aberbach@gmail.com';
 <div class="brief-form">
   {/* Once Turnstile is live the server requires a token, which only the page's
       script can produce — so a visitor without JavaScript is given the direct
-      route rather than a form that would be rejected. Invisible to everyone
-      else, and the form below is visually unchanged. */}
+      route instead of a form that would be rejected. The form is hidden in that
+      case by the rule at the end of this component's styles. Invisible to
+      everyone else, and the form is visually unchanged with JavaScript. */}
   <noscript>
     <p class="bf__noscript">
       This form needs JavaScript for its spam check. Email the brief straight to
@@ -312,6 +329,12 @@ const email = 'soufiane.aberbach@gmail.com';
   .bf__noscript a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
 
   .bf__done-ref { margin-top: 1.5rem !important; color: var(--muted) !important; font-family: var(--mono); font-size: .72rem; }
+
+  /* No JavaScript, no usable form: the Worker requires a Turnstile token in
+     production and only the page's script can produce one. The <noscript>
+     block above carries the direct email route instead. The `js` class is set
+     in <head> before the body paints, so nothing flashes for everyone else. */
+  :global(html:not(.js)) .bf { display: none; }
 
   @media (max-width: 560px) {
     .bf__row { grid-template-columns: minmax(0, 1fr); gap: .9rem; }
