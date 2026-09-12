@@ -7,7 +7,7 @@ const stages = [
   ['02', 'Technical build', 'Pattern architecture, construction logic and initial measurements are built and tested against each other.'],
   ['03', 'Fit / Validation', 'Proportion, balance, drape and construction corrections are worked through and recorded.'],
   ['04', 'Size / Specification lock', 'Grading, points of measure and tolerances are fixed into technical documentation.'],
-  ['05', 'Pre-production / Handoff', 'The line works from the approved reference, verified at first piece and pre-production.'],
+  ['05', 'Pre-production / Handoff', 'Production works from the approved reference, with verification at first piece and pre-production.'],
 ];
 
 // 16 logos = a 4 x 4 grid. Each is painted as a CSS mask so the single
@@ -65,7 +65,20 @@ const brandLogos = [
       <a class="button button--signal" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
     </div>
     <figure class="home-hero__portrait" data-reveal>
-      <img src="/soufiane-drawing.png" width="680" height="846" alt="Soufiane Aberbach seated and drawing on a tablet" fetchpriority="high" />
+      {/* WebP renditions generated from the same source with ffmpeg-static, so
+          the composition and the cut-out transparency are unchanged. The PNG
+          stays in the repo because og:image still points at it. width/height
+          carry the renditions' true intrinsic ratio. */}
+      <img
+        src="/soufiane-drawing-800.webp"
+        srcset="/soufiane-drawing-480.webp 480w, /soufiane-drawing-800.webp 800w, /soufiane-drawing-1200.webp 1200w"
+        sizes="(max-width: 900px) 82vw, 46vw"
+        width="1200"
+        height="1486"
+        alt="Soufiane Aberbach seated and drawing on a tablet"
+        fetchpriority="high"
+        decoding="async"
+      />
     </figure>
   </section>
 
@@ -86,7 +99,7 @@ const brandLogos = [
       <h2 class="display">The expensive mistake happens <em>before</em> the sewing line.</h2>
     </div>
     <div class="positioning__copy" data-reveal>
-      <p>Every extra fitting round, every point of fabric waste and every delayed sample traces back to a decision made before a single metre was cut.</p>
+      <p>Many expensive fitting rounds, fabric losses and sample delays begin with decisions made before the first metre is cut.</p>
       <p>That decision is the work: defining the pattern, validating fit and translating intent into instructions a factory can repeat.</p>
       <a href="/expertise/" class="button">View expertise <span><Arrow /></span></a>
     </div>
@@ -137,8 +150,8 @@ const brandLogos = [
 
   <section class="home-process section-shell">
     <div class="home-process__head" data-reveal>
-      <p class="eyebrow">The production sequence</p>
-      <h2 class="display">Five stages.<br />No blind spots.</h2>
+      <p class="eyebrow">The development sequence</p>
+      <h2 class="display">Five stages.<br />Every stage ends with a decision.</h2>
       <a class="button" href="/process/">Explore the process <span><Arrow /></span></a>
     </div>
     <ol class="home-process__list">
@@ -157,7 +170,7 @@ const brandLogos = [
       <div class="home-next__intro" data-reveal>
         <p class="label">CLO3D simulation / selected work</p>
         <h2 class="display" id="simulation-title"><em>See</em> it move.<br />Before you make it.</h2>
-        <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette and fit decisions happen before the first physical sample.</p>
+        <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette, proportion and drape can be explored before and alongside physical sampling.</p>
         <a href="/portfolio/" class="button">View the portfolio <span><Arrow /></span></a>
       </div>
       <div class="home-next__media" data-reveal>
@@ -168,10 +181,12 @@ const brandLogos = [
           muted
           loop
           playsinline
-          preload="metadata"
+          preload="none"
           aria-label="Female and male digital fashion models walking, presented in CLO3D"
         >
-          <source src="/CLO3D.mp4" type="video/mp4" />
+          {/* Attached once by the observer below, so the 3.5 MB file is not
+              fetched until the section is near the viewport. */}
+          <source data-src="/CLO3D.mp4" type="video/mp4" />
         </video>
       </div>
     </div>
@@ -249,6 +264,32 @@ const brandLogos = [
      ------------------------------------------------------------------ */
   const simulationVideo = document.querySelector('.home-next__video');
   if (simulationVideo instanceof HTMLVideoElement) {
+    /* One-time source activation. The <source> ships with data-src, so nothing
+       downloads until the section is near the viewport; the poster is available
+       from the first paint either way. load() is called exactly once, before
+       playback has begun, which is the one moment it cannot reset currentTime —
+       the bug that used to restart the video mid-scroll. The observer
+       disconnects immediately, so scrolling past again changes nothing. */
+    const deferredSource = simulationVideo.querySelector('source[data-src]');
+    if (deferredSource) {
+      const attach = () => {
+        deferredSource.src = deferredSource.dataset.src;
+        deferredSource.removeAttribute('data-src');
+        simulationVideo.load();
+        if (!reduceMotion) simulationVideo.play().catch(() => {});
+      };
+      if ('IntersectionObserver' in window) {
+        const warm = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          warm.disconnect();
+          attach();
+        }, { rootMargin: '400px 0px' });
+        warm.observe(simulationVideo);
+      } else {
+        attach();
+      }
+    }
+
     if (reduceMotion) {
       simulationVideo.removeAttribute('autoplay');
       simulationVideo.pause();

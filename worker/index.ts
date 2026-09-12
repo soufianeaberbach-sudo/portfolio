@@ -55,6 +55,11 @@ const LIMITS = {
   perIpPerHour: 5,
 };
 
+/* How long a submitted brief is kept. Stated verbatim on /privacy/, so the two
+   must be changed together. */
+const RETENTION_DAYS = 90;
+const RETENTION_SECONDS = RETENTION_DAYS * 24 * 60 * 60;
+
 interface Brief {
   name: string;
   company: string;
@@ -140,12 +145,20 @@ function screenSpam(form: Record<string, unknown>): Invalid | null {
   return null;
 }
 
-/* Returns true when the request may proceed. With no secret configured there
-   is nothing to verify against, so the check is skipped rather than failing
-   every submission — the honeypot and timing screens still apply. That keeps
-   the form coherent both before and after Turnstile is set up. */
-async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boolean> {
-  if (!env.TURNSTILE_SECRET) return true;
+/* Returns true when the request may proceed.
+ *
+ * Turnstile is enforced only on scripted (JSON) submissions, because only the
+ * page's script can produce a token. A native form POST from a browser with
+ * JavaScript disabled cannot carry one, so requiring it there would silently
+ * break the one path that has no alternative. Those submissions are screened
+ * by the honeypot, the rate limit, full validation and an origin check
+ * instead — see sameOrigin below.
+ *
+ * With no secret configured there is nothing to verify against, so the check
+ * is skipped rather than failing every submission. The form is therefore
+ * coherent before and after Turnstile is set up. */
+async function verifyTurnstile(env: Env, token: string, ip: string, enforce: boolean): Promise<boolean> {
+  if (!env.TURNSTILE_SECRET || !enforce) return true;
   if (!token) return false;
   try {
     const body = new FormData();
@@ -165,12 +178,23 @@ async function verifyTurnstile(env: Env, token: string, ip: string): Promise<boo
   }
 }
 
+/* The raw IP is never persisted. It is hashed and truncated first: enough to
+   count repeat submissions within an hour, not enough to be a stored identifier
+   once the key expires. */
+async function hashIp(ip: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip));
+  return [...new Uint8Array(digest)]
+    .slice(0, 8)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 /* KV is eventually consistent, so this is a throttle rather than a hard
    ceiling. That is the right trade for spam control: approximate is enough,
    and no brief is ever rejected because a counter was a second stale. */
 async function overRateLimit(env: Env, ip: string): Promise<boolean> {
   if (!env.BRIEFS || !ip) return false;
-  const key = `rate:${ip}:${new Date().toISOString().slice(0, 13)}`;
+  const key = `rate:${await hashIp(ip)}:${new Date().toISOString().slice(0, 13)}`;
   try {
     const current = Number((await env.BRIEFS.get(key)) ?? '0');
     if (current >= LIMITS.perIpPerHour) return true;
@@ -179,6 +203,25 @@ async function overRateLimit(env: Env, ip: string): Promise<boolean> {
     return false;
   }
   return false;
+}
+
+/* The no-JS path cannot present a Turnstile token, so it gets an origin check
+   in its place: a native form POST from this site carries an Origin or Referer
+   pointing back at it. Absent headers are allowed through — some privacy tools
+   strip them, and the honeypot, timing and rate limit still stand. */
+function sameOrigin(request: Request): boolean {
+  const target = new URL(request.url).origin;
+  const origin = request.headers.get('origin');
+  if (origin) return origin === target;
+  const referer = request.headers.get('referer');
+  if (referer) {
+    try {
+      return new URL(referer).origin === target;
+    } catch {
+      return false;
+    }
+  }
+  return true;
 }
 
 function emailText(brief: Brief, id: string): string {
@@ -298,8 +341,12 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     return fail(429, 'Several briefs have already been sent from this connection. Please email directly instead.');
   }
 
+  if (!wantsJson && !sameOrigin(request)) {
+    return fail(400, 'That submission did not come from this site. Please reload the page and try again.');
+  }
+
   const token = str(form['cf-turnstile-response']);
-  if (!(await verifyTurnstile(env, token, ip))) {
+  if (!(await verifyTurnstile(env, token, ip, wantsJson))) {
     return fail(400, 'The spam check did not pass. Please reload the page and try again.');
   }
 
@@ -311,15 +358,12 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
 
   const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
   try {
+    /* Only what is needed to read and answer the brief. Request country and
+       user agent were being stored and were never used, so they are gone. */
     await env.BRIEFS.put(
       `brief:${id}`,
-      JSON.stringify({
-        ...brief,
-        id,
-        receivedAt: new Date().toISOString(),
-        country: (request as Request & { cf?: { country?: string } }).cf?.country ?? '',
-        userAgent: request.headers.get('user-agent') ?? '',
-      }),
+      JSON.stringify({ ...brief, id, receivedAt: new Date().toISOString() }),
+      { expirationTtl: RETENTION_SECONDS },
     );
   } catch {
     return fail(502, 'The brief could not be saved. Please email directly — the address is below the form.');
@@ -330,7 +374,11 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     /* The brief is safe in KV, so this is not a failure for the sender. Record
        it so the gap is visible, and still report receipt, which is true. */
     try {
-      await env.BRIEFS.put(`undelivered:${id}`, JSON.stringify({ id, email: brief.email, at: new Date().toISOString() }));
+      await env.BRIEFS.put(
+        `undelivered:${id}`,
+        JSON.stringify({ id, email: brief.email, at: new Date().toISOString() }),
+        { expirationTtl: RETENTION_SECONDS },
+      );
     } catch {
       /* nothing further to do */
     }

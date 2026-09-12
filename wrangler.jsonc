@@ -49,6 +49,16 @@
   //      PUBLIC_TURNSTILE_SITEKEY=0x... npm run build
   //
   //    With no site key the widget is omitted; with no TURNSTILE_SECRET the
-  //    Worker skips verification. The honeypot and timing screens apply in
-  //    every combination, so the form is coherent at each step of setup.
+  //    Worker skips verification. Turnstile is enforced only on scripted
+  //    (JSON) submissions — a no-JavaScript native POST cannot produce a
+  //    token, so that path is screened by the honeypot, the rate limit, full
+  //    validation and an origin check instead. The honeypot and timing screens
+  //    apply in every combination, so the form is coherent at each step.
+  //
+  // 4. NOT PRODUCTION READY until 1-3 above are done and one real brief has
+  //    been received end to end. A successful build proves none of that.
+  //    Submitted briefs are kept for 90 days (RETENTION_DAYS in
+  //    worker/index.ts), which /privacy/ states verbatim — change both
+  //    together. Rate-limit keys hold a truncated SHA-256 of the caller's IP,
+  //    never the address itself, and expire after an hour.
 }
