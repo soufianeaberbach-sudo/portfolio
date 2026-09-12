@@ -14,6 +14,7 @@ import { readFile as readFileAsync } from 'node:fs/promises';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -40,7 +41,8 @@ const check = (name, ok, detail = '') => {
 /* detached so the whole process group can be signalled. npx spawns a shell
    which spawns node, and killing only npx left the real preview server behind
    holding the piped stdio open — which looks exactly like a hung test run. */
-const server = spawn('npx', ['astro', 'preview', '--host', HOST, '--port', String(PORT)], {
+const astroCli = fileURLToPath(new URL('../node_modules/astro/astro.js', import.meta.url));
+const server = spawn(process.execPath, [astroCli, 'preview', '--host', HOST, '--port', String(PORT)], {
   stdio: ['ignore', 'pipe', 'pipe'],
   detached: true,
 });
@@ -195,6 +197,24 @@ try {
     check('runway snaps instantly under reduced motion', state.whole, `position ${state.position}`);
     const revealed = await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1'));
     check('reveal blocks visible without scrolling', revealed);
+    await c.close();
+  }
+
+  // ---- Home portrait is one transparent cut-out, never a mirrored duplicate
+  console.log('\nHome portrait treatment');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+    const portrait = await p.evaluate(() => ({
+      imageCount: document.querySelectorAll('.home-hero__portrait img').length,
+      duplicateShadow: !!document.querySelector('.home-hero__shadow'),
+      alt: document.querySelector('.home-hero__portrait img')?.getAttribute('alt') ?? '',
+    }));
+    check('Home renders one portrait image', portrait.imageCount === 1, String(portrait.imageCount));
+    check('the rejected mirrored portrait shadow is absent', portrait.duplicateShadow === false);
+    check('the portrait keeps meaningful alternative text', portrait.alt.includes('Soufiane Aberbach'), portrait.alt);
     await c.close();
   }
 
@@ -444,7 +464,7 @@ try {
     const outDir = mkdtempSync(join(tmpdir(), 'smoke-turnstile-'));
     let staticServer;
     try {
-      const built = spawnSync('npx', ['astro', 'build', '--outDir', outDir], {
+      const built = spawnSync(process.execPath, [astroCli, 'build', '--outDir', outDir], {
         env: { ...process.env, PUBLIC_TURNSTILE_SITEKEY: '1x00000000000000000000AA' },
         encoding: 'utf8',
       });
@@ -575,6 +595,8 @@ try {
         credentialB2B: document.querySelector('.ct-credential__facts em')?.textContent ?? '',
         credentialHeadSize: size(document.querySelector('.ct-credential__head')),
         oldEqualGrid: !!document.querySelector('.ct-direct__grid'),
+        sectionOrder: ['.ct-direct', '.ct-brief', '.ct-business', '.ct-proof', '.ct-platforms']
+          .map((selector) => [...document.querySelectorAll('main > section')].indexOf(document.querySelector(selector))),
       };
     });
 
@@ -590,6 +612,9 @@ try {
     check('the business credential is present', d.credentialExists);
     check('B2B invoicing is called out', /B2B invoicing available/.test(d.credentialB2B), d.credentialB2B);
     check('the credential headline outranks the platform links', d.credentialHeadSize > d.platformSize * 1.4, `${d.credentialHeadSize} vs ${d.platformSize}`);
+    check('Contact follows direct → brief → business → proof → platforms',
+      d.sectionOrder.every((value, index, values) => value >= 0 && (index === 0 || value > values[index - 1])),
+      JSON.stringify(d.sectionOrder));
 
     await c.close();
   }

@@ -8,13 +8,9 @@ import { profiles } from '../components/SocialLinks.astro';
 /* Contact — the first step of the process, not another sales page.
  *
  * The visitor arrives having already read four pages. The only job left is to
- * make the first move easy: permission in the hero, a real form within one
- * short scroll, and the proof that reduces risk placed where the risk is
- * actually taken — beside and immediately below the form, never after it.
- *
- * The form posts to a Cloudflare Worker (worker/index.ts). Nothing on this
- * page promises an upload, because there isn't one; the optional link field
- * covers the same need without storage, size or privacy complexity.
+ * make the first move easy: permission in the hero, direct routes first, then
+ * a real form that accepts a small reference file or link. Business status,
+ * proof and third-party alternatives follow in that order.
  */
 const email = 'soufianeaberbach@gmail.com';
 /* One source for all three renderings of the number: the readable form, the
@@ -38,7 +34,7 @@ const faqs = [
   },
   {
     q: 'How do I share files?',
-    a: 'Paste a Google Drive, Dropbox or WeTransfer link in the brief form — there is no upload on this page. Larger technical material can follow by email once the first reply has gone back.',
+    a: 'Attach one PDF, JPEG, PNG or WebP file up to 10 MB, or paste a Google Drive, Dropbox, Figma or web reference. Larger technical material can follow by email once the first reply has gone back.',
   },
   {
     q: 'How is project material handled?',
@@ -71,45 +67,40 @@ const faqs = [
     </div>
   </section>
 
-  <section class="ct-brief" id="brief" aria-labelledby="ct-brief-title">
-    <div class="section-shell ct-brief__grid">
-      <div class="ct-brief__intro" data-reveal>
-        <p class="eyebrow">Development brief</p>
-        <h2 class="display ct-brief__title" id="ct-brief-title">Describe where<br />the product <em>is</em>.</h2>
-        <ol class="ct-steps">
-          <li><span class="label">01</span><p>You describe the garment or the production problem.</p></li>
-          <li><span class="label">02</span><p>It is read personally and scoped honestly.</p></li>
-          <li><span class="label">03</span><p>A written route and a realistic next step come back.</p></li>
-        </ol>
+  <section class="ct-direct" aria-labelledby="ct-direct-title">
+    <div class="section-shell ct-direct__composition">
+      <div class="ct-reach" data-reveal>
+        <p class="eyebrow">Direct contact</p>
+        <h2 class="display ct-reach__title" id="ct-direct-title">Reach Soufiane<br /><em>directly</em>.</h2>
+        <ul class="ct-reach__list">
+          <li>
+            <span class="label">Email</span>
+            <a class="ct-reach__value" href={`mailto:${email}`}>
+              {email}<i aria-hidden="true"><Arrow /></i>
+            </a>
+          </li>
+          <li>
+            <span class="label">Phone</span>
+            <a class="ct-reach__value" href={`tel:${phoneDial}`}>
+              {phoneDisplay}<i aria-hidden="true"><Arrow /></i>
+            </a>
+          </li>
+          <li>
+            <span class="label">WhatsApp</span>
+            <a class="ct-reach__value" href={whatsapp} target="_blank" rel="noopener noreferrer">
+              {phoneDisplay}
+              <span class="sr-only">on WhatsApp (opens in a new tab)</span>
+              <i aria-hidden="true"><Arrow /></i>
+            </a>
+          </li>
+        </ul>
+        <p class="ct-reach__note">
+          Working hours are Morocco time (GMT+1). The development brief reaches the
+          same inbox and keeps your reference attached to it.
+        </p>
       </div>
 
-      <div class="ct-brief__form" data-reveal>
-        <BriefForm />
-      </div>
-
-      <!-- Who vouches, visible while the form is being filled in. The quotes
-           follow immediately below; nothing is left until after the ask. -->
-      <div class="ct-brief__vouch" data-reveal>
-        <References mode="list" />
-      </div>
-    </div>
-
-    <div class="section-shell ct-brief__refs">
-      <div class="ct-brief__refs-head" data-reveal>
-        <p class="eyebrow">References</p>
-        <h3 class="display" id="ct-refs-title">In their own words.</h3>
-      </div>
-      <References mode="full" />
-    </div>
-  </section>
-
-  <section class="ct-workspace" aria-label="Soufiane's freelance workspace">
-    <div class="section-shell ct-workspace__grid">
-      <div class="ct-workspace__note" data-reveal>
-        <p class="eyebrow">Working environment</p>
-        <p>Pattern, fit and technical decisions are developed here before they move to production.</p>
-      </div>
-      <figure data-reveal>
+      <figure class="ct-workspace__figure" data-reveal>
         <img
           src="/contact-figure-1400.webp"
           srcset="/contact-figure-800.webp 800w, /contact-figure-1400.webp 1400w"
@@ -120,54 +111,41 @@ const faqs = [
           loading="lazy"
           decoding="async"
         />
-        <figcaption class="label">Freelance workspace / Tangier</figcaption>
+        <figcaption>
+          <span class="eyebrow">Working environment</span>
+          <span>Pattern, fit and technical decisions are developed here before they move to production.</span>
+          <strong class="label">Freelance workspace / Tangier</strong>
+        </figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="ct-direct" aria-labelledby="ct-direct-title">
-    <div class="section-shell">
-      <h2 class="sr-only" id="ct-direct-title">Direct contact and business status</h2>
+  <section class="ct-brief" id="brief" aria-labelledby="ct-brief-title">
+    <div class="section-shell ct-brief__grid">
+      <div class="ct-brief__intro" data-reveal>
+        <p class="eyebrow">Start a development brief</p>
+        <h2 class="display ct-brief__title" id="ct-brief-title">Upload what<br />you <em>have</em>.</h2>
+        <ol class="ct-steps">
+          <li><span class="label">01</span><p>Describe the garment or the production problem.</p></li>
+          <li><span class="label">02</span><p>Attach one approved reference file or share a link.</p></li>
+          <li><span class="label">03</span><p>Receive an honest scope and a realistic next step.</p></li>
+        </ol>
+      </div>
 
-      {/* Direct contact and the business credential carry this section. The
-          three ways to reach Soufiane are one block, at display size, because
-          they are the primary action on the page; the platforms that used to
-          sit beside them at equal weight are now a quiet row underneath. */}
-      <div class="ct-direct__top">
-        <div class="ct-reach" data-reveal>
-          <p class="eyebrow">Reach Soufiane directly</p>
-          <ul class="ct-reach__list">
-            <li>
-              <span class="label">Email</span>
-              <a class="ct-reach__value" href={`mailto:${email}`}>
-                {email}<i aria-hidden="true"><Arrow /></i>
-              </a>
-            </li>
-            <li>
-              <span class="label">Phone</span>
-              {/* Readable, not icon-only — and a tel: link so a phone dials it. */}
-              <a class="ct-reach__value" href={`tel:${phoneDial}`}>
-                {phoneDisplay}<i aria-hidden="true"><Arrow /></i>
-              </a>
-            </li>
-            <li>
-              <span class="label">WhatsApp</span>
-              <a class="ct-reach__value" href={whatsapp} target="_blank" rel="noopener noreferrer">
-                {phoneDisplay}
-                <span class="sr-only">on WhatsApp (opens in a new tab)</span>
-                <i aria-hidden="true"><Arrow /></i>
-              </a>
-            </li>
-          </ul>
-          <p class="ct-reach__note">
-            Working hours are Morocco time (GMT+1). A brief through the form reaches the
-            same inbox and keeps your reference attached to it.
-          </p>
-        </div>
+      <div class="ct-brief__form" data-reveal>
+        <BriefForm />
+      </div>
+    </div>
+  </section>
 
-        {/* A credential, not fine print: ruled, weighted and given the same
-            vertical space as the contact block beside it. */}
-        <aside class="ct-credential" data-reveal aria-labelledby="ct-credential-title">
+  <section class="ct-business" aria-labelledby="ct-credential-title">
+    <div class="section-shell ct-business__grid">
+      <div class="ct-business__intro" data-reveal>
+        <p class="eyebrow">Procurement ready</p>
+        <p class="ct-signature" aria-label="Soufiane Aberbach"><span>Soufiane</span><span>Aberbach</span></p>
+        <p>Direct engagement is supported by a registered Moroccan business and clear invoicing.</p>
+      </div>
+      <aside class="ct-credential" data-reveal>
           <p class="eyebrow" id="ct-credential-title">Registered business</p>
           <p class="ct-credential__head">
             Registered Moroccan<br />Auto&#8209;Entrepreneur
@@ -190,14 +168,24 @@ const faqs = [
             Formal engagement with a company is straightforward — contracts and invoices
             in your own procurement process.
           </p>
-        </aside>
-      </div>
+      </aside>
+    </div>
+  </section>
 
-      {/* Available, secondary, and stated once on this page. The footer keeps
-          the site-wide profile nav; this row exists only so somebody who
-          prefers a marketplace can find one. */}
-      <div class="ct-platforms" data-reveal>
-        <p class="ct-platforms__tag">Or work through a platform, if you prefer</p>
+  <section class="ct-proof" aria-labelledby="ct-refs-title">
+    <div class="section-shell">
+      <div class="ct-proof__head" data-reveal>
+        <p class="eyebrow">Professional references</p>
+        <h2 class="display" id="ct-refs-title">In their own <em>words</em>.</h2>
+      </div>
+      <References mode="full" />
+    </div>
+  </section>
+
+  <section class="ct-platforms" aria-labelledby="ct-platforms-title">
+    <div class="section-shell ct-platforms__row" data-reveal>
+        <p class="ct-platforms__tag" id="ct-platforms-title">Third-party platform alternatives</p>
+        <p class="ct-platforms__note">Direct contact is preferred. These profiles remain available if your process requires a marketplace.</p>
         <ul class="ct-platforms__list">
           {profiles.map((profile) => (
             <li>
@@ -208,7 +196,6 @@ const faqs = [
             </li>
           ))}
         </ul>
-      </div>
     </div>
   </section>
 
@@ -244,92 +231,89 @@ const faqs = [
   /* Static and factual — no indicator dot, nothing that reads as live state. */
   .ct-hero__availability { margin: 1.75rem 0 0; padding-top: .9rem; border-top: 1px solid color-mix(in srgb, var(--paper) 32%, var(--ink)); color: color-mix(in srgb, var(--paper) 72%, var(--ink)); }
 
-  /* ---------- The brief: the primary action ---------- */
-  .ct-brief { padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(4rem, 8vw, 8rem); }
-  .ct-brief__grid {
+  /* ---------- Direct routes + workspace: the first conversion choice ---------- */
+  .ct-direct { padding-block: clamp(4rem, 7vw, 7rem); border-bottom: 1px solid var(--line-strong); overflow: hidden; }
+  .ct-direct__composition {
     display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.35fr) minmax(13rem, .55fr);
-    column-gap: clamp(2rem, 5vw, 5rem);
-    row-gap: clamp(2.5rem, 4vw, 3.5rem);
-    align-items: start;
+    grid-template-columns: minmax(21rem, .78fr) minmax(0, 1.22fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: center;
   }
-  .ct-brief__intro { grid-column: 1; }
-  .ct-brief__form { grid-column: 2; min-width: 0; }
-  .ct-brief__vouch { grid-column: 3; }
-
-  .ct-brief__title { margin: 1.75rem 0 0; font-size: clamp(2rem, 3.4vw, 3.1rem); }
-  .ct-steps { margin: clamp(2rem, 3.5vw, 3rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
-  .ct-steps li { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .75rem; padding: .95rem 0; border-bottom: 1px solid var(--line); }
-  .ct-steps span { color: var(--muted); }
-  .ct-steps p { margin: 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
-
-  .ct-brief__refs { margin-top: clamp(3.5rem, 6vw, 6rem); padding-top: clamp(2.5rem, 4vw, 4rem); border-top: 1px solid var(--line-strong); }
-  /* The quotes need a heading of their own: the rail that names the three
-     sources sits at the top of the section, which at narrow widths is a long
-     way above this, and without a heading the block is invisible to anyone
-     navigating by headings. */
-  .ct-brief__refs-head { margin-bottom: clamp(2rem, 3.5vw, 3rem); }
-  .ct-brief__refs-head .eyebrow { color: var(--muted); }
-  .ct-brief__refs-head h3 { margin: 1.25rem 0 0; font-size: clamp(1.7rem, 3vw, 2.6rem); }
-
-  /* ---------- Workspace: human proof AFTER the action ---------- */
-  .ct-workspace { padding-block: clamp(3.5rem, 7vw, 7rem); border-top: 1px solid var(--line); background: var(--paper-bright); }
-  .ct-workspace__grid { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); align-items: end; gap: clamp(2rem, 5vw, 5rem); }
-  .ct-workspace__note .eyebrow { color: var(--muted); }
-  .ct-workspace__note p:last-child { max-width: 26rem; margin: 1.5rem 0 0; color: var(--ink-soft); line-height: 1.7; }
-  .ct-workspace figure { margin: 0; }
-  /* height:auto is load-bearing: the height="980" attribute otherwise survives
-     as a presentational hint, makes aspect-ratio inert and lets object-fit
-     crop the photograph into the wrong box. */
-  /* No frame: the photograph sits in the composition rather than in a card.
-     height:auto is load-bearing — the height="980" attribute otherwise
-     survives as a presentational hint, makes aspect-ratio inert and lets
-     object-fit crop the image into the wrong box. */
-  .ct-workspace img { display: block; width: 100%; height: auto; }
-  /* Editorial metadata under the image: spacing alone. A rule across the full
-     column width read as the bottom edge of a card, which is the framing this
-     pass removes. */
-  .ct-workspace figcaption { margin-top: 1.1rem; color: var(--muted); }
-
-  /* ---------- Direct routes: deliberately quiet next to the form ---------- */
-  .ct-direct { padding-block: clamp(3.5rem, 6vw, 6rem); border-top: 1px solid var(--line-strong); }
-  .ct-direct__top {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(17rem, .75fr);
-    gap: clamp(2.5rem, 6vw, 6rem);
-    align-items: start;
-  }
-
-  /* Direct contact. Display-size values on their own rules, so the three ways
-     in read as the loudest thing in the section. */
-  .ct-reach__list { margin: clamp(1.5rem, 3vw, 2.25rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .ct-reach__title { margin-top: 1.35rem; font-size: clamp(2.6rem, 4.7vw, 4.8rem); }
+  .ct-reach__list { margin: clamp(1.75rem, 3vw, 2.5rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
   .ct-reach__list li { padding: clamp(.9rem, 1.6vw, 1.15rem) 0; border-bottom: 1px solid var(--line); }
   .ct-reach__list .label { display: block; margin-bottom: .3rem; color: var(--muted); }
   .ct-reach__value {
     display: inline-flex;
     align-items: center;
     gap: .55rem;
+    max-width: 100%;
     font-family: var(--display);
     font-weight: 800;
     letter-spacing: -.03em;
     font-size: clamp(1.15rem, 2.1vw, 1.75rem);
     line-height: 1.1;
     color: var(--ink);
-    text-decoration: none;
     overflow-wrap: anywhere;
-    /* The signal underline is the orange: it marks the action without putting
-       orange on text that has to stay readable. */
     box-shadow: inset 0 -2px 0 var(--signal);
     transition: color .2s var(--ease), box-shadow .2s var(--ease);
   }
   .ct-reach__value i { flex: none; color: var(--signal); transition: transform .2s var(--ease); }
   .ct-reach__value:hover { color: var(--signal); }
   .ct-reach__value:hover i { transform: translate(2px, -2px); }
-  .ct-reach__note { max-width: 30rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.7; }
+  .ct-reach__note { max-width: 31rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.7; }
 
-  /* The credential. A ruled panel on the brighter ground with the signal rule
-     at its head — the visual language the site already uses for something that
-     matters, rather than three lines of grey. */
+  /* The asset is already a transparent workspace cut-out. It crosses the
+     section gutter and its caption sits inside the open negative space, so it
+     behaves as part of the editorial composition—not as a rectangular card. */
+  .ct-workspace__figure { position: relative; width: calc(100% + var(--gutter)); margin: 0 calc(var(--gutter) * -1) -3rem 0; }
+  .ct-workspace__figure img { display: block; width: 100%; height: auto; }
+  .ct-workspace__figure figcaption {
+    position: absolute;
+    left: clamp(1rem, 3vw, 3rem);
+    bottom: clamp(3.5rem, 7vw, 7rem);
+    z-index: 1;
+    width: min(17rem, 38%);
+  }
+  .ct-workspace__figure figcaption > span:nth-child(2) { display: block; margin-top: 1rem; color: var(--paper); font-size: .88rem; line-height: 1.65; }
+  .ct-workspace__figure figcaption strong { display: block; margin-top: 1.1rem; padding-top: .7rem; border-top: 1px solid rgba(243, 240, 233, .45); color: var(--paper); font-weight: 400; }
+  .ct-workspace__figure .eyebrow { color: var(--signal); }
+
+  /* ---------- Development brief: upload or link ---------- */
+  .ct-brief { padding-block: clamp(4.5rem, 8vw, 8rem) clamp(3.5rem, 5vw, 5rem); }
+  .ct-brief__grid {
+    display: grid;
+    grid-template-columns: minmax(17rem, .72fr) minmax(0, 1.28fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .ct-brief__intro { grid-column: 1; }
+  .ct-brief__form { grid-column: 2; min-width: 0; }
+  .ct-brief__title { margin: 1.75rem 0 0; font-size: clamp(2.5rem, 4.6vw, 4.7rem); }
+  .ct-steps { margin: clamp(2rem, 3.5vw, 3rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+  .ct-steps li { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .75rem; padding: .95rem 0; border-bottom: 1px solid var(--line); }
+  .ct-steps span { color: var(--muted); }
+  .ct-steps p { margin: 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
+
+  /* ---------- Registered business / procurement ---------- */
+  .ct-business { padding-block: clamp(4rem, 6vw, 6rem); border-top: 1px solid var(--line-strong); background: var(--paper-bright); }
+  .ct-business__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(19rem, .75fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .ct-business__intro > p:last-child { max-width: 34rem; margin: 2rem 0 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.7; }
+  .ct-signature {
+    margin: 1.5rem 0 0;
+    font-family: var(--display);
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 850;
+    letter-spacing: -.07em;
+    line-height: .78;
+  }
+  .ct-signature span { display: block; }
+  .ct-signature span:last-child { color: transparent; -webkit-text-stroke: 1.25px var(--ink); }
   .ct-credential {
     padding: clamp(1.35rem, 2.4vw, 1.9rem);
     border: 1px solid var(--line-strong);
@@ -348,21 +332,19 @@ const faqs = [
   .ct-credential__facts div { display: grid; grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr); gap: .75rem; align-items: baseline; }
   .ct-credential__facts dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .ct-credential__facts dd { margin: 0; font-size: .9rem; font-weight: 500; color: var(--ink); }
-  /* The one procurement fact a company actually screens for. */
   .ct-credential__facts em { font-style: normal; font-weight: 600; color: var(--signal); }
   .ct-credential__note { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .8rem; line-height: 1.65; }
 
-  /* Platforms: one quiet row, once. */
-  .ct-platforms {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: .6rem clamp(1.25rem, 3vw, 2.5rem);
-    margin-top: clamp(2.5rem, 5vw, 4rem);
-    padding-top: 1.1rem;
-    border-top: 1px solid var(--line);
-  }
+  /* ---------- Professional proof: one editorial sequence ---------- */
+  .ct-proof { padding-block: clamp(4.5rem, 8vw, 8rem); border-top: 1px solid var(--line); }
+  .ct-proof__head { display: grid; grid-template-columns: .55fr 1.45fr; align-items: end; gap: 2rem; margin-bottom: clamp(2.5rem, 5vw, 5rem); }
+  .ct-proof__head h2 { font-size: clamp(3rem, 6.5vw, 6.5rem); }
+
+  /* ---------- Platforms: useful, deliberately last and secondary ---------- */
+  .ct-platforms { padding-block: clamp(2.25rem, 4vw, 3.5rem); border-top: 1px solid var(--line); background: var(--paper-bright); }
+  .ct-platforms__row { display: grid; grid-template-columns: auto minmax(16rem, 1fr) auto; align-items: baseline; gap: 1rem clamp(1.5rem, 4vw, 4rem); }
   .ct-platforms__tag { margin: 0; font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .ct-platforms__note { max-width: 32rem; margin: 0; color: var(--ink-soft); font-size: .82rem; line-height: 1.55; }
   .ct-platforms__list { display: flex; flex-wrap: wrap; gap: .5rem clamp(1rem, 2.4vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
   .ct-platforms__list a {
     font-family: var(--mono);
@@ -376,33 +358,6 @@ const faqs = [
   }
   .ct-platforms__list a:hover { color: var(--signal); border-color: var(--signal); }
 
-  @media (max-width: 860px) {
-    .ct-direct__top { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
-  }
-  .ct-direct .label { margin: 0 0 1rem; color: var(--muted); }
-  /* Hover keeps the text in ink and moves the orange to the underline:
-     signal is 3.36:1 on paper, fine for a rule but short of the 4.5:1
-     small text needs. */
-  .ct-direct__business { display: grid; gap: .4rem; }
-  .ct-direct__business strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.25; }
-  .ct-direct__business span { color: var(--muted); font-family: var(--mono); font-size: .72rem; line-height: 1.65; }
-
-  /* Platform names on hairlines. Text first, arrow second — a missing icon can
-     never leave the row unreadable. */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 2.9rem;
-    padding: .5rem .1rem;
-    color: var(--ink-soft);
-    font-family: var(--mono);
-    font-size: .72rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    transition: color .18s var(--ease);
-  }
-
   /* ---------- FAQ ---------- */
   .ct-faq { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(2rem, 5vw, 5rem); padding-block: clamp(4rem, 7vw, 7rem); border-top: 1px solid var(--line); }
   .ct-faq__head h2 { margin-top: 1.75rem; font-size: clamp(2rem, 3.6vw, 3.4rem); }
@@ -415,32 +370,36 @@ const faqs = [
 
   /* ---------- Responsive ---------- */
   @media (max-width: 1199px) {
-    /* Trust moves ABOVE the form rather than below it: the point of the rail
-       is to reduce risk before the ask, so it never falls past it. */
     .ct-brief__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
-    .ct-brief__vouch { grid-column: 1 / -1; grid-row: 1; }
-    .ct-brief__vouch :global(.vouch ul) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(1rem, 3vw, 2.5rem); }
-    .ct-brief__intro { grid-column: 1; grid-row: 2; }
-    .ct-brief__form { grid-column: 2; grid-row: 2; }
+    .ct-platforms__row { grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr); }
+    .ct-platforms__list { grid-column: 1 / -1; }
   }
 
   @media (max-width: 900px) {
     .ct-hero__grid,
     .ct-brief__grid,
-    .ct-workspace__grid,
-    .ct-direct__grid,
+    .ct-direct__composition,
+    .ct-business__grid,
+    .ct-proof__head,
+    .ct-platforms__row,
     .ct-faq { grid-template-columns: minmax(0, 1fr); }
     .ct-hero__aside { max-width: 38rem; }
-    .ct-brief__vouch { grid-column: 1; grid-row: 1; }
-    .ct-brief__intro { grid-column: 1; grid-row: 2; }
-    .ct-brief__form { grid-column: 1; grid-row: 3; }
-    .ct-workspace__grid > * { min-width: 0; }
+    .ct-brief__intro, .ct-brief__form { grid-column: 1; }
+    .ct-workspace__figure { width: calc(100% + var(--gutter)); margin-left: 0; }
+    .ct-workspace__figure figcaption { position: static; width: min(100%, 34rem); margin: 1.5rem 0 0; }
+    .ct-workspace__figure figcaption > span:nth-child(2) { color: var(--ink-soft); }
+    .ct-workspace__figure figcaption strong { border-top-color: var(--line); color: var(--muted); }
+    .ct-platforms__list { grid-column: 1; }
   }
 
   @media (max-width: 560px) {
     .ct-hero { min-height: 0; padding-top: calc(var(--header-h) + 3.5rem); }
     .ct-hero__title { font-size: clamp(2.4rem, 11vw, 3.4rem); }
-    .ct-brief__vouch :global(.vouch ul) { grid-template-columns: minmax(0, 1fr); }
-    .ct-direct__grid { gap: 2.25rem; }
+    .ct-direct__composition { gap: 2.25rem; }
+    .ct-reach__title { font-size: clamp(2.5rem, 12vw, 3.4rem); }
+    .ct-reach__value { font-size: 1.05rem; }
+    .ct-workspace__figure { width: calc(100% + var(--gutter) * 2); margin: 0 calc(var(--gutter) * -1); }
+    .ct-workspace__figure figcaption { width: auto; padding: 1.25rem var(--gutter) 0; }
+    .ct-signature { font-size: clamp(3rem, 16vw, 4.3rem); }
   }
 </style>

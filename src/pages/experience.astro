@@ -368,6 +368,8 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
      — orange as an indicator beside the name rather than colour on the name,
      so nothing that has to be read loses contrast. */
   .ex-capability {
+    grid-column: 1 / -1;
+    grid-row: 3;
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     gap: clamp(2rem, 5vw, 4.5rem);
@@ -452,6 +454,7 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
     .synthesis__grid { grid-template-columns: minmax(0, 1fr); }
     .synthesis__title, .synthesis__line { grid-column: 1; }
     .synthesis__line { grid-row: 3; max-width: 38rem; margin-top: 1.75rem; }
+    .ex-capability { grid-row: 4; }
     .synthesis__facts { grid-row: 4; }
   }
 
