@@ -33,6 +33,18 @@ const email = 'soufiane.aberbach@gmail.com';
 {turnstileKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
 
 <div class="brief-form">
+  {/* Once Turnstile is live the server requires a token, which only the page's
+      script can produce — so a visitor without JavaScript is given the direct
+      route rather than a form that would be rejected. Invisible to everyone
+      else, and the form below is visually unchanged. */}
+  <noscript>
+    <p class="bf__noscript">
+      This form needs JavaScript for its spam check. Email the brief straight to
+      <a href={`mailto:${email}`}>{email}</a> instead — a sketch, a reference, a
+      fit issue or a production question is enough to begin.
+    </p>
+  </noscript>
+
   <form
     class="bf"
     method="POST"
@@ -288,6 +300,17 @@ const email = 'soufiane.aberbach@gmail.com';
   .bf__done h3 { margin: 1.1rem 0 1.5rem; font-size: clamp(1.8rem, 3.2vw, 2.8rem); }
   .bf__done h3:focus-visible { outline: 2px solid var(--signal); outline-offset: 6px; }
   .bf__done p { max-width: 34rem; margin: 0; color: var(--ink-soft); line-height: 1.7; }
+  .bf__noscript {
+    margin: 0 0 1.75rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--line-strong);
+    background: var(--paper-bright);
+    color: var(--ink-soft);
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+  .bf__noscript a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+
   .bf__done-ref { margin-top: 1.5rem !important; color: var(--muted) !important; font-family: var(--mono); font-size: .72rem; }
 
   @media (max-width: 560px) {

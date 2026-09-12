@@ -59,9 +59,9 @@ const processors = [
       <section class="pv__block" data-reveal>
         <h2 class="pv__h">Why it is collected</h2>
         <p>
-          Only to receive, assess and respond to development enquiries. It is not
-          used for marketing, it is not sold, and there is no analytics or tracking
-          on this site.
+          Only to receive, assess and respond to development enquiries. It is not used
+          for marketing and it is not sold. No advertising trackers or analytics scripts
+          are implemented in the site code.
         </p>
       </section>
 
@@ -79,10 +79,10 @@ const processors = [
         <p>
           A submitted brief is kept for <strong>{RETENTION_DAYS} days</strong> and then
           expires automatically from storage. If a brief could not be emailed on, a short
-          record noting that expires on the same schedule. Nothing beyond the brief itself
-          is stored: no IP address, no location and no browser details. The spam throttle
-          keeps a truncated one-way hash of the sending IP address for one hour, never the
-          address itself.
+          record noting that expires on the same schedule. The stored brief record does not
+          include the sender&rsquo;s IP address, location or browser details. For rate
+          limiting, the Worker keeps a truncated hash derived from the IP address for up to
+          one hour.
         </p>
       </section>
 

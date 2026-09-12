@@ -270,13 +270,16 @@ const brandLogos = [
        playback has begun, which is the one moment it cannot reset currentTime —
        the bug that used to restart the video mid-scroll. The observer
        disconnects immediately, so scrolling past again changes nothing. */
-    const deferredSource = simulationVideo.querySelector('source[data-src]');
+    /* Under reduced motion the video never plays, so the source is never
+       attached and the 3.5 MB file is never fetched. The poster carries the
+       section on its own. */
+    const deferredSource = reduceMotion ? null : simulationVideo.querySelector('source[data-src]');
     if (deferredSource) {
       const attach = () => {
         deferredSource.src = deferredSource.dataset.src;
         deferredSource.removeAttribute('data-src');
         simulationVideo.load();
-        if (!reduceMotion) simulationVideo.play().catch(() => {});
+        simulationVideo.play().catch(() => {});
       };
       if ('IntersectionObserver' in window) {
         const warm = new IntersectionObserver((entries) => {
