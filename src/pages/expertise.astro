@@ -213,7 +213,9 @@ const systems = [
     transition: color .25s var(--ease);
   }
   .ex-index a:last-child { border-right: 0; }
-  .ex-index a span { color: var(--signal); }
+  /* Small mono on paper fails 4.5:1 in signal; orange stays on the rules,
+     indicators and large accent words. */
+  .ex-index a span { color: var(--muted); }
   .ex-index a:hover { color: var(--signal); }
 
   /* ---------- CONTROL STACK ---------- */
@@ -222,7 +224,7 @@ const systems = [
 
   .ch { padding-block: clamp(3.5rem, 6vw, 6rem); border-top: 1px solid var(--line); }
   .ch:first-child { border-top: 0; padding-top: 0; }
-  .ch__tag { color: var(--signal); }
+  .ch__tag { color: var(--muted); }
   .ch__q { max-width: 30ch; margin: 1.5rem 0 0; font-size: clamp(2.3rem, 5.4vw, 4.6rem); }
   .ch__meaning { max-width: 42rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: clamp(1rem, 1.15vw, 1.12rem); line-height: 1.7; }
   .ch__visual { margin-top: clamp(2rem, 3.5vw, 3rem); }

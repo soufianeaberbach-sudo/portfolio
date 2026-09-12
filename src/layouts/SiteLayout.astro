@@ -1,6 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { profiles } from '../components/SocialLinks.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -27,6 +28,40 @@ const {
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const socialImageURL = new URL('/soufiane-drawing.png', Astro.site ?? Astro.url.origin);
+const origin = (Astro.site ?? new URL(Astro.url.origin)).origin;
+
+/* Structured data, emitted once on the home page. Every value here is already
+   stated somewhere on the site: the name, the current job title, the city, the
+   four public profile links. Deliberately absent: registration or tax numbers,
+   any street address, client or brand relationships, and the working languages
+   — that last one is published but not yet verified, and structured data is a
+   machine-readable claim, so it stays out until it is. */
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${origin}/#soufiane`,
+      name: 'Soufiane Aberbach',
+      url: origin + '/',
+      image: socialImageURL.href,
+      jobTitle: 'Senior Fashion Designer & Product Developer',
+      address: { '@type': 'PostalAddress', addressLocality: 'Tangier', addressCountry: 'MA' },
+      sameAs: profiles.map((profile) => profile.href),
+    },
+    {
+      '@type': 'ProfessionalService',
+      '@id': `${origin}/#service`,
+      name: 'Soufiane Aberbach — Fashion Product Development',
+      url: origin + '/',
+      description:
+        'Fashion product development: pattern construction, fit validation, grading, technical documentation and pre-production handoff.',
+      areaServed: 'Worldwide',
+      provider: { '@id': `${origin}/#soufiane` },
+      address: { '@type': 'PostalAddress', addressLocality: 'Tangier', addressCountry: 'MA' },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -59,6 +94,9 @@ const socialImageURL = new URL('/soufiane-drawing.png', Astro.site ?? Astro.url.
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    {page === 'home' && (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+    )}
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
