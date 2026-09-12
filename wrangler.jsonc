@@ -23,10 +23,18 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    // Destination and verified sender for submitted briefs. BRIEF_FROM must be
-    // on a domain verified with the email provider or mail will be rejected.
+    // Where briefs are delivered. This is the public contact address and is
+    // deliberately unchanged by the domain migration — it is a Gmail mailbox,
+    // not a website URL, and it is the same address shown on /contact/, in the
+    // no-JavaScript fallback and in every mailto link.
     "BRIEF_TO": "soufiane.aberbach@gmail.com",
-    "BRIEF_FROM": "brief@soufianeaberbach.com",
+    // Transactional sender identity. NOT a mailbox anyone writes to, and not
+    // the public address: Resend requires the From domain to be one it has
+    // verified, and a gmail.com sender cannot be verified by a third-party
+    // relay. NOT YET VERIFIED — aberbach.co has to be added as a sending
+    // domain in Resend and the records Resend itself generates added to DNS
+    // before any mail will leave. See docs/DOMAIN-MIGRATION.md.
+    "BRIEF_FROM": "brief@aberbach.co",
     // Hostnames a Turnstile solve may legitimately come from, comma-separated.
     // NOT a secret — it is an allowlist, not a credential. Checked against the
     // hostname siteverify reports, so a token minted on a copy of this page
@@ -35,7 +43,17 @@
     // skipping the check. Loopback names are never accepted, whatever is
     // listed here. Add any additional production hostname that serves the
     // Contact page to this list, or its visitors cannot submit.
-    "TURNSTILE_HOSTNAMES": "soufianeaberbach.com,www.soufianeaberbach.com"
+    //
+    // www is listed alongside the apex on purpose, as migration insurance.
+    // The canonical host is the apex and www 301s to it, so in normal
+    // operation a widget is only ever solved on aberbach.co and www never
+    // appears here. But if the www redirect is mis-set or briefly missing, a
+    // visitor could reach the Contact page on www — and with www absent from
+    // this list the Worker would fail closed and refuse their brief. Keeping
+    // both costs nothing: neither host is a third party, and the allowlist
+    // still refuses every other hostname on earth. Narrow to the apex alone
+    // once the redirect has been verified stable in production.
+    "TURNSTILE_HOSTNAMES": "aberbach.co,www.aberbach.co"
   }
   // ── ACTIVATION ───────────────────────────────────────────────────────────
   // The form declines briefs until 1-3 below exist. Verified against the
@@ -68,6 +86,12 @@
   //    BRIEF_FROM above must be on a domain verified in Resend, or Resend
   //    rejects the send. The brief still survives: it is already in KV and an
   //    undelivered:<reference> record is written alongside it.
+  //
+  //    aberbach.co IS NOT VERIFIED YET. Add it as a sending domain in Resend,
+  //    then add the DNS records Resend generates for it — they are per-domain
+  //    values and must be copied from the dashboard, never guessed — and wait
+  //    for Resend to report the domain verified. BRIEF_TO is a Gmail mailbox
+  //    and needs no verification; only the sender does.
   //
   // 3. TURNSTILE — ACTIVATE BOTH HALVES TOGETHER OR NEITHER.
   //

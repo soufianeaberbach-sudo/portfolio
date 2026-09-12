@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "test:smoke": "node tests/smoke.mjs",
-    "test:worker": "node tests/worker.mjs"
+    "test:worker": "node tests/worker.mjs",
+    "test:domain": "node tests/domain.mjs"
   },
   "devDependencies": {
     "astro": "^5.16.6",

@@ -3,7 +3,7 @@ const routes = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', 
 export const prerender = true;
 
 export function GET({ site }: { site?: URL }) {
-  const origin = site ?? new URL('https://soufianeaberbach.com');
+  const origin = site ?? new URL('https://aberbach.co');
   const urls = routes
     .map((route) => `  <url><loc>${new URL(route, origin)}</loc></url>`)
     .join('\n');

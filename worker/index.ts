@@ -478,9 +478,43 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   return json(200, { ok: true, id });
 }
 
+/* www -> apex, as a SECOND line of defence only.
+ *
+ * The canonical host is the apex, aberbach.co, and www must never be
+ * independently indexable. The authoritative redirect is a Cloudflare Redirect
+ * Rule, which runs at the edge before this Worker is invoked — see
+ * docs/DOMAIN-MIGRATION.md. This exists because that rule lives in a dashboard
+ * and nothing in the repository can prove it is still there; if it is ever
+ * removed or mis-scoped, this catches the request instead of serving the site
+ * on a second indexable hostname.
+ *
+ * It only helps when www actually reaches the Worker, so it does not replace
+ * the DNS record or the rule. It cannot loop: the target never starts with
+ * `www.`, so a redirected request does not match again.
+ *
+ * /api/* is deliberately NOT redirected. Browsers downgrade a 301 on a POST to
+ * a GET and drop the body, so redirecting the endpoint could silently discard
+ * a brief. In practice the form is only ever served from the apex — the page
+ * GET is redirected long before the form exists — so an API request on www
+ * should not occur; if one does, it is handled normally and the existing origin
+ * check still applies. */
+function redirectToApex(url: URL): Response | null {
+  if (!url.hostname.startsWith('www.')) return null;
+  if (url.pathname === '/api/brief' || url.pathname.startsWith('/api/')) return null;
+  const target = new URL(url.href);
+  target.hostname = url.hostname.slice(4);
+  /* 301: permanent, so search engines transfer the apex's authority rather
+     than keeping both hosts. Path and query are preserved by construction. */
+  return Response.redirect(target.href, 301);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+
+    const apexRedirect = redirectToApex(url);
+    if (apexRedirect) return apexRedirect;
+
     const isApi = url.pathname === '/api/brief';
 
     if (isApi) {

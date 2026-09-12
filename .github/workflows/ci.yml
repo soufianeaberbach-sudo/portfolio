@@ -34,6 +34,13 @@ jobs:
       - name: Worker backend tests
         run: npm run test:worker
 
+      # Fails if the old website domain reappears in source or in the built
+      # output — canonical, og:url, structured data, sitemap, robots or the
+      # Turnstile hostname allowlist. Also asserts the public contact address
+      # is still present, and that no locale route or tracker has crept in.
+      - name: Domain and canonical guard
+        run: npm run test:domain
+
       # Uses the Playwright pinned in devDependencies, so the browser build
       # always matches the package the tests import. No temporary npx package.
       - name: Install Chromium for Playwright
