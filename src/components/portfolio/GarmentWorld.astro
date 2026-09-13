@@ -1,0 +1,222 @@
+---
+/* One garment world (Womenswear or Menswear).
+ *
+ * Everything here is server-rendered: every category, every project figure and
+ * every project's text. The browser script only windows and positions what is
+ * already in the document, so a failed script leaves a readable page rather
+ * than an empty shell.
+ */
+import type { GarmentWorld } from '../../data/portfolio';
+import Arrow from '../Arrow.astro';
+
+interface Props {
+  world: GarmentWorld;
+}
+
+const { world } = Astro.props;
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+const hasProjects = world.categories.some((category) => category.projects.length > 0);
+---
+
+<section class="pf-world" id={world.id} data-world={world.id} tabindex="-1" aria-labelledby={`${world.id}-title`}>
+  <div class="pf-world__bar">
+    <a class="pf-world__back" href="#portfolio-index" data-world-close>
+      <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+    </a>
+    <p class="label pf-world__tag"><b>{world.number}</b> {world.title}</p>
+  </div>
+
+  <header class="pf-world__head">
+    <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
+    <p class="pf-world__descriptor">{world.descriptor}</p>
+  </header>
+
+  {hasProjects ? (
+    <>
+      {/* Numbers, type and a rule. No pills, no tabs, no boxes. */}
+      <nav class="pf-cats" aria-label={`${world.title} categories`}>
+        <ul>
+          {world.categories.map((category, index) => (
+            <li>
+              <button
+                type="button"
+                class="pf-cat"
+                data-category={category.id}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >
+                <i class="pf-cat__num">{category.number}</i>
+                <span class="pf-cat__label">{category.label}</span>
+                <small class="pf-cat__count">{category.projects.length}</small>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="pf-panels">
+        {world.categories.map((category, categoryIndex) => (
+          <div
+            class="pf-panel"
+            data-panel={category.id}
+            data-count={category.projects.length}
+            hidden={categoryIndex !== 0}
+          >
+            <p class="pf-panel__blurb">{category.blurb}</p>
+
+            <div class="pf-viewer">
+              {/* ---- the depth queue. Active project is the FIRST child. ---- */}
+              <div class="pf-stage" data-stage tabindex="0" role="group"
+                   aria-label={`${category.label} projects. Use the left and right arrow keys, or drag, to move through them.`}>
+                <ol class="pf-stack" data-stack>
+                  {category.projects.map((project, index) => (
+                    <li class="pf-slot" data-slot={index} data-project={project.id}>
+                      <figure class="pf-slot__figure">
+                        <img
+                          src={project.finalGarmentImage.src}
+                          srcset={project.finalGarmentImage.srcset}
+                          sizes="(max-width: 760px) 50vw, 30vw"
+                          width={project.finalGarmentImage.width}
+                          height={project.finalGarmentImage.height}
+                          alt={project.finalGarmentImage.alt}
+                          loading={categoryIndex === 0 && index === 0 ? 'eager' : 'lazy'}
+                          decoding="async"
+                        />
+                        <figcaption class="label pf-slot__caption">Project {pad(index)}</figcaption>
+                      </figure>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* ---- project profile + development evidence ---- */}
+              <div class="pf-info" data-info>
+                <div class="pf-info__nav">
+                  <button type="button" class="pf-step" data-step="-1" aria-label="Previous project">
+                    <Arrow dir="left" />
+                  </button>
+                  <p class="label pf-info__counter" aria-live="polite">
+                    <span data-counter-current>Project 01</span>
+                    <i>/ {String(category.projects.length).padStart(2, '0')}</i>
+                  </p>
+                  <button type="button" class="pf-step" data-step="1" aria-label="Next project">
+                    <Arrow dir="right" />
+                  </button>
+                </div>
+
+                {category.projects.map((project, index) => (
+                  <article class="pf-project" data-project-info={index} hidden={index !== 0}>
+                    <p class="label pf-project__number">Project {pad(index)}</p>
+                    <h3 class="pf-project__title">{project.title}</h3>
+
+                    <dl class="pf-project__profile">
+                      <div>
+                        <dt>Garment</dt>
+                        <dd>{project.garmentType}</dd>
+                      </div>
+                      <div>
+                        <dt>Fabric family</dt>
+                        <dd>{project.fabricFamily}</dd>
+                      </div>
+                      {/* Rendered only when a verified list exists. No row is
+                          printed with UNKNOWN, N/A or a placeholder. */}
+                      {project.materials && project.materials.length > 0 && (
+                        <div>
+                          <dt>Materials</dt>
+                          <dd>{project.materials.join(' / ')}</dd>
+                        </div>
+                      )}
+                    </dl>
+
+                    <p class="pf-project__description">{project.description}</p>
+
+                    {project.tags && project.tags.length > 0 && (
+                      <p class="pf-project__tags label">
+                        {project.tags.map((tag, tagIndex) => (
+                          <>{tagIndex > 0 && <i aria-hidden="true"> / </i>}<span>{tag}</span></>
+                        ))}
+                      </p>
+                    )}
+
+                    {/* ---- DEVELOPMENT EVIDENCE ------------------------------
+                        Three stages, never four: the large image on the left is
+                        already the finished garment, so repeating it here as a
+                        fourth thumbnail would be padding.
+
+                        When a stage has a real asset it renders as a visual.
+                        When it does not — which is every project in this
+                        repository today — the strip degrades to the same three
+                        stages as type on a rule. That states the method, which
+                        is true, without standing an unrelated image in for work
+                        that has not been photographed. */}
+                    {(() => {
+                      const stages = [
+                        { key: 'sketch' as const, step: '01', name: 'Sketch' },
+                        { key: 'pattern' as const, step: '02', name: '2D Pattern' },
+                        { key: 'simulation' as const, step: '03', name: '3D Simulation' },
+                      ];
+                      const withAsset = stages.filter((stage) => project.evidence[stage.key]);
+                      const illustrated = withAsset.length > 0;
+                      return (
+                        <section class={`pf-evidence${illustrated ? '' : ' pf-evidence--type'}`} aria-label="Development stages">
+                          <p class="label pf-evidence__head">Development</p>
+                          <ol class="pf-evidence__strip">
+                            {stages.map((stage, stageIndex) => {
+                              const asset = project.evidence[stage.key];
+                              return (
+                                <li class="pf-evidence__item" data-has-asset={asset ? 'true' : 'false'}>
+                                  {stageIndex > 0 && <i class="pf-evidence__arrow" aria-hidden="true"><Arrow dir="right" /></i>}
+                                  {illustrated && (
+                                    <span class="pf-evidence__plate">
+                                      {asset ? (
+                                        <img
+                                          src={asset.image.src}
+                                          srcset={asset.image.srcset}
+                                          sizes="(max-width: 760px) 30vw, 12vw"
+                                          width={asset.image.width}
+                                          height={asset.image.height}
+                                          alt={asset.image.alt}
+                                          loading="lazy"
+                                          decoding="async"
+                                        />
+                                      ) : null}
+                                    </span>
+                                  )}
+                                  <b class="label pf-evidence__step">{stage.step}</b>
+                                  <span class="pf-evidence__name">{stage.name}</span>
+                                </li>
+                              );
+                            })}
+                          </ol>
+                          <p class="pf-evidence__result">
+                            <i aria-hidden="true"><Arrow dir="right" /></i> Final garment — the leading image
+                          </p>
+                        </section>
+                      );
+                    })()}
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  ) : (
+    /* Menswear. The four categories are the approved architecture; the
+       photography does not exist in this repository yet. Saying that is the
+       only honest option — the alternative is relabelling womenswear. */
+    <div class="pf-empty">
+      <p class="pf-empty__lead">The menswear architecture is in place. The photography is not published here yet.</p>
+      <ol class="pf-empty__list">
+        {world.categories.map((category) => (
+          <li>
+            <i class="label">{category.number}</i>
+            <span>{category.label}</span>
+            <small>{category.blurb}</small>
+          </li>
+        ))}
+      </ol>
+      <a class="button" href="/contact/">Ask for menswear references <span><Arrow /></span></a>
+    </div>
+  )}
+</section>

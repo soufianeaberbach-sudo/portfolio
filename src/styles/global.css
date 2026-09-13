@@ -220,7 +220,6 @@ button { color: inherit; }
 }
 .site-header.is-hidden { transform: translateY(-101%); }
 
-html[data-page='portfolio'] .site-header:not(.is-scrolled),
 html[data-page='contact'] .site-header:not(.is-scrolled) {
   color: var(--paper);
 }
@@ -449,7 +448,6 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
-  html[data-page='portfolio'] .site-header:not(.is-scrolled),
   html[data-page='contact'] .site-header:not(.is-scrolled) {
     background: var(--ink);
     border-bottom-color: #393933;

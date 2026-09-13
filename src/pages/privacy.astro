@@ -25,7 +25,16 @@ const collected = [
 const processors = [
   ['Site hosting and storage', 'Cloudflare. The brief is stored there first so nothing is lost in transit. An uploaded file is stored separately in Cloudflare R2, in a private bucket.'],
   ['Email delivery', 'Resend passes the brief to Soufiane’s inbox.'],
-  ['Spam check', 'Cloudflare Turnstile, when enabled. It loads a script from Cloudflare and is the only third-party script on this site.'],
+  ['Spam check', 'Cloudflare Turnstile, when enabled. It loads a script from Cloudflare.'],
+  /* Portfolio V6 added a click-to-load player to the 3D Simulation section.
+     Nothing about it runs before a visitor presses play, and every session
+     published today is hosted on this domain — so no third party is contacted
+     by simply opening the page. The YouTube sentence is written as the
+     conditional it is, rather than as a claim that a YouTube player exists
+     now. It replaces an absolute "the only third-party script on this site",
+     which was true when written but would have quietly stopped being true the
+     first time a YouTube id was added to the portfolio data. */
+  ['Embedded video', 'Nothing loads until you press play on a session in the Portfolio. The sessions published today are served from this domain. If a session is ever hosted on YouTube, pressing play loads a player from youtube-nocookie.com at that moment — and not before.'],
 ];
 ---
 

@@ -129,8 +129,143 @@ try {
     await c.close();
   }
 
-  // ---- portfolio modal: focus trapped, background inert, Escape restores focus
-  console.log('\nportfolio collection overlay');
+  /* ------------------------------------------------------------------------
+     PORTFOLIO V6
+
+     The block this replaces tested the V5 collection overlay by its own
+     selectors ([data-collection-overlay], #collection-scrubber, the "Look 01"
+     runway). V6 removed that UI, so those selectors cannot be asserted on any
+     more. Every invariant they protected is re-asserted below against the new
+     architecture — overlay opens, background inert, focus starts inside and is
+     trapped both ways, Escape closes, inert is released, focus returns to the
+     opening control, keyboard drives the queue, reduced motion settles
+     instantly — and the index-bounds assertion the scrubber used to carry is
+     now made directly against the queue's own bounds and its prev/next
+     disabled states.
+     ------------------------------------------------------------------------ */
+  const openWomenswear = async (p) => {
+    await p.evaluate(() => {
+      const link = document.querySelector('[data-chapter="womenswear"]');
+      link.id = 'smoke-trigger';
+      link.click();
+    });
+    await p.waitForTimeout(900);
+  };
+
+  // ---- structure: four worlds, approved taxonomy, nothing invented
+  console.log('\nportfolio architecture');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(500);
+
+    const worlds = await p.evaluate(() => [...document.querySelectorAll('[data-world]')].map((e) => e.dataset.world));
+    check('exactly four top-level worlds', worlds.length === 4, worlds.join(','));
+    for (const id of ['womenswear', 'menswear', 'tech-packs', '3d-simulation']) {
+      check(`world "${id}" exists`, worlds.includes(id));
+    }
+
+    const chapters = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].map((e) => e.dataset.chapter));
+    check('four chapters in the landing index', chapters.length === 4, chapters.join(','));
+
+    // The landing must not be four cards / tiles / boxes.
+    const cardish = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].filter((el) => {
+      const s = getComputedStyle(el);
+      const framed = s.borderTopWidth !== '0px' && s.borderLeftWidth !== '0px' && s.borderRightWidth !== '0px';
+      const filled = s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundImage === 'none';
+      return framed || filled || s.borderRadius !== '0px';
+    }).length);
+    check('chapters are editorial entries, not cards', cardish === 0, `${cardish} boxed`);
+
+    const cats = await p.evaluate(() => ({
+      women: [...document.querySelectorAll('[data-world="womenswear"] .pf-cat__label')].map((e) => e.textContent.trim()),
+      men: [...document.querySelectorAll('[data-world="menswear"] .pf-empty__list span')].map((e) => e.textContent.trim()),
+    }));
+    const approvedWomen = [
+      'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
+      'Evening & Occasionwear', 'Swimwear & Resortwear',
+    ];
+    const approvedMen = [
+      'Streetwear & Casualwear', 'Activewear & Performance',
+      'Contemporary Ready-to-Wear', 'Tailoring & Outerwear',
+    ];
+    check('womenswear categories match the approved order',
+      JSON.stringify(cats.women) === JSON.stringify(approvedWomen), cats.women.join(' | '));
+    check('menswear categories match the approved order',
+      JSON.stringify(cats.men) === JSON.stringify(approvedMen), cats.men.join(' | '));
+
+    // Jersey / Woven are cloth, not markets: they may appear as fabric family
+    // metadata but never as a category heading.
+    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-cat__label, .pf-chapter__title')]
+      .map((e) => e.textContent.trim().toLowerCase())
+      .filter((t) => t === 'jersey' || t === 'woven' || t === 'jersey & knit' || t === 'sport' || t === 'evening dresses'));
+    check('no jersey/woven/sport top-level taxonomy', badTaxonomy.length === 0, badTaxonomy.join(','));
+
+    const looks = await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length);
+    check('no "Look 01" UI anywhere', looks === 0, `${looks} occurrences`);
+
+    // Tech packs and 3D simulation are their own worlds, never entries in the
+    // garment queue.
+    const bleed = await p.evaluate(() => ({
+      pdfInQueue: document.querySelectorAll('.pf-slot a[href$=".pdf"], .pf-slot iframe, .pf-slot video').length,
+      mediaInQueue: document.querySelectorAll('.pf-stack video, .pf-stack iframe').length,
+      sessionsOutsideMotion: [...document.querySelectorAll('[data-session]')]
+        .filter((e) => e.closest('[data-world]')?.dataset.world !== '3d-simulation').length,
+      docsOutsideDocs: [...document.querySelectorAll('.pf-sheet, .pf-dossier')]
+        .filter((e) => e.closest('[data-world]')?.dataset.world !== 'tech-packs').length,
+    }));
+    check('no documents or video inside the garment queue', bleed.pdfInQueue === 0 && bleed.mediaInQueue === 0);
+    check('simulation sessions live only in the 3D world', bleed.sessionsOutsideMotion === 0);
+    check('tech pack documents live only in the Tech Packs world', bleed.docsOutsideDocs === 0);
+
+    // Nothing must reach YouTube before an explicit play.
+    const youtube = await p.evaluate(() => ({
+      iframes: document.querySelectorAll('iframe').length,
+      ytRefs: document.documentElement.innerHTML.includes('youtube.com/embed'),
+      videos: document.querySelectorAll('video[src]').length,
+    }));
+    check('no iframe exists before play', youtube.iframes === 0, String(youtube.iframes));
+    check('no YouTube embed URL in the served markup', youtube.ytRefs === false);
+    check('no video carries a src before play', youtube.videos === 0, String(youtube.videos));
+
+    // Missing content is omitted, never printed as a placeholder.
+    const placeholders = await p.evaluate(() => (document.body.innerText.match(/\b(UNKNOWN|N\/A|TODO|LOREM|TBD)\b/gi) ?? []));
+    check('no UNKNOWN / N-A / TODO on the public UI', placeholders.length === 0, placeholders.join(','));
+
+    /* A coloured rule directly under words reads as a spell-check mark. The
+       device is banned from the visual language, so it is fenced off here the
+       way it already is on Contact: walk every resting computed style in the
+       portfolio and fail on any signal-coloured underline or inset bottom
+       rule. Hover states are exempt by construction — nothing is hovered. */
+    const underlines = await p.evaluate(() => {
+      const signal = getComputedStyle(document.documentElement).getPropertyValue('--signal').trim();
+      const toRgb = (hex) => {
+        const h = hex.replace('#', '');
+        return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)})`;
+      };
+      const target = toRgb(signal);
+      const bad = [];
+      for (const el of document.querySelectorAll('.pf *')) {
+        if (!el.textContent.trim()) continue;
+        const s = getComputedStyle(el);
+        if (s.textDecorationLine.includes('underline') && s.textDecorationColor === target) {
+          bad.push(`${el.className} text-decoration`);
+        }
+        if (s.borderBottomStyle !== 'none' && s.borderBottomWidth !== '0px' && s.borderBottomColor === target) {
+          bad.push(`${el.className} border-bottom`);
+        }
+      }
+      return bad.slice(0, 5);
+    });
+    check('no orange underline sits beneath portfolio text at rest', underlines.length === 0, underlines.join(' | '));
+
+    await c.close();
+  }
+
+  // ---- overlay behaviour (migrated from the V5 collection overlay block)
+  console.log('\nportfolio world overlay');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
@@ -138,46 +273,185 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
 
-    await p.evaluate(() => { const b = document.querySelector('[data-category]'); b.id = 'smoke-trigger'; b.click(); });
-    await p.waitForTimeout(1100);
-    check('overlay opens', await p.evaluate(() => document.querySelector('[data-collection-overlay]').getAttribute('aria-hidden') === 'false'));
-    check('background is inert', await p.evaluate(() => !!document.querySelector('header[inert], main[inert], [inert]')));
-    check('focus starts inside the overlay', await p.evaluate(() => document.querySelector('[data-collection-overlay]').contains(document.activeElement)));
+    await openWomenswear(p);
+    const world = '[data-world="womenswear"]';
+    check('world opens', await p.evaluate((s) => document.querySelector(s).hasAttribute('data-open'), world));
+    check('background is inert', await p.evaluate(() => !!document.querySelector('[inert]')));
+    check('focus starts inside the world', await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world));
 
-    // Tab many times: focus must never leave the overlay
     let escaped = false;
     for (let i = 0; i < 24; i += 1) {
       await p.keyboard.press('Tab');
-      if (!(await p.evaluate(() => document.querySelector('[data-collection-overlay]').contains(document.activeElement)))) { escaped = true; break; }
+      if (!(await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world))) { escaped = true; break; }
     }
-    check('Tab never escapes the overlay', !escaped);
+    check('Tab never escapes the world', !escaped);
     for (let i = 0; i < 6; i += 1) await p.keyboard.press('Shift+Tab');
-    check('Shift+Tab never escapes the overlay', await p.evaluate(() => document.querySelector('[data-collection-overlay]').contains(document.activeElement)));
-
-    // scrubber maximum must be the last valid index, not one past it
-    const range = await p.evaluate(() => {
-      const s = document.querySelector('#collection-scrubber');
-      return { max: Number(s.max), count: window.__portfolioRunway?.getState?.().count ?? -1 };
-    });
-    check('scrubber max is count - 1', range.max === range.count - 1, `max ${range.max}, count ${range.count}`);
-
-    // arrow keys still drive the runway
-    await p.evaluate(() => document.querySelector('[data-runway-stage]').focus());
-    const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    await p.keyboard.press('ArrowRight');
-    await p.waitForTimeout(900);
-    const after = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    check('ArrowRight advances the runway', after !== before, `${before} -> ${after}`);
+    check('Shift+Tab never escapes the world', await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world));
 
     await p.keyboard.press('Escape');
-    await p.waitForTimeout(1100);
-    check('Escape closes the overlay', await p.evaluate(() => document.querySelector('[data-collection-overlay]').getAttribute('aria-hidden') === 'true'));
+    await p.waitForTimeout(700);
+    check('Escape closes the world', await p.evaluate((s) => !document.querySelector(s).hasAttribute('data-open'), world));
     check('background inert released', await p.evaluate(() => !document.querySelector('[inert]')));
-    check('focus restored to the opening button', await p.evaluate(() => document.activeElement?.id === 'smoke-trigger'), await p.evaluate(() => document.activeElement?.tagName ?? 'none'));
+    check('focus restored to the opening control',
+      await p.evaluate(() => document.activeElement?.id === 'smoke-trigger'),
+      await p.evaluate(() => document.activeElement?.id || document.activeElement?.tagName || 'none'));
+
     await c.close();
   }
 
-  // ---- reduced motion: no runway tween left running
+  // ---- the project queue: counts, leading position, keyboard, bounds
+  console.log('\nportfolio project queue');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(600);
+    await openWomenswear(p);
+
+    const desktop = await p.evaluate(() => window.__portfolioRunway.getState());
+    check('desktop shows five projects at once', desktop.visibleNow === 5, `visible ${desktop.visibleNow} of ${desktop.count}`);
+    check('desktop target slot count is five', desktop.visibleTarget === 5);
+    check('active project is the leftmost slot', desktop.activeIsLeftmost === true);
+
+    // Geometry: strictly decreasing width left to right, and every visible
+    // project fully inside the stage.
+    const geo = await p.evaluate(() => {
+      const stage = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
+      const slots = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot')]
+        .filter((s) => !s.hidden)
+        .map((s) => s.getBoundingClientRect())
+        .sort((a, b) => a.left - b.left);
+      return {
+        widths: slots.map((s) => Math.round(s.width)),
+        insideStage: slots.every((s) => s.left >= stage.left - 1 && s.right <= stage.right + 1),
+        activeWidest: slots[0].width === Math.max(...slots.map((s) => s.width)),
+        smallestWidth: Math.round(Math.min(...slots.map((s) => s.width))),
+      };
+    });
+    const decreasing = geo.widths.every((w, i) => i === 0 || w < geo.widths[i - 1]);
+    check('sizes decrease left to right', decreasing, geo.widths.join(' > '));
+    check('the leading project is the largest', geo.activeWidest);
+    check('every visible project is fully inside the stage', geo.insideStage);
+    check('the smallest project is still a readable silhouette', geo.smallestWidth >= 60, `${geo.smallestWidth}px`);
+
+    // contain, never cover: a head or a hem is never cropped off.
+    const fits = await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
+      .every((img) => getComputedStyle(img).objectFit === 'contain'));
+    check('garment images use object-fit: contain', fits);
+
+    // Keyboard alone must drive the queue.
+    await p.evaluate(() => document.querySelector('.pf-panel:not([hidden]) [data-stage]').focus());
+    const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    await p.keyboard.press('ArrowRight');
+    await p.waitForTimeout(650);
+    const after = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    check('ArrowRight advances the queue', after === before + 1, `${before} -> ${after}`);
+    await p.keyboard.press('ArrowLeft');
+    await p.waitForTimeout(650);
+    check('ArrowLeft steps back', await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === before);
+
+    // Bounds — the assertion the V5 scrubber's max used to carry.
+    const bounds = await p.evaluate(() => {
+      const api = window.__portfolioRunway;
+      const count = api.getState().count;
+      api.goTo(count + 50);
+      const high = api.getState().activeIndex;
+      const nextDisabled = document.querySelector('.pf-panel:not([hidden]) [data-step="1"]').disabled;
+      api.goTo(-50);
+      const low = api.getState().activeIndex;
+      const prevDisabled = document.querySelector('.pf-panel:not([hidden]) [data-step="-1"]').disabled;
+      return { count, high, low, nextDisabled, prevDisabled };
+    });
+    check('index never exceeds count - 1', bounds.high === bounds.count - 1, `${bounds.high} of ${bounds.count}`);
+    check('index never goes below zero', bounds.low === 0);
+    check('next is disabled on the last project', bounds.nextDisabled === true);
+    check('prev is disabled on the first project', bounds.prevDisabled === true);
+
+    // Drag must follow the hand: pointer right -> stack right.
+    await p.waitForTimeout(300);
+    const stageBox = await p.evaluate(() => {
+      const b = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
+      return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
+    });
+    await p.mouse.move(stageBox.x, stageBox.y);
+    await p.mouse.down();
+    await p.mouse.move(stageBox.x + 70, stageBox.y, { steps: 6 });
+    const dragRight = await p.evaluate(() => {
+      const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
+      return new DOMMatrix(getComputedStyle(stack).transform).m41;
+    });
+    await p.mouse.up();
+    await p.waitForTimeout(650);
+    check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
+
+    await p.mouse.move(stageBox.x, stageBox.y);
+    await p.mouse.down();
+    await p.mouse.move(stageBox.x - 70, stageBox.y, { steps: 6 });
+    const dragLeft = await p.evaluate(() => {
+      const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
+      return new DOMMatrix(getComputedStyle(stack).transform).m41;
+    });
+    const indexBeforeRelease = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    await p.mouse.up();
+    await p.waitForTimeout(700);
+    const indexAfterRelease = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    check('dragging left moves the stack left', dragLeft < 0, `translateX ${Math.round(dragLeft)}px`);
+    check('releasing a leftward drag advances the project',
+      indexAfterRelease === indexBeforeRelease + 1, `${indexBeforeRelease} -> ${indexAfterRelease}`);
+
+    // Project identity and the three-stage development strip.
+    const info = await p.evaluate(() => {
+      const article = document.querySelector('.pf-panel:not([hidden]) .pf-project:not([hidden])');
+      const steps = [...article.querySelectorAll('.pf-evidence__name')].map((e) => e.textContent.trim());
+      return {
+        number: article.querySelector('.pf-project__number').textContent.trim(),
+        title: article.querySelector('.pf-project__title').textContent.trim(),
+        rows: [...article.querySelectorAll('.pf-project__profile dt')].map((e) => e.textContent.trim()),
+        steps,
+        hasFinalRef: !!article.querySelector('.pf-evidence__result'),
+      };
+    });
+    check('projects are numbered "Project NN"', /^Project \d\d$/.test(info.number), info.number);
+    check('project has a factual title', info.title.length > 0 && !/look/i.test(info.title), info.title);
+    check('profile shows garment and fabric family', info.rows.includes('Garment') && info.rows.includes('Fabric family'), info.rows.join(','));
+    check('materials row is absent while unverified', !info.rows.includes('Materials'), info.rows.join(','));
+    check('evidence strip is exactly three stages',
+      JSON.stringify(info.steps) === JSON.stringify(['Sketch', '2D Pattern', '3D Simulation']), info.steps.join(' -> '));
+    check('final garment is referenced, not repeated as a fourth card', info.hasFinalRef);
+
+    await c.close();
+  }
+
+  // ---- mobile: three projects, still leading-left
+  console.log('\nportfolio queue at 390');
+  {
+    const c = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(700);
+    await openWomenswear(p);
+
+    const state = await p.evaluate(() => window.__portfolioRunway.getState());
+    check('mobile shows three projects at once', state.visibleNow === 3, `visible ${state.visibleNow}`);
+    check('mobile target slot count is three', state.visibleTarget === 3);
+    check('mobile active project is still leftmost', state.activeIsLeftmost === true);
+
+    const strip = await p.evaluate(() => {
+      const items = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-project:not([hidden]) .pf-evidence__item')];
+      const tops = items.map((e) => Math.round(e.getBoundingClientRect().top));
+      return { count: items.length, sameRow: new Set(tops).size === 1, minWidth: Math.round(Math.min(...items.map((e) => e.getBoundingClientRect().width))) };
+    });
+    check('all three development stages stay on one row at 390', strip.count === 3 && strip.sameRow, JSON.stringify(strip));
+    check('development stages are not postage stamps at 390', strip.minWidth >= 80, `${strip.minWidth}px`);
+
+    const overflow = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
+    check('no horizontal overflow at 390', overflow);
+    await c.close();
+  }
+
+  // ---- reduced motion: everything still reachable, nothing left mid-tween
   console.log('\nreduced motion');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
@@ -185,18 +459,75 @@ try {
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await p.evaluate(() => document.querySelector('[data-category]').click());
-    await p.waitForTimeout(500);
-    await p.evaluate(() => document.querySelector('[data-runway-stage]').focus());
+    await openWomenswear(p);
+
+    await p.evaluate(() => document.querySelector('.pf-panel:not([hidden]) [data-stage]').focus());
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(120);
-    const state = await p.evaluate(() => {
-      const s = window.__portfolioRunway.getState();
-      return { position: s.position, whole: Number.isInteger(s.position) };
+    const state = await p.evaluate(() => window.__portfolioRunway.getState());
+    check('queue settles instantly under reduced motion', Number.isInteger(state.position), `position ${state.position}`);
+    check('reduced motion still advances the project', state.activeIndex === 1, String(state.activeIndex));
+    check('reduced motion keeps five projects visible', state.visibleNow === 5, String(state.visibleNow));
+
+    const noTween = await p.evaluate(() => {
+      const slot = document.querySelector('.pf-panel:not([hidden]) .pf-slot');
+      return getComputedStyle(slot).transitionDuration === '0s';
     });
-    check('runway snaps instantly under reduced motion', state.whole, `position ${state.position}`);
+    check('no decorative transition left running', noTween);
+
     const revealed = await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1'));
     check('reveal blocks visible without scrolling', revealed);
+    await c.close();
+  }
+
+  // ---- click-to-load video: the player is created by the click, not the page
+  console.log('\n3D simulation player');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    const mediaRequests = [];
+    p.on('request', (r) => { if (/youtube|ytimg|googlevideo|\.mp4$/i.test(r.url())) mediaRequests.push(r.url()); });
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(800);
+    check('no video or YouTube request on page load', mediaRequests.length === 0, mediaRequests.join(','));
+
+    await p.evaluate(() => document.querySelector('[data-chapter="3d-simulation"]').click());
+    await p.waitForTimeout(700);
+    check('no player element before play',
+      await p.evaluate(() => document.querySelectorAll('[data-player] > *').length === 0));
+
+    await p.evaluate(() => document.querySelector('[data-session] [data-play]').click());
+    await p.waitForTimeout(600);
+    const played = await p.evaluate(() => {
+      const mount = document.querySelector('[data-player]');
+      return { children: mount.children.length, tag: mount.firstElementChild?.tagName ?? null, hidden: mount.hidden };
+    });
+    check('play creates the player', played.children === 1 && !played.hidden, JSON.stringify(played));
+    check('player is a real media element', played.tag === 'VIDEO' || played.tag === 'IFRAME', String(played.tag));
+    await c.close();
+  }
+
+  // ---- without JavaScript the work is still there
+  console.log('\nportfolio without JavaScript');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    const noJs = await p.evaluate === undefined ? null : await p.evaluate(() => 1).catch(() => null);
+    const html = await p.content();
+    check('all four worlds are in the served HTML',
+      ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
+    check('project titles are server-rendered', html.includes('Bias Satin Slip Dress'));
+    check('project descriptions are server-rendered', html.includes('Cut on the bias the cloth carries its own weight'));
+    const visible = await p.evaluate(() => {
+      const slots = [...document.querySelectorAll('.pf-slot')];
+      const shown = slots.filter((s) => s.getBoundingClientRect().width > 20);
+      return { total: slots.length, shown: shown.length };
+    });
+    check('garment images are laid out without the script', visible.shown > 5, `${visible.shown} of ${visible.total}`);
+    void noJs;
     await c.close();
   }
 

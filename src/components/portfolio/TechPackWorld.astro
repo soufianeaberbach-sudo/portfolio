@@ -1,0 +1,139 @@
+---
+/* Tech Packs — a document world, deliberately not a fashion world.
+ *
+ * Completely separate from the garment queue: no PDF is ever mixed into that
+ * carousel, and no garment photograph appears here.
+ *
+ * The repository currently contains no technical documents. Rather than
+ * drawing a convincing-looking dossier with invented measurements, sizes or
+ * BOM values, the world states what a tech pack from this desk contains and
+ * offers the real route to seeing one. Every scope line below is a description
+ * of the documentation method, not data from any specific document.
+ */
+import type { TechPack } from '../../data/portfolio';
+import Arrow from '../Arrow.astro';
+
+interface Props {
+  packs: TechPack[];
+}
+
+const { packs } = Astro.props;
+
+/* What a production pack from this desk is made of. These are section names,
+   not values — there is no fake grading increment or fabric consumption
+   anywhere on this page. */
+const contents = [
+  { number: '01', name: 'Technical flat', note: 'Front, back and any construction detail needing its own view.' },
+  { number: '02', name: 'Construction detail', note: 'Seam type, stitch class and finish, called out where it is not obvious.' },
+  { number: '03', name: 'Measurement chart', note: 'Points of measure defined so the factory and the client measure the same way.' },
+  { number: '04', name: 'Grading', note: 'Increments across the size range, with the rules that produced them.' },
+  { number: '05', name: 'Bill of materials', note: 'Every component, placement and quantity the garment consumes.' },
+  { number: '06', name: 'Label and packing', note: 'Care, content, placement and how the garment leaves the line.' },
+];
+---
+
+<section class="pf-world pf-world--docs" id="tech-packs" data-world="tech-packs" tabindex="-1" aria-labelledby="tech-packs-title">
+  <div class="pf-world__bar">
+    <a class="pf-world__back" href="#portfolio-index" data-world-close>
+      <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+    </a>
+    <p class="label pf-world__tag"><b>03</b> Tech Packs</p>
+  </div>
+
+  <header class="pf-world__head">
+    <h2 class="display" id="tech-packs-title">Tech Packs</h2>
+    <p class="pf-world__descriptor">Production-ready technical documentation — the document a factory can build from without calling to ask what was meant.</p>
+  </header>
+
+  <div class="pf-docs">
+    {/* ---- primary: the dossier stage --------------------------------- */}
+    <div class="pf-docs__stage">
+      {packs.length > 0 ? (
+        <>
+          {packs.map((pack, index) => (
+            <figure class="pf-dossier" data-dossier={pack.id} hidden={index !== 0}>
+              {pack.coverImage ? (
+                <img
+                  src={pack.coverImage.src}
+                  srcset={pack.coverImage.srcset}
+                  sizes="(max-width: 900px) 90vw, 46vw"
+                  width={pack.coverImage.width}
+                  height={pack.coverImage.height}
+                  alt={pack.coverImage.alt}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              ) : (
+                <span class="pf-dossier__blank" aria-hidden="true"></span>
+              )}
+              <figcaption>
+                <p class="label">{pack.category} / {pack.garmentType}</p>
+                <h3>{pack.title}</h3>
+                {/* The PDF is never fetched with the page. It is requested by
+                    this control and nothing else — one document at a time. */}
+                {pack.pdfUrl && (
+                  <a class="button button--signal pf-dossier__open" href={pack.pdfUrl} target="_blank" rel="noopener" data-open-pdf>
+                    View tech pack{pack.pageCount ? ` — ${pack.pageCount} pages` : ''} <span><Arrow /></span>
+                  </a>
+                )}
+              </figcaption>
+            </figure>
+          ))}
+        </>
+      ) : (
+        /* No invented document. A ruled sheet with no content drawn on it,
+           marked as what it is. */
+        <div class="pf-sheet" role="img" aria-label="An empty technical sheet: no document is published on this page.">
+          <div class="pf-sheet__head">
+            <span class="label">Technical dossier</span>
+            <span class="label">PDF</span>
+          </div>
+          <div class="pf-sheet__body" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="pf-sheet__foot">
+            <span class="label">Not published here</span>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* ---- secondary: index + what a pack contains --------------------- */}
+    <aside class="pf-docs__index">
+      {packs.length > 0 ? (
+        <>
+          <p class="label pf-docs__head">Documents</p>
+          <ol class="pf-docs__list">
+            {packs.map((pack, index) => (
+              <li>
+                <button type="button" class="pf-doc" data-doc={pack.id} aria-pressed={index === 0 ? 'true' : 'false'}>
+                  <i class="label">{String(index + 1).padStart(2, '0')}</i>
+                  <span>{pack.title}</span>
+                  <small>{pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount}pp` : ''}</small>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : (
+        <p class="pf-docs__note">
+          Technical packs are client-owned production documents, so they are not published on a public page.
+          A representative pack is shared directly on request.
+        </p>
+      )}
+
+      <p class="label pf-docs__head pf-docs__head--split">What a pack contains</p>
+      <ol class="pf-contents">
+        {contents.map((item) => (
+          <li>
+            <i class="label">{item.number}</i>
+            <span>{item.name}</span>
+            <small>{item.note}</small>
+          </li>
+        ))}
+      </ol>
+
+      <a class="button" href="/contact/">Request a sample pack <span><Arrow /></span></a>
+    </aside>
+  </div>
+</section>
