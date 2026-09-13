@@ -18,11 +18,12 @@ const collected = [
   ['Email address', 'The only way a reply can reach you.'],
   ['Where the product is now', 'One of five stages, so the first answer is useful.'],
   ['Your message', 'What needs solving.'],
-  ['A reference or file link', 'Optional. Only if you paste one.'],
+  ['An uploaded reference file', 'Optional. Only if you attach one — a PDF or an image.'],
+  ['A reference link', 'Optional. Only if you paste one.'],
 ];
 
 const processors = [
-  ['Site hosting and storage', 'Cloudflare. The brief is stored there first so nothing is lost in transit.'],
+  ['Site hosting and storage', 'Cloudflare. The brief is stored there first so nothing is lost in transit. An uploaded file is stored separately in Cloudflare R2, in a private bucket.'],
   ['Email delivery', 'Resend passes the brief to Soufiane’s inbox.'],
   ['Spam check', 'Cloudflare Turnstile, when enabled. It loads a script from Cloudflare and is the only third-party script on this site.'],
 ];
@@ -83,6 +84,14 @@ const processors = [
           include the sender&rsquo;s IP address, location or browser details. For rate
           limiting, the Worker keeps a truncated hash derived from the IP address for up to
           one hour.
+        </p>
+        <p>
+          A file you attach is kept on the same {RETENTION_DAYS}-day schedule and is stored
+          only so the enquiry can be answered. It is held in a private Cloudflare bucket
+          with a random name, is not placed on any public address, and there is no link to
+          it anywhere on this site &mdash; it is reachable only from Soufiane&rsquo;s own
+          Cloudflare account. That is access control, not encryption: Cloudflare operates
+          the storage and can technically reach what is in it.
         </p>
       </section>
 

@@ -105,38 +105,41 @@ const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} re
   .vouch strong { font-family: var(--display); font-weight: 850; letter-spacing: -.03em; font-size: 1.1rem; line-height: 1; }
   .vouch span { color: var(--muted); }
 
-  /* --- full mode --- */
-  .refs { display: grid; gap: clamp(2.5rem, 5vw, 4.5rem); }
-  .ref { margin: 0; }
+  /* --- full mode: one feature, one supporting voice, one review rail --- */
+  .refs { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 3vw, 3rem); align-items: start; }
+  .ref { position: relative; margin: 0; }
   .ref__quote { margin: 0; }
   .ref__quote p { margin: 0; color: var(--ink-soft); line-height: 1.7; text-wrap: pretty; }
   .ref__source { display: grid; gap: .55rem; margin-top: 1.5rem; padding-top: .9rem; border-top: 1px solid var(--line-strong); }
   .ref__name { font-family: var(--display); font-weight: 850; letter-spacing: -.035em; line-height: 1; }
   .ref__meta { color: var(--muted); }
 
-  /* The two personal references share one editorial quote family: a generous
-     measure, larger type, and the name standing alone over a rule. They differ
-     from each other only in measure, because they carry identical information
-     — a name, and that it is a personal reference. */
+  /* The first voice is the feature; the second is deliberately offset and
+     quieter. This is an editorial sequence, not two equal cards. */
+  .ref--personal { grid-row: 1; }
+  .ref--personal:nth-of-type(1) { grid-column: 1 / span 7; }
+  .ref--personal:nth-of-type(2) { grid-column: 8 / -1; margin-top: clamp(4rem, 8vw, 8rem); }
   .ref--personal .ref__quote p { font-size: clamp(1.05rem, 1.45vw, 1.3rem); }
   .ref--personal .ref__name { font-size: clamp(1.3rem, 1.8vw, 1.65rem); }
-  .ref--personal:nth-of-type(1) .ref__quote p { max-width: 38rem; }
+  .ref--personal:nth-of-type(1)::before { content: '“'; position: absolute; left: 0; top: -.8em; color: var(--signal); font-family: var(--display); font-size: clamp(3rem, 6vw, 6rem); font-weight: 850; line-height: 1; }
+  .ref--personal:nth-of-type(1) .ref__quote p { max-width: 46rem; font-size: clamp(1.35rem, 2vw, 1.85rem); line-height: 1.55; }
   .ref--personal:nth-of-type(2) .ref__quote p { max-width: 34rem; }
 
-  /* The platform review is a different kind of object, not a restyled one:
-     smaller type, a review chrome, and the only stars on the site's
-     testimonials. */
-  .ref--platform { padding: clamp(1.5rem, 3vw, 2.25rem); border: 1px solid var(--line); background: var(--paper-bright); }
+  /* The platform review closes the sequence as a horizontal evidence rail,
+     not the third card in a 2+1 stack. */
+  .ref--platform { grid-column: 3 / -1; grid-row: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, .45fr); gap: clamp(2rem, 5vw, 5rem); padding: clamp(1.5rem, 2.5vw, 2.25rem) 0; border-top: 3px solid var(--signal); border-bottom: 1px solid var(--line-strong); }
   .ref--platform .ref__quote p { max-width: 34rem; font-size: 1rem; }
   .ref--platform .ref__name { font-size: 1.15rem; }
+  .ref--platform .ref__source { align-content: start; margin-top: 0; padding-top: 0; border-top: 0; }
   .ref__platform { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
   .ref__stars { display: inline-flex; gap: .12rem; }
   .ref__stars svg { width: .8rem; height: .8rem; fill: var(--signal); }
   .ref__privacy { flex-basis: 100%; color: var(--muted); }
 
-  @media (min-width: 1000px) {
-    .refs { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-    /* The first personal reference takes the wider measure it was sized for. */
-    .ref--platform { grid-column: 2; }
+  @media (max-width: 760px) {
+    .refs { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
+    .ref--personal, .ref--personal:nth-of-type(1), .ref--personal:nth-of-type(2), .ref--platform { grid-column: 1; grid-row: auto; margin-top: 0; }
+    .ref--personal:nth-of-type(1)::before { position: static; display: block; margin: 0 0 -.35em; }
+    .ref--platform { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   }
 </style>
