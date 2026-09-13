@@ -351,20 +351,38 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   border-bottom: 1px solid #3a3a34;
 }
 .footer-callout p { color: #aaa89f; }
-.footer-callout a {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
+.footer-callout__eyebrow { display: flex; align-items: center; gap: .5rem; margin: 0; }
+/* The single orange in the close. */
+.footer-callout__eyebrow::before { content: ''; width: .45rem; height: .45rem; background: var(--signal); flex: none; }
+.footer-callout__statement {
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
   font-family: var(--display);
-  font-size: clamp(3.3rem, 9vw, 9rem);
-  font-variation-settings: 'wdth' 110;
+  font-size: clamp(2.3rem, 6.4vw, 5.6rem);
+  font-variation-settings: 'wdth' 104;
   font-weight: 800;
-  letter-spacing: -.07em;
-  line-height: .88;
+  letter-spacing: -.055em;
+  line-height: .95;
+  color: var(--paper) !important;
+  text-wrap: balance;
 }
-.footer-callout a i { display: grid; flex: 0 0 auto; width: clamp(3.2rem, 5vw, 5.5rem); aspect-ratio: 1; place-items: center; border: 1px solid #4b4a43; color: var(--signal); font-size: clamp(1.5rem, 3vw, 3rem); font-style: normal; transition: border-color .3s, transform .3s; }
-.footer-callout a:hover i { border-color: var(--signal); transform: translate(.12em, -.12em); }
+.footer-callout__statement span { display: block; }
+.footer-callout__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .9rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  padding-bottom: .55rem;
+  border-bottom: 1px solid #4b4a43;
+  transition: border-color .3s, color .3s;
+}
+.footer-callout__cta i { display: inline-grid; place-items: center; color: var(--signal); font-style: normal; transition: transform .3s; }
+.footer-callout__cta:hover { color: var(--signal); border-color: var(--signal); }
+.footer-callout__cta:hover i { transform: translate(.18em, -.18em); }
 .footer-grid {
   display: grid;
   grid-template-columns: auto .9fr 1.4fr auto;
@@ -444,15 +462,8 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
      the headline. Drop the box and let the arrow sit as a piece of the
      typography, at the same weight as the desktop mark. Desktop keeps its
      framed square. */
-  .footer-callout a { align-items: center; gap: .75rem; font-size: clamp(2.65rem, 12vw, 3.3rem); }
-  .footer-callout a span { min-width: 0; overflow-wrap: anywhere; }
-  .footer-callout a i {
-    width: auto;
-    aspect-ratio: auto;
-    border: 0;
-    font-size: clamp(2rem, 8vw, 3rem);
-  }
-  .footer-callout a:hover i { transform: none; }
+  .footer-callout__statement { font-size: clamp(2rem, 9.5vw, 2.9rem); letter-spacing: -.04em; }
+  .footer-callout__cta:hover i { transform: none; }
   .page-intro { min-height: 72vh; padding-top: calc(var(--header-h) + 4rem); }
   .page-intro__title { font-size: clamp(3rem, 12.5vw, 5rem); }
   .lede { font-size: 1rem; }

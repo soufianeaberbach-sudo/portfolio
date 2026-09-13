@@ -581,12 +581,18 @@ try {
     const d = await p.evaluate(() => {
       const size = (el) => (el ? parseFloat(getComputedStyle(el).fontSize) : 0);
       const reach = [...document.querySelectorAll('.ct-reach__value')];
+      const actions = [...document.querySelectorAll('.ct-reach__actions a')];
       const platform = document.querySelector('.ct-platforms__list a');
-      const hrefs = reach.map((a) => a.getAttribute('href'));
+      /* The number is stated ONCE as text with two small actions beside it, so
+         the links live in two places now — both are collected. */
+      const hrefs = [...reach, ...actions].map((a) => a.getAttribute('href')).filter(Boolean);
       return {
-        count: reach.length,
+        count: hrefs.length,
         hrefs,
         text: reach.map((a) => a.textContent.replace(/\s+/g, ' ').trim()),
+        /* Printing the same eleven digits twice at display size was the
+           duplication complaint; assert it appears exactly once that big. */
+        bigNumberCount: reach.filter((el) => el.textContent.includes('+212 657 872 090')).length,
         reachSize: size(reach[0]),
         platformSize: size(platform),
         /* Stated once on the page — the footer nav is separate and site-wide. */
@@ -600,11 +606,12 @@ try {
       };
     });
 
-    check('three direct routes are offered', d.count === 3, String(d.count));
+    check('three direct routes are offered', d.count === 3, JSON.stringify(d.hrefs));
     check('email is a mailto link', d.hrefs.some((h) => h === 'mailto:soufianeaberbach@gmail.com'), JSON.stringify(d.hrefs));
     check('phone is a tel link', d.hrefs.some((h) => h === 'tel:+212657872090'), JSON.stringify(d.hrefs));
     check('WhatsApp is a wa.me link', d.hrefs.some((h) => h === 'https://wa.me/212657872090'), JSON.stringify(d.hrefs));
-    check('the number is readable text, not icon-only', d.text.filter((t) => t.includes('+212 657 872 090')).length === 2, JSON.stringify(d.text));
+    check('the number is readable text, not icon-only', d.text.some((t) => t.includes('+212 657 872 090')), JSON.stringify(d.text));
+    check('and it is printed once, not as two giant rows', d.bigNumberCount === 1, String(d.bigNumberCount));
     /* The hierarchy the brief asks for, asserted rather than eyeballed. */
     check('direct contact is set larger than the platform links', d.reachSize > d.platformSize * 1.6, `${d.reachSize} vs ${d.platformSize}`);
     check('the platform group appears exactly once', d.platformGroups === 1, String(d.platformGroups));
@@ -612,6 +619,27 @@ try {
     check('the business credential is present', d.credentialExists);
     check('B2B invoicing is called out', /B2B invoicing available/.test(d.credentialB2B), d.credentialB2B);
     check('the credential headline outranks the platform links', d.credentialHeadSize > d.platformSize * 1.4, `${d.credentialHeadSize} vs ${d.platformSize}`);
+
+    /* A coloured rule sitting directly under words reads as a spell-check
+       mark. It is banned from the visual language, so it is asserted away
+       rather than left to discipline. Hover states are exempt: this samples
+       the resting state only. */
+    const underlines = await p.evaluate(() => {
+      const signal = getComputedStyle(document.documentElement).getPropertyValue('--signal').trim();
+      const hits = [];
+      for (const el of document.querySelectorAll('main *')) {
+        const cs = getComputedStyle(el);
+        const deco = cs.textDecorationLine;
+        const decoColor = cs.textDecorationColor;
+        if (deco.includes('underline') && decoColor && decoColor !== 'rgb(17, 17, 15)') {
+          const isSignal = decoColor.includes('212') || decoColor.includes(signal);
+          if (isSignal) hits.push(el.className || el.tagName);
+        }
+        if (/inset .*-\d/.test(cs.boxShadow) && cs.boxShadow.includes('212')) hits.push((el.className || el.tagName) + ' [box-shadow]');
+      }
+      return hits;
+    });
+    check('no orange underline sits beneath text at rest', underlines.length === 0, JSON.stringify(underlines).slice(0, 160));
     check('Contact follows direct → brief → business → proof → platforms',
       d.sectionOrder.every((value, index, values) => value >= 0 && (index === 0 || value > values[index - 1])),
       JSON.stringify(d.sectionOrder));

@@ -73,6 +73,10 @@ const faqs = [
       <div class="ct-reach" data-reveal>
         <p class="eyebrow">Direct contact</p>
         <h2 class="display ct-reach__title" id="ct-direct-title">Reach Soufiane<br /><em>directly</em>.</h2>
+        {/* One number, stated once, with two small actions beside it. It was
+            printed twice as two display-size rows — the same eleven digits
+            immediately below themselves, which read as duplicated content
+            rather than as two ways to use it. */}
         <ul class="ct-reach__list">
           <li>
             <span class="label">Email</span>
@@ -81,26 +85,26 @@ const faqs = [
             </a>
           </li>
           <li>
-            <span class="label">Phone</span>
-            <a class="ct-reach__value" href={`tel:${phoneDial}`}>
-              {phoneDisplay}<i aria-hidden="true"><Arrow /></i>
-            </a>
-          </li>
-          <li>
-            <span class="label">WhatsApp</span>
-            <a class="ct-reach__value" href={whatsapp} target="_blank" rel="noopener noreferrer">
-              {phoneDisplay}
-              <span class="sr-only">on WhatsApp (opens in a new tab)</span>
-              <i aria-hidden="true"><Arrow /></i>
-            </a>
+            <span class="label">Phone / WhatsApp</span>
+            <p class="ct-reach__value ct-reach__value--static">{phoneDisplay}</p>
+            <p class="ct-reach__actions">
+              <a href={`tel:${phoneDial}`}>Call<i aria-hidden="true"><Arrow /></i></a>
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                WhatsApp<span class="sr-only"> (opens in a new tab)</span><i aria-hidden="true"><Arrow /></i>
+              </a>
+            </p>
           </li>
         </ul>
         <p class="ct-reach__note">
-          Tangier, Morocco · Remote collaboration. The development brief reaches the
+          Tangier, Morocco &middot; Remote collaboration. The development brief reaches the
           same inbox and keeps your reference attached to it.
         </p>
       </div>
 
+      {/* The caption sits BELOW the image, never over it. It used to be an
+          absolutely-positioned overlay printed across the figure's body in
+          white — unreadable in places and exactly the "text thrown over an
+          image" problem. */}
       <figure class="ct-workspace__figure" data-reveal>
         <img
           src="/contact-figure-1400.webp"
@@ -112,11 +116,7 @@ const faqs = [
           loading="lazy"
           decoding="async"
         />
-        <figcaption>
-          <span class="eyebrow">Working environment</span>
-          <span>Pattern, fit and technical decisions are developed here before they move to production.</span>
-          <strong class="label">Freelance workspace / Tangier</strong>
-        </figcaption>
+        <figcaption>Freelance workspace &middot; Tangier</figcaption>
       </figure>
     </div>
   </section>
@@ -254,29 +254,55 @@ const faqs = [
     line-height: 1.1;
     color: var(--ink);
     overflow-wrap: anywhere;
-    box-shadow: inset 0 -2px 0 var(--signal);
-    transition: color .2s var(--ease), box-shadow .2s var(--ease);
+    /* No coloured rule under the words — that reads as a spell-check mark.
+       The arrow and the hover colour carry the signal instead. */
+    transition: color .2s var(--ease);
   }
   .ct-reach__value i { flex: none; color: var(--signal); transition: transform .2s var(--ease); }
   .ct-reach__value:hover { color: var(--signal); }
   .ct-reach__value:hover i { transform: translate(2px, -2px); }
   .ct-reach__note { max-width: 31rem; margin: 1.5rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.7; }
 
-  /* The asset is already a transparent workspace cut-out. It crosses the
-     section gutter and its caption sits inside the open negative space, so it
-     behaves as part of the editorial composition—not as a rectangular card. */
-  .ct-workspace__figure { position: relative; width: calc(100% + var(--gutter)); margin: 0 calc(var(--gutter) * -1) -3rem 0; }
-  .ct-workspace__figure img { display: block; width: 100%; height: auto; }
-  .ct-workspace__figure figcaption {
-    position: absolute;
-    left: clamp(1rem, 3vw, 3rem);
-    bottom: clamp(3.5rem, 7vw, 7rem);
-    z-index: 1;
-    width: min(17rem, 38%);
+  /* The workspace cut-out. It still crosses the section gutter so it belongs
+     to the composition rather than sitting in a column, but nothing is printed
+     over it any more and it carries the same ambient grounding philosophy as
+     the hero: a single soft shadow following the silhouette, short and low
+     enough that it reads as presence rather than as an effect. */
+  .ct-workspace__figure { position: relative; width: calc(100% + var(--gutter)); margin: 0 calc(var(--gutter) * -1) 0 0; }
+  .ct-workspace__figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0.3rem 0.7rem 1.5rem rgba(17, 17, 15, .15));
   }
-  .ct-workspace__figure figcaption > span:nth-child(2) { display: block; margin-top: 1rem; color: var(--paper); font-size: .88rem; line-height: 1.65; }
-  .ct-workspace__figure figcaption strong { display: block; margin-top: 1.1rem; padding-top: .7rem; border-top: 1px solid rgba(243, 240, 233, .45); color: var(--paper); font-weight: 400; }
-  .ct-workspace__figure .eyebrow { color: var(--signal); }
+  .ct-workspace__figure figcaption {
+    margin-top: .9rem;
+    padding-inline-end: var(--gutter);
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: end;
+  }
+
+  /* One number, two small actions. */
+  .ct-reach__value--static { margin: 0; box-shadow: none; }
+  .ct-reach__actions { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: .7rem 0 0; }
+  .ct-reach__actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color .2s var(--ease);
+  }
+  .ct-reach__actions a i { color: var(--signal); transition: transform .2s var(--ease); }
+  .ct-reach__actions a:hover { color: var(--signal); }
+  .ct-reach__actions a:hover i { transform: translate(2px, -2px); }
 
   /* ---------- Development brief: upload or link ---------- */
   .ct-brief { padding-block: clamp(4.5rem, 8vw, 8rem) clamp(3.5rem, 5vw, 5rem); }
@@ -286,7 +312,10 @@ const faqs = [
     column-gap: clamp(2rem, 5vw, 5rem);
     align-items: start;
   }
-  .ct-brief__intro { grid-column: 1; }
+  .ct-brief__intro { grid-column: 1;   position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    align-self: start;
+  }
   .ct-brief__form { grid-column: 2; min-width: 0; }
   .ct-brief__title { margin: 1.75rem 0 0; font-size: clamp(2.5rem, 4.6vw, 4.7rem); }
   .ct-steps { margin: clamp(2rem, 3.5vw, 3rem) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
@@ -331,14 +360,12 @@ const faqs = [
   .ct-credential__facts div { display: grid; grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr); gap: .75rem; align-items: baseline; }
   .ct-credential__facts dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .ct-credential__facts dd { margin: 0; font-size: .9rem; font-weight: 500; color: var(--ink); }
+  /* The one procurement fact a company screens for. Weight and colour, not a
+     rule beneath the words. */
   .ct-credential__facts em {
-    color: var(--ink);
+    color: var(--signal);
     font-style: normal;
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: var(--signal);
-    text-decoration-thickness: .14em;
-    text-underline-offset: .24em;
+    font-weight: 650;
   }
   .ct-credential__note { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .8rem; line-height: 1.65; }
 

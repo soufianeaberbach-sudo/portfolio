@@ -187,15 +187,17 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
         already in view.
       </p>
 
-      {/* These were a joined string in 0.8rem grey mono — six pattern-CAD
-          systems and three working languages rendered as fine print. They are
-          among the most concrete things a sourcing or product-development
-          reader is scanning for, so they get their own weight here. No levels
-          are claimed for the languages and no system is added that is not
-          already in the career above. */}
+      {/* Editorial, not administrative. The previous version put every system
+          and every language on its own ruled row with its own orange dash —
+          nine markers and nine hairlines inside one block, which reads as a
+          form. The names now sit as a typographic set: display weight,
+          generous spacing, one marker per group. No proficiency is claimed and
+          no system appears that the career above does not already contain. */}
       <div class="ex-capability" data-reveal>
         <div class="ex-capability__col">
-          <p class="label">Systems worked in</p>
+          <p class="label ex-capability__tag">
+            <span class="ex-capability__mark" aria-hidden="true"></span>Systems worked in
+          </p>
           <ul class="ex-systems">
             {systems.map((system) => (
               <li>{system}</li>
@@ -204,18 +206,20 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
         </div>
 
         <div class="ex-capability__col">
-          <p class="label">Working languages</p>
+          <p class="label ex-capability__tag">
+            <span class="ex-capability__mark" aria-hidden="true"></span>Working languages
+          </p>
           <ul class="ex-langs">
             <li>Arabic</li>
             <li>French</li>
             <li>English</li>
           </ul>
           <p class="ex-capability__note">
-            Three languages across a European–North African supply chain, and
-            <em>remote collaboration</em> with teams in other time zones — the practical
-            side of moving a product between a design office and a factory floor.
+            Three languages across a European&ndash;North African supply chain, and remote
+            collaboration with teams in other time zones.
           </p>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -278,7 +282,11 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
     line-height: .84;
   }
   .experience-hero__portrait { position: relative; z-index: 2; grid-column: 2; grid-row: 1 / 4; align-self: end; justify-self: end; width: var(--figure-w); aspect-ratio: 754 / 1517; height: auto; max-width: none; margin: 0 var(--figure-offset) -3rem 0; overflow: visible; }
-  .experience-hero__portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; filter: contrast(1.035) saturate(.97); }
+  /* Same grounding philosophy as the hero and the Contact workspace: one soft
+     ambient shadow following the cut-out's own silhouette (the asset is 60.6%
+     transparent), short and low enough to read as presence rather than effect.
+     No reflection, no floor line, no decorative strokes. */
+  .experience-hero__portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; filter: contrast(1.035) saturate(.97) drop-shadow(0.3rem 0.6rem 1.4rem rgba(17, 17, 15, .15)); }
   /* Outside the figure's left edge, low. V4 parked it at top:2rem, which was
      clear against a two-line headline; this headline is four lines and reaches
      further right, so the top of that lane is now type. Inside the figure box
@@ -345,15 +353,28 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
   .tr__lens-label { margin: 0 0 .75rem; color: var(--muted); }
   .tr__lens-text { margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.55; }
 
-  /* Role 06 is the sixth band of the same trajectory, given more air and more
-     resolution because it is where the six arrive. No scale ladder leads to
-     it — the five before it are deliberately equal. */
-  .tr--current { padding-block: clamp(3.25rem, 5.5vw, 5.5rem); border-bottom: 0; background: var(--paper-bright); }
+  /* Role 06 is the sixth band of the same trajectory, and it has to read that
+     way. It previously sat on its own --paper-bright ground with a boxed badge
+     and a title jumping from 2.5rem to 3.6rem, which made it a panel inserted
+     at the end rather than the place the six arrive.
+     No ground change, no box. The emphasis is carried by the things the
+     trajectory already uses: a little more air, the orange on the newest
+     stratum, a modest step in the title, and full-ink lens text. */
+  .tr--current { padding-block: clamp(2.75rem, 4.5vw, 4.5rem); border-bottom: 0; }
   .tr--current .tr__strata i:last-child { background: var(--signal); }
-  .tr--current .tr__pos { max-width: 34rem; font-size: clamp(2rem, 4.1vw, 3.6rem); }
-  .tr__badge { display: inline-block; margin: 1.5rem 0 0; padding: .5rem .7rem; border: 1px solid var(--line-strong); color: var(--ink-soft); }
-  .tr--current .tr__lens { padding-top: 2.5rem; }
-  .tr--current .tr__lens-text { color: var(--ink); font-size: 1.05rem; }
+  .tr--current .tr__pos { max-width: 30rem; font-size: clamp(1.8rem, 3.3vw, 2.9rem); }
+  /* A marker in the same label language as the metadata above it, not a
+     bordered chip. */
+  .tr__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 1.15rem 0 0;
+    color: var(--ink-soft);
+  }
+  .tr__badge::before { content: ''; width: .4rem; height: .4rem; background: var(--signal); flex: none; }
+  .tr--current .tr__lens { padding-top: 2rem; }
+  .tr--current .tr__lens-text { color: var(--ink); }
 
   /* ---------------------------------------------------------------------------
      SYNTHESIS — a conclusion, not an argument with a misconception.
@@ -367,56 +388,57 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
   /* Secondary evidence: small, factual, career-wide, attached to no employer.
      Two hairlines — if either fact is withdrawn nothing else reflows. */
   .synthesis__facts { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); margin-top: clamp(3rem, 5vw, 5rem); }
-  /* Capability block. Two columns, ruled, with the signal marking each system
-     — orange as an indicator beside the name rather than colour on the name,
-     so nothing that has to be read loses contrast. */
+  /* Capability block. Typographic, not tabular: no per-item rules, no per-item
+     markers, one signal square per group. */
   .ex-capability {
+    /* Spans the synthesis grid; without this it drops into column one only. */
     grid-column: 1 / -1;
     grid-row: 3;
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-    gap: clamp(2rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
     margin-top: clamp(2.5rem, 4vw, 3.5rem);
-    padding-top: clamp(1.5rem, 2.5vw, 2rem);
+    padding-top: clamp(1.75rem, 2.8vw, 2.25rem);
     border-top: 1px solid var(--line-strong);
   }
-  .ex-capability__col > .label { margin: 0 0 1rem; color: var(--muted); }
+  .ex-capability__tag { display: flex; align-items: center; gap: .5rem; margin: 0 0 clamp(1.1rem, 2vw, 1.5rem); color: var(--muted); }
+  .ex-capability__mark { width: .4rem; height: .4rem; background: var(--signal); flex: none; }
 
   .ex-systems, .ex-langs { margin: 0; padding: 0; list-style: none; }
   .ex-systems {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 clamp(1rem, 2.5vw, 2rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem clamp(1.5rem, 3vw, 2.75rem);
   }
-  .ex-systems li, .ex-langs li {
-    position: relative;
-    padding: .62rem 0 .62rem 1.1rem;
-    border-bottom: 1px solid var(--line);
+  .ex-systems li {
     font-family: var(--display);
-    font-weight: 650;
-    font-size: clamp(.94rem, 1.3vw, 1.08rem);
-    letter-spacing: -.015em;
+    font-variation-settings: 'wdth' 96;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+    letter-spacing: -.025em;
+    line-height: 1.25;
     color: var(--ink);
   }
-  /* The indicator, not the text, carries the orange. */
-  .ex-systems li::before, .ex-langs li::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0;
-    top: 1.15em;
-    width: .42rem;
-    height: 1px;
-    background: var(--signal);
+  .ex-langs { display: flex; flex-wrap: wrap; gap: .4rem clamp(1.25rem, 2.6vw, 2.25rem); }
+  .ex-langs li {
+    font-family: var(--display);
+    font-variation-settings: 'wdth' 96;
+    font-weight: 800;
+    font-size: clamp(1.3rem, 2.3vw, 2rem);
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--ink);
   }
-  .ex-langs li { font-size: clamp(1.05rem, 1.7vw, 1.3rem); font-weight: 750; }
-  .ex-capability__note { margin: 1.35rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.7; }
-  .ex-capability__note em { font-style: normal; font-weight: 600; color: var(--ink); }
+  .ex-capability__note {
+    max-width: 28rem;
+    margin: clamp(1.25rem, 2.2vw, 1.75rem) 0 0;
+    color: var(--ink-soft);
+    font-size: .86rem;
+    line-height: 1.7;
+  }
 
   @media (max-width: 860px) {
     .ex-capability { grid-template-columns: minmax(0, 1fr); gap: 2.25rem; }
-  }
-  @media (max-width: 460px) {
-    .ex-systems { grid-template-columns: minmax(0, 1fr); }
   }
 
   .fact { padding-top: .9rem; border-top: 1px solid var(--line-strong); }
