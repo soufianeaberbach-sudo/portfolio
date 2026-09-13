@@ -426,6 +426,8 @@ const brandLogos = [
      comes from the rings behind the figure and the page rule at 68%, which the
      figure is allowed to cross. */
   .home-hero__portrait {
+    --figure-shift: 2%;
+    --figure-scale: 1.035;
     position: relative;
     z-index: 1;
     align-self: end;
@@ -437,22 +439,43 @@ const brandLogos = [
     justify-content: center;
   }
 
-  /* The cut-out meets one measured floor trace at the source image's actual
-     contact line (the asset has 6.53% transparent padding beneath it). It is
-     deliberately a tapered directional mark—not a second portrait, ellipse,
-     blur, glow or theatrical shadow. The trace runs away from the name/CTA
-     side, so the light logic and the figure's footing agree. */
+  /* The name/brand side is the implied light source. A masked, near-invisible
+     warm response reaches only the cut-out's left-facing pixels; it cannot
+     create a rectangular wash around the asset. */
+  .home-hero__portrait::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 0;
+    width: min(108%, 49rem);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(221, 91, 49, .16), rgba(221, 91, 49, .045) 24%, transparent 48%);
+    -webkit-mask: url('/soufiane-drawing-1200.webp') center bottom / contain no-repeat;
+    mask: url('/soufiane-drawing-1200.webp') center bottom / contain no-repeat;
+    mix-blend-mode: screen;
+    opacity: .42;
+    transform: translateX(-50%) translateX(var(--figure-shift)) scale(var(--figure-scale));
+    transform-origin: center bottom;
+    pointer-events: none;
+  }
+
+  /* Four short contact responses sit at the actual shoe/chair/cup ground
+     points. Each begins under its object and tapers away to the right, opposite
+     the source above-left. There is no independent floor line or generic oval. */
   .home-hero__portrait::after {
     content: '';
     position: absolute;
     z-index: 0;
-    right: 1%;
+    left: 0;
     bottom: 6.35%;
-    width: 72%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(17, 17, 15, .32) 22%, rgba(17, 17, 15, .14) 72%, transparent);
-    transform: skewX(-18deg);
-    transform-origin: left;
+    width: 100%;
+    height: 3px;
+    background:
+      linear-gradient(100deg, rgba(17, 17, 15, .28), rgba(17, 17, 15, .08) 46%, transparent 78%) 8% 50% / 18% 1px no-repeat,
+      linear-gradient(100deg, rgba(17, 17, 15, .24), rgba(17, 17, 15, .07) 48%, transparent 80%) 24% 50% / 21% 1px no-repeat,
+      linear-gradient(100deg, rgba(17, 17, 15, .22), rgba(17, 17, 15, .06) 50%, transparent 82%) 70% 50% / 18% 1px no-repeat,
+      linear-gradient(100deg, rgba(17, 17, 15, .18), rgba(17, 17, 15, .05) 48%, transparent 80%) 90% 50% / 10% 1px no-repeat;
     pointer-events: none;
   }
 
@@ -466,11 +489,12 @@ const brandLogos = [
   .home-hero__figure {
     position: relative;
     z-index: 1;
-    transform: translateX(2%) scale(1.035);
+    transform: translateX(var(--figure-shift)) scale(var(--figure-scale));
     transform-origin: center bottom;
   }
 
   @media (forced-colors: active) {
+    .home-hero__portrait::before,
     .home-hero__portrait::after { display: none; }
   }
 
@@ -645,7 +669,7 @@ const brandLogos = [
   @media (max-width: 1100px) and (min-width: 901px) {
     .home-hero { grid-template-columns: minmax(0, 1fr) minmax(25rem, .9fr); gap: 1.5rem; }
     .home-hero__title h1 { font-size: clamp(4.75rem, 8.6vw, 7rem); }
-    .home-hero__portrait img { transform: translateX(4%) scale(1.02); }
+    .home-hero__portrait { --figure-shift: 4%; --figure-scale: 1.02; }
   }
   @media (max-width: 900px) {
     .home-hero {
@@ -692,8 +716,10 @@ const brandLogos = [
       min-height: 22rem;
       margin-right: calc(var(--gutter) * -1);
     }
-    .home-hero__portrait img { width: 110%; height: 105%; transform: translateX(3%) scale(1.02); }
-    .home-hero__portrait::after { right: -4%; bottom: 5.8%; width: 78%; }
+    .home-hero__portrait { --figure-shift: 3%; --figure-scale: 1.02; }
+    .home-hero__portrait img { width: 110%; height: 105%; }
+    .home-hero__portrait::before { width: 110%; height: 105%; }
+    .home-hero__portrait::after { bottom: 5.8%; }
     .home-process__list li { grid-template-columns: 2.5rem 1fr; }
     .home-process__list p { grid-column: 2; }
     .brand-context__head { align-items: flex-start; flex-direction: column; gap: 1rem; }
