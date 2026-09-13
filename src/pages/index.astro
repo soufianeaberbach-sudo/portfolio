@@ -95,38 +95,41 @@ const brandLogos = [
     </div>
   </section>
 
+  {/* Its own section, not evidence inside Production Record. The two sit
+      next to each other because a procurement reader wants both, but they are
+      separate statements: this one is about being able to engage formally, the
+      one below is about output. Production Record now contains nothing but its
+      five numbers. */}
+  <section class="business-ready section-shell" aria-labelledby="business-ready-title">
+    <div class="business-ready__inner" data-reveal>
+      <p class="label business-ready__tag" id="business-ready-title">
+        <span class="business-ready__mark" aria-hidden="true"></span>Business ready
+      </p>
+      <p class="business-ready__lead">Ready for a direct professional engagement.</p>
+      <dl class="business-ready__facts">
+        <div>
+          <dt>Status</dt>
+          <dd>Registered Moroccan Auto&#8209;Entrepreneur</dd>
+        </div>
+        <div>
+          <dt>Registered</dt>
+          <dd>Since 2018</dd>
+        </div>
+        <div>
+          <dt>Invoicing</dt>
+          <dd>B2B invoicing available</dd>
+        </div>
+        <div>
+          <dt>Based in</dt>
+          <dd>Tangier, Morocco</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
   <section class="home-stats section-shell section-rule" aria-labelledby="production-record-title">
     <div class="home-stats__head">
       <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
-      {/* One procurement credential, read in one pass: eyebrow, statement, then
-          four quiet facts on a single rule. Previously this carried an orange
-          left rule AND an orange underline beneath four separate phrases —
-          five signals inside one small block, and the underlines read as
-          spell-check marks. One signal now: the square on the eyebrow. */}
-      <aside class="business-ready" aria-labelledby="business-ready-title" data-reveal>
-        <p class="label business-ready__tag" id="business-ready-title">
-          <span class="business-ready__mark" aria-hidden="true"></span>Business ready
-        </p>
-        <p class="business-ready__lead">Ready for a direct professional engagement.</p>
-        <dl class="business-ready__facts">
-          <div>
-            <dt>Status</dt>
-            <dd>Registered Moroccan Auto&#8209;Entrepreneur</dd>
-          </div>
-          <div>
-            <dt>Registered</dt>
-            <dd>Since 2018</dd>
-          </div>
-          <div>
-            <dt>Invoicing</dt>
-            <dd>B2B invoicing available</dd>
-          </div>
-          <div>
-            <dt>Based in</dt>
-            <dd>Tangier, Morocco</dd>
-          </div>
-        </dl>
-      </aside>
     </div>
     <div class="home-stats__grid">
       <article class="home-stat" data-reveal>
@@ -536,7 +539,8 @@ const brandLogos = [
   /* No left rule: the block sits in the stats section family and takes its
      structure from the hairline under the statement, not from a coloured bar
      competing with the numbers below it. */
-  .business-ready { max-width: 46rem; }
+  .business-ready { padding-block: clamp(3.5rem, 6vw, 6rem) clamp(2.5rem, 4vw, 4rem); }
+  .business-ready__inner { max-width: 52rem; }
   .business-ready__tag { display: flex; align-items: center; gap: .5rem; margin: 0; color: var(--muted); }
   /* The single orange in this block. */
   .business-ready__mark { width: .45rem; height: .45rem; background: var(--signal); flex: none; }

@@ -366,13 +366,6 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   text-wrap: balance;
 }
 .footer-callout__statement span { display: block; }
-/* The last line lands the point, so it carries the outlined treatment — the
-   one place in the close where the brand's filled/hollow language earns its
-   keep. It is the technique, not the name. */
-.footer-callout__statement span:last-child {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--paper);
-}
 .footer-callout__cta {
   display: inline-flex;
   align-items: center;

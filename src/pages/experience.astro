@@ -353,15 +353,28 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
   .tr__lens-label { margin: 0 0 .75rem; color: var(--muted); }
   .tr__lens-text { margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.55; }
 
-  /* Role 06 is the sixth band of the same trajectory, given more air and more
-     resolution because it is where the six arrive. No scale ladder leads to
-     it — the five before it are deliberately equal. */
-  .tr--current { padding-block: clamp(3.25rem, 5.5vw, 5.5rem); border-bottom: 0; background: var(--paper-bright); }
+  /* Role 06 is the sixth band of the same trajectory, and it has to read that
+     way. It previously sat on its own --paper-bright ground with a boxed badge
+     and a title jumping from 2.5rem to 3.6rem, which made it a panel inserted
+     at the end rather than the place the six arrive.
+     No ground change, no box. The emphasis is carried by the things the
+     trajectory already uses: a little more air, the orange on the newest
+     stratum, a modest step in the title, and full-ink lens text. */
+  .tr--current { padding-block: clamp(2.75rem, 4.5vw, 4.5rem); border-bottom: 0; }
   .tr--current .tr__strata i:last-child { background: var(--signal); }
-  .tr--current .tr__pos { max-width: 34rem; font-size: clamp(2rem, 4.1vw, 3.6rem); }
-  .tr__badge { display: inline-block; margin: 1.5rem 0 0; padding: .5rem .7rem; border: 1px solid var(--line-strong); color: var(--ink-soft); }
-  .tr--current .tr__lens { padding-top: 2.5rem; }
-  .tr--current .tr__lens-text { color: var(--ink); font-size: 1.05rem; }
+  .tr--current .tr__pos { max-width: 30rem; font-size: clamp(1.8rem, 3.3vw, 2.9rem); }
+  /* A marker in the same label language as the metadata above it, not a
+     bordered chip. */
+  .tr__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 1.15rem 0 0;
+    color: var(--ink-soft);
+  }
+  .tr__badge::before { content: ''; width: .4rem; height: .4rem; background: var(--signal); flex: none; }
+  .tr--current .tr__lens { padding-top: 2rem; }
+  .tr--current .tr__lens-text { color: var(--ink); }
 
   /* ---------------------------------------------------------------------------
      SYNTHESIS — a conclusion, not an argument with a misconception.
