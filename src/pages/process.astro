@@ -548,11 +548,19 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
   .pr-receive li { padding: .6rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .95rem; }
 
   .pr-media { margin: clamp(1.75rem, 3vw, 2.75rem) 0 0; }
-  /* The single frame ratio for all five stages. 4/3 suits both the landscape
-     and the portrait sources: cover crops each to the same footprint, so
-     perceived scale, alignment and compositional weight match down the page. */
+  /* One ratio and one width for every stage that has a visual, so the three
+     read as the same object rather than three different ones — that was the
+     only Process change actually requested.
+     The frame is deliberately MODEST rather than full-column. The three assets
+     in /process-temp/ are holding plates: measured, they are 97.4% flat paper
+     colour with no imagery in them at all. At full column width a blank plate
+     becomes a large void that makes the stage look unfinished, which is
+     exactly the regression this pass is undoing. Sized like this it reads as a
+     reserved visual slot. It is not a fix — the three real photographs are
+     still outstanding — but it stops the placeholder dominating the stage. */
   .pr-media__frame {
     aspect-ratio: 4 / 3;
+    width: min(100%, 26rem);
     overflow: hidden;
     border: 1px solid var(--line);
     background: var(--paper-bright);

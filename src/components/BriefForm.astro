@@ -381,10 +381,17 @@ const email = 'soufianeaberbach@gmail.com';
     font-size: 1rem;
     letter-spacing: -.02em;
     color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--signal);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
+  }
+  /* A marker, not an underline. A coloured rule directly beneath words reads
+     as a spell-check mark. */
+  .bf__drop-action::before {
+    content: '';
+    display: inline-block;
+    width: .45rem;
+    height: .45rem;
+    margin-inline-end: .5rem;
+    vertical-align: .08em;
+    background: var(--signal);
   }
   .bf__drop-or { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .bf__drop-label:hover { border-color: var(--signal); }
@@ -395,6 +402,9 @@ const email = 'soufianeaberbach@gmail.com';
      a thing there, and inviting it would be a lie. */
   @media (hover: none) { .bf__drop-or { display: none; } }
 
+  /* display:flex outranks the UA's [hidden] { display: none }, so without this
+     the remove row showed before any file was chosen. */
+  .bf__file-chosen[hidden] { display: none; }
   .bf__file-chosen {
     display: flex;
     align-items: baseline;
