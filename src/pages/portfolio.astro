@@ -73,12 +73,14 @@ const openable = (state: string) => state !== 'unpublished';
           >
             <span class="pf-gate__mark" aria-hidden="true"></span>
 
-            <span class="pf-gate__rail">
+            <span class="pf-gate__head">
               <i class="pf-gate__num">{chapter.number}</i>
               <span class="pf-gate__name">{chapter.title}</span>
             </span>
 
-            {/* The visual field. Revealed as the gate opens. */}
+            {/* Every gate carries its own cover, at rest as well as open, so
+                all four kinds of evidence are legible before anything is
+                hovered. Opening the gate brings the cover to full presence. */}
             <span class="pf-gate__field" aria-hidden="true">
               {chapter.id === 'womenswear' && (
                 <span class="pf-gatedeck">
@@ -376,7 +378,7 @@ const openable = (state: string) => state !== 'unpublished';
         const width0 = stageWidth / span;
         const height0 = width0 / CANVAS;
         queue.width = width0;
-        queue.stage.style.setProperty('--stage-h', `${Math.round(height0)}px`);
+        queue.stage.style.setProperty('--stage-h', `${Math.round(height0 + (nominal - 1) * 6)}px`);
 
         /* Position k holds project (index + nominal - 1 - k), so the active
            project lands at the right-hand end. Near the end of a category the
@@ -406,7 +408,9 @@ const openable = (state: string) => state !== 'unpublished';
           item.slot.style.setProperty('--x', `${Math.round(offset + item.x)}px`);
           item.slot.style.setProperty('--w', `${Math.round(item.w)}px`);
           item.slot.style.setProperty('--h', `${Math.round(item.h)}px`);
-          item.slot.dataset.depth = String(nominal - 1 - item.k);
+          const depth = nominal - 1 - item.k;
+          item.slot.style.setProperty('--lift', `${depth * 6}px`);
+          item.slot.dataset.depth = String(depth);
           item.slot.style.zIndex = String(10 + item.k);
         }
       };
@@ -653,20 +657,16 @@ const openable = (state: string) => state !== 'unpublished';
        Every selector below is inside .pf. Nothing here reaches another page.
        ====================================================================== */
 
-        /* Two different whites, both measured rather than picked.
-       --pf-stage is the garment studio. Sampling the ground of all 49
-       renditions gives 238-255 with a median of 248, so no single value makes
-       every tile disappear. Two candidates were rendered and compared rather
-       than argued about: the median (#f8f8f8) leaves the lightest photographs
-       sitting on the stage as brighter rectangles, which reads as a glowing
-       tile; multiply compositing scales the gap by (255 - ground) and pushed
-       the darkest photograph sixteen levels down. Sitting just under the
-       lightest cluster puts every edge on the same, softer side — a tile is
-       never brighter than its stage, so the residual reads as paper rather
-       than as a panel. The remaining difference is inherent to the source
-       photography; normalising it belongs in gen-portfolio.sh, not in CSS.
-       --pf-paper is for document surfaces: sheets, dossiers, evidence plates. */
-    .pf { --pf-stage: #fcfcfc; --pf-paper: #ffffff; }
+        /* One white now, not two.
+       The derived renditions used to carry grounds from #eeeeee to #ffffff, so
+       the stage had to sit at a compromise value and every deck seam showed as
+       a change of white. .devtools/normalise-ground.mjs now resolves every
+       frame's studio ground to 255 — edge-connected flood fill, tight
+       tolerance, feathered mask, masters untouched — so the stage is simply
+       white and the photographs meet it exactly.
+       Measured after regenerating: all 49 corner grounds read 255; the widest
+       residual anywhere is three levels, on the two vignetted evening frames. */
+    .pf { --pf-stage: #ffffff; --pf-paper: #ffffff; }
 
     /* ---------- intro ---------- */
     .pf-intro {
@@ -721,15 +721,21 @@ const openable = (state: string) => state !== 'unpublished';
       position: relative;
       flex: 1 1 0;
       min-width: 0;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(.7rem, 1.2vw, 1.1rem);
       padding: clamp(1.1rem, 1.8vw, 1.9rem) clamp(.9rem, 1.4vw, 1.5rem);
       color: inherit;
       text-decoration: none;
       overflow: hidden;
-      /* 2.77 against three gates at 1 puts the open gate at ~48% of the row. */
-      transition: flex-grow .62s var(--ease);
+      /* The gate is its own container, so the chapter name can be sized in
+         container units and grow with the gate instead of being set once and
+         either shrinking to menu type or overflowing. */
+      container-type: inline-size;
+      transition: flex-grow .62s var(--ease), background-color .62s var(--ease);
     }
     .pf-gate + .pf-gate { border-left: 1px solid var(--line); }
+    /* 2.77 against three gates at 1 puts the open gate at ~48% of the row. */
     .pf-gate[data-active] { flex-grow: 2.77; }
     .pf-gate:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
 
@@ -746,19 +752,10 @@ const openable = (state: string) => state !== 'unpublished';
     }
     .pf-gate[data-active] .pf-gate__mark { height: clamp(4rem, 9vw, 7rem); }
 
-    /* Number and name on a vertical rail. Set vertically the name can stay
-       large in a 250px gate — horizontal type would have to shrink to menu
-       size, which is the thing this replaces. */
-    .pf-gate__rail {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-      height: 100%;
-      pointer-events: none;
-    }
+    /* Horizontal at every width. The name is set in container units so it
+       grows with the gate — a 90-degree title reads as an archive spine, not
+       as a fashion chapter. */
+    .pf-gate__head { display: flex; flex-direction: column; gap: .5rem; }
     .pf-gate__num {
       font-family: var(--mono);
       font-size: .72rem;
@@ -769,81 +766,59 @@ const openable = (state: string) => state !== 'unpublished';
     }
     .pf-gate[data-active] .pf-gate__num { color: var(--signal); }
     .pf-gate__name {
-      writing-mode: vertical-rl;
+      display: block;
       font-family: var(--display);
       font-weight: 600;
-      font-size: clamp(1.7rem, 2.9vw, 2.9rem);
-      line-height: 1;
-      letter-spacing: -.03em;
-      white-space: nowrap;
+      font-size: clamp(1.32rem, 8.4cqi, 3.1rem);
+      line-height: .98;
+      letter-spacing: -.035em;
+      text-wrap: balance;
     }
     .pf-gate[data-publication='unpublished'] .pf-gate__name { color: var(--ink-soft); }
 
-    /* The visual field sits behind the rail and to its right. */
+    /* The cover. In the flow, between the name and the foot, so the gate reads
+       as a composed cover rather than type with a picture parked at the
+       bottom. */
     .pf-gate__field {
-      position: absolute;
-      left: clamp(3.4rem, 5vw, 5rem);
-      right: clamp(.9rem, 1.4vw, 1.5rem);
-      top: clamp(1.1rem, 1.8vw, 1.9rem);
-      bottom: clamp(8.5rem, 13vw, 11rem);
+      position: relative;
+      flex: 1;
+      min-height: 0;
       display: block;
-      /* A safety net: nothing in a gate's visual language may cross into the
-         type at the foot. */
       overflow: hidden;
-      opacity: 0;
-      transform: translateX(1.5rem);
-      transition: opacity .5s var(--ease), transform .62s var(--ease);
+      opacity: .58;
+      transition: opacity .55s var(--ease);
     }
-    .pf-gate[data-active] .pf-gate__field { opacity: 1; transform: none; }
-    /* When the garment gate opens, the gate itself becomes the studio. The
-       cards are opaque so they can occlude each other; if the ground behind
-       them stayed paper they would read as three white rectangles laid on
-       beige instead of garments standing in one white field. */
-    .pf-gate[data-chapter='womenswear'] { transition: flex-grow .62s var(--ease), background-color .62s var(--ease); }
+    .pf-gate[data-active] .pf-gate__field { opacity: 1; }
+    /* When the garment gate opens the gate itself becomes the studio; with the
+       ground behind them left as paper the cards would read as white
+       rectangles laid on beige rather than garments standing in one field. */
     .pf-gate[data-chapter='womenswear'][data-active] { background: var(--pf-stage); }
 
-    /* The descriptor is part of the resting composition — number at the top,
-       name down the side, one line at the foot. Only the state note and the
-       open affordance wait for the gate to open. */
-    /* A fixed band, filled from the top. The state note and the open
-       affordance are present but transparent at rest, and if they simply
-       flowed, every gate's descriptor would sit at a different height
-       depending on which of them it happens to have. */
-    .pf-gate__foot {
-      position: absolute;
-      left: clamp(3.4rem, 5vw, 5rem);
-      right: clamp(.9rem, 1.4vw, 1.5rem);
-      bottom: clamp(1.1rem, 1.8vw, 1.9rem);
-      height: clamp(7rem, 11vw, 9rem);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .pf-gate__state,
-    .pf-gate__go {
-      opacity: 0;
-      transform: translateY(.5rem);
-      transition: opacity .45s var(--ease), transform .55s var(--ease);
-    }
-    .pf-gate[data-active] .pf-gate__state,
-    .pf-gate[data-active] .pf-gate__go { opacity: 1; transform: none; }
+    .pf-gate__foot { display: block; }
     .pf-gate__desc {
       display: block;
       max-width: 26rem;
       color: var(--ink-soft);
-      font-size: clamp(.9rem, 1.1vw, 1rem);
-      line-height: 1.55;
+      font-size: clamp(.86rem, 1.05vw, .98rem);
+      line-height: 1.5;
     }
+    .pf-gate__state,
+    .pf-gate__go {
+      opacity: 0;
+      transform: translateY(.4rem);
+      transition: opacity .45s var(--ease), transform .5s var(--ease);
+    }
+    .pf-gate[data-active] .pf-gate__state,
+    .pf-gate[data-active] .pf-gate__go { opacity: 1; transform: none; }
     .pf-gate__state {
       position: relative;
       display: block;
-      will-change: opacity;
       max-width: 26rem;
-      margin-top: .7rem;
+      margin-top: .6rem;
       padding-left: .95rem;
       color: var(--muted);
-      font-size: .85rem;
-      line-height: 1.5;
+      font-size: .84rem;
+      line-height: 1.45;
     }
     .pf-gate__state::before {
       content: '';
@@ -858,7 +833,7 @@ const openable = (state: string) => state !== 'unpublished';
       display: inline-flex;
       align-items: center;
       gap: .4rem;
-      margin-top: .9rem;
+      margin-top: .7rem;
       color: var(--signal);
     }
     .pf-gate__go .arrow { width: 1em; height: 1em; }
@@ -869,16 +844,16 @@ const openable = (state: string) => state !== 'unpublished';
       position: absolute;
       bottom: 0;
       display: block;
-      height: calc(100% - (2 - var(--i)) * 6%);
       aspect-ratio: 3 / 4;
       background: var(--pf-stage);
+      box-shadow: -14px 0 20px -14px rgba(17, 17, 15, .22);
     }
-    /* Laid right to left: the leading card is flush right and complete, the
-       ones behind it are clipped by the card in front so only their front view
-       shows. The same rule the world uses. */
-    .pf-gatedeck__card:nth-child(3) { right: 0; z-index: 3; }
-    .pf-gatedeck__card:nth-child(2) { right: 26%; z-index: 2; }
-    .pf-gatedeck__card:nth-child(1) { right: 48%; z-index: 1; }
+    /* Laid right to left, leading card flush right, each overlapped on its
+       right by the one in front — the same rule the world uses. max-width caps
+       them so a narrow gate cannot push the furthest card out of frame. */
+    .pf-gatedeck__card:nth-child(3) { right: 0; height: 94%; max-width: 44%; z-index: 3; }
+    .pf-gatedeck__card:nth-child(2) { right: 30%; height: 86%; max-width: 38%; z-index: 2; }
+    .pf-gatedeck__card:nth-child(1) { right: 56%; height: 78%; max-width: 33%; z-index: 1; }
     .pf-gatedeck__card img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
 
     /* ---------- menswear: typographic, because there is no photograph ---- */
@@ -886,38 +861,40 @@ const openable = (state: string) => state !== 'unpublished';
     .pf-gatetype__row {
       display: flex;
       align-items: baseline;
-      gap: .8rem;
-      padding: .55rem 0;
+      gap: .7rem;
+      padding: .5rem 0;
       border-bottom: 1px solid var(--line);
       font-family: var(--display);
-      font-size: clamp(1rem, 1.5vw, 1.3rem);
+      font-size: clamp(.8rem, 3.4cqi, 1.25rem);
       letter-spacing: -.02em;
       color: var(--ink-soft);
       white-space: nowrap;
     }
-    .pf-gatetype__row i { color: var(--muted); font-family: var(--mono); font-size: .65rem; font-style: normal; letter-spacing: .14em; }
+    .pf-gatetype__row i { color: var(--muted); font-family: var(--mono); font-size: .62rem; font-style: normal; letter-spacing: .14em; }
 
     /* ---------- tech packs: technical objects lying in the field --------- */
     .pf-gatesheets { position: absolute; inset: 0; display: block; }
     .pf-gatesheets__sheet {
       position: absolute;
       display: block;
-      width: 50%;
+      width: 64%;
+      max-width: 15rem;
       aspect-ratio: 297 / 210;
-      padding: 1rem;
+      padding: .8rem;
       border: 1px solid var(--line-strong);
       background: var(--pf-paper);
+      box-shadow: 0 10px 22px -18px rgba(17, 17, 15, .5);
     }
-    .pf-gatesheets__sheet:nth-child(1) { left: 0; top: 2%; transform: rotate(-3.5deg); z-index: 1; }
-    .pf-gatesheets__sheet:nth-child(2) { left: 19%; top: 24%; transform: rotate(1.5deg); z-index: 2; }
-    .pf-gatesheets__sheet:nth-child(3) { left: 38%; top: 45%; transform: rotate(-1deg); z-index: 3; }
-    .pf-gatesheets__sheet i { display: block; height: 1px; margin-bottom: .55rem; background: var(--line); }
+    .pf-gatesheets__sheet:nth-child(1) { left: 0; bottom: 46%; transform: rotate(-4deg); z-index: 1; }
+    .pf-gatesheets__sheet:nth-child(2) { left: 14%; bottom: 23%; transform: rotate(1.5deg); z-index: 2; }
+    .pf-gatesheets__sheet:nth-child(3) { left: 28%; bottom: 0; transform: rotate(-1deg); z-index: 3; }
+    .pf-gatesheets__sheet i { display: block; height: 1px; margin-bottom: .5rem; background: var(--line); }
     .pf-gatesheets__sheet i:first-child { width: 34%; background: var(--line-strong); }
     .pf-gatesheets__sheet i:nth-child(3) { width: 76%; }
     .pf-gatesheets__sheet i:nth-child(4) { width: 52%; }
 
     /* ---------- 3d simulation: the real frame, filling the field --------- */
-    .pf-gatestill { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+    .pf-gatestill { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
 
     /* ======================================================================
        WORLDS
@@ -1057,9 +1034,8 @@ const openable = (state: string) => state !== 'unpublished';
 
     /* The information panel in reference mode. No profile rows, because there
        is nothing verified to put in them. */
-    .pf-refpanel { padding-top: 1.5rem; }
-    .pf-refpanel__lead { margin: 0; color: var(--ink); font-size: .98rem; line-height: 1.6; }
-    .pf-refpanel__note { margin: 1rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .pf-refpanel { padding-top: 1.4rem; }
+    .pf-refpanel__note { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
 
     .pf-panel { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
     .pf-panel[hidden] { display: none; }
@@ -1119,14 +1095,25 @@ const openable = (state: string) => state !== 'unpublished';
     .pf--js .pf-slot {
       position: absolute;
       left: var(--x, 0);
-      bottom: 0;
+      /* Receding cards sit a little higher, the way objects rise toward a
+         horizon. Small — six pixels a step — but it stops the row reading as
+         one flat baseline. */
+      bottom: var(--lift, 0);
       width: var(--w, 0);
       height: var(--h, 0);
       /* Opaque, because the occlusion is real: the card in front physically
          covers the back view of the card behind it. A transparent card would
          let both views show through each other. */
       background: var(--pf-stage);
-      transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease), opacity .58s var(--ease);
+      /* The depth cue. Now that every studio ground resolves to the same white,
+         the overlap has no edge of its own and five figures on one white field
+         read as five figures, not as a deck. This is the shadow the card in
+         front casts onto the card behind — cast leftward, because that is the
+         side it covers. It is the only thing drawn at the seam: no rule, no
+         border, no separator. */
+      box-shadow: -18px 0 26px -16px rgba(17, 17, 15, .22);
+      transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease),
+                  bottom .58s var(--ease), opacity .58s var(--ease);
     }
     .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
     .pf-slot[hidden] { display: none; }
@@ -1165,30 +1152,37 @@ const openable = (state: string) => state !== 'unpublished';
 
     /* ---------- project information ---------- */
     .pf-info { min-width: 0; }
+    /* One control line, not two buttons flanking a label: arrow, count,
+       arrow, sharing a single rule. The arrows carry their hit area and focus
+       ring without being drawn as boxes. */
     .pf-info__nav {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: .75rem;
-      padding-bottom: .9rem;
-      border-bottom: 1px solid var(--line);
+      padding-bottom: .85rem;
+      border-bottom: 1px solid var(--line-strong);
     }
     .pf-step {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border: 1px solid var(--line-strong);
+      width: 2.1rem;
+      height: 2.1rem;
+      margin: -.3rem;
+      border: 0;
       background: none;
-      color: inherit;
+      color: var(--ink);
       cursor: pointer;
-      transition: background .25s var(--ease), color .25s var(--ease), opacity .25s var(--ease);
+      transition: color .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
     }
-    .pf-step .arrow { width: 1.05rem; height: 1.05rem; }
-    .pf-step:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
-    .pf-step:disabled { opacity: .3; cursor: default; }
-    .pf-step:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-    .pf-info__counter { margin: 0; }
+    .pf-step .arrow { width: 1.1rem; height: 1.1rem; }
+    .pf-step:hover:not(:disabled) { color: var(--signal); }
+    .pf-step[data-step='-1']:hover:not(:disabled) { transform: translateX(-2px); }
+    .pf-step[data-step='1']:hover:not(:disabled) { transform: translateX(2px); }
+    .pf-step:disabled { opacity: .22; cursor: default; }
+    .pf-step:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+    .pf-info__counter { margin: 0; letter-spacing: .16em; }
     .pf-info__counter i { color: var(--muted); font-style: normal; }
 
     .pf-project[hidden] { display: none; }
@@ -1416,34 +1410,26 @@ const openable = (state: string) => state !== 'unpublished';
       .pf-gate__mark { width: 0; height: 2px; transition: width .5s var(--ease); }
       .pf-gate[data-active] .pf-gate__mark { width: 4rem; height: 2px; }
 
-      .pf-gate__rail { flex-direction: row; align-items: baseline; gap: .8rem; height: auto; }
-      /* Horizontal here: a full-width band has room for the name at size
-         without turning it on its side. */
-      .pf-gate__name { writing-mode: horizontal-tb; font-size: clamp(2rem, 8.6vw, 2.8rem); }
+      .pf-gate__head { flex-direction: row; align-items: baseline; gap: .8rem; }
+      .pf-gate__name { font-size: clamp(2rem, 8.6vw, 2.8rem); }
 
-      /* In the flow, full width, always on: a band has no hover state to
-         reveal anything. */
+      /* A band has no hover state, so its cover is always at full presence. */
       .pf-gate__field {
-        position: relative;
-        inset: auto;
-        width: 100%;
+        flex: none;
         height: clamp(9.5rem, 32vw, 13rem);
         opacity: 1;
-        transform: none;
       }
-      .pf-gate__foot { position: static; height: auto; }
       .pf-gate__desc { max-width: none; }
       .pf-gate__state,
       .pf-gate__go { opacity: 1; transform: none; }
       .pf-gate__state { max-width: none; }
 
-      .pf-gatetype__row { font-size: clamp(.85rem, 3.4vw, 1.05rem); padding: .34rem 0; }
-      .pf-gatesheets__sheet { width: 44%; padding: .55rem; }
+      .pf-gatetype__row { font-size: clamp(.85rem, 3.4vw, 1.05rem); padding: .3rem 0; }
+      .pf-gatesheets__sheet { width: 40%; max-width: 11rem; padding: .55rem; }
       .pf-gatesheets__sheet i { margin-bottom: .3rem; }
-      .pf-gatedeck__card { background: none; }
-      .pf-gatedeck__card:nth-child(3) { right: 2%; }
-      .pf-gatedeck__card:nth-child(2) { right: 28%; }
-      .pf-gatedeck__card:nth-child(1) { right: 52%; }
+      .pf-gatedeck__card:nth-child(3) { right: 2%; max-width: 42%; }
+      .pf-gatedeck__card:nth-child(2) { right: 30%; max-width: 36%; }
+      .pf-gatedeck__card:nth-child(1) { right: 56%; max-width: 31%; }
     }
 
     @media (max-width: 1023px) {
@@ -1460,9 +1446,24 @@ const openable = (state: string) => state !== 'unpublished';
       .pf-evidence__strip { gap: .4rem; }
       .pf-evidence__name { font-size: .74rem; }
       .pf-evidence__arrow { left: -.25rem; }
-      .pf-cats ul { gap: 0 1.1rem; }
-      .pf-cat { padding: .8rem 0; }
-      .pf-cat__label { font-size: .82rem; }
+      /* One editorial rail that scrolls, instead of a block of text wrapping
+         onto four rows like an old menu. Numbers, type, one signal — no pills,
+         no tabs. The rail is edge-to-edge so it reads as a rail, and each
+         entry snaps. */
+      .pf-cats { padding: 0; }
+      .pf-cats ul {
+        flex-wrap: nowrap;
+        gap: 0 1.4rem;
+        padding: 0 var(--gutter);
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .pf-cats ul::-webkit-scrollbar { display: none; }
+      .pf-cats li { scroll-snap-align: start; flex: none; }
+      .pf-cat { padding: .85rem 0; white-space: nowrap; }
+      .pf-cat__label { font-size: .95rem; }
       .pf-project__profile > div { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem; }
     }
 

@@ -397,9 +397,14 @@ export const simulationSessions: SimulationSession[] = [
     description:
       'Sixteen seconds of a CLO3D simulation running, carrying two looks. It shows what simulation output looks like in motion; it is not a recording of the pattern being built.',
     videoSrc: '/CLO3D.mp4',
-    poster: '/CLO3D-poster.jpg',
+    /* A different frame from the same recording, four seconds in: closer,
+       better lit and with both garments reading clearly. public/CLO3D-poster.jpg
+       is left exactly as it is because the home page uses it, and this pass
+       does not change any other page. Extracted from the real video — nothing
+       is generated. */
+    poster: '/CLO3D-cover.jpg',
     posterAlt:
-      'Two digital avatars mid-walk in CLO3D, one in a checked jacket and wide trousers, one in a waistcoat and wide trousers.',
+      'Two digital avatars mid-walk in CLO3D, one in a corduroy harrington jacket and wide trousers, one in a ribbed top and wide trousers.',
     workflowLabels: ['CLO3D', 'Garment simulation'],
     duration: 16,
   },

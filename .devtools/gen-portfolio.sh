@@ -1,35 +1,25 @@
 #!/usr/bin/env bash
-# Generates the responsive renditions the portfolio carousel actually loads.
+# Generates the responsive renditions the Portfolio deck actually loads.
 #
 # The uploaded sources are ~6 MB PNGs (297 MB across 49 files) and must never
 # reach a phone. They also must not sit in public/, because Astro publishes
-# everything in there verbatim — that alone made dist/ 312 MB of which nothing
-# but 7.2 MB was ever requested. Sources therefore live in
+# everything in there verbatim. Sources therefore live in
 # assets/source/<CATEGORY>/ (versioned, never deployed) and this script derives
-# what the site actually serves into public/portfolio/.
+# what the site serves into public/portfolio/<key>/N-{900,1400}.webp.
 #
-# Add or replace a source there, then re-run:  bash .devtools/gen-portfolio.sh
+# The derivation now also normalises the studio ground. The 49 frames were shot
+# on backgrounds running roughly #eeeeee to #ffffff; on the Portfolio stage the
+# garments overlap, so two adjacent frames with different whites met along a
+# hard seam and the deck read as a row of tiles rather than one photographic
+# space. normalise-ground.mjs resolves every ground to white using an
+# edge-connected flood fill with a tight tolerance and a feathered mask, so
+# white lace, ivory fabric, highlights and skin are left alone. The masters are
+# never touched.
+#
+# Add or replace a source, then re-run:  bash .devtools/gen-portfolio.sh
+#   ...--check  reports each frame's ground without writing
+#   ...--sample evening/1 woven/3   writes before/after PNG comparisons
 set -euo pipefail
-FF=$(node -e "console.log(require('ffmpeg-static'))")
-OUT=public/portfolio
-declare -A MAP=(
-  [evening]="EVENING & OCCASION"
-  [jersey]="JERSEY & KNITS"
-  [woven]="WOMENSWEAR - WOVEN"
-  [sport]="SPORTSWEAR & ACTIVEWEAR"
-  [swim]="SWIMWEAR"
-)
-for key in "${!MAP[@]}"; do
-  src="assets/source/${MAP[$key]}"
-  mkdir -p "$OUT/$key"
-  for f in "$src"/*.png; do
-    n=$(basename "$f" .png)
-    for w in 900 1400; do
-      dst="$OUT/$key/$n-$w.webp"
-      [ -f "$dst" ] && continue
-      "$FF" -hide_banner -v error -y -i "$f" -vf "scale=$w:-2:flags=lanczos" -c:v libwebp -quality 82 -compression_level 5 "$dst"
-    done
-  done
-  echo "$key: $(ls "$OUT/$key" | wc -l) renditions"
-done
-echo "TOTAL: $(du -sh $OUT | cut -f1)"
+cd "$(dirname "$0")/.."
+node .devtools/normalise-ground.mjs --write
+echo "TOTAL: $(du -sh public/portfolio | cut -f1)"
