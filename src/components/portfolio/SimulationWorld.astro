@@ -1,5 +1,5 @@
 ---
-/* 3D Simulation — a library of recorded working sessions.
+/* Pattern & 3D Development — a library of recorded development sessions.
  *
  * Ten entries, one below another, every one of them in the same 16:9 frame at
  * the same width. No hero, no film strip, no carousel: the videos are the
@@ -38,21 +38,21 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
         <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
       </a>
-      <p class="label pf-bar__tag"><b>04</b> 3D Simulation</p>
+      <p class="label pf-bar__tag"><b>04</b> Pattern &#38; 3D Development</p>
     </div>
 
     <header class="pf-head">
-      <h2 class="display" id="simulation-title">3D Simulation</h2>
+      <h2 class="display" id="simulation-title">Pattern &#38; 3D Development</h2>
       <p class="pf-head__descriptor">
-        Pattern construction, garment simulation and fit decisions in motion — the part of the work a
-        photograph cannot hold still.
+        Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
+        and fit decisions — the part of the work a photograph cannot hold still.
       </p>
       {sessions.some((session) => !playable(session)) && (
         <p class="pf-prov" data-pending-notice>
           <b class="label">Videos pending</b>
           <span>
-            The library is laid out for ten recorded working sessions. None is published yet, so every slot
-            is reserved and nothing is attached to it.
+            The library is laid out for ten recorded development sessions. None is published yet, so every
+            slot is reserved and nothing is attached to it.
           </span>
         </p>
       )}
@@ -80,7 +80,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
             )}
 
             {playable(session) ? (
-              <button type="button" class="pf-play" data-play aria-label={`Play ${session.title}`}>
+              <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>
                 <span class="pf-play__mark" aria-hidden="true"></span>
                 <span class="pf-play__text label">Play</span>
               </button>

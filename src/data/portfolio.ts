@@ -532,10 +532,16 @@ export const chapters: Chapter[] = [
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
   {
+    /* The id stays `3d-simulation` so every link, hash and history entry that
+       already exists keeps working. The PUBLIC name is wider than that: these
+       recordings start at the first pattern lines, not at the finished
+       simulation, and calling the chapter after its last step undersold the
+       work in it. */
     id: '3d-simulation',
     number: '04',
-    title: '3D Simulation',
-    descriptor: 'Pattern construction, garment simulation and fit decisions in motion.',
+    title: 'Pattern & 3D Development',
+    descriptor:
+      'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
     publication: simulationSessions.some((session) => !session.demo)
       ? 'published'
       : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',

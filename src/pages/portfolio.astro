@@ -6,6 +6,12 @@ import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVER } from '../data/portfolio';
 
+/* A cover title is set to fill its measure, not to a fixed size: a short name
+   and a long one should occupy about the same optical width, the way they
+   would on four covers of the same book. The scale is derived from the name's
+   own length and capped at both ends. */
+const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.length));
+
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
    pending, and nothing inside claims work that does not exist. Refusing to
@@ -61,6 +67,7 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
             data-chapter={chapter.id}
             data-publication={chapter.publication}
             data-tone={cinematic ? 'dark' : 'paper'}
+            style={`--cover-vw:${coverScale(chapter.title).toFixed(2)}`}
           >
             {cinematic && (
               <span class="pf-cover__art" aria-hidden="true">
@@ -728,11 +735,12 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       font-family: var(--display);
       font-variation-settings: 'wdth' 112;
       font-weight: 850;
-      /* The title is the hero. It runs as large as the width allows and never
-         breaks inside a word. */
-      font-size: clamp(2.9rem, 11vw, 9.5rem);
-      line-height: .84;
-      letter-spacing: -.06em;
+      /* The title is the hero. It runs as large as its own length allows —
+         see coverScale above — and never breaks inside a word. */
+      font-size: clamp(2.4rem, calc(var(--cover-vw, 11) * 1vw), 9.5rem);
+      line-height: .86;
+      letter-spacing: -.055em;
+      text-wrap: balance;
       overflow-wrap: normal;
       word-break: keep-all;
       hyphens: none;
@@ -757,7 +765,7 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(120% 90% at 50% 50%, rgba(17, 17, 15, .55) 0%, rgba(17, 17, 15, .88) 70%);
+      background: radial-gradient(120% 95% at 50% 50%, rgba(17, 17, 15, .72) 0%, rgba(17, 17, 15, .93) 74%);
     }
     .pf-cover[data-tone='dark'] .pf-cover__num { color: rgba(251, 250, 246, .66); }
 
@@ -931,12 +939,13 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       gap: clamp(1.75rem, 3vw, 2.75rem);
       align-items: start;
     }
-    @media (min-width: 1360px) {
-      .pf-viewer { grid-template-columns: minmax(0, 62fr) minmax(0, 38fr); gap: clamp(2rem, 3.2vw, 3.5rem); }
-      /* Three equal plates stand taller than four garments laid across 62% of
-         the width ever can, so the deck holds its place while the sequence
-         travels past it instead of being stranded in a column of white. */
-      .pf-deck { position: sticky; top: clamp(5rem, 9vh, 7rem); }
+    /* 71 / 29. The final garment is the result and carries the argument; the
+       three development stages are the proof behind it and are sized to say
+       so. Two columns from 1024 up, because the rail is now small enough that
+       the garments and all three plates compose together rather than the
+       plates pushing the deck out of the screen. */
+    @media (min-width: 1024px) {
+      .pf-viewer { grid-template-columns: minmax(0, 71fr) minmax(0, 29fr); gap: clamp(1.75rem, 2.8vw, 3rem); }
     }
 
     .pf-deck { min-width: 0; }
@@ -1088,24 +1097,43 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
     .pf-dev__plates {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: clamp(2rem, 3vw, 2.75rem);
+      gap: clamp(1.4rem, 2.2vw, 1.9rem);
       margin: 0;
       padding: 0;
       list-style: none;
+      justify-items: start;
     }
-    /* Compact, not huge: capped so three of them sit elegantly beside the
-       garments instead of competing with them for the eye. */
-    .pf-plate { position: relative; min-width: 0; max-width: 26rem; }
-    .pf-plate__art { position: relative; aspect-ratio: 3 / 2; }
+    .pf-plate { position: relative; min-width: 0; width: 100%; }
+    .pf-plate__art { position: relative; aspect-ratio: 4 / 3; }
+    /* Beside the deck the plates are deliberately small — evidence, not a
+       second gallery. Sized so the whole three-step rail stands no taller than
+       the garments it belongs to, which is what removed the need to make the
+       deck sticky to keep them in the same view. */
+    @media (min-width: 1024px) {
+      /* The whole rail is one column the width of a plate, so its heading rule
+         ends where the plates end instead of running past them. */
+      .pf-dev { width: clamp(9.5rem, 12.6vw, 12.5rem); }
+      .pf-dev__head { display: block; margin-bottom: .8rem; padding-bottom: .5rem; }
+      .pf-dev__note { display: block; margin-top: .3rem; line-height: 1.45; }
+      .pf-dev__plates { gap: clamp(.8rem, 1.1vw, 1rem); }
+      .pf-plate { width: 100%; }
+      /* One line, or it wraps over the plate's own edge at this width. */
+      .pf-plate__caption { font-size: .5rem; letter-spacing: .1em; white-space: nowrap; }
+      .pf-plate__stamp { font-size: .5rem; letter-spacing: .14em; }
+    }
     .pf-plate__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
     /* The arrow between one step and the next, drawn in the gap. */
     .pf-plate__link {
       position: absolute;
       left: 50%;
-      top: calc(clamp(2rem, 3vw, 2.75rem) * -1);
+      top: calc(clamp(1.4rem, 2.2vw, 1.9rem) * -1);
       width: 1px;
-      height: clamp(2rem, 3vw, 2.75rem);
+      height: clamp(1.4rem, 2.2vw, 1.9rem);
       background: var(--line-strong);
+    }
+    @media (min-width: 1024px) {
+      .pf-plate__link { top: calc(clamp(.8rem, 1.1vw, 1rem) * -1); height: clamp(.8rem, 1.1vw, 1rem); }
+      .pf-plate__link::after { width: .38rem; height: .38rem; left: -.18rem; }
     }
     .pf-plate__link::after {
       content: '';
@@ -1129,15 +1157,15 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
-      padding: clamp(.75rem, 1.2vw, 1.05rem);
+      padding: clamp(.5rem, .8vw, .75rem);
       border: 1px solid var(--line-strong);
     }
     .pf-plate__blank::before,
     .pf-plate__blank::after {
       content: '';
       position: absolute;
-      width: .9rem;
-      height: .9rem;
+      width: .7rem;
+      height: .7rem;
       border: 1px solid var(--ink);
       opacity: .38;
       pointer-events: none;
@@ -1161,21 +1189,22 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       background-repeat: no-repeat;
     }
     .pf-plate__stamp {
-      padding: .28rem .5rem;
+      padding: .22rem .42rem;
       border: 1px solid var(--muted);
       color: var(--muted);
       font-size: .58rem;
       letter-spacing: .2em;
     }
     .pf-plate__caption { color: var(--muted); font-size: .58rem; letter-spacing: .16em; }
-    .pf-plate__label { display: flex; align-items: baseline; gap: .6rem; margin: .7rem 0 0; }
-    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; }
+    .pf-plate__label { display: flex; align-items: baseline; gap: .55rem; margin: .5rem 0 0; }
+    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; font-size: .58rem; }
     .pf-plate__label span {
       font-family: var(--display);
-      font-size: clamp(.95rem, 1.25vw, 1.15rem);
+      font-size: clamp(.85rem, 1vw, .98rem);
       line-height: 1.15;
       letter-spacing: -.02em;
     }
+    .pf-dev__head { font-size: .92em; }
 
     /* ======================================================================
        EMPTY CHAPTER
@@ -1274,18 +1303,51 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
     .pf-reader__tab:hover { color: var(--signal); }
 
     /* ======================================================================
-       3D SIMULATION — ten 16:9 slots, one below another
+       PATTERN & 3D DEVELOPMENT — the digital workshop
+
+       This chapter is the only one that is not on paper. The whole layer is
+       ink, top bar to last hairline, because the work in it happens on a
+       screen in a dark room and the chapter should feel like that room rather
+       than like a beige page with black rectangles punched into it.
+
+       Same brand, inverted: paper type, warm grey for the second voice, the
+       one orange as a signal and nothing else, hairlines as low-opacity paper.
+       No blue, no gradient, no glow.
        ====================================================================== */
+    .pf-world--motion {
+      --pf-ink-line: rgba(251, 250, 246, .14);
+      --pf-ink-line-strong: rgba(251, 250, 246, .26);
+      --pf-ink-soft: rgba(251, 250, 246, .74);
+      --pf-ink-muted: rgba(251, 250, 246, .5);
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf--js .pf-world--motion { background: var(--ink); }
+    .pf-world--motion .pf-bar {
+      background: var(--ink);
+      border-bottom-color: var(--pf-ink-line);
+    }
+    .pf-world--motion .pf-bar__tag { color: var(--pf-ink-muted); }
+    .pf-world--motion .pf-bar__tag b { color: var(--paper-bright); }
+    .pf-world--motion .pf-back { color: var(--paper-bright); }
+    .pf-world--motion .pf-back:hover { color: var(--signal); }
+    .pf-world--motion .pf-head__descriptor { color: var(--pf-ink-soft); }
+    .pf-world--motion .pf-prov { border-left-color: var(--pf-ink-line-strong); }
+    .pf-world--motion .pf-prov span { color: var(--pf-ink-muted); }
+
+    /* ---- the video list ---- */
     .pf-videos {
       max-width: 64rem;
       margin: 0 auto;
-      padding: 0 var(--gutter);
+      padding: 0 var(--gutter) clamp(3rem, 6vw, 6rem);
       list-style: none;
     }
-    .pf-video { padding: clamp(2rem, 4vw, 3.25rem) 0; border-top: 1px solid var(--line); }
-    .pf-video:first-child { border-top: 1px solid var(--line-strong); }
+    /* Spacing and hairlines, not boxes: nothing here is a card. */
+    .pf-video { padding: clamp(2rem, 4vw, 3.25rem) 0; border-top: 1px solid var(--pf-ink-line); }
+    .pf-video:first-child { border-top: 1px solid var(--pf-ink-line-strong); }
+    .pf-video:last-child { border-bottom: 1px solid var(--pf-ink-line); }
     .pf-video__head { display: flex; align-items: baseline; gap: clamp(.9rem, 2vw, 1.6rem); margin: 0 0 clamp(.9rem, 1.6vw, 1.3rem); }
-    .pf-video__num { flex: none; color: var(--muted); font-style: normal; letter-spacing: .2em; }
+    .pf-video__num { flex: none; color: var(--pf-ink-muted); font-style: normal; letter-spacing: .2em; }
     .pf-video__head h3 {
       margin: 0;
       font-family: var(--display);
@@ -1299,7 +1361,11 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       position: relative;
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      background: var(--ink);
+      /* A shade off the world's own ink, so the frame reads as a surface
+         inside the room rather than as a hole cut in it. One hairline, no
+         border on the other three sides and no shadow. */
+      background: #17171a;
+      border-top: 1px solid var(--pf-ink-line);
     }
     .pf-video__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .pf-video__pending {
@@ -1308,8 +1374,8 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
       top: 50%;
       margin: 0;
       transform: translate(-50%, -50%);
-      color: rgba(251, 250, 246, .72);
-      letter-spacing: .24em;
+      color: var(--pf-ink-muted);
+      letter-spacing: .28em;
       text-align: center;
     }
     .pf-video__frame::after {
@@ -1342,8 +1408,8 @@ import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVE
     .pf-video__player { position: absolute; inset: 0; z-index: 3; }
     .pf-video__player[hidden] { display: none; }
     .pf-video__player iframe { width: 100%; height: 100%; border: 0; background: #000; }
-    .pf-video__desc { max-width: 42rem; margin: clamp(.9rem, 1.6vw, 1.3rem) 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
-    .pf-video__privacy { margin: .5rem 0 0; color: var(--muted); font-size: .85rem; }
+    .pf-video__desc { max-width: 42rem; margin: clamp(.9rem, 1.6vw, 1.3rem) 0 0; color: var(--pf-ink-soft); font-size: .95rem; line-height: 1.65; }
+    .pf-video__privacy { margin: .5rem 0 0; color: var(--pf-ink-muted); font-size: .85rem; }
 
     /* ======================================================================
        RESPONSIVE

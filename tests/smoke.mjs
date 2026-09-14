@@ -212,6 +212,16 @@ try {
       covers.find((cv) => cv.chapter === 'menswear').images === 0);
     check('the tech pack cover previews no document',
       covers.find((cv) => cv.chapter === 'tech-packs').images === 0);
+    /* The public name of chapter 04 is wider than its last step: the
+       recordings start at the first pattern lines. The internal id stays
+       `3d-simulation` so existing links and history entries keep working. */
+    check('chapter 04 is published as Pattern & 3D Development',
+      /^04 Pattern & 3D Development Open chapter$/.test(
+        covers.find((cv) => cv.chapter === '3d-simulation').text),
+      covers.find((cv) => cv.chapter === '3d-simulation').text);
+    check('the old narrower name is gone from the landing',
+      await p.evaluate(() => !/\b3D Simulation\b/.test(
+        [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
     check('the type-led covers say only their number, name and the way in',
       quiet.every((cv) => /^\d\d [A-Za-z0-9 ]+ Open chapter$/.test(cv.text)),
       quiet.map((cv) => cv.text).join(' | '));
@@ -613,6 +623,41 @@ try {
     check('the three plates are stacked one above another in one column',
       plates.stacked && new Set(plates.lefts).size === 1, `${plates.lefts.join(',')} stacked ${plates.stacked}`);
     check('the progression between steps is drawn', plates.links === 2, String(plates.links));
+
+    /* THE GARMENT IS THE HERO. The result carries the argument; the three
+       development stages are the proof behind it and are sized to say so. */
+    const weight = await p.evaluate(() => {
+      const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
+      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
+      const rail = viewer.querySelector('.pf-devcol').getBoundingClientRect();
+      const stage = viewer.querySelector('.pf-stage').getBoundingClientRect();
+      const dev = viewer.querySelector('.pf-dev').getBoundingClientRect();
+      const plate = viewer.querySelector('.pf-plate__art').getBoundingClientRect();
+      const total = deck.width + rail.width;
+      return {
+        deckShare: deck.width / total,
+        railShare: rail.width / total,
+        sideBySide: rail.left > deck.right - 2,
+        plateWidth: Math.round(plate.width),
+        stageHeight: Math.round(stage.height),
+        deckHeight: Math.round(deck.height),
+        railHeight: Math.round(dev.height),
+        deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
+      };
+    });
+    check('the garment deck takes 70-72% of the viewer',
+      weight.sideBySide && weight.deckShare >= 0.68 && weight.deckShare <= 0.74,
+      `${Math.round(weight.deckShare * 100)}%`);
+    check('the development rail takes 28-30% of the viewer',
+      weight.railShare >= 0.26 && weight.railShare <= 0.32, `${Math.round(weight.railShare * 100)}%`);
+    check('a development plate is a fraction of the garment stage',
+      weight.plateWidth <= weight.stageHeight * 0.45,
+      `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
+    /* The whole three-step rail has to stand no taller than the garments, or
+       the plates push the deck out of the view they belong to. */
+    check('all three plates fit beside the garments without a sticky deck',
+      weight.railHeight <= weight.deckHeight && weight.deckSticky !== 'sticky',
+      `rail ${weight.railHeight}px vs deck ${weight.deckHeight}px, deck ${weight.deckSticky}`);
     check('every plate is marked as a demo and borrows no image',
       plates.demo === 3 && plates.images === 0, `${plates.demo} demo / ${plates.images} images`);
     check('the strip says the real assets are pending',
@@ -799,6 +844,65 @@ try {
       reel.localVideo === false || reel.localVideo === 0, String(reel.localVideo));
     check('the rejected hero-plus-film-strip interface is gone', reel.strip === 0, String(reel.strip));
     check('nothing reached YouTube or fetched a video', media.length === 0, media.join(','));
+
+    /* THE WHOLE WORLD IS INK — bar, header, list and the gaps between the
+       videos — not a paper page with black rectangles punched into it. */
+    const dark = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="3d-simulation"]');
+      const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+      const h = ink.replace('#', '');
+      const inkRgb = `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)})`;
+      const bg = (sel) => getComputedStyle(w.querySelector(sel)).backgroundColor;
+      const lum = (c) => {
+        const m = c.match(/\d+/g) ?? [];
+        return (Number(m[0]) * 299 + Number(m[1]) * 587 + Number(m[2]) * 114) / 1000;
+      };
+      const signal = getComputedStyle(document.documentElement).getPropertyValue('--signal').trim();
+      const sh = signal.replace('#', '');
+      const signalRgb = `rgb(${parseInt(sh.slice(0, 2), 16)}, ${parseInt(sh.slice(2, 4), 16)}, ${parseInt(sh.slice(4, 6), 16)})`;
+      return {
+        world: getComputedStyle(w).backgroundColor,
+        inkRgb,
+        bar: bg('.pf-bar'),
+        title: getComputedStyle(w.querySelector('.pf-head h2')).color,
+        titleLum: lum(getComputedStyle(w.querySelector('.pf-head h2')).color),
+        gapLum: lum(getComputedStyle(w.querySelector('.pf-videos')).backgroundColor === 'rgba(0, 0, 0, 0)'
+          ? getComputedStyle(w).backgroundColor
+          : getComputedStyle(w.querySelector('.pf-videos')).backgroundColor),
+        frameLum: lum(bg('.pf-video__frame')),
+        /* Orange is a signal, never a surface. */
+        orangeFills: [...w.querySelectorAll('*')]
+          .filter((el) => getComputedStyle(el).backgroundColor === signalRgb).length,
+        /* Nothing is a card. */
+        rounded: [...w.querySelectorAll('.pf-video, .pf-video__frame')]
+          .filter((el) => getComputedStyle(el).borderRadius !== '0px'
+            || getComputedStyle(el).boxShadow !== 'none').length,
+      };
+    });
+    check('the whole chapter is ink', dark.world === dark.inkRgb, `${dark.world} vs ${dark.inkRgb}`);
+    check('the top bar belongs to the dark world', dark.bar === dark.inkRgb, dark.bar);
+    check('the type is paper on ink', dark.titleLum > 200, `${Math.round(dark.titleLum)}`);
+    check('there is no paper gap between the videos', dark.gapLum < 40, `${Math.round(dark.gapLum)}`);
+    check('the video frames sit on the dark world, not on a light panel',
+      dark.frameLum < 45, `${Math.round(dark.frameLum)}`);
+    check('orange is a signal, never a surface', dark.orangeFills === 0, String(dark.orangeFills));
+    check('no video is drawn as a card', dark.rounded === 0, String(dark.rounded));
+
+    /* The chapter is named for what the recordings actually cover. */
+    const naming = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="3d-simulation"]');
+      return {
+        heading: w.querySelector('.pf-head h2').textContent.trim(),
+        bar: w.querySelector('.pf-bar__tag').textContent.replace(/\s+/g, ' ').trim(),
+        descriptor: w.querySelector('.pf-head__descriptor').textContent.replace(/\s+/g, ' ').trim(),
+      };
+    });
+    check('the chapter heading is Pattern & 3D Development',
+      naming.heading === 'Pattern & 3D Development', naming.heading);
+    check('the navigation label matches', naming.bar === '04 Pattern & 3D Development', naming.bar);
+    check('the descriptor names the whole development arc',
+      /first pattern lines/i.test(naming.descriptor) && /CLO3D validation/i.test(naming.descriptor)
+      && /fit decisions/i.test(naming.descriptor), naming.descriptor);
     await c.close();
   }
 
