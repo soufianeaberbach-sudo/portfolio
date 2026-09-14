@@ -90,35 +90,55 @@ for (const width of WIDTHS) {
   await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
   await p.waitForTimeout(500);
   await settle(p);
-  await p.screenshot({ path: path.join(OUT, `${width}-01-landing.png`), fullPage: true });
+  await p.screenshot({ path: path.join(OUT, `${width}-01-index.png`), fullPage: true });
 
-  const open = async (id) => {
-    await p.evaluate((chapter) => {
+  const nav = async (hash) => {
+    await p.evaluate((h) => {
       window.scrollTo(0, 0);
-      document.querySelector(`[data-chapter="${chapter}"]`).click();
-    }, id);
+      const link = document.querySelector(`a[href="${h}"][data-nav]`)
+        ?? document.querySelector(`[data-chapter="${h.slice(1)}"]`);
+      link.click();
+    }, hash);
     await p.waitForTimeout(900);
   };
-  const close = async () => { await p.keyboard.press('Escape'); await p.waitForTimeout(650); };
 
-  await open('womenswear');
-  await captureWorld(p, 'womenswear', path.join(OUT, `${width}-02-womenswear.png`));
-  /* The viewer band on its own, at the top of the frame. */
+  await nav('#womenswear');
+  await captureWorld(p, 'womenswear', path.join(OUT, `${width}-02-women-categories.png`));
+
+  await nav('#womenswear/rtw');
+  await captureWorld(p, 'womenswear', path.join(OUT, `${width}-03-women-viewer.png`));
   await p.evaluate(() => {
     const world = document.querySelector('[data-world="womenswear"]');
     world.scrollTop = world.querySelector('.pf-studio').offsetTop - 70;
   });
   await p.waitForTimeout(450);
-  await p.screenshot({ path: path.join(OUT, `${width}-03-viewer.png`) });
-  await close();
+  await p.screenshot({ path: path.join(OUT, `${width}-04-women-development.png`) });
 
-  await open('tech-packs');
-  await captureWorld(p, 'tech-packs', path.join(OUT, `${width}-04-techpacks.png`));
-  await close();
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(650);
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(650);
 
-  await open('3d-simulation');
-  await captureWorld(p, '3d-simulation', path.join(OUT, `${width}-05-simulation.png`));
-  await close();
+  await nav('#menswear');
+  await captureWorld(p, 'menswear', path.join(OUT, `${width}-05-men-categories.png`));
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(650);
+
+  await nav('#tech-packs');
+  await captureWorld(p, 'tech-packs', path.join(OUT, `${width}-06-techpacks.png`));
+  /* The reader, with a real document in it. */
+  await p.evaluate(() => document.querySelector('[data-world="tech-packs"] [data-open-pdf]').click());
+  await p.waitForTimeout(1600);
+  await p.screenshot({ path: path.join(OUT, `${width}-07-pdf-reader.png`) });
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(500);
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(650);
+
+  await nav('#3d-simulation');
+  await captureWorld(p, '3d-simulation', path.join(OUT, `${width}-08-simulation.png`));
+  await p.keyboard.press('Escape');
+  await p.waitForTimeout(650);
 
   await ctx.close();
   console.log(`${width} captured`);

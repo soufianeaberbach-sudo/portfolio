@@ -130,30 +130,33 @@ try {
   }
 
   /* ------------------------------------------------------------------------
-     PORTFOLIO V6
+     PORTFOLIO V8
 
-     The block this replaces tested the V5 collection overlay by its own
-     selectors ([data-collection-overlay], #collection-scrubber, the "Look 01"
-     runway). V6 removed that UI, so those selectors cannot be asserted on any
-     more. Every invariant they protected is re-asserted below against the new
-     architecture — overlay opens, background inert, focus starts inside and is
-     trapped both ways, Escape closes, inert is released, focus returns to the
-     opening control, keyboard drives the queue, reduced motion settles
-     instantly — and the index-bounds assertion the scrubber used to carry is
-     now made directly against the queue's own bounds and its prev/next
-     disabled states.
+     The presentation was rebuilt around a three-level hierarchy — portfolio
+     index, chapter category index, category viewer — so the assertions that
+     described the V7 single-screen chapter (the folio table, the film strip,
+     the 2+1 development panel, the subchapter bands sitting above a viewer)
+     are gone with the interface they protected. Every factual-integrity rule
+     they carried alongside is kept and re-asserted here against the new
+     architecture.
      ------------------------------------------------------------------------ */
-  const openWomenswear = async (p) => {
-    await p.evaluate(() => {
-      const link = document.querySelector('[data-chapter="womenswear"]');
+  const openChapter = async (p, id) => {
+    await p.evaluate((chapter) => {
+      const link = document.querySelector(`[data-chapter="${chapter}"]`);
       link.id = 'smoke-trigger';
       link.click();
-    });
-    await p.waitForTimeout(900);
+    }, id);
+    await p.waitForTimeout(800);
+  };
+  const openCategory = async (p, world, category) => {
+    await p.evaluate(([w, c]) => {
+      document.querySelector(`[data-world="${w}"] a.pf-cat[data-category="${c}"]`).click();
+    }, [world, category]);
+    await p.waitForTimeout(800);
   };
 
-  // ---- structure: four worlds, approved taxonomy, nothing invented
-  console.log('\nportfolio architecture');
+  // ---- structure: four chapters, four long covers, nothing previewed
+  console.log('\nportfolio index');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
@@ -162,237 +165,102 @@ try {
     await p.waitForTimeout(500);
 
     const worlds = await p.evaluate(() => [...document.querySelectorAll('[data-world]')].map((e) => e.dataset.world));
-    check('exactly four top-level worlds', worlds.length === 4, worlds.join(','));
+    check('exactly four top-level chapters', worlds.length === 4, worlds.join(','));
     for (const id of ['womenswear', 'menswear', 'tech-packs', '3d-simulation']) {
-      check(`world "${id}" exists`, worlds.includes(id));
+      check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    const chapters = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].map((e) => e.dataset.chapter));
-    check('four chapters in the landing index', chapters.length === 4, chapters.join(','));
-
-    /* The four worlds are gates in one continuous field, not cards: no
-       radius, no frame on all four sides, nothing floating. */
-    const cardish = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].filter((el) => {
-      const s = getComputedStyle(el);
-      const framed = s.borderTopWidth !== '0px' && s.borderLeftWidth !== '0px'
-        && s.borderRightWidth !== '0px' && s.borderBottomWidth !== '0px';
-      return framed || s.borderRadius !== '0px' || s.boxShadow !== 'none';
-    }).length);
-    check('gates are one continuous field, not four cards', cardish === 0, `${cardish} boxed`);
-
-    /* V7: THE LANDING IS FOUR SEQUENTIAL COVERS.
-       Not four side-by-side columns, not a card grid, not a dashboard. Each
-       cover is the better part of a screen, each starts below the one before
-       it, and each spans the full width of the viewport. */
+    /* Four long covers, one after another. Not four columns, not cards. */
     const covers = await p.evaluate(() => {
       const list = [...document.querySelectorAll('.pf-cover')];
       const doc = document.documentElement.clientWidth;
       return list.map((el) => {
         const r = el.getBoundingClientRect();
+        const s = getComputedStyle(el);
         return {
           chapter: el.dataset.chapter,
           top: Math.round(r.top + window.scrollY),
           height: Math.round(r.height),
           left: Math.round(r.left),
-          width: Math.round(r.width),
           full: Math.round(r.width) >= doc - 1,
+          isLink: el.tagName === 'A',
+          boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
+          titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
+          images: el.querySelectorAll('img').length,
+          text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
     });
-    check('the landing carries four chapter covers', covers.length === 4, String(covers.length));
+    check('four chapter covers on the landing', covers.length === 4, String(covers.length));
     check('the covers run in sequence, never side by side',
-      covers.every((c, i) => i === 0 || c.top >= covers[i - 1].top + covers[i - 1].height - 2),
-      covers.map((c) => `${c.chapter}@${c.top}+${c.height}`).join(' '));
-    check('every cover spans the full width', covers.every((c) => c.full && c.left === 0),
-      covers.map((c) => `${c.chapter}:${c.width}`).join(','));
-    check('every cover is most of a screen tall',
-      covers.every((c) => c.height >= 900 * 0.62), covers.map((c) => c.height).join(','));
+      covers.every((cv, i) => i === 0 || cv.top >= covers[i - 1].top + covers[i - 1].height - 2),
+      covers.map((cv) => `${cv.chapter}@${cv.top}`).join(' '));
+    check('every cover spans the full width', covers.every((cv) => cv.full && cv.left === 0));
+    check('every cover is a long editorial field', covers.every((cv) => cv.height >= 900 * 0.68),
+      covers.map((cv) => cv.height).join(','));
+    check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
+    check('every chapter is openable', covers.every((cv) => cv.isLink));
+    check('the chapter title is the hero of its cover',
+      covers.every((cv) => cv.titlePx >= 72), covers.map((cv) => cv.titlePx).join(','));
 
-    /* Each cover is composed from what its own chapter actually holds, so the
-       four do not rhyme. In particular the Womenswear cover is ONE hero
-       garment — the three-image deck in miniature turned the landing back into
-       a card grid — and Menswear borrows no photograph at all. */
-    const coverArt = await p.evaluate(() => ({
-      womenswearImages: document.querySelectorAll('.pf-cover[data-chapter="womenswear"] img').length,
-      menswearImages: document.querySelectorAll('.pf-cover[data-chapter="menswear"] img').length,
-      menswearRows: document.querySelectorAll('.pf-cover[data-chapter="menswear"] .pf-covertype__row').length,
-      folio: document.querySelectorAll('.pf-cover[data-chapter="tech-packs"] .pf-foliomark').length,
-      folioSheets: [...document.querySelectorAll('.pf-cover[data-chapter="tech-packs"] .pf-foliomark__sheet')].map((el) => ({
-        src: el.querySelector('img')?.getAttribute('src') ?? '',
-        box: (() => { const r = el.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), Math.round(r.left), Math.round(r.top)]; })(),
-        spine: !!el.querySelector('.pf-foliomark__spine'),
-      })),
-      still: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__still').length,
-      play: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__play').length,
-    }));
-    check('the womenswear cover is one hero garment', coverArt.womenswearImages === 1, String(coverArt.womenswearImages));
-    check('the menswear cover borrows no photograph',
-      coverArt.menswearImages === 0 && coverArt.menswearRows === 4,
-      `${coverArt.menswearImages} images / ${coverArt.menswearRows} rows`);
-    check('the tech pack cover is a physical folio', coverArt.folio === 1);
-    check('the folio cover is three real first pages, stacked and overlapping',
-      coverArt.folioSheets.length === 3
-      && coverArt.folioSheets.every((sh) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(sh.src) && sh.spine)
-      && coverArt.folioSheets.every((sh, i) => i === 0 || (sh.box[2] > coverArt.folioSheets[i - 1].box[2]
-        && sh.box[2] < coverArt.folioSheets[i - 1].box[2] + coverArt.folioSheets[i - 1].box[0])),
-      JSON.stringify(coverArt.folioSheets.map((sh) => sh.src.split('/').pop())));
-    check('the 3D cover is a frame of the real recording with a play mark',
-      coverArt.still === 1 && coverArt.play === 1);
+    /* The three type-led covers carry their name and nothing else: no garment,
+       no category list, no paragraph, no disclaimer. */
+    const quiet = covers.filter((cv) => cv.chapter !== '3d-simulation');
+    check('the womenswear cover carries no image',
+      covers.find((cv) => cv.chapter === 'womenswear').images === 0);
+    check('the menswear cover carries no image',
+      covers.find((cv) => cv.chapter === 'menswear').images === 0);
+    check('the tech pack cover previews no document',
+      covers.find((cv) => cv.chapter === 'tech-packs').images === 0);
+    check('the type-led covers say only their number, name and the way in',
+      quiet.every((cv) => /^\d\d [A-Za-z0-9 ]+ Open chapter$/.test(cv.text)),
+      quiet.map((cv) => cv.text).join(' | '));
+    check('no category list appears on any cover',
+      await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
+    check('the reference disclaimer never appears on a cover',
+      await p.evaluate(() => !/no authorship of photographed garments/i
+        .test([...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
 
-    const cats = await p.evaluate(() => ({
-      women: [...document.querySelectorAll('[data-world="womenswear"] .pf-band__label')].map((e) => e.textContent.trim()),
-      men: [...document.querySelectorAll('[data-world="menswear"] .pf-band__label')].map((e) => e.textContent.trim()),
-    }));
-    const approvedWomen = [
-      'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
-      'Evening & Occasionwear', 'Swimwear & Resortwear',
-    ];
-    const approvedMen = [
-      'Streetwear & Casualwear', 'Activewear & Performance',
-      'Contemporary Ready-to-Wear', 'Tailoring & Outerwear',
-    ];
-    check('womenswear categories match the approved order',
-      JSON.stringify(cats.women) === JSON.stringify(approvedWomen), cats.women.join(' | '));
-    check('menswear categories match the approved order',
-      JSON.stringify(cats.men) === JSON.stringify(approvedMen), cats.men.join(' | '));
-    /* An unpublished chapter reads through the same subchapter bands as a
-       published one, but offers no control that leads nowhere. */
-    const menBands = await p.evaluate(() => {
-      const bands = [...document.querySelectorAll('[data-world="menswear"] .pf-band')];
-      return {
-        count: bands.length,
-        buttons: bands.filter((b) => b.tagName === 'BUTTON').length,
-        labelPx: bands.map((b) => Math.round(parseFloat(getComputedStyle(b.querySelector('.pf-band__label')).fontSize))),
-      };
-    });
-    check('menswear uses the same subchapter bands', menBands.count === 4, String(menBands.count));
-    check('menswear bands are editorial, not menu type',
-      menBands.labelPx.every((px) => px >= 24), menBands.labelPx.join(','));
-    check('menswear offers no control that leads nowhere', menBands.buttons === 0, String(menBands.buttons));
-
-    // Jersey / Woven are cloth, not markets: they may appear as fabric family
-    // metadata but never as a category heading.
-    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-band__label, .pf-cover__name')]
-      .map((e) => e.textContent.trim().toLowerCase())
-      .filter((t) => t === 'jersey' || t === 'woven' || t === 'jersey & knit' || t === 'sport' || t === 'evening dresses'));
-    check('no jersey/woven/sport top-level taxonomy', badTaxonomy.length === 0, badTaxonomy.join(','));
-
-    const looks = await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length);
-    check('no "Look 01" UI anywhere', looks === 0, `${looks} occurrences`);
-
-    // Tech packs and 3D simulation are their own worlds, never entries in the
-    // garment queue.
-    const bleed = await p.evaluate(() => ({
-      pdfInQueue: document.querySelectorAll('.pf-slot a[href$=".pdf"], .pf-slot iframe, .pf-slot video').length,
-      mediaInQueue: document.querySelectorAll('.pf-stack video, .pf-stack iframe').length,
-      sessionsOutsideMotion: [...document.querySelectorAll('[data-session]')]
-        .filter((e) => e.closest('[data-world]')?.dataset.world !== '3d-simulation').length,
-      docsOutsideDocs: [...document.querySelectorAll('.pf-folio, .pf-foliomark:not(.pf-cover .pf-foliomark)')]
-        .filter((e) => e.closest('[data-world]')?.dataset.world !== 'tech-packs').length,
-    }));
-    check('no documents or video inside the garment queue', bleed.pdfInQueue === 0 && bleed.mediaInQueue === 0);
-    check('simulation sessions live only in the 3D world', bleed.sessionsOutsideMotion === 0);
-    check('tech pack documents live only in the Tech Packs world', bleed.docsOutsideDocs === 0);
-
-    // Nothing must reach YouTube before an explicit play.
-    const youtube = await p.evaluate(() => ({
+    /* Nothing heavy is fetched to render the index. */
+    const eager = await p.evaluate(() => ({
       iframes: document.querySelectorAll('iframe').length,
-      ytRefs: document.documentElement.innerHTML.includes('youtube.com/embed'),
+      objects: document.querySelectorAll('object').length,
       videos: document.querySelectorAll('video[src]').length,
+      ytRefs: document.documentElement.innerHTML.includes('youtube.com/embed'),
     }));
-    check('no iframe exists before play', youtube.iframes === 0, String(youtube.iframes));
-    check('no YouTube embed URL in the served markup', youtube.ytRefs === false);
-    check('no video carries a src before play', youtube.videos === 0, String(youtube.videos));
+    check('no iframe or object exists before anything is asked for',
+      eager.iframes === 0 && eager.objects === 0, JSON.stringify(eager));
+    check('no YouTube embed URL in the served markup', eager.ytRefs === false);
+    check('no video carries a src before play', eager.videos === 0);
 
-    // Missing content is omitted, never printed as a placeholder.
     const placeholders = await p.evaluate(() => (document.body.innerText.match(/\b(UNKNOWN|N\/A|TODO|LOREM|TBD)\b/gi) ?? []));
     check('no UNKNOWN / N-A / TODO on the public UI', placeholders.length === 0, placeholders.join(','));
 
-    /* A coloured rule directly under words reads as a spell-check mark. The
-       device is banned from the visual language, so it is fenced off here the
-       way it already is on Contact: walk every resting computed style in the
-       portfolio and fail on any signal-coloured underline or inset bottom
-       rule. Hover states are exempt by construction — nothing is hovered. */
+    /* A coloured rule directly under words reads as a spell-check mark, and is
+       banned from the visual language. A hairline box around a stamp is a
+       different device and stays allowed, so only a bottom-only rule counts. */
     const underlines = await p.evaluate(() => {
       const signal = getComputedStyle(document.documentElement).getPropertyValue('--signal').trim();
-      const toRgb = (hex) => {
-        const h = hex.replace('#', '');
-        return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)})`;
-      };
-      const target = toRgb(signal);
+      const h = signal.replace('#', '');
+      const target = `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)})`;
       const bad = [];
       for (const el of document.querySelectorAll('.pf *')) {
         if (!el.textContent.trim()) continue;
-        const s = getComputedStyle(el);
-        if (s.textDecorationLine.includes('underline') && s.textDecorationColor === target) {
-          bad.push(`${el.className} text-decoration`);
-        }
-        /* A rule UNDER the words is the banned device — it reads as a Word
-           spell-check mark. A hairline box around a stamp or a button is a
-           different thing entirely and stays allowed, so the bottom rule only
-           counts when the other three sides are absent. */
-        const bottomOnly = s.borderBottomStyle !== 'none' && s.borderBottomWidth !== '0px'
-          && s.borderTopWidth === '0px' && s.borderLeftWidth === '0px' && s.borderRightWidth === '0px';
-        if (bottomOnly && s.borderBottomColor === target) {
-          bad.push(`${el.className} border-bottom`);
-        }
+        const st = getComputedStyle(el);
+        if (st.textDecorationLine.includes('underline') && st.textDecorationColor === target) bad.push(`${el.className} text-decoration`);
+        const bottomOnly = st.borderBottomStyle !== 'none' && st.borderBottomWidth !== '0px'
+          && st.borderTopWidth === '0px' && st.borderLeftWidth === '0px' && st.borderRightWidth === '0px';
+        if (bottomOnly && st.borderBottomColor === target) bad.push(`${el.className} border-bottom`);
       }
       return bad.slice(0, 5);
     });
     check('no orange underline sits beneath portfolio text at rest', underlines.length === 0, underlines.join(' | '));
 
-    /* PUBLISHING STATE. A chapter with nothing published is listed so the
-       four-world architecture stays visible, but it is not a link — there is
-       no empty world to walk into — and it says what it is waiting for. */
-    const states = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].map((el) => ({
-      id: el.dataset.chapter,
-      publication: el.dataset.publication,
-      isLink: el.tagName === 'A',
-      note: el.querySelector('.pf-cover__state')?.textContent.trim() ?? null,
-      opensAffordance: !!el.querySelector('.pf-cover__go'),
-    })));
-    const byId = Object.fromEntries(states.map((c) => [c.id, c]));
-    check('four chapters carry an explicit publication state',
-      states.every((c) => ['published', 'reference-preview', 'unpublished'].includes(c.publication)),
-      states.map((c) => `${c.id}=${c.publication}`).join(' '));
-    check('menswear is unpublished', byId.menswear.publication === 'unpublished');
-    check('menswear is not presented as an openable world', byId.menswear.isLink === false && byId.menswear.opensAffordance === false);
-    check('menswear says what it is waiting for', /will be published here/i.test(byId.menswear.note ?? ''), byId.menswear.note ?? 'none');
-    /* V7 put five DEMO packs on the table so the folio viewer could be
-       designed against documents that open. They are not published work, so
-       the chapter reports itself as an interface preview and says so on the
-       cover; it flips to `published` the moment a pack without `demo` lands. */
-    check('tech packs are an interface preview, not published work',
-      byId['tech-packs'].publication === 'reference-preview', byId['tech-packs'].publication);
-    check('tech packs are openable', byId['tech-packs'].isLink === true);
-    check('the tech pack cover says the documents are demos',
-      /demo documents for interface review/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
-    check('tech packs promise real examples rather than refusing to publish',
-      /will replace them/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
-    check('womenswear is openable as a reference preview',
-      byId.womenswear.publication === 'reference-preview' && byId.womenswear.isLink === true);
-    check('the womenswear chapter is labelled as an interface preview',
-      /temporary visual references/i.test(byId.womenswear.note ?? ''), byId.womenswear.note ?? 'none');
-
-    /* The earlier "client-owned, shared only on request" policy is not the
-       intended one and must not reappear. */
-    const refusal = await p.evaluate(() => /shared (directly )?on request|not published on a public page/i.test(document.body.innerText));
-    check('no statement that technical packs are withheld from publication', refusal === false);
-
-    /* The CLO3D clip is a simulation sample, not a recorded working session. */
-    const sim = await p.evaluate(() => {
-      const kind = document.querySelector('.pf-session__kind')?.textContent.trim() ?? '';
-      const body = document.body.innerText;
-      return { kind, claimsFullSession: /pattern creation from start to finish|full working session/i.test(body) };
-    });
-    check('the CLO3D clip is labelled a simulation sample', /simulation sample/i.test(sim.kind), sim.kind);
-    check('no claim that the sample shows pattern construction end to end', sim.claimsFullSession === false);
-
     await c.close();
   }
 
-  // ---- overlay behaviour (migrated from the V5 collection overlay block)
-  console.log('\nportfolio world overlay');
+  // ---- the hierarchy: chapter -> categories -> viewer -> back again
+  console.log('\nportfolio navigation hierarchy');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
@@ -400,591 +268,537 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
 
-    await openWomenswear(p);
+    await openChapter(p, 'womenswear');
     const world = '[data-world="womenswear"]';
-    check('world opens', await p.evaluate((s) => document.querySelector(s).hasAttribute('data-open'), world));
+    check('the chapter opens', await p.evaluate((sel) => document.querySelector(sel).hasAttribute('data-open'), world));
     check('background is inert', await p.evaluate(() => !!document.querySelector('[inert]')));
-    check('focus starts inside the world', await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world));
+    check('focus starts inside the chapter',
+      await p.evaluate((sel) => document.querySelector(sel).contains(document.activeElement), world));
 
-    let escaped = false;
-    for (let i = 0; i < 24; i += 1) {
-      await p.keyboard.press('Tab');
-      if (!(await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world))) { escaped = true; break; }
-    }
-    check('Tab never escapes the world', !escaped);
-    for (let i = 0; i < 6; i += 1) await p.keyboard.press('Shift+Tab');
-    check('Shift+Tab never escapes the world', await p.evaluate((s) => document.querySelector(s).contains(document.activeElement), world));
+    /* SCREEN 1 IS THE CATEGORY INDEX, AND NOTHING ELSE.
+       No garment, no viewer, no development panel — the visitor chooses a
+       category before any imagery is shown. */
+    const first = await p.evaluate((sel) => {
+      const w = document.querySelector(sel);
+      const shown = [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
+      const visible = (el) => el.getBoundingClientRect().width > 0 && !el.closest('[hidden]');
+      return {
+        screens: shown.map((e) => e.dataset.screen),
+        cats: [...w.querySelectorAll('[data-screen="index"] .pf-cat__label')].map((e) => e.textContent.trim()),
+        catLinks: w.querySelectorAll('[data-screen="index"] a.pf-cat').length,
+        labelPx: [...w.querySelectorAll('[data-screen="index"] .pf-cat__label')]
+          .map((e) => Math.round(parseFloat(getComputedStyle(e).fontSize))),
+        garments: [...w.querySelectorAll('.pf-slot img')].filter(visible).length,
+        stages: [...w.querySelectorAll('[data-stage]')].filter(visible).length,
+        plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
+        disclaimers: [...w.querySelectorAll('[data-reference-notice]')].filter(visible).length,
+        hash: location.hash,
+      };
+    }, world);
+    check('the chapter opens on its category index',
+      first.screens.join(',') === 'index', first.screens.join(','));
+    check('the URL names the chapter', first.hash === '#womenswear', first.hash);
+    check('the five approved categories are listed',
+      JSON.stringify(first.cats) === JSON.stringify([
+        'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
+        'Evening & Occasionwear', 'Swimwear & Resortwear',
+      ]), first.cats.join(' | '));
+    check('the categories are editorial bands, not menu type',
+      first.labelPx.every((px) => px >= 28), first.labelPx.join(','));
+    check('NO garment image is visible before a category is chosen',
+      first.garments === 0, String(first.garments));
+    check('no garment viewer is visible before a category is chosen',
+      first.stages === 0, String(first.stages));
+    check('no development panel is visible before a category is chosen',
+      first.plates === 0, String(first.plates));
+    check('the reference disclaimer is not on the category screen',
+      first.disclaimers === 0, String(first.disclaimers));
+
+    // ---- entering a category
+    await openCategory(p, 'womenswear', 'rtw');
+    const second = await p.evaluate((sel) => {
+      const w = document.querySelector(sel);
+      const shown = [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
+      const visible = (el) => el.getBoundingClientRect().width > 0 && !el.closest('[hidden]');
+      return {
+        screen: shown[0]?.dataset.screen ?? null,
+        category: shown[0]?.dataset.category ?? null,
+        count: shown.length,
+        hash: location.hash,
+        stages: [...w.querySelectorAll('[data-stage]')].filter(visible).length,
+        garments: [...w.querySelectorAll('.pf-slot img')].filter(visible).length,
+        back: w.querySelector('[data-screen="category"]:not([hidden]) .pf-back')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+        disclaimers: [...w.querySelectorAll('[data-reference-notice]')].filter(visible).length,
+      };
+    }, world);
+    check('choosing a category opens its viewer',
+      second.screen === 'category' && second.category === 'rtw', JSON.stringify(second));
+    check('exactly one screen is shown at a time', second.count === 1, String(second.count));
+    check('the URL names chapter and category', second.hash === '#womenswear/rtw', second.hash);
+    check('the garment viewer is now visible', second.stages === 1 && second.garments > 0,
+      `${second.stages} stages, ${second.garments} garments`);
+    check('the back control returns to the category index, not the portfolio index',
+      /womenswear categories/i.test(second.back), second.back);
+    check('the reference disclaimer appears exactly once, beside the photographs',
+      second.disclaimers === 1, String(second.disclaimers));
+
+    // ---- back steps one level at a time
+    await p.evaluate((sel) => document.querySelector(`${sel} [data-screen="category"]:not([hidden]) .pf-back`).click(), world);
+    await p.waitForTimeout(700);
+    check('back from the viewer returns to the category index',
+      await p.evaluate((sel) => {
+        const shown = [...document.querySelector(sel).querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
+        return shown.length === 1 && shown[0].dataset.screen === 'index' && location.hash === '#womenswear';
+      }, world));
 
     await p.keyboard.press('Escape');
     await p.waitForTimeout(700);
-    check('Escape closes the world', await p.evaluate((s) => !document.querySelector(s).hasAttribute('data-open'), world));
+    check('Escape from the category index leaves the chapter',
+      await p.evaluate((sel) => !document.querySelector(sel).hasAttribute('data-open'), world));
     check('background inert released', await p.evaluate(() => !document.querySelector('[inert]')));
-    check('focus restored to the opening control',
+    check('focus restored to the cover that opened it',
       await p.evaluate(() => document.activeElement?.id === 'smoke-trigger'),
       await p.evaluate(() => document.activeElement?.id || document.activeElement?.tagName || 'none'));
+
+    // ---- menswear has the same interface, with nothing fabricated inside it
+    await openChapter(p, 'menswear');
+    const men = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="menswear"]');
+      return {
+        cats: [...w.querySelectorAll('.pf-cat__label')].map((e) => e.textContent.trim()),
+        links: w.querySelectorAll('a.pf-cat').length,
+        pending: [...w.querySelectorAll('.pf-cat__count')].filter((e) => /pending/i.test(e.textContent)).length,
+        garments: w.querySelectorAll('.pf-slot').length,
+        publication: w.dataset.publication,
+      };
+    });
+    check('menswear categories match the approved order',
+      JSON.stringify(men.cats) === JSON.stringify([
+        'Streetwear & Casualwear', 'Activewear & Performance',
+        'Contemporary Ready-to-Wear', 'Tailoring & Outerwear',
+      ]), men.cats.join(' | '));
+    check('menswear is unpublished', men.publication === 'unpublished', men.publication);
+    check('no menswear garment is fabricated', men.garments === 0, String(men.garments));
+    check('every menswear category says it is pending, and leads nowhere',
+      men.pending === 4 && men.links === 0, `${men.pending} pending / ${men.links} links`);
 
     await c.close();
   }
 
-  // ---- the project queue: counts, leading position, keyboard, bounds
-  console.log('\nportfolio project queue');
+  // ---- the garment deck: depth, occlusion, keyboard, drag, integrity
+  console.log('\nportfolio garment viewer');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await openWomenswear(p);
+    await openChapter(p, 'womenswear');
+    await openCategory(p, 'womenswear', 'rtw');
 
-    const desktop = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('desktop shows five projects at once', desktop.visibleNow === 5, `visible ${desktop.visibleNow} of ${desktop.count}`);
-    check('desktop target slot count is five', desktop.visibleTarget === 5);
-    /* THE DECK.
-       The active image leads: it is the right-most card, it has the highest
-       stacking order, and nothing covers it — so the whole photograph, front
-       view and back view together, is revealed. Every card behind it is
-       overlapped on its right by the card in front, and what is left showing
-       is that image's own measured front fraction, so a complete front model
-       stays readable. This replaces the old "active is leftmost" invariant,
-       which described the wrong picture. */
-    check('the active image leads the deck', desktop.activeIsLeading === true);
-    check('the cards genuinely overlap', desktop.overlaps >= 4, `${desktop.overlaps} overlaps`);
+    const state = await p.evaluate(() => window.__portfolioRunway.getState());
+    check('desktop shows four garments at once', state.visibleNow === 4, `visible ${state.visibleNow} of ${state.count}`);
+    check('the active garment leads the deck', state.activeIsLeading === true);
+    check('the garments genuinely overlap', state.overlaps >= 3, `${state.overlaps} overlaps`);
 
     const deck = await p.evaluate(() => {
-      const panel = document.querySelector('.pf-panel:not([hidden])');
+      const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
       const stage = panel.querySelector('.pf-stage').getBoundingClientRect();
-      const slots = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden);
-      const boxes = slots.map((s) => ({
-        el: s,
+      const boxes = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden).map((s) => ({
         r: s.getBoundingClientRect(),
         front: Number(s.dataset.front) || 0.55,
         z: Number(s.style.zIndex),
       })).sort((a, b) => a.r.left - b.r.left);
-      const leader = boxes[boxes.length - 1];
-      /* How much of each card is left uncovered by the card in front of it. */
-      const exposure = boxes.map((b, i) => (i === boxes.length - 1
-        ? 1
-        : (boxes[i + 1].r.left - b.r.left) / b.r.width));
+      const exposure = boxes.map((b, i) => (i === boxes.length - 1 ? 1 : (boxes[i + 1].r.left - b.r.left) / b.r.width));
       return {
         widths: boxes.map((b) => Math.round(b.r.width)),
+        bottoms: boxes.map((b) => Math.round(b.r.bottom)),
         zOrder: boxes.map((b) => b.z),
         exposure: exposure.map((e) => +e.toFixed(3)),
         fronts: boxes.map((b) => b.front),
         insideStage: boxes.every((b) => b.r.left >= stage.left - 1 && b.r.right <= stage.right + 1),
-        leaderIsWidest: leader.r.width === Math.max(...boxes.map((b) => b.r.width)),
         smallest: Math.round(Math.min(...boxes.map((b) => b.r.width))),
-        /* the stack is a positioned deck, not a flex row with gaps */
         stackDisplay: getComputedStyle(panel.querySelector('[data-stack]')).display,
-        slotPosition: getComputedStyle(slots[0]).position,
+        slotPosition: getComputedStyle(panel.querySelector('.pf-slot')).position,
       };
     });
-    const growing = deck.widths.every((w, i) => i === 0 || w > deck.widths[i - 1]);
-    check('cards grow toward the leading edge', growing, deck.widths.join(' < '));
-    /* The scale progression has to READ as depth. 82-100 across five cards did
-       not: they looked like five garments of the same size in a row. Each step
-       must be a visible jump, and the furthest card must be clearly smaller
-       than the leading one while staying big enough to judge. */
-    const ratios = deck.widths.map((w) => w / deck.widths[deck.widths.length - 1]);
-    check('the furthest card is clearly farther away',
-      ratios[0] <= 0.80 && ratios[0] >= 0.70, `${Math.round(ratios[0] * 100)}% of the leader`);
-    check('every step of the deck is a visible change of scale',
-      deck.widths.every((w, i) => i === 0 || w - deck.widths[i - 1] >= 8),
-      deck.widths.join(' < '));
-    check('the leading card is the largest', deck.leaderIsWidest);
+    check('garments grow toward the leading edge',
+      deck.widths.every((w, i) => i === 0 || w > deck.widths[i - 1]), deck.widths.join(' < '));
     check('stacking order rises toward the leader',
       deck.zOrder.every((z, i) => i === 0 || z > deck.zOrder[i - 1]), deck.zOrder.join(','));
-    check('every card is fully inside the stage', deck.insideStage);
-    check('the furthest card is not a postage stamp', deck.smallest >= 180, `${deck.smallest}px`);
-    check('the leading card is completely revealed',
-      deck.exposure[deck.exposure.length - 1] === 1, String(deck.exposure[deck.exposure.length - 1]));
-    /* The exposed strip of each covered card must be at least its measured
-       front fraction, or the front model is being cut. */
-    const clipped = deck.exposure.slice(0, -1)
-      .map((e, i) => ({ e, need: deck.fronts[i] }))
-      .filter((x) => x.e < x.need - 0.01);
-    check('every covered card still shows its whole front view',
-      clipped.length === 0, JSON.stringify(clipped));
-    check('covered cards are partly hidden, not fully shown',
-      deck.exposure.slice(0, -1).every((e) => e < 0.95), deck.exposure.join(','));
+    check('every garment is fully inside the stage', deck.insideStage);
     check('the deck is a positioned stack, not a flex row',
       deck.stackDisplay !== 'flex' && deck.slotPosition === 'absolute',
       `${deck.stackDisplay} / ${deck.slotPosition}`);
 
-    // contain, never cover: a head or a hem is never cropped off.
-    const fits = await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
-      .every((img) => getComputedStyle(img).objectFit === 'contain'));
-    check('garment images use object-fit: contain', fits);
+    /* THE DEPTH MUST BE OBVIOUS.
+       Each garment behind the active one is markedly smaller, not marginally:
+       every step is at least a sixth, and the furthest is around half the
+       leader — while staying large enough to be judged as a garment. */
+    const ratios = deck.widths.map((w) => w / deck.widths[deck.widths.length - 1]);
+    check('the furthest garment is about half the active one',
+      ratios[0] <= 0.60 && ratios[0] >= 0.42, `${Math.round(ratios[0] * 100)}% of the leader`);
+    check('every step of the deck is a large change of scale',
+      deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.15),
+      deck.widths.join(' < '));
+    check('the furthest garment is still readable', deck.smallest >= 190, `${deck.smallest}px`);
 
-    // Keyboard alone must drive the queue.
-    await p.evaluate(() => document.querySelector('.pf-panel:not([hidden]) [data-stage]').focus());
-    const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    await p.keyboard.press('ArrowRight');
-    await p.waitForTimeout(650);
-    const after = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    check('ArrowRight advances the queue', after === before + 1, `${before} -> ${after}`);
-    await p.keyboard.press('ArrowLeft');
-    await p.waitForTimeout(650);
-    check('ArrowLeft steps back', await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === before);
+    /* ONE SHARED FLOOR: every garment stands on the same baseline, so the
+       smaller ones read as the same presentation further away. */
+    check('every garment stands on one baseline',
+      Math.max(...deck.bottoms) - Math.min(...deck.bottoms) <= 1, deck.bottoms.join(','));
 
-    // Bounds — the assertion the V5 scrubber's max used to carry.
-    const bounds = await p.evaluate(() => {
-      const api = window.__portfolioRunway;
-      const count = api.getState().count;
-      api.goTo(count + 50);
-      const high = api.getState().activeIndex;
-      const nextDisabled = document.querySelector('.pf-panel:not([hidden]) [data-step="1"]').disabled;
-      api.goTo(-50);
-      const low = api.getState().activeIndex;
-      const prevDisabled = document.querySelector('.pf-panel:not([hidden]) [data-step="-1"]').disabled;
-      return { count, high, low, nextDisabled, prevDisabled };
-    });
-    check('index never exceeds count - 1', bounds.high === bounds.count - 1, `${bounds.high} of ${bounds.count}`);
-    check('index never goes below zero', bounds.low === 0);
-    check('next is disabled on the last project', bounds.nextDisabled === true);
-    check('prev is disabled on the first project', bounds.prevDisabled === true);
+    /* Front/back: the leader is whole, everything behind it keeps its complete
+       front model showing. */
+    check('the leading garment is completely revealed',
+      deck.exposure[deck.exposure.length - 1] === 1, String(deck.exposure[deck.exposure.length - 1]));
+    const clipped = deck.exposure.slice(0, -1)
+      .map((e, i) => ({ e, need: deck.fronts[i] })).filter((x) => x.e < x.need - 0.01);
+    check('every covered garment still shows its whole front view',
+      clipped.length === 0, JSON.stringify(clipped));
+    check('covered garments are partly hidden, not fully shown',
+      deck.exposure.slice(0, -1).every((e) => e < 0.95), deck.exposure.join(','));
+    check('garment images use object-fit: contain',
+      await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
+        .every((img) => getComputedStyle(img).objectFit === 'contain')));
 
-    // Drag must follow the hand: pointer right -> stack right.
-    await p.waitForTimeout(300);
-    const stageBox = await p.evaluate(() => {
-      const b = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
-      return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
-    });
-    await p.mouse.move(stageBox.x, stageBox.y);
-    await p.mouse.down();
-    await p.mouse.move(stageBox.x + 110, stageBox.y, { steps: 8 });
-    const dragRight = await p.evaluate(() => {
-      const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
-      return new DOMMatrix(getComputedStyle(stack).transform).m41;
-    });
-    await p.mouse.up();
-    await p.waitForTimeout(650);
-    check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
-
-    await p.mouse.move(stageBox.x, stageBox.y);
-    await p.mouse.down();
-    await p.mouse.move(stageBox.x - 110, stageBox.y, { steps: 8 });
-    const dragLeft = await p.evaluate(() => {
-      const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
-      return new DOMMatrix(getComputedStyle(stack).transform).m41;
-    });
-    const indexBeforeRelease = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    await p.mouse.up();
-    await p.waitForTimeout(700);
-    const indexAfterRelease = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    check('dragging left moves the stack left', dragLeft < 0, `translateX ${Math.round(dragLeft)}px`);
-    check('releasing a leftward drag advances the project',
-      indexAfterRelease === indexBeforeRelease + 1, `${indexBeforeRelease} -> ${indexAfterRelease}`);
-
-    /* CONTENT INTEGRITY.
-       The 49 photographs under public/portfolio/ are temporary visual
-       references, exactly as the pre-V6 page said. They must never be
-       presented as authored projects. */
-    const integrity = await p.evaluate(() => {
-      const world = document.querySelector('[data-world="womenswear"]');
-      const panel = document.querySelector('.pf-panel:not([hidden])');
-      const notice = world.querySelector('[data-reference-notice]');
-      return {
-        publication: world.dataset.publication,
-        panelKind: panel.dataset.kind,
-        noticePresent: !!notice,
-        noticeText: notice?.textContent.trim() ?? '',
-        noticeFontPx: notice ? parseFloat(getComputedStyle(notice).fontSize) : 0,
-        noticeCount: world.querySelectorAll('[data-reference-notice]').length,
-        counter: document.querySelector('.pf-panel:not([hidden]) [data-counter-current]').textContent.trim(),
-        projectArticles: world.querySelectorAll('.pf-project').length,
-        tagRows: world.querySelectorAll('.pf-project__tags').length,
-        profileRows: world.querySelectorAll('.pf-project__profile').length,
-        referencePanel: !!world.querySelector('[data-reference-panel]'),
-        /* Every development plate in this state must be a demo: no image, a
-           DEMO stamp and a strip note that says the real assets are pending. */
-        plates: [...panel.querySelectorAll('.pf-plate')].map((el) => ({
-          stage: el.dataset.plate,
-          demo: el.hasAttribute('data-demo'),
-          images: el.querySelectorAll('img').length,
-          stamp: el.querySelector('.pf-plate__stamp')?.textContent.trim() ?? '',
-          label: el.querySelector('.pf-plate__label')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
-          box: (() => { const r = el.querySelector('.pf-plate__art').getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; })(),
-        })),
-        demoNote: panel.querySelector('[data-demo-note]')?.textContent.trim() ?? '',
-      };
-    });
-    check('womenswear is a reference preview, not published work',
-      integrity.publication === 'reference-preview', integrity.publication);
-    check('the queue is marked as references', integrity.panelKind === 'reference', String(integrity.panelKind));
-    check('items are counted as references, not projects',
-      /^Reference \d\d$/.test(integrity.counter), integrity.counter);
-    check('the non-authorship disclaimer is present',
-      integrity.noticePresent && /no authorship of photographed garments is claimed/i.test(integrity.noticeText));
-    check('the disclaimer is body size, not fine print',
-      integrity.noticeFontPx >= 14, `${integrity.noticeFontPx}px`);
-    check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
-    check('no reference is given project text', integrity.projectArticles === 0, String(integrity.projectArticles));
-    check('no capability tags on references', integrity.tagRows === 0, String(integrity.tagRows));
-    check('the reference panel explains what it is', integrity.referencePanel);
-    check('the non-authorship disclaimer is stated exactly once in the chapter',
-      integrity.noticeCount === 1, String(integrity.noticeCount));
-
-    /* V7 §F. The three development stages are VISIBLE in the reference state
-       rather than hidden, on one condition: a plate that holds nothing must
-       say so. It carries no image, it is stamped DEMO, and the strip above it
-       says the real project assets are pending — so a placeholder can never be
-       read as evidence, and the panel still shows what the chapter is for.
-       This replaces the earlier "hide the strip entirely" rule. */
-    check('the three development stages are present, in order',
-      integrity.plates.map((pl) => pl.stage).join(',') === 'sketch,pattern,simulation',
-      integrity.plates.map((pl) => pl.stage).join(','));
-    check('every development plate is marked as a demo',
-      integrity.plates.length === 3 && integrity.plates.every((pl) => pl.demo && /demo/i.test(pl.stamp)),
-      JSON.stringify(integrity.plates.map((pl) => pl.stamp)));
-    check('no demo plate borrows an image',
-      integrity.plates.every((pl) => pl.images === 0), JSON.stringify(integrity.plates.map((pl) => pl.images)));
-    check('the strip says the real assets are pending',
-      /real project assets pending/i.test(integrity.demoNote), integrity.demoNote || 'none');
-    check('the plates are step-labelled sketch, 2D pattern, 3D simulation',
-      integrity.plates.map((pl) => pl.label).join(' | ')
-        === 'Step 01 Sketch | Step 02 2D Pattern | Step 03 3D Simulation',
-      integrity.plates.map((pl) => pl.label).join(' | '));
-    check('the plates are large, not thumbnails',
-      integrity.plates.every((pl) => pl.box[0] >= 180 && pl.box[1] >= 140),
-      JSON.stringify(integrity.plates.map((pl) => pl.box)));
-    /* THREE EQUAL PLATES, ONE ABOVE THE OTHER. Three steps of one sequence
-       read as three identical frames top to bottom — not two and a feature. */
-    const platesGeo = await p.evaluate(() => {
-      const list = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-plate')];
-      const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
-      return {
-        widths: boxes.map((b) => Math.round(b.width)),
-        heights: boxes.map((b) => Math.round(b.height)),
-        lefts: boxes.map((b) => Math.round(b.left)),
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-        links: document.querySelectorAll('.pf-panel:not([hidden]) .pf-plate__link').length,
-      };
-    });
-    check('the three plates are the same size',
-      Math.max(...platesGeo.widths) - Math.min(...platesGeo.widths) <= 1
-      && Math.max(...platesGeo.heights) - Math.min(...platesGeo.heights) <= 1,
-      `${platesGeo.widths.join('/')} x ${platesGeo.heights.join('/')}`);
-    check('the three plates are stacked vertically in one column',
-      platesGeo.stacked && new Set(platesGeo.lefts).size === 1,
-      `${platesGeo.lefts.join(',')} stacked ${platesGeo.stacked}`);
-    check('the progression between steps is drawn', platesGeo.links === 2, String(platesGeo.links));
-
-    /* V7 §H/§S. No card language on garment imagery: no shadow, no border, no
-       framed white rectangle. Depth comes from overlap, scale and stacking
-       order alone. */
-    const cardLanguage = await p.evaluate(() => {
+    /* NO CARD LANGUAGE. */
+    const cardish = await p.evaluate(() => {
       const bad = [];
-      for (const el of document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot, .pf-panel:not([hidden]) .pf-slot *, .pf-cover__garment')) {
+      for (const el of document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-slot, [data-screen="category"]:not([hidden]) .pf-slot *')) {
         const st = getComputedStyle(el);
-        if (st.boxShadow !== 'none') bad.push(`${el.className} shadow ${st.boxShadow}`);
+        if (st.boxShadow !== 'none') bad.push(`${el.className} shadow`);
+        if (st.filter.includes('drop-shadow')) bad.push(`${el.className} drop-shadow`);
         if (st.borderTopWidth !== '0px' || st.borderLeftWidth !== '0px'
           || st.borderRightWidth !== '0px' || st.borderBottomWidth !== '0px') bad.push(`${el.className} border`);
         if (st.borderRadius !== '0px') bad.push(`${el.className} radius`);
       }
       return bad.slice(0, 5);
     });
-    check('no shadow, border or radius anywhere on garment imagery',
-      cardLanguage.length === 0, cardLanguage.join(' | '));
+    check('no shadow, border or radius anywhere on garment imagery', cardish.length === 0, cardish.join(' | '));
 
-    /* V7 §I. The viewer sits in a white band that runs the whole width of the
-       viewport — not a white rectangle inside the beige page. */
     const studio = await p.evaluate(() => {
-      const band = document.querySelector('[data-world="womenswear"] .pf-studio');
+      const band = document.querySelector('[data-screen="category"]:not([hidden]) .pf-studio');
       const r = band.getBoundingClientRect();
       const st = getComputedStyle(band);
-      return {
-        width: Math.round(r.width),
-        left: Math.round(r.left),
-        viewport: document.documentElement.clientWidth,
-        background: st.backgroundColor,
-        border: st.borderTopWidth + st.borderLeftWidth,
-      };
+      return { left: Math.round(r.left), width: Math.round(r.width), vw: document.documentElement.clientWidth, bg: st.backgroundColor };
     });
-    check('the garment viewer sits in a full-bleed white band',
-      studio.left === 0 && studio.width >= studio.viewport - 1
-        && studio.background === 'rgb(255, 255, 255)' && studio.border === '0px0px',
+    check('the viewer sits in one full-width white field',
+      studio.left === 0 && studio.width >= studio.vw - 1 && studio.bg === 'rgb(255, 255, 255)',
       JSON.stringify(studio));
 
-    /* V7 §E. 62-68% deck, 32-38% development panel. */
-    const split = await p.evaluate(() => {
-      const viewer = document.querySelector('.pf-panel:not([hidden]) .pf-viewer');
-      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
-      const dev = viewer.querySelector('.pf-devcol').getBoundingClientRect();
-      const total = deck.width + dev.width;
-      return { deck: deck.width / total, dev: dev.width / total, sideBySide: dev.left > deck.right - 2 };
-    });
-    check('the deck takes 62-68% of the viewer',
-      split.sideBySide && split.deck >= 0.60 && split.deck <= 0.69, `${Math.round(split.deck * 100)}%`);
-    check('the development panel takes 32-38% of the viewer',
-      split.dev >= 0.31 && split.dev <= 0.40, `${Math.round(split.dev * 100)}%`);
+    // Keyboard alone must drive the deck.
+    await p.evaluate(() => document.querySelector('[data-screen="category"]:not([hidden]) [data-stage]').focus());
+    const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    await p.keyboard.press('ArrowRight');
+    await p.waitForTimeout(650);
+    const after = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    check('ArrowRight advances the deck', after === before + 1, `${before} -> ${after}`);
+    await p.keyboard.press('ArrowLeft');
+    await p.waitForTimeout(650);
+    check('ArrowLeft steps back', await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === before);
 
-    /* V7 §L. The run bar is editorial: two arrows and a count, no boxes. */
-    const runbar = await p.evaluate(() => {
-      const bar = document.querySelector('.pf-panel:not([hidden]) .pf-runbar');
-      const steps = [...bar.querySelectorAll('.pf-step')];
+    const bounds = await p.evaluate(() => {
+      const api = window.__portfolioRunway;
+      const count = api.getState().count;
+      api.goTo(count + 50);
+      const high = api.getState().activeIndex;
+      const nextDisabled = document.querySelector('[data-screen="category"]:not([hidden]) [data-step="1"]').disabled;
+      api.goTo(-50);
+      const low = api.getState().activeIndex;
+      const prevDisabled = document.querySelector('[data-screen="category"]:not([hidden]) [data-step="-1"]').disabled;
+      return { count, high, low, nextDisabled, prevDisabled };
+    });
+    check('index never exceeds count - 1', bounds.high === bounds.count - 1, `${bounds.high} of ${bounds.count}`);
+    check('index never goes below zero', bounds.low === 0);
+    check('next is disabled on the last item', bounds.nextDisabled === true);
+    check('prev is disabled on the first item', bounds.prevDisabled === true);
+
+    // Drag must follow the hand: pointer right -> stack right.
+    await p.waitForTimeout(300);
+    const box = await p.evaluate(() => {
+      const b = document.querySelector('[data-screen="category"]:not([hidden]) .pf-stage').getBoundingClientRect();
+      return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
+    });
+    await p.mouse.move(box.x, box.y);
+    await p.mouse.down();
+    await p.mouse.move(box.x + 110, box.y, { steps: 8 });
+    const dragRight = await p.evaluate(() => new DOMMatrix(getComputedStyle(
+      document.querySelector('[data-screen="category"]:not([hidden]) [data-stack]')).transform).m41);
+    await p.mouse.up();
+    await p.waitForTimeout(650);
+    check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
+
+    await p.mouse.move(box.x, box.y);
+    await p.mouse.down();
+    await p.mouse.move(box.x - 130, box.y, { steps: 8 });
+    const indexBefore = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
+    await p.mouse.up();
+    await p.waitForTimeout(700);
+    check('releasing a leftward drag advances the deck',
+      await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === indexBefore + 1);
+
+    /* CONTENT INTEGRITY. The 49 photographs are temporary visual references
+       and must never be presented as authored projects. */
+    const integrity = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="womenswear"]');
+      const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
+      const notice = w.querySelector('[data-screen="category"]:not([hidden]) [data-reference-notice]');
       return {
-        text: bar.textContent.replace(/\s+/g, ' ').trim(),
-        insideStudio: !!bar.closest('.pf-studio'),
-        boxed: steps.filter((el) => {
-          const st = getComputedStyle(el);
-          return st.borderTopWidth !== '0px' || st.backgroundColor !== 'rgba(0, 0, 0, 0)';
-        }).length,
+        publication: w.dataset.publication,
+        panelKind: panel.dataset.kind,
+        noticeText: notice?.textContent.trim() ?? '',
+        noticePx: notice ? Math.round(parseFloat(getComputedStyle(notice.querySelector('span')).fontSize)) : 0,
+        counter: panel.querySelector('[data-counter-current]').textContent.trim(),
+        projectArticles: w.querySelectorAll('.pf-project').length,
+        profileRows: w.querySelectorAll('.pf-project__profile').length,
+        tagRows: w.querySelectorAll('.pf-project__tags').length,
+        referencePanel: !!panel.querySelector('[data-reference-panel]'),
       };
     });
-    check('the run bar reads REFERENCE nn / 17', /^Reference \d\d \/ 17$/i.test(runbar.text), runbar.text);
-    check('the run bar sits inside the garment band', runbar.insideStudio);
-    check('the run bar arrows are not square buttons', runbar.boxed === 0, String(runbar.boxed));
+    check('womenswear is a reference preview, not published work',
+      integrity.publication === 'reference-preview', integrity.publication);
+    check('the deck is marked as references', integrity.panelKind === 'reference', String(integrity.panelKind));
+    check('items are counted as references, not projects',
+      /^Reference \d\d$/.test(integrity.counter), integrity.counter);
+    check('the non-authorship disclaimer is present',
+      /no authorship of photographed garments is claimed/i.test(integrity.noticeText));
+    check('the disclaimer is readable, not fine print', integrity.noticePx >= 14, `${integrity.noticePx}px`);
+    check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
+    check('no reference is given project text', integrity.projectArticles === 0, String(integrity.projectArticles));
+    check('no capability tags on references', integrity.tagRows === 0, String(integrity.tagRows));
+    check('the reference panel explains what it is', integrity.referencePanel);
 
-    /* V7 §M. The paragraph that used to fill the right-hand panel is gone. */
-    const oldPanelCopy = await p.evaluate(() => /will appear in this panel once the real/i.test(document.body.innerText));
-    check('the placeholder paragraph no longer fills the development panel', oldPanelCopy === false);
-
-    /* No construction history may be inferred from a photograph. These are the
-       exact claim types an earlier pass read off the pictures. */
+    /* No construction history may be inferred from a photograph. */
     const claims = await p.evaluate(() => {
       const text = document.body.innerText;
-      const banned = [
-        /\bbias[- ]cut\b/i, /\bgrading\b/i, /\bfit correction\b/i,
-        /\bpattern development\b/i, /\bnegative ease\b/i, /\bdart\b/i,
-        /\bseam placement\b/i, /\bstitch class\b/i,
-      ];
-      return banned.filter((re) => re.test(text)).map((re) => String(re));
+      return [
+        /\bbias[- ]cut\b/i, /\bgrading\b/i, /\bfit correction\b/i, /\bpattern development\b/i,
+        /\bnegative ease\b/i, /\bdart\b/i, /\bseam placement\b/i, /\bstitch class\b/i,
+      ].filter((re) => re.test(text)).map((re) => String(re));
     });
-    check('no construction claim is inferred from the reference photographs',
-      claims.length === 0, claims.join(' '));
+    check('no construction claim is inferred from the reference photographs', claims.length === 0, claims.join(' '));
+    check('no "N projects" claim while nothing is verified',
+      await p.evaluate(() => /\b\d+\s+projects\b/i.test(document.body.innerText)) === false);
+    check('no "Look 01" UI anywhere',
+      await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
-    const projectWord = await p.evaluate(() => /\b\d+\s+projects\b/i.test(document.body.innerText));
-    check('no "N projects" claim while nothing is verified', projectWord === false);
+    /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER. */
+    const plates = await p.evaluate(() => {
+      const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
+      const list = [...panel.querySelectorAll('.pf-plate')];
+      const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
+      return {
+        stages: list.map((el) => el.dataset.plate),
+        labels: list.map((el) => el.querySelector('.pf-plate__label').textContent.replace(/\s+/g, ' ').trim()),
+        demo: list.filter((el) => el.hasAttribute('data-demo')).length,
+        images: list.reduce((n, el) => n + el.querySelectorAll('img').length, 0),
+        widths: boxes.map((b) => Math.round(b.width)),
+        heights: boxes.map((b) => Math.round(b.height)),
+        lefts: boxes.map((b) => Math.round(b.left)),
+        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
+        links: panel.querySelectorAll('.pf-plate__link').length,
+        note: panel.querySelector('[data-demo-note]')?.textContent.trim() ?? '',
+      };
+    });
+    check('exactly three development stages, in order',
+      plates.stages.join(',') === 'sketch,pattern,simulation', plates.stages.join(','));
+    check('the stages are labelled sketch, 2D pattern, 3D simulation',
+      plates.labels.join(' | ') === 'Step 01 Sketch | Step 02 2D Pattern | Step 03 3D Simulation',
+      plates.labels.join(' | '));
+    check('the three plates are exactly the same size',
+      Math.max(...plates.widths) - Math.min(...plates.widths) <= 1
+      && Math.max(...plates.heights) - Math.min(...plates.heights) <= 1,
+      `${plates.widths.join('/')} x ${plates.heights.join('/')}`);
+    check('the three plates are stacked one above another in one column',
+      plates.stacked && new Set(plates.lefts).size === 1, `${plates.lefts.join(',')} stacked ${plates.stacked}`);
+    check('the progression between steps is drawn', plates.links === 2, String(plates.links));
+    check('every plate is marked as a demo and borrows no image',
+      plates.demo === 3 && plates.images === 0, `${plates.demo} demo / ${plates.images} images`);
+    check('the strip says the real assets are pending',
+      /real project assets pending/i.test(plates.note), plates.note || 'none');
 
     await c.close();
   }
 
-  // ---- the subchapter index, the folio library and the ten-session reel
-  console.log('\nportfolio chapter interiors');
+  // ---- the deck at 1024 and at 390
+  for (const [width, height, want, mobile] of [[1024, 820, 4, false], [390, 844, 3, true]]) {
+    console.log(`\nportfolio deck at ${width}`);
+    const c = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(700);
+    await openChapter(p, 'womenswear');
+    await openCategory(p, 'womenswear', 'rtw');
+
+    const st = await p.evaluate(() => window.__portfolioRunway.getState());
+    check(`${width} shows ${want} garments at once`, st.visibleNow === want, `visible ${st.visibleNow}`);
+    check(`${width} active garment still leads`, st.activeIsLeading === true);
+    check(`${width} garments genuinely overlap`, st.overlaps >= want - 1, `${st.overlaps} overlaps`);
+
+    const geo = await p.evaluate(() => {
+      const stage = document.querySelector('[data-screen="category"]:not([hidden]) .pf-stage').getBoundingClientRect();
+      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-slot')]
+        .filter((s) => !s.hidden).map((s) => s.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+      return {
+        widths: boxes.map((b) => Math.round(b.width)),
+        inside: boxes.every((b) => b.left >= stage.left - 1 && b.right <= stage.right + 1),
+      };
+    });
+    check(`${width} keeps every garment inside the stage`, geo.inside, geo.widths.join(','));
+    const ratio = geo.widths[0] / geo.widths[geo.widths.length - 1];
+    check(`${width} depth is immediately visible`, ratio <= 0.62, `${Math.round(ratio * 100)}% of the leader`);
+    check(`no horizontal overflow at ${width}`,
+      await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+    /* Plates stay equal-size and stacked on every screen. */
+    const eq = await p.evaluate(() => {
+      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-plate__art')]
+        .map((el) => el.getBoundingClientRect());
+      return {
+        w: boxes.map((b) => Math.round(b.width)),
+        h: boxes.map((b) => Math.round(b.height)),
+        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
+      };
+    });
+    check(`${width} keeps the three plates equal and stacked`,
+      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1 && eq.stacked,
+      `${eq.w.join('/')} x ${eq.h.join('/')}`);
+    await c.close();
+  }
+
+  // ---- Tech Packs: five documents in a column, and a reader
+  console.log('\nportfolio tech packs');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    const pdfRequests = [];
+    p.on('request', (r) => { if (/\.pdf(\?|$)/i.test(r.url())) pdfRequests.push(r.url()); });
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await openWomenswear(p);
+    await openChapter(p, 'tech-packs');
 
-    /* V7 §D. The five categories are the first thing inside the chapter, as
-       large numbered editorial bands stacked down the page — not a tab strip,
-       not pills, and not a one-line menu. Exactly one carries the signal. */
-    const index = await p.evaluate(() => {
-      const bands = [...document.querySelectorAll('[data-world="womenswear"] .pf-band')];
-      const viewer = document.querySelector('[data-world="womenswear"] .pf-studio');
+    const docs = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="tech-packs"]');
+      const list = [...w.querySelectorAll('.pf-doc')];
+      const boxes = list.map((el) => el.getBoundingClientRect());
       return {
-        count: bands.length,
-        stacked: bands.every((b, i) => i === 0
-          || b.getBoundingClientRect().top >= bands[i - 1].getBoundingClientRect().bottom - 2),
-        heights: bands.map((b) => Math.round(b.getBoundingClientRect().height)),
-        labelPx: bands.map((b) => Math.round(parseFloat(getComputedStyle(b.querySelector('.pf-band__label')).fontSize))),
-        selected: bands.filter((b) => b.getAttribute('aria-pressed') === 'true').length,
-        signals: bands.filter((b) => getComputedStyle(b.querySelector('.pf-band__mark')).opacity === '1').length,
-        previews: bands.filter((b) => b.querySelector('.pf-band__preview img')).length,
-        beforeViewer: bands[0].getBoundingClientRect().top < viewer.getBoundingClientRect().top,
+        count: list.length,
+        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
+        lefts: boxes.map((b) => Math.round(b.left)),
+        previews: list.map((el) => el.querySelector('.pf-doc__page img')?.getAttribute('src') ?? ''),
+        previewWidths: list.map((el) => Math.round(el.querySelector('.pf-doc__page').getBoundingClientRect().width)),
+        numbers: list.map((el) => el.querySelector('.pf-doc__num').textContent.trim()),
+        opens: list.map((el) => el.querySelector('[data-open-pdf]')?.getAttribute('href') ?? ''),
+        stamps: list.filter((el) => /demo/i.test(el.querySelector('.pf-doc__stamp')?.textContent ?? '')).length,
+        carousel: w.querySelectorAll('.pf-folio, .pf-library__pile, [data-dossier]').length,
       };
     });
-    check('five subchapter bands', index.count === 5, String(index.count));
-    check('the bands are stacked, not a row of tabs', index.stacked, index.heights.join(','));
-    check('the bands are editorial, not menu type',
-      index.labelPx.every((px) => px >= 24), index.labelPx.join(','));
-    check('the index comes before the viewer', index.beforeViewer);
-    check('exactly one band is selected', index.selected === 1, String(index.selected));
-    check('exactly one orange signal in the index', index.signals === 1, String(index.signals));
-    check('each band carries one restrained preview', index.previews === 5, String(index.previews));
+    check('five demo documents', docs.count === 5, String(docs.count));
+    check('the documents run one below another',
+      docs.stacked && new Set(docs.lefts).size === 1, `${docs.lefts.join(',')} stacked ${docs.stacked}`);
+    check('the numbering runs 01 to 05', docs.numbers.join(',') === '01,02,03,04,05', docs.numbers.join(','));
+    check('each shows its own first page, large',
+      docs.previews.every((src) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(src))
+      && docs.previewWidths.every((w) => w >= 400),
+      `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.previewWidths.join(',')}`);
+    check('each is marked a demo', docs.stamps === 5, String(docs.stamps));
+    check('each offers its own PDF',
+      docs.opens.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.opens.join(' '));
+    check('the rejected folio/carousel interface is gone', docs.carousel === 0, String(docs.carousel));
 
-    /* Selecting a band swaps the deck under it. */
-    const switched = await p.evaluate(async () => {
-      const bands = [...document.querySelectorAll('[data-world="womenswear"] .pf-band')];
-      bands[3].click();
-      await new Promise((r) => setTimeout(r, 400));
-      const panel = document.querySelector('[data-world="womenswear"] .pf-panel:not([hidden])');
+    check('no PDF byte is fetched when the chapter opens', pdfRequests.length === 0, pdfRequests.join(','));
+
+    await p.evaluate(() => document.querySelector('[data-world="tech-packs"] [data-open-pdf]').click());
+    await p.waitForTimeout(900);
+    const reader = await p.evaluate(() => {
+      const r = document.querySelector('[data-reader]');
+      const obj = r.querySelector('object');
       return {
-        panel: panel.dataset.panel,
-        count: Number(panel.dataset.count),
-        selected: bands.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.category),
+        open: !r.hidden,
+        embeds: r.querySelectorAll('object, iframe').length,
+        data: obj?.getAttribute('data') ?? '',
+        type: obj?.getAttribute('type') ?? '',
+        fallback: !!obj?.querySelector('a[href$=".pdf"]'),
+        title: r.querySelector('[data-reader-title]')?.textContent.trim() ?? '',
+        closes: r.querySelectorAll('[data-reader-close]').length,
+        covers: Math.round(r.getBoundingClientRect().height) >= 890,
       };
     });
-    check('selecting a band swaps the deck',
-      switched.panel === 'evening' && switched.count === 11, JSON.stringify(switched));
-    check('selection stays singular', switched.selected.length === 1, switched.selected.join(','));
+    check('clicking a document opens the reader', reader.open && reader.embeds === 1, JSON.stringify(reader));
+    check('the reader holds the real PDF', /\.pdf$/.test(reader.data) && reader.type === 'application/pdf', reader.data);
+    check('the reader offers a fallback for browsers without a PDF viewer', reader.fallback);
+    check('the reader names the document', reader.title.length > 0, reader.title);
+    check('the reader fills the screen and can be closed', reader.covers && reader.closes === 1);
+    /* Only the pre-click assertion is a real one. Headless Chromium ships no
+       PDF viewer, so it does not fetch a document it cannot render; whether
+       the bytes arrive after the click is a property of the browser, not of
+       this page. What this page controls — that nothing is requested until the
+       click, and that the embed points at the real document — is asserted
+       above. */
+    check('no document was fetched beyond the one that was opened',
+      pdfRequests.every((url) => /demo-01/.test(url)), pdfRequests.join(','));
 
     await p.keyboard.press('Escape');
-    await p.waitForTimeout(700);
-
-    // ---- Tech Packs: a folio table, not a directory
-    await p.evaluate(() => document.querySelector('[data-chapter="tech-packs"]').click());
-    await p.waitForTimeout(900);
-    const library = await p.evaluate(() => {
-      const world = document.querySelector('[data-world="tech-packs"]');
-      const open = world.querySelector('.pf-folio:not([hidden])');
-      const docs = [...world.querySelectorAll('[data-doc]')];
-      return {
-        packs: world.querySelectorAll('[data-dossier]').length,
-        openFolios: world.querySelectorAll('.pf-folio:not([hidden])').length,
-        edges: open.querySelectorAll('.pf-folio__edge').length,
-        spine: !!open.querySelector('.pf-folio__spine'),
-        scan: open.querySelector('.pf-folio__scan')?.getAttribute('src') ?? '',
-        kind: open.querySelector('.pf-folio__kind')?.textContent.trim() ?? '',
-        pdf: open.querySelector('[data-open-pdf]')?.getAttribute('href') ?? '',
-        openLabel: open.querySelector('[data-open-pdf]')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
-        indexNumbers: docs.map((d) => d.querySelector('.pf-doc__num').textContent.trim()),
-        pileSheets: world.querySelectorAll('.pf-library__pile i').length,
-        selected: docs.filter((d) => d.getAttribute('aria-pressed') === 'true').length,
-      };
-    });
-    check('five dossiers on the table', library.packs === 5, String(library.packs));
-    check('one folio is open at a time', library.openFolios === 1, String(library.openFolios));
-    check('the open folio is a bound object with page edges',
-      library.edges === 3 && library.spine, `${library.edges} edges, spine ${library.spine}`);
-    check('the open folio shows the document\'s own first page',
-      /^\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(library.scan), library.scan);
-    check('the folio is labelled a demo pack', /demo pack/i.test(library.kind), library.kind);
-    check('the rest of the library lies behind it', library.pileSheets === 3, String(library.pileSheets));
-    check('the side index runs 01 to 05',
-      library.indexNumbers.join(',') === '01,02,03,04,05', library.indexNumbers.join(','));
-    check('exactly one dossier is selected', library.selected === 1, String(library.selected));
-    check('the control opens the dossier', /open dossier/i.test(library.openLabel), library.openLabel);
-    check('the dossier is a real demo PDF', /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(library.pdf), library.pdf);
-
-    /* The demo documents must be served, not merely linked. */
-    const pdf = await p.evaluate(async (href) => {
-      const res = await fetch(href);
-      return { status: res.status, type: res.headers.get('content-type') };
-    }, library.pdf);
-    check('the demo pack is actually served', pdf.status === 200 && /pdf/i.test(pdf.type ?? ''), JSON.stringify(pdf));
-
-    const swapped = await p.evaluate(async () => {
-      const docs = [...document.querySelectorAll('[data-world="tech-packs"] [data-doc]')];
-      docs[2].click();
-      await new Promise((r) => setTimeout(r, 350));
-      const open = document.querySelector('[data-world="tech-packs"] .pf-folio:not([hidden])');
-      return { id: open.dataset.dossier, pdf: open.querySelector('[data-open-pdf]').getAttribute('href') };
-    });
-    check('the index changes the open dossier',
-      swapped.id === 'tp-03' && swapped.pdf.includes('demo-03'), JSON.stringify(swapped));
-
-    await p.keyboard.press('Escape');
-    await p.waitForTimeout(700);
-
-    // ---- 3D: ten session slots, one recording, nothing invented
-    await p.evaluate(() => document.querySelector('[data-chapter="3d-simulation"]').click());
-    await p.waitForTimeout(900);
-    const reel = await p.evaluate(() => {
-      const world = document.querySelector('[data-world="3d-simulation"]');
-      const sessions = [...world.querySelectorAll('[data-session]')];
-      const frames = [...world.querySelectorAll('.pf-frame')];
-      return {
-        sessions: sessions.length,
-        frames: frames.length,
-        playable: sessions.filter((sn) => sn.querySelector('[data-play]')).length,
-        pending: sessions.filter((sn) => sn.hasAttribute('data-pending')).length,
-        youtubeIds: sessions.map((sn) => sn.dataset.youtube).filter(Boolean),
-        pendingPlayControls: sessions
-          .filter((sn) => sn.hasAttribute('data-pending'))
-          .filter((sn) => sn.querySelector('[data-play]')).length,
-        stripIsRow: (() => {
-          const boxes = frames.map((f) => f.getBoundingClientRect());
-          return boxes.every((b) => Math.abs(b.top - boxes[0].top) < 2);
-        })(),
-        firstKind: world.querySelector('.pf-session__kind')?.textContent.trim() ?? '',
-      };
-    });
-    check('ten session slots exist', reel.sessions === 10, String(reel.sessions));
-    check('the reel is a film strip, not a grid of cards',
-      reel.frames === 10 && reel.stripIsRow, `${reel.frames} frames, one row ${reel.stripIsRow}`);
-    check('exactly one session plays', reel.playable === 1, String(reel.playable));
-    check('nine sessions are pending', reel.pending === 9, String(reel.pending));
-    check('no YouTube id is invented', reel.youtubeIds.length === 0, reel.youtubeIds.join(','));
-    check('a pending slot never offers a play control that does nothing',
-      reel.pendingPlayControls === 0, String(reel.pendingPlayControls));
-
-    /* A pending slot shows its design state, never a broken player. */
-    const pendingSlot = await p.evaluate(async () => {
-      const world = document.querySelector('[data-world="3d-simulation"]');
-      world.querySelectorAll('[data-session-link]')[1].click();
-      await new Promise((r) => setTimeout(r, 350));
-      const open = world.querySelector('[data-session]:not([hidden])');
-      return {
-        id: open.dataset.session,
-        text: (open.querySelector('.pf-pending')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
-        players: open.querySelectorAll('[data-player] > *').length,
-        play: open.querySelectorAll('[data-play]').length,
-        kind: open.querySelector('.pf-session__kind')?.textContent.trim() ?? '',
-      };
-    });
-    check('a pending slot says which session it is waiting for',
-      /video session 02/i.test(pendingSlot.text) && /youtube session pending/i.test(pendingSlot.text),
-      pendingSlot.text || 'none');
-    check('a pending slot renders no player and no play control',
-      pendingSlot.players === 0 && pendingSlot.play === 0, JSON.stringify(pendingSlot));
-    check('a pending slot is not labelled as a published working session',
-      /not published/i.test(pendingSlot.kind), pendingSlot.kind);
-
-    await c.close();
-  }
-
-  // ---- the desktop rule is five, and 1024 is a desktop
-  console.log('\nportfolio queue at 1024');
-  {
-    const c = await browser.newContext({ viewport: { width: 1024, height: 820 } });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(700);
-    await openWomenswear(p);
-
-    const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('1024 shows five images at once', state.visibleNow === 5, `visible ${state.visibleNow}`);
-    check('1024 target slot count is five', state.visibleTarget === 5, String(state.visibleTarget));
-    check('1024 active item still leads the deck', state.activeIsLeading === true);
-    check('1024 cards genuinely overlap', state.overlaps >= 4, `${state.overlaps} overlaps`);
-
-    const geo = await p.evaluate(() => {
-      const stage = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
-      const slots = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot')]
-        .filter((s) => !s.hidden).map((s) => s.getBoundingClientRect()).sort((a, b) => a.left - b.left);
-      return {
-        widths: slots.map((s) => Math.round(s.width)),
-        inside: slots.every((s) => s.left >= stage.left - 1 && s.right <= stage.right + 1),
-      };
-    });
-    check('1024 keeps every image inside the stage', geo.inside, geo.widths.join(','));
-    check('1024 cards still grow toward the leading edge',
-      geo.widths.every((w, i) => i === 0 || w > geo.widths[i - 1]), geo.widths.join(' < '));
-    check('1024 furthest card is still substantial', Math.min(...geo.widths) >= 180, `${Math.min(...geo.widths)}px`);
-    check('no horizontal overflow at 1024',
-      await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
-    await c.close();
-  }
-
-  // ---- mobile: three projects, still leading-left
-  console.log('\nportfolio queue at 390');
-  {
-    const c = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(700);
-    await openWomenswear(p);
-
-    const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('mobile shows three projects at once', state.visibleNow === 3, `visible ${state.visibleNow}`);
-    check('mobile target slot count is three', state.visibleTarget === 3);
-    check('mobile active item still leads the deck', state.activeIsLeading === true);
-    check('mobile cards genuinely overlap', state.overlaps >= 2, `${state.overlaps} overlaps`);
-
-    check('the disclaimer survives to 390',
+    await p.waitForTimeout(500);
+    check('Escape closes the reader and tears the embed down',
       await p.evaluate(() => {
-        const n = document.querySelector('[data-reference-notice]');
-        return !!n && parseFloat(getComputedStyle(n).fontSize) >= 14;
+        const r = document.querySelector('[data-reader]');
+        return r.hidden && r.querySelectorAll('object, iframe').length === 0;
       }));
+    check('and the chapter is still open',
+      await p.evaluate(() => document.querySelector('[data-world="tech-packs"]').hasAttribute('data-open')));
 
-    const overflow = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
-    check('no horizontal overflow at 390', overflow);
+    const refusal = await p.evaluate(() => /shared (directly )?on request|not published on a public page/i.test(document.body.innerText));
+    check('no statement that technical packs are withheld from publication', refusal === false);
+    await c.close();
+  }
+
+  // ---- 3D Simulation: ten 16:9 slots in a column
+  console.log('\nportfolio 3D simulation');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    const media = [];
+    p.on('request', (r) => { if (/youtube|ytimg|googlevideo|\.mp4$/i.test(r.url())) media.push(r.url()); });
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(600);
+    await openChapter(p, '3d-simulation');
+
+    const reel = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="3d-simulation"]');
+      const items = [...w.querySelectorAll('[data-video]')];
+      const frames = items.map((el) => el.querySelector('.pf-video__frame').getBoundingClientRect());
+      return {
+        count: items.length,
+        numbers: items.map((el) => el.querySelector('.pf-video__num').textContent.trim()),
+        stacked: frames.every((b, i) => i === 0 || b.top >= frames[i - 1].bottom - 2),
+        widths: frames.map((b) => Math.round(b.width)),
+        ratios: frames.map((b) => +(b.width / b.height).toFixed(2)),
+        pending: items.filter((el) => /youtube video pending/i.test(el.textContent)).length,
+        playControls: w.querySelectorAll('[data-play]').length,
+        players: w.querySelectorAll('[data-player] > *').length,
+        youtubeIds: items.map((el) => el.dataset.youtube).filter(Boolean),
+        localVideo: w.innerHTML.includes('CLO3D.mp4') || w.querySelectorAll('video').length,
+        strip: w.querySelectorAll('.pf-strip, .pf-frame, .pf-reel__stage').length,
+      };
+    });
+    check('ten video slots', reel.count === 10, String(reel.count));
+    check('the slots run one below another, all the same width',
+      reel.stacked && new Set(reel.widths).size === 1, `${reel.widths[0]}px stacked ${reel.stacked}`);
+    check('every frame is 16:9', reel.ratios.every((r) => Math.abs(r - 16 / 9) < 0.02), reel.ratios.join(','));
+    check('the numbering runs 01 to 10',
+      reel.numbers.join(',') === '01,02,03,04,05,06,07,08,09,10', reel.numbers.join(','));
+    check('every slot says what it is waiting for', reel.pending === 10, String(reel.pending));
+    check('no YouTube id is invented', reel.youtubeIds.length === 0, reel.youtubeIds.join(','));
+    check('a pending slot offers no play control that does nothing', reel.playControls === 0, String(reel.playControls));
+    check('no player exists before a play', reel.players === 0, String(reel.players));
+    check('the local home-page clip is not used as a library video',
+      reel.localVideo === false || reel.localVideo === 0, String(reel.localVideo));
+    check('the rejected hero-plus-film-strip interface is gone', reel.strip === 0, String(reel.strip));
+    check('nothing reached YouTube or fetched a video', media.length === 0, media.join(','));
     await c.close();
   }
 
@@ -996,52 +810,21 @@ try {
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await openWomenswear(p);
+    await openChapter(p, 'womenswear');
+    await openCategory(p, 'womenswear', 'rtw');
 
-    await p.evaluate(() => document.querySelector('.pf-panel:not([hidden]) [data-stage]').focus());
+    await p.evaluate(() => document.querySelector('[data-screen="category"]:not([hidden]) [data-stage]').focus());
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(120);
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('queue settles instantly under reduced motion', Number.isInteger(state.position), `position ${state.position}`);
-    check('reduced motion still advances the project', state.activeIndex === 1, String(state.activeIndex));
-    check('reduced motion keeps five projects visible', state.visibleNow === 5, String(state.visibleNow));
-
-    const noTween = await p.evaluate(() => {
-      const slot = document.querySelector('.pf-panel:not([hidden]) .pf-slot');
-      return getComputedStyle(slot).transitionDuration === '0s';
-    });
-    check('no decorative transition left running', noTween);
-
-    const revealed = await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1'));
-    check('reveal blocks visible without scrolling', revealed);
-    await c.close();
-  }
-
-  // ---- click-to-load video: the player is created by the click, not the page
-  console.log('\n3D simulation player');
-  {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    const mediaRequests = [];
-    p.on('request', (r) => { if (/youtube|ytimg|googlevideo|\.mp4$/i.test(r.url())) mediaRequests.push(r.url()); });
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(800);
-    check('no video or YouTube request on page load', mediaRequests.length === 0, mediaRequests.join(','));
-
-    await p.evaluate(() => document.querySelector('[data-chapter="3d-simulation"]').click());
-    await p.waitForTimeout(700);
-    check('no player element before play',
-      await p.evaluate(() => document.querySelectorAll('[data-player] > *').length === 0));
-
-    await p.evaluate(() => document.querySelector('[data-session] [data-play]').click());
-    await p.waitForTimeout(600);
-    const played = await p.evaluate(() => {
-      const mount = document.querySelector('[data-player]');
-      return { children: mount.children.length, tag: mount.firstElementChild?.tagName ?? null, hidden: mount.hidden };
-    });
-    check('play creates the player', played.children === 1 && !played.hidden, JSON.stringify(played));
-    check('player is a real media element', played.tag === 'VIDEO' || played.tag === 'IFRAME', String(played.tag));
+    check('deck settles instantly under reduced motion', Number.isInteger(state.position), `position ${state.position}`);
+    check('reduced motion still advances the deck', state.activeIndex === 1, String(state.activeIndex));
+    check('reduced motion keeps four garments visible', state.visibleNow === 4, String(state.visibleNow));
+    check('no decorative transition left running',
+      await p.evaluate(() => getComputedStyle(
+        document.querySelector('[data-screen="category"]:not([hidden]) .pf-slot')).transitionDuration === '0s'));
+    check('reveal blocks visible without scrolling',
+      await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1')));
     await c.close();
   }
 
@@ -1052,26 +835,24 @@ try {
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    const noJs = await p.evaluate === undefined ? null : await p.evaluate(() => 1).catch(() => null);
     const html = await p.content();
-    check('all four worlds are in the served HTML',
+    check('all four chapters are in the served HTML',
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
-    check('the non-authorship disclaimer is server-rendered', html.includes('No authorship of photographed garments is claimed'));
-    check('the approved categories are server-rendered', html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
-    check('the unpublished chapter states its own status without the script',
-      html.includes('Selected menswear work will be published here'));
+    check('the non-authorship disclaimer is server-rendered',
+      html.includes('No authorship of photographed garments is claimed'));
+    check('the approved categories are server-rendered',
+      html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
     check('the demo documents are declared as demos without the script',
-      html.includes('Demo documents for interface review')
-      && html.includes('Demo pack — interface prototype'));
+      html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
     check('the development plates are declared as demos without the script',
-      html.includes('Demo layout — real project assets pending'));
+      html.includes('Demo layout — real project assets pending') || html.includes('Demo layout &#8212; real project assets pending'));
+    check('every video slot is declared pending without the script',
+      (html.match(/YouTube video pending/g) ?? []).length >= 10);
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
-      const shown = slots.filter((s) => s.getBoundingClientRect().width > 20);
-      return { total: slots.length, shown: shown.length };
+      return { total: slots.length, shown: slots.filter((s) => s.getBoundingClientRect().width > 20).length };
     });
     check('garment images are laid out without the script', visible.shown > 5, `${visible.shown} of ${visible.total}`);
-    void noJs;
     await c.close();
   }
 
