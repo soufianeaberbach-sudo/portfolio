@@ -444,48 +444,38 @@ export const techPacks: TechPack[] = [
   demoPack('tp-05', 'demo-05-hooded-sweatshirt', 'Hooded Sweatshirt', 'Hooded sweatshirt'),
 ];
 
-/* One real recording: public/CLO3D.mp4 is Soufiane's own CLO3D output, already
-   published on the home page, with its duration read from the file rather than
-   estimated. It is a simulation sample — sixteen seconds of a finished
-   simulation running — not a recorded working session, and it is labelled as
-   such so it cannot be read as showing a pattern being built. The YouTube
-   working-session videos are modelled and will slot in beside it. */
-export const simulationSessions: SimulationSession[] = [
-  {
-    id: 'walk-sample',
-    title: 'Garment Simulation Sample',
-    kind: 'sample',
-    description:
-      'Sixteen seconds of a CLO3D simulation running, carrying two looks. It shows what simulation output looks like in motion; it is not a recording of the pattern being built.',
-    videoSrc: '/CLO3D.mp4',
-    /* A different frame from the same recording, four seconds in: closer,
-       better lit and with both garments reading clearly. public/CLO3D-poster.jpg
-       is left exactly as it is because the home page uses it, and this pass
-       does not change any other page. Extracted from the real video — nothing
-       is generated. */
-    poster: '/CLO3D-cover.jpg',
-    posterAlt:
-      'Two digital avatars mid-walk in CLO3D, one in a corduroy harrington jacket and wide trousers, one in a ribbed top and wide trousers.',
-    workflowLabels: ['CLO3D', 'Garment simulation'],
-    duration: 16,
-  },
-  /* NINE PENDING SLOTS, so the ten-session reel can be designed.
-     No youtubeId is invented, no source is attached and no subject is named:
-     naming what session 05 will cover would be inventing a roadmap the same
-     way inventing an ID would be inventing a recording. Each slot says only
-     its number and what it is waiting for, and renders as a design state —
-     never as a broken player. */
-  ...(Array.from({ length: 9 }, (unused, i): SimulationSession => {
-    const n = String(i + 2).padStart(2, '0');
+/* TEN VIDEO SLOTS, ALL WAITING.
+ *
+ * The Simulation chapter is a library of recorded working sessions in the
+ * standard 16:9 YouTube format. None of those recordings is published yet, so
+ * all ten slots are pending: no youtubeId is invented, no source is attached,
+ * and no subject is claimed for any of them. Each renders inside the same 16:9
+ * frame as the real videos will, saying what it is waiting for.
+ *
+ * public/CLO3D.mp4 is deliberately NOT in this list. It is a vertical,
+ * self-hosted sixteen-second clip of a finished simulation running — a
+ * different format and a different kind of thing from a recorded working
+ * session — and standing it in as Video 01 would misrepresent both the library
+ * and the clip. A frame from it is still used as the chapter's cover art, and
+ * the home page keeps it unchanged. */
+export const SIMULATION_COVER = {
+  src: '/CLO3D-cover.jpg',
+  alt: 'Two digital avatars mid-walk in CLO3D, one in a corduroy harrington jacket and wide trousers, one in a ribbed top and wide trousers.',
+};
+
+export const simulationSessions: SimulationSession[] = Array.from(
+  { length: 10 },
+  (unused, i): SimulationSession => {
+    const n = String(i + 1).padStart(2, '0');
     return {
-      id: `pending-${n}`,
-      title: `Video session ${n}`,
+      id: `video-${n}`,
+      title: `Video ${n}`,
       kind: 'working-session',
-      description: 'YouTube session pending. A recorded working session will be published in this slot.',
+      description: 'YouTube video pending. A recorded working session will be published in this slot.',
       demo: true,
     };
-  })),
-];
+  },
+);
 
 /* --------------------------------------------------------------------------
    Publication state, derived from content so it cannot drift.
@@ -504,6 +494,10 @@ export interface Chapter {
   id: string;
   number: string;
   title: string;
+  /* Two or three words naming what kind of chapter this is. It sits in the
+     cover's register opposite the number — the only other thing on a cover
+     besides its name. */
+  kind: string;
   descriptor: string;
   publication: Publication;
   /* One restrained line shown when the chapter is not published work. Never
@@ -516,6 +510,7 @@ export const chapters: Chapter[] = [
     id: 'womenswear',
     number: '01',
     title: 'Womenswear',
+    kind: 'Product development',
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
@@ -524,6 +519,7 @@ export const chapters: Chapter[] = [
     id: 'menswear',
     number: '02',
     title: 'Menswear',
+    kind: 'Product development',
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     stateNote: 'Selected menswear work will be published here.',
@@ -532,6 +528,7 @@ export const chapters: Chapter[] = [
     id: 'tech-packs',
     number: '03',
     title: 'Tech Packs',
+    kind: 'Technical documentation',
     descriptor: 'Production-ready technical documentation.',
     /* Demo packs are not published work, so the chapter reports itself as an
        interface preview. It flips to 'published' the moment a pack without
@@ -542,10 +539,17 @@ export const chapters: Chapter[] = [
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
   {
+    /* The id stays `3d-simulation` so every link, hash and history entry that
+       already exists keeps working. The PUBLIC name is wider than that: these
+       recordings start at the first pattern lines, not at the finished
+       simulation, and calling the chapter after its last step undersold the
+       work in it. */
     id: '3d-simulation',
     number: '04',
-    title: '3D Simulation',
-    descriptor: 'Pattern construction, garment simulation and fit decisions in motion.',
+    title: 'Pattern & 3D Development',
+    kind: 'Digital validation',
+    descriptor:
+      'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
     publication: simulationSessions.some((session) => !session.demo)
       ? 'published'
       : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',

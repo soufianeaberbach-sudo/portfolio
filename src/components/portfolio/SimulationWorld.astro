@@ -1,21 +1,24 @@
 ---
-/* 3D Simulation — one large cinematic stage and a film-strip of ten sessions.
+/* Pattern & 3D Development — a library of recorded development sessions.
  *
- * Not a thumbnail grid, and deliberately not a wall of embedded players. No
- * player of any kind exists in the document until someone presses play:
+ * Ten entries, one below another, every one of them in the same 16:9 frame at
+ * the same width. No hero, no film strip, no carousel: the videos are the
+ * content and they are all the same kind of thing, so they are presented as
+ * one column of equals.
  *
- *   - a YouTube session renders as a poster and a button. The <iframe> is
- *     created in the click handler, from youtube-nocookie.com, and only then.
- *     Nothing contacts YouTube while the page is merely open.
- *   - a self-hosted session renders as a poster and a button. The <video>
- *     carries no src until the same click, so the bytes are not fetched on
- *     load either.
+ * NOTHING IS PUBLISHED YET. No youtubeId is invented, no source is attached
+ * and no subject is claimed for any slot; each renders inside the real 16:9
+ * frame saying what it is waiting for, so the finished layout can be judged
+ * without pretending a recording exists.
  *
- * TEN SLOTS, ONE RECORDING.
- * Session 01 is the real CLO3D clip and plays. Sessions 02 to 10 are pending:
- * no YouTube ID is invented for them, no source is attached, and no subject is
- * claimed. Each renders as a design state that says what it is waiting for —
- * never as a play button that does nothing, and never as a broken player.
+ * public/CLO3D.mp4 is deliberately absent. It is a vertical, self-hosted clip
+ * of a finished simulation running — a different format and a different kind
+ * of thing from a recorded working session — and standing it in as Video 01
+ * would misrepresent both the library and the clip.
+ *
+ * When real ids arrive: the poster renders first and the <iframe> is created
+ * by the click that asks for it, from youtube-nocookie.com. Nothing contacts
+ * Google while the page is merely open.
  */
 import type { SimulationSession } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
@@ -25,148 +28,85 @@ interface Props {
 }
 
 const { sessions } = Astro.props;
-const playable = (session: SimulationSession) => Boolean(session.youtubeId || session.videoSrc);
-const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+
+/* WHAT THE PUBLIC SEES IS WHAT EXISTS.
+ *
+ * The chapter is architected for ten recorded sessions and the data model
+ * still carries all ten. Only the ones with a real recording behind them are
+ * rendered: ten identical "pending" entries down a page is an honest statement
+ * made in the least flattering possible way, and it advertises absence instead
+ * of work. When a youtubeId is added the session appears here on its own, in
+ * the same 16:9 frame as the rest, with no other change.
+ *
+ * Until then the chapter says so once, plainly, in a composed state rather
+ * than through ten empty frames. */
+const published = sessions.filter((session) => Boolean(session.youtubeId));
+const capacity = sessions.length;
 const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
-  <div class="pf-world__bar">
-    <a class="pf-world__back" href="#portfolio-index" data-world-close>
-      <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
-    </a>
-    <p class="label pf-world__tag"><b>04</b> 3D Simulation</p>
-  </div>
-
-  <header class="pf-world__head">
-    <div class="pf-world__headline">
-      <h2 class="display" id="simulation-title">3D Simulation</h2>
-      <p class="pf-world__descriptor">Pattern construction, garment simulation and fit decisions in motion — the part of the work a photograph cannot hold still.</p>
+  <div class="pf-screen" data-screen="index">
+    <div class="pf-bar">
+      <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
+        <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+      </a>
+      <p class="label pf-bar__tag"><b>04</b> Pattern &#38; 3D Development</p>
     </div>
 
-    {sessions.some((session) => !playable(session)) && (
-      <aside class="pf-prov" data-pending-notice>
-        <p class="label pf-prov__label">Sessions pending</p>
-        <p class="pf-prov__text">
-          One recording is published. The remaining slots are reserved in the interface and are waiting on
-          their YouTube sessions; nothing is attached to them.
-        </p>
-      </aside>
-    )}
-  </header>
+    <header class="pf-head">
+      <h2 class="display" id="simulation-title">Pattern &#38; 3D Development</h2>
+      <p class="pf-head__descriptor">
+        Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
+        and fit decisions — the part of the work a photograph cannot hold still.
+      </p>
+    </header>
 
-  {sessions.length > 0 ? (
-    <div class="pf-reel">
-      {/* ---- one large stage ------------------------------------------- */}
-      <div class="pf-reel__stage">
-        {sessions.map((session, index) => (
-          <article
-            class="pf-session"
-            data-session={session.id}
-            data-youtube={session.youtubeId ?? ''}
-            data-video={session.videoSrc ?? ''}
-            data-pending={playable(session) ? undefined : ''}
-            hidden={index !== 0}
-          >
-            <div class="pf-session__frame" data-frame>
+    {published.length > 0 ? (
+      <ol class="pf-videos" data-capacity={capacity}>
+        {published.map((session, index) => (
+          <li class="pf-video" data-video={session.id} data-youtube={session.youtubeId ?? ''}>
+            <p class="pf-video__head">
+              <i class="label pf-video__num">{num(index)}</i>
+              <h3>{session.title}</h3>
+            </p>
+
+            <div class="pf-video__frame">
               {session.poster && (
                 <img
-                  class="pf-session__poster"
+                  class="pf-video__poster"
                   src={session.poster}
-                  width="512"
-                  height="910"
+                  width="1280"
+                  height="720"
                   alt={session.posterAlt ?? ''}
-                  loading={index === 0 ? 'eager' : 'lazy'}
+                  loading="lazy"
                   decoding="async"
-                  data-poster
                 />
               )}
-
-              {playable(session) ? (
-                <button type="button" class="pf-play" data-play aria-label={`Play ${session.title}`}>
-                  <span class="pf-play__mark" aria-hidden="true"></span>
-                  <span class="pf-play__text label">Play session{session.duration ? ` — ${clock(session.duration)}` : ''}</span>
-                </button>
-              ) : (
-                /* The design state. Not a disabled play button — there is
-                   nothing to play, so nothing offers to play it. */
-                <div class="pf-pending">
-                  <p class="label pf-pending__slot">Video session {num(index)}</p>
-                  <p class="label pf-pending__state">YouTube session pending</p>
-                </div>
-              )}
-
-              {/* Where the player is inserted on demand. Empty on load. */}
-              <div class="pf-session__player" data-player hidden></div>
-            </div>
-
-            <div class="pf-session__meta">
-              <p class="label pf-session__kind">
-                {playable(session)
-                  ? (session.kind === 'sample' ? 'Simulation sample' : 'Working session')
-                  : `Slot ${num(index)} — not published`}
-              </p>
-              <h3>{session.title}</h3>
-              <p>{session.description}</p>
-              {session.workflowLabels && session.workflowLabels.length > 0 && (
-                <p class="label pf-session__labels">
-                  {session.workflowLabels.map((workflowLabel, labelIndex) => (
-                    <>{labelIndex > 0 && <i aria-hidden="true"> / </i>}<span>{workflowLabel}</span></>
-                  ))}
-                </p>
-              )}
-              {session.youtubeId && (
-                <p class="pf-session__privacy">Playing this session loads a player from YouTube.</p>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {/* ---- the film strip -------------------------------------------- */}
-      <div class="pf-strip">
-        <p class="label pf-strip__head">Sessions <i>{String(sessions.length).padStart(2, '0')}</i></p>
-        <ol class="pf-strip__reel">
-          {sessions.map((session, index) => (
-            <li class="pf-strip__cell">
-              <button
-                type="button"
-                class="pf-frame"
-                data-session-link={session.id}
-                data-pending={playable(session) ? undefined : ''}
-                aria-pressed={index === 0 ? 'true' : 'false'}
-              >
-                <span class="pf-frame__window">
-                  {session.poster ? (
-                    <img src={session.poster} width="512" height="910" alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <span class="pf-frame__blank" aria-hidden="true">{num(index)}</span>
-                  )}
-                </span>
-                <span class="pf-frame__label">
-                  <i class="label pf-frame__num">{num(index)}</i>
-                  <span>{session.title}</span>
-                  <small class="label">{playable(session) ? (session.duration ? clock(session.duration) : 'Published') : 'Pending'}</small>
-                </span>
+              <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>
+                <span class="pf-play__mark" aria-hidden="true"></span>
+                <span class="pf-play__text label">Play</span>
               </button>
-            </li>
-          ))}
-        </ol>
-      </div>
+              {/* Where the player is inserted on demand. Empty on load. */}
+              <div class="pf-video__player" data-player hidden></div>
+            </div>
 
-      <div class="pf-reel__note">
-        <p>
-          Simulation is where a pattern stops being a drawing. Volume, drape and hem behaviour are judged in
-          movement, before a physical sample is cut. Recorded working sessions will be published in the slots
-          above, alongside this sample.
+            <p class="pf-video__desc">{session.description}</p>
+            <p class="pf-video__privacy">Playing this video loads a player from YouTube.</p>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      /* One composed state, not ten empty frames. */
+      <div class="pf-soon" data-videos-empty data-capacity={capacity}>
+        <p class="label pf-soon__label">Recorded development sessions</p>
+        <p class="pf-soon__lead">Publishing soon.</p>
+        <p class="pf-soon__note">
+          The library is built for {capacity} sessions in the standard 16:9 format. Each one runs from the
+          first pattern lines through 2D construction, CLO3D validation and the fit decisions that follow.
         </p>
-        <a class="button" href="/process/">See the working process <span><Arrow /></span></a>
+        <span class="pf-soon__meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       </div>
-    </div>
-  ) : (
-    <div class="pf-empty">
-      <p class="pf-empty__lead">Recorded sessions are not published here yet.</p>
-      <a class="button" href="/contact/">Ask to see a session <span><Arrow /></span></a>
-    </div>
-  )}
+    )}
+  </div>
 </section>

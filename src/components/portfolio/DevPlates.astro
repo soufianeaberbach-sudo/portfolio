@@ -56,9 +56,11 @@ const anyDemo = plates.some((plate) => !plate.asset);
               decoding="async"
             />
           ) : (
+            /* The plate says only that it is a demo. What it is waiting for is
+               stated once, in the rail's heading, rather than repeated under
+               all three at a size nobody can read. */
             <span class="pf-plate__blank">
               <span class="pf-plate__stamp label">Demo</span>
-              <span class="pf-plate__caption label">No asset — layout only</span>
             </span>
           )}
         </div>
