@@ -217,6 +217,11 @@ try {
       menswearImages: document.querySelectorAll('.pf-cover[data-chapter="menswear"] img').length,
       menswearRows: document.querySelectorAll('.pf-cover[data-chapter="menswear"] .pf-covertype__row').length,
       folio: document.querySelectorAll('.pf-cover[data-chapter="tech-packs"] .pf-foliomark').length,
+      folioSheets: [...document.querySelectorAll('.pf-cover[data-chapter="tech-packs"] .pf-foliomark__sheet')].map((el) => ({
+        src: el.querySelector('img')?.getAttribute('src') ?? '',
+        box: (() => { const r = el.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), Math.round(r.left), Math.round(r.top)]; })(),
+        spine: !!el.querySelector('.pf-foliomark__spine'),
+      })),
       still: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__still').length,
       play: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__play').length,
     }));
@@ -225,12 +230,18 @@ try {
       coverArt.menswearImages === 0 && coverArt.menswearRows === 4,
       `${coverArt.menswearImages} images / ${coverArt.menswearRows} rows`);
     check('the tech pack cover is a physical folio', coverArt.folio === 1);
+    check('the folio cover is three real first pages, stacked and overlapping',
+      coverArt.folioSheets.length === 3
+      && coverArt.folioSheets.every((sh) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(sh.src) && sh.spine)
+      && coverArt.folioSheets.every((sh, i) => i === 0 || (sh.box[2] > coverArt.folioSheets[i - 1].box[2]
+        && sh.box[2] < coverArt.folioSheets[i - 1].box[2] + coverArt.folioSheets[i - 1].box[0])),
+      JSON.stringify(coverArt.folioSheets.map((sh) => sh.src.split('/').pop())));
     check('the 3D cover is a frame of the real recording with a play mark',
       coverArt.still === 1 && coverArt.play === 1);
 
     const cats = await p.evaluate(() => ({
       women: [...document.querySelectorAll('[data-world="womenswear"] .pf-band__label')].map((e) => e.textContent.trim()),
-      men: [...document.querySelectorAll('[data-world="menswear"] .pf-empty__list span')].map((e) => e.textContent.trim()),
+      men: [...document.querySelectorAll('[data-world="menswear"] .pf-band__label')].map((e) => e.textContent.trim()),
     }));
     const approvedWomen = [
       'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
@@ -244,6 +255,20 @@ try {
       JSON.stringify(cats.women) === JSON.stringify(approvedWomen), cats.women.join(' | '));
     check('menswear categories match the approved order',
       JSON.stringify(cats.men) === JSON.stringify(approvedMen), cats.men.join(' | '));
+    /* An unpublished chapter reads through the same subchapter bands as a
+       published one, but offers no control that leads nowhere. */
+    const menBands = await p.evaluate(() => {
+      const bands = [...document.querySelectorAll('[data-world="menswear"] .pf-band')];
+      return {
+        count: bands.length,
+        buttons: bands.filter((b) => b.tagName === 'BUTTON').length,
+        labelPx: bands.map((b) => Math.round(parseFloat(getComputedStyle(b.querySelector('.pf-band__label')).fontSize))),
+      };
+    });
+    check('menswear uses the same subchapter bands', menBands.count === 4, String(menBands.count));
+    check('menswear bands are editorial, not menu type',
+      menBands.labelPx.every((px) => px >= 24), menBands.labelPx.join(','));
+    check('menswear offers no control that leads nowhere', menBands.buttons === 0, String(menBands.buttons));
 
     // Jersey / Woven are cloth, not markets: they may appear as fabric family
     // metadata but never as a category heading.
@@ -455,6 +480,16 @@ try {
     });
     const growing = deck.widths.every((w, i) => i === 0 || w > deck.widths[i - 1]);
     check('cards grow toward the leading edge', growing, deck.widths.join(' < '));
+    /* The scale progression has to READ as depth. 82-100 across five cards did
+       not: they looked like five garments of the same size in a row. Each step
+       must be a visible jump, and the furthest card must be clearly smaller
+       than the leading one while staying big enough to judge. */
+    const ratios = deck.widths.map((w) => w / deck.widths[deck.widths.length - 1]);
+    check('the furthest card is clearly farther away',
+      ratios[0] <= 0.80 && ratios[0] >= 0.70, `${Math.round(ratios[0] * 100)}% of the leader`);
+    check('every step of the deck is a visible change of scale',
+      deck.widths.every((w, i) => i === 0 || w - deck.widths[i - 1] >= 8),
+      deck.widths.join(' < '));
     check('the leading card is the largest', deck.leaderIsWidest);
     check('stacking order rises toward the leader',
       deck.zOrder.every((z, i) => i === 0 || z > deck.zOrder[i - 1]), deck.zOrder.join(','));
@@ -612,6 +647,27 @@ try {
     check('the plates are large, not thumbnails',
       integrity.plates.every((pl) => pl.box[0] >= 180 && pl.box[1] >= 140),
       JSON.stringify(integrity.plates.map((pl) => pl.box)));
+    /* THREE EQUAL PLATES, ONE ABOVE THE OTHER. Three steps of one sequence
+       read as three identical frames top to bottom — not two and a feature. */
+    const platesGeo = await p.evaluate(() => {
+      const list = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-plate')];
+      const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
+      return {
+        widths: boxes.map((b) => Math.round(b.width)),
+        heights: boxes.map((b) => Math.round(b.height)),
+        lefts: boxes.map((b) => Math.round(b.left)),
+        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
+        links: document.querySelectorAll('.pf-panel:not([hidden]) .pf-plate__link').length,
+      };
+    });
+    check('the three plates are the same size',
+      Math.max(...platesGeo.widths) - Math.min(...platesGeo.widths) <= 1
+      && Math.max(...platesGeo.heights) - Math.min(...platesGeo.heights) <= 1,
+      `${platesGeo.widths.join('/')} x ${platesGeo.heights.join('/')}`);
+    check('the three plates are stacked vertically in one column',
+      platesGeo.stacked && new Set(platesGeo.lefts).size === 1,
+      `${platesGeo.lefts.join(',')} stacked ${platesGeo.stacked}`);
+    check('the progression between steps is drawn', platesGeo.links === 2, String(platesGeo.links));
 
     /* V7 §H/§S. No card language on garment imagery: no shadow, no border, no
        framed white rectangle. Depth comes from overlap, scale and stacking
@@ -771,7 +827,7 @@ try {
         openFolios: world.querySelectorAll('.pf-folio:not([hidden])').length,
         edges: open.querySelectorAll('.pf-folio__edge').length,
         spine: !!open.querySelector('.pf-folio__spine'),
-        stamped: /demo/i.test(open.querySelector('.pf-folio__stamp')?.textContent ?? ''),
+        scan: open.querySelector('.pf-folio__scan')?.getAttribute('src') ?? '',
         kind: open.querySelector('.pf-folio__kind')?.textContent.trim() ?? '',
         pdf: open.querySelector('[data-open-pdf]')?.getAttribute('href') ?? '',
         openLabel: open.querySelector('[data-open-pdf]')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
@@ -784,7 +840,9 @@ try {
     check('one folio is open at a time', library.openFolios === 1, String(library.openFolios));
     check('the open folio is a bound object with page edges',
       library.edges === 3 && library.spine, `${library.edges} edges, spine ${library.spine}`);
-    check('the folio is stamped as a demo', library.stamped && /demo pack/i.test(library.kind), library.kind);
+    check('the open folio shows the document\'s own first page',
+      /^\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(library.scan), library.scan);
+    check('the folio is labelled a demo pack', /demo pack/i.test(library.kind), library.kind);
     check('the rest of the library lies behind it', library.pileSheets === 3, String(library.pileSheets));
     check('the side index runs 01 to 05',
       library.indexNumbers.join(',') === '01,02,03,04,05', library.indexNumbers.join(','));

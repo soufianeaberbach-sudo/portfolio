@@ -420,6 +420,17 @@ const demoPack = (id: string, slug: string, title: string, garmentType: string):
   category: 'Womenswear',
   gender: 'womenswear',
   pdfUrl: `/demo/techpacks/${slug}.pdf`,
+  /* Page 01 of the document beside it, rendered by the same generator. The
+     interface shows the actual first page — watermark, header and the
+     NOT CLIENT WORK footer included — rather than a drawing of a document. */
+  coverImage: {
+    src: `/demo/techpacks/${slug}-p1.webp`,
+    srcset: `/demo/techpacks/${slug}-p1.webp 1200w`,
+    width: 1200,
+    height: 849,
+    alt: `First page of the ${title.toLowerCase()} demo technical pack: section 01, technical flat, stamped DEMO — interface prototype, with every field left blank.`,
+    front: 1,
+  },
   pageCount: 6,
   scope: ['Technical flat', 'Construction detail', 'Measurement chart', 'Grading', 'Bill of materials', 'Label and packing'],
   demo: true,

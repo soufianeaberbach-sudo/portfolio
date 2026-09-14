@@ -80,15 +80,26 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
        the architecture is legible, and nothing is dressed as evidence. */
     <div class="pf-empty">
       <p class="pf-empty__lead">Selected {world.title.toLowerCase()} work will be published here.</p>
-      <ol class="pf-empty__list">
-        {world.categories.map((category) => (
-          <li>
-            <i class="label">{category.number}</i>
-            <span>{category.label}</span>
-            <small>{category.blurb}</small>
-          </li>
-        ))}
-      </ol>
+
+      {/* The SAME subchapter system the published chapters use, so the
+          architecture reads identically whether a chapter has work in it yet
+          or not. These bands are not buttons: there is nothing behind them to
+          select, and a control that does nothing is worse than none. */}
+      <nav class="pf-index pf-index--flat" aria-label={`${world.title} categories`}>
+        <ol class="pf-index__list">
+          {world.categories.map((category) => (
+            <li class="pf-index__item">
+              <div class="pf-band pf-band--static">
+                <i class="pf-band__num">{category.number}</i>
+                <span class="pf-band__label">{category.label}</span>
+                <small class="pf-band__blurb">{category.blurb}</small>
+                <b class="pf-band__count label">Pending</b>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       <a class="button" href="/contact/">Ask about {world.title.toLowerCase()} work <span><Arrow /></span></a>
     </div>
   ) : (

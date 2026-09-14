@@ -27,6 +27,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
+const sharp = require('sharp');
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const OUT = path.join(ROOT, 'public/demo/techpacks');
@@ -117,7 +118,7 @@ ${SECTIONS.map((s, i) => page(pack, s, i)).join('')}
 
 fs.mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
-const context = await browser.newContext();
+const context = await browser.newContext({ viewport: { width: 1123, height: 794 } });
 for (const pack of PACKS) {
   const p = await context.newPage();
   await p.setContent(doc(pack), { waitUntil: 'load' });
@@ -127,9 +128,18 @@ for (const pack of PACKS) {
     height: '210mm',
     printBackground: true,
   });
+  /* The first page, as an image, so the interface can show the document
+     itself rather than a drawing of one. Same markup, same stamps — this is a
+     picture of page 01 of the PDF beside it, not a separate illustration. */
+  const sheet = await p.$('.sheet');
+  const shot = await sheet.screenshot({ type: 'png' });
+  await sharp(shot).resize({ width: 1200 }).webp({ quality: 88, effort: 5 })
+    .toFile(path.join(OUT, `${pack.slug}-p1.webp`));
+
   await p.close();
   const bytes = fs.statSync(path.join(OUT, `${pack.slug}.pdf`)).size;
-  console.log(`${pack.slug}.pdf  ${SECTIONS.length} pages  ${(bytes / 1024).toFixed(0)} KB`);
+  const cover = fs.statSync(path.join(OUT, `${pack.slug}-p1.webp`)).size;
+  console.log(`${pack.slug}  ${SECTIONS.length}pp  ${(bytes / 1024).toFixed(0)} KB  + cover ${(cover / 1024).toFixed(0)} KB`);
 }
 await browser.close();
 console.log(`\n${PACKS.length} demo packs written to public/demo/techpacks/`);

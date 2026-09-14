@@ -37,8 +37,12 @@ const anyDemo = plates.some((plate) => !plate.asset);
   </p>
 
   <ol class="pf-dev__plates">
-    {plates.map((plate) => (
+    {plates.map((plate, index) => (
       <li class="pf-plate" data-plate={plate.key} data-demo={plate.asset ? undefined : ''}>
+        {/* The progression between the stages, drawn once between each pair.
+            The final garment is the large image beside this panel, so the
+            sequence ends at step 03 — there is no step 04. */}
+        {index > 0 && <i class="pf-plate__link" aria-hidden="true"></i>}
         <div class="pf-plate__art">
           {plate.asset ? (
             <img
