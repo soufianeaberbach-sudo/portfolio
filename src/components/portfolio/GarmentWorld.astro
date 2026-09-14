@@ -155,6 +155,16 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                       <Arrow dir="right" />
                     </button>
                   </div>
+
+                  {publication === 'reference-preview' && (
+                    /* Provenance, stated once, on the same block as the
+                       controls it belongs to — not as a section of its own
+                       under the studio. */
+                    <p class="pf-prov pf-prov--inline" data-reference-notice>
+                      <b class="label">Reference preview</b>
+                      <span>{REFERENCE_DISCLAIMER}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div class="pf-devcol">
@@ -194,16 +204,6 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
             </div>
           </div>
         </div>
-
-        {publication === 'reference-preview' && (
-          /* Stated once, here, next to the photographs it is about — not on a
-             cover and not on the screen where the visitor is only choosing a
-             category. */
-          <p class="pf-prov" data-reference-notice>
-            <b class="label">Reference preview</b>
-            <span>{REFERENCE_DISCLAIMER}</span>
-          </p>
-        )}
       </div>
     );
   })}

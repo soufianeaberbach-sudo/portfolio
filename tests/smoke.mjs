@@ -199,6 +199,30 @@ try {
     check('every cover is a long editorial field', covers.every((cv) => cv.height >= 900 * 0.68),
       covers.map((cv) => cv.height).join(','));
     check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
+    /* A cover is a composition, not a centred word: a register rule at the
+       top, an axis that alternates chapter to chapter, and the progression
+       signature at the foot. */
+    const composed = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
+      const name = el.querySelector('.pf-cover__name').getBoundingClientRect();
+      return {
+        chapter: el.dataset.chapter,
+        register: !!el.querySelector('.pf-cover__register .pf-cover__num')
+          && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
+        meter: el.querySelectorAll('.pf-cover__meter i').length,
+        signal: getComputedStyle(el.querySelector('.pf-cover__meter i:nth-child(4)')).backgroundColor,
+        /* Where the name sits across the cover, as a fraction of its width. */
+        axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
+          / el.getBoundingClientRect().width).toFixed(2),
+      };
+    }));
+    check('every cover carries its register', composed.every((cv) => cv.register));
+    check('every cover carries the four-step progression signature',
+      composed.every((cv) => cv.meter === 4), composed.map((cv) => cv.meter).join(','));
+    check('the last step of the signature is the one signal',
+      composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
+    check('the covers do not all sit on the same axis',
+      new Set(composed.map((cv) => cv.axis < 0.42 ? 'left' : cv.axis > 0.58 ? 'right' : 'centre')).size >= 2,
+      composed.map((cv) => `${cv.chapter}:${cv.axis}`).join(' '));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('the chapter title is the hero of its cover',
       covers.every((cv) => cv.titlePx >= 72), covers.map((cv) => cv.titlePx).join(','));
@@ -216,14 +240,14 @@ try {
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
     check('chapter 04 is published as Pattern & 3D Development',
-      /^04 Pattern & 3D Development Open chapter$/.test(
+      /^04 Digital validation Pattern & 3D Development Open chapter$/.test(
         covers.find((cv) => cv.chapter === '3d-simulation').text),
       covers.find((cv) => cv.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    check('the type-led covers say only their number, name and the way in',
-      quiet.every((cv) => /^\d\d [A-Za-z0-9 ]+ Open chapter$/.test(cv.text)),
+    check('the type-led covers say only their number, kind, name and the way in',
+      quiet.every((cv) => /^\d\d [A-Za-z ]+ [A-Za-z0-9 ]+ Open chapter$/.test(cv.text)),
       quiet.map((cv) => cv.text).join(' | '));
     check('no category list appears on any cover',
       await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
@@ -453,10 +477,15 @@ try {
       deck.widths.join(' < '));
     check('the furthest garment is still readable', deck.smallest >= 190, `${deck.smallest}px`);
 
-    /* ONE SHARED FLOOR: every garment stands on the same baseline, so the
-       smaller ones read as the same presentation further away. */
-    check('every garment stands on one baseline',
-      Math.max(...deck.bottoms) - Math.min(...deck.bottoms) <= 1, deck.bottoms.join(','));
+    /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
+       baseline — each step back stands a little higher, the way objects rise
+       toward a horizon — so four sizes in a row read as one presentation seen
+       from a distance rather than as four unrelated photographs. */
+    const rising = deck.bottoms.every((b, i) => i === 0 || b > deck.bottoms[i - 1]);
+    const lift = deck.bottoms[deck.bottoms.length - 1] - deck.bottoms[0];
+    check('the garments stand on one receding floor plane',
+      rising && lift >= 20 && lift <= deck.widths[deck.widths.length - 1] * 0.25,
+      `${deck.bottoms.join(',')} (rise ${lift}px)`);
 
     /* Front/back: the leader is whole, everything behind it keeps its complete
        front model showing. */
@@ -706,9 +735,15 @@ try {
         stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
       };
     });
-    check(`${width} keeps the three plates equal and stacked`,
-      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1 && eq.stacked,
+    /* Equal at every width; stacked beside the deck on a desktop, and a
+       compact row under it on a phone, so three plates never take over a
+       screen the garment should own. */
+    check(`${width} keeps the three plates exactly equal`,
+      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1,
       `${eq.w.join('/')} x ${eq.h.join('/')}`);
+    check(`${width} arranges the plates as a ${width >= 1024 ? 'column' : 'compact row'}`,
+      width >= 1024 ? eq.stacked : (!eq.stacked && eq.w[0] <= 160),
+      `stacked ${eq.stacked}, plate ${eq.w[0]}px`);
     await c.close();
   }
 
@@ -812,38 +847,53 @@ try {
     await p.waitForTimeout(600);
     await openChapter(p, '3d-simulation');
 
+    /* PUBLIC UI SHOWS WHAT EXISTS.
+       The chapter is architected for ten sessions and the data still carries
+       ten, but none has a recording behind it yet, so the page shows one
+       composed state rather than ten identical empty frames. */
     const reel = await p.evaluate(() => {
       const w = document.querySelector('[data-world="3d-simulation"]');
+      const empty = w.querySelector('[data-videos-empty]');
       const items = [...w.querySelectorAll('[data-video]')];
-      const frames = items.map((el) => el.querySelector('.pf-video__frame').getBoundingClientRect());
       return {
-        count: items.length,
-        numbers: items.map((el) => el.querySelector('.pf-video__num').textContent.trim()),
-        stacked: frames.every((b, i) => i === 0 || b.top >= frames[i - 1].bottom - 2),
-        widths: frames.map((b) => Math.round(b.width)),
-        ratios: frames.map((b) => +(b.width / b.height).toFixed(2)),
-        pending: items.filter((el) => /youtube video pending/i.test(el.textContent)).length,
-        playControls: w.querySelectorAll('[data-play]').length,
+        rendered: items.length,
+        pendingText: (w.textContent.match(/pending/gi) ?? []).length,
+        emptyState: !!empty,
+        capacity: Number(empty?.dataset.capacity ?? w.querySelector('[data-capacity]')?.dataset.capacity ?? 0),
+        emptyText: empty?.textContent.replace(/\s+/g, ' ').trim() ?? '',
         players: w.querySelectorAll('[data-player] > *').length,
-        youtubeIds: items.map((el) => el.dataset.youtube).filter(Boolean),
+        playControls: w.querySelectorAll('[data-play]').length,
         localVideo: w.innerHTML.includes('CLO3D.mp4') || w.querySelectorAll('video').length,
         strip: w.querySelectorAll('.pf-strip, .pf-frame, .pf-reel__stage').length,
       };
     });
-    check('ten video slots', reel.count === 10, String(reel.count));
-    check('the slots run one below another, all the same width',
-      reel.stacked && new Set(reel.widths).size === 1, `${reel.widths[0]}px stacked ${reel.stacked}`);
-    check('every frame is 16:9', reel.ratios.every((r) => Math.abs(r - 16 / 9) < 0.02), reel.ratios.join(','));
-    check('the numbering runs 01 to 10',
-      reel.numbers.join(',') === '01,02,03,04,05,06,07,08,09,10', reel.numbers.join(','));
-    check('every slot says what it is waiting for', reel.pending === 10, String(reel.pending));
-    check('no YouTube id is invented', reel.youtubeIds.length === 0, reel.youtubeIds.join(','));
-    check('a pending slot offers no play control that does nothing', reel.playControls === 0, String(reel.playControls));
-    check('no player exists before a play', reel.players === 0, String(reel.players));
+    check('no empty video slot is published', reel.rendered === 0, String(reel.rendered));
+    check('the chapter never repeats a pending label', reel.pendingText === 0, String(reel.pendingText));
+    check('one composed state stands in for the unpublished library', reel.emptyState);
+    check('the architecture still carries ten sessions', reel.capacity === 10, String(reel.capacity));
+    check('the state says what it is waiting for, once',
+      /publishing soon/i.test(reel.emptyText) && /10 sessions/.test(reel.emptyText)
+      && /16:9/.test(reel.emptyText), reel.emptyText);
+    check('no player and no play control exist',
+      reel.players === 0 && reel.playControls === 0, `${reel.players}/${reel.playControls}`);
     check('the local home-page clip is not used as a library video',
       reel.localVideo === false || reel.localVideo === 0, String(reel.localVideo));
     check('the rejected hero-plus-film-strip interface is gone', reel.strip === 0, String(reel.strip));
-    check('nothing reached YouTube or fetched a video', media.length === 0, media.join(','));
+
+    /* A published session renders in the same 16:9 frame the empty state
+       promises. The rule is in the stylesheet whether or not a session exists
+       yet, so it is asserted directly. */
+    const frameRule = await p.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.className = 'pf-video__frame';
+      probe.style.width = '320px';
+      document.querySelector('[data-world="3d-simulation"]').append(probe);
+      const r = probe.getBoundingClientRect();
+      const ratio = r.width / r.height;
+      probe.remove();
+      return +ratio.toFixed(2);
+    });
+    check('a published session frame is 16:9', Math.abs(frameRule - 16 / 9) < 0.02, String(frameRule));
 
     /* THE WHOLE WORLD IS INK — bar, header, list and the gaps between the
        videos — not a paper page with black rectangles punched into it. */
@@ -866,15 +916,21 @@ try {
         bar: bg('.pf-bar'),
         title: getComputedStyle(w.querySelector('.pf-head h2')).color,
         titleLum: lum(getComputedStyle(w.querySelector('.pf-head h2')).color),
-        gapLum: lum(getComputedStyle(w.querySelector('.pf-videos')).backgroundColor === 'rgba(0, 0, 0, 0)'
+        gapLum: lum(getComputedStyle(w.querySelector('[data-screen]')).backgroundColor === 'rgba(0, 0, 0, 0)'
           ? getComputedStyle(w).backgroundColor
-          : getComputedStyle(w.querySelector('.pf-videos')).backgroundColor),
-        frameLum: lum(bg('.pf-video__frame')),
-        /* Orange is a signal, never a surface. */
+          : getComputedStyle(w.querySelector('[data-screen]')).backgroundColor),
+        leadLum: lum(getComputedStyle(w.querySelector('.pf-soon__lead')).color),
+        /* Orange is a signal, never a surface. A hairline mark carries it —
+           the last step of the progression signature is a 2px rule — so this
+           counts painted AREA rather than any use of the colour at all. */
         orangeFills: [...w.querySelectorAll('*')]
-          .filter((el) => getComputedStyle(el).backgroundColor === signalRgb).length,
+          .filter((el) => {
+            if (getComputedStyle(el).backgroundColor !== signalRgb) return false;
+            const r = el.getBoundingClientRect();
+            return r.width * r.height > 400;
+          }).length,
         /* Nothing is a card. */
-        rounded: [...w.querySelectorAll('.pf-video, .pf-video__frame')]
+        rounded: [...w.querySelectorAll('.pf-video, .pf-video__frame, .pf-soon')]
           .filter((el) => getComputedStyle(el).borderRadius !== '0px'
             || getComputedStyle(el).boxShadow !== 'none').length,
       };
@@ -883,10 +939,9 @@ try {
     check('the top bar belongs to the dark world', dark.bar === dark.inkRgb, dark.bar);
     check('the type is paper on ink', dark.titleLum > 200, `${Math.round(dark.titleLum)}`);
     check('there is no paper gap between the videos', dark.gapLum < 40, `${Math.round(dark.gapLum)}`);
-    check('the video frames sit on the dark world, not on a light panel',
-      dark.frameLum < 45, `${Math.round(dark.frameLum)}`);
+    check('the chapter type is paper throughout', dark.leadLum > 200, `${Math.round(dark.leadLum)}`);
     check('orange is a signal, never a surface', dark.orangeFills === 0, String(dark.orangeFills));
-    check('no video is drawn as a card', dark.rounded === 0, String(dark.rounded));
+    check('nothing in the dark world is drawn as a card', dark.rounded === 0, String(dark.rounded));
 
     /* The chapter is named for what the recordings actually cover. */
     const naming = await p.evaluate(() => {
@@ -950,8 +1005,9 @@ try {
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
     check('the development plates are declared as demos without the script',
       html.includes('Demo layout — real project assets pending') || html.includes('Demo layout &#8212; real project assets pending'));
-    check('every video slot is declared pending without the script',
-      (html.match(/YouTube video pending/g) ?? []).length >= 10);
+    check('the unpublished library states itself once without the script',
+      html.includes('Publishing soon.')
+      && (html.match(/YouTube video pending/g) ?? []).length === 0);
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
       return { total: slots.length, shown: slots.filter((s) => s.getBoundingClientRect().width > 20).length };

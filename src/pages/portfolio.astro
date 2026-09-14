@@ -83,10 +83,27 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
               </span>
             )}
 
-            <span class="pf-cover__type">
+            {/* The register: the chapter's number at one margin, its kind at
+                the other, on the rule that opens the cover. */}
+            <span class="pf-cover__register" aria-hidden="true">
               <i class="pf-cover__num">{chapter.number}</i>
+              <i class="pf-cover__kind">{chapter.kind}</i>
+            </span>
+
+            <span class="pf-cover__type">
               <b class="pf-cover__name">{chapter.title}</b>
               <span class="pf-cover__go label" aria-hidden="true">Open chapter <Arrow /></span>
+            </span>
+
+            {/* THE SIGNATURE. Four rules stepping up to full height, in the
+                same 52 / 66 / 82 / 100 rhythm the garment deck recedes by.
+                The whole portfolio is about work moving forward from an idea
+                to a finished garment, and this is that idea drawn once per
+                chapter — the last step, the result, carrying the one signal.
+                Tech Packs takes a register of ruled document fields instead:
+                same rhythm, a document's own language. */}
+            <span class={`pf-cover__meter${chapter.id === 'tech-packs' ? ' pf-cover__meter--doc' : ''}`} aria-hidden="true">
+              <i></i><i></i><i></i><i></i>
             </span>
           </a>
         );
@@ -390,7 +407,11 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
              the smaller ones read as the same presentation further away rather
              than as differently sized photographs. */
           item.slot.style.zIndex = String(10 + item.k);
-          item.slot.dataset.depth = String(nominal - 1 - item.k);
+          const depth = nominal - 1 - item.k;
+          /* The floor plane: each step back stands a little higher, scaled to
+             the leading card so the rise is proportional at every width. */
+          item.slot.style.setProperty('--lift', `${Math.round(depth * width0 * 0.035)}px`);
+          item.slot.dataset.depth = String(depth);
         }
       };
 
@@ -699,12 +720,17 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
        ====================================================================== */
     .pf-covers { border-top: 1px solid var(--line-strong); }
 
+    /* A cover is a composition, not a centred word on an empty field: a
+       register rule across the top, the name set large and low against one
+       margin, and the progression signature at the foot. The axis alternates
+       chapter to chapter, so the four share one system and none of them reads
+       as the same slide twice. */
     .pf-cover {
       position: relative;
       display: grid;
-      place-items: center;
+      grid-template-rows: auto 1fr auto;
       min-height: clamp(30rem, 82vh, 48rem);
-      padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter);
+      padding: clamp(1.5rem, 2.6vw, 2.4rem) var(--gutter) clamp(1.75rem, 3vw, 2.8rem);
       color: inherit;
       text-decoration: none;
       overflow: hidden;
@@ -712,33 +738,45 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf-cover + .pf-cover { border-top: 1px solid var(--line-strong); }
     .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
 
+    .pf-cover__register {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: clamp(.7rem, 1.2vw, 1rem);
+      border-bottom: 1px solid var(--line);
+    }
+    .pf-cover__num,
+    .pf-cover__kind {
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-style: normal;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .pf-cover__num { color: var(--ink); }
+
     .pf-cover__type {
       position: relative;
       z-index: 2;
+      align-self: end;
       display: grid;
-      justify-items: center;
-      text-align: center;
-    }
-    /* The number is a mark in the margin of the composition, not a label on a
-       card: small, set well above the name and kept at arm's length from it. */
-    .pf-cover__num {
-      font-family: var(--mono);
-      font-size: .74rem;
-      font-style: normal;
-      letter-spacing: .34em;
-      text-indent: .34em;
-      color: var(--muted);
+      justify-items: start;
+      max-width: 100%;
     }
     .pf-cover__name {
       display: block;
-      margin: clamp(1.4rem, 3vw, 2.6rem) 0 0;
+      margin: 0;
       font-family: var(--display);
       font-variation-settings: 'wdth' 112;
       font-weight: 850;
       /* The title is the hero. It runs as large as its own length allows —
-         see coverScale above — and never breaks inside a word. */
+         see coverScale in the frontmatter — and never breaks inside a word. */
       font-size: clamp(2.4rem, calc(var(--cover-vw, 11) * 1vw), 9.5rem);
-      line-height: .86;
+      line-height: .84;
       letter-spacing: -.055em;
       text-wrap: balance;
       overflow-wrap: normal;
@@ -749,15 +787,51 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       display: inline-flex;
       align-items: center;
       gap: .55rem;
-      margin-top: clamp(1.6rem, 3.2vw, 2.8rem);
+      margin-top: clamp(1.1rem, 2vw, 1.8rem);
       color: var(--signal);
       transition: gap .3s var(--ease);
     }
     .pf-cover__go .arrow { width: 1em; height: 1em; }
     .pf-cover:hover .pf-cover__go { gap: 1.05rem; }
 
-    /* The one cover whose subject is already visible keeps the cinematic
-       frame from the real recording. */
+    /* The signature: four rules stepping up in the same rhythm the garment
+       deck recedes by, the last one carrying the signal. */
+    .pf-cover__meter {
+      position: relative;
+      z-index: 2;
+      align-self: end;
+      justify-self: start;
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(.5rem, .95vw, .85rem);
+      height: clamp(3rem, 5.5vw, 4.6rem);
+      margin-top: clamp(1.75rem, 3.4vw, 3rem);
+    }
+    .pf-cover__meter i { display: block; width: 2px; background: var(--ink); }
+    .pf-cover__meter i:nth-child(1) { height: 52%; }
+    .pf-cover__meter i:nth-child(2) { height: 66%; }
+    .pf-cover__meter i:nth-child(3) { height: 82%; }
+    .pf-cover__meter i:nth-child(4) { height: 100%; background: var(--signal); }
+    /* A document register instead of a scale, for the chapter whose subject is
+       paper: the same four steps, laid flat as ruled fields. */
+    .pf-cover__meter--doc { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: clamp(.5rem, .9vw, .8rem); width: clamp(8rem, 14vw, 13rem); }
+    .pf-cover__meter--doc i { width: 52%; height: 2px; }
+    .pf-cover__meter--doc i:nth-child(2) { width: 100%; }
+    .pf-cover__meter--doc i:nth-child(3) { width: 74%; }
+    .pf-cover__meter--doc i:nth-child(4) { width: 34%; }
+
+    /* ---- the axis alternates, so no two covers read the same way ---- */
+    /* 01 sits against the left margin. */
+    .pf-cover[data-chapter='menswear'] .pf-cover__type,
+    .pf-cover[data-chapter='menswear'] .pf-cover__meter { justify-self: end; justify-items: end; }
+    .pf-cover[data-chapter='menswear'] .pf-cover__name { text-align: right; }
+    .pf-cover[data-chapter='menswear'] .pf-cover__go { justify-self: end; }
+    /* 03 hangs its name one step in from the margin, the way a technical sheet
+       indents from its binding edge. */
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__type { padding-left: clamp(0rem, 8vw, 7rem); }
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__meter { justify-self: end; }
+
+    /* ---- 04 keeps the cinematic frame from the real recording ---- */
     .pf-cover[data-tone='dark'] { background: var(--ink); color: var(--paper-bright); }
     .pf-cover__art { position: absolute; inset: 0; z-index: 0; display: block; }
     .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
@@ -765,9 +839,13 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(120% 95% at 50% 50%, rgba(17, 17, 15, .72) 0%, rgba(17, 17, 15, .93) 74%);
+      background: linear-gradient(to top, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .72) 42%, rgba(17, 17, 15, .62) 78%, rgba(17, 17, 15, .82) 100%);
     }
-    .pf-cover[data-tone='dark'] .pf-cover__num { color: rgba(251, 250, 246, .66); }
+    .pf-cover[data-tone='dark'] .pf-cover__register { border-bottom-color: rgba(251, 250, 246, .22); }
+    .pf-cover[data-tone='dark'] .pf-cover__num { color: var(--paper-bright); }
+    .pf-cover[data-tone='dark'] .pf-cover__kind { color: rgba(251, 250, 246, .6); }
+    .pf-cover[data-tone='dark'] .pf-cover__meter i { background: rgba(251, 250, 246, .6); }
+    .pf-cover[data-tone='dark'] .pf-cover__meter i:nth-child(4) { background: var(--signal); }
 
     /* ======================================================================
        CHAPTERS
@@ -864,6 +942,16 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     }
     .pf-prov b { color: var(--signal); font-weight: 400; }
     .pf-prov span { color: var(--muted); font-size: .9rem; line-height: 1.55; }
+    /* Beside the controls: one quiet line, no rule of its own, no section. */
+    .pf-prov--inline {
+      display: block;
+      max-width: 44rem;
+      margin: clamp(.7rem, 1.2vw, 1rem) 0 0;
+      padding-left: 0;
+      border-left: 0;
+    }
+    .pf-prov--inline b { margin-right: .5rem; }
+    .pf-prov--inline span { font-size: .88rem; }
 
     /* ======================================================================
        CATEGORY INDEX — the first screen of a garment chapter
@@ -878,48 +966,62 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf-cat {
       position: relative;
       display: grid;
-      grid-template-columns: 3.5rem minmax(0, 1fr) auto 1.75rem;
+      /* The number hangs outside the title's column, the metadata sits against
+         the far margin, and the blurb is indented under the title — three
+         different alignments rather than one even row of fields. */
+      grid-template-columns: 4.5rem minmax(0, 1fr) auto 2rem;
       align-items: baseline;
-      gap: .35rem clamp(1rem, 2vw, 1.75rem);
-      padding: clamp(1.4rem, 2.6vw, 2.4rem) 0;
+      gap: .5rem clamp(1rem, 2vw, 2rem);
+      padding: clamp(1.6rem, 3vw, 2.9rem) 0;
       border-bottom: 1px solid var(--line);
       color: var(--muted);
       text-decoration: none;
-      transition: color .3s var(--ease), padding-left .45s var(--ease);
+      transition: color .35s var(--ease), border-color .35s var(--ease);
     }
-    a.pf-cat:hover { color: var(--ink); padding-left: .9rem; }
+    a.pf-cat:hover { color: var(--ink); border-bottom-color: var(--ink); }
     a.pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: -3px; }
     .pf-cat__num {
       grid-column: 1;
       grid-row: 1;
       font-family: var(--mono);
-      font-size: .72rem;
+      font-size: .74rem;
       font-style: normal;
-      letter-spacing: .16em;
+      letter-spacing: .2em;
+      transition: color .35s var(--ease);
     }
     a.pf-cat:hover .pf-cat__num { color: var(--signal); }
     .pf-cat__label {
       grid-column: 2;
       grid-row: 1;
       font-family: var(--display);
-      font-weight: 600;
-      font-size: clamp(1.5rem, 3.4vw, 3rem);
-      line-height: 1;
-      letter-spacing: -.04em;
+      font-variation-settings: 'wdth' 112;
+      font-weight: 800;
+      font-size: clamp(1.6rem, 4vw, 3.4rem);
+      line-height: .96;
+      letter-spacing: -.05em;
       color: var(--ink);
+      transition: transform .45s var(--ease);
     }
+    a.pf-cat:hover .pf-cat__label { transform: translateX(.6rem); }
     .pf-cat__blurb {
       grid-column: 2;
       grid-row: 2;
-      max-width: 44rem;
-      margin-top: .55rem;
+      max-width: 40rem;
+      margin-top: .7rem;
       color: var(--muted);
-      font-size: .9rem;
+      font-size: .92rem;
       line-height: 1.55;
     }
-    .pf-cat__count { grid-column: 3; grid-row: 1; justify-self: end; font-weight: 400; }
-    .pf-cat__go { grid-column: 4; grid-row: 1; justify-self: end; color: var(--signal); }
-    .pf-cat__go .arrow { width: 1.1rem; height: 1.1rem; }
+    .pf-cat__count { grid-column: 3; grid-row: 1; justify-self: end; font-weight: 400; letter-spacing: .18em; }
+    .pf-cat__go {
+      grid-column: 4;
+      grid-row: 1;
+      justify-self: end;
+      color: var(--signal);
+      transition: transform .45s var(--ease);
+    }
+    .pf-cat__go .arrow { width: 1.15rem; height: 1.15rem; }
+    a.pf-cat:hover .pf-cat__go { transform: translateX(.45rem); }
     /* A category with nothing behind it is not a link and does not pretend. */
     div.pf-cat { cursor: default; }
     div.pf-cat .pf-cat__label { color: var(--ink-soft); }
@@ -985,10 +1087,12 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf--js .pf-slot {
       position: absolute;
       left: var(--x, 0);
-      /* ONE SHARED FLOOR. Every garment stands on the same baseline, so the
-         smaller ones read as the same presentation further away rather than as
-         differently sized photographs. */
-      bottom: 0;
+      /* ONE RECEDING FLOOR. The garments share a floor plane rather than a
+         flat baseline: each step back stands a little higher, the way objects
+         rise toward a horizon. Without it four different sizes in a row read
+         as four unrelated photographs; with it they read as one presentation
+         seen from a distance. */
+      bottom: var(--lift, 0);
       width: var(--w, 0);
       height: var(--h, 0);
       /* Opaque, because the occlusion is real: the card in front physically
@@ -999,8 +1103,18 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
          standing in one studio into white cards lying on a table. */
       background: var(--pf-stage);
       transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease),
-                  opacity .58s var(--ease);
+                  bottom .58s var(--ease);
     }
+    /* Atmospheric recession, on the PHOTOGRAPH and never on the card.
+       Fading the whole slot let the garment behind it show through its own
+       opaque white ground and ringed every figure with a ghost — the occlusion
+       is load-bearing. Fading only the image lightens the further garments
+       against the studio, which is what air does over distance, and leaves the
+       card in front covering what it covers. */
+    .pf--js .pf-slot__figure img { transition: opacity .58s var(--ease); }
+    .pf--js .pf-slot[data-depth='1'] .pf-slot__figure img { opacity: .94; }
+    .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { opacity: .88; }
+    .pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { opacity: .82; }
     .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
     .pf-slot[hidden] { display: none; }
     /* contain, never cover: a head, a hem or a train is never cut off.
@@ -1117,9 +1231,6 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       .pf-dev__note { display: block; margin-top: .3rem; line-height: 1.45; }
       .pf-dev__plates { gap: clamp(.8rem, 1.1vw, 1rem); }
       .pf-plate { width: 100%; }
-      /* One line, or it wraps over the plate's own edge at this width. */
-      .pf-plate__caption { font-size: .5rem; letter-spacing: .1em; white-space: nowrap; }
-      .pf-plate__stamp { font-size: .5rem; letter-spacing: .14em; }
     }
     .pf-plate__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
     /* The arrow between one step and the next, drawn in the gap. */
@@ -1156,9 +1267,12 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: clamp(.5rem, .8vw, .75rem);
-      border: 1px solid var(--line-strong);
+      /* Quiet. This is supporting proof beside a photograph of a garment, and
+         a heavy frame around an empty plate competes with the thing it is
+         evidence for. */
+      border: 1px solid var(--line);
     }
     .pf-plate__blank::before,
     .pf-plate__blank::after {
@@ -1167,37 +1281,38 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       width: .7rem;
       height: .7rem;
       border: 1px solid var(--ink);
-      opacity: .38;
+      opacity: .22;
       pointer-events: none;
     }
     .pf-plate__blank::before { left: -1px; top: -1px; border-width: 1px 0 0 1px; }
     .pf-plate__blank::after { right: -1px; bottom: -1px; border-width: 0 1px 1px 0; }
     .pf-plate[data-plate='sketch'] .pf-plate__blank {
-      background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(17, 17, 15, .05) 9px 10px);
+      background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(17, 17, 15, .032) 9px 10px);
     }
     .pf-plate[data-plate='pattern'] .pf-plate__blank {
       background:
-        repeating-linear-gradient(to right, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px),
-        repeating-linear-gradient(to bottom, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px);
+        repeating-linear-gradient(to right, rgba(17, 17, 15, .045) 0 1px, transparent 1px 26px),
+        repeating-linear-gradient(to bottom, rgba(17, 17, 15, .045) 0 1px, transparent 1px 26px);
     }
     .pf-plate[data-plate='simulation'] .pf-plate__blank {
       background-image:
-        linear-gradient(to bottom, transparent, rgba(17, 17, 15, .11) 24%, rgba(17, 17, 15, .11) 76%, transparent),
-        linear-gradient(to bottom, rgba(17, 17, 15, .05), rgba(17, 17, 15, 0) 62%);
+        linear-gradient(to bottom, transparent, rgba(17, 17, 15, .07) 24%, rgba(17, 17, 15, .07) 76%, transparent),
+        linear-gradient(to bottom, rgba(17, 17, 15, .035), rgba(17, 17, 15, 0) 62%);
       background-size: 1px 100%, 100% 100%;
       background-position: 50% 0, 0 0;
       background-repeat: no-repeat;
     }
+    /* Microtype, not illegible type: the smallest thing on this page is still
+       set at about eleven pixels. */
     .pf-plate__stamp {
-      padding: .22rem .42rem;
-      border: 1px solid var(--muted);
+      padding: .2rem .4rem;
+      border: 1px solid var(--line-strong);
       color: var(--muted);
-      font-size: .58rem;
-      letter-spacing: .2em;
+      font-size: .66rem;
+      letter-spacing: .18em;
     }
-    .pf-plate__caption { color: var(--muted); font-size: .58rem; letter-spacing: .16em; }
-    .pf-plate__label { display: flex; align-items: baseline; gap: .55rem; margin: .5rem 0 0; }
-    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; font-size: .58rem; }
+    .pf-plate__label { display: flex; align-items: baseline; gap: .5rem; margin: .5rem 0 0; }
+    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; font-size: .66rem; letter-spacing: .14em; }
     .pf-plate__label span {
       font-family: var(--display);
       font-size: clamp(.85rem, 1vw, .98rem);
@@ -1230,8 +1345,16 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       border-top: 1px solid var(--line);
     }
     .pf-doc:first-child { border-top: 1px solid var(--line-strong); }
+    /* Measured alternation: the document changes side every row, so five
+       documents read as a rhythm rather than as one component repeated five
+       times. Reading order is unchanged — the preview stays first in the
+       markup and only its column moves. */
     @media (min-width: 900px) {
       .pf-doc { grid-template-columns: minmax(0, 1fr) minmax(0, 19rem); gap: clamp(2rem, 4vw, 3.5rem); }
+      .pf-doc[data-side='right'] { grid-template-columns: minmax(0, 19rem) minmax(0, 1fr); }
+      .pf-doc[data-side='right'] .pf-doc__page { grid-column: 2; grid-row: 1; }
+      .pf-doc[data-side='right'] .pf-doc__meta { grid-column: 1; grid-row: 1; text-align: right; }
+      .pf-doc[data-side='right'] .pf-doc__open { margin-left: auto; }
     }
     /* The document itself, at a size you can read. One hairline, because a
        sheet of paper has an edge — nothing else is drawn around it. */
@@ -1248,7 +1371,19 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     }
     .pf-doc__line { margin: .6rem 0 0; color: var(--muted); font-size: .9rem; line-height: 1.55; }
     .pf-doc__stamp { margin: .9rem 0 0; color: var(--signal); }
-    .pf-doc__open { margin-top: 1.5rem; }
+    .pf-doc__open {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin-top: 1.6rem;
+      padding-bottom: .3rem;
+      color: var(--signal);
+      text-decoration: none;
+      transition: gap .3s var(--ease);
+    }
+    .pf-doc__open .arrow { width: 1em; height: 1em; }
+    .pf-doc__open:hover { gap: 1rem; }
+    .pf-doc__open:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
     /* The reader. A layer above the chapter, built on the click that asks for
        a document and torn down again on close. */
@@ -1411,15 +1546,91 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf-video__desc { max-width: 42rem; margin: clamp(.9rem, 1.6vw, 1.3rem) 0 0; color: var(--pf-ink-soft); font-size: .95rem; line-height: 1.65; }
     .pf-video__privacy { margin: .5rem 0 0; color: var(--pf-ink-muted); font-size: .85rem; }
 
+    /* ---- the state before the first recording is published ---- */
+    .pf-soon {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 5rem) var(--gutter) clamp(4rem, 9vw, 8rem);
+      border-top: 1px solid var(--pf-ink-line-strong);
+    }
+    .pf-soon__label { margin: 0; color: var(--signal); letter-spacing: .24em; }
+    .pf-soon__lead {
+      margin: clamp(1rem, 2vw, 1.6rem) 0 0;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 112;
+      font-weight: 850;
+      font-size: clamp(2.2rem, 6vw, 4.6rem);
+      line-height: .9;
+      letter-spacing: -.05em;
+    }
+    .pf-soon__note {
+      max-width: 40rem;
+      margin: clamp(1.1rem, 2vw, 1.6rem) 0 0;
+      color: var(--pf-ink-soft);
+      font-size: clamp(.95rem, 1.2vw, 1.05rem);
+      line-height: 1.65;
+    }
+    /* The same four steps as the chapter covers, in the dark. */
+    .pf-soon__meter {
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(.5rem, .95vw, .85rem);
+      height: clamp(3rem, 5.5vw, 4.6rem);
+      margin-top: clamp(2rem, 4vw, 3.25rem);
+    }
+    .pf-soon__meter i { display: block; width: 2px; background: rgba(251, 250, 246, .55); }
+    .pf-soon__meter i:nth-child(1) { height: 52%; }
+    .pf-soon__meter i:nth-child(2) { height: 66%; }
+    .pf-soon__meter i:nth-child(3) { height: 82%; }
+    .pf-soon__meter i:nth-child(4) { height: 100%; background: var(--signal); }
+
     /* ======================================================================
        RESPONSIVE
        ====================================================================== */
+    /* Below the two-column viewer the rail becomes a COMPACT STRIP under the
+       garments: three equal thumbnails in one row with the arrows between
+       them, so the deck stays the dominant image on a phone instead of being
+       followed by three screen-wide plates. */
+    @media (max-width: 1023px) {
+      .pf-dev__plates {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(1.1rem, 4vw, 1.75rem);
+        justify-items: stretch;
+      }
+      .pf-plate { width: 100%; }
+      .pf-plate__link {
+        left: calc(clamp(1.1rem, 4vw, 1.75rem) * -1);
+        top: 50%;
+        width: clamp(1.1rem, 4vw, 1.75rem);
+        height: 1px;
+        transform: translateY(-50%);
+      }
+      /* The tick turns to point along the row. */
+      .pf-plate__link::after {
+        left: auto;
+        right: .04rem;
+        bottom: auto;
+        top: 50%;
+        width: .34rem;
+        height: .34rem;
+        margin-top: -.17rem;
+        transform: rotate(-45deg);
+      }
+      .pf-plate__label { display: block; margin-top: .45rem; }
+      .pf-plate__label b { display: block; font-size: .6rem; }
+      .pf-plate__label span { display: block; margin-top: .1rem; font-size: clamp(.72rem, 2.6vw, .86rem); }
+      .pf-plate__stamp { font-size: .58rem; padding: .16rem .3rem; letter-spacing: .12em; }
+      .pf-plate__blank::before, .pf-plate__blank::after { width: .5rem; height: .5rem; }
+      .pf-dev__head { margin-bottom: .9rem; }
+    }
+
     @media (max-width: 760px) {
       .pf-cat { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+      .pf-cat__label { font-size: clamp(1.35rem, 6.6vw, 2.1rem); }
       .pf-cat__go { display: none; }
-      .pf-cat__blurb { font-size: .84rem; }
-      a.pf-cat:hover { padding-left: 0; }
-      .pf-doc__open { min-width: 0; width: 100%; }
+      .pf-cat__blurb { font-size: .85rem; margin-top: .55rem; }
+      a.pf-cat:hover .pf-cat__label { transform: none; }
+
     }
 
     @media (max-width: 430px) {

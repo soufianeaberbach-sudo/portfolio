@@ -494,6 +494,10 @@ export interface Chapter {
   id: string;
   number: string;
   title: string;
+  /* Two or three words naming what kind of chapter this is. It sits in the
+     cover's register opposite the number — the only other thing on a cover
+     besides its name. */
+  kind: string;
   descriptor: string;
   publication: Publication;
   /* One restrained line shown when the chapter is not published work. Never
@@ -506,6 +510,7 @@ export const chapters: Chapter[] = [
     id: 'womenswear',
     number: '01',
     title: 'Womenswear',
+    kind: 'Product development',
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
@@ -514,6 +519,7 @@ export const chapters: Chapter[] = [
     id: 'menswear',
     number: '02',
     title: 'Menswear',
+    kind: 'Product development',
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     stateNote: 'Selected menswear work will be published here.',
@@ -522,6 +528,7 @@ export const chapters: Chapter[] = [
     id: 'tech-packs',
     number: '03',
     title: 'Tech Packs',
+    kind: 'Technical documentation',
     descriptor: 'Production-ready technical documentation.',
     /* Demo packs are not published work, so the chapter reports itself as an
        interface preview. It flips to 'published' the moment a pack without
@@ -540,6 +547,7 @@ export const chapters: Chapter[] = [
     id: '3d-simulation',
     number: '04',
     title: 'Pattern & 3D Development',
+    kind: 'Digital validation',
     descriptor:
       'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
     publication: simulationSessions.some((session) => !session.demo)

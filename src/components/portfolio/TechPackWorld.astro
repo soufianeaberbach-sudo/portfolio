@@ -58,7 +58,7 @@ const anyDemo = packs.some((pack) => pack.demo);
     {packs.length > 0 ? (
       <ol class="pf-docs">
         {packs.map((pack, index) => (
-          <li class="pf-doc" data-doc={pack.id}>
+          <li class="pf-doc" data-doc={pack.id} data-side={index % 2 === 0 ? 'left' : 'right'}>
             <div class="pf-doc__page">
               {pack.coverImage ? (
                 <img
@@ -83,9 +83,12 @@ const anyDemo = packs.some((pack) => pack.demo);
                 {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount} pages` : ''}
               </p>
               {pack.demo && <p class="label pf-doc__stamp">Demo — interface prototype</p>}
+              {/* An editorial action, not a filled block: the document is the
+                  thing on this page, and a large orange button beside it
+                  competes with the page it is offering to open. */}
               {pack.pdfUrl && (
                 <a
-                  class="button button--signal pf-doc__open"
+                  class="pf-doc__open label"
                   id={`open-${pack.id}`}
                   href={pack.pdfUrl}
                   target="_blank"
@@ -93,7 +96,7 @@ const anyDemo = packs.some((pack) => pack.demo);
                   data-open-pdf
                   data-doc-title={pack.title}
                 >
-                  Open PDF <span><Arrow /></span>
+                  Open PDF <span aria-hidden="true"><Arrow /></span>
                 </a>
               )}
             </div>

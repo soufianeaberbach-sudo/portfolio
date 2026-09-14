@@ -28,7 +28,20 @@ interface Props {
 }
 
 const { sessions } = Astro.props;
-const playable = (session: SimulationSession) => Boolean(session.youtubeId);
+
+/* WHAT THE PUBLIC SEES IS WHAT EXISTS.
+ *
+ * The chapter is architected for ten recorded sessions and the data model
+ * still carries all ten. Only the ones with a real recording behind them are
+ * rendered: ten identical "pending" entries down a page is an honest statement
+ * made in the least flattering possible way, and it advertises absence instead
+ * of work. When a youtubeId is added the session appears here on its own, in
+ * the same 16:9 frame as the rest, with no other change.
+ *
+ * Until then the chapter says so once, plainly, in a composed state rather
+ * than through ten empty frames. */
+const published = sessions.filter((session) => Boolean(session.youtubeId));
+const capacity = sessions.length;
 const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
@@ -47,59 +60,53 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
         Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
         and fit decisions — the part of the work a photograph cannot hold still.
       </p>
-      {sessions.some((session) => !playable(session)) && (
-        <p class="pf-prov" data-pending-notice>
-          <b class="label">Videos pending</b>
-          <span>
-            The library is laid out for ten recorded development sessions. None is published yet, so every
-            slot is reserved and nothing is attached to it.
-          </span>
-        </p>
-      )}
     </header>
 
-    <ol class="pf-videos">
-      {sessions.map((session, index) => (
-        <li class="pf-video" data-video={session.id} data-youtube={session.youtubeId ?? ''}>
-          <p class="pf-video__head">
-            <i class="label pf-video__num">{num(index)}</i>
-            <h3>{session.title}</h3>
-          </p>
+    {published.length > 0 ? (
+      <ol class="pf-videos" data-capacity={capacity}>
+        {published.map((session, index) => (
+          <li class="pf-video" data-video={session.id} data-youtube={session.youtubeId ?? ''}>
+            <p class="pf-video__head">
+              <i class="label pf-video__num">{num(index)}</i>
+              <h3>{session.title}</h3>
+            </p>
 
-          <div class="pf-video__frame">
-            {session.poster && (
-              <img
-                class="pf-video__poster"
-                src={session.poster}
-                width="1280"
-                height="720"
-                alt={session.posterAlt ?? ''}
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-
-            {playable(session) ? (
+            <div class="pf-video__frame">
+              {session.poster && (
+                <img
+                  class="pf-video__poster"
+                  src={session.poster}
+                  width="1280"
+                  height="720"
+                  alt={session.posterAlt ?? ''}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
               <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>
                 <span class="pf-play__mark" aria-hidden="true"></span>
                 <span class="pf-play__text label">Play</span>
               </button>
-            ) : (
-              /* The design state. Not a disabled play button — there is
-                 nothing to play, so nothing offers to play it. */
-              <p class="label pf-video__pending">YouTube video pending</p>
-            )}
+              {/* Where the player is inserted on demand. Empty on load. */}
+              <div class="pf-video__player" data-player hidden></div>
+            </div>
 
-            {/* Where the player is inserted on demand. Empty on load. */}
-            <div class="pf-video__player" data-player hidden></div>
-          </div>
-
-          <p class="pf-video__desc">{session.description}</p>
-          {session.youtubeId && (
+            <p class="pf-video__desc">{session.description}</p>
             <p class="pf-video__privacy">Playing this video loads a player from YouTube.</p>
-          )}
-        </li>
-      ))}
-    </ol>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      /* One composed state, not ten empty frames. */
+      <div class="pf-soon" data-videos-empty data-capacity={capacity}>
+        <p class="label pf-soon__label">Recorded development sessions</p>
+        <p class="pf-soon__lead">Publishing soon.</p>
+        <p class="pf-soon__note">
+          The library is built for {capacity} sessions in the standard 16:9 format. Each one runs from the
+          first pattern lines through 2D construction, CLO3D validation and the fit decisions that follow.
+        </p>
+        <span class="pf-soon__meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </div>
+    )}
   </div>
 </section>
