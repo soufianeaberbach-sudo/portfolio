@@ -261,6 +261,46 @@ try {
     });
     check('no orange underline sits beneath portfolio text at rest', underlines.length === 0, underlines.join(' | '));
 
+    /* PUBLISHING STATE. A chapter with nothing published is listed so the
+       four-world architecture stays visible, but it is not a link — there is
+       no empty world to walk into — and it says what it is waiting for. */
+    const states = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].map((el) => ({
+      id: el.dataset.chapter,
+      publication: el.dataset.publication,
+      isLink: el.tagName === 'A',
+      note: el.querySelector('.pf-chapter__state')?.textContent.trim() ?? null,
+      opensAffordance: !!el.querySelector('.pf-chapter__go'),
+    })));
+    const byId = Object.fromEntries(states.map((c) => [c.id, c]));
+    check('four chapters carry an explicit publication state',
+      states.every((c) => ['published', 'reference-preview', 'unpublished'].includes(c.publication)),
+      states.map((c) => `${c.id}=${c.publication}`).join(' '));
+    check('menswear is unpublished', byId.menswear.publication === 'unpublished');
+    check('menswear is not presented as an openable world', byId.menswear.isLink === false && byId.menswear.opensAffordance === false);
+    check('menswear says what it is waiting for', /will be published here/i.test(byId.menswear.note ?? ''), byId.menswear.note ?? 'none');
+    check('tech packs are unpublished', byId['tech-packs'].publication === 'unpublished');
+    check('tech packs are not presented as an openable world', byId['tech-packs'].isLink === false);
+    check('tech packs promise examples rather than refusing to publish',
+      /will appear here/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
+    check('womenswear is openable as a reference preview',
+      byId.womenswear.publication === 'reference-preview' && byId.womenswear.isLink === true);
+    check('the womenswear chapter is labelled as an interface preview',
+      /temporary visual references/i.test(byId.womenswear.note ?? ''), byId.womenswear.note ?? 'none');
+
+    /* The earlier "client-owned, shared only on request" policy is not the
+       intended one and must not reappear. */
+    const refusal = await p.evaluate(() => /shared (directly )?on request|not published on a public page/i.test(document.body.innerText));
+    check('no statement that technical packs are withheld from publication', refusal === false);
+
+    /* The CLO3D clip is a simulation sample, not a recorded working session. */
+    const sim = await p.evaluate(() => {
+      const kind = document.querySelector('.pf-session__kind')?.textContent.trim() ?? '';
+      const body = document.body.innerText;
+      return { kind, claimsFullSession: /pattern creation from start to finish|full working session/i.test(body) };
+    });
+    check('the CLO3D clip is labelled a simulation sample', /simulation sample/i.test(sim.kind), sim.kind);
+    check('no claim that the sample shows pattern construction end to end', sim.claimsFullSession === false);
+
     await c.close();
   }
 
@@ -400,26 +440,94 @@ try {
     check('releasing a leftward drag advances the project',
       indexAfterRelease === indexBeforeRelease + 1, `${indexBeforeRelease} -> ${indexAfterRelease}`);
 
-    // Project identity and the three-stage development strip.
-    const info = await p.evaluate(() => {
-      const article = document.querySelector('.pf-panel:not([hidden]) .pf-project:not([hidden])');
-      const steps = [...article.querySelectorAll('.pf-evidence__name')].map((e) => e.textContent.trim());
+    /* CONTENT INTEGRITY.
+       The 49 photographs under public/portfolio/ are temporary visual
+       references, exactly as the pre-V6 page said. They must never be
+       presented as authored projects. */
+    const integrity = await p.evaluate(() => {
+      const world = document.querySelector('[data-world="womenswear"]');
+      const panel = document.querySelector('.pf-panel:not([hidden])');
+      const notice = world.querySelector('[data-reference-notice]');
       return {
-        number: article.querySelector('.pf-project__number').textContent.trim(),
-        title: article.querySelector('.pf-project__title').textContent.trim(),
-        rows: [...article.querySelectorAll('.pf-project__profile dt')].map((e) => e.textContent.trim()),
-        steps,
-        hasFinalRef: !!article.querySelector('.pf-evidence__result'),
+        publication: world.dataset.publication,
+        panelKind: panel.dataset.kind,
+        noticePresent: !!notice,
+        noticeText: notice?.textContent.trim() ?? '',
+        noticeFontPx: notice ? parseFloat(getComputedStyle(notice).fontSize) : 0,
+        counter: document.querySelector('.pf-panel:not([hidden]) [data-counter-current]').textContent.trim(),
+        projectArticles: world.querySelectorAll('.pf-project').length,
+        evidenceStrips: world.querySelectorAll('.pf-evidence').length,
+        tagRows: world.querySelectorAll('.pf-project__tags').length,
+        profileRows: world.querySelectorAll('.pf-project__profile').length,
+        referencePanel: !!world.querySelector('[data-reference-panel]'),
       };
     });
-    check('projects are numbered "Project NN"', /^Project \d\d$/.test(info.number), info.number);
-    check('project has a factual title', info.title.length > 0 && !/look/i.test(info.title), info.title);
-    check('profile shows garment and fabric family', info.rows.includes('Garment') && info.rows.includes('Fabric family'), info.rows.join(','));
-    check('materials row is absent while unverified', !info.rows.includes('Materials'), info.rows.join(','));
-    check('evidence strip is exactly three stages',
-      JSON.stringify(info.steps) === JSON.stringify(['Sketch', '2D Pattern', '3D Simulation']), info.steps.join(' -> '));
-    check('final garment is referenced, not repeated as a fourth card', info.hasFinalRef);
+    check('womenswear is a reference preview, not published work',
+      integrity.publication === 'reference-preview', integrity.publication);
+    check('the queue is marked as references', integrity.panelKind === 'reference', String(integrity.panelKind));
+    check('items are counted as references, not projects',
+      /^Reference \d\d$/.test(integrity.counter), integrity.counter);
+    check('the non-authorship disclaimer is present',
+      integrity.noticePresent && /do not claim authorship/i.test(integrity.noticeText));
+    check('the disclaimer is body size, not fine print',
+      integrity.noticeFontPx >= 14, `${integrity.noticeFontPx}px`);
+    check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
+    check('no reference is given project text', integrity.projectArticles === 0, String(integrity.projectArticles));
+    check('no capability tags on references', integrity.tagRows === 0, String(integrity.tagRows));
+    check('evidence strip is hidden when no verified evidence exists',
+      integrity.evidenceStrips === 0, String(integrity.evidenceStrips));
+    check('the reference panel explains what it is', integrity.referencePanel);
 
+    /* No construction history may be inferred from a photograph. These are the
+       exact claim types an earlier pass read off the pictures. */
+    const claims = await p.evaluate(() => {
+      const text = document.body.innerText;
+      const banned = [
+        /\bbias[- ]cut\b/i, /\bgrading\b/i, /\bfit correction\b/i,
+        /\bpattern development\b/i, /\bnegative ease\b/i, /\bdart\b/i,
+        /\bseam placement\b/i, /\bstitch class\b/i,
+      ];
+      return banned.filter((re) => re.test(text)).map((re) => String(re));
+    });
+    check('no construction claim is inferred from the reference photographs',
+      claims.length === 0, claims.join(' '));
+
+    const projectWord = await p.evaluate(() => /\b\d+\s+projects\b/i.test(document.body.innerText));
+    check('no "N projects" claim while nothing is verified', projectWord === false);
+
+    await c.close();
+  }
+
+  // ---- the desktop rule is five, and 1024 is a desktop
+  console.log('\nportfolio queue at 1024');
+  {
+    const c = await browser.newContext({ viewport: { width: 1024, height: 820 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(700);
+    await openWomenswear(p);
+
+    const state = await p.evaluate(() => window.__portfolioRunway.getState());
+    check('1024 shows five images at once', state.visibleNow === 5, `visible ${state.visibleNow}`);
+    check('1024 target slot count is five', state.visibleTarget === 5, String(state.visibleTarget));
+    check('1024 active item is still leftmost', state.activeIsLeftmost === true);
+
+    const geo = await p.evaluate(() => {
+      const stage = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
+      const slots = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot')]
+        .filter((s) => !s.hidden).map((s) => s.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+      return {
+        widths: slots.map((s) => Math.round(s.width)),
+        inside: slots.every((s) => s.left >= stage.left - 1 && s.right <= stage.right + 1),
+      };
+    });
+    check('1024 keeps every image inside the stage', geo.inside, geo.widths.join(','));
+    check('1024 sizes still decrease left to right',
+      geo.widths.every((w, i) => i === 0 || w < geo.widths[i - 1]), geo.widths.join(' > '));
+    check('1024 smallest image is still readable', Math.min(...geo.widths) >= 80, `${Math.min(...geo.widths)}px`);
+    check('no horizontal overflow at 1024',
+      await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
     await c.close();
   }
 
@@ -438,13 +546,11 @@ try {
     check('mobile target slot count is three', state.visibleTarget === 3);
     check('mobile active project is still leftmost', state.activeIsLeftmost === true);
 
-    const strip = await p.evaluate(() => {
-      const items = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-project:not([hidden]) .pf-evidence__item')];
-      const tops = items.map((e) => Math.round(e.getBoundingClientRect().top));
-      return { count: items.length, sameRow: new Set(tops).size === 1, minWidth: Math.round(Math.min(...items.map((e) => e.getBoundingClientRect().width))) };
-    });
-    check('all three development stages stay on one row at 390', strip.count === 3 && strip.sameRow, JSON.stringify(strip));
-    check('development stages are not postage stamps at 390', strip.minWidth >= 80, `${strip.minWidth}px`);
+    check('the disclaimer survives to 390',
+      await p.evaluate(() => {
+        const n = document.querySelector('[data-reference-notice]');
+        return !!n && parseFloat(getComputedStyle(n).fontSize) >= 14;
+      }));
 
     const overflow = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     check('no horizontal overflow at 390', overflow);
@@ -519,8 +625,11 @@ try {
     const html = await p.content();
     check('all four worlds are in the served HTML',
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
-    check('project titles are server-rendered', html.includes('Bias Satin Slip Dress'));
-    check('project descriptions are server-rendered', html.includes('Cut on the bias the cloth carries its own weight'));
+    check('the non-authorship disclaimer is server-rendered', html.includes('do not claim authorship of the photographed garments'));
+    check('the approved categories are server-rendered', html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
+    check('the unpublished chapters state their own status without the script',
+      html.includes('Selected menswear work will be published here')
+      && html.includes('Selected technical pack examples will appear here'));
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
       const shown = slots.filter((s) => s.getBoundingClientRect().width > 20);

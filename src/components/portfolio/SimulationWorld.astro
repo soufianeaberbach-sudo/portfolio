@@ -71,6 +71,7 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
               <div class="pf-session__player" data-player hidden></div>
             </div>
             <div class="pf-session__meta">
+              <p class="label pf-session__kind">{session.kind === 'sample' ? 'Simulation sample' : 'Working session'}</p>
               <h3>{session.title}</h3>
               <p>{session.description}</p>
               {session.workflowLabels && session.workflowLabels.length > 0 && (
@@ -89,7 +90,7 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
       </div>
 
       <aside class="pf-motion__index">
-        <p class="label pf-motion__head">Working sessions</p>
+        <p class="label pf-motion__head">Recordings</p>
         <ol class="pf-motion__list">
           {sessions.map((session, index) => (
             <li>
@@ -102,7 +103,9 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
           ))}
         </ol>
         <p class="pf-motion__note">
-          Simulation is where a pattern stops being a drawing. Volume, drape and hem behaviour are judged in movement, before a physical sample is cut.
+          Simulation is where a pattern stops being a drawing. Volume, drape and hem behaviour are judged in
+          movement, before a physical sample is cut. Recorded working sessions — pattern construction and fit
+          correction end to end — will be published alongside this sample.
         </p>
         <a class="button" href="/process/">See the working process <span><Arrow /></span></a>
       </aside>

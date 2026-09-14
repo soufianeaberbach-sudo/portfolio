@@ -4,11 +4,15 @@
  * Completely separate from the garment queue: no PDF is ever mixed into that
  * carousel, and no garment photograph appears here.
  *
- * The repository currently contains no technical documents. Rather than
- * drawing a convincing-looking dossier with invented measurements, sizes or
- * BOM values, the world states what a tech pack from this desk contains and
- * offers the real route to seeing one. Every scope line below is a description
- * of the documentation method, not data from any specific document.
+ * The repository currently contains no technical documents yet, and selected
+ * real examples ARE intended for publication here. The world therefore reads
+ * as not-yet-published, not as a policy of withholding: an earlier pass said
+ * packs were client-owned and shared only on request, which is not the
+ * intended portfolio policy and has been removed.
+ *
+ * Nothing is drawn that could be mistaken for a document. Every scope line
+ * below names a section of a pack — never a measurement, a grading increment
+ * or a BOM value.
  */
 import type { TechPack } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
@@ -83,7 +87,7 @@ const contents = [
       ) : (
         /* No invented document. A ruled sheet with no content drawn on it,
            marked as what it is. */
-        <div class="pf-sheet" role="img" aria-label="An empty technical sheet: no document is published on this page.">
+        <div class="pf-sheet" role="img" aria-label="An empty technical sheet: no document is published here yet.">
           <div class="pf-sheet__head">
             <span class="label">Technical dossier</span>
             <span class="label">PDF</span>
@@ -92,7 +96,7 @@ const contents = [
             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
           </div>
           <div class="pf-sheet__foot">
-            <span class="label">Not published here</span>
+            <span class="label">Not published yet</span>
           </div>
         </div>
       )}
@@ -116,10 +120,7 @@ const contents = [
           </ol>
         </>
       ) : (
-        <p class="pf-docs__note">
-          Technical packs are client-owned production documents, so they are not published on a public page.
-          A representative pack is shared directly on request.
-        </p>
+        <p class="pf-docs__note">Selected technical pack examples will appear here.</p>
       )}
 
       <p class="label pf-docs__head pf-docs__head--split">What a pack contains</p>
@@ -133,7 +134,7 @@ const contents = [
         ))}
       </ol>
 
-      <a class="button" href="/contact/">Request a sample pack <span><Arrow /></span></a>
+      <a class="button" href="/contact/">Ask about technical documentation <span><Arrow /></span></a>
     </aside>
   </div>
 </section>

@@ -4,20 +4,21 @@ import Arrow from '../components/Arrow.astro';
 import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
-import { chapters, garmentWorlds, techPacks, simulationSessions, womenswear, projectCount } from '../data/portfolio';
+import { chapters, garmentWorlds, techPacks, simulationSessions, womenswear } from '../data/portfolio';
 
-/* The live preview stage on the landing. Womenswear shows three real garments
+/* The live preview stage. Womenswear shows three of the reference photographs
    in the same leading-image logic the world itself uses, so the index hints at
-   the interaction before you enter it. Menswear has no photography in this
-   repository, so its preview is typographic — a borrowed womenswear image
-   would be a false claim about what exists. */
+   the interaction before you enter it — and the stage is labelled as the
+   reference preview it is. Menswear has no photography here, so its preview is
+   typographic; a borrowed womenswear image would be a false claim. */
 const womenswearPreview = [
-  womenswear.categories[3].projects[0].finalGarmentImage,
-  womenswear.categories[0].projects[0].finalGarmentImage,
-  womenswear.categories[1].projects[3].finalGarmentImage,
+  womenswear.categories[3].references[0].image,
+  womenswear.categories[0].references[0].image,
+  womenswear.categories[1].references[3].image,
 ];
 const menswearCategories = garmentWorlds[1].categories;
 const firstSession = simulationSessions[0];
+const openable = (state: string) => state !== 'unpublished';
 ---
 
 <SiteLayout
@@ -41,7 +42,7 @@ const firstSession = simulationSessions[0];
       <p class="pf-intro__lede">
         Product development, technical documentation and digital validation shown as evidence — not decoration.
       </p>
-      <p class="label pf-intro__meta">{projectCount} projects / 4 chapters</p>
+      <p class="label pf-intro__meta">Four chapters</p>
     </section>
 
     {/* ------------------------------------------------------------------
@@ -55,22 +56,36 @@ const firstSession = simulationSessions[0];
     <section class="pf-index" aria-labelledby="pf-index-title">
       <h2 class="pf-index__title" id="pf-index-title">Portfolio chapters</h2>
 
+      {/* A chapter with nothing published is listed — the four-world
+          architecture is the point of this page — but it is NOT a link. There
+          is no empty world to walk into, and presenting one as openable would
+          dress absence as finished evidence. It carries one restrained line
+          saying what it is waiting for. */}
       <ol class="pf-index__chapters" data-chapters>
-        {chapters.map((chapter, index) => (
-          <li>
-            <a
-              class="pf-chapter"
-              href={`#${chapter.id}`}
-              data-chapter={chapter.id}
-              aria-current={index === 0 ? 'true' : 'false'}
-            >
-              <i class="pf-chapter__num label">{chapter.number}</i>
-              <span class="pf-chapter__title">{chapter.title}</span>
-              <span class="pf-chapter__desc">{chapter.descriptor}</span>
-              <span class="pf-chapter__go label" aria-hidden="true">Open <Arrow /></span>
-            </a>
-          </li>
-        ))}
+        {chapters.map((chapter, index) => {
+          const Tag = openable(chapter.publication) ? 'a' : 'div';
+          return (
+            <li>
+              <Tag
+                class="pf-chapter"
+                href={openable(chapter.publication) ? `#${chapter.id}` : undefined}
+                data-chapter={chapter.id}
+                data-publication={chapter.publication}
+                aria-current={index === 0 ? 'true' : 'false'}
+              >
+                <i class="pf-chapter__num label">{chapter.number}</i>
+                <span class="pf-chapter__title">{chapter.title}</span>
+                <span class="pf-chapter__desc">{chapter.descriptor}</span>
+                {chapter.stateNote && (
+                  <span class="pf-chapter__state">{chapter.stateNote}</span>
+                )}
+                {openable(chapter.publication) && (
+                  <span class="pf-chapter__go label" aria-hidden="true">Open <Arrow /></span>
+                )}
+              </Tag>
+            </li>
+          );
+        })}
       </ol>
 
       {/* Decorative: every chapter's name and descriptor is already in the
@@ -84,7 +99,7 @@ const firstSession = simulationSessions[0];
               </span>
             ))}
           </div>
-          <p class="label pf-preview__tag">Five markets / {womenswear.categories.reduce((n, c) => n + c.projects.length, 0)} projects</p>
+          <p class="label pf-preview__tag">Five markets / temporary references</p>
         </div>
 
         <div class="pf-preview pf-preview--type" data-preview="menswear">
@@ -93,7 +108,7 @@ const firstSession = simulationSessions[0];
               <li><i class="label">{category.number}</i><span>{category.label}</span></li>
             ))}
           </ol>
-          <p class="label pf-preview__tag">Architecture ready / photography pending</p>
+          <p class="label pf-preview__tag">Not yet published</p>
         </div>
 
         <div class="pf-preview pf-preview--doc" data-preview="tech-packs">
@@ -104,14 +119,14 @@ const firstSession = simulationSessions[0];
             <span class="pf-preview__sheetline"></span>
             <span class="pf-preview__sheetline"></span>
           </div>
-          <p class="label pf-preview__tag">Flats / measurements / grading / BOM</p>
+          <p class="label pf-preview__tag">Not yet published</p>
         </div>
 
         <div class="pf-preview pf-preview--motion" data-preview="3d-simulation">
           {firstSession?.poster && (
             <img class="pf-preview__still" src={firstSession.poster} width="512" height="910" alt="" loading="lazy" decoding="async" />
           )}
-          <p class="label pf-preview__tag">CLO3D / garment simulation</p>
+          <p class="label pf-preview__tag">CLO3D / simulation sample</p>
         </div>
       </div>
     </section>
@@ -145,7 +160,9 @@ const firstSession = simulationSessions[0];
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       /* ---- 1. landing preview ----------------------------------------- */
-      const chapterLinks = [...root.querySelectorAll<HTMLAnchorElement>('[data-chapter]')];
+      /* Includes the unpublished chapters, which are <div> rather than <a>:
+         they still drive the preview stage on hover, they just do not open. */
+      const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
       const previews = [...root.querySelectorAll<HTMLElement>('[data-preview]')];
 
       const showPreview = (id: string) => {
@@ -233,10 +250,11 @@ const firstSession = simulationSessions[0];
          puts the same URL in the bar without that side effect, and popstate
          below keeps the Back button behaving exactly as before. */
       for (const link of chapterLinks) {
+        if (link.tagName !== 'A') continue;
         link.addEventListener('click', (event) => {
           const id = link.dataset.chapter!;
           if (!worlds.has(id)) return;
-          if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+          if (event.metaKey || event.ctrlKey || event.shiftKey || (event as MouseEvent).button !== 0) return;
           event.preventDefault();
           if (window.location.hash !== `#${id}`) window.history.pushState({ world: id }, '', `#${id}`);
           openWorldById(id);
@@ -285,8 +303,12 @@ const firstSession = simulationSessions[0];
          being a desktop layout shrunk down. */
       const geometry = () => {
         const w = window.innerWidth;
-        if (w >= 1200) return { visible: 5, ratio: 0.78, gap: 10, lift: 7 };
-        if (w >= 900) return { visible: 4, ratio: 0.78, gap: 9, lift: 6 };
+        /* Two states, not four. The rule is desktop five / mobile three, and
+           1024 is a desktop. Between 1024 and 1199 the information panel drops
+           below the stage (see the CSS breakpoint), which gives the queue the
+           full content width — that is what lets five complete garments fit at
+           1024 without any of them becoming unreadable. */
+        if (w >= 1024) return { visible: 5, ratio: 0.78, gap: 10, lift: 7 };
         if (w >= 760) return { visible: 3, ratio: 0.74, gap: 8, lift: 6 };
         return { visible: 3, ratio: 0.70, gap: 6, lift: 5 };
       };
@@ -367,7 +389,10 @@ const firstSession = simulationSessions[0];
       const render = (queue: Queue) => {
         queue.infos.forEach((info, i) => { info.hidden = i !== queue.index; });
         queue.slots.forEach((slot, i) => slot.toggleAttribute('data-active', i === queue.index));
-        if (queue.counter) queue.counter.textContent = `Project ${String(queue.index + 1).padStart(2, '0')}`;
+        if (queue.counter) {
+          const noun = queue.counter.dataset.noun ?? 'Project';
+          queue.counter.textContent = `${noun} ${String(queue.index + 1).padStart(2, '0')}`;
+        }
         if (queue.prev) (queue.prev as HTMLButtonElement).disabled = queue.index === 0;
         if (queue.next) (queue.next as HTMLButtonElement).disabled = queue.index >= queue.slots.length - 1;
         layout(queue);
@@ -658,6 +683,32 @@ const firstSession = simulationSessions[0];
     }
     .pf-chapter__title { grid-column: 2; grid-row: 1; }
     .pf-chapter__desc { grid-column: 2; grid-row: 2; color: var(--muted); font-size: .95rem; line-height: 1.55; max-width: 30rem; }
+    /* The one restrained line on a chapter that is not published work. */
+    .pf-chapter__state {
+      grid-column: 2;
+      grid-row: 3;
+      position: relative;
+      margin-top: .5rem;
+      padding-left: .95rem;
+      max-width: 32rem;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      line-height: 1.5;
+    }
+    .pf-chapter__state::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .52em;
+      width: .35rem;
+      height: .35rem;
+      background: var(--signal);
+    }
+    .pf-chapter[data-publication='unpublished'] { cursor: default; }
+    .pf-chapter[data-publication='unpublished'] .pf-chapter__title { color: var(--ink-soft); }
+    /* No hover lift and no orange marker on something that does not open. */
+    .pf-chapter[data-publication='unpublished']:hover { padding-left: 0; }
+
     .pf-chapter__go {
       grid-column: 3;
       grid-row: 1 / span 2;
@@ -840,6 +891,7 @@ const firstSession = simulationSessions[0];
     .pf-world__head { max-width: var(--max); margin: 0 auto; padding: clamp(2rem, 4vw, 3.5rem) var(--gutter) clamp(1.25rem, 2vw, 2rem); }
     .pf-world__head h2 { margin: 0; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .95; letter-spacing: -.04em; }
     .pf-world__descriptor { max-width: 38rem; margin: 1rem 0 0; color: var(--ink-soft); line-height: 1.6; }
+    .pf-world__head:has(+ .pf-notice) { padding-bottom: .5rem; }
 
     /* ---------- subcategory index: numbers, type, one rule ---------- */
     .pf-cats { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
@@ -884,6 +936,36 @@ const firstSession = simulationSessions[0];
       background: var(--signal);
     }
     .pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+    /* ---------- the reference disclaimer ----------
+       Body size, full measure, sitting above the work in the reading order.
+       Deliberately not small print: it is the sentence that tells you what you
+       are looking at. */
+    .pf-notice {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.1rem var(--gutter);
+      color: var(--ink-soft);
+      font-size: clamp(.94rem, 1.25vw, 1.02rem);
+      line-height: 1.6;
+    }
+    .pf-notice > * { max-width: 46rem; }
+    .pf-notice b { position: relative; padding-left: .95rem; color: var(--ink); font-weight: 600; }
+    .pf-notice b::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .5em;
+      width: .4rem;
+      height: .4rem;
+      background: var(--signal);
+    }
+
+    /* The information panel in reference mode. No profile rows, because there
+       is nothing verified to put in them. */
+    .pf-refpanel { padding-top: 1.5rem; }
+    .pf-refpanel__lead { margin: 0; color: var(--ink); font-size: .98rem; line-height: 1.6; }
+    .pf-refpanel__note { margin: 1rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
 
     .pf-panel { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
     .pf-panel[hidden] { display: none; }
@@ -1197,9 +1279,11 @@ const firstSession = simulationSessions[0];
        RESPONSIVE
        ====================================================================== */
 
-    @media (max-width: 1024px) {
+    /* The stage keeps the whole content width from here down, so five complete
+       garments still fit at 1024. Above it there is room for the panel beside
+       the queue. */
+    @media (max-width: 1199px) {
       .pf-viewer, .pf-docs, .pf-motion { grid-template-columns: minmax(0, 1fr); }
-      .pf-stagepane { aspect-ratio: 1 / 1; }
     }
 
     @media (max-width: 900px) {
@@ -1209,7 +1293,12 @@ const firstSession = simulationSessions[0];
          restrained preview. */
       .pf-stagepane { display: none; }
       .pf-chapter { grid-template-columns: auto minmax(0, 1fr); padding: clamp(1.25rem, 3.4vw, 1.8rem) 0; }
-      .pf-chapter__go { grid-column: 2; grid-row: 3; align-self: start; margin-top: .3rem; }
+      /* Row 4, not 3: the state note took row 3 and the two were printing on
+         top of each other. */
+      .pf-chapter__go { grid-column: 2; grid-row: 4; align-self: start; margin-top: .55rem; }
+      /* The corner square marks the chapter the preview is showing. A chapter
+         that does not open has no preview to mark. */
+      .pf-chapter[data-publication='unpublished']::before { content: none; }
       .pf-chapter__title { font-size: clamp(1.9rem, 7.5vw, 2.6rem); }
       .pf-chapter__go { opacity: 1; transform: none; }
       .pf-chapter[aria-current='true'] { padding-left: 0; }
