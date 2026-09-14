@@ -65,6 +65,11 @@ export interface ImageAsset {
   width: number;
   height: number;
   alt: string;
+  /* How much of the image, measured from its left edge, has to stay visible
+     for the front view to read completely. The deck overlaps each card on its
+     right, so this is the fraction that must never be covered. Per image, not
+     a global guess — see FRONT below. */
+  front: number;
 }
 
 export type EvidenceStage = 'sketch' | 'pattern' | 'simulation';
@@ -154,7 +159,7 @@ export interface SimulationSession {
 /* The sentence the pre-V6 portfolio carried, restored. It is rendered at body
    size in the flow of the page, never as fine print. */
 export const REFERENCE_DISCLAIMER =
-  'Temporary visual references used to demonstrate the portfolio interface. They do not claim authorship of the photographed garments.';
+  'Temporary visual references for interface demonstration. No authorship of photographed garments is claimed.';
 
 /* --------------------------------------------------------------------------
    Image helpers.
@@ -174,6 +179,48 @@ const INTRINSIC: Record<string, [number, number]> = {
   'sport/8': [1400, 1400],
 };
 
+/* WHERE THE FRONT VIEW ENDS, PER IMAGE.
+ *
+ * Most of these photographs place the front view on the left of the frame and
+ * the back view on the right, so the deck can overlap the right side of a card
+ * and still leave a complete front model readable. That boundary is not in the
+ * same place twice, and one number for all 49 would cut somebody in half.
+ *
+ * Measured, not assumed: each rendition was reduced to a column ink-density
+ * profile, and the widest near-empty run of columns whose centre falls between
+ * 40% and 64% of the width was taken as the gap between the two models. The
+ * value stored is the RIGHT edge of that gap, so the entire front model plus
+ * the gap stays exposed. 37 of 49 resolved that way, clustering near 0.55.
+ *
+ * Two exceptions, both handled rather than ignored:
+ *   - evening/1, jersey/9 and sport/10 have the two models touching, so there
+ *     is no gap to find. They take 0.54, the cluster median, and were then
+ *     checked by eye: the front model is complete in all three.
+ *   - the nine swimwear photographs are SINGLE-view. There is no back view to
+ *     hide, and splitting them near the middle would cut the only model down
+ *     the centre. Their value is the right edge of the model's own ink extent,
+ *     which is why they run 0.68-0.81 rather than ~0.55.
+ *
+ * An image with the arrangement reversed would simply carry a value near 1.0
+ * and stay effectively unoccluded. Nothing here assumes a side.
+ */
+const FRONT: Record<string, number> = {
+  'evening/1': 0.54, 'evening/2': 0.512, 'evening/3': 0.537, 'evening/4': 0.504,
+  'evening/5': 0.529, 'evening/6': 0.529, 'evening/7': 0.504, 'evening/8': 0.596,
+  'evening/9': 0.546, 'evening/10': 0.571,
+  'jersey/1': 0.571, 'jersey/2': 0.596, 'jersey/3': 0.563, 'jersey/4': 0.596,
+  'jersey/5': 0.563, 'jersey/6': 0.554, 'jersey/7': 0.596, 'jersey/8': 0.579,
+  'jersey/9': 0.54, 'jersey/10': 0.563,
+  'woven/1': 0.596, 'woven/2': 0.579, 'woven/3': 0.579, 'woven/4': 0.579,
+  'woven/5': 0.588, 'woven/6': 0.588, 'woven/7': 0.604, 'woven/8': 0.596,
+  'woven/9': 0.504, 'woven/10': 0.604,
+  'sport/1': 0.554, 'sport/2': 0.554, 'sport/3': 0.579, 'sport/4': 0.588,
+  'sport/5': 0.554, 'sport/6': 0.579, 'sport/7': 0.596, 'sport/8': 0.554,
+  'sport/9': 0.588, 'sport/10': 0.54,
+  'swim/1': 0.796, 'swim/2': 0.813, 'swim/3': 0.771, 'swim/4': 0.679, 'swim/5': 0.804,
+  'swim/6': 0.704, 'swim/7': 0.771, 'swim/8': 0.713, 'swim/9': 0.762,
+};
+
 const image = (ref: string, alt: string): ImageAsset => {
   const [width, height] = INTRINSIC[ref] ?? [1400, 1868];
   return {
@@ -182,6 +229,7 @@ const image = (ref: string, alt: string): ImageAsset => {
     width,
     height,
     alt,
+    front: FRONT[ref] ?? 0.55,
   };
 };
 

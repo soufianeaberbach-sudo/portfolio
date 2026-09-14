@@ -55,9 +55,25 @@ const STAGES = [
     <p class="label pf-world__tag"><b>{world.number}</b> {world.title}</p>
   </div>
 
+  {/* Compact by design. The garment stage is the hero, so the type above it
+      is sized to introduce the chapter and then get out of the way — a full
+      screen of title, descriptor, notice and blurb before the first garment is
+      what made this read as a document index. */}
   <header class="pf-world__head">
-    <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
-    <p class="pf-world__descriptor">{world.descriptor}</p>
+    <div class="pf-world__headline">
+      <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
+      <p class="pf-world__descriptor">{world.descriptor}</p>
+    </div>
+
+    {publication === 'reference-preview' && (
+      /* A provenance note, not a warning banner. Label, then the fact, in
+         restrained type beside the title rather than across the page. It is
+         still full size and still first — it just no longer interrupts. */
+      <aside class="pf-prov" data-reference-notice>
+        <p class="label pf-prov__label">Reference preview</p>
+        <p class="pf-prov__text">{REFERENCE_DISCLAIMER}</p>
+      </aside>
+    )}
   </header>
 
   {publication === 'unpublished' ? (
@@ -78,15 +94,6 @@ const STAGES = [
     </div>
   ) : (
     <>
-      {/* THE DISCLAIMER. Body size, in the flow, above the work — not a
-          footnote and not fine print. It is the first thing read after the
-          chapter title. */}
-      {publication === 'reference-preview' && (
-        <p class="pf-notice" data-reference-notice>
-          <b>Interface preview.</b> {REFERENCE_DISCLAIMER}
-        </p>
-      )}
-
       {/* Numbers, type and a rule. No pills, no tabs, no boxes. */}
       <nav class="pf-cats" aria-label={`${world.title} categories`}>
         <ul>
@@ -117,15 +124,13 @@ const STAGES = [
               data-kind={publication === 'published' ? 'project' : 'reference'}
               hidden={categoryIndex !== 0}
             >
-              <p class="pf-panel__blurb">{category.blurb}</p>
-
               <div class="pf-viewer">
                 {/* ---- the depth queue. The active item is the FIRST child. ---- */}
                 <div class="pf-stage" data-stage tabindex="0" role="group"
                      aria-label={`${category.label}. Use the left and right arrow keys, or drag, to move through the images.`}>
                   <ol class="pf-stack" data-stack>
                     {slots.map((slot, index) => (
-                      <li class="pf-slot" data-slot={index} data-item={slot.id}>
+                      <li class="pf-slot" data-slot={index} data-item={slot.id} data-front={slot.image.front}>
                         <figure class="pf-slot__figure">
                           <img
                             src={slot.image.src}

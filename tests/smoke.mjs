@@ -170,14 +170,42 @@ try {
     const chapters = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].map((e) => e.dataset.chapter));
     check('four chapters in the landing index', chapters.length === 4, chapters.join(','));
 
-    // The landing must not be four cards / tiles / boxes.
+    /* The four worlds are gates in one continuous field, not cards: no
+       radius, no frame on all four sides, nothing floating. */
     const cardish = await p.evaluate(() => [...document.querySelectorAll('[data-chapter]')].filter((el) => {
       const s = getComputedStyle(el);
-      const framed = s.borderTopWidth !== '0px' && s.borderLeftWidth !== '0px' && s.borderRightWidth !== '0px';
-      const filled = s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundImage === 'none';
-      return framed || filled || s.borderRadius !== '0px';
+      const framed = s.borderTopWidth !== '0px' && s.borderLeftWidth !== '0px'
+        && s.borderRightWidth !== '0px' && s.borderBottomWidth !== '0px';
+      return framed || s.borderRadius !== '0px' || s.boxShadow !== 'none';
     }).length);
-    check('chapters are editorial entries, not cards', cardish === 0, `${cardish} boxed`);
+    check('gates are one continuous field, not four cards', cardish === 0, `${cardish} boxed`);
+
+    /* Hover or focus expands a gate to roughly half the row; the other three
+       give way. The expansion is the navigation. */
+    const gateRow = await p.evaluate(() => {
+      const gates = [...document.querySelectorAll('.pf-gate')];
+      const resting = gates.map((g) => Math.round(g.getBoundingClientRect().width));
+      gates[0].dispatchEvent(new PointerEvent('pointerenter', { bubbles: false }));
+      return { resting, total: Math.round(document.querySelector('.pf-gates').getBoundingClientRect().width) };
+    });
+    await p.waitForTimeout(900);
+    const gateOpen = await p.evaluate(() => {
+      const gates = [...document.querySelectorAll('.pf-gate')];
+      return {
+        widths: gates.map((g) => Math.round(g.getBoundingClientRect().width)),
+        active: gates.filter((g) => g.hasAttribute('data-active')).length,
+        total: Math.round(document.querySelector('.pf-gates').getBoundingClientRect().width),
+      };
+    });
+    const evenAtRest = Math.max(...gateRow.resting) - Math.min(...gateRow.resting) < 4;
+    check('all four gates are equal at rest', evenAtRest, gateRow.resting.join(','));
+    check('exactly one gate opens', gateOpen.active === 1, String(gateOpen.active));
+    const share = gateOpen.widths[0] / gateOpen.total;
+    check('the open gate takes 45-55% of the row', share >= 0.43 && share <= 0.57, `${Math.round(share * 100)}%`);
+    check('the other three give way',
+      gateOpen.widths.slice(1).every((w) => w < gateOpen.widths[0] / 2), gateOpen.widths.join(','));
+    await p.evaluate(() => document.querySelector('[data-gates]').dispatchEvent(new PointerEvent('pointerleave', { bubbles: false })));
+    await p.waitForTimeout(800);
 
     const cats = await p.evaluate(() => ({
       women: [...document.querySelectorAll('[data-world="womenswear"] .pf-cat__label')].map((e) => e.textContent.trim()),
@@ -198,7 +226,7 @@ try {
 
     // Jersey / Woven are cloth, not markets: they may appear as fabric family
     // metadata but never as a category heading.
-    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-cat__label, .pf-chapter__title')]
+    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-cat__label, .pf-gate__name')]
       .map((e) => e.textContent.trim().toLowerCase())
       .filter((t) => t === 'jersey' || t === 'woven' || t === 'jersey & knit' || t === 'sport' || t === 'evening dresses'));
     check('no jersey/woven/sport top-level taxonomy', badTaxonomy.length === 0, badTaxonomy.join(','));
@@ -268,8 +296,8 @@ try {
       id: el.dataset.chapter,
       publication: el.dataset.publication,
       isLink: el.tagName === 'A',
-      note: el.querySelector('.pf-chapter__state')?.textContent.trim() ?? null,
-      opensAffordance: !!el.querySelector('.pf-chapter__go'),
+      note: el.querySelector('.pf-gate__state')?.textContent.trim() ?? null,
+      opensAffordance: !!el.querySelector('.pf-gate__go'),
     })));
     const byId = Object.fromEntries(states.map((c) => [c.id, c]));
     check('four chapters carry an explicit publication state',
@@ -352,28 +380,66 @@ try {
     const desktop = await p.evaluate(() => window.__portfolioRunway.getState());
     check('desktop shows five projects at once', desktop.visibleNow === 5, `visible ${desktop.visibleNow} of ${desktop.count}`);
     check('desktop target slot count is five', desktop.visibleTarget === 5);
-    check('active project is the leftmost slot', desktop.activeIsLeftmost === true);
+    /* THE DECK.
+       The active image leads: it is the right-most card, it has the highest
+       stacking order, and nothing covers it — so the whole photograph, front
+       view and back view together, is revealed. Every card behind it is
+       overlapped on its right by the card in front, and what is left showing
+       is that image's own measured front fraction, so a complete front model
+       stays readable. This replaces the old "active is leftmost" invariant,
+       which described the wrong picture. */
+    check('the active image leads the deck', desktop.activeIsLeading === true);
+    check('the cards genuinely overlap', desktop.overlaps >= 4, `${desktop.overlaps} overlaps`);
 
-    // Geometry: strictly decreasing width left to right, and every visible
-    // project fully inside the stage.
-    const geo = await p.evaluate(() => {
-      const stage = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
-      const slots = [...document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot')]
-        .filter((s) => !s.hidden)
-        .map((s) => s.getBoundingClientRect())
-        .sort((a, b) => a.left - b.left);
+    const deck = await p.evaluate(() => {
+      const panel = document.querySelector('.pf-panel:not([hidden])');
+      const stage = panel.querySelector('.pf-stage').getBoundingClientRect();
+      const slots = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden);
+      const boxes = slots.map((s) => ({
+        el: s,
+        r: s.getBoundingClientRect(),
+        front: Number(s.dataset.front) || 0.55,
+        z: Number(s.style.zIndex),
+      })).sort((a, b) => a.r.left - b.r.left);
+      const leader = boxes[boxes.length - 1];
+      /* How much of each card is left uncovered by the card in front of it. */
+      const exposure = boxes.map((b, i) => (i === boxes.length - 1
+        ? 1
+        : (boxes[i + 1].r.left - b.r.left) / b.r.width));
       return {
-        widths: slots.map((s) => Math.round(s.width)),
-        insideStage: slots.every((s) => s.left >= stage.left - 1 && s.right <= stage.right + 1),
-        activeWidest: slots[0].width === Math.max(...slots.map((s) => s.width)),
-        smallestWidth: Math.round(Math.min(...slots.map((s) => s.width))),
+        widths: boxes.map((b) => Math.round(b.r.width)),
+        zOrder: boxes.map((b) => b.z),
+        exposure: exposure.map((e) => +e.toFixed(3)),
+        fronts: boxes.map((b) => b.front),
+        insideStage: boxes.every((b) => b.r.left >= stage.left - 1 && b.r.right <= stage.right + 1),
+        leaderIsWidest: leader.r.width === Math.max(...boxes.map((b) => b.r.width)),
+        smallest: Math.round(Math.min(...boxes.map((b) => b.r.width))),
+        /* the stack is a positioned deck, not a flex row with gaps */
+        stackDisplay: getComputedStyle(panel.querySelector('[data-stack]')).display,
+        slotPosition: getComputedStyle(slots[0]).position,
       };
     });
-    const decreasing = geo.widths.every((w, i) => i === 0 || w < geo.widths[i - 1]);
-    check('sizes decrease left to right', decreasing, geo.widths.join(' > '));
-    check('the leading project is the largest', geo.activeWidest);
-    check('every visible project is fully inside the stage', geo.insideStage);
-    check('the smallest project is still a readable silhouette', geo.smallestWidth >= 60, `${geo.smallestWidth}px`);
+    const growing = deck.widths.every((w, i) => i === 0 || w > deck.widths[i - 1]);
+    check('cards grow toward the leading edge', growing, deck.widths.join(' < '));
+    check('the leading card is the largest', deck.leaderIsWidest);
+    check('stacking order rises toward the leader',
+      deck.zOrder.every((z, i) => i === 0 || z > deck.zOrder[i - 1]), deck.zOrder.join(','));
+    check('every card is fully inside the stage', deck.insideStage);
+    check('the furthest card is not a postage stamp', deck.smallest >= 180, `${deck.smallest}px`);
+    check('the leading card is completely revealed',
+      deck.exposure[deck.exposure.length - 1] === 1, String(deck.exposure[deck.exposure.length - 1]));
+    /* The exposed strip of each covered card must be at least its measured
+       front fraction, or the front model is being cut. */
+    const clipped = deck.exposure.slice(0, -1)
+      .map((e, i) => ({ e, need: deck.fronts[i] }))
+      .filter((x) => x.e < x.need - 0.01);
+    check('every covered card still shows its whole front view',
+      clipped.length === 0, JSON.stringify(clipped));
+    check('covered cards are partly hidden, not fully shown',
+      deck.exposure.slice(0, -1).every((e) => e < 0.95), deck.exposure.join(','));
+    check('the deck is a positioned stack, not a flex row',
+      deck.stackDisplay !== 'flex' && deck.slotPosition === 'absolute',
+      `${deck.stackDisplay} / ${deck.slotPosition}`);
 
     // contain, never cover: a head or a hem is never cropped off.
     const fits = await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
@@ -416,7 +482,7 @@ try {
     });
     await p.mouse.move(stageBox.x, stageBox.y);
     await p.mouse.down();
-    await p.mouse.move(stageBox.x + 70, stageBox.y, { steps: 6 });
+    await p.mouse.move(stageBox.x + 110, stageBox.y, { steps: 8 });
     const dragRight = await p.evaluate(() => {
       const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
       return new DOMMatrix(getComputedStyle(stack).transform).m41;
@@ -427,7 +493,7 @@ try {
 
     await p.mouse.move(stageBox.x, stageBox.y);
     await p.mouse.down();
-    await p.mouse.move(stageBox.x - 70, stageBox.y, { steps: 6 });
+    await p.mouse.move(stageBox.x - 110, stageBox.y, { steps: 8 });
     const dragLeft = await p.evaluate(() => {
       const stack = document.querySelector('.pf-panel:not([hidden]) [data-stack]');
       return new DOMMatrix(getComputedStyle(stack).transform).m41;
@@ -468,7 +534,7 @@ try {
     check('items are counted as references, not projects',
       /^Reference \d\d$/.test(integrity.counter), integrity.counter);
     check('the non-authorship disclaimer is present',
-      integrity.noticePresent && /do not claim authorship/i.test(integrity.noticeText));
+      integrity.noticePresent && /no authorship of photographed garments is claimed/i.test(integrity.noticeText));
     check('the disclaimer is body size, not fine print',
       integrity.noticeFontPx >= 14, `${integrity.noticeFontPx}px`);
     check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
@@ -511,7 +577,8 @@ try {
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
     check('1024 shows five images at once', state.visibleNow === 5, `visible ${state.visibleNow}`);
     check('1024 target slot count is five', state.visibleTarget === 5, String(state.visibleTarget));
-    check('1024 active item is still leftmost', state.activeIsLeftmost === true);
+    check('1024 active item still leads the deck', state.activeIsLeading === true);
+    check('1024 cards genuinely overlap', state.overlaps >= 4, `${state.overlaps} overlaps`);
 
     const geo = await p.evaluate(() => {
       const stage = document.querySelector('.pf-panel:not([hidden]) .pf-stage').getBoundingClientRect();
@@ -523,9 +590,9 @@ try {
       };
     });
     check('1024 keeps every image inside the stage', geo.inside, geo.widths.join(','));
-    check('1024 sizes still decrease left to right',
-      geo.widths.every((w, i) => i === 0 || w < geo.widths[i - 1]), geo.widths.join(' > '));
-    check('1024 smallest image is still readable', Math.min(...geo.widths) >= 80, `${Math.min(...geo.widths)}px`);
+    check('1024 cards still grow toward the leading edge',
+      geo.widths.every((w, i) => i === 0 || w > geo.widths[i - 1]), geo.widths.join(' < '));
+    check('1024 furthest card is still substantial', Math.min(...geo.widths) >= 180, `${Math.min(...geo.widths)}px`);
     check('no horizontal overflow at 1024',
       await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
     await c.close();
@@ -544,7 +611,8 @@ try {
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
     check('mobile shows three projects at once', state.visibleNow === 3, `visible ${state.visibleNow}`);
     check('mobile target slot count is three', state.visibleTarget === 3);
-    check('mobile active project is still leftmost', state.activeIsLeftmost === true);
+    check('mobile active item still leads the deck', state.activeIsLeading === true);
+    check('mobile cards genuinely overlap', state.overlaps >= 2, `${state.overlaps} overlaps`);
 
     check('the disclaimer survives to 390',
       await p.evaluate(() => {
@@ -625,7 +693,7 @@ try {
     const html = await p.content();
     check('all four worlds are in the served HTML',
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
-    check('the non-authorship disclaimer is server-rendered', html.includes('do not claim authorship of the photographed garments'));
+    check('the non-authorship disclaimer is server-rendered', html.includes('No authorship of photographed garments is claimed'));
     check('the approved categories are server-rendered', html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
     check('the unpublished chapters state their own status without the script',
       html.includes('Selected menswear work will be published here')
