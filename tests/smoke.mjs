@@ -180,35 +180,56 @@ try {
     }).length);
     check('gates are one continuous field, not four cards', cardish === 0, `${cardish} boxed`);
 
-    /* Hover or focus expands a gate to roughly half the row; the other three
-       give way. The expansion is the navigation. */
-    const gateRow = await p.evaluate(() => {
-      const gates = [...document.querySelectorAll('.pf-gate')];
-      const resting = gates.map((g) => Math.round(g.getBoundingClientRect().width));
-      gates[0].dispatchEvent(new PointerEvent('pointerenter', { bubbles: false }));
-      return { resting, total: Math.round(document.querySelector('.pf-gates').getBoundingClientRect().width) };
+    /* V7: THE LANDING IS FOUR SEQUENTIAL COVERS.
+       Not four side-by-side columns, not a card grid, not a dashboard. Each
+       cover is the better part of a screen, each starts below the one before
+       it, and each spans the full width of the viewport. */
+    const covers = await p.evaluate(() => {
+      const list = [...document.querySelectorAll('.pf-cover')];
+      const doc = document.documentElement.clientWidth;
+      return list.map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          chapter: el.dataset.chapter,
+          top: Math.round(r.top + window.scrollY),
+          height: Math.round(r.height),
+          left: Math.round(r.left),
+          width: Math.round(r.width),
+          full: Math.round(r.width) >= doc - 1,
+        };
+      });
     });
-    await p.waitForTimeout(900);
-    const gateOpen = await p.evaluate(() => {
-      const gates = [...document.querySelectorAll('.pf-gate')];
-      return {
-        widths: gates.map((g) => Math.round(g.getBoundingClientRect().width)),
-        active: gates.filter((g) => g.hasAttribute('data-active')).length,
-        total: Math.round(document.querySelector('.pf-gates').getBoundingClientRect().width),
-      };
-    });
-    const evenAtRest = Math.max(...gateRow.resting) - Math.min(...gateRow.resting) < 4;
-    check('all four gates are equal at rest', evenAtRest, gateRow.resting.join(','));
-    check('exactly one gate opens', gateOpen.active === 1, String(gateOpen.active));
-    const share = gateOpen.widths[0] / gateOpen.total;
-    check('the open gate takes 45-55% of the row', share >= 0.43 && share <= 0.57, `${Math.round(share * 100)}%`);
-    check('the other three give way',
-      gateOpen.widths.slice(1).every((w) => w < gateOpen.widths[0] / 2), gateOpen.widths.join(','));
-    await p.evaluate(() => document.querySelector('[data-gates]').dispatchEvent(new PointerEvent('pointerleave', { bubbles: false })));
-    await p.waitForTimeout(800);
+    check('the landing carries four chapter covers', covers.length === 4, String(covers.length));
+    check('the covers run in sequence, never side by side',
+      covers.every((c, i) => i === 0 || c.top >= covers[i - 1].top + covers[i - 1].height - 2),
+      covers.map((c) => `${c.chapter}@${c.top}+${c.height}`).join(' '));
+    check('every cover spans the full width', covers.every((c) => c.full && c.left === 0),
+      covers.map((c) => `${c.chapter}:${c.width}`).join(','));
+    check('every cover is most of a screen tall',
+      covers.every((c) => c.height >= 900 * 0.62), covers.map((c) => c.height).join(','));
+
+    /* Each cover is composed from what its own chapter actually holds, so the
+       four do not rhyme. In particular the Womenswear cover is ONE hero
+       garment — the three-image deck in miniature turned the landing back into
+       a card grid — and Menswear borrows no photograph at all. */
+    const coverArt = await p.evaluate(() => ({
+      womenswearImages: document.querySelectorAll('.pf-cover[data-chapter="womenswear"] img').length,
+      menswearImages: document.querySelectorAll('.pf-cover[data-chapter="menswear"] img').length,
+      menswearRows: document.querySelectorAll('.pf-cover[data-chapter="menswear"] .pf-covertype__row').length,
+      folio: document.querySelectorAll('.pf-cover[data-chapter="tech-packs"] .pf-foliomark').length,
+      still: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__still').length,
+      play: document.querySelectorAll('.pf-cover[data-chapter="3d-simulation"] .pf-cover__play').length,
+    }));
+    check('the womenswear cover is one hero garment', coverArt.womenswearImages === 1, String(coverArt.womenswearImages));
+    check('the menswear cover borrows no photograph',
+      coverArt.menswearImages === 0 && coverArt.menswearRows === 4,
+      `${coverArt.menswearImages} images / ${coverArt.menswearRows} rows`);
+    check('the tech pack cover is a physical folio', coverArt.folio === 1);
+    check('the 3D cover is a frame of the real recording with a play mark',
+      coverArt.still === 1 && coverArt.play === 1);
 
     const cats = await p.evaluate(() => ({
-      women: [...document.querySelectorAll('[data-world="womenswear"] .pf-cat__label')].map((e) => e.textContent.trim()),
+      women: [...document.querySelectorAll('[data-world="womenswear"] .pf-band__label')].map((e) => e.textContent.trim()),
       men: [...document.querySelectorAll('[data-world="menswear"] .pf-empty__list span')].map((e) => e.textContent.trim()),
     }));
     const approvedWomen = [
@@ -226,7 +247,7 @@ try {
 
     // Jersey / Woven are cloth, not markets: they may appear as fabric family
     // metadata but never as a category heading.
-    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-cat__label, .pf-gate__name')]
+    const badTaxonomy = await p.evaluate(() => [...document.querySelectorAll('.pf-band__label, .pf-cover__name')]
       .map((e) => e.textContent.trim().toLowerCase())
       .filter((t) => t === 'jersey' || t === 'woven' || t === 'jersey & knit' || t === 'sport' || t === 'evening dresses'));
     check('no jersey/woven/sport top-level taxonomy', badTaxonomy.length === 0, badTaxonomy.join(','));
@@ -241,7 +262,7 @@ try {
       mediaInQueue: document.querySelectorAll('.pf-stack video, .pf-stack iframe').length,
       sessionsOutsideMotion: [...document.querySelectorAll('[data-session]')]
         .filter((e) => e.closest('[data-world]')?.dataset.world !== '3d-simulation').length,
-      docsOutsideDocs: [...document.querySelectorAll('.pf-sheet, .pf-dossier')]
+      docsOutsideDocs: [...document.querySelectorAll('.pf-folio, .pf-foliomark:not(.pf-cover .pf-foliomark)')]
         .filter((e) => e.closest('[data-world]')?.dataset.world !== 'tech-packs').length,
     }));
     check('no documents or video inside the garment queue', bleed.pdfInQueue === 0 && bleed.mediaInQueue === 0);
@@ -281,7 +302,13 @@ try {
         if (s.textDecorationLine.includes('underline') && s.textDecorationColor === target) {
           bad.push(`${el.className} text-decoration`);
         }
-        if (s.borderBottomStyle !== 'none' && s.borderBottomWidth !== '0px' && s.borderBottomColor === target) {
+        /* A rule UNDER the words is the banned device — it reads as a Word
+           spell-check mark. A hairline box around a stamp or a button is a
+           different thing entirely and stays allowed, so the bottom rule only
+           counts when the other three sides are absent. */
+        const bottomOnly = s.borderBottomStyle !== 'none' && s.borderBottomWidth !== '0px'
+          && s.borderTopWidth === '0px' && s.borderLeftWidth === '0px' && s.borderRightWidth === '0px';
+        if (bottomOnly && s.borderBottomColor === target) {
           bad.push(`${el.className} border-bottom`);
         }
       }
@@ -296,8 +323,8 @@ try {
       id: el.dataset.chapter,
       publication: el.dataset.publication,
       isLink: el.tagName === 'A',
-      note: el.querySelector('.pf-gate__state')?.textContent.trim() ?? null,
-      opensAffordance: !!el.querySelector('.pf-gate__go'),
+      note: el.querySelector('.pf-cover__state')?.textContent.trim() ?? null,
+      opensAffordance: !!el.querySelector('.pf-cover__go'),
     })));
     const byId = Object.fromEntries(states.map((c) => [c.id, c]));
     check('four chapters carry an explicit publication state',
@@ -306,10 +333,17 @@ try {
     check('menswear is unpublished', byId.menswear.publication === 'unpublished');
     check('menswear is not presented as an openable world', byId.menswear.isLink === false && byId.menswear.opensAffordance === false);
     check('menswear says what it is waiting for', /will be published here/i.test(byId.menswear.note ?? ''), byId.menswear.note ?? 'none');
-    check('tech packs are unpublished', byId['tech-packs'].publication === 'unpublished');
-    check('tech packs are not presented as an openable world', byId['tech-packs'].isLink === false);
-    check('tech packs promise examples rather than refusing to publish',
-      /will appear here/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
+    /* V7 put five DEMO packs on the table so the folio viewer could be
+       designed against documents that open. They are not published work, so
+       the chapter reports itself as an interface preview and says so on the
+       cover; it flips to `published` the moment a pack without `demo` lands. */
+    check('tech packs are an interface preview, not published work',
+      byId['tech-packs'].publication === 'reference-preview', byId['tech-packs'].publication);
+    check('tech packs are openable', byId['tech-packs'].isLink === true);
+    check('the tech pack cover says the documents are demos',
+      /demo documents for interface review/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
+    check('tech packs promise real examples rather than refusing to publish',
+      /will replace them/i.test(byId['tech-packs'].note ?? ''), byId['tech-packs'].note ?? 'none');
     check('womenswear is openable as a reference preview',
       byId.womenswear.publication === 'reference-preview' && byId.womenswear.isLink === true);
     check('the womenswear chapter is labelled as an interface preview',
@@ -520,12 +554,23 @@ try {
         noticePresent: !!notice,
         noticeText: notice?.textContent.trim() ?? '',
         noticeFontPx: notice ? parseFloat(getComputedStyle(notice).fontSize) : 0,
+        noticeCount: world.querySelectorAll('[data-reference-notice]').length,
         counter: document.querySelector('.pf-panel:not([hidden]) [data-counter-current]').textContent.trim(),
         projectArticles: world.querySelectorAll('.pf-project').length,
-        evidenceStrips: world.querySelectorAll('.pf-evidence').length,
         tagRows: world.querySelectorAll('.pf-project__tags').length,
         profileRows: world.querySelectorAll('.pf-project__profile').length,
         referencePanel: !!world.querySelector('[data-reference-panel]'),
+        /* Every development plate in this state must be a demo: no image, a
+           DEMO stamp and a strip note that says the real assets are pending. */
+        plates: [...panel.querySelectorAll('.pf-plate')].map((el) => ({
+          stage: el.dataset.plate,
+          demo: el.hasAttribute('data-demo'),
+          images: el.querySelectorAll('img').length,
+          stamp: el.querySelector('.pf-plate__stamp')?.textContent.trim() ?? '',
+          label: el.querySelector('.pf-plate__label')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+          box: (() => { const r = el.querySelector('.pf-plate__art').getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; })(),
+        })),
+        demoNote: panel.querySelector('[data-demo-note]')?.textContent.trim() ?? '',
       };
     });
     check('womenswear is a reference preview, not published work',
@@ -540,9 +585,103 @@ try {
     check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
     check('no reference is given project text', integrity.projectArticles === 0, String(integrity.projectArticles));
     check('no capability tags on references', integrity.tagRows === 0, String(integrity.tagRows));
-    check('evidence strip is hidden when no verified evidence exists',
-      integrity.evidenceStrips === 0, String(integrity.evidenceStrips));
     check('the reference panel explains what it is', integrity.referencePanel);
+    check('the non-authorship disclaimer is stated exactly once in the chapter',
+      integrity.noticeCount === 1, String(integrity.noticeCount));
+
+    /* V7 §F. The three development stages are VISIBLE in the reference state
+       rather than hidden, on one condition: a plate that holds nothing must
+       say so. It carries no image, it is stamped DEMO, and the strip above it
+       says the real project assets are pending — so a placeholder can never be
+       read as evidence, and the panel still shows what the chapter is for.
+       This replaces the earlier "hide the strip entirely" rule. */
+    check('the three development stages are present, in order',
+      integrity.plates.map((pl) => pl.stage).join(',') === 'sketch,pattern,simulation',
+      integrity.plates.map((pl) => pl.stage).join(','));
+    check('every development plate is marked as a demo',
+      integrity.plates.length === 3 && integrity.plates.every((pl) => pl.demo && /demo/i.test(pl.stamp)),
+      JSON.stringify(integrity.plates.map((pl) => pl.stamp)));
+    check('no demo plate borrows an image',
+      integrity.plates.every((pl) => pl.images === 0), JSON.stringify(integrity.plates.map((pl) => pl.images)));
+    check('the strip says the real assets are pending',
+      /real project assets pending/i.test(integrity.demoNote), integrity.demoNote || 'none');
+    check('the plates are step-labelled sketch, 2D pattern, 3D simulation',
+      integrity.plates.map((pl) => pl.label).join(' | ')
+        === 'Step 01 Sketch | Step 02 2D Pattern | Step 03 3D Simulation',
+      integrity.plates.map((pl) => pl.label).join(' | '));
+    check('the plates are large, not thumbnails',
+      integrity.plates.every((pl) => pl.box[0] >= 180 && pl.box[1] >= 140),
+      JSON.stringify(integrity.plates.map((pl) => pl.box)));
+
+    /* V7 §H/§S. No card language on garment imagery: no shadow, no border, no
+       framed white rectangle. Depth comes from overlap, scale and stacking
+       order alone. */
+    const cardLanguage = await p.evaluate(() => {
+      const bad = [];
+      for (const el of document.querySelectorAll('.pf-panel:not([hidden]) .pf-slot, .pf-panel:not([hidden]) .pf-slot *, .pf-cover__garment')) {
+        const st = getComputedStyle(el);
+        if (st.boxShadow !== 'none') bad.push(`${el.className} shadow ${st.boxShadow}`);
+        if (st.borderTopWidth !== '0px' || st.borderLeftWidth !== '0px'
+          || st.borderRightWidth !== '0px' || st.borderBottomWidth !== '0px') bad.push(`${el.className} border`);
+        if (st.borderRadius !== '0px') bad.push(`${el.className} radius`);
+      }
+      return bad.slice(0, 5);
+    });
+    check('no shadow, border or radius anywhere on garment imagery',
+      cardLanguage.length === 0, cardLanguage.join(' | '));
+
+    /* V7 §I. The viewer sits in a white band that runs the whole width of the
+       viewport — not a white rectangle inside the beige page. */
+    const studio = await p.evaluate(() => {
+      const band = document.querySelector('[data-world="womenswear"] .pf-studio');
+      const r = band.getBoundingClientRect();
+      const st = getComputedStyle(band);
+      return {
+        width: Math.round(r.width),
+        left: Math.round(r.left),
+        viewport: document.documentElement.clientWidth,
+        background: st.backgroundColor,
+        border: st.borderTopWidth + st.borderLeftWidth,
+      };
+    });
+    check('the garment viewer sits in a full-bleed white band',
+      studio.left === 0 && studio.width >= studio.viewport - 1
+        && studio.background === 'rgb(255, 255, 255)' && studio.border === '0px0px',
+      JSON.stringify(studio));
+
+    /* V7 §E. 62-68% deck, 32-38% development panel. */
+    const split = await p.evaluate(() => {
+      const viewer = document.querySelector('.pf-panel:not([hidden]) .pf-viewer');
+      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
+      const dev = viewer.querySelector('.pf-devcol').getBoundingClientRect();
+      const total = deck.width + dev.width;
+      return { deck: deck.width / total, dev: dev.width / total, sideBySide: dev.left > deck.right - 2 };
+    });
+    check('the deck takes 62-68% of the viewer',
+      split.sideBySide && split.deck >= 0.60 && split.deck <= 0.69, `${Math.round(split.deck * 100)}%`);
+    check('the development panel takes 32-38% of the viewer',
+      split.dev >= 0.31 && split.dev <= 0.40, `${Math.round(split.dev * 100)}%`);
+
+    /* V7 §L. The run bar is editorial: two arrows and a count, no boxes. */
+    const runbar = await p.evaluate(() => {
+      const bar = document.querySelector('.pf-panel:not([hidden]) .pf-runbar');
+      const steps = [...bar.querySelectorAll('.pf-step')];
+      return {
+        text: bar.textContent.replace(/\s+/g, ' ').trim(),
+        insideStudio: !!bar.closest('.pf-studio'),
+        boxed: steps.filter((el) => {
+          const st = getComputedStyle(el);
+          return st.borderTopWidth !== '0px' || st.backgroundColor !== 'rgba(0, 0, 0, 0)';
+        }).length,
+      };
+    });
+    check('the run bar reads REFERENCE nn / 17', /^Reference \d\d \/ 17$/i.test(runbar.text), runbar.text);
+    check('the run bar sits inside the garment band', runbar.insideStudio);
+    check('the run bar arrows are not square buttons', runbar.boxed === 0, String(runbar.boxed));
+
+    /* V7 §M. The paragraph that used to fill the right-hand panel is gone. */
+    const oldPanelCopy = await p.evaluate(() => /will appear in this panel once the real/i.test(document.body.innerText));
+    check('the placeholder paragraph no longer fills the development panel', oldPanelCopy === false);
 
     /* No construction history may be inferred from a photograph. These are the
        exact claim types an earlier pass read off the pictures. */
@@ -560,6 +699,172 @@ try {
 
     const projectWord = await p.evaluate(() => /\b\d+\s+projects\b/i.test(document.body.innerText));
     check('no "N projects" claim while nothing is verified', projectWord === false);
+
+    await c.close();
+  }
+
+  // ---- the subchapter index, the folio library and the ten-session reel
+  console.log('\nportfolio chapter interiors');
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(600);
+    await openWomenswear(p);
+
+    /* V7 §D. The five categories are the first thing inside the chapter, as
+       large numbered editorial bands stacked down the page — not a tab strip,
+       not pills, and not a one-line menu. Exactly one carries the signal. */
+    const index = await p.evaluate(() => {
+      const bands = [...document.querySelectorAll('[data-world="womenswear"] .pf-band')];
+      const viewer = document.querySelector('[data-world="womenswear"] .pf-studio');
+      return {
+        count: bands.length,
+        stacked: bands.every((b, i) => i === 0
+          || b.getBoundingClientRect().top >= bands[i - 1].getBoundingClientRect().bottom - 2),
+        heights: bands.map((b) => Math.round(b.getBoundingClientRect().height)),
+        labelPx: bands.map((b) => Math.round(parseFloat(getComputedStyle(b.querySelector('.pf-band__label')).fontSize))),
+        selected: bands.filter((b) => b.getAttribute('aria-pressed') === 'true').length,
+        signals: bands.filter((b) => getComputedStyle(b.querySelector('.pf-band__mark')).opacity === '1').length,
+        previews: bands.filter((b) => b.querySelector('.pf-band__preview img')).length,
+        beforeViewer: bands[0].getBoundingClientRect().top < viewer.getBoundingClientRect().top,
+      };
+    });
+    check('five subchapter bands', index.count === 5, String(index.count));
+    check('the bands are stacked, not a row of tabs', index.stacked, index.heights.join(','));
+    check('the bands are editorial, not menu type',
+      index.labelPx.every((px) => px >= 24), index.labelPx.join(','));
+    check('the index comes before the viewer', index.beforeViewer);
+    check('exactly one band is selected', index.selected === 1, String(index.selected));
+    check('exactly one orange signal in the index', index.signals === 1, String(index.signals));
+    check('each band carries one restrained preview', index.previews === 5, String(index.previews));
+
+    /* Selecting a band swaps the deck under it. */
+    const switched = await p.evaluate(async () => {
+      const bands = [...document.querySelectorAll('[data-world="womenswear"] .pf-band')];
+      bands[3].click();
+      await new Promise((r) => setTimeout(r, 400));
+      const panel = document.querySelector('[data-world="womenswear"] .pf-panel:not([hidden])');
+      return {
+        panel: panel.dataset.panel,
+        count: Number(panel.dataset.count),
+        selected: bands.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.category),
+      };
+    });
+    check('selecting a band swaps the deck',
+      switched.panel === 'evening' && switched.count === 11, JSON.stringify(switched));
+    check('selection stays singular', switched.selected.length === 1, switched.selected.join(','));
+
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(700);
+
+    // ---- Tech Packs: a folio table, not a directory
+    await p.evaluate(() => document.querySelector('[data-chapter="tech-packs"]').click());
+    await p.waitForTimeout(900);
+    const library = await p.evaluate(() => {
+      const world = document.querySelector('[data-world="tech-packs"]');
+      const open = world.querySelector('.pf-folio:not([hidden])');
+      const docs = [...world.querySelectorAll('[data-doc]')];
+      return {
+        packs: world.querySelectorAll('[data-dossier]').length,
+        openFolios: world.querySelectorAll('.pf-folio:not([hidden])').length,
+        edges: open.querySelectorAll('.pf-folio__edge').length,
+        spine: !!open.querySelector('.pf-folio__spine'),
+        stamped: /demo/i.test(open.querySelector('.pf-folio__stamp')?.textContent ?? ''),
+        kind: open.querySelector('.pf-folio__kind')?.textContent.trim() ?? '',
+        pdf: open.querySelector('[data-open-pdf]')?.getAttribute('href') ?? '',
+        openLabel: open.querySelector('[data-open-pdf]')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+        indexNumbers: docs.map((d) => d.querySelector('.pf-doc__num').textContent.trim()),
+        pileSheets: world.querySelectorAll('.pf-library__pile i').length,
+        selected: docs.filter((d) => d.getAttribute('aria-pressed') === 'true').length,
+      };
+    });
+    check('five dossiers on the table', library.packs === 5, String(library.packs));
+    check('one folio is open at a time', library.openFolios === 1, String(library.openFolios));
+    check('the open folio is a bound object with page edges',
+      library.edges === 3 && library.spine, `${library.edges} edges, spine ${library.spine}`);
+    check('the folio is stamped as a demo', library.stamped && /demo pack/i.test(library.kind), library.kind);
+    check('the rest of the library lies behind it', library.pileSheets === 3, String(library.pileSheets));
+    check('the side index runs 01 to 05',
+      library.indexNumbers.join(',') === '01,02,03,04,05', library.indexNumbers.join(','));
+    check('exactly one dossier is selected', library.selected === 1, String(library.selected));
+    check('the control opens the dossier', /open dossier/i.test(library.openLabel), library.openLabel);
+    check('the dossier is a real demo PDF', /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(library.pdf), library.pdf);
+
+    /* The demo documents must be served, not merely linked. */
+    const pdf = await p.evaluate(async (href) => {
+      const res = await fetch(href);
+      return { status: res.status, type: res.headers.get('content-type') };
+    }, library.pdf);
+    check('the demo pack is actually served', pdf.status === 200 && /pdf/i.test(pdf.type ?? ''), JSON.stringify(pdf));
+
+    const swapped = await p.evaluate(async () => {
+      const docs = [...document.querySelectorAll('[data-world="tech-packs"] [data-doc]')];
+      docs[2].click();
+      await new Promise((r) => setTimeout(r, 350));
+      const open = document.querySelector('[data-world="tech-packs"] .pf-folio:not([hidden])');
+      return { id: open.dataset.dossier, pdf: open.querySelector('[data-open-pdf]').getAttribute('href') };
+    });
+    check('the index changes the open dossier',
+      swapped.id === 'tp-03' && swapped.pdf.includes('demo-03'), JSON.stringify(swapped));
+
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(700);
+
+    // ---- 3D: ten session slots, one recording, nothing invented
+    await p.evaluate(() => document.querySelector('[data-chapter="3d-simulation"]').click());
+    await p.waitForTimeout(900);
+    const reel = await p.evaluate(() => {
+      const world = document.querySelector('[data-world="3d-simulation"]');
+      const sessions = [...world.querySelectorAll('[data-session]')];
+      const frames = [...world.querySelectorAll('.pf-frame')];
+      return {
+        sessions: sessions.length,
+        frames: frames.length,
+        playable: sessions.filter((sn) => sn.querySelector('[data-play]')).length,
+        pending: sessions.filter((sn) => sn.hasAttribute('data-pending')).length,
+        youtubeIds: sessions.map((sn) => sn.dataset.youtube).filter(Boolean),
+        pendingPlayControls: sessions
+          .filter((sn) => sn.hasAttribute('data-pending'))
+          .filter((sn) => sn.querySelector('[data-play]')).length,
+        stripIsRow: (() => {
+          const boxes = frames.map((f) => f.getBoundingClientRect());
+          return boxes.every((b) => Math.abs(b.top - boxes[0].top) < 2);
+        })(),
+        firstKind: world.querySelector('.pf-session__kind')?.textContent.trim() ?? '',
+      };
+    });
+    check('ten session slots exist', reel.sessions === 10, String(reel.sessions));
+    check('the reel is a film strip, not a grid of cards',
+      reel.frames === 10 && reel.stripIsRow, `${reel.frames} frames, one row ${reel.stripIsRow}`);
+    check('exactly one session plays', reel.playable === 1, String(reel.playable));
+    check('nine sessions are pending', reel.pending === 9, String(reel.pending));
+    check('no YouTube id is invented', reel.youtubeIds.length === 0, reel.youtubeIds.join(','));
+    check('a pending slot never offers a play control that does nothing',
+      reel.pendingPlayControls === 0, String(reel.pendingPlayControls));
+
+    /* A pending slot shows its design state, never a broken player. */
+    const pendingSlot = await p.evaluate(async () => {
+      const world = document.querySelector('[data-world="3d-simulation"]');
+      world.querySelectorAll('[data-session-link]')[1].click();
+      await new Promise((r) => setTimeout(r, 350));
+      const open = world.querySelector('[data-session]:not([hidden])');
+      return {
+        id: open.dataset.session,
+        text: (open.querySelector('.pf-pending')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+        players: open.querySelectorAll('[data-player] > *').length,
+        play: open.querySelectorAll('[data-play]').length,
+        kind: open.querySelector('.pf-session__kind')?.textContent.trim() ?? '',
+      };
+    });
+    check('a pending slot says which session it is waiting for',
+      /video session 02/i.test(pendingSlot.text) && /youtube session pending/i.test(pendingSlot.text),
+      pendingSlot.text || 'none');
+    check('a pending slot renders no player and no play control',
+      pendingSlot.players === 0 && pendingSlot.play === 0, JSON.stringify(pendingSlot));
+    check('a pending slot is not labelled as a published working session',
+      /not published/i.test(pendingSlot.kind), pendingSlot.kind);
 
     await c.close();
   }
@@ -695,9 +1000,13 @@ try {
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
     check('the non-authorship disclaimer is server-rendered', html.includes('No authorship of photographed garments is claimed'));
     check('the approved categories are server-rendered', html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
-    check('the unpublished chapters state their own status without the script',
-      html.includes('Selected menswear work will be published here')
-      && html.includes('Selected technical pack examples will appear here'));
+    check('the unpublished chapter states its own status without the script',
+      html.includes('Selected menswear work will be published here'));
+    check('the demo documents are declared as demos without the script',
+      html.includes('Demo documents for interface review')
+      && html.includes('Demo pack — interface prototype'));
+    check('the development plates are declared as demos without the script',
+      html.includes('Demo layout — real project assets pending'));
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
       const shown = slots.filter((s) => s.getBoundingClientRect().width > 20);

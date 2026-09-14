@@ -6,15 +6,12 @@ import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions, womenswear } from '../data/portfolio';
 
-/* The womenswear gate opens onto a small version of the same layered deck the
-   world itself uses, so the index shows the interaction rather than describing
-   it. Menswear has no photography here, so its gate is typographic — a
-   borrowed womenswear image would be a false claim about what exists. */
-const womenswearPreview = [
-  womenswear.categories[3].references[0].image,
-  womenswear.categories[0].references[0].image,
-  womenswear.categories[1].references[3].image,
-];
+/* ONE garment, not a deck in miniature. The Womenswear cover is a single hero
+   composition; a row of three thumbnails turned the landing into a card grid,
+   which is exactly what this rebuild removes. The black sequinned column reads
+   hardest against the white studio ground. */
+const heroGarment = womenswear.categories[3].references[3].image;
+
 const menswearCategories = garmentWorlds[1].categories;
 const firstSession = simulationSessions[0];
 const openable = (state: string) => state !== 'unpublished';
@@ -23,10 +20,10 @@ const openable = (state: string) => state !== 'unpublished';
 <SiteLayout
   title="Portfolio — Soufiane Aberbach"
   description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
-  marker="SA-PORTFOLIO-V6"
+  marker="SA-PORTFOLIO-V7"
   page="portfolio"
 >
-  <!-- BUILD-MARKER: SA-PORTFOLIO-V6 -->
+  <!-- BUILD-MARKER: SA-PORTFOLIO-V7 -->
   <div class="pf" data-pf-root>
     {/* Set before first paint so the enhanced layout never flashes the
         stacked fallback. parentElement is the .pf root, so the flag cannot
@@ -35,89 +32,115 @@ const openable = (state: string) => state !== 'unpublished';
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
+    {/* The intro states the proposition and gets out of the way. It used to
+        hold most of a screen of beige before the first chapter appeared; the
+        first cover now starts within the fold. */}
     <section class="pf-intro" id="portfolio-index">
       <p class="eyebrow">Portfolio / 02</p>
-      <h1 class="display pf-intro__title">Four ways<br />to read the work.</h1>
+      <h1 class="display pf-intro__title">Four ways to read the work.</h1>
       <p class="pf-intro__lede">
         Product development, technical documentation and digital validation shown as evidence — not decoration.
       </p>
     </section>
 
     {/* ------------------------------------------------------------------
-        EXPANDING EDITORIAL GATES
+        FOUR SEQUENTIAL CHAPTER COVERS
 
-        Four tall gates across the full usable width, sharing one continuous
-        field divided only by hairlines. Not cards: no radius, no fill, no
-        shadow, nothing floating. Each carries its number and its name set
-        vertically, so the name stays large at every gate width instead of
-        shrinking to menu type.
+        One after another down the page, each the better part of a screen,
+        each with its own composition. Not four columns, not a dashboard, not
+        a card grid: four covers, the way four chapters of a book have four
+        covers.
 
-        Hovering or keyboard-focusing a gate expands it to roughly half the
-        row and reveals its own visual language inside the field itself. The
-        expansion IS the navigation.
+        Each cover is built from what that chapter actually has:
+          01  one hero garment, standing in a white studio
+          02  type only — there is no menswear photography here to show, and
+              borrowing a womenswear frame would be a false claim
+          03  a physical folio: stacked sheets, a bound edge, a demo stamp
+          04  a frame from the real CLO3D recording
 
-        Unpublished chapters are <div>, not <a>: they still respond and still
-        show their language, but there is no empty world to walk into.
+        Unpublished chapters are <div>, not <a>: the cover is still composed
+        and still legible, but there is no empty world to walk into.
        ------------------------------------------------------------------ */}
-    <section class="pf-gates" aria-labelledby="pf-gates-title" data-gates>
-      <h2 class="pf-sr" id="pf-gates-title">Portfolio chapters</h2>
+    <section class="pf-covers" aria-labelledby="pf-covers-title" data-covers>
+      <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
 
       {chapters.map((chapter) => {
         const Tag = openable(chapter.publication) ? 'a' : 'div';
         return (
           <Tag
-            class="pf-gate"
+            class="pf-cover"
             href={openable(chapter.publication) ? `#${chapter.id}` : undefined}
             data-chapter={chapter.id}
             data-publication={chapter.publication}
           >
-            <span class="pf-gate__mark" aria-hidden="true"></span>
-
-            <span class="pf-gate__head">
-              <i class="pf-gate__num">{chapter.number}</i>
-              <span class="pf-gate__name">{chapter.title}</span>
-            </span>
-
-            {/* Every gate carries its own cover, at rest as well as open, so
-                all four kinds of evidence are legible before anything is
-                hovered. Opening the gate brings the cover to full presence. */}
-            <span class="pf-gate__field" aria-hidden="true">
+            <span class="pf-cover__art" aria-hidden="true">
               {chapter.id === 'womenswear' && (
-                <span class="pf-gatedeck">
-                  {womenswearPreview.map((asset, i) => (
-                    <span class="pf-gatedeck__card" style={`--i:${i}; --front:${asset.front}`}>
-                      <img src={asset.src} srcset={asset.srcset} sizes="26vw" width={asset.width} height={asset.height} alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                /* One garment. No frame, no shadow, no card — it stands on
+                   the studio ground the way it does inside the chapter. */
+                <img
+                  class="pf-cover__garment"
+                  src={heroGarment.src}
+                  srcset={heroGarment.srcset}
+                  sizes="(max-width: 900px) 92vw, 56vw"
+                  width={heroGarment.width}
+                  height={heroGarment.height}
+                  alt=""
+                  loading="eager"
+                  decoding="async"
+                />
+              )}
+
+              {chapter.id === 'menswear' && (
+                <span class="pf-covertype">
+                  {menswearCategories.map((category) => (
+                    <span class="pf-covertype__row">
+                      <i>{category.number}</i>
+                      <b>{category.label}</b>
                     </span>
                   ))}
                 </span>
               )}
 
-              {chapter.id === 'menswear' && (
-                <span class="pf-gatetype">
-                  {menswearCategories.map((category) => (
-                    <span class="pf-gatetype__row"><i>{category.number}</i>{category.label}</span>
-                  ))}
-                </span>
-              )}
-
               {chapter.id === 'tech-packs' && (
-                <span class="pf-gatesheets">
-                  <span class="pf-gatesheets__sheet"><i></i><i></i><i></i><i></i></span>
-                  <span class="pf-gatesheets__sheet"><i></i><i></i><i></i><i></i></span>
-                  <span class="pf-gatesheets__sheet"><i></i><i></i><i></i><i></i></span>
+                /* A physical object: three page edges, a bound spine and a
+                   printed cover. Drawn entirely from hairlines and offsets —
+                   no gloss, no page curl, no blur. */
+                <span class="pf-foliomark">
+                  <span class="pf-foliomark__leaf"></span>
+                  <span class="pf-foliomark__leaf"></span>
+                  <span class="pf-foliomark__cover">
+                    <span class="pf-foliomark__spine"></span>
+                    <span class="pf-foliomark__print">
+                      <i class="pf-foliomark__stamp">Demo</i>
+                      <i></i><i></i><i></i><i></i>
+                    </span>
+                  </span>
                 </span>
               )}
 
               {chapter.id === '3d-simulation' && firstSession?.poster && (
-                <img class="pf-gatestill" src={firstSession.poster} width="512" height="910" alt="" loading="lazy" decoding="async" />
+                <img
+                  class="pf-cover__still"
+                  src={firstSession.poster}
+                  width="512"
+                  height="910"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
               )}
             </span>
 
-            <span class="pf-gate__foot">
-              <span class="pf-gate__desc">{chapter.descriptor}</span>
-              {chapter.stateNote && <span class="pf-gate__state">{chapter.stateNote}</span>}
+            <span class="pf-cover__type">
+              <i class="pf-cover__num">{chapter.number}</i>
+              {chapter.id === '3d-simulation' && (
+                <span class="pf-cover__play" aria-hidden="true"><i></i></span>
+              )}
+              <b class="pf-cover__name">{chapter.title}</b>
+              <span class="pf-cover__desc">{chapter.descriptor}</span>
+              {chapter.stateNote && <span class="pf-cover__state">{chapter.stateNote}</span>}
               {openable(chapter.publication) && (
-                <span class="pf-gate__go label" aria-hidden="true">Open <Arrow /></span>
+                <span class="pf-cover__go label" aria-hidden="true">Open chapter <Arrow /></span>
               )}
             </span>
           </Tag>
@@ -129,9 +152,9 @@ const openable = (state: string) => state !== 'unpublished';
         THE FOUR WORLDS
 
         Present in the document, always. With the script running these become
-        full-screen layers opened from the index; without it they are four
-        ordinary sections the chapter anchors jump to, carrying every project
-        title, profile and description as real HTML.
+        full-screen layers opened from a cover; without it they are four
+        ordinary sections the chapter anchors jump to, carrying every
+        category, document and session as real HTML.
        ------------------------------------------------------------------ */}
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
@@ -142,43 +165,23 @@ const openable = (state: string) => state !== 'unpublished';
 
   <script>
     /* --------------------------------------------------------------------
-       Portfolio V6 runtime.
+       Portfolio V7 runtime.
 
        Three independent pieces, each degrading to something readable:
-         1. the landing preview (hover / focus)
-         2. world opening + closing, driven entirely by location.hash
-         3. the project queue: windowing, direct-manipulation drag, keyboard
+         1. world opening + closing, driven entirely by location.hash
+         2. the garment deck: windowing, direct-manipulation drag, keyboard
+         3. documents and sessions — nothing is fetched until it is asked for
+
+       The V6 gate-expansion logic is gone, not disabled: the landing is four
+       sequential covers now, and a cover has no open state to drive.
        -------------------------------------------------------------------- */
     const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      /* ---- 1. the gates --------------------------------------------- */
-      /* Includes the unpublished chapters, which are <div> rather than <a>:
-         they still open on hover so their language can be seen, they just do
-         not lead anywhere. */
       const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
-      const gateRow = root.querySelector<HTMLElement>('[data-gates]');
 
-      const openGate = (id: string | null) => {
-        for (const gate of chapterLinks) gate.toggleAttribute('data-active', gate.dataset.chapter === id);
-      };
-
-      for (const gate of chapterLinks) {
-        const id = gate.dataset.chapter!;
-        /* pointerenter rather than mouseenter so a pen counts too, and focus
-           so the keyboard gets exactly the same expansion. */
-        gate.addEventListener('pointerenter', () => openGate(id));
-        gate.addEventListener('focus', () => openGate(id));
-      }
-      /* Leaving the row returns to the resting state, where all four are
-         equal — that is the composition, not a fallback. */
-      gateRow?.addEventListener('pointerleave', () => openGate(null));
-      gateRow?.addEventListener('focusout', (event) => {
-        if (!gateRow.contains(event.relatedTarget as Node)) openGate(null);
-      });
-
-      /* ---- 2. worlds --------------------------------------------------- */
+      /* ---- 1. worlds --------------------------------------------------- */
       const worlds = new Map<string, HTMLElement>(
         [...root.querySelectorAll<HTMLElement>('[data-world]')].map((el) => [el.dataset.world!, el]),
       );
@@ -190,7 +193,7 @@ const openable = (state: string) => state !== 'unpublished';
         for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
           if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
-        const index = root.querySelector<HTMLElement>('.pf-gates');
+        const index = root.querySelector<HTMLElement>('.pf-covers');
         const intro = root.querySelector<HTMLElement>('.pf-intro');
         for (const el of [index, intro]) if (el) el.toggleAttribute('inert', on);
       };
@@ -225,7 +228,7 @@ const openable = (state: string) => state !== 'unpublished';
            focus() is a no-op on a visibility:hidden element and data-open has
            not been through style recalc yet, so force that first.
            And the focus has to move BEFORE the index is marked inert: the
-           chapter link the visitor just activated lives inside it, and the
+           chapter cover the visitor just activated lives inside it, and the
            blur the UA performs when a focused element's container becomes
            inert lands after a focus call made on the same tick — which is
            exactly what kept putting activeElement back on <body>. */
@@ -242,7 +245,7 @@ const openable = (state: string) => state !== 'unpublished';
         else closeWorld();
       };
 
-      /* The chapter entries are real anchors so that the worlds are reachable
+      /* The chapter covers are real anchors so that the worlds are reachable
          with the script gone. With the script running we take the click over:
          letting the browser perform the fragment navigation meant it also ran
          its own focus handling afterwards, which threw away the focus we had
@@ -295,21 +298,20 @@ const openable = (state: string) => state !== 'unpublished';
 
       window.addEventListener('hashchange', syncFromHash);
 
-      /* ---- 3. the project queue ---------------------------------------- */
-      /* Geometry, by width. `visible` is the number of projects on screen at
-         once; `ratio` is how much smaller each one is than the one before it.
-         Nothing is a fixed pixel offset — every number below is derived from
-         the measured stage width, so the composition breathes instead of
-         being a desktop layout shrunk down. */
-      /* Two states, not four: the desktop rule is five images, and 1024 is a
-         desktop. `scales` runs from the furthest card to the leading one, so
-         the last entry is always the active card at full size. The rhythm is
-         deliberately shallow — the furthest garment is still 82% of the
-         leading one, not a postage stamp. */
+      /* ---- 2. the garment deck ----------------------------------------- */
+      /* Geometry, by width. `visible` is the number of garments on screen at
+         once; `scales` runs from the furthest card to the leading one, so the
+         last entry is always the active card at full size. Nothing is a fixed
+         pixel offset — every number below is derived from the measured stage
+         width, so the composition breathes instead of being a desktop layout
+         shrunk down.
+
+         The rhythm is deliberately shallow: the furthest garment is still 82%
+         of the leading one, not a postage stamp. */
       const geometry = () => {
         const w = window.innerWidth;
-        if (w >= 1024) return { visible: 5, scales: [0.82, 0.86, 0.90, 0.94, 1] };
-        return { visible: 3, scales: [0.88, 0.94, 1] };
+        if (w >= 1024) return { visible: 5, scales: [0.82, 0.87, 0.91, 0.95, 1] };
+        return { visible: 3, scales: [0.90, 0.95, 1] };
       };
 
       /* 3:4. Measured from the renditions: 39 of 49 are exactly 0.749, and the
@@ -380,21 +382,21 @@ const openable = (state: string) => state !== 'unpublished';
         queue.width = width0;
         queue.stage.style.setProperty('--stage-h', `${Math.round(height0 + (nominal - 1) * 6)}px`);
 
-        /* Position k holds project (index + nominal - 1 - k), so the active
-           project lands at the right-hand end. Near the end of a category the
-           left-hand positions simply have no project to hold. */
+        /* Position k holds the image (index + nominal - 1 - k), so the active
+           one lands at the right-hand end. Near the end of a category the
+           left-hand positions simply have no image to hold. */
         const placed: Array<{ slot: HTMLElement; k: number; w: number; h: number; x: number }> = [];
         let x = 0;
         for (let k = 0; k < nominal; k += 1) {
-          const projectIndex = queue.index + (nominal - 1 - k);
-          if (projectIndex >= queue.slots.length) continue;
-          const slot = queue.slots[projectIndex];
+          const itemIndex = queue.index + (nominal - 1 - k);
+          if (itemIndex >= queue.slots.length) continue;
+          const slot = queue.slots[itemIndex];
           const s = scale[k];
           const w = width0 * s;
           const h = height0 * s;
           placed.push({ slot, k, w, h, x });
           const leading = k === nominal - 1;
-          x += leading ? w : w * (queue.fronts[projectIndex] ?? 0.6);
+          x += leading ? w : w * (queue.fronts[itemIndex] ?? 0.6);
         }
 
         const used = placed.length ? placed[placed.length - 1].x + placed[placed.length - 1].w : 0;
@@ -454,8 +456,8 @@ const openable = (state: string) => state !== 'unpublished';
         /* Direct manipulation.
            During the gesture the stack is translated by the SAME SIGN as the
            pointer delta — hand right, cards right. On release, a leftward drag
-           past the threshold advances to the next project, because dragging
-           left is what pulls the next project into the leading position. */
+           past the threshold advances, because dragging left is what pulls the
+           next garment into the leading position. */
         let dragging = false;
         let startX = 0;
         let pointerId = -1;
@@ -515,7 +517,9 @@ const openable = (state: string) => state !== 'unpublished';
         render(queue);
       }
 
-      /* ---- category switching ------------------------------------------ */
+      /* ---- subchapter index -------------------------------------------- */
+      /* The five categories are the first thing inside a garment chapter, as
+         large numbered bands. Selecting one swaps the panel below. */
       for (const world of worlds.values()) {
         const buttons = [...world.querySelectorAll<HTMLElement>('[data-category]')];
         const panels = [...world.querySelectorAll<HTMLElement>('[data-panel]')];
@@ -525,6 +529,21 @@ const openable = (state: string) => state !== 'unpublished';
             for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
             for (const panel of panels) panel.hidden = panel.dataset.panel !== id;
             layoutAll();
+          });
+        }
+      }
+
+      /* ---- 3. documents: one dossier on the table at a time ------------- */
+      for (const world of worlds.values()) {
+        const books = [...world.querySelectorAll<HTMLElement>('[data-dossier]')];
+        if (books.length === 0) continue;
+        for (const link of world.querySelectorAll<HTMLElement>('[data-doc]')) {
+          link.addEventListener('click', () => {
+            const id = link.dataset.doc!;
+            for (const other of world.querySelectorAll<HTMLElement>('[data-doc]')) {
+              other.setAttribute('aria-pressed', String(other === link));
+            }
+            for (const book of books) book.hidden = book.dataset.dossier !== id;
           });
         }
       }
@@ -596,20 +615,19 @@ const openable = (state: string) => state !== 'unpublished';
 
       /* Debug surface for the smoke tests. Mirrors the old
          window.__portfolioRunway contract so the overlay assertions that
-         predate V6 keep running, and adds what V6 needs to prove. */
+         predate V6 keep running, and adds what the deck needs to prove. */
       (window as unknown as Record<string, unknown>).__portfolioRunway = {
         getState() {
           const queue = queues.find((q) => !q.panel.hidden && q.panel.closest('[data-world]')?.hasAttribute('data-open'))
             ?? queues.find((q) => !q.panel.hidden)
             ?? queues[0];
-          const { visible, ratio } = geometry();
+          const { visible } = geometry();
           return {
             activeIndex: queue.index,
             position: queue.index,
             count: queue.slots.length,
             visibleTarget: visible,
             visibleNow: queue.slots.filter((slot) => !slot.hidden).length,
-            ratio,
             /* The active card leads the deck: it is the right-most and the
                top-most, and nothing covers it. */
             activeIsLeading: (() => {
@@ -650,44 +668,27 @@ const openable = (state: string) => state !== 'unpublished';
       };
     }
   </script>
-
   <style is:global>
     /* ======================================================================
-       PORTFOLIO V6
+       PORTFOLIO V7
        Every selector below is inside .pf. Nothing here reaches another page.
+
+       This is a rebuild, not a patch. The V6 gate row (.pf-gates, .pf-gate*,
+       .pf-gatedeck, .pf-gatetype, .pf-gatesheets, .pf-gatestill) and the V6
+       viewer chrome (.pf-cats/.pf-cat, .pf-info, .pf-refpanel, .pf-evidence,
+       .pf-docs/.pf-dossier/.pf-sheet, .pf-motion/.pf-sessionlink) are gone
+       from the stylesheet entirely rather than overridden — there are no dead
+       selectors left behind them.
        ====================================================================== */
 
-        /* One white now, not two.
+    /* One white, not two.
        The derived renditions used to carry grounds from #eeeeee to #ffffff, so
-       the stage had to sit at a compromise value and every deck seam showed as
-       a change of white. .devtools/normalise-ground.mjs now resolves every
-       frame's studio ground to 255 — edge-connected flood fill, tight
-       tolerance, feathered mask, masters untouched — so the stage is simply
-       white and the photographs meet it exactly.
-       Measured after regenerating: all 49 corner grounds read 255; the widest
-       residual anywhere is three levels, on the two vignetted evening frames. */
+       the studio had to sit at a compromise value and every deck seam showed as
+       a change of white. .devtools/normalise-ground.mjs resolves every frame's
+       studio ground to 255 — edge-connected flood fill, tight tolerance,
+       feathered mask, masters untouched — so the studio is simply white and the
+       photographs meet it exactly. */
     .pf { --pf-stage: #ffffff; --pf-paper: #ffffff; }
-
-    /* ---------- intro ---------- */
-    .pf-intro {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: calc(var(--header-h) + clamp(1.1rem, 2.2vw, 1.8rem)) var(--gutter) clamp(1.1rem, 1.8vw, 1.5rem);
-    }
-    .pf-intro__title {
-      margin: 1.25rem 0 0;
-      font-size: clamp(2.2rem, 4.9vw, 4.1rem);
-      line-height: .94;
-      letter-spacing: -.045em;
-    }
-    .pf-intro__lede {
-      max-width: 34rem;
-      margin: 1.05rem 0 0;
-      color: var(--ink-soft);
-      font-size: clamp(1rem, 1.5vw, 1.12rem);
-      line-height: 1.65;
-    }
-    .pf-intro__meta { margin: .9rem 0 0; color: var(--muted); }
 
     .pf-sr {
       position: absolute;
@@ -699,213 +700,309 @@ const openable = (state: string) => state !== 'unpublished';
     }
 
     /* ======================================================================
-       EXPANDING EDITORIAL GATES
-
-       One continuous field, divided by hairlines. Four gates share the row;
-       hovering or focusing one takes it to roughly half the width and the
-       other three give way. flex-grow is the only animated property, so the
-       browser interpolates a single number rather than reflowing four
-       independent boxes.
+       INTRO
+       Says the proposition and stops. The first cover has to start inside the
+       fold; a screen and a half of beige before the first chapter is what made
+       the old landing read as a document index.
        ====================================================================== */
-    .pf-gates {
-      display: flex;
-      align-items: stretch;
+    .pf-intro {
       max-width: var(--max);
       margin: 0 auto;
-      height: clamp(25rem, 58vh, 37rem);
-      border-top: 1px solid var(--line-strong);
-      border-bottom: 1px solid var(--line-strong);
+      padding: calc(var(--header-h) + clamp(.9rem, 1.8vw, 1.5rem)) var(--gutter) clamp(1.1rem, 2vw, 1.75rem);
+    }
+    .pf-intro__title {
+      max-width: 20ch;
+      margin: 1rem 0 0;
+      font-size: clamp(2.1rem, 4.4vw, 3.7rem);
+      line-height: .94;
+      letter-spacing: -.045em;
+    }
+    .pf-intro__lede {
+      max-width: 34rem;
+      margin: .9rem 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(.98rem, 1.35vw, 1.08rem);
+      line-height: 1.6;
     }
 
-    .pf-gate {
+    /* ======================================================================
+       FOUR SEQUENTIAL CHAPTER COVERS
+
+       One after another down the page. Each is the better part of a screen and
+       each is composed from what that chapter actually holds, so the four do
+       not rhyme: a garment in a studio, a page of type, a physical folio, a
+       frame of film. No columns, no cards, no radius, nothing floating.
+       ====================================================================== */
+    .pf-covers { border-top: 1px solid var(--line-strong); }
+
+    .pf-cover {
       position: relative;
-      flex: 1 1 0;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(.7rem, 1.2vw, 1.1rem);
-      padding: clamp(1.1rem, 1.8vw, 1.9rem) clamp(.9rem, 1.4vw, 1.5rem);
+      display: grid;
+      align-items: center;
+      min-height: clamp(28rem, 78vh, 46rem);
       color: inherit;
       text-decoration: none;
       overflow: hidden;
-      /* The gate is its own container, so the chapter name can be sized in
-         container units and grow with the gate instead of being set once and
-         either shrinking to menu type or overflowing. */
-      container-type: inline-size;
-      transition: flex-grow .62s var(--ease), background-color .62s var(--ease);
     }
-    .pf-gate + .pf-gate { border-left: 1px solid var(--line); }
-    /* 2.77 against three gates at 1 puts the open gate at ~48% of the row. */
-    .pf-gate[data-active] { flex-grow: 2.77; }
-    .pf-gate:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
+    .pf-cover + .pf-cover { border-top: 1px solid var(--line-strong); }
+    .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
 
-    /* The single controlled signal: a short edge marker on the open gate.
-       Never a rule under the words. */
-    .pf-gate__mark {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2px;
-      height: 0;
-      background: var(--signal);
-      transition: height .62s var(--ease);
+    /* The type block carries the page gutter, so the art can run to the edge
+       of the viewport without fighting the cover's own padding. */
+    .pf-cover__type {
+      position: relative;
+      z-index: 2;
+      display: block;
+      padding: clamp(2.25rem, 4.4vw, 4rem) var(--gutter);
     }
-    .pf-gate[data-active] .pf-gate__mark { height: clamp(4rem, 9vw, 7rem); }
+    .pf-cover__art { position: relative; align-self: stretch; display: block; min-width: 0; }
 
-    /* Horizontal at every width. The name is set in container units so it
-       grows with the gate — a 90-degree title reads as an archive spine, not
-       as a fashion chapter. */
-    .pf-gate__head { display: flex; flex-direction: column; gap: .5rem; }
-    .pf-gate__num {
+    .pf-cover__num {
+      display: block;
       font-family: var(--mono);
       font-size: .72rem;
-      letter-spacing: .18em;
       font-style: normal;
+      letter-spacing: .2em;
       color: var(--muted);
-      transition: color .4s var(--ease);
     }
-    .pf-gate[data-active] .pf-gate__num { color: var(--signal); }
-    .pf-gate__name {
+    .pf-cover__name {
       display: block;
+      margin: clamp(.8rem, 1.4vw, 1.2rem) 0 0;
       font-family: var(--display);
-      font-weight: 600;
-      font-size: clamp(1.32rem, 8.4cqi, 3.1rem);
-      line-height: .98;
-      letter-spacing: -.035em;
-      text-wrap: balance;
+      font-variation-settings: 'wdth' 112;
+      font-weight: 850;
+      /* Sized so the longest chapter name clears the type column at every
+         width. It is never allowed to break inside a word: "Womensw / ear"
+         is a typographic failure, not a wrap. */
+      font-size: clamp(2.3rem, 4.6vw, 4.6rem);
+      line-height: .88;
+      letter-spacing: -.055em;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: none;
     }
-    .pf-gate[data-publication='unpublished'] .pf-gate__name { color: var(--ink-soft); }
-
-    /* The cover. In the flow, between the name and the foot, so the gate reads
-       as a composed cover rather than type with a picture parked at the
-       bottom. */
-    .pf-gate__field {
-      position: relative;
-      flex: 1;
-      min-height: 0;
+    .pf-cover__desc {
       display: block;
-      overflow: hidden;
-      opacity: .58;
-      transition: opacity .55s var(--ease);
-    }
-    .pf-gate[data-active] .pf-gate__field { opacity: 1; }
-    /* When the garment gate opens the gate itself becomes the studio; with the
-       ground behind them left as paper the cards would read as white
-       rectangles laid on beige rather than garments standing in one field. */
-    .pf-gate[data-chapter='womenswear'][data-active] { background: var(--pf-stage); }
-
-    .pf-gate__foot { display: block; }
-    .pf-gate__desc {
-      display: block;
-      max-width: 26rem;
+      max-width: 30rem;
+      margin: clamp(.9rem, 1.5vw, 1.3rem) 0 0;
       color: var(--ink-soft);
-      font-size: clamp(.86rem, 1.05vw, .98rem);
+      font-size: clamp(.92rem, 1.15vw, 1.02rem);
+      line-height: 1.6;
+    }
+    /* The one restrained signal on a cover: a small square, never a rule under
+       the words. */
+    .pf-cover__state {
+      position: relative;
+      display: block;
+      max-width: 30rem;
+      margin: 1rem 0 0;
+      padding-left: 1rem;
+      color: var(--muted);
+      font-size: .86rem;
       line-height: 1.5;
     }
-    .pf-gate__state,
-    .pf-gate__go {
-      opacity: 0;
-      transform: translateY(.4rem);
-      transition: opacity .45s var(--ease), transform .5s var(--ease);
-    }
-    .pf-gate[data-active] .pf-gate__state,
-    .pf-gate[data-active] .pf-gate__go { opacity: 1; transform: none; }
-    .pf-gate__state {
-      position: relative;
-      display: block;
-      max-width: 26rem;
-      margin-top: .6rem;
-      padding-left: .95rem;
-      color: var(--muted);
-      font-size: .84rem;
-      line-height: 1.45;
-    }
-    .pf-gate__state::before {
+    .pf-cover__state::before {
       content: '';
       position: absolute;
       left: 0;
-      top: .5em;
+      top: .55em;
       width: .35rem;
       height: .35rem;
       background: var(--signal);
     }
-    .pf-gate__go {
+    .pf-cover__go {
       display: inline-flex;
       align-items: center;
-      gap: .4rem;
-      margin-top: .7rem;
+      gap: .5rem;
+      margin-top: clamp(1.1rem, 1.8vw, 1.6rem);
       color: var(--signal);
+      transition: gap .3s var(--ease);
     }
-    .pf-gate__go .arrow { width: 1em; height: 1em; }
+    .pf-cover__go .arrow { width: 1em; height: 1em; }
+    .pf-cover:hover .pf-cover__go { gap: .95rem; }
 
-    /* ---------- womenswear: the same layered deck, in miniature ---------- */
-    .pf-gatedeck { position: absolute; inset: 0; display: block; }
-    .pf-gatedeck__card {
-      position: absolute;
-      bottom: 0;
-      display: block;
-      aspect-ratio: 3 / 4;
+    /* ---------- 01 WOMENSWEAR: one garment, standing in the studio ------- */
+    .pf-cover[data-chapter='womenswear'] { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); }
+    .pf-cover[data-chapter='womenswear'] .pf-cover__type { grid-column: 1; grid-row: 1; }
+    .pf-cover[data-chapter='womenswear'] .pf-cover__art {
+      grid-column: 2;
+      grid-row: 1;
       background: var(--pf-stage);
-      box-shadow: -14px 0 20px -14px rgba(17, 17, 15, .22);
     }
-    /* Laid right to left, leading card flush right, each overlapped on its
-       right by the one in front — the same rule the world uses. max-width caps
-       them so a narrow gate cannot push the furthest card out of frame. */
-    .pf-gatedeck__card:nth-child(3) { right: 0; height: 94%; max-width: 44%; z-index: 3; }
-    .pf-gatedeck__card:nth-child(2) { right: 30%; height: 86%; max-width: 38%; z-index: 2; }
-    .pf-gatedeck__card:nth-child(1) { right: 56%; height: 78%; max-width: 33%; z-index: 1; }
-    .pf-gatedeck__card img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
+    /* No frame, no shadow, no card. The garment stands on the ground, exactly
+       as it does inside the chapter. */
+    .pf-cover__garment {
+      position: absolute;
+      inset: clamp(1.25rem, 2.6vw, 2.5rem) clamp(1.25rem, 2.6vw, 2.5rem) 0;
+      width: calc(100% - 2 * clamp(1.25rem, 2.6vw, 2.5rem));
+      height: calc(100% - clamp(1.25rem, 2.6vw, 2.5rem));
+      object-fit: contain;
+      object-position: bottom center;
+    }
 
-    /* ---------- menswear: typographic, because there is no photograph ---- */
-    .pf-gatetype { display: flex; flex-direction: column; justify-content: center; gap: .1rem; height: 100%; }
-    .pf-gatetype__row {
+    /* ---------- 02 MENSWEAR: typographic, because there is no photograph -- */
+    .pf-cover[data-chapter='menswear'] { grid-template-columns: minmax(0, 40%) minmax(0, 1fr); }
+    .pf-cover[data-chapter='menswear'] .pf-cover__type { grid-column: 1; grid-row: 1; }
+    .pf-cover[data-chapter='menswear'] .pf-cover__art {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      padding-right: var(--gutter);
+    }
+    .pf-covertype { display: flex; flex-direction: column; }
+    .pf-covertype__row {
       display: flex;
       align-items: baseline;
-      gap: .7rem;
-      padding: .5rem 0;
+      gap: clamp(.9rem, 2vw, 1.75rem);
+      padding: clamp(.85rem, 1.7vw, 1.45rem) 0;
       border-bottom: 1px solid var(--line);
-      font-family: var(--display);
-      font-size: clamp(.8rem, 3.4cqi, 1.25rem);
-      letter-spacing: -.02em;
+    }
+    .pf-covertype__row:first-child { border-top: 1px solid var(--line-strong); }
+    .pf-covertype__row i {
+      flex: none;
+      width: 2rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-style: normal;
+      letter-spacing: .16em;
+    }
+    .pf-covertype__row b {
       color: var(--ink-soft);
-      white-space: nowrap;
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: clamp(1.1rem, 2.4vw, 2.1rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
     }
-    .pf-gatetype__row i { color: var(--muted); font-family: var(--mono); font-size: .62rem; font-style: normal; letter-spacing: .14em; }
 
-    /* ---------- tech packs: technical objects lying in the field --------- */
-    .pf-gatesheets { position: absolute; inset: 0; display: block; }
-    .pf-gatesheets__sheet {
-      position: absolute;
+    /* ---------- 03 TECH PACKS: a physical folio on the table ------------- */
+    .pf-cover[data-chapter='tech-packs'] { grid-template-columns: minmax(0, 1fr) minmax(0, 40%); }
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__art {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3.5rem) var(--gutter);
+    }
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__type { grid-column: 2; grid-row: 1; }
+
+    /* Thickness from stacked page edges and a bound spine. Hairlines and
+       offsets only — no gloss, no page curl, no blur. */
+    .pf-foliomark {
+      position: relative;
       display: block;
-      width: 64%;
-      max-width: 15rem;
+      width: min(100%, 36rem);
       aspect-ratio: 297 / 210;
-      padding: .8rem;
-      border: 1px solid var(--line-strong);
-      background: var(--pf-paper);
-      box-shadow: 0 10px 22px -18px rgba(17, 17, 15, .5);
     }
-    .pf-gatesheets__sheet:nth-child(1) { left: 0; bottom: 46%; transform: rotate(-4deg); z-index: 1; }
-    .pf-gatesheets__sheet:nth-child(2) { left: 14%; bottom: 23%; transform: rotate(1.5deg); z-index: 2; }
-    .pf-gatesheets__sheet:nth-child(3) { left: 28%; bottom: 0; transform: rotate(-1deg); z-index: 3; }
-    .pf-gatesheets__sheet i { display: block; height: 1px; margin-bottom: .5rem; background: var(--line); }
-    .pf-gatesheets__sheet i:first-child { width: 34%; background: var(--line-strong); }
-    .pf-gatesheets__sheet i:nth-child(3) { width: 76%; }
-    .pf-gatesheets__sheet i:nth-child(4) { width: 52%; }
+    .pf-foliomark__leaf,
+    .pf-foliomark__cover {
+      position: absolute;
+      inset: 0;
+      display: block;
+      border: 1px solid var(--line);
+      background: var(--pf-paper);
+    }
+    .pf-foliomark__leaf:nth-child(1) { transform: translate(14px, 14px) rotate(-1.6deg); }
+    .pf-foliomark__leaf:nth-child(2) { transform: translate(7px, 7px) rotate(.9deg); }
+    .pf-foliomark__cover { border-color: var(--line-strong); display: flex; }
+    .pf-foliomark__spine {
+      position: relative;
+      flex: none;
+      width: clamp(1rem, 2vw, 1.7rem);
+      background: var(--ink);
+    }
+    .pf-foliomark__spine::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 14%;
+      bottom: 14%;
+      width: 1px;
+      background: rgba(251, 250, 246, .32);
+    }
+    .pf-foliomark__print {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(.55rem, 1.1vw, .9rem);
+      padding: clamp(1rem, 2.2vw, 1.9rem);
+    }
+    .pf-foliomark__print i:not(.pf-foliomark__stamp) { display: block; height: 1px; background: var(--line); }
+    .pf-foliomark__print i:not(.pf-foliomark__stamp):nth-child(2) { width: 78%; background: var(--line-strong); }
+    .pf-foliomark__print i:not(.pf-foliomark__stamp):nth-child(3) { width: 54%; }
+    .pf-foliomark__print i:not(.pf-foliomark__stamp):nth-child(4) { width: 70%; }
+    .pf-foliomark__print i:not(.pf-foliomark__stamp):nth-child(5) { width: 40%; }
+    .pf-foliomark__stamp {
+      align-self: flex-start;
+      height: auto;
+      margin-bottom: clamp(.6rem, 1.2vw, 1rem);
+      padding: .3rem .55rem;
+      border: 1px solid var(--signal);
+      background: none;
+      color: var(--signal);
+      font-family: var(--mono);
+      font-size: .62rem;
+      font-style: normal;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
 
-    /* ---------- 3d simulation: the real frame, filling the field --------- */
-    .pf-gatestill { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
+    /* ---------- 04 3D SIMULATION: a frame of the real recording ---------- */
+    .pf-cover[data-chapter='3d-simulation'] {
+      grid-template-columns: minmax(0, 1fr);
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__art {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 34%; }
+    /* The scrim is what makes the type legible over a photograph. It is a
+       gradient on the ink, not a translucent card. */
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__art::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .78) 34%, rgba(17, 17, 15, .08) 72%);
+    }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { max-width: 44rem; }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__num { color: rgba(251, 250, 246, .62); }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__desc { color: rgba(251, 250, 246, .8); }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__state { color: rgba(251, 250, 246, .68); }
+    .pf-cover__play {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(2.6rem, 4.4vw, 3.6rem);
+      height: clamp(2.6rem, 4.4vw, 3.6rem);
+      margin-top: clamp(.9rem, 1.6vw, 1.3rem);
+      border: 1px solid rgba(251, 250, 246, .5);
+      border-radius: 50%;
+    }
+    .pf-cover__play i {
+      width: 0;
+      height: 0;
+      margin-left: .2rem;
+      border-left: .62rem solid var(--paper-bright);
+      border-top: .4rem solid transparent;
+      border-bottom: .4rem solid transparent;
+    }
 
     /* ======================================================================
        WORLDS
        ====================================================================== */
 
     /* Fallback (no script): four ordinary sections. Everything is readable,
-       scrollable and reachable by the chapter anchors. */
+       scrollable and reachable by the chapter anchors. The section itself is
+       not width-capped — the inner blocks are — so the white studio band can
+       run edge to edge in both modes. */
     .pf-world {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(3rem, 6vw, 5rem) var(--gutter);
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
       border-top: 1px solid var(--line-strong);
       scroll-margin-top: var(--header-h);
     }
@@ -917,8 +1014,6 @@ const openable = (state: string) => state !== 'unpublished';
       position: fixed;
       inset: 0;
       z-index: 150;
-      max-width: none;
-      margin: 0;
       padding: 0 0 clamp(3rem, 6vw, 5rem);
       border-top: 0;
       background: var(--paper);
@@ -945,7 +1040,7 @@ const openable = (state: string) => state !== 'unpublished';
     .pf--js .pf-world__bar {
       position: sticky;
       top: 0;
-      z-index: 4;
+      z-index: 8;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -972,12 +1067,12 @@ const openable = (state: string) => state !== 'unpublished';
 
     .pf-world__head {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
       gap: clamp(1.25rem, 3vw, 3rem);
       align-items: end;
       max-width: var(--max);
       margin: 0 auto;
-      padding: clamp(1.25rem, 2.4vw, 2.1rem) var(--gutter) clamp(.9rem, 1.4vw, 1.2rem);
+      padding: clamp(1.25rem, 2.4vw, 2.1rem) var(--gutter) clamp(1rem, 1.6vw, 1.4rem);
     }
     .pf-world__head h2 { margin: 0; font-size: clamp(1.9rem, 3.6vw, 3.1rem); line-height: .95; letter-spacing: -.035em; }
     .pf-world__descriptor { max-width: 34rem; margin: .6rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
@@ -986,82 +1081,144 @@ const openable = (state: string) => state !== 'unpublished';
        a label and the fact, in the margin position a credit line occupies. */
     .pf-prov { padding-left: 1rem; border-left: 1px solid var(--line-strong); }
     .pf-prov__label { margin: 0; color: var(--signal); }
-    .pf-prov__text { margin: .4rem 0 0; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+    .pf-prov__text { margin: .4rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
 
-    /* ---------- subcategory index: numbers, type, one rule ---------- */
-    .pf-cats { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
-    .pf-cats ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0 clamp(1.1rem, 2.6vw, 2.4rem);
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      border-top: 1px solid var(--line-strong);
-      border-bottom: 1px solid var(--line);
-    }
-    .pf-cat {
-      display: flex;
+    /* ======================================================================
+       THE SUBCHAPTER INDEX
+
+       Five numbered editorial bands, the first thing inside a garment chapter.
+       Not tabs, not pills, not a one-line menu. The selected band takes the
+       studio ground and shows one restrained preview of what is inside it;
+       hovering another band previews that one the same way. The preview strip
+       is a reserved track, so revealing it never moves the type.
+       ====================================================================== */
+    .pf-index { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .pf-index__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+
+    .pf-band {
+      position: relative;
+      display: grid;
+      grid-template-columns: 3rem minmax(0, 1fr) 3rem clamp(5rem, 10vw, 8.5rem);
       align-items: baseline;
-      gap: .55rem;
-      padding: .8rem 0;
+      gap: .3rem clamp(.75rem, 1.5vw, 1.25rem);
+      width: 100%;
+      padding: clamp(1rem, 1.8vw, 1.6rem) 0 clamp(1rem, 1.8vw, 1.6rem) 1.25rem;
       border: 0;
+      border-bottom: 1px solid var(--line);
       background: none;
       color: var(--muted);
       cursor: pointer;
       font: inherit;
       text-align: left;
-      transition: color .3s var(--ease);
+      overflow: hidden;
+      transition: background-color .45s var(--ease), color .35s var(--ease);
     }
-    .pf-cat__num { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; font-style: normal; }
-    .pf-cat__label { font-family: var(--display); font-size: clamp(1rem, 1.55vw, 1.3rem); letter-spacing: -.02em; }
-    .pf-cat__count { font-family: var(--mono); font-size: .62rem; color: var(--muted); }
-    .pf-cat:hover { color: var(--ink); }
-    .pf-cat[aria-pressed='true'] { color: var(--ink); }
-    /* The marker is a square before the number, never a rule beneath the
-       words — a coloured line under text reads as a spelling error. */
-    .pf-cat[aria-pressed='true'] .pf-cat__num { position: relative; color: var(--ink); }
-    .pf-cat[aria-pressed='true'] .pf-cat__num::before {
-      content: '';
+    .pf-band:hover,
+    .pf-band[aria-pressed='true'] { background: var(--pf-stage); color: var(--ink); }
+    .pf-band:focus-visible { outline: 2px solid var(--signal); outline-offset: -3px; }
+
+    /* The one signal in the index. A square at the head of the selected band,
+       never a rule beneath the words. */
+    .pf-band__mark {
       position: absolute;
-      left: -.7rem;
-      top: .34em;
-      width: .34rem;
-      height: .34rem;
+      left: 0;
+      top: 50%;
+      width: .38rem;
+      height: .38rem;
+      margin-top: -.19rem;
       background: var(--signal);
+      opacity: 0;
+      transition: opacity .35s var(--ease);
     }
-    .pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+    .pf-band[aria-pressed='true'] .pf-band__mark { opacity: 1; }
 
-    /* The information panel in reference mode. No profile rows, because there
-       is nothing verified to put in them. */
-    .pf-refpanel { padding-top: 1.4rem; }
-    .pf-refpanel__note { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .pf-band__num {
+      grid-column: 1;
+      grid-row: 1;
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-style: normal;
+      letter-spacing: .16em;
+    }
+    .pf-band__label {
+      grid-column: 2;
+      grid-row: 1;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(1.15rem, 2.4vw, 2.1rem);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      color: var(--ink);
+    }
+    .pf-band__blurb {
+      grid-column: 2;
+      grid-row: 2;
+      max-width: 46rem;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+    .pf-band__count { grid-column: 3; grid-row: 1; justify-self: end; color: var(--muted); font-weight: 400; }
 
-    .pf-panel { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    /* The reserved track. Empty at rest, so nothing shifts when the preview
+       fades in. */
+    .pf-band__preview {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: clamp(5rem, 10vw, 8.5rem);
+      opacity: 0;
+      transition: opacity .45s var(--ease);
+      pointer-events: none;
+    }
+    .pf-band:hover .pf-band__preview,
+    .pf-band[aria-pressed='true'] .pf-band__preview { opacity: 1; }
+    .pf-band__preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+    }
+
+    /* ======================================================================
+       THE STUDIO
+
+       One white band the full width of the viewport. The deck and the
+       development panel share it, so the viewer reads as a lit studio rather
+       than as a white rectangle laid on beige.
+       ====================================================================== */
+    .pf-studio {
+      margin-top: clamp(1.25rem, 2.4vw, 2rem);
+      padding: clamp(1.5rem, 3vw, 2.75rem) 0 clamp(1.75rem, 3.4vw, 3rem);
+      background: var(--pf-stage);
+    }
+    .pf-studio__inner { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
     .pf-panel[hidden] { display: none; }
-    .pf-panel__blurb { max-width: 34rem; margin: 1.5rem 0 0; color: var(--muted); font-size: .95rem; line-height: 1.6; }
 
-    /* ---------- viewer ---------- */
     .pf-viewer {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 18rem);
-      gap: clamp(1.25rem, 2.2vw, 2.25rem);
-      align-items: start;
-      margin-top: clamp(1.1rem, 2vw, 1.6rem);
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.75rem, 3vw, 2.75rem);
+      align-items: center;
+    }
+    /* 65 / 35. Below this the two columns cannot both hold their job — five
+       complete garments need the whole width — so the plates move under the
+       deck instead of being squeezed beside it. */
+    @media (min-width: 1360px) {
+      .pf-viewer {
+        grid-template-columns: minmax(0, 65fr) minmax(0, 35fr);
+        gap: clamp(2rem, 3.2vw, 3.5rem);
+      }
     }
 
-    /* ONE white studio. Every garment sits in the same light, so the row does
-       not read as five unrelated rectangular photographs. */
-    /* FALLBACK (no script): the stage is simply the white studio and every
-       project is a normal grid cell inside it. Complete, scrollable and
-       readable — the queue below is an enhancement layered on top of this,
-       never a prerequisite for seeing the work. */
-    .pf-stage {
-      position: relative;
-      background: var(--pf-stage);
-      border: 1px solid var(--line);
-      padding: 1rem;
-    }
+    /* ---------- the deck ---------- */
+    .pf-deck { min-width: 0; }
+
+    /* FALLBACK (no script): every garment is a normal grid cell in the studio.
+       Complete, scrollable and readable — the deck below is an enhancement
+       layered on top of this, never a prerequisite for seeing the work. */
+    .pf-stage { position: relative; }
     .pf-stage:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
     .pf-stack {
       display: grid;
@@ -1073,11 +1230,9 @@ const openable = (state: string) => state !== 'unpublished';
     }
     .pf-slot__figure { margin: 0; }
 
-    /* ENHANCED: the leading-image depth queue. */
+    /* ENHANCED: the layered deck. */
     .pf--js .pf-stage {
       height: var(--stage-h, 420px);
-      padding: 0;
-      border: 0;
       overflow: hidden;
       cursor: grab;
       touch-action: pan-y;
@@ -1103,24 +1258,20 @@ const openable = (state: string) => state !== 'unpublished';
       height: var(--h, 0);
       /* Opaque, because the occlusion is real: the card in front physically
          covers the back view of the card behind it. A transparent card would
-         let both views show through each other. */
+         let both views show through each other.
+
+         NO SHADOW, NO BORDER, NO FRAME. Depth is carried by overlap, by scale
+         and by stacking order alone. A cast shadow at the seam turned five
+         garments standing in one studio into five white cards lying on a
+         table, which is the card language this rebuild removes. */
       background: var(--pf-stage);
-      /* The depth cue. Now that every studio ground resolves to the same white,
-         the overlap has no edge of its own and five figures on one white field
-         read as five figures, not as a deck. This is the shadow the card in
-         front casts onto the card behind — cast leftward, because that is the
-         side it covers. It is the only thing drawn at the seam: no rule, no
-         border, no separator. */
-      box-shadow: -18px 0 26px -16px rgba(17, 17, 15, .22);
       transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease),
                   bottom .58s var(--ease), opacity .58s var(--ease);
     }
     .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
     .pf-slot[hidden] { display: none; }
-    /* contain, never cover: a head, a hem or a train is never cut off. The
-       image backgrounds are white and so is the stage, so the individual
-       frames dissolve into one studio instead of reading as tiles. */
-    /* pointer-events: none is load-bearing. Without it the first pointermove
+    /* contain, never cover: a head, a hem or a train is never cut off.
+       pointer-events: none is load-bearing. Without it the first pointermove
        over a slot started a native image drag, the browser fired
        pointercancel, and the gesture died about twelve pixels in. The stage
        owns the whole interaction; the images are not targets. */
@@ -1132,9 +1283,9 @@ const openable = (state: string) => state !== 'unpublished';
       pointer-events: none;
       -webkit-user-drag: none;
     }
-    /* The number is stated in the information panel, so on screen this would
-       be the same fact twice. It stays in the document for assistive tech,
-       which has no panel to read it from. */
+    /* The number is stated in the run bar, so on screen this would be the same
+       fact twice. It stays in the document for assistive tech, which has no
+       run bar to read it from. */
     .pf-slot__caption {
       position: absolute;
       width: 1px; height: 1px;
@@ -1144,98 +1295,158 @@ const openable = (state: string) => state !== 'unpublished';
       white-space: nowrap;
     }
 
-    /* Depth: scale and position do the work. The farthest one or two take a
-       very restrained blur — enough to sit back, never enough to stop the
-       garment being evaluated. */
-    .pf-slot[data-depth='3'] { opacity: .96; }
-    .pf-slot[data-depth='4'] { opacity: .92; }
-
-    /* ---------- project information ---------- */
-    .pf-info { min-width: 0; }
-    /* One control line, not two buttons flanking a label: arrow, count,
-       arrow, sharing a single rule. The arrows carry their hit area and focus
-       ring without being drawn as boxes. */
-    .pf-info__nav {
+    /* ---------- the run bar: the deck's own navigation ---------- */
+    .pf-runbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: .75rem;
-      padding-bottom: .85rem;
-      border-bottom: 1px solid var(--line-strong);
+      gap: clamp(.9rem, 1.8vw, 1.6rem);
+      margin-top: clamp(.9rem, 1.6vw, 1.4rem);
+      padding-top: clamp(.7rem, 1.2vw, 1rem);
+      border-top: 1px solid var(--line);
     }
     .pf-step {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.1rem;
-      height: 2.1rem;
-      margin: -.3rem;
+      padding: .4rem;
       border: 0;
       background: none;
       color: var(--ink);
       cursor: pointer;
-      transition: color .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
+      transition: color .25s var(--ease), transform .25s var(--ease), opacity .25s var(--ease);
     }
-    .pf-step .arrow { width: 1.1rem; height: 1.1rem; }
+    .pf-step .arrow { width: 1.15rem; height: 1.15rem; }
     .pf-step:hover:not(:disabled) { color: var(--signal); }
-    .pf-step[data-step='-1']:hover:not(:disabled) { transform: translateX(-2px); }
-    .pf-step[data-step='1']:hover:not(:disabled) { transform: translateX(2px); }
-    .pf-step:disabled { opacity: .22; cursor: default; }
+    .pf-step[data-step='-1']:hover:not(:disabled) { transform: translateX(-3px); }
+    .pf-step[data-step='1']:hover:not(:disabled) { transform: translateX(3px); }
+    .pf-step:disabled { opacity: .2; cursor: default; }
     .pf-step:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
-    .pf-info__counter { margin: 0; letter-spacing: .16em; }
-    .pf-info__counter i { color: var(--muted); font-style: normal; }
+    .pf-runbar__count { margin: 0; letter-spacing: .18em; color: var(--ink); }
+    .pf-runbar__count i { color: var(--muted); font-style: normal; }
 
+    /* ======================================================================
+       PROJECT DEVELOPMENT — the three stages, full size
+
+       One component renders this panel in both states. A stage with a real
+       asset shows it; a stage without one shows a plate that says it is a demo
+       layout. Publishing real evidence replaces the placeholder by adding data
+       — nothing here is conditional on the state.
+       ====================================================================== */
+    .pf-devcol { min-width: 0; }
     .pf-project[hidden] { display: none; }
-    .pf-project__number { margin: 1.5rem 0 0; color: var(--signal); }
+    .pf-project__number { margin: 0; color: var(--signal); }
     .pf-project__title {
       margin: .5rem 0 0;
       font-family: var(--display);
-      font-weight: 600;
-      font-size: clamp(1.35rem, 2.1vw, 1.75rem);
-      line-height: 1.1;
-      letter-spacing: -.025em;
+      font-size: clamp(1.3rem, 2vw, 1.7rem);
+      line-height: 1.05;
+      letter-spacing: -.03em;
     }
-    .pf-project__profile { margin: 1.5rem 0 0; }
+    .pf-project__profile { margin: 1.25rem 0 0; }
     .pf-project__profile > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
     .pf-project__profile dt {
-      margin: 0;
       color: var(--muted);
       font-family: var(--mono);
       font-size: .64rem;
       letter-spacing: .14em;
       text-transform: uppercase;
-      line-height: 1.6;
     }
     .pf-project__profile dd { margin: 0; font-size: .92rem; line-height: 1.55; }
-    .pf-project__description { margin: 1.25rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
-    .pf-project__tags { margin: 1rem 0 0; color: var(--muted); }
+    .pf-project__description { margin: 1.1rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
+    .pf-project__tags { margin: .9rem 0 0; color: var(--muted); }
     .pf-project__tags i { font-style: normal; opacity: .5; }
 
-    /* ---------- development evidence ---------- */
-    .pf-evidence { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--line-strong); }
-    .pf-evidence__head { margin: 0 0 .9rem; color: var(--muted); }
-    .pf-evidence__strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; margin: 0; padding: 0; list-style: none; }
-    .pf-evidence__item { position: relative; display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
-    .pf-evidence__arrow {
-      position: absolute;
-      left: -.5rem;
-      top: .1rem;
-      display: inline-flex;
-      color: var(--signal);
-      transform: translateX(-50%);
+    .pf-dev { margin-top: clamp(1.1rem, 1.8vw, 1.5rem); }
+    .pf-project .pf-dev { margin-top: clamp(1.5rem, 2.4vw, 2rem); }
+    .pf-dev__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .45rem 1.1rem;
+      margin: 0 0 clamp(.9rem, 1.5vw, 1.3rem);
+      padding-bottom: .7rem;
+      border-bottom: 1px solid var(--line-strong);
     }
-    .pf-evidence__arrow .arrow { width: .72rem; height: .72rem; }
-    .pf-evidence__plate { display: block; aspect-ratio: 4 / 5; background: var(--pf-paper); border: 1px solid var(--line); }
-    .pf-evidence__plate img { width: 100%; height: 100%; object-fit: contain; }
-    .pf-evidence__step { color: var(--muted); font-size: .6rem; font-weight: 400; }
-    .pf-evidence__name { font-family: var(--display); font-size: .82rem; line-height: 1.2; letter-spacing: -.01em; }
-    /* No asset for any stage yet: the strip becomes the same three stages as
-       type on a rule. Nothing stands in for work that has not been made. */
-    .pf-evidence--type .pf-evidence__strip { border-top: 1px solid var(--line); padding-top: .8rem; }
-    .pf-evidence__result { display: flex; align-items: center; gap: .4rem; margin: .9rem 0 0; color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
-    .pf-evidence__result .arrow { width: .8rem; height: .8rem; color: var(--signal); }
+    .pf-dev__title { color: var(--ink); }
+    /* The one signal in this panel: the strip says what it is, in the one
+       colour the site uses to mean "read this". */
+    .pf-dev__note { color: var(--signal); }
 
-    /* ---------- menswear / empty worlds ---------- */
+    .pf-dev__plates {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 1.8vw, 1.6rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    @media (min-width: 1360px) {
+      /* Two and one, in step order.
+         Beside the deck the panel is a third of the width, and three plates
+         stacked down it would stand about twice as tall as the deck — the
+         garments would float in the middle of a column of white with the
+         development running past them on both sides. Two portrait plates and
+         one wide one bring the panel within reach of the deck's height while
+         keeping every plate large. */
+      .pf-dev__plates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pf-plate[data-plate='sketch'] .pf-plate__art,
+      .pf-plate[data-plate='pattern'] .pf-plate__art { aspect-ratio: 3 / 4; }
+      .pf-plate[data-plate='simulation'] { grid-column: 1 / -1; }
+      .pf-plate[data-plate='simulation'] .pf-plate__art { aspect-ratio: 16 / 9; }
+    }
+    .pf-plate { min-width: 0; }
+    .pf-plate__art { position: relative; aspect-ratio: 4 / 3; }
+    .pf-plate__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+    /* A demo plate does not draw a sketch, a pattern or a garment. It is
+       visibly an empty technical layout, stamped, so it cannot be read as
+       work. The three are told apart by their ground alone. */
+    .pf-plate__blank {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: clamp(.65rem, 1.1vw, .95rem);
+      border: 1px solid var(--line-strong);
+    }
+    .pf-plate[data-plate='sketch'] .pf-plate__blank {
+      background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(17, 17, 15, .05) 9px 10px);
+    }
+    .pf-plate[data-plate='pattern'] .pf-plate__blank {
+      background:
+        repeating-linear-gradient(to right, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px),
+        repeating-linear-gradient(to bottom, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px);
+    }
+    /* A centre-front axis and the fall of light down a backdrop. A full
+       crosshair read as a window divided into four panes, which is a frame,
+       not a ground. */
+    .pf-plate[data-plate='simulation'] .pf-plate__blank {
+      background:
+        linear-gradient(to right, transparent calc(50% - .5px), rgba(17, 17, 15, .09) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)),
+        linear-gradient(to bottom, rgba(17, 17, 15, .05), rgba(17, 17, 15, 0) 62%);
+    }
+    .pf-plate__stamp {
+      padding: .28rem .5rem;
+      border: 1px solid var(--muted);
+      color: var(--muted);
+      font-size: .58rem;
+      letter-spacing: .2em;
+    }
+    .pf-plate__caption { color: var(--muted); font-size: .58rem; letter-spacing: .16em; }
+    .pf-plate__label { display: flex; align-items: baseline; gap: .6rem; margin: .65rem 0 0; }
+    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; }
+    .pf-plate__label span {
+      font-family: var(--display);
+      font-size: clamp(.95rem, 1.25vw, 1.15rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    /* ======================================================================
+       EMPTY CHAPTERS
+       ====================================================================== */
     .pf-empty { max-width: var(--max); margin: 0 auto; padding: clamp(1rem, 2vw, 2rem) var(--gutter) 0; }
     .pf-empty__lead { max-width: 34rem; margin: 0; color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6; }
     .pf-empty__list { max-width: 46rem; margin: 2rem 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
@@ -1244,113 +1455,103 @@ const openable = (state: string) => state !== 'unpublished';
     .pf-empty__list span { font-family: var(--display); font-size: 1.1rem; letter-spacing: -.015em; }
     .pf-empty__list small { color: var(--muted); font-size: .88rem; line-height: 1.5; }
 
-    /* ---------- tech packs ---------- */
-    .pf-docs {
+    /* ======================================================================
+       TECH PACKS — the folio table
+
+       One dossier open on the table, the rest of the library lying behind it,
+       and a numbered side index. Paper, page edges and a bound spine; no
+       gloss, no cartoon page curl, no 3D.
+       ====================================================================== */
+    .pf-library {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 23rem);
-      gap: clamp(1.5rem, 3.5vw, 3.5rem);
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 3.5rem);
       max-width: var(--max);
       margin: 0 auto;
-      padding: clamp(1rem, 2vw, 2rem) var(--gutter) 0;
+      padding: clamp(1.25rem, 2.4vw, 2.25rem) var(--gutter) 0;
+      align-items: start;
     }
-    /* Sized as a sheet of paper, not as a full-width panel: at column width
-       the empty dossier read as a void rather than as a document. */
-    .pf-sheet {
-      display: flex;
-      flex-direction: column;
-      max-width: 32rem;
+    @media (min-width: 1100px) {
+      .pf-library { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); }
+    }
+
+    .pf-library__table { position: relative; min-width: 0; padding: clamp(1.25rem, 2.4vw, 2.25rem) 0 0 clamp(1.25rem, 2.4vw, 2.25rem); }
+    /* The rest of the library, lying on the table behind the open dossier. */
+    .pf-library__pile { position: absolute; inset: 0; pointer-events: none; }
+    .pf-library__pile i {
+      position: absolute;
+      display: block;
+      width: min(70%, 26rem);
       aspect-ratio: 297 / 210;
-      padding: clamp(1.25rem, 2.5vw, 2.25rem);
-      border: 1px solid var(--line-strong);
+      border: 1px solid var(--line);
       background: var(--pf-paper);
     }
-    .pf-sheet__head, .pf-sheet__foot { display: flex; justify-content: space-between; color: var(--muted); }
-    .pf-sheet__head { padding-bottom: .9rem; border-bottom: 1px solid var(--line-strong); }
-    .pf-sheet__foot { padding-top: .9rem; border-top: 1px solid var(--line); }
-    .pf-sheet__body { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; gap: .5rem; padding: clamp(.75rem, 2vw, 1.4rem) 0; }
-    .pf-sheet__body i { display: block; height: 1px; background: var(--line); }
-    .pf-sheet__body i:nth-child(1) { width: 34%; background: var(--line-strong); }
-    .pf-sheet__body i:nth-child(4) { width: 78%; }
-    .pf-sheet__body i:nth-child(6) { width: 61%; }
-    .pf-sheet__body i:nth-child(8) { width: 43%; }
-    .pf-dossier { margin: 0; }
-    .pf-dossier[hidden] { display: none; }
-    .pf-dossier img { width: 100%; height: auto; border: 1px solid var(--line); background: var(--pf-paper); }
-    .pf-dossier__blank { display: block; aspect-ratio: 297 / 210; border: 1px solid var(--line); background: var(--pf-paper); }
-    .pf-dossier figcaption h3 { margin: .4rem 0 1rem; font-family: var(--display); font-size: 1.4rem; letter-spacing: -.02em; }
-    .pf-docs__head { margin: 0 0 1rem; color: var(--muted); }
-    .pf-docs__head--split { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line-strong); }
-    .pf-docs__note { margin: 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
-    .pf-docs__list, .pf-contents { margin: 0; padding: 0; list-style: none; }
-    .pf-contents li { display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: .25rem .75rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
-    .pf-contents li:first-child { border-top: 1px solid var(--line); }
-    .pf-contents i { grid-row: 1 / span 2; color: var(--muted); font-style: normal; }
-    .pf-contents span { font-family: var(--display); font-size: .98rem; letter-spacing: -.01em; }
-    .pf-contents small { color: var(--muted); font-size: .84rem; line-height: 1.5; }
-    .pf-docs__index .button { margin-top: 1.75rem; }
+    .pf-library__pile i:nth-child(1) { left: 0; top: 0; transform: rotate(-2.4deg); }
+    .pf-library__pile i:nth-child(2) { left: .9rem; top: .7rem; transform: rotate(1.4deg); }
+    .pf-library__pile i:nth-child(3) { left: 1.7rem; top: 1.4rem; transform: rotate(-.6deg); }
 
-    /* ---------- 3d simulation ---------- */
-    .pf-motion {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
-      gap: clamp(1.5rem, 3.5vw, 3.5rem);
-      align-items: start;
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(1rem, 2vw, 2rem) var(--gutter) 0;
-    }
-    .pf-session[hidden] { display: none; }
-    /* The children are positioned, not grid-placed. Inside a grid the
-       poster's `height: 100%` was cyclic against a content-sized row, so the
-       512x910 still kept its intrinsic height, the row grew to 1709px and the
-       centred play control was pushed out of the clipped frame. An absolute
-       inset resolves against the frame's own border box, which aspect-ratio
-       has already made definite. */
-    .pf-session__frame {
-      position: relative;
-      aspect-ratio: 16 / 10;
-      background: var(--ink);
-      overflow: hidden;
-    }
-    .pf-session__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-    .pf-play {
+    .pf-folio { position: relative; margin: 0; display: grid; gap: clamp(1.25rem, 2.4vw, 2rem); }
+    .pf-folio[hidden] { display: none; }
+    .pf-folio__object { position: relative; display: block; width: min(100%, 38rem); aspect-ratio: 297 / 210; }
+    .pf-folio__edge,
+    .pf-folio__cover { position: absolute; inset: 0; display: block; border: 1px solid var(--line); background: var(--pf-paper); }
+    .pf-folio__edge:nth-child(1) { transform: translate(15px, 15px); }
+    .pf-folio__edge:nth-child(2) { transform: translate(10px, 10px); }
+    .pf-folio__edge:nth-child(3) { transform: translate(5px, 5px); }
+    .pf-folio__cover { border-color: var(--line-strong); display: flex; overflow: hidden; }
+    .pf-folio__spine { position: relative; flex: none; width: clamp(1.2rem, 2.4vw, 2.1rem); background: var(--ink); }
+    .pf-folio__spine::after {
+      content: '';
       position: absolute;
       left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      gap: .7rem;
-      padding: .75rem 1.1rem;
-      border: 1px solid rgba(243, 240, 233, .45);
-      background: rgba(17, 17, 15, .58);
-      color: var(--paper);
-      cursor: pointer;
-      transition: background .3s var(--ease), border-color .3s var(--ease);
+      top: 12%;
+      bottom: 12%;
+      width: 1px;
+      background: rgba(251, 250, 246, .32);
     }
-    .pf-play:hover { background: var(--signal); border-color: var(--signal); color: var(--ink); }
-    .pf-play:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
-    .pf-play__mark { width: 0; height: 0; border-left: .6rem solid currentColor; border-top: .38rem solid transparent; border-bottom: .38rem solid transparent; }
-    .pf-session__player { position: absolute; inset: 0; z-index: 3; }
-    .pf-session__player[hidden] { display: none; }
-    .pf-session__player iframe, .pf-session__player video { width: 100%; height: 100%; border: 0; background: var(--ink); }
-    .pf-session[data-playing] .pf-session__poster { opacity: 0; }
-    .pf-session__meta h3 { margin: 1.25rem 0 0; font-family: var(--display); font-size: clamp(1.3rem, 2.2vw, 1.75rem); letter-spacing: -.025em; }
-    .pf-session__meta p { margin: .75rem 0 0; max-width: 40rem; color: var(--ink-soft); line-height: 1.65; }
-    .pf-session__labels { color: var(--muted); }
-    .pf-session__labels i { font-style: normal; opacity: .5; }
-    .pf-session__privacy { color: var(--muted); font-size: .85rem; }
-    .pf-motion__head { margin: 0 0 1rem; color: var(--muted); }
-    .pf-motion__list { margin: 0; padding: 0; list-style: none; }
-    .pf-sessionlink {
+    .pf-folio__scan { flex: 1; width: 100%; height: 100%; object-fit: contain; }
+    .pf-folio__print {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: clamp(1.1rem, 2.4vw, 2.1rem);
+    }
+    .pf-folio__printhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line-strong); }
+    .pf-folio__printhead i:not(.pf-folio__stamp) { color: var(--muted); font-style: normal; }
+    .pf-folio__stamp {
+      flex: none;
+      font-style: normal;
+      padding: .28rem .5rem;
+      border: 1px solid var(--signal);
+      color: var(--signal);
+      letter-spacing: .2em;
+    }
+    .pf-folio__rules { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; padding: clamp(.9rem, 2vw, 1.6rem) 0; }
+    .pf-folio__rules i { display: block; height: 1px; background: var(--line); }
+    .pf-folio__rules i:nth-child(1) { width: 38%; background: var(--line-strong); }
+    .pf-folio__rules i:nth-child(2) { width: 82%; }
+    .pf-folio__rules i:nth-child(3) { width: 64%; }
+    .pf-folio__rules i:nth-child(4) { width: 76%; }
+    .pf-folio__rules i:nth-child(5) { width: 45%; }
+    .pf-folio__printfoot { padding-top: .9rem; border-top: 1px solid var(--line); color: var(--muted); }
+
+    .pf-folio__meta { max-width: 38rem; }
+    .pf-folio__kind { margin: 0; color: var(--signal); }
+    .pf-folio__meta h3 { margin: .5rem 0 0; font-family: var(--display); font-size: clamp(1.35rem, 2.2vw, 1.8rem); letter-spacing: -.03em; }
+    .pf-folio__scope { margin: .6rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+    .pf-folio__open { margin-top: 1.25rem; }
+
+    .pf-library__head { margin: 0 0 1rem; color: var(--muted); }
+    .pf-library__head--split { margin-top: 2.25rem; padding-top: 1.4rem; border-top: 1px solid var(--line-strong); }
+    .pf-library__list, .pf-contents { margin: 0; padding: 0; list-style: none; }
+    .pf-doc {
+      position: relative;
       display: grid;
-      grid-template-columns: 2.1rem minmax(0, 1fr) auto;
-      gap: .75rem;
-      align-items: baseline;
+      grid-template-columns: 2.2rem minmax(0, 1fr);
+      gap: .2rem .8rem;
       width: 100%;
-      padding: .9rem 0;
+      padding: .9rem 0 .9rem 1.1rem;
       border: 0;
       border-bottom: 1px solid var(--line);
       background: none;
@@ -1358,118 +1559,305 @@ const openable = (state: string) => state !== 'unpublished';
       cursor: pointer;
       font: inherit;
       text-align: left;
+      transition: color .3s var(--ease);
     }
-    .pf-sessionlink:first-child { border-top: 1px solid var(--line); }
-    .pf-sessionlink span { font-family: var(--display); font-size: 1rem; letter-spacing: -.01em; }
-    .pf-sessionlink small { font-family: var(--mono); font-size: .64rem; }
-    .pf-sessionlink[aria-pressed='true'] { color: var(--ink); }
-    .pf-sessionlink[aria-pressed='true'] i { color: var(--signal); }
-    .pf-sessionlink:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-    .pf-motion__note { margin: 1.5rem 0 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
-    .pf-motion__index .button { margin-top: 1.5rem; }
+    .pf-library__list li:first-child .pf-doc { border-top: 1px solid var(--line); }
+    .pf-doc:hover { color: var(--ink); }
+    .pf-doc:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+    .pf-doc__mark {
+      position: absolute;
+      left: 0;
+      top: 1.2rem;
+      width: .36rem;
+      height: .36rem;
+      background: var(--signal);
+      opacity: 0;
+      transition: opacity .3s var(--ease);
+    }
+    .pf-doc[aria-pressed='true'] .pf-doc__mark { opacity: 1; }
+    .pf-doc[aria-pressed='true'] { color: var(--ink); }
+    .pf-doc__num { grid-column: 1; grid-row: 1; font-style: normal; }
+    .pf-doc__title { grid-column: 2; grid-row: 1; font-family: var(--display); font-size: 1rem; letter-spacing: -.015em; color: var(--ink); }
+    .pf-doc__meta { grid-column: 2; grid-row: 2; color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+
+    .pf-contents li { display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: .25rem .75rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+    .pf-contents li:first-child { border-top: 1px solid var(--line); }
+    .pf-contents i { grid-row: 1 / span 2; color: var(--muted); font-style: normal; }
+    .pf-contents span { font-family: var(--display); font-size: .98rem; letter-spacing: -.01em; }
+    .pf-contents small { color: var(--muted); font-size: .84rem; line-height: 1.5; }
+    .pf-library__index .button { margin-top: 1.75rem; }
+
+    /* ======================================================================
+       3D SIMULATION — the theatre
+
+       A dark band running the full width: one large frame, then a film strip
+       of every session slot. The recording is portrait, so the frame is
+       portrait and the theatre is what surrounds it — nothing is cropped to
+       force a cinema shape onto it.
+       ====================================================================== */
+    .pf-reel {
+      margin-top: clamp(1rem, 2vw, 1.75rem);
+      padding: clamp(1.75rem, 3.4vw, 3rem) 0 clamp(2rem, 4vw, 3.5rem);
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf-reel__stage,
+    .pf-strip,
+    .pf-reel__note { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+    .pf-session[hidden] { display: none; }
+    .pf-session {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.5rem, 3vw, 2.75rem);
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .pf-session { grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); }
+    }
+    .pf-session__frame {
+      position: relative;
+      width: 100%;
+      max-width: 27rem;
+      aspect-ratio: 512 / 910;
+      max-height: min(70vh, 38rem);
+      margin-inline: auto;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-session__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .pf-play {
+      position: absolute;
+      left: 50%;
+      bottom: 1.25rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .8rem 1.1rem;
+      border: 1px solid rgba(251, 250, 246, .55);
+      background: rgba(17, 17, 15, .6);
+      color: var(--paper-bright);
+      cursor: pointer;
+      transform: translateX(-50%);
+      transition: background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
+    }
+    .pf-play:hover { background: var(--signal); border-color: var(--signal); color: var(--ink); }
+    .pf-play:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+    .pf-play__mark { width: 0; height: 0; border-left: .6rem solid currentColor; border-top: .38rem solid transparent; border-bottom: .38rem solid transparent; }
+
+    /* Not a disabled play button — there is nothing to play, so nothing
+       offers to play it. */
+    .pf-pending {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      text-align: center;
+      background:
+        repeating-linear-gradient(45deg, rgba(251, 250, 246, .035) 0 10px, transparent 10px 20px),
+        #0b0b0a;
+    }
+    .pf-pending__slot { margin: 0; color: var(--paper-bright); font-size: .78rem; letter-spacing: .22em; }
+    .pf-pending__state { margin: 0; color: var(--signal); letter-spacing: .2em; }
+
+    .pf-session__player { position: absolute; inset: 0; z-index: 3; }
+    .pf-session__player[hidden] { display: none; }
+    .pf-session__player iframe, .pf-session__player video { width: 100%; height: 100%; border: 0; background: #000; }
+    .pf-session[data-playing] .pf-session__poster { opacity: 0; }
+    .pf-session__kind { margin: 0; color: var(--signal); }
+    .pf-session__meta h3 { margin: .7rem 0 0; font-family: var(--display); font-size: clamp(1.4rem, 2.6vw, 2.2rem); letter-spacing: -.035em; }
+    .pf-session__meta > p { margin: .8rem 0 0; max-width: 38rem; color: rgba(251, 250, 246, .78); line-height: 1.65; }
+    .pf-session__labels { color: rgba(251, 250, 246, .55); }
+    .pf-session__labels i { font-style: normal; opacity: .5; }
+    .pf-session__privacy { font-size: .85rem; color: rgba(251, 250, 246, .55); }
+
+    /* ---------- the film strip ---------- */
+    .pf-strip { margin-top: clamp(1.75rem, 3.4vw, 3rem); }
+    .pf-strip__head {
+      display: flex;
+      align-items: baseline;
+      gap: .6rem;
+      margin: 0 0 .9rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid rgba(251, 250, 246, .18);
+      color: rgba(251, 250, 246, .6);
+    }
+    .pf-strip__head i { font-style: normal; color: var(--paper-bright); }
+    .pf-strip__reel {
+      display: flex;
+      gap: .75rem;
+      margin: 0;
+      padding: .55rem 0;
+      list-style: none;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      /* The sprocket rails. Two hairline tracks of perforations above and
+         below the frames, drawn on the ground rather than on each cell. */
+      background:
+        repeating-linear-gradient(to right, rgba(251, 250, 246, .22) 0 6px, transparent 6px 18px) top left / 100% 3px no-repeat,
+        repeating-linear-gradient(to right, rgba(251, 250, 246, .22) 0 6px, transparent 6px 18px) bottom left / 100% 3px no-repeat;
+    }
+    .pf-strip__cell { flex: none; scroll-snap-align: start; }
+    .pf-frame {
+      display: block;
+      width: clamp(6.75rem, 8.4vw, 8.25rem);
+      padding: 0;
+      border: 0;
+      background: none;
+      color: rgba(251, 250, 246, .62);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: color .3s var(--ease);
+    }
+    .pf-frame:hover { color: var(--paper-bright); }
+    .pf-frame:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+    .pf-frame__window {
+      position: relative;
+      display: block;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #0b0b0a;
+      border: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-frame[aria-pressed='true'] .pf-frame__window { border-color: var(--signal); }
+    .pf-frame__window img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .pf-frame__blank {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(251, 250, 246, .3);
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      letter-spacing: .1em;
+      background: repeating-linear-gradient(45deg, rgba(251, 250, 246, .035) 0 9px, transparent 9px 18px);
+    }
+    .pf-frame__label { display: block; margin-top: .55rem; }
+    .pf-frame__num { display: block; font-style: normal; color: var(--muted); }
+    .pf-frame[aria-pressed='true'] .pf-frame__num { color: var(--signal); }
+    .pf-frame__label span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      min-height: 2.4em;
+      margin-top: .22rem;
+      font-family: var(--display);
+      font-size: .88rem;
+      line-height: 1.2;
+      letter-spacing: -.015em;
+      color: inherit;
+    }
+    .pf-frame__label small { display: block; margin-top: .3rem; color: rgba(251, 250, 246, .42); font-size: .58rem; }
+
+    .pf-reel__note {
+      display: grid;
+      gap: 1.25rem;
+      justify-items: start;
+      margin-top: clamp(1.75rem, 3.4vw, 3rem);
+      padding-top: clamp(1.25rem, 2.4vw, 2rem);
+      border-top: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-reel__note p { max-width: 44rem; margin: 0; color: rgba(251, 250, 246, .72); font-size: .95rem; line-height: 1.65; }
+    .pf-reel__note .button { border-color: rgba(251, 250, 246, .4); color: var(--paper-bright); }
+    .pf-reel__note .button:hover { background: var(--paper-bright); color: var(--ink); }
+    .pf-world--motion .pf-prov { border-left-color: var(--line-strong); }
 
     /* ======================================================================
        RESPONSIVE
        ====================================================================== */
 
-    /* The stage keeps the whole content width from here down, so five complete
-       garments still fit at 1024. Above it there is room for the panel beside
-       the queue. */
-    @media (max-width: 1199px) {
-      .pf-viewer, .pf-docs, .pf-motion { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    /* ======================================================================
-       MOBILE LANDING
-
-       There is no hover to drive an expanding row, and four 95px columns would
-       be unreadable. The gates become four full-width horizontal bands, each
-       substantial enough to carry its own visual language: number, large
-       horizontal title, one line, and a glimpse of what is inside. Not a menu.
-       ====================================================================== */
+    /* ---- covers stack to one column, art above type ----------------------
+       Every selector here carries [data-chapter] so it matches the specificity
+       of the per-chapter placement above and actually overrides it. Written
+       without the attribute these rules lost, the art kept its desktop
+       grid-column: 2 in a one-column grid, and the garment and the folio were
+       pushed into an implicit track off the side of the cover.
+       --------------------------------------------------------------------- */
     @media (max-width: 900px) {
-      /* There is no hover to drive an expanding row, and four 95px columns
-         would be unreadable. The gates become four full-width bands, each a
-         stacked composition: number and name, then the band's own visual
-         language at full width, then the line and its state. Nothing is
-         absolutely positioned over the type — that is what made the first
-         attempt print images across the titles. */
-      .pf-gates { display: block; height: auto; border-bottom: 0; }
-      .pf-gate {
+      .pf-cover[data-chapter] {
+        /* The art takes whatever the type does not, so the garment and the
+           folio stay the largest thing on the cover instead of shrinking to a
+           fixed strip with air above and below them. */
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(clamp(13rem, 34vh, 19rem), 1fr) auto;
+        min-height: clamp(26rem, 74vh, 40rem);
+      }
+      .pf-cover[data-chapter] .pf-cover__art { grid-column: 1; grid-row: 1; align-self: stretch; }
+      .pf-cover[data-chapter] .pf-cover__type { grid-column: 1; grid-row: 2; }
+
+      /* Menswear is a page of type, so its title leads and the categories
+         follow it — the reading order a cover with no photograph wants. */
+      .pf-cover[data-chapter='menswear'] { grid-template-rows: auto auto; align-content: center; }
+      .pf-cover[data-chapter='menswear'] .pf-cover__type { grid-row: 1; }
+      .pf-cover[data-chapter='menswear'] .pf-cover__art { grid-row: 2; padding: 0 var(--gutter) clamp(1.5rem, 5vw, 2.5rem); }
+      .pf-cover[data-chapter='tech-packs'] .pf-cover__art {
         display: flex;
-        flex-direction: column;
-        gap: .95rem;
-        padding: clamp(1.5rem, 5vw, 2.2rem) var(--gutter) clamp(1.6rem, 5vw, 2.4rem);
-        border-left: 0;
-        border-bottom: 1px solid var(--line-strong);
+        align-items: center;
+        padding: clamp(1.5rem, 6vw, 2.5rem) var(--gutter);
       }
-      .pf-gate + .pf-gate { border-left: 0; }
-      .pf-gate[data-active] { flex-grow: 1; }
-      .pf-gate[data-chapter='womenswear'][data-active] { background: none; }
-
-      .pf-gate__mark { width: 0; height: 2px; transition: width .5s var(--ease); }
-      .pf-gate[data-active] .pf-gate__mark { width: 4rem; height: 2px; }
-
-      .pf-gate__head { flex-direction: row; align-items: baseline; gap: .8rem; }
-      .pf-gate__name { font-size: clamp(2rem, 8.6vw, 2.8rem); }
-
-      /* A band has no hover state, so its cover is always at full presence. */
-      .pf-gate__field {
-        flex: none;
-        height: clamp(9.5rem, 32vw, 13rem);
-        opacity: 1;
+      .pf-cover[data-chapter='3d-simulation'] { grid-template-rows: 1fr auto; align-content: end; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__still { object-position: center 34%; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { position: absolute; inset: 0; min-height: 0; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__art::after {
+        background: linear-gradient(to top, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .78) 45%, rgba(17, 17, 15, .25) 100%);
       }
-      .pf-gate__desc { max-width: none; }
-      .pf-gate__state,
-      .pf-gate__go { opacity: 1; transform: none; }
-      .pf-gate__state { max-width: none; }
-
-      .pf-gatetype__row { font-size: clamp(.85rem, 3.4vw, 1.05rem); padding: .3rem 0; }
-      .pf-gatesheets__sheet { width: 40%; max-width: 11rem; padding: .55rem; }
-      .pf-gatesheets__sheet i { margin-bottom: .3rem; }
-      .pf-gatedeck__card:nth-child(3) { right: 2%; max-width: 42%; }
-      .pf-gatedeck__card:nth-child(2) { right: 30%; max-width: 36%; }
-      .pf-gatedeck__card:nth-child(1) { right: 56%; max-width: 31%; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { grid-row: 1; }
     }
 
+    /* ---- chapter interiors ---- */
     @media (max-width: 1023px) {
       .pf-world__head { grid-template-columns: minmax(0, 1fr); align-items: start; }
       .pf-prov { padding-left: .9rem; }
     }
 
-    @media (max-width: 760px) {
-      .pf-session__frame { aspect-ratio: 4 / 5; }
-      .pf-viewer { gap: 1.75rem; }
-      .pf-info__nav { position: sticky; top: 3.4rem; z-index: 3; background: var(--paper); padding-top: .75rem; }
-      /* Three across, still, and sized deliberately rather than shrunk: at
-         390px each stage is ~30vw wide, which keeps the label legible. */
-      .pf-evidence__strip { gap: .4rem; }
-      .pf-evidence__name { font-size: .74rem; }
-      .pf-evidence__arrow { left: -.25rem; }
-      /* One editorial rail that scrolls, instead of a block of text wrapping
-         onto four rows like an old menu. Numbers, type, one signal — no pills,
-         no tabs. The rail is edge-to-edge so it reads as a rail, and each
-         entry snaps. */
-      .pf-cats { padding: 0; }
-      .pf-cats ul {
-        flex-wrap: nowrap;
-        gap: 0 1.4rem;
-        padding: 0 var(--gutter);
+    /* One folio on the table and the rest of the library as a shelf that runs
+       across under it, rather than a column of five rows pushing the contents
+       list off the bottom of the phone. */
+    @media (max-width: 1099px) {
+      .pf-library__list {
+        display: flex;
+        gap: .75rem;
         overflow-x: auto;
         scroll-snap-type: x proximity;
         scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
       }
-      .pf-cats ul::-webkit-scrollbar { display: none; }
-      .pf-cats li { scroll-snap-align: start; flex: none; }
-      .pf-cat { padding: .85rem 0; white-space: nowrap; }
-      .pf-cat__label { font-size: .95rem; }
-      .pf-project__profile > div { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem; }
+      .pf-library__list::-webkit-scrollbar { display: none; }
+      .pf-library__list li { flex: none; scroll-snap-align: start; width: clamp(9rem, 42vw, 12rem); }
+      .pf-library__list li:first-child .pf-doc { border-top: 0; }
+      .pf-doc { height: 100%; border-bottom: 0; }
+      .pf-doc__mark { top: .95rem; }
+    }
+
+    @media (max-width: 760px) {
+      /* The bands lose their preview track and keep their type: at this width
+         a 5rem strip of photograph costs more than it gives. */
+      .pf-band { grid-template-columns: 2.4rem minmax(0, 1fr) 2.6rem; }
+      .pf-band__preview { display: none; }
+      .pf-band__label { font-size: clamp(1.05rem, 4.6vw, 1.5rem); }
+      .pf-band__blurb { font-size: .8rem; }
+
+      /* Plates go under the deck and stay large — one per row, not three
+         thumbnails squeezed across a phone. */
+      .pf-dev__plates { grid-template-columns: minmax(0, 1fr); }
+      .pf-plate__art { aspect-ratio: 3 / 2; }
+
+      .pf-library__table { padding-left: 0; }
+      .pf-library__pile i { width: 78%; }
     }
 
     @media (max-width: 430px) {
-      .pf-cat__label { font-size: .78rem; }
-      .pf-evidence__name { font-size: .7rem; }
+      .pf-cover__name { font-size: clamp(2.1rem, 11vw, 2.9rem); }
       .pf-project__profile > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
     }
 
@@ -1477,16 +1865,19 @@ const openable = (state: string) => state !== 'unpublished';
        REDUCED MOTION — everything still works, nothing moves decoratively.
        ====================================================================== */
     @media (prefers-reduced-motion: reduce) {
-      .pf-chapter,
-      .pf-chapter::before,
-      .pf-chapter__go,
-      .pf-preview,
+      .pf-cover,
+      .pf-cover__go,
+      .pf-band,
+      .pf-band__mark,
+      .pf-band__preview,
+      .pf-doc,
+      .pf-doc__mark,
+      .pf-frame,
       .pf-slot,
       .pf-stack,
+      .pf-step,
       .pf-world { transition: none !important; }
       .pf--js .pf-world { transform: none; }
-      .pf-slot[data-depth='3'],
-      .pf-slot[data-depth='4'] { filter: none; }
     }
   </style>
 </SiteLayout>

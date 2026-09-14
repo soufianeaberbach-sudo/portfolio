@@ -1,5 +1,5 @@
 ---
-/* 3D Simulation — one large session stage plus an editorial session index.
+/* 3D Simulation — one large cinematic stage and a film-strip of ten sessions.
  *
  * Not a thumbnail grid, and deliberately not a wall of embedded players. No
  * player of any kind exists in the document until someone presses play:
@@ -11,8 +11,11 @@
  *     carries no src until the same click, so the bytes are not fetched on
  *     load either.
  *
- * Sessions with neither a youtubeId nor a videoSrc are not invented. If the
- * list is empty the world says so.
+ * TEN SLOTS, ONE RECORDING.
+ * Session 01 is the real CLO3D clip and plays. Sessions 02 to 10 are pending:
+ * no YouTube ID is invented for them, no source is attached, and no subject is
+ * claimed. Each renders as a design state that says what it is waiting for —
+ * never as a play button that does nothing, and never as a broken player.
  */
 import type { SimulationSession } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
@@ -22,8 +25,9 @@ interface Props {
 }
 
 const { sessions } = Astro.props;
-
+const playable = (session: SimulationSession) => Boolean(session.youtubeId || session.videoSrc);
 const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
@@ -35,19 +39,33 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
   </div>
 
   <header class="pf-world__head">
-    <h2 class="display" id="simulation-title">3D Simulation</h2>
-    <p class="pf-world__descriptor">Pattern construction, garment simulation and fit decisions in motion — the part of the work a photograph cannot hold still.</p>
+    <div class="pf-world__headline">
+      <h2 class="display" id="simulation-title">3D Simulation</h2>
+      <p class="pf-world__descriptor">Pattern construction, garment simulation and fit decisions in motion — the part of the work a photograph cannot hold still.</p>
+    </div>
+
+    {sessions.some((session) => !playable(session)) && (
+      <aside class="pf-prov" data-pending-notice>
+        <p class="label pf-prov__label">Sessions pending</p>
+        <p class="pf-prov__text">
+          One recording is published. The remaining slots are reserved in the interface and are waiting on
+          their YouTube sessions; nothing is attached to them.
+        </p>
+      </aside>
+    )}
   </header>
 
   {sessions.length > 0 ? (
-    <div class="pf-motion">
-      <div class="pf-motion__stage">
+    <div class="pf-reel">
+      {/* ---- one large stage ------------------------------------------- */}
+      <div class="pf-reel__stage">
         {sessions.map((session, index) => (
           <article
             class="pf-session"
             data-session={session.id}
             data-youtube={session.youtubeId ?? ''}
             data-video={session.videoSrc ?? ''}
+            data-pending={playable(session) ? undefined : ''}
             hidden={index !== 0}
           >
             <div class="pf-session__frame" data-frame>
@@ -63,15 +81,31 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
                   data-poster
                 />
               )}
-              <button type="button" class="pf-play" data-play aria-label={`Play ${session.title}`}>
-                <span class="pf-play__mark" aria-hidden="true"></span>
-                <span class="pf-play__text label">Play session{session.duration ? ` — ${clock(session.duration)}` : ''}</span>
-              </button>
+
+              {playable(session) ? (
+                <button type="button" class="pf-play" data-play aria-label={`Play ${session.title}`}>
+                  <span class="pf-play__mark" aria-hidden="true"></span>
+                  <span class="pf-play__text label">Play session{session.duration ? ` — ${clock(session.duration)}` : ''}</span>
+                </button>
+              ) : (
+                /* The design state. Not a disabled play button — there is
+                   nothing to play, so nothing offers to play it. */
+                <div class="pf-pending">
+                  <p class="label pf-pending__slot">Video session {num(index)}</p>
+                  <p class="label pf-pending__state">YouTube session pending</p>
+                </div>
+              )}
+
               {/* Where the player is inserted on demand. Empty on load. */}
               <div class="pf-session__player" data-player hidden></div>
             </div>
+
             <div class="pf-session__meta">
-              <p class="label pf-session__kind">{session.kind === 'sample' ? 'Simulation sample' : 'Working session'}</p>
+              <p class="label pf-session__kind">
+                {playable(session)
+                  ? (session.kind === 'sample' ? 'Simulation sample' : 'Working session')
+                  : `Slot ${num(index)} — not published`}
+              </p>
               <h3>{session.title}</h3>
               <p>{session.description}</p>
               {session.workflowLabels && session.workflowLabels.length > 0 && (
@@ -89,26 +123,45 @@ const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds
         ))}
       </div>
 
-      <aside class="pf-motion__index">
-        <p class="label pf-motion__head">Recordings</p>
-        <ol class="pf-motion__list">
+      {/* ---- the film strip -------------------------------------------- */}
+      <div class="pf-strip">
+        <p class="label pf-strip__head">Sessions <i>{String(sessions.length).padStart(2, '0')}</i></p>
+        <ol class="pf-strip__reel">
           {sessions.map((session, index) => (
-            <li>
-              <button type="button" class="pf-sessionlink" data-session-link={session.id} aria-pressed={index === 0 ? 'true' : 'false'}>
-                <i class="label">{String(index + 1).padStart(2, '0')}</i>
-                <span>{session.title}</span>
-                {session.duration && <small>{clock(session.duration)}</small>}
+            <li class="pf-strip__cell">
+              <button
+                type="button"
+                class="pf-frame"
+                data-session-link={session.id}
+                data-pending={playable(session) ? undefined : ''}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >
+                <span class="pf-frame__window">
+                  {session.poster ? (
+                    <img src={session.poster} width="512" height="910" alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <span class="pf-frame__blank" aria-hidden="true">{num(index)}</span>
+                  )}
+                </span>
+                <span class="pf-frame__label">
+                  <i class="label pf-frame__num">{num(index)}</i>
+                  <span>{session.title}</span>
+                  <small class="label">{playable(session) ? (session.duration ? clock(session.duration) : 'Published') : 'Pending'}</small>
+                </span>
               </button>
             </li>
           ))}
         </ol>
-        <p class="pf-motion__note">
+      </div>
+
+      <div class="pf-reel__note">
+        <p>
           Simulation is where a pattern stops being a drawing. Volume, drape and hem behaviour are judged in
-          movement, before a physical sample is cut. Recorded working sessions — pattern construction and fit
-          correction end to end — will be published alongside this sample.
+          movement, before a physical sample is cut. Recorded working sessions will be published in the slots
+          above, alongside this sample.
         </p>
         <a class="button" href="/process/">See the working process <span><Arrow /></span></a>
-      </aside>
+      </div>
     </div>
   ) : (
     <div class="pf-empty">
