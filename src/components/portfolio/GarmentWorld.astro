@@ -1,0 +1,272 @@
+---
+/* One garment chapter (Womenswear or Menswear).
+ *
+ * Reading order inside the chapter:
+ *   1. the title, and — where the imagery is borrowed — the provenance note
+ *   2. THE SUBCHAPTER INDEX: the five approved categories as large numbered
+ *      bands, not a tab strip and not a one-line menu
+ *   3. the viewer: a full-bleed white studio carrying the garment deck on the
+ *      left and the three development plates on the right
+ *
+ * Three render states, derived from the content:
+ *
+ *   published          verified projects exist. The deck carries projects and
+ *                      the right panel carries their real profile and their
+ *                      real sketch / pattern / simulation assets.
+ *   reference-preview  no verified projects, but reference photography. The
+ *                      deck carries those images so the interface can be seen
+ *                      working, and the right panel carries the three
+ *                      development plates in their demo state. No title,
+ *                      garment type, fabric family, description, capability
+ *                      tag or evidence image is rendered for a reference —
+ *                      none of those is knowable from a photograph.
+ *   unpublished        nothing yet. The chapter exists so the architecture is
+ *                      visible, and says plainly that the work is not here.
+ *
+ * Everything is server-rendered, so a failed script leaves a readable page.
+ */
+import type { GarmentWorld } from '../../data/portfolio';
+import { REFERENCE_DISCLAIMER, worldPublication } from '../../data/portfolio';
+import Arrow from '../Arrow.astro';
+import DevPlates from './DevPlates.astro';
+
+interface Props {
+  world: GarmentWorld;
+}
+
+const { world } = Astro.props;
+const publication = worldPublication(world);
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+
+/* One list drives the deck. In reference-preview the items are photographs
+   with nothing claimed about them; in published they are projects. The noun
+   changes with the state so the UI never calls a reference a project. */
+const slotsFor = (category: GarmentWorld['categories'][number]) =>
+  publication === 'published'
+    ? category.projects.map((p) => ({ id: p.id, image: p.finalGarmentImage, project: p }))
+    : category.references.map((r) => ({ id: r.id, image: r.image, project: null }));
+
+const noun = publication === 'published' ? 'Project' : 'Reference';
+const live = world.categories.filter((c) => slotsFor(c).length > 0);
+---
+
+<section class="pf-world" id={world.id} data-world={world.id} data-publication={publication} tabindex="-1" aria-labelledby={`${world.id}-title`}>
+  <div class="pf-world__bar">
+    <a class="pf-world__back" href="#portfolio-index" data-world-close>
+      <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+    </a>
+    <p class="label pf-world__tag"><b>{world.number}</b> {world.title}</p>
+  </div>
+
+  <header class="pf-world__head">
+    <div class="pf-world__headline">
+      <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
+      <p class="pf-world__descriptor">{world.descriptor}</p>
+    </div>
+
+    {publication === 'reference-preview' && (
+      /* Stated once, here, in the margin position a credit line occupies.
+         Never repeated beside the deck — saying it twice made it the loudest
+         thing in the chapter. */
+      <aside class="pf-prov" data-reference-notice>
+        <p class="label pf-prov__label">Reference preview</p>
+        <p class="pf-prov__text">{REFERENCE_DISCLAIMER}</p>
+      </aside>
+    )}
+  </header>
+
+  {publication === 'unpublished' ? (
+    /* No verified work and no reference imagery. The categories are shown so
+       the architecture is legible, and nothing is dressed as evidence. */
+    <div class="pf-empty">
+      <p class="pf-empty__lead">Selected {world.title.toLowerCase()} work will be published here.</p>
+
+      {/* The SAME subchapter system the published chapters use, so the
+          architecture reads identically whether a chapter has work in it yet
+          or not. These bands are not buttons: there is nothing behind them to
+          select, and a control that does nothing is worse than none. */}
+      <nav class="pf-index pf-index--flat" aria-label={`${world.title} categories`}>
+        <ol class="pf-index__list">
+          {world.categories.map((category) => (
+            <li class="pf-index__item">
+              <div class="pf-band pf-band--static">
+                <i class="pf-band__num">{category.number}</i>
+                <span class="pf-band__label">{category.label}</span>
+                <small class="pf-band__blurb">{category.blurb}</small>
+                <b class="pf-band__count label">Pending</b>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <a class="button" href="/contact/">Ask about {world.title.toLowerCase()} work <span><Arrow /></span></a>
+    </div>
+  ) : (
+    <>
+      {/* ---- THE SUBCHAPTER INDEX ---------------------------------------
+          Five bands, each the height of a real editorial row: the number,
+          the category set large, its blurb and its count. The selected band
+          takes the white studio ground and shows one restrained preview of
+          what is inside it; hovering another band previews that one the same
+          way. One orange signal marks the selection and nothing else in the
+          index is coloured.
+          ---------------------------------------------------------------- */}
+      <nav class="pf-index" aria-label={`${world.title} categories`}>
+        <ol class="pf-index__list">
+          {live.map((category, index) => {
+            const first = slotsFor(category)[0];
+            return (
+              <li class="pf-index__item">
+                <button
+                  type="button"
+                  class="pf-band"
+                  data-category={category.id}
+                  aria-pressed={index === 0 ? 'true' : 'false'}
+                >
+                  <i class="pf-band__mark" aria-hidden="true"></i>
+                  <i class="pf-band__num">{category.number}</i>
+                  <span class="pf-band__label">{category.label}</span>
+                  <small class="pf-band__blurb">{category.blurb}</small>
+                  <b class="pf-band__count label">{String(slotsFor(category).length).padStart(2, '0')}</b>
+                  <span class="pf-band__preview" aria-hidden="true">
+                    <img
+                      src={first.image.src}
+                      srcset={first.image.srcset}
+                      sizes="20vw"
+                      width={first.image.width}
+                      height={first.image.height}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
+      {/* ---- THE STUDIO -------------------------------------------------
+          A white band running the full width of the viewport, not a white
+          rectangle sitting inside a beige page. The deck and the development
+          panel share it, so the whole viewer reads as one lit studio.
+          ---------------------------------------------------------------- */}
+      <div class="pf-studio">
+        <div class="pf-studio__inner">
+          <div class="pf-panels">
+            {live.map((category, categoryIndex) => {
+              const slots = slotsFor(category);
+              return (
+                <div
+                  class="pf-panel"
+                  data-panel={category.id}
+                  data-count={slots.length}
+                  data-kind={publication === 'published' ? 'project' : 'reference'}
+                  hidden={categoryIndex !== 0}
+                >
+                  <div class="pf-viewer">
+                    {/* ---- the deck. The active item leads at the right. ---- */}
+                    <div class="pf-deck">
+                      <div class="pf-stage" data-stage tabindex="0" role="group"
+                           aria-label={`${category.label}. Use the left and right arrow keys, or drag, to move through the images.`}>
+                        <ol class="pf-stack" data-stack>
+                          {slots.map((slot, index) => (
+                            <li class="pf-slot" data-slot={index} data-item={slot.id} data-front={slot.image.front}>
+                              <figure class="pf-slot__figure">
+                                <img
+                                  src={slot.image.src}
+                                  srcset={slot.image.srcset}
+                                  sizes="(max-width: 1359px) 46vw, 30vw"
+                                  width={slot.image.width}
+                                  height={slot.image.height}
+                                  alt={slot.image.alt}
+                                  loading={categoryIndex === 0 && index === 0 ? 'eager' : 'lazy'}
+                                  decoding="async"
+                                />
+                                <figcaption class="label pf-slot__caption">{noun} {pad(index)}</figcaption>
+                              </figure>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+
+                      {/* Part of the studio band, on the same baseline as the
+                          garments: two editorial arrows and the count, with
+                          no button boxes anywhere near them. */}
+                      <div class="pf-runbar">
+                        <button type="button" class="pf-step" data-step="-1" aria-label={`Previous ${noun.toLowerCase()}`}>
+                          <Arrow dir="left" />
+                        </button>
+                        <p class="label pf-runbar__count" aria-live="polite">
+                          <span data-counter-current data-noun={noun}>{noun} 01</span>
+                          <i>/ {String(slots.length).padStart(2, '0')}</i>
+                        </p>
+                        <button type="button" class="pf-step" data-step="1" aria-label={`Next ${noun.toLowerCase()}`}>
+                          <Arrow dir="right" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* ---- project development ---------------------------- */}
+                    {publication === 'reference-preview' ? (
+                      <div class="pf-devcol" data-reference-panel>
+                        <DevPlates />
+                      </div>
+                    ) : (
+                      <div class="pf-devcol">
+                        {slots.map((slot, index) => {
+                          const project = slot.project!;
+                          return (
+                            <article class="pf-project" data-project-info={index} hidden={index !== 0}>
+                              <p class="label pf-project__number">Project {pad(index)}</p>
+                              <h3 class="pf-project__title">{project.title}</h3>
+
+                              <dl class="pf-project__profile">
+                                <div>
+                                  <dt>Garment</dt>
+                                  <dd>{project.garmentType}</dd>
+                                </div>
+                                {project.fabricFamily && (
+                                  <div>
+                                    <dt>Fabric family</dt>
+                                    <dd>{project.fabricFamily}</dd>
+                                  </div>
+                                )}
+                                {project.materials && project.materials.length > 0 && (
+                                  <div>
+                                    <dt>Materials</dt>
+                                    <dd>{project.materials.join(' / ')}</dd>
+                                  </div>
+                                )}
+                              </dl>
+
+                              {project.description && (
+                                <p class="pf-project__description">{project.description}</p>
+                              )}
+
+                              {project.tags && project.tags.length > 0 && (
+                                <p class="pf-project__tags label">
+                                  {project.tags.map((tag, tagIndex) => (
+                                    <>{tagIndex > 0 && <i aria-hidden="true"> / </i>}<span>{tag}</span></>
+                                  ))}
+                                </p>
+                              )}
+
+                              <DevPlates evidence={project.evidence} />
+                            </article>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </>
+  )}
+</section>

@@ -1,0 +1,72 @@
+---
+/* The three development stages — sketch, 2D pattern, 3D simulation — as three
+ * large plates, always in that order.
+ *
+ * ONE component serves both states, which is the whole point of it:
+ *
+ *   a stage WITH a real asset renders that asset;
+ *   a stage WITHOUT one renders a demo plate that says so.
+ *
+ * So publishing a project's real evidence replaces the placeholder by adding
+ * data — `project.evidence.sketch` and the rest — and nothing here changes.
+ *
+ * A demo plate deliberately does not draw a sketch, a pattern or a garment.
+ * Inventing a plausible-looking drawing would be fabricating evidence; a plate
+ * that is visibly an empty technical layout, stamped DEMO, cannot be mistaken
+ * for work. The three are told apart by their ground alone — hatch, pattern
+ * grid, crosshair — never by pretending to hold content.
+ */
+import type { ProjectEvidence } from '../../data/portfolio';
+import { EVIDENCE_STAGES, EVIDENCE_DEMO_NOTE } from '../../data/portfolio';
+
+interface Props {
+  evidence?: ProjectEvidence;
+}
+
+const { evidence } = Astro.props;
+const plates = EVIDENCE_STAGES.map((stage) => ({ ...stage, asset: evidence?.[stage.key] }));
+const anyDemo = plates.some((plate) => !plate.asset);
+---
+
+<section class="pf-dev" aria-label="Development stages" data-dev>
+  <p class="pf-dev__head">
+    <span class="label pf-dev__title">Development</span>
+    {anyDemo && (
+      <span class="label pf-dev__note" data-demo-note>{EVIDENCE_DEMO_NOTE}</span>
+    )}
+  </p>
+
+  <ol class="pf-dev__plates">
+    {plates.map((plate, index) => (
+      <li class="pf-plate" data-plate={plate.key} data-demo={plate.asset ? undefined : ''}>
+        {/* The progression between the stages, drawn once between each pair.
+            The final garment is the large image beside this panel, so the
+            sequence ends at step 03 — there is no step 04. */}
+        {index > 0 && <i class="pf-plate__link" aria-hidden="true"></i>}
+        <div class="pf-plate__art">
+          {plate.asset ? (
+            <img
+              src={plate.asset.image.src}
+              srcset={plate.asset.image.srcset}
+              sizes="(max-width: 1359px) 32vw, 22vw"
+              width={plate.asset.image.width}
+              height={plate.asset.image.height}
+              alt={plate.asset.image.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="pf-plate__blank">
+              <span class="pf-plate__stamp label">Demo</span>
+              <span class="pf-plate__caption label">No asset — layout only</span>
+            </span>
+          )}
+        </div>
+        <p class="pf-plate__label">
+          <b class="label">Step {plate.step}</b>
+          <span>{plate.name}</span>
+        </p>
+      </li>
+    ))}
+  </ol>
+</section>

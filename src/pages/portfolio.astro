@@ -1,729 +1,1911 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
+import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
+import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
+import { chapters, garmentWorlds, techPacks, simulationSessions, womenswear } from '../data/portfolio';
 
-/* Real photography, replacing the Unsplash placeholders.
-   Sources live in assets/source/<CATEGORY>/N.png at ~1792x2390 and ~6 MB each
-   (297 MB across all 49) — outside public/, so they are versioned but never
-   deployed. .devtools/gen-portfolio.sh derives two WebP renditions per source
-   into public/portfolio/<key>/N-{900,1400}.webp (7.2 MB in total) and the page
-   only ever references those. Regenerate after adding or replacing a source. */
-const RENDITIONS = [900, 1400] as const;
-const look = (key: string, n: number, width: 900 | 1400 = 1400) => `/portfolio/${key}/${n}-${width}.webp`;
-const lookSrcSet = (key: string, n: number) => RENDITIONS.map((w) => `${look(key, n, w)} ${w}w`).join(', ');
+/* ONE garment, not a deck in miniature. The Womenswear cover is a single hero
+   composition; a row of three thumbnails turned the landing into a card grid,
+   which is exactly what this rebuild removes. The black sequinned column reads
+   hardest against the white studio ground. */
+const heroGarment = womenswear.categories[3].references[3].image;
 
-const categories = [
-  { key: 'evening', number: '01', title: 'Evening Dresses', cover: 1, description: 'Structured bodices, complex drape and fit decisions that only become visible in motion.' },
-  { key: 'jersey', number: '02', title: 'Jersey & Knit', cover: 1, description: 'Negative ease, recovery and grade rules designed around stretch rather than imposed on it.' },
-  { key: 'woven', number: '03', title: 'Woven', cover: 1, description: 'Tailoring, outerwear and shirting resolved for repeatable construction at production scale.' },
-  { key: 'sport', number: '04', title: 'Sport', cover: 1, description: 'Performance panelling and four-way stretch tested for bodies in motion.' },
-  { key: 'swim', number: '05', title: 'Swimwear', cover: 1, description: 'A category where balance, recovery and millimetre-level tolerances leave nowhere to hide.' },
-];
+const menswearCategories = garmentWorlds[1].categories;
+
+/* Three real first pages, stacked. The cover shows the documents the chapter
+   actually holds — watermark, header and NOT CLIENT WORK footer included —
+   rather than a drawing of a document. */
+const folioCovers = techPacks.slice(0, 3).map((pack) => pack.coverImage).filter(Boolean);
+const firstSession = simulationSessions[0];
+const openable = (state: string) => state !== 'unpublished';
 ---
 
-<SiteLayout title="Portfolio — Soufiane Aberbach" description="A mechanical, scroll-driven fashion development portfolio across evening, jersey, woven, sport and swimwear." marker="SA-PORTFOLIO-V5" page="portfolio">
-  <!-- BUILD-MARKER: SA-PORTFOLIO-V5 -->
-  <section class="portfolio-hero">
-    <div class="portfolio-hero__meta label">Portfolio / 02 <span>Scroll to operate</span></div>
-    <div class="portfolio-hero__title" data-reveal>
-      <h1 class="display"><span>Port</span><span>folio</span></h1>
-    </div>
-    <div class="portfolio-hero__copy" data-reveal>
-      <p class="eyebrow">Five production categories</p>
-      <p>This is not a gallery wall. Each category behaves like a development stack: one layer advances while the last stays visible underneath.</p>
-      <div class="portfolio-hero__instruction label"><i aria-hidden="true"><Arrow dir="down" /></i> Scroll / click a category</div>
-    </div>
-  </section>
+<SiteLayout
+  title="Portfolio — Soufiane Aberbach"
+  description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
+  marker="SA-PORTFOLIO-V7"
+  page="portfolio"
+>
+  <!-- BUILD-MARKER: SA-PORTFOLIO-V7 -->
+  <div class="pf" data-pf-root>
+    {/* Set before first paint so the enhanced layout never flashes the
+        stacked fallback. parentElement is the .pf root, so the flag cannot
+        reach any other page. */}
+    <script is:inline>
+      document.currentScript.parentElement.classList.add('pf--js');
+    </script>
 
-  <section class="portfolio-stack-shell section-shell">
-    <div class="stack-heading" data-reveal>
-      <p class="eyebrow">Mechanical index</p>
-      <p class="label">05 categories / fullscreen studies</p>
-    </div>
-    <div class="stack-stage" data-stack-stage>
-      {categories.map((category, index) => (
-        <button class="collection-card" type="button" data-category={category.key} style={`--card-index:${index}`} aria-label={`Open ${category.title} collection`}>
-          <img
-            src={look(category.key, category.cover)}
-            srcset={lookSrcSet(category.key, category.cover)}
-            sizes="(max-width: 768px) 100vw, 60vw"
-            alt=""
-            loading={index === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-          <span class="collection-card__shade"></span>
-          <span class="collection-card__top label"><b>{category.number} / 05</b><i>Open collection <Arrow /></i></span>
-          <span class="collection-card__copy">
-            <strong>{category.title}</strong>
-            <small>{category.description}</small>
-          </span>
-        </button>
-      ))}
-    </div>
-  </section>
-
-  <section class="portfolio-context section-shell section-rule">
-    <div data-reveal>
-      <p class="eyebrow">What the work represents</p>
-      <h2 class="display">Pattern logic.<br /><em>Fit</em> resolution.<br />Production intent.</h2>
-    </div>
-    <div data-reveal>
-      <p>These categories show the kinds of construction and development problems addressed across manufacturing programmes.</p>
-      <p>Project exposure through manufacturing contracts at Ava Marie—not direct employment or endorsement. Images are temporary visual references and do not claim authorship of the photographed garments.</p>
-      <a class="button" href="/process/">See the working process <span><Arrow /></span></a>
-    </div>
-  </section>
-
-  <div class="collection-overlay" data-collection-overlay aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="collection-title">
-    <div class="collection-overlay__bar">
-      <a class="brand" href="/" aria-label="Home"><span>SA</span><i></i></a>
-      <p class="label">Collection study <span data-collection-count>01 / 05</span></p>
-      <button type="button" data-close-collection>Close <span aria-hidden="true">×</span></button>
-    </div>
-    <header class="collection-overlay__header">
-      <p class="eyebrow" data-collection-kicker>Category</p>
-      <h2 class="display" id="collection-title" data-collection-title></h2>
-      <p data-collection-description></p>
-      <span class="label">Drag or scroll through the runway <Arrow dir="down" /></span>
-    </header>
-    <section class="look-runway" aria-label="Collection looks">
-      <div class="look-runway__layout">
-        <div class="look-runway__stage" data-runway-stage tabindex="0" aria-label="Drag, swipe or scroll to explore collection looks">
-          <div class="look-runway__cards" data-runway-cards></div>
-          <p class="look-runway__hint label" aria-hidden="true">Drag to explore ↔</p>
-        </div>
-        <aside class="look-runway__details" data-runway-details aria-live="polite"></aside>
-      </div>
-      <div class="look-runway__scrubber" data-runway-scrubber>
-        <label class="label" for="collection-scrubber">Scrub collection</label>
-        <input id="collection-scrubber" type="range" min="0" max="1" step="0.001" value="0" aria-label="Scrub through collection looks" />
-        <span class="label" data-runway-total>03 looks</span>
-      </div>
+    {/* The intro states the proposition and gets out of the way. It used to
+        hold most of a screen of beige before the first chapter appeared; the
+        first cover now starts within the fold. */}
+    <section class="pf-intro" id="portfolio-index">
+      <p class="eyebrow">Portfolio / 02</p>
+      <h1 class="display pf-intro__title">Four ways to read the work.</h1>
+      <p class="pf-intro__lede">
+        Product development, technical documentation and digital validation shown as evidence — not decoration.
+      </p>
     </section>
-    <div class="collection-overlay__end">
-      <p class="label">End of study</p>
-      <button class="button button--signal" type="button" data-close-collection>Return to categories <span><Arrow dir="up" /></span></button>
+
+    {/* ------------------------------------------------------------------
+        FOUR SEQUENTIAL CHAPTER COVERS
+
+        One after another down the page, each the better part of a screen,
+        each with its own composition. Not four columns, not a dashboard, not
+        a card grid: four covers, the way four chapters of a book have four
+        covers.
+
+        Each cover is built from what that chapter actually has:
+          01  one hero garment, standing in a white studio
+          02  type only — there is no menswear photography here to show, and
+              borrowing a womenswear frame would be a false claim
+          03  a physical folio: stacked sheets, a bound edge, a demo stamp
+          04  a frame from the real CLO3D recording
+
+        Unpublished chapters are <div>, not <a>: the cover is still composed
+        and still legible, but there is no empty world to walk into.
+       ------------------------------------------------------------------ */}
+    <section class="pf-covers" aria-labelledby="pf-covers-title" data-covers>
+      <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
+
+      {chapters.map((chapter) => {
+        const Tag = openable(chapter.publication) ? 'a' : 'div';
+        return (
+          <Tag
+            class="pf-cover"
+            href={openable(chapter.publication) ? `#${chapter.id}` : undefined}
+            data-chapter={chapter.id}
+            data-publication={chapter.publication}
+          >
+            <span class="pf-cover__art" aria-hidden="true">
+              {chapter.id === 'womenswear' && (
+                /* One garment. No frame, no shadow, no card — it stands on
+                   the studio ground the way it does inside the chapter. */
+                <img
+                  class="pf-cover__garment"
+                  src={heroGarment.src}
+                  srcset={heroGarment.srcset}
+                  sizes="(max-width: 900px) 92vw, 56vw"
+                  width={heroGarment.width}
+                  height={heroGarment.height}
+                  alt=""
+                  loading="eager"
+                  decoding="async"
+                />
+              )}
+
+              {chapter.id === 'menswear' && (
+                <span class="pf-covertype">
+                  {menswearCategories.map((category) => (
+                    <span class="pf-covertype__row">
+                      <i>{category.number}</i>
+                      <b>{category.label}</b>
+                    </span>
+                  ))}
+                </span>
+              )}
+
+              {chapter.id === 'tech-packs' && (
+                /* A physical object: three page edges, a bound spine and a
+                   printed cover. Drawn entirely from hairlines and offsets —
+                   no gloss, no page curl, no blur. */
+                <span class="pf-foliomark">
+                  {folioCovers.map((cover, i) => (
+                    <span class="pf-foliomark__sheet" style={`--i:${i}`}>
+                      <span class="pf-foliomark__spine"></span>
+                      <img
+                        src={cover!.src}
+                        srcset={cover!.srcset}
+                        sizes="(max-width: 900px) 88vw, 42vw"
+                        width={cover!.width}
+                        height={cover!.height}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                  ))}
+                </span>
+              )}
+
+              {chapter.id === '3d-simulation' && firstSession?.poster && (
+                <img
+                  class="pf-cover__still"
+                  src={firstSession.poster}
+                  width="512"
+                  height="910"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </span>
+
+            <span class="pf-cover__type">
+              <i class="pf-cover__num">{chapter.number}</i>
+              {chapter.id === '3d-simulation' && (
+                <span class="pf-cover__play" aria-hidden="true"><i></i></span>
+              )}
+              <b class="pf-cover__name">{chapter.title}</b>
+              <span class="pf-cover__desc">{chapter.descriptor}</span>
+              {chapter.stateNote && <span class="pf-cover__state">{chapter.stateNote}</span>}
+              {openable(chapter.publication) && (
+                <span class="pf-cover__go label" aria-hidden="true">Open chapter <Arrow /></span>
+              )}
+            </span>
+          </Tag>
+        );
+      })}
+    </section>
+
+    {/* ------------------------------------------------------------------
+        THE FOUR WORLDS
+
+        Present in the document, always. With the script running these become
+        full-screen layers opened from a cover; without it they are four
+        ordinary sections the chapter anchors jump to, carrying every
+        category, document and session as real HTML.
+       ------------------------------------------------------------------ */}
+    <div class="pf-worlds" data-worlds>
+      {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
+      <TechPackWorld packs={techPacks} />
+      <SimulationWorld sessions={simulationSessions} />
     </div>
   </div>
 
   <script>
-    import { gsap } from 'gsap';
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    /* --------------------------------------------------------------------
+       Portfolio V7 runtime.
 
-    /* Read live rather than once at load: the setting can change mid-session. */
-    const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+       Three independent pieces, each degrading to something readable:
+         1. world opening + closing, driven entirely by location.hash
+         2. the garment deck: windowing, direct-manipulation drag, keyboard
+         3. documents and sessions — nothing is fetched until it is asked for
 
-    const collectionData = {
-      evening: {
-        number: '01 / 05', title: 'Evening Dresses', description: 'Structure and drape are negotiated together: the internal architecture must hold without making the dress feel engineered.',
-        looks: [
-          { title: 'Look 01', description: 'Drape / balance', image: 'evening/1' },
-          { title: 'Look 02', description: 'Bodice / support', image: 'evening/2' },
-          { title: 'Look 03', description: 'Volume / movement', image: 'evening/3' },
-          { title: 'Look 04', description: 'Seam / structure', image: 'evening/4' },
-          { title: 'Look 05', description: 'Hem / weight', image: 'evening/5' },
-          { title: 'Look 06', description: 'Drape / balance', image: 'evening/6' },
-          { title: 'Look 07', description: 'Bodice / support', image: 'evening/7' },
-          { title: 'Look 08', description: 'Volume / movement', image: 'evening/8' },
-          { title: 'Look 09', description: 'Seam / structure', image: 'evening/9' },
-          { title: 'Look 10', description: 'Hem / weight', image: 'evening/10' },
-        ],
-      },
-      jersey: {
-        number: '02 / 05', title: 'Jersey & Knit', description: 'Stretch changes every assumption. Ease, recovery, seam choice and grade rules are designed as a connected system.',
-        looks: [
-          { title: 'Look 01', description: 'Recovery / shape', image: 'jersey/1' },
-          { title: 'Look 02', description: 'Ease / movement', image: 'jersey/2' },
-          { title: 'Look 03', description: 'Grade / consistency', image: 'jersey/3' },
-          { title: 'Look 04', description: 'Rib / tension', image: 'jersey/4' },
-          { title: 'Look 05', description: 'Neckline / hold', image: 'jersey/5' },
-          { title: 'Look 06', description: 'Recovery / shape', image: 'jersey/6' },
-          { title: 'Look 07', description: 'Ease / movement', image: 'jersey/7' },
-          { title: 'Look 08', description: 'Grade / consistency', image: 'jersey/8' },
-          { title: 'Look 09', description: 'Rib / tension', image: 'jersey/9' },
-          { title: 'Look 10', description: 'Neckline / hold', image: 'jersey/10' },
-        ],
-      },
-      woven: {
-        number: '03 / 05', title: 'Woven', description: 'Repeatable tailoring depends on construction order, controlled volume and a pattern that holds its balance through production.',
-        looks: [
-          { title: 'Look 01', description: 'Tailoring / line', image: 'woven/1' },
-          { title: 'Look 02', description: 'Construction / repeat', image: 'woven/2' },
-          { title: 'Look 03', description: 'Volume / control', image: 'woven/3' },
-          { title: 'Look 04', description: 'Collar / roll', image: 'woven/4' },
-          { title: 'Look 05', description: 'Grain / balance', image: 'woven/5' },
-          { title: 'Look 06', description: 'Tailoring / line', image: 'woven/6' },
-          { title: 'Look 07', description: 'Construction / repeat', image: 'woven/7' },
-          { title: 'Look 08', description: 'Volume / control', image: 'woven/8' },
-          { title: 'Look 09', description: 'Collar / roll', image: 'woven/9' },
-          { title: 'Look 10', description: 'Grain / balance', image: 'woven/10' },
-        ],
-      },
-      sport: {
-        number: '04 / 05', title: 'Sport', description: 'Performance product is tested against movement: panel lines, stretch direction and recovery have to work on the body.',
-        looks: [
-          { title: 'Look 01', description: 'Panel / articulation', image: 'sport/1' },
-          { title: 'Look 02', description: 'Stretch / direction', image: 'sport/2' },
-          { title: 'Look 03', description: 'Movement / fit', image: 'sport/3' },
-          { title: 'Look 04', description: 'Seam / abrasion', image: 'sport/4' },
-          { title: 'Look 05', description: 'Coverage / support', image: 'sport/5' },
-          { title: 'Look 06', description: 'Panel / articulation', image: 'sport/6' },
-          { title: 'Look 07', description: 'Stretch / direction', image: 'sport/7' },
-          { title: 'Look 08', description: 'Movement / fit', image: 'sport/8' },
-          { title: 'Look 09', description: 'Seam / abrasion', image: 'sport/9' },
-          { title: 'Look 10', description: 'Coverage / support', image: 'sport/10' },
-        ],
-      },
-      swim: {
-        number: '05 / 05', title: 'Swimwear', description: 'Swimwear exposes imbalance immediately. Recovery, edge tension and coverage are resolved within very small tolerances.',
-        looks: [
-          { title: 'Look 01', description: 'Tension / edge', image: 'swim/1' },
-          { title: 'Look 02', description: 'Coverage / balance', image: 'swim/2' },
-          { title: 'Look 03', description: 'Recovery / hold', image: 'swim/3' },
-          { title: 'Look 04', description: 'Elastic / gather', image: 'swim/4' },
-          { title: 'Look 05', description: 'Lining / grade', image: 'swim/5' },
-          { title: 'Look 06', description: 'Tension / edge', image: 'swim/6' },
-          { title: 'Look 07', description: 'Coverage / balance', image: 'swim/7' },
-          { title: 'Look 08', description: 'Recovery / hold', image: 'swim/8' },
-          { title: 'Look 09', description: 'Elastic / gather', image: 'swim/9' },
-        ],
-      },
-    };
+       The V6 gate-expansion logic is gone, not disabled: the landing is four
+       sequential covers now, and a cover has no open state to drive.
+       -------------------------------------------------------------------- */
+    const root = document.querySelector<HTMLElement>('[data-pf-root]');
+    if (root) {
+      const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const portfolioState = { stackTimeline: null, runway: null, lastFocus: null };
-    /* One rendition is chosen per session from the viewport, so a phone never
-       pulls the 1400w file. The carousel still receives a plain URL string and
-       assigns it to img.src exactly as before — no mechanics changed. */
-    const RUNWAY_WIDTH = window.matchMedia('(max-width: 768px)').matches ? 900 : 1400;
-    const imageUrl = (id) => `/portfolio/${id}-${RUNWAY_WIDTH}.webp`;
+      const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
 
-    function setCard(card, index, total) {
-      card.style.setProperty('--card-index', index);
-      card.style.zIndex = String(total + index);
-      gsap.set(card, { yPercent: index === 0 ? 0 : 108, rotate: index % 2 ? 1.2 : -1.2 });
-    }
+      /* ---- 1. worlds --------------------------------------------------- */
+      const worlds = new Map<string, HTMLElement>(
+        [...root.querySelectorAll<HTMLElement>('[data-world]')].map((el) => [el.dataset.world!, el]),
+      );
+      const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
+      let openWorld: HTMLElement | null = null;
+      let restoreFocusTo: HTMLElement | null = null;
 
-    function createTransition(timeline, card, previousCards, index) {
-      const position = index - 1;
-      timeline.to(previousCards, {
-        scale: (itemIndex) => 1 - ((previousCards.length - itemIndex) * .025),
-        y: (itemIndex) => -10 * (previousCards.length - itemIndex),
-        filter: 'brightness(.72)',
-        duration: 1,
-        ease: 'none',
-      }, position);
-      timeline.to(card, { yPercent: 0, rotate: 0, duration: 1, ease: 'none' }, position);
-    }
-
-    function initializeMechanicalStack() {
-      const stage = document.querySelector('[data-stack-stage]');
-      const cards = Array.from(document.querySelectorAll('.collection-card'));
-      const reduce = prefersReducedMotion();
-      if (!stage || !cards.length || reduce || window.innerWidth < 900) return;
-
-      gsap.registerPlugin(ScrollTrigger);
-      stage.classList.add('is-mechanical');
-      cards.forEach((card, index) => setCard(card, index, cards.length));
-
-      portfolioState.stackTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: 'top top+=90',
-          end: () => `+=${Math.max(2400, cards.length * window.innerHeight * .72)}`,
-          pin: true,
-          scrub: .75,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      cards.forEach((card, index) => {
-        if (index === 0) return;
-        createTransition(portfolioState.stackTimeline, card, cards.slice(0, index), index);
-      });
-    }
-
-    const modulo = (value, length) => ((value % length) + length) % length;
-    const mix = (from, to, progress) => from + ((to - from) * progress);
-
-    function createRunway(initialItems) {
-      const stage = document.querySelector('[data-runway-stage]');
-      const cardsRoot = document.querySelector('[data-runway-cards]');
-      const detailsRoot = document.querySelector('[data-runway-details]');
-      const scrubber = document.querySelector('[data-runway-scrubber] input');
-      const total = document.querySelector('[data-runway-total]');
-      if (!stage || !cardsRoot || !detailsRoot || !scrubber || !total || !initialItems.length) return null;
-
-      const cardNodes = Array.from({ length: 6 }, () => {
-        const card = document.createElement('article');
-        card.className = 'runway-card';
-        const image = document.createElement('img');
-        image.alt = '';
-        image.draggable = false;
-        const shade = document.createElement('span');
-        shade.className = 'runway-card__shade';
-        card.append(image, shade);
-        return card;
-      });
-      cardsRoot.replaceChildren(...cardNodes);
-
-      const detailNodes = Array.from({ length: 2 }, () => {
-        const detail = document.createElement('article');
-        detail.className = 'runway-detail';
-        const count = document.createElement('span');
-        count.className = 'label';
-        const title = document.createElement('h3');
-        const description = document.createElement('p');
-        detail.append(count, title, description);
-        return detail;
-      });
-      detailsRoot.replaceChildren(...detailNodes);
-
-      const state = {
-        items: [...initialItems],
-        position: 0,
-        width: stage.clientWidth,
-        frame: 0,
-        base: Number.NaN,
-        pointerId: null,
-        pointerStartX: 0,
-        pointerStartPosition: 0,
-        scrubbing: false,
-        wheelTimer: 0,
-        tween: null,
-      };
-
-      const slotSet = () => {
-        const mobile = window.innerWidth < 700;
-        return mobile ? [
-          { x: .14, scale: 1, blur: 0, opacity: 1, z: 50 },
-          { x: -.13, scale: .79, blur: 0, opacity: .94, z: 40 },
-          { x: -.34, scale: .63, blur: 2.5, opacity: .78, z: 30 },
-          { x: -.49, scale: .50, blur: 7, opacity: .5, z: 20 },
-          { x: -.59, scale: .39, blur: 14, opacity: .22, z: 10 },
-          { x: -.67, scale: .32, blur: 21, opacity: 0, z: 5 },
-        ] : [
-          { x: .20, scale: 1, blur: 0, opacity: 1, z: 50 },
-          { x: -.06, scale: .83, blur: 0, opacity: .96, z: 40 },
-          { x: -.26, scale: .68, blur: 2.5, opacity: .82, z: 30 },
-          { x: -.41, scale: .55, blur: 7, opacity: .56, z: 20 },
-          { x: -.52, scale: .44, blur: 15, opacity: .25, z: 10 },
-          { x: -.60, scale: .36, blur: 22, opacity: 0, z: 5 },
-        ];
-      };
-
-      const outgoingState = () => ({ x: window.innerWidth < 700 ? .55 : .62, scale: 1.06, blur: 3.5, opacity: 0, z: 60 });
-
-      function fillDetail(node, item, virtualIndex) {
-        node.querySelector('span').textContent = `${String(modulo(virtualIndex, state.items.length) + 1).padStart(2, '0')} / ${String(state.items.length).padStart(2, '0')}`;
-        node.querySelector('h3').textContent = item.title;
-        node.querySelector('p').textContent = item.description;
-      }
-
-      function syncContent(base) {
-        if (state.base === base) return;
-        state.base = base;
-        cardNodes.forEach((card, offset) => {
-          const itemIndex = modulo(base + offset, state.items.length);
-          const item = state.items[itemIndex];
-          const image = card.querySelector('img');
-          const source = imageUrl(item.image);
-          if (image.src !== source) image.src = source;
-          card.dataset.itemIndex = String(itemIndex);
-        });
-        fillDetail(detailNodes[0], state.items[modulo(base, state.items.length)], base);
-        fillDetail(detailNodes[1], state.items[modulo(base + 1, state.items.length)], base + 1);
-        /* Nearby only. The six visible cards fetch themselves through their own
-           <img> elements; this just warms what is immediately either side. */
-        for (let offset = -2; offset <= 2; offset += 1) {
-          const nearby = state.items[modulo(base + offset, state.items.length)];
-          const preload = new Image();
-          preload.src = imageUrl(nearby.image);
+      const setInert = (on: boolean) => {
+        for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
+          if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
-      }
-
-      function draw() {
-        state.frame = 0;
-        const base = Math.floor(state.position);
-        const progress = state.position - base;
-        const slots = slotSet();
-        syncContent(base);
-
-        cardNodes.forEach((card, offset) => {
-          const from = offset === 0 ? slots[0] : slots[offset];
-          const to = offset === 0 ? outgoingState() : slots[offset - 1];
-          const x = mix(from.x, to.x, progress) * state.width;
-          const scale = mix(from.scale, to.scale, progress);
-          const blur = mix(from.blur, to.blur, progress);
-          const opacity = mix(from.opacity, to.opacity, progress);
-          card.style.transform = `translate3d(calc(-50% + ${x}px), -50%, 0) scale(${scale})`;
-          card.style.filter = `blur(${blur}px)`;
-          card.style.opacity = String(opacity);
-          card.style.zIndex = String(Math.round(mix(from.z, to.z, progress)));
-          card.setAttribute('aria-hidden', opacity < .08 ? 'true' : 'false');
-        });
-
-        detailNodes[0].style.opacity = String(1 - progress);
-        detailNodes[0].style.transform = `translate3d(0, ${-1.2 * progress}rem, 0)`;
-        detailNodes[0].setAttribute('aria-hidden', progress > .55 ? 'true' : 'false');
-        detailNodes[1].style.opacity = String(progress);
-        detailNodes[1].style.transform = `translate3d(0, ${(1 - progress) * 1.2}rem, 0)`;
-        detailNodes[1].setAttribute('aria-hidden', progress < .45 ? 'true' : 'false');
-
-        if (!state.scrubbing) scrubber.value = String(modulo(state.position, state.items.length));
-      }
-
-      function scheduleDraw() {
-        if (!state.frame) state.frame = requestAnimationFrame(draw);
-      }
-
-      function setPosition(value) {
-        state.position = Number(value);
-        scheduleDraw();
-      }
-
-      function snap(origin = null) {
-        state.tween?.kill?.();
-        const delta = origin === null ? 1 : state.position - origin;
-        let target;
-        if (origin !== null && Math.abs(delta) < .48) target = origin;
-        else if (origin !== null) target = delta > 0 ? Math.ceil(state.position) : Math.floor(state.position);
-        else target = Math.round(state.position);
-        /* Only the opening wipe used to check this, which left the runway's own
-           snapping animated after motion had been disabled. Jump instead. */
-        if (prefersReducedMotion()) {
-          setPosition(target);
-          return;
-        }
-        state.tween = gsap.to(state, {
-          position: target,
-          duration: Math.min(.7, .32 + (Math.abs(target - state.position) * .32)),
-          ease: 'power3.out',
-          onUpdate: scheduleDraw,
-        });
-      }
-
-      const onPointerDown = (event) => {
-        if (event.button !== undefined && event.button !== 0) return;
-        state.tween?.kill?.();
-        state.pointerId = event.pointerId;
-        state.pointerStartX = event.clientX;
-        state.pointerStartPosition = state.position;
-        stage.setPointerCapture?.(event.pointerId);
-        stage.classList.add('is-dragging');
+        const index = root.querySelector<HTMLElement>('.pf-covers');
+        const intro = root.querySelector<HTMLElement>('.pf-intro');
+        for (const el of [index, intro]) if (el) el.toggleAttribute('inert', on);
       };
-      const onPointerMove = (event) => {
-        if (event.pointerId !== state.pointerId) return;
-        const distance = Math.max(150, state.width * (window.innerWidth < 700 ? .42 : .30));
-        setPosition(state.pointerStartPosition + ((state.pointerStartX - event.clientX) / distance));
-      };
-      const finishPointer = (event) => {
-        if (event.pointerId !== state.pointerId) return;
-        stage.releasePointerCapture?.(event.pointerId);
-        state.pointerId = null;
-        stage.classList.remove('is-dragging');
-        snap(state.pointerStartPosition);
-      };
-      const onWheel = (event) => {
-        event.preventDefault();
-        state.tween?.kill?.();
-        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-        setPosition(state.position + (delta / 420));
-        window.clearTimeout(state.wheelTimer);
-        state.wheelTimer = window.setTimeout(() => snap(), 150);
-      };
-      const onKeyDown = (event) => {
-        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-        event.preventDefault();
-        state.tween?.kill?.();
-        setPosition(Math.round(state.position) + (event.key === 'ArrowRight' ? 1 : -1));
-        snap();
-      };
-      const onScrubStart = () => { state.scrubbing = true; state.tween?.kill?.(); };
-      const onScrub = () => {
-        const desired = Number(scrubber.value);
-        const nearest = desired + (Math.round((state.position - desired) / state.items.length) * state.items.length);
-        setPosition(nearest);
-      };
-      const onScrubEnd = () => { state.scrubbing = false; snap(); };
 
-      stage.addEventListener('pointerdown', onPointerDown);
-      stage.addEventListener('pointermove', onPointerMove);
-      stage.addEventListener('pointerup', finishPointer);
-      stage.addEventListener('pointercancel', finishPointer);
-      stage.addEventListener('wheel', onWheel, { passive: false });
-      stage.addEventListener('keydown', onKeyDown);
-      scrubber.addEventListener('pointerdown', onScrubStart);
-      scrubber.addEventListener('input', onScrub);
-      scrubber.addEventListener('change', onScrubEnd);
-      scrubber.addEventListener('pointerup', onScrubEnd);
-
-      const resizeObserver = new ResizeObserver(() => { state.width = stage.clientWidth; scheduleDraw(); });
-      resizeObserver.observe(stage);
-
-      function replaceItems(items) {
-        if (!Array.isArray(items) || items.length < 2) return;
-        state.items = [...items];
-        state.position = 0;
-        state.base = Number.NaN;
-        /* length - 1, not length: the old maximum allowed a phantom position
-           one past the end that wrapped straight back to Look 01. */
-        scrubber.max = String(state.items.length - 1);
-        total.textContent = `${String(state.items.length).padStart(2, '0')} looks`;
-        scheduleDraw();
-      }
-
-      function destroy() {
-        state.tween?.kill?.();
-        window.clearTimeout(state.wheelTimer);
-        if (state.frame) cancelAnimationFrame(state.frame);
-        resizeObserver.disconnect();
-        stage.removeEventListener('pointerdown', onPointerDown);
-        stage.removeEventListener('pointermove', onPointerMove);
-        stage.removeEventListener('pointerup', finishPointer);
-        stage.removeEventListener('pointercancel', finishPointer);
-        stage.removeEventListener('wheel', onWheel);
-        stage.removeEventListener('keydown', onKeyDown);
-        scrubber.removeEventListener('pointerdown', onScrubStart);
-        scrubber.removeEventListener('input', onScrub);
-        scrubber.removeEventListener('change', onScrubEnd);
-        scrubber.removeEventListener('pointerup', onScrubEnd);
-      }
-
-      const controller = {
-        destroy,
-        replaceItems,
-        setPosition,
-        snap,
-        getItems: () => [...state.items],
-        getState: () => ({ position: state.position, activeIndex: modulo(Math.round(state.position), state.items.length), count: state.items.length }),
-      };
-      replaceItems(initialItems);
-      return controller;
-    }
-
-    /* Real modal behaviour, no dependency.
-     *
-     * Two layers, deliberately. `inert` on every ancestor-sibling of the
-     * overlay removes the whole background from focus, pointer and assistive
-     * tech in one attribute — the correct primitive, supported everywhere
-     * current. The Tab cycle below is the fallback for anything that does not
-     * honour it, so focus is contained either way. */
-    const FOCUSABLE = [
-      'a[href]', 'button:not([disabled])', 'input:not([disabled])',
-      'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]:not([tabindex="-1"])',
-    ].join(',');
-
-    let inertedNodes = [];
-
-    function setBackgroundInert(overlay, on) {
-      if (!on) {
-        inertedNodes.forEach((el) => el.removeAttribute('inert'));
-        inertedNodes = [];
-        return;
-      }
-      inertedNodes = [];
-      let node = overlay;
-      while (node && node !== document.body) {
-        const parent = node.parentElement;
-        if (!parent) break;
-        for (const sibling of parent.children) {
-          if (sibling !== node) inertedNodes.push(sibling);
-        }
-        node = parent;
-      }
-      inertedNodes.forEach((el) => el.setAttribute('inert', ''));
-    }
-
-    function visibleFocusable(overlay) {
-      return [...overlay.querySelectorAll(FOCUSABLE)].filter((el) => {
-        if (el.hasAttribute('inert') || el.getAttribute('aria-hidden') === 'true') return false;
-        const rect = el.getBoundingClientRect();
-        return rect.width > 0 || rect.height > 0;
-      });
-    }
-
-    function trapTab(event) {
-      if (event.key !== 'Tab') return;
-      const overlay = document.querySelector('[data-collection-overlay]');
-      if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
-      const items = visibleFocusable(overlay);
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      const active = document.activeElement;
-      if (!overlay.contains(active)) {
-        event.preventDefault();
-        (event.shiftKey ? last : first).focus();
-        return;
-      }
-      if (event.shiftKey && active === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    function openCollection(category, trigger = null) {
-      const data = collectionData[category];
-      const overlay = document.querySelector('[data-collection-overlay]');
-      if (!data || !overlay) return;
-      /* The button that opened it, not whatever happened to be focused: a
-         mouse click may not focus the card at all. */
-      portfolioState.lastFocus = trigger ?? document.activeElement;
-      overlay.querySelector('[data-collection-count]').textContent = data.number;
-      overlay.querySelector('[data-collection-kicker]').textContent = `Category ${data.number}`;
-      overlay.querySelector('[data-collection-title]').textContent = data.title;
-      overlay.querySelector('[data-collection-description]').textContent = data.description;
-      overlay.setAttribute('aria-hidden', 'false');
-      overlay.classList.add('is-open');
-      document.body.classList.add('no-scroll');
-      setBackgroundInert(overlay, true);
-      document.addEventListener('keydown', trapTab, true);
-      overlay.scrollTop = 0;
-      portfolioState.runway?.destroy?.();
-      portfolioState.runway = createRunway(data.looks);
-      window.__portfolioRunway = portfolioState.runway;
-
-      if (!prefersReducedMotion()) {
-        gsap.fromTo(overlay, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .8, ease: 'power4.inOut' });
-        gsap.fromTo(overlay.querySelector('.collection-overlay__header h2'), { yPercent: 100 }, { yPercent: 0, duration: .9, delay: .25, ease: 'power4.out' });
-      } else {
-        overlay.style.clipPath = 'inset(0% 0 0 0)';
-      }
-      overlay.querySelector('[data-close-collection]')?.focus();
-    }
-
-    function closeCollection() {
-      const overlay = document.querySelector('[data-collection-overlay]');
-      if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
-      const finish = () => {
-        portfolioState.runway?.destroy?.();
-        portfolioState.runway = null;
-        window.__portfolioRunway = null;
-        overlay.classList.remove('is-open');
-        overlay.setAttribute('aria-hidden', 'true');
-        overlay.style.clipPath = '';
+      const closeWorld = () => {
+        if (!openWorld) return;
+        openWorld.removeAttribute('data-open');
+        openWorld = null;
         document.body.classList.remove('no-scroll');
-        /* Inert comes off before the focus call, or the restore target is
-           still unfocusable. */
-        setBackgroundInert(overlay, false);
-        document.removeEventListener('keydown', trapTab, true);
-        portfolioState.lastFocus?.focus?.();
-        portfolioState.lastFocus = null;
+        setInert(false);
+        const target = restoreFocusTo;
+        restoreFocusTo = null;
+        /* Focus has to land after the layer is gone, or the browser scrolls
+           the still-fixed panel instead of the page. */
+        if (target && document.contains(target)) target.focus({ preventScroll: true });
       };
-      if (!prefersReducedMotion()) {
-        gsap.to(overlay, { clipPath: 'inset(0 0 100% 0)', duration: .65, ease: 'power4.inOut', onComplete: finish });
-      } else finish();
+
+      const openWorldById = (id: string) => {
+        const next = worlds.get(id);
+        if (!next) { closeWorld(); return; }
+        if (openWorld === next) return;
+        if (openWorld) openWorld.removeAttribute('data-open');
+        if (!restoreFocusTo) {
+          restoreFocusTo = chapterLinks.find((link) => link.dataset.chapter === id)
+            ?? (document.activeElement as HTMLElement | null);
+        }
+        openWorld = next;
+        next.setAttribute('data-open', '');
+        document.body.classList.add('no-scroll');
+        next.scrollTop = 0;
+        /* Order matters twice over here.
+           focus() is a no-op on a visibility:hidden element and data-open has
+           not been through style recalc yet, so force that first.
+           And the focus has to move BEFORE the index is marked inert: the
+           chapter cover the visitor just activated lives inside it, and the
+           blur the UA performs when a focused element's container becomes
+           inert lands after a focus call made on the same tick — which is
+           exactly what kept putting activeElement back on <body>. */
+        void next.offsetHeight;
+        const first = next.querySelector<HTMLElement>(FOCUSABLE);
+        (first ?? next).focus({ preventScroll: true });
+        setInert(true);
+        layoutAll();
+      };
+
+      const syncFromHash = () => {
+        const id = window.location.hash.replace('#', '');
+        if (worlds.has(id)) openWorldById(id);
+        else closeWorld();
+      };
+
+      /* The chapter covers are real anchors so that the worlds are reachable
+         with the script gone. With the script running we take the click over:
+         letting the browser perform the fragment navigation meant it also ran
+         its own focus handling afterwards, which threw away the focus we had
+         just moved into the layer and left activeElement on <body>. pushState
+         puts the same URL in the bar without that side effect, and popstate
+         below keeps the Back button behaving exactly as before. */
+      for (const link of chapterLinks) {
+        if (link.tagName !== 'A') continue;
+        link.addEventListener('click', (event) => {
+          const id = link.dataset.chapter!;
+          if (!worlds.has(id)) return;
+          if (event.metaKey || event.ctrlKey || event.shiftKey || (event as MouseEvent).button !== 0) return;
+          event.preventDefault();
+          if (window.location.hash !== `#${id}`) window.history.pushState({ world: id }, '', `#${id}`);
+          openWorldById(id);
+        });
+      }
+
+      window.addEventListener('popstate', syncFromHash);
+
+      /* Close returns through history so the browser Back button and the
+         in-page control agree about what "back" means. */
+      for (const button of root.querySelectorAll<HTMLElement>('[data-world-close]')) {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (window.history.length > 1 && window.location.hash) window.history.back();
+          else { window.location.hash = ''; syncFromHash(); }
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !openWorld) return;
+        event.preventDefault();
+        if (window.history.length > 1 && window.location.hash) window.history.back();
+        else { window.location.hash = ''; syncFromHash(); }
+      });
+
+      /* Focus trap. Only ever active while a layer is open. */
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Tab' || !openWorld) return;
+        const items = [...openWorld.querySelectorAll<HTMLElement>(FOCUSABLE)]
+          .filter((el) => el.offsetParent !== null || el === document.activeElement);
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        else if (!openWorld.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+      });
+
+      window.addEventListener('hashchange', syncFromHash);
+
+      /* ---- 2. the garment deck ----------------------------------------- */
+      /* Geometry, by width. `visible` is the number of garments on screen at
+         once; `scales` runs from the furthest card to the leading one, so the
+         last entry is always the active card at full size. Nothing is a fixed
+         pixel offset — every number below is derived from the measured stage
+         width, so the composition breathes instead of being a desktop layout
+         shrunk down.
+
+         The rhythm is deliberately shallow: the furthest garment is still 82%
+         of the leading one, not a postage stamp. */
+      const geometry = () => {
+        const w = window.innerWidth;
+        /* Deep enough to read as distance. The earlier rhythm ran 82-100 and
+           five garments looked like five garments of the same size in a row;
+           76-100 across five steps, and 82-100 across three, make the deck
+           read as images approaching the viewer. The furthest card is still
+           roughly three quarters of the leading one, so it stays a garment
+           that can be judged rather than a thumbnail. */
+        if (w >= 1024) return { visible: 5, scales: [0.76, 0.82, 0.88, 0.94, 1] };
+        return { visible: 3, scales: [0.82, 0.91, 1] };
+      };
+
+      /* 3:4. Measured from the renditions: 39 of 49 are exactly 0.749, and the
+         rest letterbox into this canvas rather than being cropped. */
+      const CANVAS = 0.75;
+
+      interface Queue {
+        panel: HTMLElement;
+        stage: HTMLElement;
+        stack: HTMLElement;
+        slots: HTMLElement[];
+        infos: HTMLElement[];
+        fronts: number[];
+        counter: HTMLElement | null;
+        prev: HTMLElement | null;
+        next: HTMLElement | null;
+        index: number;
+        drag: number;
+        width: number;
+      }
+
+      const queues: Queue[] = [...root.querySelectorAll<HTMLElement>('.pf-panel')].map((panel) => ({
+        panel,
+        stage: panel.querySelector<HTMLElement>('[data-stage]')!,
+        stack: panel.querySelector<HTMLElement>('[data-stack]')!,
+        slots: [...panel.querySelectorAll<HTMLElement>('.pf-slot')],
+        infos: [...panel.querySelectorAll<HTMLElement>('[data-project-info]')],
+        /* How much of each image, from its left edge, must stay uncovered for
+           the front view to read completely. Measured per image; see FRONT in
+           the data module. */
+        fronts: [...panel.querySelectorAll<HTMLElement>('.pf-slot')]
+          .map((slot) => Number(slot.dataset.front) || 0.55),
+        counter: panel.querySelector<HTMLElement>('[data-counter-current]'),
+        prev: panel.querySelector<HTMLElement>('[data-step="-1"]'),
+        next: panel.querySelector<HTMLElement>('[data-step="1"]'),
+        index: 0,
+        drag: 0,
+        width: 0,
+      }));
+
+      const layout = (queue: Queue) => {
+        const { visible, scales } = geometry();
+        const stageWidth = queue.stage.clientWidth;
+        if (stageWidth === 0) return;
+
+        const nominal = Math.min(visible, queue.slots.length);
+        const scale = scales.slice(-nominal);
+
+        /* THE DECK.
+           Visual order runs left to right: the furthest upcoming garment on
+           the left, the active one flush against the right end. Each card is
+           overlapped on its RIGHT by the card in front of it, and the amount
+           left showing is that image's own measured front fraction — so what
+           stays visible is a complete front view, never half a model. The
+           active card has nothing in front of it, so it shows the whole
+           photograph: front and back together.
+
+           The leading card's width is solved from the WORST CASE arrangement
+           of front fractions in this category rather than from the current
+           window. If it were solved per window the active garment would
+           resize every time you stepped, because a swimwear frame exposes far
+           more of itself than a front-and-back frame does. */
+        const widest = [...queue.fronts].sort((a, b) => b - a);
+        let span = 1;
+        for (let k = 0; k < nominal - 1; k += 1) span += scale[k] * (widest[k] ?? 0.6);
+        const width0 = stageWidth / span;
+        const height0 = width0 / CANVAS;
+        queue.width = width0;
+        queue.stage.style.setProperty('--stage-h', `${Math.round(height0 + (nominal - 1) * 6)}px`);
+
+        /* Position k holds the image (index + nominal - 1 - k), so the active
+           one lands at the right-hand end. Near the end of a category the
+           left-hand positions simply have no image to hold. */
+        const placed: Array<{ slot: HTMLElement; k: number; w: number; h: number; x: number }> = [];
+        let x = 0;
+        for (let k = 0; k < nominal; k += 1) {
+          const itemIndex = queue.index + (nominal - 1 - k);
+          if (itemIndex >= queue.slots.length) continue;
+          const slot = queue.slots[itemIndex];
+          const s = scale[k];
+          const w = width0 * s;
+          const h = height0 * s;
+          placed.push({ slot, k, w, h, x });
+          const leading = k === nominal - 1;
+          x += leading ? w : w * (queue.fronts[itemIndex] ?? 0.6);
+        }
+
+        const used = placed.length ? placed[placed.length - 1].x + placed[placed.length - 1].w : 0;
+        const offset = Math.max(0, (stageWidth - used) / 2);
+
+        const shown = new Set(placed.map((item) => item.slot));
+        for (const slot of queue.slots) if (!shown.has(slot)) slot.hidden = true;
+
+        for (const item of placed) {
+          item.slot.hidden = false;
+          item.slot.style.setProperty('--x', `${Math.round(offset + item.x)}px`);
+          item.slot.style.setProperty('--w', `${Math.round(item.w)}px`);
+          item.slot.style.setProperty('--h', `${Math.round(item.h)}px`);
+          const depth = nominal - 1 - item.k;
+          item.slot.style.setProperty('--lift', `${depth * 6}px`);
+          item.slot.dataset.depth = String(depth);
+          item.slot.style.zIndex = String(10 + item.k);
+        }
+      };
+
+      const layoutAll = () => { for (const queue of queues) if (!queue.panel.hidden) layout(queue); };
+
+      const render = (queue: Queue) => {
+        queue.infos.forEach((info, i) => { info.hidden = i !== queue.index; });
+        queue.slots.forEach((slot, i) => slot.toggleAttribute('data-active', i === queue.index));
+        if (queue.counter) {
+          const noun = queue.counter.dataset.noun ?? 'Project';
+          queue.counter.textContent = `${noun} ${String(queue.index + 1).padStart(2, '0')}`;
+        }
+        if (queue.prev) (queue.prev as HTMLButtonElement).disabled = queue.index === 0;
+        if (queue.next) (queue.next as HTMLButtonElement).disabled = queue.index >= queue.slots.length - 1;
+        layout(queue);
+      };
+
+      const goTo = (queue: Queue, next: number) => {
+        const clamped = Math.max(0, Math.min(queue.slots.length - 1, next));
+        if (clamped === queue.index) return;
+        queue.index = clamped;
+        render(queue);
+      };
+
+      for (const queue of queues) {
+        if (queue.slots.length === 0) continue;
+
+        queue.prev?.addEventListener('click', () => goTo(queue, queue.index - 1));
+        queue.next?.addEventListener('click', () => goTo(queue, queue.index + 1));
+
+        /* Keyboard: the stage is focusable and the arrows drive it. Nothing
+           here needs a pointer. */
+        queue.stage.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowRight') { event.preventDefault(); goTo(queue, queue.index + 1); }
+          else if (event.key === 'ArrowLeft') { event.preventDefault(); goTo(queue, queue.index - 1); }
+          else if (event.key === 'Home') { event.preventDefault(); goTo(queue, 0); }
+          else if (event.key === 'End') { event.preventDefault(); goTo(queue, queue.slots.length - 1); }
+        });
+
+        /* Direct manipulation.
+           During the gesture the stack is translated by the SAME SIGN as the
+           pointer delta — hand right, cards right. On release, a leftward drag
+           past the threshold advances, because dragging left is what pulls the
+           next garment into the leading position. */
+        let dragging = false;
+        let startX = 0;
+        let pointerId = -1;
+
+        const resistance = (dx: number) => {
+          const atStart = queue.index === 0 && dx > 0;
+          const atEnd = queue.index >= queue.slots.length - 1 && dx < 0;
+          return (atStart || atEnd) ? dx * 0.3 : dx;
+        };
+
+        queue.stage.addEventListener('pointerdown', (event) => {
+          if (event.button !== 0 || queue.slots.length < 2) return;
+          const target = event.target as HTMLElement;
+          if (target.closest('button, a')) return;
+          event.preventDefault();
+          dragging = true;
+          startX = event.clientX;
+          pointerId = event.pointerId;
+          queue.stage.setPointerCapture(pointerId);
+          queue.stack.setAttribute('data-dragging', '');
+        });
+
+        queue.stage.addEventListener('pointermove', (event) => {
+          if (!dragging || event.pointerId !== pointerId) return;
+          queue.drag = resistance(event.clientX - startX);
+          queue.stack.style.setProperty('--drag', `${queue.drag}px`);
+        });
+
+        const endDrag = (event: PointerEvent) => {
+          if (!dragging || event.pointerId !== pointerId) return;
+          dragging = false;
+          try { queue.stage.releasePointerCapture(pointerId); } catch { /* already released */ }
+          queue.stack.removeAttribute('data-dragging');
+          queue.stack.style.setProperty('--drag', '0px');
+          /* One step of the deck is roughly one card's exposed strip, not a
+             whole card, so the commit threshold is a fraction of that rather
+             than of the full width. 18% of the leading card is a short,
+             deliberate swipe. */
+          const threshold = Math.max(44, queue.width * 0.18);
+          const travelled = queue.drag;
+          queue.drag = 0;
+          if (travelled <= -threshold) goTo(queue, queue.index + 1);
+          else if (travelled >= threshold) goTo(queue, queue.index - 1);
+        };
+
+        queue.stage.addEventListener('pointerup', endDrag);
+        /* A cancel is an abort, not a release — it snaps back and changes
+           nothing. */
+        queue.stage.addEventListener('pointercancel', (event) => {
+          if (!dragging || event.pointerId !== pointerId) return;
+          dragging = false;
+          queue.drag = 0;
+          queue.stack.removeAttribute('data-dragging');
+          queue.stack.style.setProperty('--drag', '0px');
+        });
+
+        render(queue);
+      }
+
+      /* ---- subchapter index -------------------------------------------- */
+      /* The five categories are the first thing inside a garment chapter, as
+         large numbered bands. Selecting one swaps the panel below. */
+      for (const world of worlds.values()) {
+        const buttons = [...world.querySelectorAll<HTMLElement>('[data-category]')];
+        const panels = [...world.querySelectorAll<HTMLElement>('[data-panel]')];
+        for (const button of buttons) {
+          button.addEventListener('click', () => {
+            const id = button.dataset.category!;
+            for (const other of buttons) other.setAttribute('aria-pressed', String(other === button));
+            for (const panel of panels) panel.hidden = panel.dataset.panel !== id;
+            layoutAll();
+          });
+        }
+      }
+
+      /* ---- 3. documents: one dossier on the table at a time ------------- */
+      for (const world of worlds.values()) {
+        const books = [...world.querySelectorAll<HTMLElement>('[data-dossier]')];
+        if (books.length === 0) continue;
+        for (const link of world.querySelectorAll<HTMLElement>('[data-doc]')) {
+          link.addEventListener('click', () => {
+            const id = link.dataset.doc!;
+            for (const other of world.querySelectorAll<HTMLElement>('[data-doc]')) {
+              other.setAttribute('aria-pressed', String(other === link));
+            }
+            for (const book of books) book.hidden = book.dataset.dossier !== id;
+          });
+        }
+      }
+
+      /* ---- 4. sessions: nothing is fetched until play is pressed -------- */
+      for (const world of worlds.values()) {
+        const sessions = [...world.querySelectorAll<HTMLElement>('[data-session]')];
+        for (const link of world.querySelectorAll<HTMLElement>('[data-session-link]')) {
+          link.addEventListener('click', () => {
+            const id = link.dataset.sessionLink!;
+            for (const other of world.querySelectorAll<HTMLElement>('[data-session-link]')) {
+              other.setAttribute('aria-pressed', String(other === link));
+            }
+            for (const session of sessions) session.hidden = session.dataset.session !== id;
+          });
+        }
+
+        for (const session of sessions) {
+          const play = session.querySelector<HTMLElement>('[data-play]');
+          const mount = session.querySelector<HTMLElement>('[data-player]');
+          if (!play || !mount) continue;
+          play.addEventListener('click', () => {
+            const youtubeId = session.dataset.youtube;
+            const videoSrc = session.dataset.video;
+            if (youtubeId) {
+              /* Created here and nowhere else. Before this click no request
+                 has been made to any Google domain. nocookie is the
+                 privacy-enhanced host; autoplay applies to the click that
+                 just happened, not to page load. */
+              const frame = document.createElement('iframe');
+              frame.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+              frame.title = session.querySelector('h3')?.textContent ?? 'Simulation session';
+              frame.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+              frame.setAttribute('allowfullscreen', '');
+              frame.setAttribute('loading', 'lazy');
+              mount.replaceChildren(frame);
+            } else if (videoSrc) {
+              /* Same contract for a self-hosted session: no src on the
+                 element until now, so the bytes are not fetched on load. */
+              const video = document.createElement('video');
+              video.src = videoSrc;
+              video.controls = true;
+              video.autoplay = true;
+              video.playsInline = true;
+              video.setAttribute('preload', 'auto');
+              mount.replaceChildren(video);
+            } else {
+              return;
+            }
+            mount.hidden = false;
+            session.setAttribute('data-playing', '');
+            play.hidden = true;
+          });
+        }
+      }
+
+      /* ---- relayout ---------------------------------------------------- */
+      let resizeTimer = 0;
+      window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(layoutAll, 120);
+      });
+      window.addEventListener('orientationchange', () => window.setTimeout(layoutAll, 200));
+      /* Late webfonts and image decode both change the stage box. */
+      window.addEventListener('load', layoutAll);
+
+      layoutAll();
+      syncFromHash();
+
+      /* Debug surface for the smoke tests. Mirrors the old
+         window.__portfolioRunway contract so the overlay assertions that
+         predate V6 keep running, and adds what the deck needs to prove. */
+      (window as unknown as Record<string, unknown>).__portfolioRunway = {
+        getState() {
+          const queue = queues.find((q) => !q.panel.hidden && q.panel.closest('[data-world]')?.hasAttribute('data-open'))
+            ?? queues.find((q) => !q.panel.hidden)
+            ?? queues[0];
+          const { visible } = geometry();
+          return {
+            activeIndex: queue.index,
+            position: queue.index,
+            count: queue.slots.length,
+            visibleTarget: visible,
+            visibleNow: queue.slots.filter((slot) => !slot.hidden).length,
+            /* The active card leads the deck: it is the right-most and the
+               top-most, and nothing covers it. */
+            activeIsLeading: (() => {
+              const shown = queue.slots.filter((slot) => !slot.hidden);
+              if (shown.length === 0) return false;
+              const active = queue.slots[queue.index];
+              const right = shown.reduce((a, b) => (b.getBoundingClientRect().right > a.getBoundingClientRect().right ? b : a));
+              const top = shown.reduce((a, b) => (Number(b.style.zIndex) > Number(a.style.zIndex) ? b : a));
+              return right === active && top === active;
+            })(),
+            overlaps: (() => {
+              const shown = queue.slots.filter((slot) => !slot.hidden)
+                .map((slot) => slot.getBoundingClientRect())
+                .sort((a, b) => a.left - b.left);
+              let n = 0;
+              for (let i = 0; i < shown.length - 1; i += 1) if (shown[i + 1].left < shown[i].right - 1) n += 1;
+              return n;
+            })(),
+            openWorld: openWorld?.dataset.world ?? null,
+            reducedMotion: reduced(),
+          };
+        },
+        /* Used by the drag-direction test: reports the sign the stack is
+           translated by for a given pointer delta. */
+        dragProbe(deltaX: number) {
+          const queue = queues.find((q) => !q.panel.hidden) ?? queues[0];
+          const before = queue.index;
+          queue.stack.style.setProperty('--drag', `${deltaX}px`);
+          const applied = getComputedStyle(queue.stack).getPropertyValue('--drag').trim();
+          queue.stack.style.setProperty('--drag', '0px');
+          return { applied, before };
+        },
+        goTo(i: number) {
+          const queue = queues.find((q) => !q.panel.hidden) ?? queues[0];
+          goTo(queue, i);
+          return queue.index;
+        },
+      };
+    }
+  </script>
+  <style is:global>
+    /* ======================================================================
+       PORTFOLIO V7
+       Every selector below is inside .pf. Nothing here reaches another page.
+
+       This is a rebuild, not a patch. The V6 gate row (.pf-gates, .pf-gate*,
+       .pf-gatedeck, .pf-gatetype, .pf-gatesheets, .pf-gatestill) and the V6
+       viewer chrome (.pf-cats/.pf-cat, .pf-info, .pf-refpanel, .pf-evidence,
+       .pf-docs/.pf-dossier/.pf-sheet, .pf-motion/.pf-sessionlink) are gone
+       from the stylesheet entirely rather than overridden — there are no dead
+       selectors left behind them.
+       ====================================================================== */
+
+    /* One white, not two.
+       The derived renditions used to carry grounds from #eeeeee to #ffffff, so
+       the studio had to sit at a compromise value and every deck seam showed as
+       a change of white. .devtools/normalise-ground.mjs resolves every frame's
+       studio ground to 255 — edge-connected flood fill, tight tolerance,
+       feathered mask, masters untouched — so the studio is simply white and the
+       photographs meet it exactly. */
+    .pf { --pf-stage: #ffffff; --pf-paper: #ffffff; }
+
+    .pf-sr {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
 
-    document.querySelectorAll('[data-category]').forEach((card) => card.addEventListener('click', () => openCollection(card.dataset.category, card)));
-    document.querySelectorAll('[data-close-collection]').forEach((button) => button.addEventListener('click', closeCollection));
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeCollection(); });
-    window.addEventListener('load', initializeMechanicalStack, { once: true });
+    /* ======================================================================
+       INTRO
+       Says the proposition and stops. The first cover has to start inside the
+       fold; a screen and a half of beige before the first chapter is what made
+       the old landing read as a document index.
+       ====================================================================== */
+    .pf-intro {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: calc(var(--header-h) + clamp(.9rem, 1.8vw, 1.5rem)) var(--gutter) clamp(1.1rem, 2vw, 1.75rem);
+    }
+    .pf-intro__title {
+      max-width: 20ch;
+      margin: 1rem 0 0;
+      font-size: clamp(2.1rem, 4.4vw, 3.7rem);
+      line-height: .94;
+      letter-spacing: -.045em;
+    }
+    .pf-intro__lede {
+      max-width: 34rem;
+      margin: .9rem 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(.98rem, 1.35vw, 1.08rem);
+      line-height: 1.6;
+    }
 
-  </script>
+    /* ======================================================================
+       FOUR SEQUENTIAL CHAPTER COVERS
+
+       One after another down the page. Each is the better part of a screen and
+       each is composed from what that chapter actually holds, so the four do
+       not rhyme: a garment in a studio, a page of type, a physical folio, a
+       frame of film. No columns, no cards, no radius, nothing floating.
+       ====================================================================== */
+    .pf-covers { border-top: 1px solid var(--line-strong); }
+
+    .pf-cover {
+      position: relative;
+      display: grid;
+      align-items: center;
+      min-height: clamp(28rem, 78vh, 46rem);
+      color: inherit;
+      text-decoration: none;
+      overflow: hidden;
+    }
+    .pf-cover + .pf-cover { border-top: 1px solid var(--line-strong); }
+    .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
+
+    /* The type block carries the page gutter, so the art can run to the edge
+       of the viewport without fighting the cover's own padding. */
+    .pf-cover__type {
+      position: relative;
+      z-index: 2;
+      display: block;
+      padding: clamp(2.25rem, 4.4vw, 4rem) var(--gutter);
+    }
+    .pf-cover__art { position: relative; align-self: stretch; display: block; min-width: 0; }
+
+    .pf-cover__num {
+      display: block;
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-style: normal;
+      letter-spacing: .2em;
+      color: var(--muted);
+    }
+    .pf-cover__name {
+      display: block;
+      margin: clamp(.8rem, 1.4vw, 1.2rem) 0 0;
+      font-family: var(--display);
+      font-variation-settings: 'wdth' 112;
+      font-weight: 850;
+      /* Sized so the longest chapter name clears the type column at every
+         width. It is never allowed to break inside a word: "Womensw / ear"
+         is a typographic failure, not a wrap. */
+      font-size: clamp(2.3rem, 4.6vw, 4.6rem);
+      line-height: .88;
+      letter-spacing: -.055em;
+      overflow-wrap: normal;
+      word-break: keep-all;
+      hyphens: none;
+    }
+    .pf-cover__desc {
+      display: block;
+      max-width: 30rem;
+      margin: clamp(.9rem, 1.5vw, 1.3rem) 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(.92rem, 1.15vw, 1.02rem);
+      line-height: 1.6;
+    }
+    /* The one restrained signal on a cover: a small square, never a rule under
+       the words. */
+    .pf-cover__state {
+      position: relative;
+      display: block;
+      max-width: 30rem;
+      margin: 1rem 0 0;
+      padding-left: 1rem;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+    .pf-cover__state::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: .35rem;
+      height: .35rem;
+      background: var(--signal);
+    }
+    .pf-cover__go {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: clamp(1.1rem, 1.8vw, 1.6rem);
+      color: var(--signal);
+      transition: gap .3s var(--ease);
+    }
+    .pf-cover__go .arrow { width: 1em; height: 1em; }
+    .pf-cover:hover .pf-cover__go { gap: .95rem; }
+
+    /* ---------- 01 WOMENSWEAR: one garment, standing in the studio ------- */
+    .pf-cover[data-chapter='womenswear'] { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); }
+    .pf-cover[data-chapter='womenswear'] .pf-cover__type { grid-column: 1; grid-row: 1; }
+    .pf-cover[data-chapter='womenswear'] .pf-cover__art {
+      grid-column: 2;
+      grid-row: 1;
+      background: var(--pf-stage);
+    }
+    /* No frame, no shadow, no card. The garment stands on the ground, exactly
+       as it does inside the chapter. */
+    .pf-cover__garment {
+      position: absolute;
+      inset: clamp(1.25rem, 2.6vw, 2.5rem) clamp(1.25rem, 2.6vw, 2.5rem) 0;
+      width: calc(100% - 2 * clamp(1.25rem, 2.6vw, 2.5rem));
+      height: calc(100% - clamp(1.25rem, 2.6vw, 2.5rem));
+      object-fit: contain;
+      object-position: bottom center;
+    }
+
+    /* ---------- 02 MENSWEAR: typographic, because there is no photograph -- */
+    .pf-cover[data-chapter='menswear'] { grid-template-columns: minmax(0, 40%) minmax(0, 1fr); }
+    .pf-cover[data-chapter='menswear'] .pf-cover__type { grid-column: 1; grid-row: 1; }
+    .pf-cover[data-chapter='menswear'] .pf-cover__art {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      padding-right: var(--gutter);
+    }
+    .pf-covertype { display: flex; flex-direction: column; }
+    .pf-covertype__row {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(.9rem, 2vw, 1.75rem);
+      padding: clamp(.85rem, 1.7vw, 1.45rem) 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .pf-covertype__row:first-child { border-top: 1px solid var(--line-strong); }
+    .pf-covertype__row i {
+      flex: none;
+      width: 2rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-style: normal;
+      letter-spacing: .16em;
+    }
+    .pf-covertype__row b {
+      color: var(--ink-soft);
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: clamp(1.1rem, 2.4vw, 2.1rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    /* ---------- 03 TECH PACKS: a physical folio on the table ------------- */
+    .pf-cover[data-chapter='tech-packs'] { grid-template-columns: minmax(0, 1fr) minmax(0, 40%); }
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__art {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3.5rem) var(--gutter);
+    }
+    .pf-cover[data-chapter='tech-packs'] .pf-cover__type { grid-column: 2; grid-row: 1; }
+
+    /* Three first pages lying on each other, the way a folio sits on a desk.
+       Real document images, a bound edge on each, a hairline where one sheet
+       meets the next — no gloss, no page curl, no cast shadow. */
+    .pf-foliomark {
+      position: relative;
+      display: block;
+      width: min(100%, 41rem);
+      aspect-ratio: 1 / .82;
+    }
+    .pf-foliomark__sheet {
+      position: absolute;
+      left: calc(var(--i) * 7%);
+      top: calc((2 - var(--i)) * 8%);
+      z-index: var(--i);
+      display: flex;
+      width: 86%;
+      aspect-ratio: 297 / 210;
+      border: 1px solid var(--line-strong);
+      background: var(--pf-paper);
+      overflow: hidden;
+    }
+    .pf-foliomark__spine {
+      flex: none;
+      width: clamp(.55rem, 1.1vw, .95rem);
+      background: var(--ink);
+    }
+    .pf-foliomark__sheet img { flex: 1; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+
+    /* ---------- 04 3D SIMULATION: a frame of the real recording ---------- */
+    .pf-cover[data-chapter='3d-simulation'] {
+      grid-template-columns: minmax(0, 1fr);
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__art {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 34%; }
+    /* The scrim is what makes the type legible over a photograph. It is a
+       gradient on the ink, not a translucent card. */
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__art::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .78) 34%, rgba(17, 17, 15, .08) 72%);
+    }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { max-width: 44rem; }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__num { color: rgba(251, 250, 246, .62); }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__desc { color: rgba(251, 250, 246, .8); }
+    .pf-cover[data-chapter='3d-simulation'] .pf-cover__state { color: rgba(251, 250, 246, .68); }
+    .pf-cover__play {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(2.6rem, 4.4vw, 3.6rem);
+      height: clamp(2.6rem, 4.4vw, 3.6rem);
+      margin-top: clamp(.9rem, 1.6vw, 1.3rem);
+      border: 1px solid rgba(251, 250, 246, .5);
+      border-radius: 50%;
+    }
+    .pf-cover__play i {
+      width: 0;
+      height: 0;
+      margin-left: .2rem;
+      border-left: .62rem solid var(--paper-bright);
+      border-top: .4rem solid transparent;
+      border-bottom: .4rem solid transparent;
+    }
+
+    /* ======================================================================
+       WORLDS
+       ====================================================================== */
+
+    /* Fallback (no script): four ordinary sections. Everything is readable,
+       scrollable and reachable by the chapter anchors. The section itself is
+       not width-capped — the inner blocks are — so the white studio band can
+       run edge to edge in both modes. */
+    .pf-world {
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
+      border-top: 1px solid var(--line-strong);
+      scroll-margin-top: var(--header-h);
+    }
+    .pf-world__bar { display: none; }
+
+    /* Enhanced: a full-screen layer. */
+    .pf--js .pf-worlds { display: contents; }
+    .pf--js .pf-world {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      padding: 0 0 clamp(3rem, 6vw, 5rem);
+      border-top: 0;
+      background: var(--paper);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(1.25rem);
+      /* visibility is stepped, not eased. Transitioning it over .4s meant the
+         computed value was still `hidden` for the first frame after data-open
+         was set, and focus() is a no-op on a hidden element — which is why
+         opening a world left activeElement on <body> and broke the focus trap.
+         Opening switches it at 0s; closing delays it until the fade is done so
+         the layer does not disappear before it has finished leaving. */
+      transition: opacity .4s var(--ease), transform .5s var(--ease), visibility 0s linear .4s;
+    }
+    .pf--js .pf-world[data-open] {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: opacity .4s var(--ease), transform .5s var(--ease), visibility 0s linear 0s;
+    }
+    .pf-world:focus { outline: none; }
+    .pf--js .pf-world__bar {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem var(--gutter);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .pf-world__back {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      color: inherit;
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .pf-world__back .arrow { width: 1.1em; height: 1.1em; }
+    .pf-world__back:hover { color: var(--signal); }
+    .pf-world__tag { color: var(--muted); margin: 0; }
+    .pf-world__tag b { color: var(--ink); font-weight: 500; }
+
+    .pf-world__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
+      gap: clamp(1.25rem, 3vw, 3rem);
+      align-items: end;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(1.25rem, 2.4vw, 2.1rem) var(--gutter) clamp(1rem, 1.6vw, 1.4rem);
+    }
+    .pf-world__head h2 { margin: 0; font-size: clamp(1.9rem, 3.6vw, 3.1rem); line-height: .95; letter-spacing: -.035em; }
+    .pf-world__descriptor { max-width: 34rem; margin: .6rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
+
+    /* Provenance, not a warning. No orange field, no box, no exclamation —
+       a label and the fact, in the margin position a credit line occupies. */
+    .pf-prov { padding-left: 1rem; border-left: 1px solid var(--line-strong); }
+    .pf-prov__label { margin: 0; color: var(--signal); }
+    .pf-prov__text { margin: .4rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+
+    /* ======================================================================
+       THE SUBCHAPTER INDEX
+
+       Five numbered editorial bands, the first thing inside a garment chapter.
+       Not tabs, not pills, not a one-line menu. The selected band takes the
+       studio ground and shows one restrained preview of what is inside it;
+       hovering another band previews that one the same way. The preview strip
+       is a reserved track, so revealing it never moves the type.
+       ====================================================================== */
+    .pf-index { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .pf-index__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+
+    .pf-band {
+      position: relative;
+      display: grid;
+      grid-template-columns: 3rem minmax(0, 1fr) 3rem clamp(5rem, 10vw, 8.5rem);
+      align-items: baseline;
+      gap: .3rem clamp(.75rem, 1.5vw, 1.25rem);
+      width: 100%;
+      padding: clamp(1rem, 1.8vw, 1.6rem) 0 clamp(1rem, 1.8vw, 1.6rem) 1.25rem;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      overflow: hidden;
+      transition: background-color .45s var(--ease), color .35s var(--ease);
+    }
+    .pf-band:hover,
+    .pf-band[aria-pressed='true'] { background: var(--pf-stage); color: var(--ink); }
+    /* An unpublished chapter shows the same bands so the architecture reads the
+       same, but there is nothing to select and nothing pretends there is. */
+    .pf-band--static {
+      cursor: default;
+      padding-left: 0;
+      /* No preview track: there is no photography behind an unpublished
+         chapter, and reserving space for one would leave a hole. */
+      grid-template-columns: 3rem minmax(0, 1fr) auto;
+    }
+    .pf-band--static:hover { background: none; color: var(--muted); }
+    .pf-index--flat { padding: 0; margin: clamp(1.75rem, 3vw, 2.5rem) 0; }
+    .pf-band:focus-visible { outline: 2px solid var(--signal); outline-offset: -3px; }
+
+    /* The one signal in the index. A square at the head of the selected band,
+       never a rule beneath the words. */
+    .pf-band__mark {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: .38rem;
+      height: .38rem;
+      margin-top: -.19rem;
+      background: var(--signal);
+      opacity: 0;
+      transition: opacity .35s var(--ease);
+    }
+    .pf-band[aria-pressed='true'] .pf-band__mark { opacity: 1; }
+
+    .pf-band__num {
+      grid-column: 1;
+      grid-row: 1;
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-style: normal;
+      letter-spacing: .16em;
+    }
+    .pf-band__label {
+      grid-column: 2;
+      grid-row: 1;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(1.15rem, 2.4vw, 2.1rem);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      color: var(--ink);
+    }
+    .pf-band__blurb {
+      grid-column: 2;
+      grid-row: 2;
+      max-width: 46rem;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+    .pf-band__count { grid-column: 3; grid-row: 1; justify-self: end; color: var(--muted); font-weight: 400; }
+
+    /* The reserved track. Empty at rest, so nothing shifts when the preview
+       fades in. */
+    .pf-band__preview {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: clamp(5rem, 10vw, 8.5rem);
+      opacity: 0;
+      transition: opacity .45s var(--ease);
+      pointer-events: none;
+    }
+    .pf-band:hover .pf-band__preview,
+    .pf-band[aria-pressed='true'] .pf-band__preview { opacity: 1; }
+    .pf-band__preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+    }
+
+    /* ======================================================================
+       THE STUDIO
+
+       One white band the full width of the viewport. The deck and the
+       development panel share it, so the viewer reads as a lit studio rather
+       than as a white rectangle laid on beige.
+       ====================================================================== */
+    .pf-studio {
+      margin-top: clamp(1.25rem, 2.4vw, 2rem);
+      padding: clamp(1.5rem, 3vw, 2.75rem) 0 clamp(1.75rem, 3.4vw, 3rem);
+      background: var(--pf-stage);
+    }
+    .pf-studio__inner { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .pf-panel[hidden] { display: none; }
+
+    .pf-viewer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.75rem, 3vw, 2.75rem);
+      align-items: center;
+    }
+    /* 65 / 35. Below this the two columns cannot both hold their job — five
+       complete garments need the whole width — so the plates move under the
+       deck instead of being squeezed beside it. */
+    @media (min-width: 1360px) {
+      .pf-viewer {
+        grid-template-columns: minmax(0, 65fr) minmax(0, 35fr);
+        gap: clamp(2rem, 3.2vw, 3.5rem);
+        align-items: start;
+      }
+      /* Three equal plates stand taller than five garments laid across 65% of
+         the width ever can. Rather than leave the deck stranded in a column of
+         white, it holds its place while the three steps travel past it — the
+         garments stay the subject, and the panel reads as development running
+         alongside them. */
+      .pf-deck { position: sticky; top: clamp(5rem, 9vh, 7rem); }
+    }
+
+    /* ---------- the deck ---------- */
+    .pf-deck { min-width: 0; }
+
+    /* FALLBACK (no script): every garment is a normal grid cell in the studio.
+       Complete, scrollable and readable — the deck below is an enhancement
+       layered on top of this, never a prerequisite for seeing the work. */
+    .pf-stage { position: relative; }
+    .pf-stage:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+    .pf-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .pf-slot__figure { margin: 0; }
+
+    /* ENHANCED: the layered deck. */
+    .pf--js .pf-stage {
+      height: var(--stage-h, 420px);
+      overflow: hidden;
+      cursor: grab;
+      touch-action: pan-y;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .pf--js .pf-stack {
+      display: block;
+      position: absolute;
+      inset: 0;
+      transform: translate3d(var(--drag, 0px), 0, 0);
+      transition: transform .55s var(--ease);
+    }
+    .pf--js .pf-stack[data-dragging] { transition: none; }
+    .pf--js .pf-slot {
+      position: absolute;
+      left: var(--x, 0);
+      /* Receding cards sit a little higher, the way objects rise toward a
+         horizon. Small — six pixels a step — but it stops the row reading as
+         one flat baseline. */
+      bottom: var(--lift, 0);
+      width: var(--w, 0);
+      height: var(--h, 0);
+      /* Opaque, because the occlusion is real: the card in front physically
+         covers the back view of the card behind it. A transparent card would
+         let both views show through each other.
+
+         NO SHADOW, NO BORDER, NO FRAME. Depth is carried by overlap, by scale
+         and by stacking order alone. A cast shadow at the seam turned five
+         garments standing in one studio into five white cards lying on a
+         table, which is the card language this rebuild removes. */
+      background: var(--pf-stage);
+      transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease),
+                  bottom .58s var(--ease), opacity .58s var(--ease);
+    }
+    .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
+    .pf-slot[hidden] { display: none; }
+    /* contain, never cover: a head, a hem or a train is never cut off.
+       pointer-events: none is load-bearing. Without it the first pointermove
+       over a slot started a native image drag, the browser fired
+       pointercancel, and the gesture died about twelve pixels in. The stage
+       owns the whole interaction; the images are not targets. */
+    .pf-slot__figure img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+    /* The number is stated in the run bar, so on screen this would be the same
+       fact twice. It stays in the document for assistive tech, which has no
+       run bar to read it from. */
+    .pf-slot__caption {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    /* ---------- the run bar: the deck's own navigation ---------- */
+    .pf-runbar {
+      display: flex;
+      align-items: center;
+      gap: clamp(.9rem, 1.8vw, 1.6rem);
+      margin-top: clamp(.9rem, 1.6vw, 1.4rem);
+      padding-top: clamp(.7rem, 1.2vw, 1rem);
+      border-top: 1px solid var(--line);
+    }
+    .pf-step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .4rem;
+      border: 0;
+      background: none;
+      color: var(--ink);
+      cursor: pointer;
+      transition: color .25s var(--ease), transform .25s var(--ease), opacity .25s var(--ease);
+    }
+    .pf-step .arrow { width: 1.15rem; height: 1.15rem; }
+    .pf-step:hover:not(:disabled) { color: var(--signal); }
+    .pf-step[data-step='-1']:hover:not(:disabled) { transform: translateX(-3px); }
+    .pf-step[data-step='1']:hover:not(:disabled) { transform: translateX(3px); }
+    .pf-step:disabled { opacity: .2; cursor: default; }
+    .pf-step:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+    .pf-runbar__count { margin: 0; letter-spacing: .18em; color: var(--ink); }
+    .pf-runbar__count i { color: var(--muted); font-style: normal; }
+
+    /* ======================================================================
+       PROJECT DEVELOPMENT — the three stages, full size
+
+       One component renders this panel in both states. A stage with a real
+       asset shows it; a stage without one shows a plate that says it is a demo
+       layout. Publishing real evidence replaces the placeholder by adding data
+       — nothing here is conditional on the state.
+       ====================================================================== */
+    .pf-devcol { min-width: 0; }
+    .pf-project[hidden] { display: none; }
+    .pf-project__number { margin: 0; color: var(--signal); }
+    .pf-project__title {
+      margin: .5rem 0 0;
+      font-family: var(--display);
+      font-size: clamp(1.3rem, 2vw, 1.7rem);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+    .pf-project__profile { margin: 1.25rem 0 0; }
+    .pf-project__profile > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+    .pf-project__profile dt {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .64rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .pf-project__profile dd { margin: 0; font-size: .92rem; line-height: 1.55; }
+    .pf-project__description { margin: 1.1rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
+    .pf-project__tags { margin: .9rem 0 0; color: var(--muted); }
+    .pf-project__tags i { font-style: normal; opacity: .5; }
+
+    .pf-dev { margin-top: clamp(1.1rem, 1.8vw, 1.5rem); }
+    .pf-project .pf-dev { margin-top: clamp(1.5rem, 2.4vw, 2rem); }
+    .pf-dev__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .45rem 1.1rem;
+      margin: 0 0 clamp(.9rem, 1.5vw, 1.3rem);
+      padding-bottom: .7rem;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .pf-dev__title { color: var(--ink); }
+    /* The one signal in this panel: the strip says what it is, in the one
+       colour the site uses to mean "read this". */
+    .pf-dev__note { color: var(--signal); }
+
+    /* THREE EQUAL PLATES, ONE ABOVE THE OTHER.
+       Sketch, 2D pattern and 3D simulation are three steps of one sequence, so
+       they are three identical frames read top to bottom — not two and a
+       feature. The same rule holds at every width; only the column they sit in
+       changes. */
+    .pf-dev__plates {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.5rem, 2.4vw, 2.1rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .pf-plate { position: relative; min-width: 0; }
+    .pf-plate__art { position: relative; aspect-ratio: 16 / 10; }
+    /* The progression, drawn in the gap between two plates: a short rule down
+       to the next step with a small tick at its head. Editorial, not an icon. */
+    .pf-plate__link {
+      position: absolute;
+      left: 1.15rem;
+      top: calc(clamp(1.5rem, 2.4vw, 2.1rem) * -1);
+      width: 1px;
+      height: clamp(1.5rem, 2.4vw, 2.1rem);
+      background: var(--line-strong);
+    }
+    .pf-plate__link::after {
+      content: '';
+      position: absolute;
+      left: -.17rem;
+      bottom: 0;
+      width: .35rem;
+      height: 1px;
+      background: var(--signal);
+    }
+    .pf-plate__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+    /* A demo plate does not draw a sketch, a pattern or a garment. It is
+       visibly an empty technical layout, stamped, so it cannot be read as
+       work. The three are told apart by their ground alone. */
+    /* A blank plate is a drawing sheet waiting for its content: a hairline
+       frame, registration ticks at the corners, and its ground. Not an empty
+       administrative rectangle. */
+    .pf-plate__blank {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: clamp(.75rem, 1.2vw, 1.05rem);
+      border: 1px solid var(--line-strong);
+    }
+    .pf-plate__blank::before,
+    .pf-plate__blank::after {
+      content: '';
+      position: absolute;
+      width: .9rem;
+      height: .9rem;
+      border: 1px solid var(--ink);
+      opacity: .38;
+      pointer-events: none;
+    }
+    .pf-plate__blank::before { left: -1px; top: -1px; border-width: 1px 0 0 1px; }
+    .pf-plate__blank::after { right: -1px; bottom: -1px; border-width: 0 1px 1px 0; }
+    .pf-plate[data-plate='sketch'] .pf-plate__blank {
+      background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(17, 17, 15, .05) 9px 10px);
+    }
+    .pf-plate[data-plate='pattern'] .pf-plate__blank {
+      background:
+        repeating-linear-gradient(to right, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px),
+        repeating-linear-gradient(to bottom, rgba(17, 17, 15, .07) 0 1px, transparent 1px 28px);
+    }
+    /* A centre-front axis and the fall of light down a backdrop. A full
+       crosshair read as a window divided into four panes, which is a frame,
+       not a ground. */
+    .pf-plate[data-plate='simulation'] .pf-plate__blank {
+      /* A centre-front axis that fades out at both ends, and the fall of light
+         down a backdrop. A full-height rule split the plate into two panes,
+         which reads as a frame rather than as a ground. */
+      background-image:
+        linear-gradient(to bottom, transparent, rgba(17, 17, 15, .11) 24%, rgba(17, 17, 15, .11) 76%, transparent),
+        linear-gradient(to bottom, rgba(17, 17, 15, .05), rgba(17, 17, 15, 0) 62%);
+      background-size: 1px 100%, 100% 100%;
+      background-position: 50% 0, 0 0;
+      background-repeat: no-repeat;
+    }
+    .pf-plate__stamp {
+      padding: .28rem .5rem;
+      border: 1px solid var(--muted);
+      color: var(--muted);
+      font-size: .58rem;
+      letter-spacing: .2em;
+    }
+    .pf-plate__caption { color: var(--muted); font-size: .58rem; letter-spacing: .16em; }
+    .pf-plate__label { display: flex; align-items: baseline; gap: .6rem; margin: .65rem 0 0; }
+    .pf-plate__label b { flex: none; color: var(--muted); font-weight: 400; }
+    .pf-plate__label span {
+      font-family: var(--display);
+      font-size: clamp(.95rem, 1.25vw, 1.15rem);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    /* ======================================================================
+       EMPTY CHAPTERS
+       ====================================================================== */
+    .pf-empty { max-width: var(--max); margin: 0 auto; padding: clamp(1rem, 2vw, 2rem) var(--gutter) 0; }
+    .pf-empty__lead { max-width: 34rem; margin: 0; color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6; }
+    .pf-empty__list { max-width: 46rem; margin: 2rem 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+    .pf-empty__list li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: .35rem 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+    .pf-empty__list i { grid-row: 1 / span 2; color: var(--muted); font-style: normal; }
+    .pf-empty__list span { font-family: var(--display); font-size: 1.1rem; letter-spacing: -.015em; }
+    .pf-empty__list small { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+
+    /* ======================================================================
+       TECH PACKS — the folio table
+
+       One dossier open on the table, the rest of the library lying behind it,
+       and a numbered side index. Paper, page edges and a bound spine; no
+       gloss, no cartoon page curl, no 3D.
+       ====================================================================== */
+    .pf-library {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 3.5rem);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(1.25rem, 2.4vw, 2.25rem) var(--gutter) 0;
+      align-items: start;
+    }
+    @media (min-width: 1100px) {
+      .pf-library { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); }
+    }
+
+    .pf-library__table { position: relative; min-width: 0; padding: clamp(1.25rem, 2.4vw, 2.25rem) 0 0 clamp(1.25rem, 2.4vw, 2.25rem); }
+    /* The rest of the library, lying on the table behind the open dossier. */
+    .pf-library__pile { position: absolute; inset: 0; pointer-events: none; }
+    .pf-library__pile i {
+      position: absolute;
+      display: block;
+      width: min(70%, 26rem);
+      aspect-ratio: 297 / 210;
+      border: 1px solid var(--line);
+      background: var(--pf-paper);
+    }
+    .pf-library__pile i:nth-child(1) { left: 0; top: 0; transform: rotate(-2.4deg); }
+    .pf-library__pile i:nth-child(2) { left: .9rem; top: .7rem; transform: rotate(1.4deg); }
+    .pf-library__pile i:nth-child(3) { left: 1.7rem; top: 1.4rem; transform: rotate(-.6deg); }
+
+    .pf-folio { position: relative; margin: 0; display: grid; gap: clamp(1.25rem, 2.4vw, 2rem); }
+    .pf-folio[hidden] { display: none; }
+    .pf-folio__object { position: relative; display: block; width: min(100%, 38rem); aspect-ratio: 297 / 210; }
+    .pf-folio__edge,
+    .pf-folio__cover { position: absolute; inset: 0; display: block; border: 1px solid var(--line); background: var(--pf-paper); }
+    .pf-folio__edge:nth-child(1) { transform: translate(15px, 15px); }
+    .pf-folio__edge:nth-child(2) { transform: translate(10px, 10px); }
+    .pf-folio__edge:nth-child(3) { transform: translate(5px, 5px); }
+    .pf-folio__cover { border-color: var(--line-strong); display: flex; overflow: hidden; }
+    .pf-folio__spine { position: relative; flex: none; width: clamp(1.2rem, 2.4vw, 2.1rem); background: var(--ink); }
+    .pf-folio__spine::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 12%;
+      bottom: 12%;
+      width: 1px;
+      background: rgba(251, 250, 246, .32);
+    }
+    .pf-folio__scan { flex: 1; width: 100%; height: 100%; object-fit: contain; }
+    .pf-folio__print {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: clamp(1.1rem, 2.4vw, 2.1rem);
+    }
+    .pf-folio__printhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line-strong); }
+    .pf-folio__printhead i:not(.pf-folio__stamp) { color: var(--muted); font-style: normal; }
+    .pf-folio__stamp {
+      flex: none;
+      font-style: normal;
+      padding: .28rem .5rem;
+      border: 1px solid var(--signal);
+      color: var(--signal);
+      letter-spacing: .2em;
+    }
+    .pf-folio__rules { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; padding: clamp(.9rem, 2vw, 1.6rem) 0; }
+    .pf-folio__rules i { display: block; height: 1px; background: var(--line); }
+    .pf-folio__rules i:nth-child(1) { width: 38%; background: var(--line-strong); }
+    .pf-folio__rules i:nth-child(2) { width: 82%; }
+    .pf-folio__rules i:nth-child(3) { width: 64%; }
+    .pf-folio__rules i:nth-child(4) { width: 76%; }
+    .pf-folio__rules i:nth-child(5) { width: 45%; }
+    .pf-folio__printfoot { padding-top: .9rem; border-top: 1px solid var(--line); color: var(--muted); }
+
+    .pf-folio__meta { max-width: 38rem; }
+    .pf-folio__kind { margin: 0; color: var(--signal); }
+    .pf-folio__meta h3 { margin: .5rem 0 0; font-family: var(--display); font-size: clamp(1.35rem, 2.2vw, 1.8rem); letter-spacing: -.03em; }
+    .pf-folio__scope { margin: .6rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+    .pf-folio__open { margin-top: 1.25rem; }
+
+    .pf-library__head { margin: 0 0 1rem; color: var(--muted); }
+    .pf-library__head--split { margin-top: 2.25rem; padding-top: 1.4rem; border-top: 1px solid var(--line-strong); }
+    .pf-library__list, .pf-contents { margin: 0; padding: 0; list-style: none; }
+    .pf-doc {
+      position: relative;
+      display: grid;
+      grid-template-columns: 2.2rem minmax(0, 1fr);
+      gap: .2rem .8rem;
+      width: 100%;
+      padding: .9rem 0 .9rem 1.1rem;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: color .3s var(--ease);
+    }
+    .pf-library__list li:first-child .pf-doc { border-top: 1px solid var(--line); }
+    .pf-doc:hover { color: var(--ink); }
+    .pf-doc:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+    .pf-doc__mark {
+      position: absolute;
+      left: 0;
+      top: 1.2rem;
+      width: .36rem;
+      height: .36rem;
+      background: var(--signal);
+      opacity: 0;
+      transition: opacity .3s var(--ease);
+    }
+    .pf-doc[aria-pressed='true'] .pf-doc__mark { opacity: 1; }
+    .pf-doc[aria-pressed='true'] { color: var(--ink); }
+    .pf-doc__num { grid-column: 1; grid-row: 1; font-style: normal; }
+    .pf-doc__title { grid-column: 2; grid-row: 1; font-family: var(--display); font-size: 1rem; letter-spacing: -.015em; color: var(--ink); }
+    .pf-doc__meta { grid-column: 2; grid-row: 2; color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+
+    .pf-contents li { display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: .25rem .75rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+    .pf-contents li:first-child { border-top: 1px solid var(--line); }
+    .pf-contents i { grid-row: 1 / span 2; color: var(--muted); font-style: normal; }
+    .pf-contents span { font-family: var(--display); font-size: .98rem; letter-spacing: -.01em; }
+    .pf-contents small { color: var(--muted); font-size: .84rem; line-height: 1.5; }
+    .pf-library__index .button { margin-top: 1.75rem; }
+
+    /* ======================================================================
+       3D SIMULATION — the theatre
+
+       A dark band running the full width: one large frame, then a film strip
+       of every session slot. The recording is portrait, so the frame is
+       portrait and the theatre is what surrounds it — nothing is cropped to
+       force a cinema shape onto it.
+       ====================================================================== */
+    .pf-reel {
+      margin-top: clamp(1rem, 2vw, 1.75rem);
+      padding: clamp(1.75rem, 3.4vw, 3rem) 0 clamp(2rem, 4vw, 3.5rem);
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf-reel__stage,
+    .pf-strip,
+    .pf-reel__note { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+    .pf-session[hidden] { display: none; }
+    .pf-session {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.5rem, 3vw, 2.75rem);
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .pf-session { grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); }
+    }
+    .pf-session__frame {
+      position: relative;
+      width: 100%;
+      max-width: 27rem;
+      aspect-ratio: 512 / 910;
+      max-height: min(70vh, 38rem);
+      margin-inline: auto;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-session__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .pf-play {
+      position: absolute;
+      left: 50%;
+      bottom: 1.25rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .8rem 1.1rem;
+      border: 1px solid rgba(251, 250, 246, .55);
+      background: rgba(17, 17, 15, .6);
+      color: var(--paper-bright);
+      cursor: pointer;
+      transform: translateX(-50%);
+      transition: background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
+    }
+    .pf-play:hover { background: var(--signal); border-color: var(--signal); color: var(--ink); }
+    .pf-play:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+    .pf-play__mark { width: 0; height: 0; border-left: .6rem solid currentColor; border-top: .38rem solid transparent; border-bottom: .38rem solid transparent; }
+
+    /* Not a disabled play button — there is nothing to play, so nothing
+       offers to play it. */
+    .pf-pending {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      text-align: center;
+      background:
+        repeating-linear-gradient(45deg, rgba(251, 250, 246, .035) 0 10px, transparent 10px 20px),
+        #0b0b0a;
+    }
+    .pf-pending__slot { margin: 0; color: var(--paper-bright); font-size: .78rem; letter-spacing: .22em; }
+    .pf-pending__state { margin: 0; color: var(--signal); letter-spacing: .2em; }
+
+    .pf-session__player { position: absolute; inset: 0; z-index: 3; }
+    .pf-session__player[hidden] { display: none; }
+    .pf-session__player iframe, .pf-session__player video { width: 100%; height: 100%; border: 0; background: #000; }
+    .pf-session[data-playing] .pf-session__poster { opacity: 0; }
+    .pf-session__kind { margin: 0; color: var(--signal); }
+    .pf-session__meta h3 { margin: .7rem 0 0; font-family: var(--display); font-size: clamp(1.4rem, 2.6vw, 2.2rem); letter-spacing: -.035em; }
+    .pf-session__meta > p { margin: .8rem 0 0; max-width: 38rem; color: rgba(251, 250, 246, .78); line-height: 1.65; }
+    .pf-session__labels { color: rgba(251, 250, 246, .55); }
+    .pf-session__labels i { font-style: normal; opacity: .5; }
+    .pf-session__privacy { font-size: .85rem; color: rgba(251, 250, 246, .55); }
+
+    /* ---------- the film strip ---------- */
+    .pf-strip { margin-top: clamp(1.75rem, 3.4vw, 3rem); }
+    .pf-strip__head {
+      display: flex;
+      align-items: baseline;
+      gap: .6rem;
+      margin: 0 0 .9rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid rgba(251, 250, 246, .18);
+      color: rgba(251, 250, 246, .6);
+    }
+    .pf-strip__head i { font-style: normal; color: var(--paper-bright); }
+    .pf-strip__reel {
+      display: flex;
+      gap: .75rem;
+      margin: 0;
+      padding: .55rem 0;
+      list-style: none;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      /* The sprocket rails. Two hairline tracks of perforations above and
+         below the frames, drawn on the ground rather than on each cell. */
+      background:
+        repeating-linear-gradient(to right, rgba(251, 250, 246, .22) 0 6px, transparent 6px 18px) top left / 100% 3px no-repeat,
+        repeating-linear-gradient(to right, rgba(251, 250, 246, .22) 0 6px, transparent 6px 18px) bottom left / 100% 3px no-repeat;
+    }
+    .pf-strip__cell { flex: none; scroll-snap-align: start; }
+    .pf-frame {
+      display: block;
+      width: clamp(6.75rem, 8.4vw, 8.25rem);
+      padding: 0;
+      border: 0;
+      background: none;
+      color: rgba(251, 250, 246, .62);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: color .3s var(--ease);
+    }
+    .pf-frame:hover { color: var(--paper-bright); }
+    .pf-frame:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+    .pf-frame__window {
+      position: relative;
+      display: block;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #0b0b0a;
+      border: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-frame[aria-pressed='true'] .pf-frame__window { border-color: var(--signal); }
+    .pf-frame__window img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .pf-frame__blank {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(251, 250, 246, .3);
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      letter-spacing: .1em;
+      background: repeating-linear-gradient(45deg, rgba(251, 250, 246, .035) 0 9px, transparent 9px 18px);
+    }
+    .pf-frame__label { display: block; margin-top: .55rem; }
+    .pf-frame__num { display: block; font-style: normal; color: var(--muted); }
+    .pf-frame[aria-pressed='true'] .pf-frame__num { color: var(--signal); }
+    .pf-frame__label span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      min-height: 2.4em;
+      margin-top: .22rem;
+      font-family: var(--display);
+      font-size: .88rem;
+      line-height: 1.2;
+      letter-spacing: -.015em;
+      color: inherit;
+    }
+    .pf-frame__label small { display: block; margin-top: .3rem; color: rgba(251, 250, 246, .42); font-size: .58rem; }
+
+    .pf-reel__note {
+      display: grid;
+      gap: 1.25rem;
+      justify-items: start;
+      margin-top: clamp(1.75rem, 3.4vw, 3rem);
+      padding-top: clamp(1.25rem, 2.4vw, 2rem);
+      border-top: 1px solid rgba(251, 250, 246, .16);
+    }
+    .pf-reel__note p { max-width: 44rem; margin: 0; color: rgba(251, 250, 246, .72); font-size: .95rem; line-height: 1.65; }
+    .pf-reel__note .button { border-color: rgba(251, 250, 246, .4); color: var(--paper-bright); }
+    .pf-reel__note .button:hover { background: var(--paper-bright); color: var(--ink); }
+    .pf-world--motion .pf-prov { border-left-color: var(--line-strong); }
+
+    /* ======================================================================
+       RESPONSIVE
+       ====================================================================== */
+
+    /* ---- covers stack to one column, art above type ----------------------
+       Every selector here carries [data-chapter] so it matches the specificity
+       of the per-chapter placement above and actually overrides it. Written
+       without the attribute these rules lost, the art kept its desktop
+       grid-column: 2 in a one-column grid, and the garment and the folio were
+       pushed into an implicit track off the side of the cover.
+       --------------------------------------------------------------------- */
+    @media (max-width: 900px) {
+      .pf-cover[data-chapter] {
+        /* The art takes whatever the type does not, so the garment and the
+           folio stay the largest thing on the cover instead of shrinking to a
+           fixed strip with air above and below them. */
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(clamp(13rem, 34vh, 19rem), 1fr) auto;
+        min-height: clamp(26rem, 74vh, 40rem);
+      }
+      .pf-cover[data-chapter] .pf-cover__art { grid-column: 1; grid-row: 1; align-self: stretch; }
+      .pf-cover[data-chapter] .pf-cover__type { grid-column: 1; grid-row: 2; }
+
+      /* Menswear is a page of type, so its title leads and the categories
+         follow it — the reading order a cover with no photograph wants. */
+      .pf-cover[data-chapter='menswear'] { grid-template-rows: auto auto; align-content: center; }
+      .pf-cover[data-chapter='menswear'] .pf-cover__type { grid-row: 1; }
+      .pf-cover[data-chapter='menswear'] .pf-cover__art { grid-row: 2; padding: 0 var(--gutter) clamp(1.5rem, 5vw, 2.5rem); }
+      .pf-cover[data-chapter='tech-packs'] .pf-cover__art {
+        display: flex;
+        align-items: center;
+        padding: clamp(1.5rem, 6vw, 2.5rem) var(--gutter);
+      }
+      .pf-cover[data-chapter='3d-simulation'] { grid-template-rows: 1fr auto; align-content: end; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__still { object-position: center 34%; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { position: absolute; inset: 0; min-height: 0; }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__art::after {
+        background: linear-gradient(to top, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .78) 45%, rgba(17, 17, 15, .25) 100%);
+      }
+      .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { grid-row: 1; }
+    }
+
+    /* ---- chapter interiors ---- */
+    @media (max-width: 1023px) {
+      .pf-world__head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+      .pf-prov { padding-left: .9rem; }
+    }
+
+    /* One folio on the table and the rest of the library as a shelf that runs
+       across under it, rather than a column of five rows pushing the contents
+       list off the bottom of the phone. */
+    @media (max-width: 1099px) {
+      .pf-library__list {
+        display: flex;
+        gap: .75rem;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .pf-library__list::-webkit-scrollbar { display: none; }
+      .pf-library__list li { flex: none; scroll-snap-align: start; width: clamp(9rem, 42vw, 12rem); }
+      .pf-library__list li:first-child .pf-doc { border-top: 0; }
+      .pf-doc { height: 100%; border-bottom: 0; }
+      .pf-doc__mark { top: .95rem; }
+    }
+
+    @media (max-width: 760px) {
+      /* The bands lose their preview track and keep their type: at this width
+         a 5rem strip of photograph costs more than it gives. */
+      .pf-band { grid-template-columns: 2.4rem minmax(0, 1fr) 2.6rem; }
+      .pf-band__preview { display: none; }
+      .pf-band__label { font-size: clamp(1.05rem, 4.6vw, 1.5rem); }
+      .pf-band__blurb { font-size: .8rem; }
+
+
+      .pf-library__table { padding-left: 0; }
+      .pf-library__pile i { width: 78%; }
+    }
+
+    @media (max-width: 430px) {
+      .pf-cover__name { font-size: clamp(2.1rem, 11vw, 2.9rem); }
+      .pf-project__profile > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+    }
+
+    /* ======================================================================
+       REDUCED MOTION — everything still works, nothing moves decoratively.
+       ====================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      .pf-cover,
+      .pf-cover__go,
+      .pf-band,
+      .pf-band__mark,
+      .pf-band__preview,
+      .pf-doc,
+      .pf-doc__mark,
+      .pf-frame,
+      .pf-slot,
+      .pf-stack,
+      .pf-step,
+      .pf-world { transition: none !important; }
+      .pf--js .pf-world { transform: none; }
+    }
+  </style>
 </SiteLayout>
-
-<style>
-  .portfolio-hero { min-height: 100svh; display: grid; grid-template-columns: 1.35fr .65fr; grid-template-rows: auto 1fr; gap: 3rem 7vw; align-items: end; padding: calc(var(--header-h) + 2rem) var(--gutter) 4rem; background: var(--ink); color: var(--paper); }
-  .portfolio-hero__meta { grid-column: 1 / -1; align-self: start; display: flex; justify-content: space-between; color: #8f8e86; }
-  .portfolio-hero__title h1 { font-size: clamp(7rem, 17vw, 17rem); }
-  .portfolio-hero__title h1 span { display: block; }
-  .portfolio-hero__title h1 span:last-child { color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
-  .portfolio-hero__copy { padding-bottom: 1rem; }
-  .portfolio-hero__copy > p:nth-child(2) { max-width: 31rem; margin: 1.5rem 0 3rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
-  .portfolio-hero__instruction { display: flex; align-items: center; gap: 1rem; }
-  .portfolio-hero__instruction i { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid #4b4a44; border-radius: 50%; color: var(--signal); font-style: normal; }
-  .portfolio-stack-shell { padding-block: clamp(6rem, 10vw, 10rem); }
-  .stack-heading { display: flex; justify-content: space-between; align-items: center; padding-bottom: 2rem; border-bottom: 1px solid var(--line-strong); }
-  .stack-stage { display: grid; gap: 1.25rem; padding-top: 2rem; }
-  .collection-card { position: relative; min-height: min(76vh, 52rem); width: 100%; padding: 0; overflow: hidden; border: 0; background: #222; color: white; text-align: left; cursor: pointer; isolation: isolate; }
-  .collection-card img { position: absolute; z-index: -2; inset: 0; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
-  .collection-card:hover img { transform: scale(1.035); }
-  .collection-card__shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.1) 45%, rgba(0,0,0,.88)); }
-  .collection-card__top { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 1.5rem; }
-  .collection-card__top i { color: var(--acid); font-style: normal; }
-  .collection-card__copy { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1.2fr .8fr; gap: 4rem; align-items: end; padding: clamp(1.5rem, 4vw, 4rem); }
-  .collection-card__copy strong { font-family: var(--display); font-size: clamp(4rem, 10vw, 10rem); font-weight: 850; letter-spacing: -.07em; line-height: .82; }
-  .collection-card__copy small { max-width: 29rem; font-size: .9rem; line-height: 1.65; color: #d4d2ca; }
-  .stack-stage.is-mechanical { position: relative; height: calc(100svh - 7rem); min-height: 42rem; padding-top: 0; }
-  .stack-stage.is-mechanical .collection-card { position: absolute; inset: 0; min-height: 0; height: 100%; will-change: transform, filter; }
-  .portfolio-context { display: grid; grid-template-columns: 1.25fr .75fr; gap: 8vw; padding-block: clamp(7rem, 12vw, 12rem); }
-  .portfolio-context h2 { margin-top: 2rem; font-size: clamp(4rem, 8vw, 8.5rem); }
-  .portfolio-context > div:last-child { align-self: end; }
-  .portfolio-context > div:last-child p { color: var(--muted); line-height: 1.75; }
-  .portfolio-context .button { margin-top: 2rem; }
-
-  .collection-overlay { position: fixed; z-index: 500; inset: 0; overflow-x: clip; overflow-y: auto; overscroll-behavior: contain; background: var(--ink); color: var(--paper); visibility: hidden; pointer-events: none; clip-path: inset(100% 0 0 0); }
-  .collection-overlay.is-open { visibility: visible; pointer-events: auto; }
-  .collection-overlay__bar { position: sticky; z-index: 10; top: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 5rem; padding-inline: var(--gutter); border-bottom: 1px solid #3d3d37; background: rgba(17,17,15,.88); backdrop-filter: blur(18px); }
-  .collection-overlay__bar > p { color: #96958d; }
-  .collection-overlay__bar > p span { color: var(--paper); margin-left: 1rem; }
-  .collection-overlay__bar button { justify-self: end; padding: .65rem 0; border: 0; background: transparent; color: white; font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
-  .collection-overlay__bar button span { display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; margin-left: .7rem; border: 1px solid #55544d; border-radius: 50%; color: var(--signal); font-size: 1.1rem; }
-  .collection-overlay__header { min-height: 90svh; display: grid; grid-template-columns: 1fr .55fr; grid-template-rows: 1fr auto; gap: 3rem 8vw; align-items: end; padding: 8rem var(--gutter) 4rem; overflow: hidden; }
-  .collection-overlay__header .eyebrow { grid-column: 1 / -1; align-self: start; }
-  .collection-overlay__header h2 { font-size: clamp(6rem, 14vw, 14rem); }
-  .collection-overlay__header > p:not(.eyebrow) { max-width: 32rem; color: #aaa89f; font-size: 1.1rem; line-height: 1.75; }
-  .collection-overlay__header > span { grid-column: 2; }
-  .look-runway { padding: 0 var(--gutter) clamp(4rem, 7vw, 7rem); }
-  .look-runway__layout { display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(18rem, .78fr); gap: clamp(2rem, 5vw, 6rem); min-height: min(76rem, 86svh); }
-  .look-runway__stage { position: relative; min-height: 44rem; overflow: hidden; outline: 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
-  .look-runway__stage:focus-visible { outline: 1px solid var(--signal); outline-offset: 4px; }
-  .look-runway__stage.is-dragging { cursor: grabbing; }
-  .look-runway__cards { position: absolute; inset: 0; }
-  :global(.runway-card) { position: absolute; left: 50%; top: 50%; width: min(54%, 34rem); height: 84%; overflow: hidden; margin: 0; background: #222; isolation: isolate; transform-origin: center; will-change: transform, filter, opacity; pointer-events: none; }
-  :global(.runway-card img) { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  :global(.runway-card__shade) { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.14)); }
-  .look-runway__details { position: relative; align-self: center; min-height: 23rem; border-top: 1px solid #46463f; border-bottom: 1px solid #46463f; }
-  :global(.runway-detail) { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem 0; will-change: transform, opacity; }
-  :global(.runway-detail > span) { color: var(--signal); }
-  :global(.runway-detail h3) { margin: 2rem 0 .75rem; font-family: var(--display); font-size: clamp(4rem, 7vw, 7rem); letter-spacing: -.07em; line-height: .84; }
-  :global(.runway-detail p) { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
-  .look-runway__hint { display: none; }
-  .look-runway__scrubber { display: grid; grid-template-columns: auto minmax(8rem, 1fr) auto; gap: 1.5rem; align-items: center; padding-top: 1.5rem; border-top: 1px solid #3d3d37; color: #96958d; }
-  .look-runway__scrubber input { width: 100%; height: 1.5rem; margin: 0; appearance: none; background: transparent; cursor: ew-resize; }
-  .look-runway__scrubber input::-webkit-slider-runnable-track { height: 1px; background: #55544d; }
-  .look-runway__scrubber input::-webkit-slider-thumb { width: 3rem; height: 5px; margin-top: -2px; appearance: none; border: 0; border-radius: 0; background: var(--signal); }
-  .look-runway__scrubber input::-moz-range-track { height: 1px; background: #55544d; }
-  .look-runway__scrubber input::-moz-range-thumb { width: 3rem; height: 5px; border: 0; border-radius: 0; background: var(--signal); }
-  .collection-overlay__end { display: flex; justify-content: space-between; align-items: end; gap: 2rem; padding: 8rem var(--gutter); }
-
-  @media (max-width: 900px) {
-    .portfolio-hero { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; min-height: 92svh; }
-    .portfolio-hero__title h1 { font-size: clamp(6rem, 25vw, 11rem); }
-    .collection-card { min-height: 70svh; }
-    .collection-card__copy { grid-template-columns: 1fr; gap: 1.5rem; }
-    .collection-card__copy strong { font-size: clamp(3.6rem, 15vw, 7rem); }
-    .portfolio-context { grid-template-columns: minmax(0, 1fr); }
-    .portfolio-context > * { min-width: 0; }
-    .collection-overlay__header { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto auto; }
-    .collection-overlay__header > span { grid-column: 1; }
-    .look-runway__layout { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-    .look-runway__stage { min-height: min(70rem, 72svh); }
-    .look-runway__details { min-height: 18rem; }
-  }
-  @media (max-width: 600px) {
-    .stack-heading { align-items: flex-start; flex-direction: column; gap: 1rem; }
-    .collection-card { min-height: 33rem; }
-    .collection-card__copy { padding: 1.25rem; }
-    .collection-card__copy small { font-size: .78rem; }
-    .portfolio-context h2 { font-size: 3.5rem; }
-    .collection-overlay__bar { grid-template-columns: 1fr auto; }
-    .collection-overlay__bar > p { display: none; }
-    .collection-overlay__header { min-height: 80svh; padding-top: 6rem; }
-    .collection-overlay__header h2 { font-size: clamp(4.5rem, 20vw, 7rem); }
-    .look-runway { padding-inline: 0; }
-    .look-runway__layout { gap: 1.5rem; }
-    .look-runway__stage { min-height: 68svh; }
-    :global(.runway-card) { width: 74%; height: 88%; }
-    .look-runway__details { min-height: 13rem; margin-inline: var(--gutter); }
-    :global(.runway-detail h3) { font-size: clamp(3.8rem, 17vw, 6rem); }
-    .look-runway__hint { position: absolute; z-index: 80; left: var(--gutter); bottom: 1rem; display: block; color: var(--paper); }
-    .look-runway__scrubber { display: none; }
-    .collection-overlay__end { align-items: stretch; flex-direction: column; }
-  }
-</style>
