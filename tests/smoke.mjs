@@ -500,6 +500,8 @@ try {
     check('only the farthest desktop garment carries atmospheric blur',
       /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
       deck.filters.join(' | '));
+    check('far garment blur remains restrained and identifiable',
+      /blur\(1\.2px\)/.test(deck.filters[0]), deck.filters[0]);
 
     /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
        baseline — each step back stands a little higher, the way objects rise
@@ -588,6 +590,24 @@ try {
     });
     check('next loops from the last garment to the first', loop.forward === 0, JSON.stringify(loop));
     check('previous loops from the first garment to the last', loop.backward === loop.count - 1, JSON.stringify(loop));
+    await p.waitForTimeout(600);
+    const wheel = await p.evaluate(async () => {
+      const panel = document.querySelector('[data-screen="category"]:not([hidden])');
+      const nodes = [...panel.querySelectorAll('.pf-slot')];
+      panel.querySelector('[data-step="-1"]').click();
+      const animated = nodes.filter((node) => node.getAnimations().length > 0).length;
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      return {
+        animated,
+        sameNodes: nodes.every((node, i) => panel.querySelectorAll('.pf-slot')[i] === node),
+        visible: nodes.filter((node) => !node.hidden).length,
+        remaining: nodes.flatMap((node) => node.getAnimations()).length,
+      };
+    });
+    check('circular wrap animates existing depth positions', wheel.animated >= 4 && wheel.sameNodes, JSON.stringify(wheel));
+    check('wheel settles with four garments and no abandoned animation', wheel.visible === 4 && wheel.remaining === 0, JSON.stringify(wheel));
+    await p.evaluate(() => window.__portfolioRunway.goTo(0));
+    await p.waitForTimeout(600);
 
     // Drag must follow the hand: pointer right -> stack right.
     await p.waitForTimeout(300);
