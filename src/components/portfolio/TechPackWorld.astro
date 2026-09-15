@@ -59,7 +59,16 @@ const anyDemo = packs.some((pack) => pack.demo);
       <ol class="pf-docs">
         {packs.map((pack, index) => (
           <li class="pf-doc" data-doc={pack.id} data-side={index % 2 === 0 ? 'left' : 'right'}>
-            <div class="pf-doc__page">
+            <a
+              class="pf-doc__page"
+              id={`preview-${pack.id}`}
+              href={pack.pdfUrl}
+              target="_blank"
+              rel="noopener"
+              data-open-pdf={pack.pdfUrl ? '' : undefined}
+              data-doc-title={pack.title}
+              aria-label={`Open ${pack.title} PDF reader`}
+            >
               {pack.coverImage ? (
                 <img
                   src={pack.coverImage.src}
@@ -74,7 +83,7 @@ const anyDemo = packs.some((pack) => pack.demo);
               ) : (
                 <span class="pf-doc__blank" aria-hidden="true"></span>
               )}
-            </div>
+            </a>
 
             <div class="pf-doc__meta">
               <p class="label pf-doc__num">{String(index + 1).padStart(2, '0')}</p>
@@ -83,22 +92,7 @@ const anyDemo = packs.some((pack) => pack.demo);
                 {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount} pages` : ''}
               </p>
               {pack.demo && <p class="label pf-doc__stamp">Demo — interface prototype</p>}
-              {/* An editorial action, not a filled block: the document is the
-                  thing on this page, and a large orange button beside it
-                  competes with the page it is offering to open. */}
-              {pack.pdfUrl && (
-                <a
-                  class="pf-doc__open label"
-                  id={`open-${pack.id}`}
-                  href={pack.pdfUrl}
-                  target="_blank"
-                  rel="noopener"
-                  data-open-pdf
-                  data-doc-title={pack.title}
-                >
-                  Open PDF <span aria-hidden="true"><Arrow /></span>
-                </a>
-              )}
+              <p class="label pf-doc__instruction">Select the document to read</p>
             </div>
           </li>
         ))}

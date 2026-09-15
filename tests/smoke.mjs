@@ -155,7 +155,7 @@ try {
     await p.waitForTimeout(800);
   };
 
-  // ---- structure: four chapters, four long covers, nothing previewed
+  // ---- structure: four chapters in one asymmetric editorial cover gallery
   console.log('\nportfolio index');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -170,7 +170,7 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* Four long covers, one after another. Not four columns, not cards. */
+    /* Four separated image covers, composed together without card chrome. */
     const covers = await p.evaluate(() => {
       const list = [...document.querySelectorAll('.pf-cover')];
       const doc = document.documentElement.clientWidth;
@@ -187,16 +187,17 @@ try {
           boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
           titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
           images: el.querySelectorAll('img').length,
+          source: el.dataset.imageSource ?? '',
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
     });
     check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    check('the covers run in sequence, never side by side',
-      covers.every((cv, i) => i === 0 || cv.top >= covers[i - 1].top + covers[i - 1].height - 2),
-      covers.map((cv) => `${cv.chapter}@${cv.top}`).join(' '));
-    check('every cover spans the full width', covers.every((cv) => cv.full && cv.left === 0));
-    check('every cover is a long editorial field', covers.every((cv) => cv.height >= 900 * 0.68),
+    check('the cover gallery uses an asymmetric multi-column composition',
+      new Set(covers.map((cv) => cv.left)).size >= 2 && covers.some((cv, i) => i > 0 && cv.top < covers[i - 1].top + covers[i - 1].height),
+      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top}`).join(' '));
+    check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
+    check('every cover is a substantial editorial image field', covers.every((cv) => cv.height >= 900 * 0.52),
       covers.map((cv) => cv.height).join(','));
     check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
     /* A cover is a composition, not a centred word: a register rule at the
@@ -208,47 +209,44 @@ try {
         chapter: el.dataset.chapter,
         register: !!el.querySelector('.pf-cover__register .pf-cover__num')
           && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
-        meter: el.querySelectorAll('.pf-cover__meter i').length,
-        signal: getComputedStyle(el.querySelector('.pf-cover__meter i:nth-child(4)')).backgroundColor,
+        intent: el.querySelector('.pf-cover__intent')?.textContent.trim(),
+        signal: getComputedStyle(el.querySelector('.pf-cover__go .arrow')).color,
         /* Where the name sits across the cover, as a fraction of its width. */
         axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
+          / el.getBoundingClientRect().width).toFixed(2),
+        artInset: +((el.querySelector('.pf-cover__art').getBoundingClientRect().left - el.getBoundingClientRect().left)
           / el.getBoundingClientRect().width).toFixed(2),
       };
     }));
     check('every cover carries its register', composed.every((cv) => cv.register));
-    check('every cover carries the four-step progression signature',
-      composed.every((cv) => cv.meter === 4), composed.map((cv) => cv.meter).join(','));
-    check('the last step of the signature is the one signal',
+    check('every chapter has a distinct editorial intent',
+      composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
+    check('the chapter action is the restrained orange signal',
       composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    check('the covers do not all sit on the same axis',
-      new Set(composed.map((cv) => cv.axis < 0.42 ? 'left' : cv.axis > 0.58 ? 'right' : 'centre')).size >= 2,
-      composed.map((cv) => `${cv.chapter}:${cv.axis}`).join(' '));
+    check('the editorial image compositions use distinct margins',
+      new Set(composed.map((cv) => cv.artInset)).size >= 3
+        && composed[0].artInset > composed[1].artInset
+        && composed[3].artInset > composed[0].artInset,
+      composed.map((cv) => `${cv.chapter}:${cv.artInset}`).join(' '));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('the chapter title is the hero of its cover',
-      covers.every((cv) => cv.titlePx >= 72), covers.map((cv) => cv.titlePx).join(','));
+      covers.every((cv) => cv.titlePx >= 44), covers.map((cv) => cv.titlePx).join(','));
 
-    /* The three type-led covers carry their name and nothing else: no garment,
-       no category list, no paragraph, no disclaimer. */
-    const quiet = covers.filter((cv) => cv.chapter !== '3d-simulation');
-    check('the womenswear cover carries no image',
-      covers.find((cv) => cv.chapter === 'womenswear').images === 0);
-    check('the menswear cover carries no image',
-      covers.find((cv) => cv.chapter === 'menswear').images === 0);
-    check('the tech pack cover previews no document',
-      covers.find((cv) => cv.chapter === 'tech-packs').images === 0);
+    check('every chapter cover is image-led', covers.every((cv) => cv.images === 1), covers.map((cv) => cv.images).join(','));
+    check('every cover records its image source', covers.every((cv) => cv.source.length > 0), covers.map((cv) => cv.source).join(' | '));
     /* The public name of chapter 04 is wider than its last step: the
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
     check('chapter 04 is published as Pattern & 3D Development',
-      /^04 Digital validation Pattern & 3D Development Open chapter$/.test(
+      /^04 Digital validation Pattern & 3D Development From pattern lines to digital fit Open chapter$/.test(
         covers.find((cv) => cv.chapter === '3d-simulation').text),
       covers.find((cv) => cv.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    check('the type-led covers say only their number, kind, name and the way in',
-      quiet.every((cv) => /^\d\d [A-Za-z ]+ [A-Za-z0-9 ]+ Open chapter$/.test(cv.text)),
-      quiet.map((cv) => cv.text).join(' | '));
+    check('the covers include a concise intent and the way in',
+      covers.every((cv) => /^\d\d .+ Open chapter$/.test(cv.text)),
+      covers.map((cv) => cv.text).join(' | '));
     check('no category list appears on any cover',
       await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
     check('the reference disclaimer never appears on a cover',
@@ -293,6 +291,26 @@ try {
     await c.close();
   }
 
+  for (const width of [390, 430]) {
+    console.log(`\nportfolio cover gallery at ${width}`);
+    const c = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 932 }, isMobile: true, hasTouch: true });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    const mobileCovers = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top + scrollY), height: Math.round(r.height) };
+    }));
+    check(`${width} stacks one substantial cover at a time`,
+      mobileCovers.every((cover, index) => cover.height >= 480
+        && cover.left >= 16 && cover.right <= width - 16
+        && (index === 0 || cover.top >= mobileCovers[index - 1].top + mobileCovers[index - 1].height)),
+      JSON.stringify(mobileCovers));
+    check(`no horizontal overflow in the ${width} cover gallery`,
+      await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    await c.close();
+  }
+
   // ---- the hierarchy: chapter -> categories -> viewer -> back again
   console.log('\nportfolio navigation hierarchy');
   {
@@ -309,9 +327,8 @@ try {
     check('focus starts inside the chapter',
       await p.evaluate((sel) => document.querySelector(sel).contains(document.activeElement), world));
 
-    /* SCREEN 1 IS THE CATEGORY INDEX, AND NOTHING ELSE.
-       No garment, no viewer, no development panel — the visitor chooses a
-       category before any imagery is shown. */
+    /* SCREEN 1 IS THE IMAGE-LED CATEGORY INDEX. The deeper garment runway and
+       development evidence stay hidden until a category is selected. */
     const first = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
       const shown = [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
@@ -322,6 +339,7 @@ try {
         catLinks: w.querySelectorAll('[data-screen="index"] a.pf-cat').length,
         labelPx: [...w.querySelectorAll('[data-screen="index"] .pf-cat__label')]
           .map((e) => Math.round(parseFloat(getComputedStyle(e).fontSize))),
+        categoryCovers: [...w.querySelectorAll('[data-screen="index"] .pf-cat__media img')].filter(visible).length,
         garments: [...w.querySelectorAll('.pf-slot img')].filter(visible).length,
         stages: [...w.querySelectorAll('[data-stage]')].filter(visible).length,
         plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
@@ -337,8 +355,9 @@ try {
         'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
         'Evening & Occasionwear', 'Swimwear & Resortwear',
       ]), first.cats.join(' | '));
-    check('the categories are editorial bands, not menu type',
+    check('the categories use large editorial typography',
       first.labelPx.every((px) => px >= 28), first.labelPx.join(','));
+    check('all five womenswear categories are image-led', first.categoryCovers === 5, String(first.categoryCovers));
     check('NO garment image is visible before a category is chosen',
       first.garments === 0, String(first.garments));
     check('no garment viewer is visible before a category is chosen',
@@ -394,7 +413,7 @@ try {
       await p.evaluate(() => document.activeElement?.id === 'smoke-trigger'),
       await p.evaluate(() => document.activeElement?.id || document.activeElement?.tagName || 'none'));
 
-    // ---- menswear has the same interface, with nothing fabricated inside it
+    // ---- menswear has the same image-led, working reference-preview interface
     await openChapter(p, 'menswear');
     const men = await p.evaluate(() => {
       const w = document.querySelector('[data-world="menswear"]');
@@ -411,10 +430,10 @@ try {
         'Streetwear & Casualwear', 'Activewear & Performance',
         'Contemporary Ready-to-Wear', 'Tailoring & Outerwear',
       ]), men.cats.join(' | '));
-    check('menswear is unpublished', men.publication === 'unpublished', men.publication);
-    check('no menswear garment is fabricated', men.garments === 0, String(men.garments));
-    check('every menswear category says it is pending, and leads nowhere',
-      men.pending === 4 && men.links === 0, `${men.pending} pending / ${men.links} links`);
+    check('menswear is explicitly a reference preview', men.publication === 'reference-preview', men.publication);
+    check('menswear has a working visual gallery behind every category',
+      men.garments >= 8 && men.links === 4, `${men.garments} references / ${men.links} links`);
+    check('no menswear category is left as a dead pending row', men.pending === 0, String(men.pending));
 
     await c.close();
   }
@@ -442,6 +461,7 @@ try {
         r: s.getBoundingClientRect(),
         front: Number(s.dataset.front) || 0.55,
         z: Number(s.style.zIndex),
+        filter: getComputedStyle(s.querySelector('img')).filter,
       })).sort((a, b) => a.r.left - b.r.left);
       const exposure = boxes.map((b, i) => (i === boxes.length - 1 ? 1 : (boxes[i + 1].r.left - b.r.left) / b.r.width));
       return {
@@ -450,6 +470,7 @@ try {
         zOrder: boxes.map((b) => b.z),
         exposure: exposure.map((e) => +e.toFixed(3)),
         fronts: boxes.map((b) => b.front),
+        filters: boxes.map((b) => b.filter),
         insideStage: boxes.every((b) => b.r.left >= stage.left - 1 && b.r.right <= stage.right + 1),
         smallest: Math.round(Math.min(...boxes.map((b) => b.r.width))),
         stackDisplay: getComputedStyle(panel.querySelector('[data-stack]')).display,
@@ -476,6 +497,9 @@ try {
       deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.15),
       deck.widths.join(' < '));
     check('the furthest garment is still readable', deck.smallest >= 190, `${deck.smallest}px`);
+    check('only the farthest desktop garment carries atmospheric blur',
+      /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
+      deck.filters.join(' | '));
 
     /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
        baseline — each step back stands a little higher, the way objects rise
@@ -548,10 +572,22 @@ try {
       const prevDisabled = document.querySelector('[data-screen="category"]:not([hidden]) [data-step="-1"]').disabled;
       return { count, high, low, nextDisabled, prevDisabled };
     });
-    check('index never exceeds count - 1', bounds.high === bounds.count - 1, `${bounds.high} of ${bounds.count}`);
-    check('index never goes below zero', bounds.low === 0);
-    check('next is disabled on the last item', bounds.nextDisabled === true);
-    check('prev is disabled on the first item', bounds.prevDisabled === true);
+    check('out-of-range forward navigation wraps by modulo', bounds.high === (bounds.count + 50) % bounds.count, `${bounds.high} of ${bounds.count}`);
+    check('out-of-range backward navigation wraps by modulo', bounds.low === ((-50 % bounds.count) + bounds.count) % bounds.count, String(bounds.low));
+    check('circular controls stay available at every item', !bounds.nextDisabled && !bounds.prevDisabled);
+    const loop = await p.evaluate(() => {
+      const api = window.__portfolioRunway;
+      const count = api.getState().count;
+      api.goTo(count - 1);
+      document.querySelector('[data-screen="category"]:not([hidden]) [data-step="1"]').click();
+      const forward = api.getState().activeIndex;
+      document.querySelector('[data-screen="category"]:not([hidden]) [data-step="-1"]').click();
+      const backward = api.getState().activeIndex;
+      api.goTo(0);
+      return { count, forward, backward };
+    });
+    check('next loops from the last garment to the first', loop.forward === 0, JSON.stringify(loop));
+    check('previous loops from the first garment to the last', loop.backward === loop.count - 1, JSON.stringify(loop));
 
     // Drag must follow the hand: pointer right -> stack right.
     await p.waitForTimeout(300);
@@ -575,7 +611,8 @@ try {
     await p.mouse.up();
     await p.waitForTimeout(700);
     check('releasing a leftward drag advances the deck',
-      await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === indexBefore + 1);
+      await p.evaluate(() => window.__portfolioRunway.getState().activeIndex)
+        === (indexBefore + 1) % (await p.evaluate(() => window.__portfolioRunway.getState().count)));
 
     /* CONTENT INTEGRITY. The 49 photographs are temporary visual references
        and must never be presented as authored projects. */
@@ -674,11 +711,11 @@ try {
         deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
       };
     });
-    check('the garment deck takes 70-72% of the viewer',
-      weight.sideBySide && weight.deckShare >= 0.68 && weight.deckShare <= 0.74,
+    check('the garment deck takes 76-80% of the viewer',
+      weight.sideBySide && weight.deckShare >= 0.76 && weight.deckShare <= 0.80,
       `${Math.round(weight.deckShare * 100)}%`);
-    check('the development rail takes 28-30% of the viewer',
-      weight.railShare >= 0.26 && weight.railShare <= 0.32, `${Math.round(weight.railShare * 100)}%`);
+    check('the development rail takes 20-24% of the viewer',
+      weight.railShare >= 0.20 && weight.railShare <= 0.24, `${Math.round(weight.railShare * 100)}%`);
     check('a development plate is a fraction of the garment stage',
       weight.plateWidth <= weight.stageHeight * 0.45,
       `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
@@ -768,6 +805,7 @@ try {
         stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
         lefts: boxes.map((b) => Math.round(b.left)),
         previews: list.map((el) => el.querySelector('.pf-doc__page img')?.getAttribute('src') ?? ''),
+        previewLinks: list.map((el) => el.querySelector('.pf-doc__page')?.getAttribute('href') ?? ''),
         previewWidths: list.map((el) => Math.round(el.querySelector('.pf-doc__page').getBoundingClientRect().width)),
         numbers: list.map((el) => el.querySelector('.pf-doc__num').textContent.trim()),
         opens: list.map((el) => el.querySelector('[data-open-pdf]')?.getAttribute('href') ?? ''),
@@ -786,6 +824,8 @@ try {
     check('each is marked a demo', docs.stamps === 5, String(docs.stamps));
     check('each offers its own PDF',
       docs.opens.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.opens.join(' '));
+    check('every document preview is itself clickable',
+      docs.previewLinks.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.previewLinks.join(' '));
     check('the rejected folio/carousel interface is gone', docs.carousel === 0, String(docs.carousel));
 
     check('no PDF byte is fetched when the chapter opens', pdfRequests.length === 0, pdfRequests.join(','));
@@ -835,7 +875,7 @@ try {
     await c.close();
   }
 
-  // ---- 3D Simulation: ten 16:9 slots in a column
+  // ---- Pattern & 3D Development: five supplied click-to-load recordings
   console.log('\nportfolio 3D simulation');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -847,38 +887,41 @@ try {
     await p.waitForTimeout(600);
     await openChapter(p, '3d-simulation');
 
-    /* PUBLIC UI SHOWS WHAT EXISTS.
-       The chapter is architected for ten sessions and the data still carries
-       ten, but none has a recording behind it yet, so the page shows one
-       composed state rather than ten identical empty frames. */
+    /* All five supplied recordings render as equal poster-led rows. No iframe
+       exists until one deliberate play click. */
     const reel = await p.evaluate(() => {
       const w = document.querySelector('[data-world="3d-simulation"]');
-      const empty = w.querySelector('[data-videos-empty]');
       const items = [...w.querySelectorAll('[data-video]')];
       return {
         rendered: items.length,
-        pendingText: (w.textContent.match(/pending/gi) ?? []).length,
-        emptyState: !!empty,
-        capacity: Number(empty?.dataset.capacity ?? w.querySelector('[data-capacity]')?.dataset.capacity ?? 0),
-        emptyText: empty?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+        ids: items.map((item) => item.dataset.youtube),
+        posters: items.map((item) => item.querySelector('img')?.getAttribute('src') ?? ''),
+        capacity: Number(w.querySelector('[data-capacity]')?.dataset.capacity ?? 0),
         players: w.querySelectorAll('[data-player] > *').length,
         playControls: w.querySelectorAll('[data-play]').length,
         localVideo: w.innerHTML.includes('CLO3D.mp4') || w.querySelectorAll('video').length,
         strip: w.querySelectorAll('.pf-strip, .pf-frame, .pf-reel__stage').length,
       };
     });
-    check('no empty video slot is published', reel.rendered === 0, String(reel.rendered));
-    check('the chapter never repeats a pending label', reel.pendingText === 0, String(reel.pendingText));
-    check('one composed state stands in for the unpublished library', reel.emptyState);
-    check('the architecture still carries ten sessions', reel.capacity === 10, String(reel.capacity));
-    check('the state says what it is waiting for, once',
-      /publishing soon/i.test(reel.emptyText) && /10 sessions/.test(reel.emptyText)
-      && /16:9/.test(reel.emptyText), reel.emptyText);
-    check('no player and no play control exist',
-      reel.players === 0 && reel.playControls === 0, `${reel.players}/${reel.playControls}`);
+    const suppliedIds = ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k'];
+    check('exactly five supplied recordings are published', reel.rendered === 5 && reel.capacity === 5, `${reel.rendered}/${reel.capacity}`);
+    check('the exact five supplied YouTube ids are used in order', JSON.stringify(reel.ids) === JSON.stringify(suppliedIds), reel.ids.join(','));
+    check('every recording has its localized YouTube poster', reel.posters.every((src, index) => src === `/portfolio/posters/${suppliedIds[index]}.jpg`), reel.posters.join(' | '));
+    check('no player exists before a click, while all play controls do',
+      reel.players === 0 && reel.playControls === 5, `${reel.players}/${reel.playControls}`);
     check('the local home-page clip is not used as a library video',
       reel.localVideo === false || reel.localVideo === 0, String(reel.localVideo));
     check('the rejected hero-plus-film-strip interface is gone', reel.strip === 0, String(reel.strip));
+
+    check('no privacy-enhanced player is requested before play', media.every((url) => !/youtube-nocookie\.com\/embed/i.test(url)), media.join(' | '));
+    await p.evaluate(() => document.querySelector('[data-world="3d-simulation"] [data-play]').click());
+    await p.waitForTimeout(300);
+    const played = await p.evaluate(() => {
+      const frames = [...document.querySelectorAll('[data-world="3d-simulation"] iframe')];
+      return { count: frames.length, src: frames[0]?.getAttribute('src') ?? '' };
+    });
+    check('a click creates exactly one privacy-enhanced iframe',
+      played.count === 1 && played.src.includes(`youtube-nocookie.com/embed/${suppliedIds[0]}`), JSON.stringify(played));
 
     /* A published session renders in the same 16:9 frame the empty state
        promises. The rule is in the stylesheet whether or not a session exists
@@ -919,7 +962,7 @@ try {
         gapLum: lum(getComputedStyle(w.querySelector('[data-screen]')).backgroundColor === 'rgba(0, 0, 0, 0)'
           ? getComputedStyle(w).backgroundColor
           : getComputedStyle(w.querySelector('[data-screen]')).backgroundColor),
-        leadLum: lum(getComputedStyle(w.querySelector('.pf-soon__lead')).color),
+        leadLum: lum(getComputedStyle(w.querySelector('.pf-video__head h3')).color),
         /* Orange is a signal, never a surface. A hairline mark carries it —
            the last step of the progression signature is a 2px rule — so this
            counts painted AREA rather than any use of the colour at all. */
@@ -1005,9 +1048,10 @@ try {
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
     check('the development plates are declared as demos without the script',
       html.includes('Demo layout — real project assets pending') || html.includes('Demo layout &#8212; real project assets pending'));
-    check('the unpublished library states itself once without the script',
-      html.includes('Publishing soon.')
-      && (html.match(/YouTube video pending/g) ?? []).length === 0);
+    check('all five supplied development recordings are server-rendered without players',
+      ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
+        .every((id) => html.includes(`data-youtube="${id}"`))
+      && !html.includes('youtube-nocookie.com/embed/'));
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
       return { total: slots.length, shown: slots.filter((s) => s.getBoundingClientRect().width > 20).length };

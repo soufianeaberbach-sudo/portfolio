@@ -1,15 +1,13 @@
 ---
 /* Pattern & 3D Development — a library of recorded development sessions.
  *
- * Ten entries, one below another, every one of them in the same 16:9 frame at
+ * Five entries, one below another, every one of them in the same 16:9 frame at
  * the same width. No hero, no film strip, no carousel: the videos are the
  * content and they are all the same kind of thing, so they are presented as
  * one column of equals.
  *
- * NOTHING IS PUBLISHED YET. No youtubeId is invented, no source is attached
- * and no subject is claimed for any slot; each renders inside the real 16:9
- * frame saying what it is waiting for, so the finished layout can be judged
- * without pretending a recording exists.
+ * The exact five supplied YouTube ids are published. Titles remain neutral
+ * because the source material, not an inferred marketing story, names them.
  *
  * public/CLO3D.mp4 is deliberately absent. It is a vertical, self-hosted clip
  * of a finished simulation running — a different format and a different kind
@@ -29,17 +27,8 @@ interface Props {
 
 const { sessions } = Astro.props;
 
-/* WHAT THE PUBLIC SEES IS WHAT EXISTS.
- *
- * The chapter is architected for ten recorded sessions and the data model
- * still carries all ten. Only the ones with a real recording behind them are
- * rendered: ten identical "pending" entries down a page is an honest statement
- * made in the least flattering possible way, and it advertises absence instead
- * of work. When a youtubeId is added the session appears here on its own, in
- * the same 16:9 frame as the rest, with no other change.
- *
- * Until then the chapter says so once, plainly, in a composed state rather
- * than through ten empty frames. */
+/* WHAT THE PUBLIC SEES IS WHAT EXISTS. Sessions without an id remain excluded;
+ * the five supplied recordings render as equal rows, with no empty slots. */
 const published = sessions.filter((session) => Boolean(session.youtubeId));
 const capacity = sessions.length;
 const num = (i: number) => String(i + 1).padStart(2, '0');
@@ -66,10 +55,10 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       <ol class="pf-videos" data-capacity={capacity}>
         {published.map((session, index) => (
           <li class="pf-video" data-video={session.id} data-youtube={session.youtubeId ?? ''}>
-            <p class="pf-video__head">
+            <div class="pf-video__head">
               <i class="label pf-video__num">{num(index)}</i>
               <h3>{session.title}</h3>
-            </p>
+            </div>
 
             <div class="pf-video__frame">
               {session.poster && (
@@ -81,6 +70,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
                   alt={session.posterAlt ?? ''}
                   loading="lazy"
                   decoding="async"
+                  onerror="this.hidden=true"
                 />
               )}
               <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>
