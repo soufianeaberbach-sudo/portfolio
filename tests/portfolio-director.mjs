@@ -19,6 +19,12 @@ try {
     };
     const open = async (hash) => { await page.evaluate((value) => { location.hash = value; }, hash); await page.waitForTimeout(600); };
     await page.goto(`${base}/portfolio/`);
+    await page.addStyleTag({ content: 'astro-dev-toolbar { display: none !important; }' });
+    for (const cover of await page.locator('.pf-cover__still').all()) {
+      await cover.scrollIntoViewIfNeeded();
+      await cover.evaluate((image) => image.decode());
+    }
+    await page.evaluate(() => scrollTo(0, 0));
     await capture('landing');
     await page.screenshot({ path: `${output}/${width}-landing-full.png`, fullPage: true });
     for (const [world, category] of [['womenswear', 'rtw'], ['menswear', 'm-streetwear']]) {

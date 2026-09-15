@@ -4,6 +4,7 @@ import Arrow from '../components/Arrow.astro';
 import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
+import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 import '../styles/portfolio-director.css';
 
@@ -35,87 +36,58 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     </script>
 
     <section class="pf-intro" id="portfolio-index">
-      <p class="eyebrow">Portfolio / 02</p>
-      <h1 class="display pf-intro__title">Four ways to read the work.</h1>
-      <p class="pf-intro__lede">
-        Product development, technical documentation and digital validation shown as evidence — not decoration.
-      </p>
+      <p class="eyebrow">Portfolio / Fashion & product development</p>
+      <div class="pf-manifesto">
+        <figure class="pf-prologue-image" aria-label="Editorial fashion reference, not authored project evidence">
+          <img src="/portfolio/editorial/pexels-13364876.jpg" width="1200" height="1500" alt="" fetchpriority="high" />
+          <figcaption class="label">Editorial reference / Pexels</figcaption>
+        </figure>
+        <h1 class="display pf-intro__title">Ideas<span class="pf-into">into</span><span class="pf-form">form.</span></h1>
+        <div class="pf-intro__aside">
+          <span class="pf-intro__arrow" aria-hidden="true">↘</span>
+          <p class="pf-intro__lede">Creative intent. Technical clarity.<br />The space between an idea<br />and a garment.</p>
+          <p class="label">Four worlds / One practice</p>
+        </div>
+      </div>
+      <WorldNavigation />
     </section>
 
-    {/* ------------------------------------------------------------------
-        FOUR CHAPTER COVERS
-
-        Four separated image-led openings arranged as one asymmetric editorial
-        spread. They introduce the worlds without turning into a navigation
-        grid or previewing the category lists inside.
-       ------------------------------------------------------------------ */}
-    <section class="pf-covers" aria-labelledby="pf-covers-title" data-covers>
+    <section class="pf-covers pf-gates" aria-labelledby="pf-covers-title" data-covers>
       <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
-
       {chapters.map((chapter, index) => (
-          <a
-            class="pf-cover"
-            href={`#${chapter.id}`}
-            data-nav
-            data-chapter={chapter.id}
-            data-publication={chapter.publication}
-            data-tone="image"
-            data-cover-index={index + 1}
-            data-image-source={chapter.cover.credit.source}
-            data-image-source-page={chapter.cover.credit.sourcePage}
-            data-image-photographer={chapter.cover.credit.photographer}
-            style={`--cover-vw:${coverScale(chapter.title).toFixed(2)};--cover-cqw:${(coverScale(chapter.title) * 1.26).toFixed(2)}cqw`}
-          >
-            <span class="pf-cover__art" aria-hidden="true">
-              <img
-                class="pf-cover__still"
-                src={chapter.cover.image.src}
-                srcset={chapter.cover.image.srcset}
-                sizes="(max-width: 899px) 92vw, 62vw"
-                width={chapter.cover.image.width}
-                height={chapter.cover.image.height}
-                alt=""
-                loading={index < 2 ? 'eager' : 'lazy'}
-                decoding="async"
-                style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
-              />
-            </span>
-
-            {/* The register: the chapter's number at one margin, its kind at
-                the other, on the rule that opens the cover. */}
-            <span class="pf-cover__register" aria-hidden="true">
-              <i class="pf-cover__num">{chapter.number}</i>
-              <i class="pf-cover__kind">{chapter.kind}</i>
-            </span>
-
-            <span class="pf-cover__type">
-              <b class="pf-cover__name">{chapter.title}</b>
-              <span class="pf-cover__intent">{['Silhouette / proportion / desire', 'Structure / volume / balance', 'Design intent, made explicit', 'From pattern lines to digital fit'][index]}</span>
-              <span class="pf-cover__go label" aria-hidden="true">Open chapter <Arrow /></span>
-            </span>
-
-            {/* THE SIGNATURE. Four rules stepping up to full height, in the
-                same 52 / 66 / 82 / 100 rhythm the garment deck recedes by.
-                The whole portfolio is about work moving forward from an idea
-                to a finished garment, and this is that idea drawn once per
-                chapter — the last step, the result, carrying the one signal.
-                Tech Packs takes a register of ruled document fields instead:
-                same rhythm, a document's own language. */}
-            <span class={`pf-cover__meter${chapter.id === 'tech-packs' ? ' pf-cover__meter--doc' : ''}`} aria-hidden="true">
-              <i></i><i></i><i></i><i></i>
-            </span>
-          </a>
+        <a class="pf-cover pf-gate" href={`#${chapter.id}`} data-nav
+          data-chapter={chapter.id} data-publication={chapter.publication}
+          data-cover-index={index + 1}
+          data-image-source={chapter.cover.credit.source}
+          data-image-source-page={chapter.cover.credit.sourcePage}
+          data-image-photographer={chapter.cover.credit.photographer}>
+          <span class="pf-cover__register">
+            <i class="pf-cover__num">{chapter.number}</i>
+            <i class="pf-cover__kind">{chapter.kind}</i>
+          </span>
+          <span class="pf-cover__art" aria-hidden="true">
+            <img class="pf-cover__still" src={chapter.cover.image.src}
+              srcset={chapter.cover.image.srcset} sizes="(max-width: 767px) 90vw, 65vw"
+              width={chapter.cover.image.width} height={chapter.cover.image.height}
+              alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
+          </span>
+          <span class="pf-cover__type">
+            <b class="display pf-cover__name">{chapter.title}</b>
+            <span class="pf-cover__intent">{[
+              'The silhouette comes first.',
+              'A study in structure.',
+              'The language of making.',
+              'Inside the development process.',
+            ][index]}</span>
+            <span class="pf-cover__go label">Enter world <Arrow /></span>
+          </span>
+          <span class="pf-gate__folio label" aria-hidden="true">{[
+            'Form / movement / proportion', 'Balance / volume / construction',
+            'Five technical dossiers', 'Five recorded sessions',
+          ][index]}</span>
+        </a>
       ))}
     </section>
-
-    {/* ------------------------------------------------------------------
-        THE FOUR CHAPTERS
-
-        Present in the document, always. With the script running these become
-        full-screen layers opened from a cover; without it they are four
-        ordinary sections the chapter anchors jump to, carrying every
-        category, document and video slot as real HTML.
-       ------------------------------------------------------------------ */}
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
       <TechPackWorld packs={techPacks} />
