@@ -47,6 +47,8 @@
  * stamped interface demos rather than client work.
  */
 
+import { editorial } from './portfolio-editorial';
+
 export type Gender = 'womenswear' | 'menswear';
 
 /* Construction families, not fibre compositions. Only ever set from verified
@@ -120,6 +122,7 @@ export interface Project {
 export interface ReferenceImage {
   id: string;
   image: ImageAsset;
+  credit?: ImageCredit;
 }
 
 export interface MarketCategory {
@@ -129,6 +132,7 @@ export interface MarketCategory {
   blurb: string;
   projects: Project[];
   references: ReferenceImage[];
+  cover?: ImageAsset;
 }
 
 export type Publication = 'published' | 'reference-preview' | 'unpublished';
@@ -409,6 +413,21 @@ const menswearCategories: MarketCategory[] = [
 
 /* -------------------------------------------------------------------------- */
 
+// Menswear reference photography replaces the inherited cross-category placeholders.
+const menswearReferenceIds = [
+  [8505243, 30599804, 30954220, 16711124],
+  [7648388, 20038943, 30954220, 5037287],
+  [16711124, 8505243, 17552351, 4651396],
+  [4651396, 16862147, 17552351, 18320052],
+];
+menswearCategories.forEach((category, index) => {
+  category.references = menswearReferenceIds[index].map((id) => ({
+    id: `${category.id}-pexels-${id}`, ...editorial[id],
+  }));
+  category.cover = category.references[0].image;
+});
+rtw.cover = editorial[13364876].image;
+
 export const womenswear: GarmentWorld = {
   id: 'womenswear',
   number: '01',
@@ -493,7 +512,7 @@ export const simulationSessions: SimulationSession[] = suppliedYouTubeIds.map((y
   title: `Development recording ${String(index + 1).padStart(2, '0')}`,
   kind: 'working-session',
   youtubeId,
-  poster: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+  poster: `/portfolio/posters/${youtubeId}.jpg`,
   posterAlt: `Poster frame for development recording ${String(index + 1).padStart(2, '0')}.`,
   description: 'A supplied recording from the pattern and 3D development archive.',
 }));
@@ -536,8 +555,7 @@ export const chapters: Chapter[] = [
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     cover: {
-      image: image('evening/4', 'Front and back views of a black sequinned evening gown on a white studio ground.'),
-      credit: { source: 'Portfolio reference archive' },
+      ...editorial[13364876],
       focalPosition: '50% 38%',
     },
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
@@ -550,8 +568,7 @@ export const chapters: Chapter[] = [
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     cover: {
-      image: image('jersey/6', 'Front and back views of a burgundy hooded sweatshirt on a white studio ground.'),
-      credit: { source: 'Portfolio reference archive' },
+      ...editorial[4651396],
       focalPosition: '50% 32%',
     },
     stateNote: 'Selected menswear work will be published here.',

@@ -68,12 +68,13 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
         {world.categories.map((category, categoryIndex) => {
           const count = slotsFor(category).length;
           const open = count > 0;
-          const visual = category.projects[0]?.finalGarmentImage ?? category.references[0]?.image;
+          const visual = category.cover ?? category.projects[0]?.finalGarmentImage ?? category.references[0]?.image;
           const Tag = open ? 'a' : 'div';
           return (
             <li data-category-index={categoryIndex + 1}>
               <Tag
                 class="pf-cat"
+                data-composition={['portrait', 'margin', 'wide', 'portrait', 'wide'][categoryIndex]}
                 href={open ? `#${world.id}/${category.id}` : undefined}
                 data-nav={open ? '' : undefined}
                 data-category={category.id}
@@ -179,6 +180,13 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                     <p class="pf-prov pf-prov--inline" data-reference-notice>
                       <b class="label">Reference preview</b>
                       <span>{REFERENCE_DISCLAIMER}</span>
+                    </p>
+                  )}
+                  {publication === 'reference-preview' && category.references.some((ref) => ref.credit) && (
+                    <p class="pf-reference-sources">
+                      Licensed reference photography — {category.references.map((ref, index) => ref.credit && (
+                        <><a href={ref.credit.sourcePage} target="_blank" rel="noopener">Pexels {pad(index)}</a>{index < category.references.length - 1 ? ' / ' : ''}</>
+                      ))}
                     </p>
                   )}
                 </div>

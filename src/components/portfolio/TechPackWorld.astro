@@ -92,22 +92,7 @@ const anyDemo = packs.some((pack) => pack.demo);
                 {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount} pages` : ''}
               </p>
               {pack.demo && <p class="label pf-doc__stamp">Demo — interface prototype</p>}
-              {/* An editorial action, not a filled block: the document is the
-                  thing on this page, and a large orange button beside it
-                  competes with the page it is offering to open. */}
-              {pack.pdfUrl && (
-                <a
-                  class="pf-doc__open label"
-                  id={`open-${pack.id}`}
-                  href={pack.pdfUrl}
-                  target="_blank"
-                  rel="noopener"
-                  data-open-pdf
-                  data-doc-title={pack.title}
-                >
-                  Open PDF <span aria-hidden="true"><Arrow /></span>
-                </a>
-              )}
+              <p class="label pf-doc__instruction">Select the document to read</p>
             </div>
           </li>
         ))}

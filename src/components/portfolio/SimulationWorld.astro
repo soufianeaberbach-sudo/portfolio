@@ -70,6 +70,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
                   alt={session.posterAlt ?? ''}
                   loading="lazy"
                   decoding="async"
+                  onerror="this.hidden=true"
                 />
               )}
               <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>

@@ -1,0 +1,97 @@
+/* Portfolio-only editorial compositions. The garment runtime is unchanged. */
+.pf .pf-covers { gap: 5rem 3rem; }
+.pf .pf-cover[data-chapter] { background: var(--paper); color: var(--ink); padding: 0; overflow: hidden; }
+.pf .pf-cover__art::after { display: none; }
+.pf .pf-cover__register { position: absolute; inset: 0 0 auto; padding: 1rem 0; color: var(--ink); border-color: var(--line-strong); }
+.pf .pf-cover__num, .pf .pf-cover__kind { color: inherit; }
+.pf .pf-cover__type { position: absolute; inset: auto 0 0; padding: 1rem 0 0; background: var(--paper); justify-items: start; gap: .8rem; width: 100%; }
+.pf .pf-cover__name { color: inherit; font-size: clamp(2.8rem, 6.2cqw, 7rem); max-width: 100%; line-height: .94; text-align: left; overflow-wrap: normal; }
+.pf .pf-cover__intent { font-size: .85rem; font-weight: 400; letter-spacing: .025em; }
+.pf .pf-cover__go { color: var(--ink); justify-self: start; padding-bottom: .5rem; }
+.pf .pf-cover__go .arrow { color: var(--signal); }
+.pf .pf-cover__meter { display: none; }
+.pf .pf-cover[data-chapter='womenswear'] { min-height: 790px; }
+.pf .pf-cover[data-chapter='womenswear'] .pf-cover__art { inset: 65px 0 130px 14%; }
+.pf .pf-cover[data-chapter='womenswear'] .pf-cover__type { background: transparent; }
+.pf .pf-cover[data-chapter='womenswear'] .pf-cover__name { background: var(--paper); padding-top: .15em; font-size: 12cqw; }
+.pf .pf-cover[data-chapter='menswear'] { min-height: 620px; margin-top: 9rem; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 64px 12% 180px 0; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__still { object-position: center 30% !important; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 14cqw; text-align: left; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__type { justify-items: start; padding-left: 12%; }
+.pf .pf-cover[data-chapter='tech-packs'] { min-height: 580px; margin-top: 0; border-top: 1px solid var(--ink); }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 65px 12% 155px 15%; transform: rotate(-4deg); box-shadow: 8px 14px 22px #11111115; transition: transform .45s ease; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__still { object-fit: contain; background: #fff; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { padding-left: 0; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 16cqw; }
+.pf .pf-cover[data-chapter='tech-packs']:is(:hover,:focus-visible) .pf-cover__art { transform: rotate(-1deg) translateY(-5px); }
+.pf .pf-cover[data-chapter='3d-simulation'] { min-height: 650px; margin-top: 0; background: var(--ink); color: var(--paper-bright); }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__register { inset: 0 1.5rem auto; color: var(--paper-bright); border-color: #ffffff40; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 70px 0 180px 24%; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { background: var(--ink); padding: 1.5rem; justify-items: start; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 9cqw; text-align: left; max-width: 14ch; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__go { color: var(--paper-bright); }
+
+.pf .pf-cats__list { gap: 5rem 3rem; }
+.pf .pf-cat, .pf .pf-cats__list > li:nth-child(even) .pf-cat { background: transparent; color: var(--ink); min-height: 0; aspect-ratio: auto; overflow: visible; display: flex; flex-direction: column; align-items: stretch; }
+.pf .pf-cat__shade { display: none; }
+.pf .pf-cat__media { position: relative; inset: auto; width: 100%; flex: none; aspect-ratio: 4 / 5; overflow: hidden; }
+.pf .pf-cat__media img { position: absolute; inset: 0; object-position: center 25%; }
+.pf .pf-cat__content { min-height: 0; min-width: 0; width: 100%; padding: 1.3rem 0 0; grid-template-rows: auto auto auto; gap: .9rem 1rem; }
+.pf .pf-cat__label { grid-row: 2; color: var(--ink); font-size: clamp(2rem, 3.5vw, 4rem); max-width: 17ch; }
+.pf .pf-cat__num, .pf .pf-cat__count, .pf .pf-cat__blurb { color: var(--ink); }
+.pf .pf-cat__num { color: var(--signal); }
+.pf .pf-cat__blurb, .pf .pf-cat__go { grid-row: 3; }
+.pf .pf-cat__blurb { font-size: .9rem; }
+.pf .pf-cat[data-composition='margin'] .pf-cat__media { width: 82%; margin-left: 18%; aspect-ratio: 3 / 4; }
+.pf .pf-cat[data-composition='margin'] .pf-cat__label { border-left: 2px solid var(--signal); padding-left: 1rem; }
+.pf .pf-cats__list > li:nth-child(3) { grid-column: 1 / -1; }
+.pf .pf-cat[data-composition='wide'] { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
+.pf .pf-cat[data-composition='wide'] .pf-cat__media { aspect-ratio: 5 / 4; }
+.pf .pf-cat[data-composition='wide'] .pf-cat__content { padding-top: 0; }
+.pf .pf-cats__list > li:nth-child(4) { grid-column: 1 / span 6; margin-top: 0; }
+.pf .pf-cats__list > li:nth-child(5) { grid-column: 7 / span 6; margin-top: 5rem; }
+.pf .pf-cats__list > li:nth-child(5) .pf-cat { display: flex; }
+.pf .pf-cats__list > li:nth-child(5) .pf-cat__media { aspect-ratio: 1; }
+.pf .pf-cats__list > li:nth-child(5) .pf-cat__content { padding-top: 1.3rem; }
+.pf .pf-reference-sources { font-size: .75rem; line-height: 1.7; color: var(--ink-soft); }
+.pf .pf-reference-sources a { text-underline-offset: .2em; }
+.pf .pf-doc__page { transform: rotate(-1deg); transform-origin: 50% 90%; transition: transform .4s ease, box-shadow .4s ease; box-shadow: 5px 9px 20px #1111110a; }
+.pf .pf-doc[data-side='right'] .pf-doc__page { transform: rotate(1deg); }
+.pf .pf-doc__page:is(:hover,:focus-visible) { transform: rotate(0) translateY(-5px); box-shadow: 7px 16px 28px #11111114; }
+.pf .pf-doc__instruction { margin-top: 2rem; font-size: .65rem; color: var(--ink-soft); }
+.pf .pf-video__frame { background: #171715; }
+.pf .pf-video__head { padding-top: 1rem; border-top: 1px solid #ffffff30; }
+.pf .pf-video__num { color: var(--signal); }
+
+@media (max-width: 899px) {
+  .pf .pf-covers { gap: 4rem; }
+  .pf .pf-cover[data-chapter] { min-height: 620px; margin-top: 0; }
+  .pf .pf-cover[data-chapter='menswear'] { min-height: 560px; }
+  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 560px; }
+  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 600px; }
+  .pf .pf-cover__register { font-size: .65rem; }
+  .pf .pf-cover[data-chapter='womenswear'] .pf-cover__art { left: 10%; }
+  .pf .pf-cover[data-chapter='womenswear'] .pf-cover__name { font-size: 12cqw; }
+  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 10cqw; }
+  .pf .pf-cats__list { display: block; }
+  .pf .pf-cats__list > li:nth-child(n) { margin: 0 0 3.5rem; }
+  .pf .pf-cat__label { font-size: clamp(2rem, 5vw, 3rem); }
+}
+@media (max-width: 540px) {
+  .pf .pf-cover[data-chapter='womenswear'] { min-height: 560px; }
+  .pf .pf-cover[data-chapter='menswear'] { min-height: 480px; }
+  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 480px; }
+  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 500px; }
+  .pf .pf-cover__intent { font-size: .75rem; }
+  .pf .pf-cover[data-chapter='menswear'] .pf-cover__art { bottom: 150px; }
+  .pf .pf-cat[data-composition='wide'] { display: flex; gap: 0; }
+  .pf .pf-cat[data-composition='wide'] .pf-cat__media { width: 100%; }
+  .pf .pf-cat[data-composition='wide'] .pf-cat__content { padding-top: 1.3rem; }
+  .pf .pf-cat__label { font-size: 2.1rem; }
+  .pf .pf-cat__count { font-size: .6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf .pf-cover__art, .pf .pf-cover__still, .pf .pf-cat__media img, .pf .pf-doc__page { transition: none; }
+  .pf .pf-doc__page:is(:hover,:focus-visible), .pf .pf-cover:hover .pf-cover__still, .pf a.pf-cat:hover .pf-cat__media img { transform: none; }
+}

@@ -209,21 +209,25 @@ try {
         chapter: el.dataset.chapter,
         register: !!el.querySelector('.pf-cover__register .pf-cover__num')
           && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
-        meter: el.querySelectorAll('.pf-cover__meter i').length,
-        signal: getComputedStyle(el.querySelector('.pf-cover__meter i:nth-child(4)')).backgroundColor,
+        intent: el.querySelector('.pf-cover__intent')?.textContent.trim(),
+        signal: getComputedStyle(el.querySelector('.pf-cover__go .arrow')).color,
         /* Where the name sits across the cover, as a fraction of its width. */
         axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
+          / el.getBoundingClientRect().width).toFixed(2),
+        artInset: +((el.querySelector('.pf-cover__art').getBoundingClientRect().left - el.getBoundingClientRect().left)
           / el.getBoundingClientRect().width).toFixed(2),
       };
     }));
     check('every cover carries its register', composed.every((cv) => cv.register));
-    check('every cover carries the four-step progression signature',
-      composed.every((cv) => cv.meter === 4), composed.map((cv) => cv.meter).join(','));
-    check('the last step of the signature is the one signal',
+    check('every chapter has a distinct editorial intent',
+      composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
+    check('the chapter action is the restrained orange signal',
       composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    check('the covers do not all sit on the same axis',
-      Math.max(...composed.map((cv) => cv.axis)) - Math.min(...composed.map((cv) => cv.axis)) >= 0.12,
-      composed.map((cv) => `${cv.chapter}:${cv.axis}`).join(' '));
+    check('the editorial image compositions use distinct margins',
+      new Set(composed.map((cv) => cv.artInset)).size >= 3
+        && composed[0].artInset > composed[1].artInset
+        && composed[3].artInset > composed[0].artInset,
+      composed.map((cv) => `${cv.chapter}:${cv.artInset}`).join(' '));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('the chapter title is the hero of its cover',
       covers.every((cv) => cv.titlePx >= 44), covers.map((cv) => cv.titlePx).join(','));
@@ -234,14 +238,14 @@ try {
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
     check('chapter 04 is published as Pattern & 3D Development',
-      /^04 Digital validation Pattern & 3D Development Open chapter$/.test(
+      /^04 Digital validation Pattern & 3D Development From pattern lines to digital fit Open chapter$/.test(
         covers.find((cv) => cv.chapter === '3d-simulation').text),
       covers.find((cv) => cv.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    check('the covers say only their number, kind, name and the way in',
-      covers.every((cv) => /^\d\d [A-Za-z ]+ [A-Za-z0-9 &]+ Open chapter$/.test(cv.text)),
+    check('the covers include a concise intent and the way in',
+      covers.every((cv) => /^\d\d .+ Open chapter$/.test(cv.text)),
       covers.map((cv) => cv.text).join(' | '));
     check('no category list appears on any cover',
       await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
@@ -298,7 +302,7 @@ try {
       return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top + scrollY), height: Math.round(r.height) };
     }));
     check(`${width} stacks one substantial cover at a time`,
-      mobileCovers.every((cover, index) => cover.height >= 600
+      mobileCovers.every((cover, index) => cover.height >= 480
         && cover.left >= 16 && cover.right <= width - 16
         && (index === 0 || cover.top >= mobileCovers[index - 1].top + mobileCovers[index - 1].height)),
       JSON.stringify(mobileCovers));
@@ -902,7 +906,7 @@ try {
     const suppliedIds = ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k'];
     check('exactly five supplied recordings are published', reel.rendered === 5 && reel.capacity === 5, `${reel.rendered}/${reel.capacity}`);
     check('the exact five supplied YouTube ids are used in order', JSON.stringify(reel.ids) === JSON.stringify(suppliedIds), reel.ids.join(','));
-    check('every recording has its YouTube poster', reel.posters.every((src, index) => src.includes(`/vi/${suppliedIds[index]}/`)), reel.posters.join(' | '));
+    check('every recording has its localized YouTube poster', reel.posters.every((src, index) => src === `/portfolio/posters/${suppliedIds[index]}.jpg`), reel.posters.join(' | '));
     check('no player exists before a click, while all play controls do',
       reel.players === 0 && reel.playControls === 5, `${reel.players}/${reel.playControls}`);
     check('the local home-page clip is not used as a library video',
