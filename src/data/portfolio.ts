@@ -41,9 +41,10 @@
  *
  * WHAT IS DELIBERATELY ABSENT
  * ---------------------------
- * No menswear photography, no tech pack PDF, no YouTube id, and no sketch,
- * pattern or simulation still for any garment. All four are modelled. None is
- * invented, and no womenswear image is relabelled to fill a menswear slot.
+ * No verified menswear project photography and no sketch, pattern or
+ * simulation still for any garment. Menswear uses explicitly labelled
+ * reference-preview imagery, and the five tech-pack PDFs remain unmistakably
+ * stamped interface demos rather than client work.
  */
 
 export type Gender = 'womenswear' | 'menswear';
@@ -70,6 +71,18 @@ export interface ImageAsset {
      right, so this is the fraction that must never be covered. Per image, not
      a global guess — see FRONT below. */
   front: number;
+}
+
+export interface ImageCredit {
+  source: string;
+  sourcePage?: string;
+  photographer?: string;
+}
+
+export interface ChapterCover {
+  image: ImageAsset;
+  credit: ImageCredit;
+  focalPosition?: string;
 }
 
 export type EvidenceStage = 'sketch' | 'pattern' | 'simulation';
@@ -361,22 +374,37 @@ const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
 ]);
 
 /* --------------------------------------------------------------------------
-   MENSWEAR — approved category order, no content.
+   MENSWEAR — approved category order with temporary reference previews.
 
-   Real menswear work exists but is not in this repository. The architecture is
-   here; the chapter resolves to `unpublished` and is not presented as finished
-   evidence. Nothing womenswear has been relabelled to fill it.
+   Real menswear work exists but is not in this repository. The chapter reuses
+   a small, clearly disclosed subset of the reference archive only to make all
+   four category routes and gallery mechanics reviewable; none is presented as
+   authored menswear project evidence.
    -------------------------------------------------------------------------- */
 
 const menswearCategories: MarketCategory[] = [
   buildCategory('m-streetwear', '01', 'Streetwear & Casualwear',
-    'Relaxed volume, dropped shoulders, and the construction that keeps a loose garment from reading as an oversized one.', []),
+    'Relaxed volume, dropped shoulders, and the construction that keeps a loose garment from reading as an oversized one.', [
+      ['jersey/6', bothViews('a cropped hooded sweatshirt worn with relaxed joggers')],
+      ['jersey/5', bothViews('a gathered jersey top worn with wide-leg trousers')],
+    ]),
   buildCategory('m-activewear', '02', 'Activewear & Performance',
-    'Panelled performance product engineered around movement, stretch and recovery.', []),
+    'Panelled performance product engineered around movement, stretch and recovery.', [
+      ['sport/5', bothViews('a long-sleeved performance top with full-length leggings')],
+      ['sport/6', bothViews('a short-sleeved performance top with cropped leggings')],
+      ['sport/10', bothViews('a long-sleeved performance set with contrast side stripes')],
+    ]),
   buildCategory('m-rtw', '03', 'Contemporary Ready-to-Wear',
-    'Shirting, knitwear and trousers, where the commercial and construction decisions meet.', []),
+    'Shirting, knitwear and trousers, where the commercial and construction decisions meet.', [
+      ['woven/2', bothViews('a cropped shirt worn with wide-leg trousers')],
+      ['woven/5', bothViews('a printed shirt-jacket worn with wide-leg trousers')],
+      ['jersey/8', bothViews('an off-shoulder knit top worn with tailored trousers')],
+    ]),
   buildCategory('m-tailoring', '04', 'Tailoring & Outerwear',
-    'Internal construction, canvas and balance — the work that is invisible once the garment is finished.', []),
+    'Internal construction, canvas and balance — the work that is invisible once the garment is finished.', [
+      ['jersey/9', bothViews('a belted jacket with a wide sleeve worn with tailored trousers')],
+      ['jersey/4', bothViews('a funnel-neck peplum jacket worn with slim trousers')],
+    ]),
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -444,38 +472,31 @@ export const techPacks: TechPack[] = [
   demoPack('tp-05', 'demo-05-hooded-sweatshirt', 'Hooded Sweatshirt', 'Hooded sweatshirt'),
 ];
 
-/* TEN VIDEO SLOTS, ALL WAITING.
- *
- * The Simulation chapter is a library of recorded working sessions in the
- * standard 16:9 YouTube format. None of those recordings is published yet, so
- * all ten slots are pending: no youtubeId is invented, no source is attached,
- * and no subject is claimed for any of them. Each renders inside the same 16:9
- * frame as the real videos will, saying what it is waiting for.
- *
- * public/CLO3D.mp4 is deliberately NOT in this list. It is a vertical,
- * self-hosted sixteen-second clip of a finished simulation running — a
- * different format and a different kind of thing from a recorded working
- * session — and standing it in as Video 01 would misrepresent both the library
- * and the clip. A frame from it is still used as the chapter's cover art, and
- * the home page keeps it unchanged. */
+/* The five supplied recordings. Posters are YouTube's own static thumbnails;
+ * the privacy-enhanced player is still created only after an intentional
+ * click, so opening the chapter never preloads an iframe. */
 export const SIMULATION_COVER = {
   src: '/CLO3D-cover.jpg',
   alt: 'Two digital avatars mid-walk in CLO3D, one in a corduroy harrington jacket and wide trousers, one in a ribbed top and wide trousers.',
 };
 
-export const simulationSessions: SimulationSession[] = Array.from(
-  { length: 10 },
-  (unused, i): SimulationSession => {
-    const n = String(i + 1).padStart(2, '0');
-    return {
-      id: `video-${n}`,
-      title: `Video ${n}`,
-      kind: 'working-session',
-      description: 'YouTube video pending. A recorded working session will be published in this slot.',
-      demo: true,
-    };
-  },
-);
+const suppliedYouTubeIds = [
+  'dfbUl82h8Ck',
+  'iOyhNjVEe_U',
+  'UToex4DCeZ8',
+  'TDfFjjnbPq4',
+  'ure0EK4gq3k',
+] as const;
+
+export const simulationSessions: SimulationSession[] = suppliedYouTubeIds.map((youtubeId, index) => ({
+  id: `video-${String(index + 1).padStart(2, '0')}`,
+  title: `Development recording ${String(index + 1).padStart(2, '0')}`,
+  kind: 'working-session',
+  youtubeId,
+  poster: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+  posterAlt: `Poster frame for development recording ${String(index + 1).padStart(2, '0')}.`,
+  description: 'A supplied recording from the pattern and 3D development archive.',
+}));
 
 /* --------------------------------------------------------------------------
    Publication state, derived from content so it cannot drift.
@@ -500,6 +521,7 @@ export interface Chapter {
   kind: string;
   descriptor: string;
   publication: Publication;
+  cover: ChapterCover;
   /* One restrained line shown when the chapter is not published work. Never
      promotional, never a promise with a date. */
   stateNote?: string;
@@ -513,6 +535,11 @@ export const chapters: Chapter[] = [
     kind: 'Product development',
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
+    cover: {
+      image: image('evening/4', 'Front and back views of a black sequinned evening gown on a white studio ground.'),
+      credit: { source: 'Portfolio reference archive' },
+      focalPosition: '50% 38%',
+    },
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
   },
   {
@@ -522,6 +549,11 @@ export const chapters: Chapter[] = [
     kind: 'Product development',
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
+    cover: {
+      image: image('jersey/6', 'Front and back views of a burgundy hooded sweatshirt on a white studio ground.'),
+      credit: { source: 'Portfolio reference archive' },
+      focalPosition: '50% 32%',
+    },
     stateNote: 'Selected menswear work will be published here.',
   },
   {
@@ -536,6 +568,11 @@ export const chapters: Chapter[] = [
     publication: techPacks.some((pack) => !pack.demo)
       ? 'published'
       : techPacks.length > 0 ? 'reference-preview' : 'unpublished',
+    cover: {
+      image: techPacks[0].coverImage!,
+      credit: { source: 'Portfolio demo document archive' },
+      focalPosition: '50% 18%',
+    },
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
   {
@@ -553,5 +590,17 @@ export const chapters: Chapter[] = [
     publication: simulationSessions.some((session) => !session.demo)
       ? 'published'
       : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',
+    cover: {
+      image: {
+        src: SIMULATION_COVER.src,
+        srcset: `${SIMULATION_COVER.src} 512w`,
+        width: 512,
+        height: 910,
+        alt: SIMULATION_COVER.alt,
+        front: 1,
+      },
+      credit: { source: 'Portfolio CLO3D archive' },
+      focalPosition: '50% 32%',
+    },
   },
 ];

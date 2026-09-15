@@ -4,7 +4,7 @@ import Arrow from '../components/Arrow.astro';
 import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
-import { chapters, garmentWorlds, techPacks, simulationSessions, SIMULATION_COVER } from '../data/portfolio';
+import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 
 /* A cover title is set to fill its measure, not to a fixed size: a short name
    and a long one should occupy about the same optical width, the way they
@@ -44,44 +44,41 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     {/* ------------------------------------------------------------------
         FOUR CHAPTER COVERS
 
-        One after another down the page, each the better part of a screen.
-        Three of them carry nothing but their name: the title is the design,
-        and the composition is made of scale, position and air rather than of
-        artwork. The fourth keeps the cinematic frame from the real CLO3D
-        recording, which is the one cover whose subject is already visible.
-
-        Nothing here previews what is inside. A cover that lists categories,
-        shows garments or explains itself is a directory entry; these are
-        chapter openings.
+        Four separated image-led openings arranged as one asymmetric editorial
+        spread. They introduce the worlds without turning into a navigation
+        grid or previewing the category lists inside.
        ------------------------------------------------------------------ */}
     <section class="pf-covers" aria-labelledby="pf-covers-title" data-covers>
       <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
 
-      {chapters.map((chapter) => {
-        const cinematic = chapter.id === '3d-simulation';
-        return (
+      {chapters.map((chapter, index) => (
           <a
             class="pf-cover"
             href={`#${chapter.id}`}
             data-nav
             data-chapter={chapter.id}
             data-publication={chapter.publication}
-            data-tone={cinematic ? 'dark' : 'paper'}
-            style={`--cover-vw:${coverScale(chapter.title).toFixed(2)}`}
+            data-tone="image"
+            data-cover-index={index + 1}
+            data-image-source={chapter.cover.credit.source}
+            data-image-source-page={chapter.cover.credit.sourcePage}
+            data-image-photographer={chapter.cover.credit.photographer}
+            style={`--cover-vw:${coverScale(chapter.title).toFixed(2)};--cover-cqw:${(coverScale(chapter.title) * 1.26).toFixed(2)}cqw`}
           >
-            {cinematic && (
-              <span class="pf-cover__art" aria-hidden="true">
-                <img
-                  class="pf-cover__still"
-                  src={SIMULATION_COVER.src}
-                  width="512"
-                  height="910"
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-              </span>
-            )}
+            <span class="pf-cover__art" aria-hidden="true">
+              <img
+                class="pf-cover__still"
+                src={chapter.cover.image.src}
+                srcset={chapter.cover.image.srcset}
+                sizes="(max-width: 899px) 92vw, 62vw"
+                width={chapter.cover.image.width}
+                height={chapter.cover.image.height}
+                alt=""
+                loading={index < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+                style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
+              />
+            </span>
 
             {/* The register: the chapter's number at one margin, its kind at
                 the other, on the rule that opens the cover. */}
@@ -106,8 +103,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
               <i></i><i></i><i></i><i></i>
             </span>
           </a>
-        );
-      })}
+      ))}
     </section>
 
     {/* ------------------------------------------------------------------
@@ -381,8 +377,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         const placed: Array<{ slot: HTMLElement; k: number; w: number; h: number; x: number }> = [];
         let x = 0;
         for (let k = 0; k < nominal; k += 1) {
-          const itemIndex = queue.index + (nominal - 1 - k);
-          if (itemIndex >= queue.slots.length) continue;
+          const itemIndex = (queue.index + (nominal - 1 - k)) % queue.slots.length;
           const slot = queue.slots[itemIndex];
           const s = scale[k];
           const w = width0 * s;
@@ -429,15 +424,15 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
           const noun = queue.counter.dataset.noun ?? 'Project';
           queue.counter.textContent = `${noun} ${String(queue.index + 1).padStart(2, '0')}`;
         }
-        if (queue.prev) (queue.prev as HTMLButtonElement).disabled = queue.index === 0;
-        if (queue.next) (queue.next as HTMLButtonElement).disabled = queue.index >= queue.slots.length - 1;
+        if (queue.prev) (queue.prev as HTMLButtonElement).disabled = queue.slots.length < 2;
+        if (queue.next) (queue.next as HTMLButtonElement).disabled = queue.slots.length < 2;
         layout(queue);
       };
 
       const goTo = (queue: Queue, next: number) => {
-        const clamped = Math.max(0, Math.min(queue.slots.length - 1, next));
-        if (clamped === queue.index) return;
-        queue.index = clamped;
+        const wrapped = ((next % queue.slots.length) + queue.slots.length) % queue.slots.length;
+        if (wrapped === queue.index) return;
+        queue.index = wrapped;
         render(queue);
       };
 
@@ -462,12 +457,6 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         let startX = 0;
         let pointerId = -1;
 
-        const resistance = (dx: number) => {
-          const atStart = queue.index === 0 && dx > 0;
-          const atEnd = queue.index >= queue.slots.length - 1 && dx < 0;
-          return (atStart || atEnd) ? dx * 0.3 : dx;
-        };
-
         queue.stage.addEventListener('pointerdown', (event) => {
           if (event.button !== 0 || queue.slots.length < 2) return;
           const target = event.target as HTMLElement;
@@ -482,7 +471,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
 
         queue.stage.addEventListener('pointermove', (event) => {
           if (!dragging || event.pointerId !== pointerId) return;
-          queue.drag = resistance(event.clientX - startX);
+          queue.drag = event.clientX - startX;
           queue.stack.style.setProperty('--drag', `${queue.drag}px`);
         });
 
@@ -713,10 +702,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     /* ======================================================================
        FOUR CHAPTER COVERS
 
-       Long editorial openings, one after another. Three carry nothing but
-       their name — the typography, the proportion and the air ARE the design,
-       and anything else on them (a garment, a category list, a paragraph)
-       would turn a chapter opening back into a directory entry.
+       Four image-led editorial openings arranged with unequal scale and air.
        ====================================================================== */
     .pf-covers { border-top: 1px solid var(--line-strong); }
 
@@ -734,6 +720,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       color: inherit;
       text-decoration: none;
       overflow: hidden;
+      container-type: inline-size;
     }
     .pf-cover + .pf-cover { border-top: 1px solid var(--line-strong); }
     .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
@@ -847,6 +834,55 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf-cover[data-tone='dark'] .pf-cover__meter i { background: rgba(251, 250, 246, .6); }
     .pf-cover[data-tone='dark'] .pf-cover__meter i:nth-child(4) { background: var(--signal); }
 
+    /* V9 cover gallery: four independent editorial image fields, composed as
+       one paced spread rather than four identical full-width bands. */
+    .pf-covers {
+      display: grid;
+      gap: clamp(1rem, 2vw, 2rem);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(1rem, 2vw, 2rem) var(--gutter) clamp(4rem, 8vw, 8rem);
+      border-top: 0;
+    }
+    .pf-cover,
+    .pf-cover + .pf-cover {
+      min-height: min(76svh, 52rem);
+      padding: clamp(1rem, 1.8vw, 1.6rem);
+      border: 0;
+      background: var(--ink);
+      color: var(--paper-bright);
+      isolation: isolate;
+    }
+    .pf-cover__still { transform: scale(1.01); transition: transform .8s var(--ease); }
+    .pf-cover:hover .pf-cover__still { transform: scale(1.035); }
+    .pf-cover__art::after {
+      background: linear-gradient(to top, rgba(17, 17, 15, .9) 0%, rgba(17, 17, 15, .26) 55%, rgba(17, 17, 15, .6) 100%);
+    }
+    .pf-cover__register { border-bottom-color: rgba(251, 250, 246, .32); }
+    .pf-cover__num { color: var(--paper-bright); }
+    .pf-cover__kind { color: rgba(251, 250, 246, .68); }
+    .pf-cover__name {
+      max-width: 9ch;
+      font-size: clamp(2.4rem, var(--cover-cqw), 8rem);
+      text-wrap: pretty;
+    }
+    .pf-cover__meter i { background: rgba(251, 250, 246, .68); }
+    .pf-cover__meter i:nth-child(4) { background: var(--signal); }
+
+    @media (min-width: 900px) {
+      .pf-covers { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; }
+      .pf-cover[data-cover-index='1'] { grid-column: 1 / span 7; min-height: min(78svh, 54rem); }
+      .pf-cover[data-cover-index='2'] { grid-column: 8 / span 5; min-height: min(60svh, 42rem); margin-top: clamp(5rem, 10vw, 9rem); }
+      .pf-cover[data-cover-index='3'] { grid-column: 1 / span 5; min-height: min(58svh, 40rem); margin-top: clamp(1rem, 3vw, 3rem); }
+      .pf-cover[data-cover-index='4'] { grid-column: 6 / span 7; min-height: min(82svh, 56rem); margin-top: clamp(-5rem, -4vw, -2.5rem); }
+      .pf-cover[data-cover-index='2'] .pf-cover__type,
+      .pf-cover[data-cover-index='2'] .pf-cover__meter,
+      .pf-cover[data-cover-index='4'] .pf-cover__type,
+      .pf-cover[data-cover-index='4'] .pf-cover__meter { justify-self: end; justify-items: end; }
+      .pf-cover[data-cover-index='2'] .pf-cover__name,
+      .pf-cover[data-cover-index='4'] .pf-cover__name { text-align: right; }
+    }
+
     /* ======================================================================
        CHAPTERS
        ====================================================================== */
@@ -956,9 +992,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     /* ======================================================================
        CATEGORY INDEX — the first screen of a garment chapter
 
-       Large numbered bands and nothing else. There is deliberately no garment
-       imagery on this screen: the visitor is choosing a category, and a
-       preview would answer the question the screen is asking.
+       Large image-led category covers with an asymmetric editorial rhythm.
        ====================================================================== */
     .pf-cats { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
     .pf-cats__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
@@ -1026,6 +1060,79 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     div.pf-cat { cursor: default; }
     div.pf-cat .pf-cat__label { color: var(--ink-soft); }
 
+    /* Image-led editorial category indexes. The unequal spans create a
+       deliberate magazine rhythm; each chapter keeps its exact category
+       count and every visual is also the entrance to its working gallery. */
+    .pf-cats__list {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: clamp(1rem, 2.2vw, 2.2rem);
+      border: 0;
+    }
+    .pf-cats__list > li { min-width: 0; }
+    .pf-cats__list > li:nth-child(1) { grid-column: 1 / span 7; }
+    .pf-cats__list > li:nth-child(2) { grid-column: 8 / span 5; margin-top: clamp(4rem, 8vw, 7rem); }
+    .pf-cats__list > li:nth-child(3) { grid-column: 2 / span 5; }
+    .pf-cats__list > li:nth-child(4) { grid-column: 7 / span 6; margin-top: clamp(-3rem, -2vw, -1rem); }
+    .pf-cats__list > li:nth-child(5) { grid-column: 1 / span 8; margin-top: clamp(1rem, 4vw, 4rem); }
+    .pf-cats--menswear .pf-cats__list > li:nth-child(3) { grid-column: 1 / span 6; }
+    .pf-cats--menswear .pf-cats__list > li:nth-child(4) { grid-column: 7 / span 6; }
+    .pf-cat {
+      display: block;
+      min-height: clamp(24rem, 56vw, 43rem);
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--ink);
+      color: var(--paper-bright);
+    }
+    .pf-cats__list > li:nth-child(even) .pf-cat { min-height: clamp(21rem, 43vw, 35rem); }
+    .pf-cat__media,
+    .pf-cat__shade { position: absolute; inset: 0; display: block; }
+    .pf-cat__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: saturate(.82) contrast(1.03);
+      transition: transform .8s var(--ease), filter .6s var(--ease);
+    }
+    .pf-cat__shade {
+      z-index: 1;
+      background: linear-gradient(to top, rgba(17, 17, 15, .9), rgba(17, 17, 15, .08) 60%, rgba(17, 17, 15, .44));
+    }
+    .pf-cat__content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-rows: auto 1fr auto auto;
+      gap: .75rem 1rem;
+      min-height: inherit;
+      padding: clamp(1rem, 2vw, 1.7rem);
+    }
+    .pf-cat__num { grid-column: 1; grid-row: 1; color: var(--paper-bright); }
+    .pf-cat__count { grid-column: 3; grid-row: 1; color: rgba(251, 250, 246, .76); }
+    .pf-cat__label {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      max-width: 11ch;
+      color: var(--paper-bright);
+      font-size: clamp(2rem, 4vw, 4.1rem);
+    }
+    .pf-cat__blurb {
+      grid-column: 1 / span 2;
+      grid-row: 4;
+      max-width: 36rem;
+      margin: 0;
+      color: rgba(251, 250, 246, .74);
+    }
+    .pf-cat__go { grid-column: 3; grid-row: 4; align-self: end; color: var(--signal); }
+    a.pf-cat:hover .pf-cat__label { transform: none; }
+    a.pf-cat:hover .pf-cat__media img { transform: scale(1.035); filter: saturate(1) contrast(1.02); }
+    a.pf-cat:hover { color: var(--paper-bright); }
+
     /* ======================================================================
        THE STUDIO — one continuous white photographic field, full width
        ====================================================================== */
@@ -1047,7 +1154,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
        the garments and all three plates compose together rather than the
        plates pushing the deck out of the screen. */
     @media (min-width: 1024px) {
-      .pf-viewer { grid-template-columns: minmax(0, 71fr) minmax(0, 29fr); gap: clamp(1.75rem, 2.8vw, 3rem); }
+      .pf-viewer { grid-template-columns: minmax(0, 78fr) minmax(0, 22fr); gap: clamp(1.75rem, 2.8vw, 3rem); }
     }
 
     .pf-deck { min-width: 0; }
@@ -1111,10 +1218,13 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
        is load-bearing. Fading only the image lightens the further garments
        against the studio, which is what air does over distance, and leaves the
        card in front covering what it covers. */
-    .pf--js .pf-slot__figure img { transition: opacity .58s var(--ease); }
-    .pf--js .pf-slot[data-depth='1'] .pf-slot__figure img { opacity: .94; }
-    .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { opacity: .88; }
-    .pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { opacity: .82; }
+    .pf--js .pf-slot__figure img { transition: filter .58s var(--ease); }
+    .pf--js .pf-slot[data-depth='1'] .pf-slot__figure img,
+    .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: none; }
+    .pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { filter: blur(2.6px) contrast(.94); }
+    @media (max-width: 1023px) {
+      .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: blur(2.2px) contrast(.95); }
+    }
     .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
     .pf-slot[hidden] { display: none; }
     /* contain, never cover: a head, a hem or a train is never cut off.
@@ -1358,7 +1468,8 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     }
     /* The document itself, at a size you can read. One hairline, because a
        sheet of paper has an edge — nothing else is drawn around it. */
-    .pf-doc__page { position: relative; border: 1px solid var(--line-strong); background: var(--pf-paper); }
+    .pf-doc__page { position: relative; display: block; border: 1px solid var(--line-strong); background: var(--pf-paper); color: inherit; text-decoration: none; }
+    .pf-doc__page:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
     .pf-doc__page img { display: block; width: 100%; height: auto; }
     .pf-doc__blank { display: block; aspect-ratio: 297 / 210; }
     .pf-doc__num { margin: 0; color: var(--muted); letter-spacing: .22em; }
@@ -1625,16 +1736,34 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     }
 
     @media (max-width: 760px) {
-      .pf-cat { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
-      .pf-cat__label { font-size: clamp(1.35rem, 6.6vw, 2.1rem); }
-      .pf-cat__go { display: none; }
-      .pf-cat__blurb { font-size: .85rem; margin-top: .55rem; }
-      a.pf-cat:hover .pf-cat__label { transform: none; }
+      .pf-covers { gap: 1rem; padding-bottom: 4rem; }
+      .pf-cover,
+      .pf-cover + .pf-cover {
+        min-height: min(78svh, 42rem);
+        margin: 0;
+      }
+      .pf-cover__name { max-width: 9ch; font-size: clamp(2.35rem, 10.2vw, 4rem); }
+      .pf-cover__meter { height: 2.8rem; }
 
+      .pf-cats__list { display: block; }
+      .pf-cats__list > li,
+      .pf-cats__list > li:nth-child(n) { margin: 0 0 1rem; }
+      .pf-cat,
+      .pf-cats__list > li:nth-child(even) .pf-cat {
+        min-height: 0;
+        aspect-ratio: 4 / 5;
+      }
+      .pf-cat__content { min-height: 100%; padding: 1rem; }
+      .pf-cat__label { font-size: clamp(2rem, 9vw, 3.2rem); }
+      .pf-cat__go { display: block; }
+      .pf-cat__blurb { margin: 0; font-size: .82rem; }
+      a.pf-cat:hover .pf-cat__label { transform: none; }
     }
 
     @media (max-width: 430px) {
       .pf-project__profile > div { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+      .pf-bar__tag { max-width: 48vw; text-align: right; }
+      .pf-reader__tab { display: none; }
     }
 
     /* ======================================================================
