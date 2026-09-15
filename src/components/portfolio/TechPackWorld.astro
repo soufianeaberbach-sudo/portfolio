@@ -21,6 +21,7 @@
  */
 import type { TechPack } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
+import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
   packs: TechPack[];
@@ -31,6 +32,7 @@ const anyDemo = packs.some((pack) => pack.demo);
 ---
 
 <section class="pf-world pf-world--docs" id="tech-packs" data-world="tech-packs" tabindex="-1" aria-labelledby="tech-packs-title">
+  <WorldNavigation current="tech-packs" />
   <div class="pf-screen" data-screen="index">
     <div class="pf-bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>

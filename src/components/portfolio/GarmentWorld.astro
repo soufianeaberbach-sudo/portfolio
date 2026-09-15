@@ -26,6 +26,7 @@ import type { GarmentWorld } from '../../data/portfolio';
 import { REFERENCE_DISCLAIMER, worldPublication } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import DevPlates from './DevPlates.astro';
+import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
   world: GarmentWorld;
@@ -48,6 +49,7 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
 ---
 
 <section class="pf-world" id={world.id} data-world={world.id} data-publication={publication} tabindex="-1" aria-labelledby={`${world.id}-title`}>
+  <WorldNavigation current={world.id} />
 
   {/* ---- SCREEN 1 — the category index ------------------------------- */}
   <div class="pf-screen" data-screen="index">

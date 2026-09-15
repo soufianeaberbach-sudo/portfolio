@@ -1,125 +1,244 @@
-/* Portfolio-only editorial compositions. The garment runtime is unchanged. */
-.pf .pf-covers { gap: 5rem 3rem; }
-.pf .pf-cover[data-chapter] { background: var(--paper); color: var(--ink); padding: 0; overflow: hidden; }
-.pf .pf-cover__art::after { display: none; }
-.pf .pf-cover__register { position: absolute; inset: 0 0 auto; padding: 1rem 0; color: var(--ink); border-color: var(--line-strong); }
-.pf .pf-cover__num, .pf .pf-cover__kind { color: inherit; }
-.pf .pf-cover__type { position: absolute; inset: auto 0 0; padding: 1rem 0 0; background: var(--paper); justify-items: start; gap: .8rem; width: 100%; }
-.pf .pf-cover__name { color: inherit; font-size: clamp(2.8rem, 6.2cqw, 7rem); max-width: 100%; line-height: .94; text-align: left; overflow-wrap: normal; }
-.pf .pf-cover__intent { font-size: .85rem; font-weight: 400; letter-spacing: .025em; }
-.pf .pf-cover__go { color: var(--ink); justify-self: start; padding-bottom: .5rem; }
-.pf .pf-cover__go .arrow { color: var(--signal); }
-.pf .pf-cover__meter { display: none; }
-.pf .pf-cover[data-chapter='womenswear'] { min-height: 790px; }
-.pf .pf-cover[data-chapter='womenswear'] .pf-cover__art { inset: 65px 0 130px 14%; }
-.pf .pf-cover[data-chapter='womenswear'] .pf-cover__type { background: transparent; }
-.pf .pf-cover[data-chapter='womenswear'] .pf-cover__name { background: var(--paper); padding-top: .15em; font-size: 12cqw; }
-.pf .pf-cover[data-chapter='menswear'] { min-height: 620px; margin-top: 9rem; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 64px 12% 180px 0; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__still { object-position: center 30% !important; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 14cqw; text-align: left; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__type { justify-items: start; padding-left: 12%; }
-.pf .pf-cover[data-chapter='tech-packs'] { min-height: 580px; margin-top: 0; border-top: 1px solid var(--ink); }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 65px 12% 155px 15%; transform: rotate(-4deg); box-shadow: 8px 14px 22px #11111115; transition: transform .45s ease; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__still { object-fit: contain; background: #fff; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { padding-left: 0; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 16cqw; }
-.pf .pf-cover[data-chapter='tech-packs']:is(:hover,:focus-visible) .pf-cover__art { transform: rotate(-1deg) translateY(-5px); }
-.pf .pf-cover[data-chapter='3d-simulation'] { min-height: 650px; margin-top: 0; background: var(--ink); color: var(--paper-bright); }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__register { inset: 0 1.5rem auto; color: var(--paper-bright); border-color: #ffffff40; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 70px 0 180px 24%; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { background: var(--ink); padding: 1.5rem; justify-items: start; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 9cqw; text-align: left; max-width: 14ch; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__go { color: var(--paper-bright); }
+/* Portfolio: a typographic prologue and four editorial gates. */
+.pf .pf-intro { padding: clamp(7rem,9vw,9rem) var(--gutter) 0; max-width: var(--max); margin: auto; }
+.pf .pf-manifesto { display: grid; grid-template-columns: 1.8fr 1fr; align-items: end; gap: 2rem; padding: 2rem 0 4rem; }
+.pf .pf-intro__title { font-size: clamp(5rem,13vw,12.5rem); line-height: .82; letter-spacing: -.055em; max-width: none; margin: 0; }
+.pf .pf-intro__title span { display: block; padding-left: 8%; }
+.pf .pf-intro__aside { padding: 0 0 .5rem 2rem; }
+.pf .pf-intro__arrow { display: block; color: var(--signal); font-size: 5rem; line-height: 1; margin-bottom: 2rem; }
+.pf .pf-intro__lede { font-size: clamp(1rem,1.4vw,1.3rem); line-height: 1.55; max-width: 25ch; margin: 0 0 2rem; }
+.pf .pf-continuity { display: flex; align-items: stretch; justify-content: space-between; gap: 1rem; padding: 1.1rem var(--gutter); background: var(--paper); color: var(--ink); border-block: 1px solid var(--line-strong); }
+.pf .pf-intro .pf-continuity { padding-inline: 0; }
+.pf .pf-continuity a { display: flex; align-items: baseline; gap: .6rem; color: inherit; text-decoration: none; font-size: .75rem; line-height: 1.45; }
+.pf .pf-continuity a span { font-family: var(--font-mono, monospace); font-size: .6rem; color: var(--muted); }
+.pf .pf-continuity a[aria-current] { font-weight: 700; }
+.pf .pf-continuity a[aria-current] span { color: var(--signal); }
+.pf .pf-continuity a:focus-visible { outline: 2px solid var(--signal); outline-offset: 5px; }
+.pf .pf-world > .pf-continuity { position: sticky; top: 0; z-index: 40; }
+.pf .pf-world .pf-bar { position: relative; top: auto; background: transparent; border: 0; padding-block: 1.5rem; }
+.pf .pf-world--motion > .pf-continuity { background: var(--ink); color: var(--paper-bright); border-color: #ffffff30; }
+.pf .pf-world--motion .pf-bar { background: var(--ink); }
+.pf .pf-world--motion .pf-continuity a span { color: #c5c2ba; }
+.pf .pf-world--motion .pf-continuity a[aria-current] span { color: var(--signal); }
 
-.pf .pf-cats__list { gap: 5rem 3rem; }
-.pf .pf-cat, .pf .pf-cats__list > li:nth-child(even) .pf-cat { background: transparent; color: var(--ink); min-height: 0; aspect-ratio: auto; overflow: visible; display: flex; flex-direction: column; align-items: stretch; }
+.pf .pf-gates { display: block; border: 0; padding: 4rem var(--gutter) 6rem; max-width: var(--max); margin: auto; }
+.pf .pf-gates .pf-cover { display: block; position: relative; min-height: 700px; height: 78vw; max-height: 880px; width: 100%; margin: 0 0 7rem; padding: 0; border: 0; color: var(--ink); background: var(--paper); overflow: hidden; container-type: inline-size; isolation: isolate; }
+.pf .pf-gates .pf-cover__register { position: absolute; inset: 0 0 auto; display: flex; align-items: baseline; justify-content: space-between; z-index: 3; padding: 1rem 0; border-bottom: 1px solid var(--line-strong); }
+.pf .pf-gates .pf-cover__num { font-size: 1rem; color: var(--signal); }
+.pf .pf-gates .pf-cover__kind { font-size: .65rem; color: inherit; }
+.pf .pf-gates .pf-cover__art { position: absolute; inset: 85px 0 0 42%; }
+.pf .pf-gates .pf-cover__art::after { display: none; }
+.pf .pf-gates .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transform: none; transition: transform 850ms cubic-bezier(.2,.7,.2,1); }
+.pf .pf-gates .pf-cover:hover .pf-cover__still { transform: scale(1.025); }
+.pf .pf-gates .pf-cover .pf-cover__type { position: absolute; inset: 22% auto auto 0; width: 60%; display: grid; justify-items: start; gap: 1.5rem; padding: 0; z-index: 4; }
+.pf .pf-gates .pf-cover .pf-cover__name { font-size: clamp(4rem,8.7cqw,9rem); color: inherit; line-height: .88; letter-spacing: -.045em; text-align: left; max-width: 100%; }
+.pf .pf-gates .pf-cover__intent { font-size: clamp(.95rem,1.4cqw,1.3rem); background: var(--paper); padding: .3rem .8rem .3rem 0; }
+.pf .pf-gates .pf-cover .pf-cover__go { color: inherit; justify-self: start; font-size: .65rem; margin-top: 1rem; gap: 1rem; }
+.pf .pf-gates .pf-cover__go .arrow { color: var(--signal); }
+.pf .pf-gates .pf-gate__folio { position: absolute; bottom: 1rem; left: 0; font-size: .65rem; writing-mode: vertical-rl; transform: rotate(180deg); }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__name { background: var(--paper); padding: .12em .12em .12em 0; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] { height: 65vw; max-height: 760px; min-height: 640px; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 100px 48% 0 8%; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__type { inset: 16% 0 auto auto; width: 48%; padding-top: 3rem; border-top: 1px solid var(--ink); }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 7.6cqw; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-gate__folio { left: auto; right: 0; writing-mode: horizontal-tb; transform: none; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] { height: 60vw; min-height: 630px; max-height: 750px; background: #e8e5dd; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__register { inset-inline: 2rem; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 90px 53% 40px 6%; transform: rotate(-3deg); }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__still { object-fit: contain; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 30% 4% auto auto; width: 43%; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__name { max-width: 7ch; font-size: 9cqw; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__intent { background: transparent; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-gate__folio { left: 2rem; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] { min-height: 680px; background: var(--ink); color: var(--paper-bright); margin-bottom: 0; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__register { inset-inline: 2rem; border-color: #ffffff30; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 80px 0 0 48%; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: auto auto 10% 3%; width: 53%; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 8.2cqw; max-width: 12ch; background: var(--ink); padding-block: .12em; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__intent { background: var(--ink); }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-gate__folio { bottom: auto; top: 90px; left: 2rem; }
+
+.pf .pf-world [data-screen='index'] > .pf-head { display: grid; grid-template-columns: 1.6fr 1fr; align-items: end; gap: 2rem; padding-top: 2rem; padding-bottom: 5rem; }
+.pf .pf-world [data-screen='index'] > .pf-head h2 { font-size: clamp(3.5rem,8vw,8rem); line-height: .92; letter-spacing: -.04em; }
+.pf .pf-world [data-screen='index'] > .pf-head .pf-head__descriptor { max-width: 34ch; padding-bottom: .5rem; }
+.pf .pf-world [data-screen='index'] > .pf-head .pf-prov { grid-column: 1 / -1; max-width: 60rem; }
+.pf .pf-cats__list { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 6rem 3rem; border: 0; }
+.pf .pf-cats__list > li:nth-child(n) { min-width: 0; margin: 0; }
+.pf .pf-cats__list > li:nth-child(1) { grid-column: 1 / span 8; }
+.pf .pf-cats__list > li:nth-child(2) { grid-column: 9 / span 4; padding-top: 10rem; }
+.pf .pf-cats__list > li:nth-child(3) { grid-column: 2 / span 11; }
+.pf .pf-cats__list > li:nth-child(4) { grid-column: 1 / span 6; }
+.pf .pf-cats__list > li:nth-child(5) { grid-column: 8 / span 5; padding-top: 8rem; }
+.pf .pf-cat, .pf .pf-cats__list > li:nth-child(even) .pf-cat { background: transparent; color: var(--ink); display: flex; flex-direction: column; align-items: stretch; min-height: 0; height: auto; aspect-ratio: auto; padding: 0; border: 0; overflow: visible; }
 .pf .pf-cat__shade { display: none; }
-.pf .pf-cat__media { position: relative; inset: auto; width: 100%; flex: none; aspect-ratio: 4 / 5; overflow: hidden; }
-.pf .pf-cat__media img { position: absolute; inset: 0; object-position: center 25%; }
-.pf .pf-cat__content { min-height: 0; min-width: 0; width: 100%; padding: 1.3rem 0 0; grid-template-rows: auto auto auto; gap: .9rem 1rem; }
-.pf .pf-cat__label { grid-row: 2; color: var(--ink); font-size: clamp(2rem, 3.5vw, 4rem); max-width: 17ch; }
-.pf .pf-cat__num, .pf .pf-cat__count, .pf .pf-cat__blurb { color: var(--ink); }
-.pf .pf-cat__num { color: var(--signal); }
-.pf .pf-cat__blurb, .pf .pf-cat__go { grid-row: 3; }
-.pf .pf-cat__blurb { font-size: .9rem; }
-.pf .pf-cat[data-composition='margin'] .pf-cat__media { width: 82%; margin-left: 18%; aspect-ratio: 3 / 4; }
-.pf .pf-cat[data-composition='margin'] .pf-cat__label { border-left: 2px solid var(--signal); padding-left: 1rem; }
-.pf .pf-cats__list > li:nth-child(3) { grid-column: 1 / -1; }
-.pf .pf-cat[data-composition='wide'] { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
-.pf .pf-cat[data-composition='wide'] .pf-cat__media { aspect-ratio: 5 / 4; }
-.pf .pf-cat[data-composition='wide'] .pf-cat__content { padding-top: 0; }
-.pf .pf-cats__list > li:nth-child(4) { grid-column: 1 / span 6; margin-top: 0; }
-.pf .pf-cats__list > li:nth-child(5) { grid-column: 7 / span 6; margin-top: 5rem; }
-.pf .pf-cats__list > li:nth-child(5) .pf-cat { display: flex; }
-.pf .pf-cats__list > li:nth-child(5) .pf-cat__media { aspect-ratio: 1; }
-.pf .pf-cats__list > li:nth-child(5) .pf-cat__content { padding-top: 1.3rem; }
-.pf .pf-reference-sources { font-size: .75rem; line-height: 1.7; color: var(--ink-soft); }
-.pf .pf-reference-sources a { text-underline-offset: .2em; }
-.pf .pf-doc__page { transform: rotate(-1deg); transform-origin: 50% 90%; transition: transform .4s ease, box-shadow .4s ease; box-shadow: 5px 9px 20px #1111110a; }
-.pf .pf-doc[data-side='right'] .pf-doc__page { transform: rotate(1deg); }
-.pf .pf-doc__page:is(:hover,:focus-visible) { transform: rotate(0) translateY(-5px); box-shadow: 7px 16px 28px #11111114; }
-.pf .pf-doc__instruction { margin-top: 2rem; font-size: .65rem; color: var(--ink-soft); }
-.pf .pf-video__frame { background: #171715; }
-.pf .pf-video__head { padding-top: 1rem; border-top: 1px solid #ffffff30; }
-.pf .pf-video__num { color: var(--signal); }
-
-@media (max-width: 899px) {
-  .pf .pf-covers { gap: 4rem; }
-  .pf .pf-cover[data-chapter] { min-height: 620px; margin-top: 0; }
-  .pf .pf-cover[data-chapter='menswear'] { min-height: 560px; }
-  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 560px; }
-  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 600px; }
-  .pf .pf-cover__register { font-size: .65rem; }
-  .pf .pf-cover[data-chapter='womenswear'] .pf-cover__art { left: 10%; }
-  .pf .pf-cover[data-chapter='womenswear'] .pf-cover__name { font-size: 12cqw; }
-  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 10cqw; }
-  .pf .pf-cats__list { display: block; }
-  .pf .pf-cats__list > li:nth-child(n) { margin: 0 0 3.5rem; }
-  .pf .pf-cat__label { font-size: clamp(2rem, 5vw, 3rem); }
-}
-@media (max-width: 540px) {
-  .pf .pf-cover[data-chapter='womenswear'] { min-height: 560px; }
-  .pf .pf-cover[data-chapter='menswear'] { min-height: 480px; }
-  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 480px; }
-  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 500px; }
-  .pf .pf-cover__intent { font-size: .75rem; }
-  .pf .pf-cover[data-chapter='menswear'] .pf-cover__art { bottom: 150px; }
-  .pf .pf-cat[data-composition='wide'] { display: flex; gap: 0; }
-  .pf .pf-cat[data-composition='wide'] .pf-cat__media { width: 100%; }
-  .pf .pf-cat[data-composition='wide'] .pf-cat__content { padding-top: 1.3rem; }
-  .pf .pf-cat__label { font-size: 2.1rem; }
-  .pf .pf-cat__count { font-size: .6rem; }
-}
-/* A fashion opening, an architectural counterpoint, then a paper/ink diptych. */
-.pf .pf-cover[data-chapter='menswear'] { min-height: 700px; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__type { inset: 75px 0 auto; padding: 0; background: transparent; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 14cqw; }
-.pf .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 265px 12% 0 0; }
-.pf .pf-cover[data-chapter='tech-packs'] { grid-column: 1 / -1; min-height: 540px; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 70px 8% 25px 51%; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 140px auto auto 0; width: 46%; background: transparent; }
-.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: clamp(3rem, 7cqw, 7rem); max-width: 7ch; }
-.pf .pf-cover[data-chapter='3d-simulation'] { grid-column: 1 / -1; min-height: 610px; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 65px 0 0 50%; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: 125px auto auto 0; width: 51%; background: transparent; padding: 2rem; }
-.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: clamp(3rem, 5.4cqw, 6rem); max-width: 11ch; }
+.pf .pf-cat__media { position: relative; inset: auto; display: block; width: 100%; aspect-ratio: 5 / 4; overflow: hidden; flex: none; }
+.pf .pf-cat__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; filter: none; transition: transform .8s ease; }
+.pf .pf-cat__content { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr) auto; grid-template-rows: auto auto auto; min-height: 0; width: 100%; min-width: 0; gap: 1rem; padding: 1.5rem 0 0; }
+.pf .pf-cat__num { grid-column: 1; grid-row: 1; color: var(--signal); font-size: .7rem; }
+.pf .pf-cat__count { grid-column: 3; grid-row: 1; color: var(--ink-soft); font-size: .6rem; }
+.pf .pf-cat__label { grid-column: 1 / -1; grid-row: 2; color: var(--ink); max-width: 16ch; font-size: clamp(2.1rem,4vw,4.6rem); line-height: .95; }
+.pf .pf-cat__blurb { grid-column: 1 / span 2; grid-row: 3; color: var(--ink-soft); font-size: .9rem; max-width: 45ch; margin: 0; }
+.pf .pf-cat__go { grid-column: 3; grid-row: 3; color: var(--signal); }
 .pf .pf-cat[data-composition='margin'] .pf-cat__content { order: -1; padding: 0 0 2rem; }
-.pf .pf-cat[data-composition='portrait'] .pf-cat__label { max-width: 15ch; }
-.pf .pf-cat[data-composition='wide'] .pf-cat__num { padding-top: 1rem; border-top: 1px solid var(--ink); }
-@media (max-width: 899px) {
-  .pf .pf-cover[data-chapter='menswear'] { min-height: 620px; }
-  .pf .pf-cover[data-chapter='menswear'] .pf-cover__art { top: 240px; bottom: 0; }
-  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 600px; }
-  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { top: 75px; width: 100%; }
-  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 13cqw; max-width: none; }
-  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 260px 5% 15px 26%; }
-  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 680px; }
-  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: 65px 0 auto; width: 100%; padding: 1.5rem; }
-  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 10cqw; max-width: 14ch; }
-  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 340px 0 0 18%; }
+.pf .pf-cat[data-composition='margin'] .pf-cat__media { aspect-ratio: 3 / 5; }
+.pf .pf-cat[data-composition='wide'] { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); align-items: center; gap: 3rem; }
+.pf .pf-cat[data-composition='wide'] .pf-cat__media { aspect-ratio: 5 / 4; }
+.pf .pf-cat[data-composition='wide'] .pf-cat__content { padding-top: 2rem; border-top: 1px solid var(--ink); }
+.pf .pf-cats__list > li:nth-child(4) .pf-cat__media { aspect-ratio: 3 / 4; }
+.pf .pf-cats__list > li:nth-child(5) .pf-cat { display: flex; }
+.pf .pf-cats__list > li:nth-child(5) .pf-cat__content { border: 0; }
+.pf .pf-cat:hover .pf-cat__label { transform: none; }
+.pf .pf-reference-sources { font-size: .7rem; color: var(--ink-soft); }
+.pf .pf-reference-sources a { text-underline-offset: .2em; }
+.pf .pf-docs { padding-bottom: 6rem; }
+.pf .pf-doc { padding-block: 5rem; border-top: 1px solid var(--line-strong); }
+.pf .pf-doc__page { border: 0; transform: rotate(-1deg); transform-origin: 50% 90%; transition: transform .45s ease; }
+.pf .pf-doc[data-side='right'] .pf-doc__page { transform: rotate(1deg); }
+.pf .pf-doc__page:is(:hover,:focus-visible) { transform: rotate(0) translateY(-5px); }
+.pf .pf-doc__title { font-size: clamp(2.2rem,4vw,4rem); line-height: .95; }
+.pf .pf-doc__num { font-size: 3rem; color: var(--ink-soft); }
+.pf .pf-doc__instruction { margin-top: 2rem; font-size: .65rem; color: var(--ink-soft); }
+.pf .pf-video { padding-top: 3rem; }
+.pf .pf-video__head { padding-block: 1.5rem; border-top: 1px solid #ffffff35; }
+.pf .pf-video__num { color: var(--signal); }
+.pf .pf-video__head h3 { font-size: clamp(1.3rem,2.4vw,2.4rem); }
+.pf .pf-video__frame { background: #171715; }
+@media (min-width: 1024px) {
+  .pf .pf-dev { width: clamp(8rem,10vw,9rem); }
+  .pf .pf-dev__plates { gap: .8rem; }
+  .pf .pf-plate__art { aspect-ratio: 1.6; }
+  .pf .pf-plate__label { gap: .3rem; }
+}
+@media (max-width: 1023px) {
+  .pf .pf-world [data-screen='index'] > .pf-head { grid-template-columns: 1fr; gap: 1.5rem; padding-bottom: 3rem; }
+  .pf .pf-dev { width: 100%; }
+  .pf .pf-dev__plates { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+  .pf .pf-continuity { gap: .7rem; padding-block: .9rem; }
+  .pf .pf-continuity a { font-size: .67rem; gap: .3rem; }
+}
+@media (max-width: 767px) {
+  .pf .pf-world [data-screen='index'] > .pf-head h2 { font-size: clamp(2.5rem,11vw,4rem); }
+  .pf .pf-manifesto { grid-template-columns: 1fr; gap: 2rem; padding: 1rem 0 2rem; }
+  .pf .pf-intro__title { font-size: clamp(4.5rem,18vw,8rem); }
+  .pf .pf-intro__aside { padding: 0; display: grid; grid-template-columns: 1fr 4fr; gap: 1rem; }
+  .pf .pf-intro__arrow { font-size: 3rem; margin: 0; }
+  .pf .pf-intro__lede { font-size: .9rem; margin: 0; }
+  .pf .pf-intro__aside > .label { grid-column: 2; font-size: .6rem; }
+  .pf .pf-continuity { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); padding: .8rem var(--gutter); gap: .7rem 1rem; }
+  .pf .pf-continuity .pf-continuity__index { display: none; }
+  .pf .pf-continuity a { font-size: .7rem; min-height: 44px; align-items: center; }
+  .pf .pf-gates { padding-top: 2rem; padding-bottom: 3rem; }
+  .pf .pf-gates .pf-cover { min-height: 660px; max-height: none; height: auto; margin-bottom: 3rem; }
+  .pf .pf-gates .pf-cover__register { padding-block: .8rem; }
+  .pf .pf-gates .pf-cover__kind { font-size: .53rem; }
+  .pf .pf-gates .pf-cover .pf-cover__type { inset: 70px 0 auto; width: 100%; gap: .9rem; }
+  .pf .pf-gates .pf-cover .pf-cover__name { font-size: 13cqw; }
+  .pf .pf-gates .pf-cover__art { inset: 230px 0 20px 14%; }
+  .pf .pf-gates .pf-cover__intent { font-size: .95rem; }
+  .pf .pf-gates .pf-cover__go { margin-top: .5rem; font-size: .6rem; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] { min-height: 680px; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__type { inset: auto 0 0; width: 100%; padding-top: 1rem; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 15cqw; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 65px 14% 200px 0; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-gate__folio { right: 0; top: 65px; bottom: auto; writing-mode: vertical-rl; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] { min-height: 730px; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__register { inset-inline: 1rem; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 70px 1rem auto; width: calc(100% - 2rem); }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 16cqw; max-width: none; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 270px 6% 40px 16%; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-gate__folio { left: .7rem; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] { min-height: 760px; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__register { inset-inline: 1rem; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: auto 1rem 2rem; width: calc(100% - 2rem); }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 13cqw; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 65px 0 240px 18%; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-gate__folio { top: 70px; left: .7rem; }
+  .pf .pf-cats__list { display: block; }
+  .pf .pf-cats__list > li:nth-child(n) { padding: 0; margin: 0 0 4rem; }
+  .pf .pf-cat__label { font-size: 2.2rem; }
+  .pf .pf-cat[data-composition='wide'] { display: flex; gap: 0; }
+  .pf .pf-cat[data-composition='wide'] .pf-cat__content { border: 0; padding-top: 1.5rem; }
+  .pf .pf-cat[data-composition='margin'] .pf-cat__media { aspect-ratio: 4 / 5; width: 85%; margin-left: auto; }
+  .pf .pf-cat__blurb { font-size: .85rem; }
+  .pf .pf-doc { padding-block: 3rem; }
+  .pf .pf-doc__num { font-size: 1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pf .pf-cover__art, .pf .pf-cover__still, .pf .pf-cat__media img, .pf .pf-doc__page { transition: none; }
-  .pf .pf-doc__page:is(:hover,:focus-visible), .pf .pf-cover:hover .pf-cover__still, .pf a.pf-cat:hover .pf-cat__media img { transform: none; }
+  .pf .pf-gates .pf-cover__still, .pf .pf-cat__media img, .pf .pf-doc__page { transition: none; }
+  .pf .pf-gates .pf-cover:hover .pf-cover__still, .pf .pf-cat:hover .pf-cat__media img, .pf .pf-doc__page:is(:hover,:focus-visible) { transform: none; }
+}
+
+/* The prologue works as one photographic typographic plate, not two columns. */
+.pf .pf-manifesto { display: block; position: relative; min-height: 590px; padding: 1rem 0 3rem; isolation: isolate; background: var(--paper); }
+.pf .pf-prologue-image { position: absolute; inset: 0 5% 45px 54%; margin: 0; z-index: 0; }
+.pf .pf-prologue-image img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1); }
+.pf .pf-prologue-image figcaption { position: absolute; top: 100%; right: 0; padding-top: .75rem; font-size: .55rem; }
+.pf .pf-manifesto .pf-intro__title { position: relative; z-index: 2; color: #fff; mix-blend-mode: difference; font-size: clamp(7rem,15vw,14rem); line-height: .85; width: 100%; pointer-events: none; }
+.pf .pf-manifesto .pf-intro__title .pf-into { font-size: clamp(1.2rem,2.5vw,2rem); letter-spacing: -.03em; padding: 1.3rem 0 1rem 28%; }
+.pf .pf-manifesto .pf-intro__title .pf-form { font-size: clamp(10rem,22vw,21rem); line-height: .85; padding: 0 0 0 22%; }
+.pf .pf-intro__aside { position: absolute; left: 0; bottom: 3rem; padding: 0; width: 21%; }
+.pf .pf-intro__arrow { font-size: 2.4rem; margin-bottom: 1rem; }
+.pf .pf-intro__lede { font-size: .9rem; margin-bottom: 1.2rem; }
+.pf .pf-intro__aside > .label { font-size: .55rem; }
+.pf .pf-continuity { border-top: 0; border-bottom: 1px solid var(--line-strong); }
+.pf .pf-continuity a[aria-current] { box-shadow: inset 0 -2px var(--signal); }
+.pf .pf-gates { padding-top: 6rem; }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] { min-height: 720px; height: 63vw; max-height: 800px; }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__art { inset: 80px 10% 60px 34%; clip-path: polygon(0 0,100% 0,100% 82%,76% 82%,76% 100%,0 100%); transition: clip-path .75s cubic-bezier(.2,.7,.2,1); }
+.pf .pf-gates .pf-cover[data-chapter='womenswear']:is(:hover,:focus-visible) .pf-cover__art { clip-path: polygon(0 0,100% 0,100% 100%,76% 100%,76% 100%,0 100%); }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__type { inset: auto 0 12%; width: 100%; z-index: auto; }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__name { position: relative; z-index: 4; font-size: 12cqw; background: transparent; color: white; mix-blend-mode: difference; padding: 0; }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__intent { justify-self: start; }
+.pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-gate__folio { top: 100px; bottom: auto; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] { background: var(--ink); color: var(--paper-bright); margin-bottom: 0; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__register { inset-inline: 2rem; border-color: #ffffff35; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__type { border: 0; inset: 20% 3% auto auto; width: 52%; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 8cqw; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__intent { background: var(--ink); }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 100px 50% 50px 5%; }
+.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-gate__folio { right: 2rem; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] { background: #e6e2d8; border-top: 5px solid var(--signal); }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 18% auto auto 5%; width: 52%; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 10cqw; max-width: 7ch; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 100px 7% 45px 48%; transform: rotate(5deg); transition: transform .7s ease; }
+.pf .pf-gates .pf-cover[data-chapter='tech-packs']:is(:hover,:focus-visible) .pf-cover__art { transform: rotate(0); }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 80px 8% 100px 30%; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: auto 3% 5%; width: 94%; }
+.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 8.5cqw; max-width: none; padding: .1em; }
+.pf .pf-cats__list > li:nth-child(1) .pf-cat__content { margin-top: -3rem; padding: 1.5rem 1.5rem 0 0; width: 88%; background: var(--paper); }
+.pf .pf-cats__list > li:nth-child(3) .pf-cat__label { font-size: clamp(3rem,5vw,5rem); }
+@media (max-width: 1023px) {
+  .pf .pf-manifesto { min-height: 480px; }
+  .pf .pf-intro__lede { font-size: .75rem; }
+}
+@media (max-width: 767px) {
+  .pf .pf-manifesto { min-height: 560px; padding-bottom: 0; }
+  .pf .pf-prologue-image { inset: 25px 0 150px 29%; }
+  .pf .pf-prologue-image figcaption { font-size: .45rem; }
+  .pf .pf-manifesto .pf-intro__title { font-size: 25vw; padding-top: 1rem; }
+  .pf .pf-manifesto .pf-intro__title .pf-into { font-size: 1.3rem; padding: 2rem 0 1rem 4%; }
+  .pf .pf-manifesto .pf-intro__title .pf-form { font-size: 33vw; padding: 0; }
+  .pf .pf-intro__aside { display: block; width: 100%; bottom: 0; padding-bottom: 1.5rem; }
+  .pf .pf-intro__arrow { display: none; }
+  .pf .pf-intro__lede { font-size: .85rem; margin-bottom: .7rem; }
+  .pf .pf-intro__aside > .label { margin: 0; }
+  .pf .pf-gates { padding-top: 3rem; }
+  .pf .pf-gates .pf-cover[data-chapter='womenswear'] { min-height: 660px; }
+  .pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__art { inset: 70px 0 140px 8%; }
+  .pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__type { inset: auto 0 5%; }
+  .pf .pf-gates .pf-cover[data-chapter='womenswear'] .pf-cover__name { font-size: 13cqw; color: var(--ink); mix-blend-mode: normal; background: var(--paper); padding-block: .1em; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__register { inset-inline: 1rem; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 70px 15% 180px 0; }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__type { inset: auto 1rem 2rem; width: calc(100% - 2rem); }
+  .pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 14cqw; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 80px 1rem auto; width: calc(100% - 2rem); }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 16cqw; max-width: none; }
+  .pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 270px 10% 40px 15%; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 70px 0 230px 10%; }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: auto 1rem 1.5rem; width: calc(100% - 2rem); }
+  .pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 12cqw; }
+  .pf .pf-cats__list > li:nth-child(1) .pf-cat__content { width: 92%; margin-top: -1.5rem; padding-right: .7rem; }
+  .pf .pf-cats__list > li:nth-child(3) .pf-cat__label { font-size: 2.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf .pf-gates .pf-cover .pf-cover__art { transition: none; }
 }

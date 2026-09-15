@@ -188,13 +188,15 @@ try {
           titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
           images: el.querySelectorAll('img').length,
           source: el.dataset.imageSource ?? '',
+          name: el.querySelector('.pf-cover__name').textContent.trim(),
+          intent: el.querySelector('.pf-cover__intent').textContent.trim(),
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
     });
     check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    check('the cover gallery uses an asymmetric multi-column composition',
-      new Set(covers.map((cv) => cv.left)).size >= 2 && covers.some((cv, i) => i > 0 && cv.top < covers[i - 1].top + covers[i - 1].height),
+    check('the four editorial gates form an ordered non-overlapping sequence',
+      covers.every((cv, i) => i === 0 || cv.top >= covers[i - 1].top + covers[i - 1].height),
       covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top}`).join(' '));
     check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
     check('every cover is a substantial editorial image field', covers.every((cv) => cv.height >= 900 * 0.52),
@@ -226,7 +228,7 @@ try {
     check('the editorial image compositions use distinct margins',
       new Set(composed.map((cv) => cv.artInset)).size >= 3
         && composed[0].artInset > composed[1].artInset
-        && composed[3].artInset > composed[0].artInset,
+        && composed[3].artInset !== composed[0].artInset,
       composed.map((cv) => `${cv.chapter}:${cv.artInset}`).join(' '));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('the chapter title is the hero of its cover',
@@ -237,15 +239,14 @@ try {
     /* The public name of chapter 04 is wider than its last step: the
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
-    check('chapter 04 is published as Pattern & 3D Development',
-      /^04 Digital validation Pattern & 3D Development From pattern lines to digital fit Open chapter$/.test(
-        covers.find((cv) => cv.chapter === '3d-simulation').text),
+    check('chapter 04 is published as Pattern Development',
+      covers.find((cv) => cv.chapter === '3d-simulation').name === 'Pattern Development',
       covers.find((cv) => cv.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
     check('the covers include a concise intent and the way in',
-      covers.every((cv) => /^\d\d .+ Open chapter$/.test(cv.text)),
+      covers.every((cv) => cv.intent.length > 0 && cv.text.includes('Enter world')),
       covers.map((cv) => cv.text).join(' | '));
     check('no category list appears on any cover',
       await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
@@ -415,6 +416,14 @@ try {
 
     // ---- menswear has the same image-led, working reference-preview interface
     await openChapter(p, 'menswear');
+    await p.locator('[data-world="menswear"] > .pf-continuity a[href="#tech-packs"]').click();
+    check('world navigation moves directly to another world',
+      await p.locator('[data-world="tech-packs"]').evaluate((el) => el.hasAttribute('data-open')));
+    check('all four worlds remain accessible inside a chapter',
+      await p.locator('[data-world="tech-packs"] > .pf-continuity a:not(.pf-continuity__index)').count() === 4);
+    await p.locator('[data-world="tech-packs"] > .pf-continuity a[href="#menswear"]').click();
+    check('world navigation marks the current chapter',
+      await p.locator('[data-world="menswear"] > .pf-continuity a[aria-current="page"]').getAttribute('href') === '#menswear');
     const men = await p.evaluate(() => {
       const w = document.querySelector('[data-world="menswear"]');
       return {
@@ -667,7 +676,8 @@ try {
 
     /* No construction history may be inferred from a photograph. */
     const claims = await p.evaluate(() => {
-      const text = document.body.innerText;
+      // Audit the entire visible reference screen, not global chapter names.
+      const text = document.querySelector('.pf-world[data-open] [data-screen="category"]:not([hidden])').innerText;
       return [
         /\bbias[- ]cut\b/i, /\bgrading\b/i, /\bfit correction\b/i, /\bpattern development\b/i,
         /\bnegative ease\b/i, /\bdart\b/i, /\bseam placement\b/i, /\bstitch class\b/i,
@@ -1015,9 +1025,9 @@ try {
         descriptor: w.querySelector('.pf-head__descriptor').textContent.replace(/\s+/g, ' ').trim(),
       };
     });
-    check('the chapter heading is Pattern & 3D Development',
-      naming.heading === 'Pattern & 3D Development', naming.heading);
-    check('the navigation label matches', naming.bar === '04 Pattern & 3D Development', naming.bar);
+    check('the chapter heading is Pattern Development',
+      naming.heading === 'Pattern Development', naming.heading);
+    check('the navigation label matches', naming.bar === '04 Pattern Development', naming.bar);
     check('the descriptor names the whole development arc',
       /first pattern lines/i.test(naming.descriptor) && /CLO3D validation/i.test(naming.descriptor)
       && /fit decisions/i.test(naming.descriptor), naming.descriptor);

@@ -20,6 +20,7 @@
  */
 import type { SimulationSession } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
+import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
   sessions: SimulationSession[];
@@ -35,16 +36,17 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
+  <WorldNavigation current="3d-simulation" />
   <div class="pf-screen" data-screen="index">
     <div class="pf-bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
         <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
       </a>
-      <p class="label pf-bar__tag"><b>04</b> Pattern &#38; 3D Development</p>
+      <p class="label pf-bar__tag"><b>04</b> Pattern Development</p>
     </div>
 
     <header class="pf-head">
-      <h2 class="display" id="simulation-title">Pattern &#38; 3D Development</h2>
+      <h2 class="display" id="simulation-title">Pattern Development</h2>
       <p class="pf-head__descriptor">
         Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
         and fit decisions — the part of the work a photograph cannot hold still.

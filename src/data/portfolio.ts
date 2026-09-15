@@ -600,7 +600,7 @@ export const chapters: Chapter[] = [
        work in it. */
     id: '3d-simulation',
     number: '04',
-    title: 'Pattern & 3D Development',
+    title: 'Pattern Development',
     kind: 'Digital validation',
     descriptor:
       'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
