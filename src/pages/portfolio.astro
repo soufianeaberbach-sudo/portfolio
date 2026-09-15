@@ -333,6 +333,8 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         index: number;
         drag: number;
         width: number;
+        motion: Animation[];
+        revision: number;
       }
 
       const queues: Queue[] = [...root.querySelectorAll<HTMLElement>('.pf-panel')].map((panel) => ({
@@ -351,6 +353,8 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         index: 0,
         drag: 0,
         width: 0,
+        motion: [],
+        revision: 0,
       }));
 
       const layout = (queue: Queue) => {
@@ -441,8 +445,52 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       const goTo = (queue: Queue, next: number) => {
         const wrapped = ((next % queue.slots.length) + queue.slots.length) % queue.slots.length;
         if (wrapped === queue.index) return;
+        const forward = next > queue.index;
+        const before = new Map(queue.slots.filter((slot) => !slot.hidden).map((slot) => [slot, {
+          rect: slot.getBoundingClientRect(), depth: Number(slot.dataset.depth),
+        }]));
+        queue.motion.forEach((animation) => animation.cancel());
+        queue.motion = [];
+        const revision = ++queue.revision;
+        queue.stack.setAttribute('data-dragging', '');
+        queue.stack.style.setProperty('--drag', '0px');
+        void queue.stack.offsetWidth;
+        queue.stack.removeAttribute('data-dragging');
         queue.index = wrapped;
         render(queue);
+        if (reduced()) return;
+        const stage = queue.stage.getBoundingClientRect();
+        const farDepth = Math.min(geometry().visible, queue.slots.length) - 1;
+        for (const slot of queue.slots) {
+          const previous = before.get(slot);
+          const leaving = slot.hidden;
+          if (leaving && !previous) continue;
+          slot.hidden = false;
+          const after = slot.getBoundingClientRect();
+          const at = (x: number, y: number, scaleX = 1, scaleY = scaleX) =>
+            `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})`;
+          const start = previous ? at(previous.rect.left - after.left, previous.rect.top - after.top,
+            previous.rect.width / after.width, previous.rect.height / after.height)
+            : at(forward ? stage.left - after.right : stage.right - after.left, 0, forward ? .8 : 1.08);
+          const end = leaving ? at(forward ? stage.right - after.left : stage.left - after.right, 0, .8) : 'none';
+          const cycles = previous && !leaving && (forward
+            ? previous.depth === 0 && Number(slot.dataset.depth) === farDepth
+            : previous.depth === farDepth && Number(slot.dataset.depth) === 0);
+          // Recycle beyond the clipped stage, never across the visible queue.
+          const frames: Keyframe[] = cycles ? [
+            { transform: start, zIndex: forward ? 20 : 1, offset: 0 },
+            { transform: at(forward ? stage.right - after.left : stage.left - after.right, 0, .8), offset: .48 },
+            { transform: at(forward ? stage.left - after.right : stage.right - after.left, 0, .8), zIndex: forward ? 1 : 20, offset: .49 },
+            { transform: end, offset: 1 },
+          ] : [{ transform: start }, { transform: end }];
+          const animation = slot.animate(frames, { duration: 560, easing: 'cubic-bezier(.22,.68,.22,1)', fill: 'both' });
+          queue.motion.push(animation);
+          animation.finished.then(() => {
+            if (queue.revision !== revision) return;
+            if (leaving) slot.hidden = true;
+            animation.cancel();
+          }).catch(() => {});
+        }
       };
 
       for (const queue of queues) {
@@ -489,12 +537,12 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
           dragging = false;
           try { queue.stage.releasePointerCapture(pointerId); } catch { /* already released */ }
           queue.stack.removeAttribute('data-dragging');
-          queue.stack.style.setProperty('--drag', '0px');
           const threshold = Math.max(44, queue.width * 0.18);
           const travelled = queue.drag;
           queue.drag = 0;
           if (travelled <= -threshold) goTo(queue, queue.index + 1);
           else if (travelled >= threshold) goTo(queue, queue.index - 1);
+          else queue.stack.style.setProperty('--drag', '0px');
         };
 
         queue.stage.addEventListener('pointerup', endDrag);
@@ -1218,8 +1266,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
          stacking order alone — a cast shadow at the seam turns garments
          standing in one studio into white cards lying on a table. */
       background: var(--pf-stage);
-      transition: left .58s var(--ease), width .58s var(--ease), height .58s var(--ease),
-                  bottom .58s var(--ease);
+      transform-origin: top left;
     }
     /* Atmospheric recession, on the PHOTOGRAPH and never on the card.
        Fading the whole slot let the garment behind it show through its own
@@ -1230,9 +1277,9 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     .pf--js .pf-slot__figure img { transition: filter .58s var(--ease); }
     .pf--js .pf-slot[data-depth='1'] .pf-slot__figure img,
     .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: none; }
-    .pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { filter: blur(2.6px) contrast(.94); }
+    .pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { filter: blur(1.2px); }
     @media (max-width: 1023px) {
-      .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: blur(2.2px) contrast(.95); }
+      .pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: blur(1px); }
     }
     .pf--js .pf-slot__figure { position: relative; width: 100%; height: 100%; }
     .pf-slot[hidden] { display: none; }

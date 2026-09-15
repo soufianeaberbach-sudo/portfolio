@@ -91,6 +91,34 @@
   .pf .pf-cat__label { font-size: 2.1rem; }
   .pf .pf-cat__count { font-size: .6rem; }
 }
+/* A fashion opening, an architectural counterpoint, then a paper/ink diptych. */
+.pf .pf-cover[data-chapter='menswear'] { min-height: 700px; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__type { inset: 75px 0 auto; padding: 0; background: transparent; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__name { font-size: 14cqw; }
+.pf .pf-cover[data-chapter='menswear'] .pf-cover__art { inset: 265px 12% 0 0; }
+.pf .pf-cover[data-chapter='tech-packs'] { grid-column: 1 / -1; min-height: 540px; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 70px 8% 25px 51%; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { inset: 140px auto auto 0; width: 46%; background: transparent; }
+.pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: clamp(3rem, 7cqw, 7rem); max-width: 7ch; }
+.pf .pf-cover[data-chapter='3d-simulation'] { grid-column: 1 / -1; min-height: 610px; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 65px 0 0 50%; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: 125px auto auto 0; width: 51%; background: transparent; padding: 2rem; }
+.pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: clamp(3rem, 5.4cqw, 6rem); max-width: 11ch; }
+.pf .pf-cat[data-composition='margin'] .pf-cat__content { order: -1; padding: 0 0 2rem; }
+.pf .pf-cat[data-composition='portrait'] .pf-cat__label { max-width: 15ch; }
+.pf .pf-cat[data-composition='wide'] .pf-cat__num { padding-top: 1rem; border-top: 1px solid var(--ink); }
+@media (max-width: 899px) {
+  .pf .pf-cover[data-chapter='menswear'] { min-height: 620px; }
+  .pf .pf-cover[data-chapter='menswear'] .pf-cover__art { top: 240px; bottom: 0; }
+  .pf .pf-cover[data-chapter='tech-packs'] { min-height: 600px; }
+  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__type { top: 75px; width: 100%; }
+  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__name { font-size: 13cqw; max-width: none; }
+  .pf .pf-cover[data-chapter='tech-packs'] .pf-cover__art { inset: 260px 5% 15px 26%; }
+  .pf .pf-cover[data-chapter='3d-simulation'] { min-height: 680px; }
+  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__type { inset: 65px 0 auto; width: 100%; padding: 1.5rem; }
+  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__name { font-size: 10cqw; max-width: 14ch; }
+  .pf .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { inset: 340px 0 0 18%; }
+}
 @media (prefers-reduced-motion: reduce) {
   .pf .pf-cover__art, .pf .pf-cover__still, .pf .pf-cat__media img, .pf .pf-doc__page { transition: none; }
   .pf .pf-doc__page:is(:hover,:focus-visible), .pf .pf-cover:hover .pf-cover__still, .pf a.pf-cat:hover .pf-cat__media img { transform: none; }
