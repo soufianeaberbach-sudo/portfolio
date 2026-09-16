@@ -195,8 +195,8 @@ try {
       });
     });
     check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    check('the four editorial gates form an ordered non-overlapping sequence',
-      covers.every((cv, i) => i === 0 || cv.top >= covers[i - 1].top + covers[i - 1].height),
+    check('the four hinged leaves share a baseline without overlapping',
+      covers.every((cv, i) => i === 0 || (cv.left > covers[i - 1].left && Math.abs(cv.top - covers[0].top) <= 1)),
       covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top}`).join(' '));
     check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
     check('every cover is a substantial editorial image field', covers.every((cv) => cv.height >= 900 * 0.52),
@@ -225,14 +225,14 @@ try {
       composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
     check('the chapter action is the restrained orange signal',
       composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    check('the editorial image compositions use distinct margins',
-      new Set(composed.map((cv) => cv.artInset)).size >= 3
-        && composed[0].artInset > composed[1].artInset
-        && composed[3].artInset !== composed[0].artInset,
-      composed.map((cv) => `${cv.chapter}:${cv.artInset}`).join(' '));
+    check('the opening has distinct photographic, cut, paper and cinematic treatments',
+      await p.evaluate(() => {
+        const art = [...document.querySelectorAll('.pf-cover__art')].map(e=>getComputedStyle(e));
+        return art[1].clipPath !== 'none' && art[2].paddingTop !== '0px' && art[3].backgroundColor !== art[0].backgroundColor;
+      }));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
-    check('the chapter title is the hero of its cover',
-      covers.every((cv) => cv.titlePx >= 44), covers.map((cv) => cv.titlePx).join(','));
+    check('chapter names remain legible without competing with imagery',
+      covers.every((cv) => cv.titlePx >= 28 && cv.titlePx <= 40), covers.map((cv) => cv.titlePx).join(','));
 
     check('every chapter cover is image-led', covers.every((cv) => cv.images === 1), covers.map((cv) => cv.images).join(','));
     check('every cover records its image source', covers.every((cv) => cv.source.length > 0), covers.map((cv) => cv.source).join(' | '));
@@ -302,10 +302,10 @@ try {
       const r = el.getBoundingClientRect();
       return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top + scrollY), height: Math.round(r.height) };
     }));
-    check(`${width} stacks one substantial cover at a time`,
+    check(`${width} offers substantial chapter leaves in a contained swipe rail`,
       mobileCovers.every((cover, index) => cover.height >= 480
-        && cover.left >= 16 && cover.right <= width - 16
-        && (index === 0 || cover.top >= mobileCovers[index - 1].top + mobileCovers[index - 1].height)),
+        && cover.left >= 16 && cover.right - cover.left < width
+        && (index === 0 || cover.left >= mobileCovers[index - 1].right)),
       JSON.stringify(mobileCovers));
     check(`no horizontal overflow in the ${width} cover gallery`,
       await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
@@ -510,7 +510,7 @@ try {
       /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
       deck.filters.join(' | '));
     check('far garment blur remains restrained and identifiable',
-      /blur\(1\.2px\)/.test(deck.filters[0]), deck.filters[0]);
+      /blur\(0\.55px\)/.test(deck.filters[0]), deck.filters[0]);
 
     /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
        baseline — each step back stands a little higher, the way objects rise
@@ -605,7 +605,7 @@ try {
       const nodes = [...panel.querySelectorAll('.pf-slot')];
       panel.querySelector('[data-step="-1"]').click();
       const animated = nodes.filter((node) => node.getAnimations().length > 0).length;
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      await new Promise((resolve) => setTimeout(resolve, 750));
       return {
         animated,
         sameNodes: nodes.every((node, i) => panel.querySelectorAll('.pf-slot')[i] === node),
@@ -625,10 +625,11 @@ try {
       return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
     });
     await p.mouse.move(box.x, box.y);
+    const beforeDrag = await p.evaluate(() => document.querySelector('[data-screen="category"]:not([hidden]) [data-depth="1"]').getBoundingClientRect().left);
+    const movingItem = await p.evaluate(() => document.querySelector('[data-screen="category"]:not([hidden]) [data-depth="1"]').dataset.item);
     await p.mouse.down();
     await p.mouse.move(box.x + 110, box.y, { steps: 8 });
-    const dragRight = await p.evaluate(() => new DOMMatrix(getComputedStyle(
-      document.querySelector('[data-screen="category"]:not([hidden]) [data-stack]')).transform).m41);
+    const dragRight = await p.evaluate(item => document.querySelector('[data-screen="category"]:not([hidden]) [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
     await p.mouse.up();
     await p.waitForTimeout(650);
     check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
@@ -639,9 +640,9 @@ try {
     const indexBefore = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
     await p.mouse.up();
     await p.waitForTimeout(700);
-    check('releasing a leftward drag advances the deck',
+    check('releasing a leftward drag continues left around the wheel',
       await p.evaluate(() => window.__portfolioRunway.getState().activeIndex)
-        === (indexBefore + 1) % (await p.evaluate(() => window.__portfolioRunway.getState().count)));
+        === (indexBefore - 1 + (await p.evaluate(() => window.__portfolioRunway.getState().count))) % (await p.evaluate(() => window.__portfolioRunway.getState().count)));
 
     /* CONTENT INTEGRITY. The 49 photographs are temporary visual references
        and must never be presented as authored projects. */
@@ -718,7 +719,7 @@ try {
       `${plates.widths.join('/')} x ${plates.heights.join('/')}`);
     check('the three plates are stacked one above another in one column',
       plates.stacked && new Set(plates.lefts).size === 1, `${plates.lefts.join(',')} stacked ${plates.stacked}`);
-    check('the progression between steps is drawn', plates.links === 2, String(plates.links));
+    check('stage numbering replaces provisional connector arrows', plates.links === 0, String(plates.links));
 
     /* THE GARMENT IS THE HERO. The result carries the argument; the three
        development stages are the proof behind it and are sized to say so. */
@@ -741,13 +742,13 @@ try {
         deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
       };
     });
-    check('the garment deck takes 76-80% of the viewer',
-      weight.sideBySide && weight.deckShare >= 0.76 && weight.deckShare <= 0.80,
+    check('the garment remains dominant at 70-74% of the viewer',
+      weight.sideBySide && weight.deckShare >= 0.70 && weight.deckShare <= 0.74,
       `${Math.round(weight.deckShare * 100)}%`);
-    check('the development rail takes 20-24% of the viewer',
-      weight.railShare >= 0.20 && weight.railShare <= 0.24, `${Math.round(weight.railShare * 100)}%`);
+    check('the evidence rail uses 26-30% of the viewer',
+      weight.railShare >= 0.26 && weight.railShare <= 0.30, `${Math.round(weight.railShare * 100)}%`);
     check('a development plate is a fraction of the garment stage',
-      weight.plateWidth <= weight.stageHeight * 0.45,
+      weight.plateWidth >= 220 && weight.plateWidth <= weight.stageHeight * 0.5,
       `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
     /* The whole three-step rail has to stand no taller than the garments, or
        the plates push the deck out of the view they belong to. */

@@ -42,8 +42,7 @@ const anyDemo = plates.some((plate) => !plate.asset);
         {/* The progression between the stages, drawn once between each pair.
             The final garment is the large image beside this panel, so the
             sequence ends at step 03 — there is no step 04. */}
-        {index > 0 && <i class="pf-plate__link" aria-hidden="true"></i>}
-        <div class="pf-plate__art">
+        <button type="button" class="pf-plate__art" data-evidence-open data-evidence-title={`${plate.step} / ${plate.name}`} data-evidence-demo={plate.asset ? undefined : ''} aria-label={`Enlarge ${plate.name}${plate.asset ? '' : ' demo plate'}`}>
           {plate.asset ? (
             <img
               src={plate.asset.image.src}
@@ -63,7 +62,8 @@ const anyDemo = plates.some((plate) => !plate.asset);
               <span class="pf-plate__stamp label">Demo</span>
             </span>
           )}
-        </div>
+          <span class="pf-plate__inspect" aria-hidden="true">Inspect +</span>
+        </button>
         <p class="pf-plate__label">
           <b class="label">Step {plate.step}</b>
           <span>{plate.name}</span>

@@ -109,7 +109,7 @@ const anyDemo = packs.some((pack) => pack.demo);
 
   {/* The reader. Empty on load; the runtime builds the frame on the click that
       asks for a document and tears it down again on close. */}
-  <div class="pf-reader" data-reader hidden>
+  <dialog class="pf-reader" data-reader aria-label="Technical document reader" hidden>
     <div class="pf-reader__bar">
       <p class="label pf-reader__title" data-reader-title></p>
       <span class="pf-reader__tools">
@@ -120,5 +120,5 @@ const anyDemo = packs.some((pack) => pack.demo);
       </span>
     </div>
     <div class="pf-reader__mount" data-reader-mount></div>
-  </div>
+  </dialog>
 </section>
