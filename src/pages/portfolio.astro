@@ -36,20 +36,11 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
     </script>
 
     <section class="pf-intro" id="portfolio-index">
-      <p class="eyebrow">Portfolio / Fashion & product development</p>
-      <div class="pf-manifesto">
-        <figure class="pf-prologue-image" aria-label="Editorial fashion reference, not authored project evidence">
-          <img src="/portfolio/editorial/pexels-13364876.jpg" width="1200" height="1500" alt="" fetchpriority="high" />
-          <figcaption class="label">Editorial reference / Pexels</figcaption>
-        </figure>
-        <h1 class="display pf-intro__title">Ideas<span class="pf-into">into</span><span class="pf-form">form.</span></h1>
-        <div class="pf-intro__aside">
-          <span class="pf-intro__arrow" aria-hidden="true">↘</span>
-          <p class="pf-intro__lede">Creative intent. Technical clarity.<br />The space between an idea<br />and a garment.</p>
-          <p class="label">Four worlds / One practice</p>
-        </div>
+      <p class="label">Soufiane Aberbach / Portfolio</p>
+      <div class="pf-opening">
+        <h1 class="display">Between instinct<br />&amp; construction.</h1>
+        <p>Fashion seen from both sides.<br />The creative intention.<br />The precision that gives it form.</p>
       </div>
-      <WorldNavigation />
     </section>
 
     <section class="pf-covers pf-gates" aria-labelledby="pf-covers-title" data-covers>
@@ -88,11 +79,17 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         </a>
       ))}
     </section>
+    <div class="pf-colophon"><p class="label">Four perspectives / One practice</p><p>Explore a world. Follow the work.</p><p class="label">Editorial covers are references.<br />Project and demo status is disclosed inside.</p></div>
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
       <TechPackWorld packs={techPacks} />
       <SimulationWorld sessions={simulationSessions} />
     </div>
+    <dialog class="pf-evidence-reader" data-evidence-reader aria-labelledby="pf-evidence-title">
+      <div class="pf-evidence-reader__bar"><h2 id="pf-evidence-title" class="label"></h2><button type="button" data-evidence-close>Close <span aria-hidden="true">×</span></button></div>
+      <div class="pf-evidence-reader__art" data-evidence-mount></div>
+      <p class="label" data-evidence-caption></p>
+    </dialog>
 
     {/* Progressive enhancement, made explicit. Every screen of every chapter
         is in the served HTML and readable without a script; this runs before
@@ -119,7 +116,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
        from that one piece of state, so Back always steps back exactly one
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
-    const root = document.querySelector<HTMLElement>('[data-pf-root]');
+      const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
@@ -131,6 +128,26 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
       let openWorld: HTMLElement | null = null;
       let restoreFocusTo: HTMLElement | null = null;
+      const evidenceReader = root.querySelector<HTMLDialogElement>('[data-evidence-reader]')!;
+      let evidenceOpener: HTMLElement | null = null;
+      const closeEvidence = () => {
+        evidenceReader.close();
+        evidenceReader.querySelector('[data-evidence-mount]')?.replaceChildren();
+        evidenceOpener?.focus({ preventScroll: true });
+      };
+      evidenceReader.querySelector('[data-evidence-close]')?.addEventListener('click', closeEvidence);
+      evidenceReader.addEventListener('cancel', (event) => { event.preventDefault(); closeEvidence(); });
+      for (const opener of root.querySelectorAll<HTMLElement>('[data-evidence-open]')) {
+        opener.addEventListener('click', () => {
+          evidenceOpener = opener;
+          evidenceReader.querySelector('#pf-evidence-title')!.textContent = opener.dataset.evidenceTitle ?? '';
+          const art = opener.querySelector('img,.pf-plate__blank')!;
+          evidenceReader.querySelector('[data-evidence-mount]')!.replaceChildren(art.cloneNode(true));
+          evidenceReader.querySelector('[data-evidence-caption]')!.textContent =
+            opener.hasAttribute('data-evidence-demo') ? 'Demo plate / No project evidence supplied' : 'Development evidence / Full image';
+          evidenceReader.showModal();
+        });
+      }
 
       const setInert = (on: boolean) => {
         for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
@@ -219,6 +236,8 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       };
 
       const syncFromHash = () => {
+        if (evidenceReader.open) closeEvidence();
+        if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
         const { world, category } = parseHash();
         if (world && worlds.has(world)) openWorldById(world, category);
         else closeWorld();
@@ -250,8 +269,11 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       /* Escape steps back one level, the same as the on-screen control. */
       document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape' || !openWorld) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (evidenceReader.open) { closeEvidence(); return; }
         const reader = openWorld.querySelector<HTMLElement>('[data-reader]:not([hidden])');
-        if (reader) { closeReader(openWorld); return; }
+        if (reader) { event.preventDefault(); closeReader(openWorld); return; }
         event.preventDefault();
         /* One level up, computed from the URL rather than replayed from the
            history stack: every level is a pushState entry, so `back()` would
@@ -259,10 +281,11 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
            up once with the on-screen control. */
         const { world, category } = parseHash();
         go(category ? `#${world}` : '');
-      });
+      }, true);
 
       /* Focus trap. Only ever active while a layer is open. */
       document.addEventListener('keydown', (event) => {
+        if (evidenceReader.open || openWorld?.querySelector('[data-reader][open]')) return;
         if (event.key !== 'Tab' || !openWorld) return;
         const items = [...openWorld.querySelectorAll<HTMLElement>(FOCUSABLE)]
           .filter((el) => el.offsetParent !== null || el === document.activeElement);
@@ -414,120 +437,134 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
         layout(queue);
       };
 
-      const goTo = (queue: Queue, next: number) => {
-        const wrapped = ((next % queue.slots.length) + queue.slots.length) % queue.slots.length;
-        if (wrapped === queue.index) return;
-        const forward = next > queue.index;
-        const before = new Map(queue.slots.filter((slot) => !slot.hidden).map((slot) => [slot, {
+      interface WheelMotion {
+        from: number; to: number; direction: number; progress: number;
+        animations: Animation[]; ghosts: HTMLElement[]; raf: number;
+      }
+      const wheels = new Map<Queue, WheelMotion>();
+      const finishWheel = (queue: Queue, commit: boolean) => {
+        const wheel = wheels.get(queue);
+        if (!wheel) return;
+        cancelAnimationFrame(wheel.raf);
+        queue.index = commit ? wheel.to : wheel.from;
+        wheel.animations.forEach((a) => a.cancel());
+        wheel.ghosts.forEach((g) => g.remove());
+        wheels.delete(queue);
+        render(queue);
+      };
+      const seekWheel = (wheel: WheelMotion, progress: number) => {
+        wheel.progress = progress;
+        wheel.animations.forEach((a) => { a.currentTime = progress * 1000; });
+      };
+      const prepareWheel = (queue: Queue, next: number) => {
+        finishWheel(queue, true);
+        const from = queue.index;
+        const to = ((next % queue.slots.length) + queue.slots.length) % queue.slots.length;
+        if (to === from) return null;
+        const direction = next > from ? 1 : -1;
+        const before = new Map(queue.slots.filter((s) => !s.hidden).map((slot) => [slot, {
           rect: slot.getBoundingClientRect(), depth: Number(slot.dataset.depth),
         }]));
-        queue.motion.forEach((animation) => animation.cancel());
-        queue.motion = [];
-        const revision = ++queue.revision;
-        queue.stack.setAttribute('data-dragging', '');
-        queue.stack.style.setProperty('--drag', '0px');
-        void queue.stack.offsetWidth;
-        queue.stack.removeAttribute('data-dragging');
-        queue.index = wrapped;
-        render(queue);
-        if (reduced()) return;
+        queue.index = to;
+        layout(queue);
+        queue.index = from;
         const stage = queue.stage.getBoundingClientRect();
         const farDepth = Math.min(geometry().visible, queue.slots.length) - 1;
+        const wheel: WheelMotion = { from, to, direction, progress: 0, animations: [], ghosts: [], raf: 0 };
+        const animate = (element: HTMLElement, start: string, end: string) => {
+          const a = element.animate([{ transform: start }, { transform: end }], { duration: 1000, fill: 'both', easing: 'linear' });
+          a.pause(); a.currentTime = 0; wheel.animations.push(a);
+        };
         for (const slot of queue.slots) {
           const previous = before.get(slot);
           const leaving = slot.hidden;
           if (leaving && !previous) continue;
           slot.hidden = false;
           const after = slot.getBoundingClientRect();
-          const at = (x: number, y: number, scaleX = 1, scaleY = scaleX) =>
-            `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})`;
+          const at = (x: number, y: number, sx = 1, sy = sx) => `translate(${x}px,${y}px) scale(${sx},${sy})`;
+          const entry = at(direction > 0 ? stage.left - after.right - 2 : stage.right - after.left + 2, 0, 1);
+          const exit = at(direction > 0 ? stage.right - after.left + 2 : stage.left - after.right - 2, 0, 1);
           const start = previous ? at(previous.rect.left - after.left, previous.rect.top - after.top,
-            previous.rect.width / after.width, previous.rect.height / after.height)
-            : at(forward ? stage.left - after.right : stage.right - after.left, 0, forward ? .8 : 1.08);
-          const end = leaving ? at(forward ? stage.right - after.left : stage.left - after.right, 0, .8) : 'none';
-          const cycles = previous && !leaving && (forward
+            previous.rect.width / after.width, previous.rect.height / after.height) : entry;
+          const recycled = previous && !leaving && (direction > 0
             ? previous.depth === 0 && Number(slot.dataset.depth) === farDepth
             : previous.depth === farDepth && Number(slot.dataset.depth) === 0);
-          // Recycle beyond the clipped stage, never across the visible queue.
-          const frames: Keyframe[] = cycles ? [
-            { transform: start, zIndex: forward ? 20 : 1, offset: 0 },
-            { transform: at(forward ? stage.right - after.left : stage.left - after.right, 0, .8), offset: .48 },
-            { transform: at(forward ? stage.left - after.right : stage.right - after.left, 0, .8), zIndex: forward ? 1 : 20, offset: .49 },
-            { transform: end, offset: 1 },
-          ] : [{ transform: start }, { transform: end }];
-          const animation = slot.animate(frames, { duration: 560, easing: 'cubic-bezier(.22,.68,.22,1)', fill: 'both' });
-          queue.motion.push(animation);
-          animation.finished.then(() => {
-            if (queue.revision !== revision) return;
-            if (leaving) slot.hidden = true;
-            animation.cancel();
-          }).catch(() => {});
+          if (recycled) {
+            // Two edge instances of the same circular item; neither teleports through the visible field.
+            const ghost = slot.cloneNode(true) as HTMLElement;
+            ghost.removeAttribute('data-slot'); ghost.removeAttribute('data-active');
+            ghost.setAttribute('data-wheel-ghost', ''); ghost.setAttribute('aria-hidden', 'true');
+            ghost.style.zIndex = direction > 0 ? '30' : '1';
+            queue.stack.append(ghost); wheel.ghosts.push(ghost);
+            animate(ghost, start, exit);
+            animate(slot, entry, 'none');
+          } else animate(slot, start, leaving ? exit : 'none');
         }
+        wheels.set(queue, wheel);
+        return wheel;
       };
-
+      const settleWheel = (queue: Queue, commit: boolean) => {
+        const wheel = wheels.get(queue);
+        if (!wheel) return;
+        cancelAnimationFrame(wheel.raf);
+        if (reduced()) { finishWheel(queue, commit); return; }
+        const start = wheel.progress;
+        const target = commit ? 1 : 0;
+        const duration = Math.max(150, 600 * Math.abs(target - start));
+        const began = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - began) / duration);
+          seekWheel(wheel, start + (target - start) * (1 - Math.pow(1 - t, 3)));
+          if (t < 1) wheel.raf = requestAnimationFrame(tick);
+          else finishWheel(queue, commit);
+        };
+        wheel.raf = requestAnimationFrame(tick);
+      };
+      const goTo = (queue: Queue, next: number) => {
+        finishWheel(queue, true);
+        if (!prepareWheel(queue, next)) return;
+        const wheel = wheels.get(queue)!;
+        queue.index = wheel.to;
+        if (queue.counter) queue.counter.textContent = `${queue.counter.dataset.noun ?? 'Project'} ${String(queue.index + 1).padStart(2, '0')}`;
+        settleWheel(queue, true);
+      };
       for (const queue of queues) {
-        if (queue.slots.length === 0) continue;
-
+        if (!queue.slots.length) continue;
         queue.prev?.addEventListener('click', () => goTo(queue, queue.index - 1));
         queue.next?.addEventListener('click', () => goTo(queue, queue.index + 1));
-
         queue.stage.addEventListener('keydown', (event) => {
           if (event.key === 'ArrowRight') { event.preventDefault(); goTo(queue, queue.index + 1); }
           else if (event.key === 'ArrowLeft') { event.preventDefault(); goTo(queue, queue.index - 1); }
           else if (event.key === 'Home') { event.preventDefault(); goTo(queue, 0); }
           else if (event.key === 'End') { event.preventDefault(); goTo(queue, queue.slots.length - 1); }
         });
-
-        /* Direct manipulation. During the gesture the stack is translated by
-           the SAME SIGN as the pointer delta — hand right, cards right. On
-           release, a leftward drag past the threshold advances, because
-           dragging left is what pulls the next garment into the lead. */
-        let dragging = false;
-        let startX = 0;
-        let pointerId = -1;
-
+        let dragging = false, startX = 0, pointerId = -1;
         queue.stage.addEventListener('pointerdown', (event) => {
           if (event.button !== 0 || queue.slots.length < 2) return;
-          const target = event.target as HTMLElement;
-          if (target.closest('button, a')) return;
-          event.preventDefault();
-          dragging = true;
-          startX = event.clientX;
-          pointerId = event.pointerId;
+          if ((event.target as HTMLElement).closest('button,a')) return;
+          finishWheel(queue, true);
+          dragging = true; startX = event.clientX; pointerId = event.pointerId; queue.drag = 0;
           queue.stage.setPointerCapture(pointerId);
-          queue.stack.setAttribute('data-dragging', '');
         });
-
         queue.stage.addEventListener('pointermove', (event) => {
           if (!dragging || event.pointerId !== pointerId) return;
           queue.drag = event.clientX - startX;
-          queue.stack.style.setProperty('--drag', `${queue.drag}px`);
+          if (Math.abs(queue.drag) < 2) return;
+          const direction = Math.sign(queue.drag);
+          let wheel = wheels.get(queue);
+          if (wheel && wheel.direction !== direction) { finishWheel(queue, false); wheel = undefined; }
+          wheel ??= prepareWheel(queue, queue.index + direction) ?? undefined;
+          if (wheel) seekWheel(wheel, Math.min(.98, Math.abs(queue.drag) / Math.max(150, queue.width * .65)));
         });
-
-        const endDrag = (event: PointerEvent) => {
+        queue.stage.addEventListener('pointerup', (event) => {
           if (!dragging || event.pointerId !== pointerId) return;
           dragging = false;
-          try { queue.stage.releasePointerCapture(pointerId); } catch { /* already released */ }
-          queue.stack.removeAttribute('data-dragging');
-          const threshold = Math.max(44, queue.width * 0.18);
-          const travelled = queue.drag;
+          try { queue.stage.releasePointerCapture(pointerId); } catch {}
+          const commit = Math.abs(queue.drag) >= Math.max(44, queue.width * .18);
           queue.drag = 0;
-          if (travelled <= -threshold) goTo(queue, queue.index + 1);
-          else if (travelled >= threshold) goTo(queue, queue.index - 1);
-          else queue.stack.style.setProperty('--drag', '0px');
-        };
-
-        queue.stage.addEventListener('pointerup', endDrag);
-        /* A cancel is an abort, not a release — it snaps back and changes
-           nothing. */
-        queue.stage.addEventListener('pointercancel', (event) => {
-          if (!dragging || event.pointerId !== pointerId) return;
-          dragging = false;
-          queue.drag = 0;
-          queue.stack.removeAttribute('data-dragging');
-          queue.stack.style.setProperty('--drag', '0px');
+          settleWheel(queue, commit);
         });
-
+        queue.stage.addEventListener('pointercancel', () => { dragging = false; queue.drag = 0; settleWheel(queue, false); });
         render(queue);
       }
 
@@ -536,25 +573,42 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
          created by the click that asks for it and destroyed when the reader
          closes, so five demo packs cost nothing until one is opened. */
       const closeReader = (world: HTMLElement) => {
-        const reader = world.querySelector<HTMLElement>('[data-reader]');
+        const reader = world.querySelector<HTMLDialogElement>('[data-reader]');
         if (!reader || reader.hidden) return;
         reader.querySelector<HTMLElement>('[data-reader-mount]')?.replaceChildren();
+        reader.close();
         reader.hidden = true;
-        document.body.classList.remove('no-scroll');
         world.classList.remove('pf-world--reading');
         const back = reader.dataset.openerId
           ? world.querySelector<HTMLElement>(`#${reader.dataset.openerId}`)
           : null;
         back?.focus({ preventScroll: true });
+        const savedScroll = Number(reader.dataset.scrollTop ?? 0);
+        world.scrollTop = savedScroll;
+        /* Chromium restores a modal dialog's scroll target after close() on
+           its next rendering step. Reapply the chapter position afterwards,
+           so closing never nudges the dossier list. */
+        requestAnimationFrame(() => {
+          world.scrollTop = savedScroll;
+          requestAnimationFrame(() => { world.scrollTop = savedScroll; });
+        });
+        window.setTimeout(() => { world.scrollTop = savedScroll; }, 80);
       };
 
       for (const world of worlds.values()) {
-        const reader = world.querySelector<HTMLElement>('[data-reader]');
+        const reader = world.querySelector<HTMLDialogElement>('[data-reader]');
         if (!reader) continue;
         const mount = reader.querySelector<HTMLElement>('[data-reader-mount]')!;
         const title = reader.querySelector<HTMLElement>('[data-reader-title]');
 
         for (const opener of world.querySelectorAll<HTMLElement>('[data-open-pdf]')) {
+          /* Pointer activation focuses the document before `click`, and that
+             focus may scroll a long folio row into a different alignment.
+             Capture the origin before focus so Close returns to the exact
+             reading position the visitor selected from. */
+          opener.addEventListener('pointerdown', () => {
+            reader.dataset.scrollTop = String(world.scrollTop);
+          });
           opener.addEventListener('click', (event) => {
             const href = opener.getAttribute('href');
             if (!href) return;
@@ -562,8 +616,10 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
             /* Inline PDF viewing is unreliable on phones — iOS renders one
                page and will not scroll it — so below this width the anchor is
                left alone and the document opens in its own tab. */
-            if (window.matchMedia('(max-width: 899px)').matches) return;
             event.preventDefault();
+            if ((event as MouseEvent).detail === 0 || !reader.dataset.scrollTop) {
+              reader.dataset.scrollTop = String(world.scrollTop);
+            }
             /* <object> rather than <iframe>: when a browser has no PDF
                viewer the object's own fallback content renders in its place,
                so the visitor gets a working link instead of a blank panel. */
@@ -579,13 +635,27 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
             link.rel = 'noopener';
             link.textContent = 'Open this document in a new tab';
             fallback.append('This browser cannot display a PDF inline. ', link);
+            const preview = opener.querySelector('img');
+            if (preview) fallback.prepend(preview.cloneNode(true));
             frame.append(fallback);
             mount.replaceChildren(frame);
+            if (window.matchMedia('(max-width: 899px)').matches) {
+              const mobile = document.createElement('div');
+              mobile.className = 'pf-reader-mobile';
+              const cover = opener.querySelector('img');
+              if (cover) mobile.append(cover.cloneNode(true));
+              const description = document.createElement('p');
+              description.textContent = 'Document preview. Open the PDF in your device reader for all pages.';
+              const mobileLink = link.cloneNode(true);
+              mobile.append(description, mobileLink);
+              mount.replaceChildren(mobile);
+            }
             if (title) title.textContent = opener.dataset.docTitle ?? '';
             const tab = reader.querySelector<HTMLAnchorElement>('[data-reader-tab]');
             if (tab) tab.href = href;
             reader.dataset.openerId = opener.id;
             reader.hidden = false;
+            reader.showModal();
             reader.querySelector<HTMLElement>('[data-reader-close]')?.focus({ preventScroll: true });
             world.classList.add('pf-world--reading');
           });
@@ -593,6 +663,7 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
 
         reader.querySelector<HTMLElement>('[data-reader-close]')
           ?.addEventListener('click', () => closeReader(world));
+        reader.addEventListener('cancel', (event) => { event.preventDefault(); closeReader(world); });
       }
 
       /* ---- 4. video slots: no player before a click --------------------- */
@@ -705,212 +776,6 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       white-space: nowrap;
     }
 
-    /* ======================================================================
-       INTRO — an opening statement, then out of the way.
-       ====================================================================== */
-    .pf-intro {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: calc(var(--header-h) + clamp(.75rem, 1.6vw, 1.3rem)) var(--gutter) clamp(1rem, 1.8vw, 1.6rem);
-    }
-    .pf-intro__title {
-      max-width: 20ch;
-      margin: .9rem 0 0;
-      font-size: clamp(2rem, 4.2vw, 3.5rem);
-      line-height: .94;
-      letter-spacing: -.045em;
-    }
-    .pf-intro__lede {
-      max-width: 34rem;
-      margin: .85rem 0 0;
-      color: var(--ink-soft);
-      font-size: clamp(.96rem, 1.3vw, 1.05rem);
-      line-height: 1.6;
-    }
-
-    /* ======================================================================
-       FOUR CHAPTER COVERS
-
-       Four image-led editorial openings arranged with unequal scale and air.
-       ====================================================================== */
-    .pf-covers { border-top: 1px solid var(--line-strong); }
-
-    /* A cover is a composition, not a centred word on an empty field: a
-       register rule across the top, the name set large and low against one
-       margin, and the progression signature at the foot. The axis alternates
-       chapter to chapter, so the four share one system and none of them reads
-       as the same slide twice. */
-    .pf-cover {
-      position: relative;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      min-height: clamp(30rem, 82vh, 48rem);
-      padding: clamp(1.5rem, 2.6vw, 2.4rem) var(--gutter) clamp(1.75rem, 3vw, 2.8rem);
-      color: inherit;
-      text-decoration: none;
-      overflow: hidden;
-      container-type: inline-size;
-    }
-    .pf-cover + .pf-cover { border-top: 1px solid var(--line-strong); }
-    .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
-
-    .pf-cover__register {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
-      padding-bottom: clamp(.7rem, 1.2vw, 1rem);
-      border-bottom: 1px solid var(--line);
-    }
-    .pf-cover__num,
-    .pf-cover__kind {
-      font-family: var(--mono);
-      font-size: .7rem;
-      font-style: normal;
-      letter-spacing: .26em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .pf-cover__num { color: var(--ink); }
-
-    .pf-cover__type {
-      position: relative;
-      z-index: 2;
-      align-self: end;
-      display: grid;
-      justify-items: start;
-      max-width: 100%;
-    }
-    .pf-cover__name {
-      display: block;
-      margin: 0;
-      font-family: var(--display);
-      font-variation-settings: 'wdth' 112;
-      font-weight: 850;
-      /* The title is the hero. It runs as large as its own length allows —
-         see coverScale in the frontmatter — and never breaks inside a word. */
-      font-size: clamp(2.4rem, calc(var(--cover-vw, 11) * 1vw), 9.5rem);
-      line-height: .84;
-      letter-spacing: -.055em;
-      text-wrap: balance;
-      overflow-wrap: normal;
-      word-break: keep-all;
-      hyphens: none;
-    }
-    .pf-cover__go {
-      display: inline-flex;
-      align-items: center;
-      gap: .55rem;
-      margin-top: clamp(1.1rem, 2vw, 1.8rem);
-      color: var(--signal);
-      transition: gap .3s var(--ease);
-    }
-    .pf-cover__go .arrow { width: 1em; height: 1em; }
-    .pf-cover:hover .pf-cover__go { gap: 1.05rem; }
-
-    /* The signature: four rules stepping up in the same rhythm the garment
-       deck recedes by, the last one carrying the signal. */
-    .pf-cover__meter {
-      position: relative;
-      z-index: 2;
-      align-self: end;
-      justify-self: start;
-      display: flex;
-      align-items: flex-end;
-      gap: clamp(.5rem, .95vw, .85rem);
-      height: clamp(3rem, 5.5vw, 4.6rem);
-      margin-top: clamp(1.75rem, 3.4vw, 3rem);
-    }
-    .pf-cover__meter i { display: block; width: 2px; background: var(--ink); }
-    .pf-cover__meter i:nth-child(1) { height: 52%; }
-    .pf-cover__meter i:nth-child(2) { height: 66%; }
-    .pf-cover__meter i:nth-child(3) { height: 82%; }
-    .pf-cover__meter i:nth-child(4) { height: 100%; background: var(--signal); }
-    /* A document register instead of a scale, for the chapter whose subject is
-       paper: the same four steps, laid flat as ruled fields. */
-    .pf-cover__meter--doc { flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: clamp(.5rem, .9vw, .8rem); width: clamp(8rem, 14vw, 13rem); }
-    .pf-cover__meter--doc i { width: 52%; height: 2px; }
-    .pf-cover__meter--doc i:nth-child(2) { width: 100%; }
-    .pf-cover__meter--doc i:nth-child(3) { width: 74%; }
-    .pf-cover__meter--doc i:nth-child(4) { width: 34%; }
-
-    /* ---- the axis alternates, so no two covers read the same way ---- */
-    /* 01 sits against the left margin. */
-    .pf-cover[data-chapter='menswear'] .pf-cover__type,
-    .pf-cover[data-chapter='menswear'] .pf-cover__meter { justify-self: end; justify-items: end; }
-    .pf-cover[data-chapter='menswear'] .pf-cover__name { text-align: right; }
-    .pf-cover[data-chapter='menswear'] .pf-cover__go { justify-self: end; }
-    /* 03 hangs its name one step in from the margin, the way a technical sheet
-       indents from its binding edge. */
-    .pf-cover[data-chapter='tech-packs'] .pf-cover__type { padding-left: clamp(0rem, 8vw, 7rem); }
-    .pf-cover[data-chapter='tech-packs'] .pf-cover__meter { justify-self: end; }
-
-    /* ---- 04 keeps the cinematic frame from the real recording ---- */
-    .pf-cover[data-tone='dark'] { background: var(--ink); color: var(--paper-bright); }
-    .pf-cover__art { position: absolute; inset: 0; z-index: 0; display: block; }
-    .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
-    .pf-cover__art::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(17, 17, 15, .95) 0%, rgba(17, 17, 15, .72) 42%, rgba(17, 17, 15, .62) 78%, rgba(17, 17, 15, .82) 100%);
-    }
-    .pf-cover[data-tone='dark'] .pf-cover__register { border-bottom-color: rgba(251, 250, 246, .22); }
-    .pf-cover[data-tone='dark'] .pf-cover__num { color: var(--paper-bright); }
-    .pf-cover[data-tone='dark'] .pf-cover__kind { color: rgba(251, 250, 246, .6); }
-    .pf-cover[data-tone='dark'] .pf-cover__meter i { background: rgba(251, 250, 246, .6); }
-    .pf-cover[data-tone='dark'] .pf-cover__meter i:nth-child(4) { background: var(--signal); }
-
-    /* V9 cover gallery: four independent editorial image fields, composed as
-       one paced spread rather than four identical full-width bands. */
-    .pf-covers {
-      display: grid;
-      gap: clamp(1rem, 2vw, 2rem);
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(1rem, 2vw, 2rem) var(--gutter) clamp(4rem, 8vw, 8rem);
-      border-top: 0;
-    }
-    .pf-cover,
-    .pf-cover + .pf-cover {
-      min-height: min(76svh, 52rem);
-      padding: clamp(1rem, 1.8vw, 1.6rem);
-      border: 0;
-      background: var(--ink);
-      color: var(--paper-bright);
-      isolation: isolate;
-    }
-    .pf-cover__still { transform: scale(1.01); transition: transform .8s var(--ease); }
-    .pf-cover:hover .pf-cover__still { transform: scale(1.035); }
-    .pf-cover__art::after {
-      background: linear-gradient(to top, rgba(17, 17, 15, .9) 0%, rgba(17, 17, 15, .26) 55%, rgba(17, 17, 15, .6) 100%);
-    }
-    .pf-cover__register { border-bottom-color: rgba(251, 250, 246, .32); }
-    .pf-cover__num { color: var(--paper-bright); }
-    .pf-cover__kind { color: rgba(251, 250, 246, .68); }
-    .pf-cover__name {
-      max-width: 9ch;
-      font-size: clamp(2.4rem, var(--cover-cqw), 8rem);
-      text-wrap: pretty;
-    }
-    .pf-cover__meter i { background: rgba(251, 250, 246, .68); }
-    .pf-cover__meter i:nth-child(4) { background: var(--signal); }
-
-    @media (min-width: 900px) {
-      .pf-covers { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; }
-      .pf-cover[data-cover-index='1'] { grid-column: 1 / span 7; min-height: min(78svh, 54rem); }
-      .pf-cover[data-cover-index='2'] { grid-column: 8 / span 5; min-height: min(60svh, 42rem); margin-top: clamp(5rem, 10vw, 9rem); }
-      .pf-cover[data-cover-index='3'] { grid-column: 1 / span 5; min-height: min(58svh, 40rem); margin-top: clamp(1rem, 3vw, 3rem); }
-      .pf-cover[data-cover-index='4'] { grid-column: 6 / span 7; min-height: min(82svh, 56rem); margin-top: clamp(-5rem, -4vw, -2.5rem); }
-      .pf-cover[data-cover-index='2'] .pf-cover__type,
-      .pf-cover[data-cover-index='2'] .pf-cover__meter,
-      .pf-cover[data-cover-index='4'] .pf-cover__type,
-      .pf-cover[data-cover-index='4'] .pf-cover__meter { justify-self: end; justify-items: end; }
-      .pf-cover[data-cover-index='2'] .pf-cover__name,
-      .pf-cover[data-cover-index='4'] .pf-cover__name { text-align: right; }
-    }
 
     /* ======================================================================
        CHAPTERS

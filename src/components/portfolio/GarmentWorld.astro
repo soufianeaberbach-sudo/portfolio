@@ -65,7 +65,8 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
       <p class="pf-head__descriptor">{world.descriptor}</p>
     </header>
 
-    <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`}>
+    <div class="pf-category-instruction label">Silhouette index <span>Scroll to discover / Select to enter</span></div>
+    <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`} tabindex="0">
       <ol class="pf-cats__list">
         {world.categories.map((category, categoryIndex) => {
           const count = slotsFor(category).length;
