@@ -1,72 +1,113 @@
 ---
-/* The three development stages — sketch, 2D pattern, 3D simulation — as three
- * large plates, always in that order.
+/* The three development surfaces of ONE garment — sketch, 2D pattern, 3D
+ * simulation, always in that order.
  *
- * ONE component serves both states, which is the whole point of it:
+ * WHAT CHANGED, AND WHY IT MATTERS.
+ * These used to be rendered once per CATEGORY: three fixed plates that stayed
+ * the same while the visitor advanced through seventeen garments. Evidence that
+ * does not follow the garment is not evidence of anything. Now one block is
+ * rendered per garment and the runtime shows the active one, so position 1 of
+ * the deck and the three surfaces are always the same garment.
  *
- *   a stage WITH a real asset renders that asset;
- *   a stage WITHOUT one renders a demo plate that says so.
+ * THREE STATES PER SURFACE, and the visitor can tell them apart:
  *
- * So publishing a project's real evidence replaces the placeholder by adding
- * data — `project.evidence.sketch` and the rest — and nothing here changes.
+ *   authored   a real supplied asset, shown at full strength.
+ *   preview    no asset yet, so the ACTIVE GARMENT stands in — dimmed, and
+ *              stamped so it can never be read as a sketch, a pattern or a
+ *              simulation. This exists to prove the dynamic system works
+ *              while the real assets are being prepared.
+ *   empty      nothing to borrow either. A ruled blank that says so.
  *
- * A demo plate deliberately does not draw a sketch, a pattern or a garment.
- * Inventing a plausible-looking drawing would be fabricating evidence; a plate
- * that is visibly an empty technical layout, stamped DEMO, cannot be mistaken
- * for work. The three are told apart by their ground alone — hatch, pattern
- * grid, crosshair — never by pretending to hold content.
+ * A demo surface deliberately does not draw a plausible sketch or pattern.
+ * Inventing one would be fabricating evidence; a dimmed garment under a
+ * `Temp preview` stamp cannot be mistaken for work.
+ *
+ * Supplying `project.evidence.sketch` flips that one surface to `authored`.
+ * Nothing in this file changes when it does.
  */
-import type { ProjectEvidence } from '../../data/portfolio';
-import { EVIDENCE_STAGES, EVIDENCE_DEMO_NOTE } from '../../data/portfolio';
+import type { EvidenceSurface } from '../../data/portfolio';
+import { EVIDENCE_PREVIEW_MARK, EVIDENCE_PREVIEW_NOTE, evidenceIsAllPreview } from '../../data/portfolio';
 
 interface Props {
-  evidence?: ProjectEvidence;
+  surfaces: EvidenceSurface[];
+  /* Which garment these belong to — the runtime matches it against the deck's
+     active index. */
+  index: number;
+  /* The garment's own label, so the heading names what is being inspected
+     rather than saying "Development" three hundred times. */
+  garmentLabel: string;
 }
 
-const { evidence } = Astro.props;
-const plates = EVIDENCE_STAGES.map((stage) => ({ ...stage, asset: evidence?.[stage.key] }));
-const anyDemo = plates.some((plate) => !plate.asset);
+const { surfaces, index, garmentLabel } = Astro.props;
+const allPreview = evidenceIsAllPreview(surfaces);
+const hasAuthored = surfaces.some((surface) => surface.kind === 'authored');
 ---
 
-<section class="pf-dev" aria-label="Development stages" data-dev>
+<section
+  class="pf-dev"
+  data-dev
+  data-evidence-for={index}
+  data-has-authored={hasAuthored ? '' : undefined}
+  aria-label={`Development surfaces — ${garmentLabel}`}
+  hidden={index !== 0}
+>
   <p class="pf-dev__head">
     <span class="label pf-dev__title">Development</span>
-    {anyDemo && (
-      <span class="label pf-dev__note" data-demo-note>{EVIDENCE_DEMO_NOTE}</span>
+    {allPreview && (
+      /* Said once, here, rather than repeated under all three at a size
+         nobody reads. */
+      <span class="label pf-dev__note" data-preview-note>{EVIDENCE_PREVIEW_NOTE}</span>
     )}
   </p>
 
   <ol class="pf-dev__plates">
-    {plates.map((plate, index) => (
-      <li class="pf-plate" data-plate={plate.key} data-demo={plate.asset ? undefined : ''}>
-        {/* The progression between the stages, drawn once between each pair.
-            The final garment is the large image beside this panel, so the
-            sequence ends at step 03 — there is no step 04. */}
-        <button type="button" class="pf-plate__art" data-evidence-open data-evidence-title={`${plate.step} / ${plate.name}`} data-evidence-demo={plate.asset ? undefined : ''} aria-label={`Enlarge ${plate.name}${plate.asset ? '' : ' demo plate'}`}>
-          {plate.asset ? (
+    {surfaces.map((surface) => (
+      <li
+        class="pf-plate"
+        data-plate={surface.key}
+        data-preview={surface.kind === 'preview' ? '' : undefined}
+        data-empty={surface.kind === 'empty' ? '' : undefined}
+      >
+        <button
+          type="button"
+          class="pf-plate__art"
+          data-evidence-open
+          data-evidence-title={`${surface.step} / ${surface.name}`}
+          data-evidence-kind={surface.kind}
+          aria-label={
+            surface.kind === 'authored'
+              ? `Enlarge ${surface.name} — ${garmentLabel}`
+              : `Enlarge ${surface.name} temporary preview — ${garmentLabel}`
+          }
+        >
+          <span class="pf-notch" aria-hidden="true"></span>
+          {surface.kind === 'preview' && (
+            <span class="pf-plate__stamp label">{EVIDENCE_PREVIEW_MARK}</span>
+          )}
+          {surface.kind === 'empty' && <span class="pf-plate__stamp label">Pending</span>}
+          {surface.image ? (
             <img
-              src={plate.asset.image.src}
-              srcset={plate.asset.image.srcset}
-              sizes="(max-width: 1359px) 32vw, 22vw"
-              width={plate.asset.image.width}
-              height={plate.asset.image.height}
-              alt={plate.asset.image.alt}
+              src={surface.image.src}
+              srcset={surface.image.srcset}
+              sizes="(max-width: 1023px) 30vw, 20vw"
+              width={surface.image.width}
+              height={surface.image.height}
+              /* A stand-in describes itself as a stand-in to a screen reader
+                 too. It never borrows the surface's name. */
+              alt={surface.kind === 'authored'
+                ? surface.image.alt
+                : `Temporary preview: the active garment shown in place of the ${surface.name.toLowerCase()} for ${garmentLabel}`}
               loading="lazy"
               decoding="async"
             />
           ) : (
-            /* The plate says only that it is a demo. What it is waiting for is
-               stated once, in the rail's heading, rather than repeated under
-               all three at a size nobody can read. */
-            <span class="pf-plate__blank">
-              <span class="pf-plate__stamp label">Demo</span>
-            </span>
+            <span class="pf-plate__blank"></span>
           )}
           <span class="pf-plate__inspect" aria-hidden="true">Inspect +</span>
         </button>
         <p class="pf-plate__label">
-          <b class="label">Step {plate.step}</b>
-          <span>{plate.name}</span>
+          <b class="label">Step {surface.step}</b>
+          <span>{surface.name}</span>
         </p>
       </li>
     ))}

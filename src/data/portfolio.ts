@@ -426,7 +426,11 @@ menswearCategories.forEach((category, index) => {
   }));
   category.cover = category.references[0].image;
 });
-rtw.cover = editorial[13364876].image;
+/* The Ready-to-Wear cover was pointed at a licensed editorial photograph. A
+   category's own first garment is both truer and stronger: it is the actual
+   content of the category, it is authored work, and it stopped one stock image
+   appearing three times on a single journey (landing, chapter cover, category
+   cover). The chapter cover above still uses editorial imagery and says so. */
 
 export const womenswear: GarmentWorld = {
   id: 'womenswear',
@@ -551,7 +555,10 @@ export const chapters: Chapter[] = [
     id: 'womenswear',
     number: '01',
     title: 'Womenswear',
-    kind: 'Product development',
+    /* The two garment chapters used to carry the same `kind`, so the register
+       line above their covers read "Product development" twice, side by side,
+       and differentiated nothing. Each now names what it is about. */
+    kind: 'Silhouette',
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     cover: {
@@ -564,7 +571,7 @@ export const chapters: Chapter[] = [
     id: 'menswear',
     number: '02',
     title: 'Menswear',
-    kind: 'Product development',
+    kind: 'Structure',
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     cover: {
@@ -621,3 +628,79 @@ export const chapters: Chapter[] = [
     },
   },
 ];
+
+/* --------------------------------------------------------------------------
+   PER-GARMENT EVIDENCE RESOLUTION
+
+   The three development surfaces — sketch, 2D pattern, 3D simulation — belong
+   to ONE garment, not to a category. Advancing the deck changes which garment
+   is under inspection, so the three surfaces have to change with it.
+
+   WHY THIS LIVES HERE AND NOT ON THE TYPES ABOVE.
+   `ReferenceImage` deliberately carries no evidence field: a photograph whose
+   authorship is not claimed cannot have development evidence, and the type
+   makes that unrepresentable. `Project.evidence` is the only place a real
+   asset is ever declared. This function is the read side of both — it answers
+   "what should the three surfaces show for the garment at this position?"
+   without letting either type grow a field it must not have.
+
+   THREE OUTCOMES PER SURFACE, and the caller can tell them apart:
+
+     kind: 'authored'   a real supplied asset. `image` is that asset.
+     kind: 'preview'    no asset yet, so the CURRENT GARMENT image stands in
+                        so the dynamic system is visibly working. It is
+                        labelled TEMP PREVIEW on the surface itself and is
+                        never described as a sketch, a pattern or a
+                        simulation.
+     kind: 'empty'      nothing to show at all — no asset and no garment
+                        image to borrow. Renders as a stated blank.
+
+   Supplying `project.evidence.sketch` later turns that one surface from
+   'preview' to 'authored'. Nothing structural changes.
+   -------------------------------------------------------------------------- */
+
+export type EvidenceKind = 'authored' | 'preview' | 'empty';
+
+export interface EvidenceSurface {
+  key: EvidenceStage;
+  step: string;
+  name: string;
+  kind: EvidenceKind;
+  /* Absent only when kind is 'empty'. */
+  image?: ImageAsset;
+  note?: string;
+}
+
+/* What the deck holds at one position: either a verified project or a
+   reference photograph. One shape so the viewer does not branch. */
+export interface GarmentSlot {
+  id: string;
+  image: ImageAsset;
+  project: Project | null;
+}
+
+/* The marker printed on a surface that is standing in for an asset that does
+   not exist yet. Exported so the component and the tests read one string. */
+export const EVIDENCE_PREVIEW_MARK = 'Temp preview';
+
+/* Said once, beside the three surfaces, when any of them is a stand-in. */
+export const EVIDENCE_PREVIEW_NOTE =
+  'Temporary previews — the active garment shown in place of its development assets.';
+
+export const garmentEvidence = (slot: GarmentSlot): EvidenceSurface[] =>
+  EVIDENCE_STAGES.map(({ key, step, name }) => {
+    const authored = slot.project?.evidence?.[key];
+    if (authored) {
+      return { key, step, name, kind: 'authored' as const, image: authored.image, note: authored.note };
+    }
+    if (slot.image) {
+      return { key, step, name, kind: 'preview' as const, image: slot.image };
+    }
+    return { key, step, name, kind: 'empty' as const };
+  });
+
+/* True when not one of the three surfaces holds a real asset. The viewer uses
+   it to keep the evidence rail at a lower visual weight rather than giving a
+   third of the best screen to three stand-ins. */
+export const evidenceIsAllPreview = (surfaces: EvidenceSurface[]): boolean =>
+  surfaces.every((surface) => surface.kind !== 'authored');

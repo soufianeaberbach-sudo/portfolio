@@ -1,29 +1,30 @@
 ---
 /* One garment chapter (Womenswear or Menswear), in two levels.
  *
- *   SCREEN 1  the category index. Each category is an image-led editorial
- *             cover; the deeper garment runway and development evidence stay
- *             hidden until the visitor chooses one.
- *   SCREEN 2  one per category. The garment viewer for that category and its
- *             three development stages, with a back control that returns to
- *             SCREEN 1 rather than jumping out to the portfolio index.
+ *   SCREEN 1  the category index — a nested composition of pieces, one per
+ *             market category. Replaces the horizontal scroll-snap rail:
+ *             categories are a CHOICE, and a choice needs the whole field
+ *             visible rather than one hidden card after another.
+ *   SCREEN 2  one per category. The garment viewer and the three development
+ *             surfaces of whichever garment is under inspection, with a back
+ *             control that returns to SCREEN 1 rather than jumping out to the
+ *             portfolio index.
  *
- * Three content states, derived from the data:
+ * Three content states, derived from the data — never hand-set:
  *
  *   published          verified projects exist; the deck carries them.
  *   reference-preview  no verified projects, but reference photography. The
  *                      deck carries those images so the interface can be seen
  *                      working, and nothing is claimed about them. The
- *                      non-authorship note is stated once, beside that deck —
- *                      never on the index screen and never on a cover.
+ *                      non-authorship note is stated once, beside that deck.
  *   unpublished        nothing yet. The categories are still listed so the
  *                      architecture is legible, and nothing is dressed as
  *                      evidence or given a control that leads nowhere.
  *
  * Everything is server-rendered, so a failed script leaves a readable page.
  */
-import type { GarmentWorld } from '../../data/portfolio';
-import { REFERENCE_DISCLAIMER, worldPublication } from '../../data/portfolio';
+import type { GarmentWorld, GarmentSlot } from '../../data/portfolio';
+import { REFERENCE_DISCLAIMER, worldPublication, garmentEvidence } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import DevPlates from './DevPlates.astro';
 import WorldNavigation from './WorldNavigation.astro';
@@ -39,7 +40,7 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
 /* One list drives the deck. In reference-preview the items are photographs
    with nothing claimed about them; in published they are projects. The noun
    changes with the state so the UI never calls a reference a project. */
-const slotsFor = (category: GarmentWorld['categories'][number]) =>
+const slotsFor = (category: GarmentWorld['categories'][number]): GarmentSlot[] =>
   publication === 'published'
     ? category.projects.map((p) => ({ id: p.id, image: p.finalGarmentImage, project: p }))
     : category.references.map((r) => ({ id: r.id, image: r.image, project: null }));
@@ -65,8 +66,10 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
       <p class="pf-head__descriptor">{world.descriptor}</p>
     </header>
 
-    <div class="pf-category-instruction label">Silhouette index <span>Scroll to discover / Select to enter</span></div>
-    <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`} tabindex="0">
+    {/* The whole field, at once. Nesting and area carry the hierarchy; the
+        list order and the numbers carry the reading order. No rail, no snap
+        points, no "scroll to discover" — every category is on screen. */}
+    <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`}>
       <ol class="pf-cats__list">
         {world.categories.map((category, categoryIndex) => {
           const count = slotsFor(category).length;
@@ -74,37 +77,43 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
           const visual = category.cover ?? category.projects[0]?.finalGarmentImage ?? category.references[0]?.image;
           const Tag = open ? 'a' : 'div';
           return (
-            <li data-category-index={categoryIndex + 1}>
+            <li>
               <Tag
                 class="pf-cat"
-                data-composition={['portrait', 'margin', 'wide', 'portrait', 'wide'][categoryIndex]}
                 href={open ? `#${world.id}/${category.id}` : undefined}
                 data-nav={open ? '' : undefined}
                 data-category={category.id}
                 data-open={open ? '' : undefined}
+                aria-label={open ? `${category.label} — ${count} ${noun.toLowerCase()}${count === 1 ? '' : 's'}` : `${category.label} — pending`}
               >
+                <span class="pf-notch" aria-hidden="true"></span>
                 {visual && (
                   <span class="pf-cat__media" aria-hidden="true">
                     <img
                       src={visual.src}
                       srcset={visual.srcset}
-                      sizes="(max-width: 899px) 92vw, 48vw"
+                      sizes="(max-width: 767px) 92vw, (max-width: 1023px) 56vw, 46vw"
                       width={visual.width}
                       height={visual.height}
                       alt=""
-                      loading={categoryIndex < 2 ? 'eager' : 'lazy'}
+                      {/* A category cover is behind a chapter the visitor has
+                          not opened yet, so none of them is eager: the four
+                          landing covers are the only images the first frame
+                          owes anything to. */}
+                      loading="lazy"
                       decoding="async"
                     />
                   </span>
                 )}
-                <span class="pf-cat__shade" aria-hidden="true"></span>
                 <span class="pf-cat__content">
                   <i class="pf-cat__num">{category.number}</i>
                   <span class="pf-cat__label">{category.label}</span>
-                  <small class="pf-cat__blurb">{category.blurb}</small>
                   <b class="pf-cat__count label">
                     {open ? `${String(count).padStart(2, '0')} ${noun.toLowerCase()}s` : 'Pending'}
                   </b>
+                  {/* One line, always present. Discovery never depends on a
+                      pointer hovering something. */}
+                  <small class="pf-cat__blurb">{category.blurb}</small>
                   {open && <i class="pf-cat__go" aria-hidden="true"><Arrow /></i>}
                 </span>
               </Tag>
@@ -132,8 +141,8 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
           <p class="pf-head__descriptor">{category.blurb}</p>
         </header>
 
-        {/* The white studio: one continuous photographic field, the full width
-            of the viewport. */}
+        {/* The inspection field: bright paper, one step up from the page.
+            Deliberately not black — see the note in portfolio.css. */}
         <div class="pf-studio">
           <div class="pf-studio__inner">
             <div class="pf-panel" data-panel={category.id} data-count={slots.length}
@@ -149,11 +158,16 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                             <img
                               src={slot.image.src}
                               srcset={slot.image.srcset}
-                              sizes="(max-width: 1359px) 52vw, 34vw"
+                              sizes="(max-width: 767px) 60vw, (max-width: 1023px) 42vw, 30vw"
                               width={slot.image.width}
                               height={slot.image.height}
                               alt={slot.image.alt}
-                              loading={index === 0 ? 'eager' : 'lazy'}
+                              {/* Every garment is two screens deep, behind a
+                                  chapter AND a category. Eagerly loading the
+                                  first five of each of the nine categories put
+                                  4.5MB of images on the Portfolio's first
+                                  frame for a deck nobody had opened. */}
+                              loading="lazy"
                               decoding="async"
                             />
                             <figcaption class="label pf-slot__caption">{noun} {pad(index)}</figcaption>
@@ -178,8 +192,7 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
 
                   {publication === 'reference-preview' && (
                     /* Provenance, stated once, on the same block as the
-                       controls it belongs to — not as a section of its own
-                       under the studio. */
+                       controls it belongs to — body size, in the flow. */
                     <p class="pf-prov pf-prov--inline" data-reference-notice>
                       <b class="label">Reference preview</b>
                       <span>{REFERENCE_DISCLAIMER}</span>
@@ -194,40 +207,36 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                   )}
                 </div>
 
+                {/* The three surfaces, one block per garment. The runtime
+                    shows the block whose index matches the deck, so the
+                    evidence is always the active garment's own. */}
                 <div class="pf-devcol">
-                  {publication === 'reference-preview' ? (
-                    <div data-reference-panel><DevPlates /></div>
-                  ) : (
-                    slots.map((slot, index) => {
-                      const project = slot.project!;
-                      return (
-                        <article class="pf-project" data-project-info={index} hidden={index !== 0}>
-                          <p class="label pf-project__number">Project {pad(index)}</p>
-                          <h3 class="pf-project__title">{project.title}</h3>
-                          <dl class="pf-project__profile">
-                            <div><dt>Garment</dt><dd>{project.garmentType}</dd></div>
-                            {project.fabricFamily && (
-                              <div><dt>Fabric family</dt><dd>{project.fabricFamily}</dd></div>
-                            )}
-                            {project.materials && project.materials.length > 0 && (
-                              <div><dt>Materials</dt><dd>{project.materials.join(' / ')}</dd></div>
-                            )}
-                          </dl>
-                          {project.description && <p class="pf-project__description">{project.description}</p>}
-                          {project.tags && project.tags.length > 0 && (
-                            <p class="pf-project__tags label">
-                              {project.tags.map((tag, tagIndex) => (
-                                <>{tagIndex > 0 && <i aria-hidden="true"> / </i>}<span>{tag}</span></>
-                              ))}
-                            </p>
-                          )}
-                          <DevPlates evidence={project.evidence} />
-                        </article>
-                      );
-                    })
-                  )}
+                  {slots.map((slot, index) => (
+                    <DevPlates
+                      surfaces={garmentEvidence(slot)}
+                      index={index}
+                      garmentLabel={slot.project?.title ?? `${noun} ${pad(index)}`}
+                    />
+                  ))}
                 </div>
               </div>
+
+              {publication === 'published' && slots.map((slot, index) => (
+                <article class="pf-project" data-project-info={index} hidden={index !== 0}>
+                  <p class="label pf-project__number">Project {pad(index)}</p>
+                  <h3 class="pf-project__title">{slot.project!.title}</h3>
+                  <dl class="pf-project__profile">
+                    <div><dt>Garment</dt><dd>{slot.project!.garmentType}</dd></div>
+                    {slot.project!.fabricFamily && (
+                      <div><dt>Fabric family</dt><dd>{slot.project!.fabricFamily}</dd></div>
+                    )}
+                    {slot.project!.materials && slot.project!.materials.length > 0 && (
+                      <div><dt>Materials</dt><dd>{slot.project!.materials.join(' / ')}</dd></div>
+                    )}
+                  </dl>
+                  {slot.project!.description && <p class="pf-project__description">{slot.project!.description}</p>}
+                </article>
+              ))}
             </div>
           </div>
         </div>

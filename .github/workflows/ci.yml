@@ -47,3 +47,11 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - run: npm run test:smoke
+
+      # The two Portfolio suites. They used to need a server started by hand on
+      # port 4339, so they never ran here; each one now starts its own preview
+      # server and they guard the Portfolio's interaction contracts — the
+      # garment deck, the evidence reader, the PDF reader's focus and scroll
+      # restoration — across five widths.
+      - name: Portfolio interaction suites
+        run: npm run test:portfolio

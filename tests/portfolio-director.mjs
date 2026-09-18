@@ -2,7 +2,11 @@ import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
-const base = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4339';
+import { startPreview } from './preview.mjs';
+
+/* Starts its own server on its own port, so `npm run test:portfolio` needs
+   nothing running first. PORTFOLIO_QA_URL still overrides it. */
+const { base, stop } = await startPreview(Number(process.env.PORTFOLIO_QA_PORT ?? 4322));
 const output = '.qa-director/final';
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
@@ -63,4 +67,4 @@ try {
     await page.close();
   }
   console.log(`${checks} Portfolio visual checks passed. Screenshots: ${output}`);
-} finally { await browser.close(); }
+} finally { await browser.close(); stop(); }

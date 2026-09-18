@@ -182,6 +182,7 @@ try {
           top: Math.round(r.top + window.scrollY),
           height: Math.round(r.height),
           left: Math.round(r.left),
+          width: Math.round(r.width),
           full: Math.round(r.width) >= doc - 1,
           isLink: el.tagName === 'A',
           boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
@@ -195,11 +196,25 @@ try {
       });
     });
     check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    check('the four hinged leaves share a baseline without overlapping',
-      covers.every((cv, i) => i === 0 || (cv.left > covers[i - 1].left && Math.abs(cv.top - covers[0].top) <= 1)),
-      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top}`).join(' '));
+    /* The four chapters are deliberately UNEQUAL: a nested field, not a rail
+       of identical leaves. What must hold is that no two of them overlap and
+       that they do not all share one height — a row of four equal cards would
+       say the four bodies of work are interchangeable. */
+    check('the four chapter fields occupy distinct regions without overlapping',
+      covers.every((cv, i) => covers.every((other, j) => j <= i
+        || cv.left + cv.width <= other.left + 1 || other.left + other.width <= cv.left + 1
+        || cv.top + cv.height <= other.top + 1 || other.top + other.height <= cv.top + 1)),
+      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top} ${cv.width}x${cv.height}`).join(' '));
+    check('the chapters are given unequal weight',
+      new Set(covers.map((cv) => cv.height)).size >= 3
+        && Math.max(...covers.map((cv) => cv.height)) >= Math.min(...covers.map((cv) => cv.height)) * 1.3,
+      covers.map((cv) => cv.height).join(','));
     check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
-    check('every cover is a substantial editorial image field', covers.every((cv) => cv.height >= 900 * 0.52),
+    /* No chapter may collapse, and the lead chapter must read as the lead.
+       The floor is per-field rather than one shared height, because the
+       composition earns its hierarchy from the difference. */
+    check('no chapter field collapses and the lead chapter dominates',
+      covers.every((cv) => cv.height >= 900 * 0.4) && covers[0].height >= 900 * 0.6,
       covers.map((cv) => cv.height).join(','));
     check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
     /* A cover is a composition, not a centred word: a register rule at the
@@ -225,10 +240,19 @@ try {
       composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
     check('the chapter action is the restrained orange signal',
       composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    check('the opening has distinct photographic, cut, paper and cinematic treatments',
+    /* Each chapter is a different kind of space, which is carried by the
+       proportion of its image field and by its own ground — not by four
+       variations of one card. */
+    check('every chapter field has its own proportion and its own ground',
       await p.evaluate(() => {
-        const art = [...document.querySelectorAll('.pf-cover__art')].map(e=>getComputedStyle(e));
-        return art[1].clipPath !== 'none' && art[2].paddingTop !== '0px' && art[3].backgroundColor !== art[0].backgroundColor;
+        const art = [...document.querySelectorAll('.pf-cover__art')].map((el) => {
+          const r = el.getBoundingClientRect();
+          const s = getComputedStyle(el);
+          return { ratio: +(r.width / r.height).toFixed(2), ground: s.backgroundColor, fit: getComputedStyle(el.querySelector('img')).objectFit };
+        });
+        return new Set(art.map((a) => a.ratio)).size === 4
+          && new Set(art.map((a) => a.ground)).size >= 2
+          && new Set(art.map((a) => a.fit)).size >= 2;
       }));
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('chapter names remain legible without competing with imagery',
@@ -245,9 +269,16 @@ try {
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    check('the covers include a concise intent and the way in',
-      covers.every((cv) => cv.intent.length > 0 && cv.text.includes('Enter world')),
-      covers.map((cv) => cv.text).join(' | '));
+    /* Four identical "Enter world" labels told the visitor nothing about what
+       lay behind each one. Each chapter now names its own way in, and the
+       labels must all differ. */
+    const ways = await p.evaluate(() => [...document.querySelectorAll('.pf-cover__go')].map((e) => e.textContent.trim()));
+    check('the covers include a concise intent and their own way in',
+      covers.every((cv) => cv.intent.length > 0) && ways.every((w) => w.length > 0)
+        && new Set(ways).size === 4,
+      ways.join(' | '));
+    check('the way in is never four repetitions of one label',
+      !ways.some((w) => /enter world/i.test(w)), ways.join(' | '));
     check('no category list appears on any cover',
       await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
     check('the reference disclaimer never appears on a cover',
@@ -302,10 +333,14 @@ try {
       const r = el.getBoundingClientRect();
       return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top + scrollY), height: Math.round(r.height) };
     }));
-    check(`${width} offers substantial chapter leaves in a contained swipe rail`,
-      mobileCovers.every((cover, index) => cover.height >= 480
-        && cover.left >= 16 && cover.right - cover.left < width
-        && (index === 0 || cover.left >= mobileCovers[index - 1].right)),
+    /* On a hand the nested field unfolds into one column. A horizontal rail
+       hid three of four chapters behind a gesture nothing announced, so the
+       leaves now stack: each one substantial, each one in the gutter, each one
+       below the last. */
+    check(`${width} stacks substantial chapter leaves in one column`,
+      mobileCovers.every((cover, index) => cover.height >= 380
+        && cover.left >= 16 && cover.right - cover.left <= width - 16
+        && (index === 0 || cover.top >= mobileCovers[index - 1].top + mobileCovers[index - 1].height - 1)),
       JSON.stringify(mobileCovers));
     check(`no horizontal overflow in the ${width} cover gallery`,
       await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
@@ -459,7 +494,10 @@ try {
     await openCategory(p, 'womenswear', 'rtw');
 
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('desktop shows four garments at once', state.visibleNow === 4, `visible ${state.visibleNow} of ${state.count}`);
+    /* FIVE positions, not four: the composition reads as a rail of garments
+       seen in depth rather than a small group, and five is the number the
+       stage geometry is solved for. */
+    check('desktop shows five garments at once', state.visibleNow === 5, `visible ${state.visibleNow} of ${state.count}`);
     check('the active garment leads the deck', state.activeIsLeading === true);
     check('the garments genuinely overlap', state.overlaps >= 3, `${state.overlaps} overlaps`);
 
@@ -495,22 +533,30 @@ try {
       deck.stackDisplay !== 'flex' && deck.slotPosition === 'absolute',
       `${deck.stackDisplay} / ${deck.slotPosition}`);
 
-    /* THE DEPTH MUST BE OBVIOUS.
-       Each garment behind the active one is markedly smaller, not marginally:
-       every step is at least a sixth, and the furthest is around half the
-       leader — while staying large enough to be judged as a garment. */
+    /* THE DEPTH MUST BE LEGIBLE, AND EVERY GARMENT MUST STAY JUDGEABLE.
+       Five positions inside one stage cannot each be a sixth smaller than the
+       next and still leave the furthest large enough to read as a garment, so
+       the ladder is even rather than steep: every step is a visible change,
+       and the span from furthest to leader is substantial. */
     const ratios = deck.widths.map((w) => w / deck.widths[deck.widths.length - 1]);
-    check('the furthest garment is about half the active one',
-      ratios[0] <= 0.60 && ratios[0] >= 0.42, `${Math.round(ratios[0] * 100)}% of the leader`);
-    check('every step of the deck is a large change of scale',
-      deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.15),
+    check('the furthest garment is clearly behind but still a garment',
+      ratios[0] <= 0.68 && ratios[0] >= 0.55, `${Math.round(ratios[0] * 100)}% of the leader`);
+    check('every step of the deck is a visible change of scale',
+      deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.08)
+        && deck.widths[deck.widths.length - 1] / deck.widths[0] >= 1.45,
       deck.widths.join(' < '));
     check('the furthest garment is still readable', deck.smallest >= 190, `${deck.smallest}px`);
-    check('only the farthest desktop garment carries atmospheric blur',
-      /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
+    /* Blur belongs to the two furthest positions only. The active garment and
+       the two nearest it are never blurred: they are the ones being judged. */
+    const blurs = deck.filters.map((value) => {
+      const m = /blur\(([\d.]+)px\)/.exec(value);
+      return m ? Number(m[1]) : 0;
+    });
+    check('only the two furthest desktop garments carry atmospheric blur',
+      blurs[0] > 0 && blurs[1] > 0 && blurs.slice(2).every((value) => value === 0),
       deck.filters.join(' | '));
     check('far garment blur remains restrained and identifiable',
-      /blur\(0\.55px\)/.test(deck.filters[0]), deck.filters[0]);
+      blurs[0] <= 1.2 && blurs[1] < blurs[0], `${blurs[0]}px / ${blurs[1]}px`);
 
     /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
        baseline — each step back stands a little higher, the way objects rise
@@ -613,8 +659,8 @@ try {
         remaining: nodes.flatMap((node) => node.getAnimations()).length,
       };
     });
-    check('circular wrap animates existing depth positions', wheel.animated >= 4 && wheel.sameNodes, JSON.stringify(wheel));
-    check('wheel settles with four garments and no abandoned animation', wheel.visible === 4 && wheel.remaining === 0, JSON.stringify(wheel));
+    check('circular wrap animates existing depth positions', wheel.animated >= 5 && wheel.sameNodes, JSON.stringify(wheel));
+    check('wheel settles with five garments and no abandoned animation', wheel.visible === 5 && wheel.remaining === 0, JSON.stringify(wheel));
     await p.evaluate(() => window.__portfolioRunway.goTo(0));
     await p.waitForTimeout(600);
 
@@ -659,7 +705,7 @@ try {
         projectArticles: w.querySelectorAll('.pf-project').length,
         profileRows: w.querySelectorAll('.pf-project__profile').length,
         tagRows: w.querySelectorAll('.pf-project__tags').length,
-        referencePanel: !!panel.querySelector('[data-reference-panel]'),
+        referencePanel: !!panel.querySelector('[data-reference-notice]'),
       };
     });
     check('womenswear is a reference preview, not published work',
@@ -690,22 +736,33 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
-    /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER. */
+    /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER — FOR THE GARMENT
+       UNDER INSPECTION. One block is rendered per garment and the runtime
+       shows the active one, so every measurement here is scoped to the block
+       that is actually on screen; the hidden blocks measure zero by design. */
     const plates = await p.evaluate(() => {
       const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
-      const list = [...panel.querySelectorAll('.pf-plate')];
+      const block = panel.querySelector('.pf-dev:not([hidden])');
+      const list = [...block.querySelectorAll('.pf-plate')];
       const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
       return {
         stages: list.map((el) => el.dataset.plate),
         labels: list.map((el) => el.querySelector('.pf-plate__label').textContent.replace(/\s+/g, ' ').trim()),
-        demo: list.filter((el) => el.hasAttribute('data-demo')).length,
+        preview: list.filter((el) => el.hasAttribute('data-preview')).length,
+        stamps: list.filter((el) => el.querySelector('.pf-plate__stamp')).length,
         images: list.reduce((n, el) => n + el.querySelectorAll('img').length, 0),
+        /* Every stand-in must say so in its alt text as well as on its face. */
+        honestAlts: list.filter((el) => !el.hasAttribute('data-preview')
+          || /temporary preview/i.test(el.querySelector('img')?.alt ?? '')).length,
+        blocks: panel.querySelectorAll('.pf-dev').length,
+        shownBlocks: panel.querySelectorAll('.pf-dev:not([hidden])').length,
+        forIndex: block.dataset.evidenceFor,
         widths: boxes.map((b) => Math.round(b.width)),
         heights: boxes.map((b) => Math.round(b.height)),
         lefts: boxes.map((b) => Math.round(b.left)),
         stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-        links: panel.querySelectorAll('.pf-plate__link').length,
-        note: panel.querySelector('[data-demo-note]')?.textContent.trim() ?? '',
+        links: block.querySelectorAll('.pf-plate__link').length,
+        note: block.querySelector('[data-preview-note]')?.textContent.trim() ?? '',
       };
     });
     check('exactly three development stages, in order',
@@ -728,8 +785,8 @@ try {
       const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
       const rail = viewer.querySelector('.pf-devcol').getBoundingClientRect();
       const stage = viewer.querySelector('.pf-stage').getBoundingClientRect();
-      const dev = viewer.querySelector('.pf-dev').getBoundingClientRect();
-      const plate = viewer.querySelector('.pf-plate__art').getBoundingClientRect();
+      const dev = viewer.querySelector('.pf-dev:not([hidden])').getBoundingClientRect();
+      const plate = viewer.querySelector('.pf-dev:not([hidden]) .pf-plate__art').getBoundingClientRect();
       const total = deck.width + rail.width;
       return {
         deckShare: deck.width / total,
@@ -740,31 +797,56 @@ try {
         deckHeight: Math.round(deck.height),
         railHeight: Math.round(dev.height),
         deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
+        stampPx: +parseFloat(getComputedStyle(
+          viewer.querySelector('.pf-dev:not([hidden]) .pf-plate__stamp')).fontSize).toFixed(1),
       };
     });
-    check('the garment remains dominant at 70-74% of the viewer',
-      weight.sideBySide && weight.deckShare >= 0.70 && weight.deckShare <= 0.74,
+    /* The garment is the hero, and the evidence column's share follows what it
+       actually holds: 22% while all three surfaces are stand-ins, 27% once a
+       real asset exists. So the contract is a floor on the garment and a
+       usable minimum for the rail, not one fixed ratio. */
+    check('the garment remains dominant in the viewer',
+      weight.sideBySide && weight.deckShare >= 0.70,
       `${Math.round(weight.deckShare * 100)}%`);
-    check('the evidence rail uses 26-30% of the viewer',
-      weight.railShare >= 0.26 && weight.railShare <= 0.30, `${Math.round(weight.railShare * 100)}%`);
-    check('a development plate is a fraction of the garment stage',
-      weight.plateWidth >= 220 && weight.plateWidth <= weight.stageHeight * 0.5,
+    check('the evidence rail keeps a usable share of the viewer',
+      weight.railShare >= 0.18 && weight.railShare <= 0.30, `${Math.round(weight.railShare * 100)}%`);
+    /* A plate is a contact-sheet thumbnail with a reader behind it, not the
+       place a surface is examined — but it still has to be large enough to
+       carry its own stamp, which is the mark that stops a borrowed photograph
+       being read as a sketch. */
+    check('a development plate is a legible fraction of the garment stage',
+      weight.plateWidth >= 100 && weight.plateWidth <= weight.stageHeight * 0.5,
       `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
+    check('the temporary-preview stamp is not fine print',
+      weight.stampPx >= 9.5, `${weight.stampPx}px`);
     /* The whole three-step rail has to stand no taller than the garments, or
-       the plates push the deck out of the view they belong to. */
+       the evidence becomes the subject of the screen. A small tolerance,
+       because the rail carries its own heading and the deck its run bar. */
     check('all three plates fit beside the garments without a sticky deck',
-      weight.railHeight <= weight.deckHeight && weight.deckSticky !== 'sticky',
+      weight.railHeight <= weight.deckHeight * 1.1 && weight.deckSticky !== 'sticky',
       `rail ${weight.railHeight}px vs deck ${weight.deckHeight}px, deck ${weight.deckSticky}`);
-    check('every plate is marked as a demo and borrows no image',
-      plates.demo === 3 && plates.images === 0, `${plates.demo} demo / ${plates.images} images`);
-    check('the strip says the real assets are pending',
-      /real project assets pending/i.test(plates.note), plates.note || 'none');
+    /* THE STAND-INS ARE HONEST, NOT ABSENT.
+       Three empty frames proved nothing about a system that is supposed to
+       follow the garment. The active garment now stands in for each missing
+       surface, which is only acceptable because every stand-in is stamped on
+       its face and described as a stand-in to a screen reader. An unstamped
+       borrowed photograph would be fabricated evidence. */
+    check('one development block exists per garment and only one is shown',
+      plates.blocks === 17 && plates.shownBlocks === 1 && plates.forIndex === '0',
+      `${plates.blocks} blocks / ${plates.shownBlocks} shown / for ${plates.forIndex}`);
+    check('every borrowed surface is stamped as a temporary preview',
+      plates.preview === 3 && plates.stamps === 3 && plates.images === 3,
+      `${plates.preview} preview / ${plates.stamps} stamped / ${plates.images} images`);
+    check('no stand-in borrows the name of the surface it stands in for',
+      plates.honestAlts === 3, `${plates.honestAlts} of 3 honest`);
+    check('the block says once that the surfaces are temporary previews',
+      /temporary previews/i.test(plates.note), plates.note || 'none');
 
     await c.close();
   }
 
   // ---- the deck at 1024 and at 390
-  for (const [width, height, want, mobile] of [[1024, 820, 4, false], [390, 844, 3, true]]) {
+  for (const [width, height, want, mobile] of [[1024, 820, 5, false], [390, 844, 3, true]]) {
     console.log(`\nportfolio deck at ${width}`);
     const c = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile });
     const p = await c.newPage();
@@ -790,12 +872,17 @@ try {
     });
     check(`${width} keeps every garment inside the stage`, geo.inside, geo.widths.join(','));
     const ratio = geo.widths[0] / geo.widths[geo.widths.length - 1];
-    check(`${width} depth is immediately visible`, ratio <= 0.62, `${Math.round(ratio * 100)}% of the leader`);
+    /* Five positions on the desk and three on a phone, so the ladder is
+       necessarily shallower where there are more of them. What has to hold is
+       that the furthest is unmistakably behind the leader. */
+    check(`${width} depth is immediately visible`, ratio <= 0.75,
+      `${Math.round(ratio * 100)}% of the leader across ${geo.widths.length} positions`);
     check(`no horizontal overflow at ${width}`,
       await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
     /* Plates stay equal-size and stacked on every screen. */
     const eq = await p.evaluate(() => {
-      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-plate__art')]
+      /* The active garment's block only — the other sixteen are hidden. */
+      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-dev:not([hidden]) .pf-plate__art')]
         .map((el) => el.getBoundingClientRect());
       return {
         w: boxes.map((b) => Math.round(b.width)),
@@ -987,7 +1074,12 @@ try {
       return {
         world: getComputedStyle(w).backgroundColor,
         inkRgb,
-        bar: bg('.pf-bar'),
+        /* The sticky element is the continuity nav; it is the one that must
+           carry an opaque ink ground, because it is the one content passes
+           behind. The chapter bar below it scrolls with the content on the
+           chapter's own ground. */
+        bar: bg('.pf-continuity'),
+        barSticky: getComputedStyle(w.querySelector('.pf-continuity')).position,
         title: getComputedStyle(w.querySelector('.pf-head h2')).color,
         titleLum: lum(getComputedStyle(w.querySelector('.pf-head h2')).color),
         gapLum: lum(getComputedStyle(w.querySelector('[data-screen]')).backgroundColor === 'rgba(0, 0, 0, 0)'
@@ -1011,6 +1103,8 @@ try {
     });
     check('the whole chapter is ink', dark.world === dark.inkRgb, `${dark.world} vs ${dark.inkRgb}`);
     check('the top bar belongs to the dark world', dark.bar === dark.inkRgb, dark.bar);
+    check('the way out of the dark world stays on screen',
+      dark.barSticky === 'sticky', dark.barSticky);
     check('the type is paper on ink', dark.titleLum > 200, `${Math.round(dark.titleLum)}`);
     check('there is no paper gap between the videos', dark.gapLum < 40, `${Math.round(dark.gapLum)}`);
     check('the chapter type is paper throughout', dark.leadLum > 200, `${Math.round(dark.leadLum)}`);
@@ -1052,7 +1146,7 @@ try {
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
     check('deck settles instantly under reduced motion', Number.isInteger(state.position), `position ${state.position}`);
     check('reduced motion still advances the deck', state.activeIndex === 1, String(state.activeIndex));
-    check('reduced motion keeps four garments visible', state.visibleNow === 4, String(state.visibleNow));
+    check('reduced motion keeps five garments visible', state.visibleNow === 5, String(state.visibleNow));
     check('no decorative transition left running',
       await p.evaluate(() => getComputedStyle(
         document.querySelector('[data-screen="category"]:not([hidden]) .pf-slot')).transitionDuration === '0s'));
@@ -1077,8 +1171,13 @@ try {
       html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
     check('the demo documents are declared as demos without the script',
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
-    check('the development plates are declared as demos without the script',
-      html.includes('Demo layout — real project assets pending') || html.includes('Demo layout &#8212; real project assets pending'));
+    /* Without the script every garment's development block is served, so the
+       honesty of the stand-ins cannot depend on JavaScript: the stamp and the
+       note are both in the HTML. */
+    check('the development stand-ins are declared as previews without the script',
+      html.includes('Temp preview')
+      && (html.includes('Temporary previews — the active garment')
+        || html.includes('Temporary previews &#8212; the active garment')));
     check('all five supplied development recordings are server-rendered without players',
       ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
         .every((id) => html.includes(`data-youtube="${id}"`))

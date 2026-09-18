@@ -33,6 +33,19 @@ const { sessions } = Astro.props;
 const published = sessions.filter((session) => Boolean(session.youtubeId));
 const capacity = sessions.length;
 const num = (i: number) => String(i + 1).padStart(2, '0');
+
+/* THE TRANSFORMATION, named. This chapter's subject is a garment changing
+ * state, so the five states are the chapter's own index rather than a
+ * decorative timeline. The runtime fills each bar as the page's scroll passes
+ * it; the names are readable at any scroll position, so nothing here depends
+ * on the motion happening. */
+const TRANSFORM_STEPS = [
+  ['01', 'Idea'],
+  ['02', '2D'],
+  ['03', 'Construction'],
+  ['04', '3D'],
+  ['05', 'Fit'],
+];
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
@@ -52,6 +65,21 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
         and fit decisions — the part of the work a photograph cannot hold still.
       </p>
     </header>
+
+    {/* The transformation the chapter is about, as its index. Five states,
+        each with its own rule; the rules fill as the page scrolls past them
+        and the names are legible whether they have filled or not. */}
+    <div class="pf-transform">
+      <ol class="pf-transform__track" data-transform-track aria-label="Development sequence">
+        {TRANSFORM_STEPS.map(([index, name], i) => (
+          <li class="pf-transform__step" style={`--step-from:${i / TRANSFORM_STEPS.length}`}>
+            <i class="pf-transform__bar" aria-hidden="true"></i>
+            <i class="pf-transform__num">{index}</i>
+            <b class="pf-transform__name">{name}</b>
+          </li>
+        ))}
+      </ol>
+    </div>
 
     {published.length > 0 ? (
       <ol class="pf-videos" data-capacity={capacity}>

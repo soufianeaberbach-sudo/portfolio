@@ -9,8 +9,10 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "test:smoke": "node tests/smoke.mjs",
+    "test:portfolio": "node tests/portfolio-director.mjs && node tests/portfolio-reinvention.mjs",
     "test:worker": "node tests/worker.mjs",
-    "test:domain": "node tests/domain.mjs"
+    "test:domain": "node tests/domain.mjs",
+    "test": "npm run test:smoke && npm run test:portfolio"
   },
   "devDependencies": {
     "astro": "^5.16.6",
