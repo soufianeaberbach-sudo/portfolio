@@ -757,162 +757,257 @@
 }
 
 /* ==========================================================================
-   4. CATEGORY DISCOVERY — the field, cut the other way.
+   4. CATEGORY DISCOVERY — THE LAY.
 
-   Three attempts are behind this. A horizontal rail hid four of five
-   categories behind a gesture nothing announced. A nested twelve-column
-   collage was clutter — different spans, different ratios, white grounds
-   scattered at different heights. Equal cells in a three-across grid fixed
-   the clutter and produced cards arranged nicely, which is not a design.
+   The categories are laid on one field the way a cutter lays pattern pieces
+   on cloth: nested along their own edges, in two courses, every piece the
+   same AREA and no two the same shape, one grain line down the length of it.
+   Equal value without identical cards, and a composition rather than a list.
 
-   This is the landing's device rotated ninety degrees. The chapter's field is
-   one sheet cut into horizontal bands: every category the same height, every
-   garment contained and standing, the cuts between them the only rules. All
-   five are readable in one pass at rest, so the choice is easy. Bring
-   attention to one and it OPENS — the band takes room from the others, the
-   garment comes up to editorial scale, the sentence arrives — and closes
-   again when attention leaves. Hierarchy exists while someone is looking and
-   is never printed into the layout.
+   Every geometric value is written by the runtime per piece, from the same
+   seam curves the landing is cut along:
+     --pd            the piece's clip path
+     --bx/--by/--bw/--bh   its bounding box, for the picture
+     --sx/--sy/--sw/--sh   the largest rectangle no seam crosses, for the type
+     --f             1 while this piece has attention, 0 otherwise
+   ========================================================================== */
 
-   The zero-height bug that once collapsed every category image cannot return:
-   the media's box comes from `aspect-ratio` on the media itself and it is
-   never a flex item, so its height derives from its own width at every size.
-   -------------------------------------------------------------------------- */
-.pf-cats {
+.pf-lay {
+  /* The depth of every piece's head: name, one description, count. */
+  --pf-band: 8rem;
+  position: relative;
   max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: 0 var(--pf-gutter) clamp(2.5rem, 6vw, 5rem);
+  /* The lay is one field, so it is as wide as the page and as tall as the
+     room left under the chapter's own heading. */
+  margin: clamp(1rem, 2.4vw, 2rem) auto 0;
+  padding-inline: var(--pf-gutter);
 }
-.pf-cats__list {
-  display: grid;
-  gap: 0;
+.pf-lay__cloth {
+  position: relative;
+  /* A LAY IS AS LONG AS IT NEEDS TO BE. Five full-length garments cannot all
+     be legible in one viewport's worth of cloth, and shrinking them to fit is
+     how a portfolio ends up showing thumbnails of its own work. The cloth runs
+     past the fold; the chapter is a scroll container, and reading down it is
+     how the lower course is discovered. */
+  height: clamp(40rem, 132svh, 76rem);
   margin: 0;
   padding: 0;
   list-style: none;
-  /* THE WHOLE LIST IS THE INSPECTION FIELD, not bone with white boxes on it.
-     The renditions are photographed on white, so a tinted band put a hard
-     white rectangle beside every name — the same fault the opening had. One
-     continuous field, and the garments simply stand in it. */
   background: var(--pf-field);
-  border-top: 1px solid var(--pf-edge-strong);
-  border-bottom: 1px solid var(--pf-edge-strong);
+  /* The cloth's own edge. Nothing else on this screen is a rectangle. */
+  outline: 1px solid var(--pf-edge);
+  outline-offset: 0;
 }
-.pf-cats__list > li { margin: 0; min-width: 0; }
+.pf-lay__slot { display: contents; }
 
-.pf-cat {
-  position: relative;
-  display: grid;
-  /* hand: the garment above its name — a band is a band only when there is
-     width for one. */
-  grid-template-rows: auto auto;
-  gap: .85rem;
-  padding: clamp(1rem, 3vw, 1.5rem) 0;
+.pf-lay__piece {
+  position: absolute;
+  inset: 0;
+  display: block;
   color: var(--ink);
   text-decoration: none;
-}
-.pf-cat__cut {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--pf-edge);
-}
-.pf-cat__media {
-  position: relative;
-  display: block;
+  /* Until the runtime has measured, the pieces are laid as plain courses:
+     the composition is correct with no script, only straighter. */
+  clip-path: var(--pd, inset(0));
   overflow: hidden;
-  /* One ground for every rendition, so the whites line up instead of
-     scattering. */
-  background: transparent;
-  /* The one line that makes a zero height impossible. */
-  aspect-ratio: 4 / 5;
+  /* THE GROUND IS ON THE PIECE. A non-none `clip-path` makes the piece a
+     stacking context, and a blend resolves against the backdrop INSIDE the
+     nearest one — so with the ground only on the cloth, every cover's white
+     studio paper had nothing to blend into and sat on the cloth as a pale
+     rectangle with the studio's own floor shadow arcing across it. */
+  background: var(--pf-field);
+  /* The recede, and the piece's own presence coming back. Focus changes no
+     geometry, so nothing in the lay can move under a visitor's pointer. */
+  --f: 0;
+  transition: opacity .4s var(--pf-lift);
 }
-.pf-cat__media img {
-  width: 100%;
-  height: 100%;
-  /* Contained and standing on the floor — the rule every rendition on this
-     route follows. A category is chosen on silhouette, and a crop takes the
-     silhouette away. */
+.pf-lay__piece:focus-visible { outline: 2px solid var(--signal); outline-offset: -4px; }
+/* A category with nothing in it yet is still a piece of the cloth, at the
+   same size as the rest: the field says what exists and what does not. */
+.pf-lay__piece:not([data-open]) { cursor: default; }
+
+/* THE PIECE IS PRINTED CLOTH AND THE SEAMS CUT THE PRINT.
+   The picture covers the piece's whole bounding box, so the curves that bound
+   the piece cut through the photograph — which is the entire point of a lay,
+   and what a rectangle of photograph sitting politely inside the piece threw
+   away. What the seams cut into is the cloth at the sides of the figure, not
+   a face: the covers are centred full-length figures, and the piece is taller
+   than it is wide. */
+.pf-lay__media {
+  position: absolute;
+  /* Sideways it runs to the piece's bounding box, so the seams cut the print.
+     Downward it starts at the piece's seam-free top, because a piece in the
+     lower course has the course seam above it and a head of type that began
+     at the bounding box would be written across the garments of the course
+     above. */
+  left: calc(var(--bx, 0) * 100%);
+  width: calc(var(--bw, 1) * 100%);
+  top: calc(var(--sy, 0) * 100%);
+  height: calc((var(--by, 0) + var(--bh, 1) - var(--sy, 0)) * 100%);
+  display: block;
+}
+.pf-lay__piece[data-fit='wide'] .pf-lay__media img {
   object-fit: contain;
   object-position: 50% 100%;
-  /* Same placeholder treatment as the opening, same one-line removal. Safe
-     here because each band holds a single image on a flat field — nothing
-     occludes anything. */
-  mix-blend-mode: darken;
-  transition: transform .7s var(--pf-lift), filter .5s var(--pf-lift);
 }
+/* THE PIECE IS PRINTED CLOTH, AND THE NAME IS WRITTEN IN ITS HEAD.
+   The photograph fills the piece from a line across its top down to its lower
+   seam, and the cloth above that line carries the category's name — the same
+   device as the landing's registration band, one per piece. Within a course
+   every piece's line is at the same height, so the three names sit on one
+   shared baseline; between the courses they do not, so five names never line
+   up into a table.
 
-.pf-cat__content { display: grid; gap: .3rem; min-width: 0; align-content: start; }
-.pf-cat__label {
+   NOT BLENDED HERE, unlike the landing. These category covers are editorial
+   photographs with graduated studio grounds, not cutouts on white: `darken`
+   kept only the pixels darker than the cloth and left a soft diagonal where
+   the backdrop's gradient crossed it, which read as a torn rectangle.
+   `contain` was worse — a small photograph floating in a large piece. */
+.pf-lay__media img {
+  position: absolute;
+  /* The head of the piece carries its name; the garment has the rest. The
+     band is in rem, not a percentage, so the three names in a course sit on
+     one baseline and the two courses' bands are the same depth even though
+     their pieces are not the same shape. */
+  inset: var(--pf-band) 0 0;
+  width: 100%;
+  height: calc(100% - var(--pf-band));
+  /* CONTAINED, so no face and no hem is ever cut: a cropped head reads as a
+     mistake whatever the crop was chosen for, and every one of these covers
+     is a full-length figure. Bottom-anchored, so each garment stands on its
+     own piece's lower seam. */
+  object-fit: cover;
+  object-position: 50% 62%;
+  /* The covers are cutouts on white, brighter than the cloth, so the ground
+     resolves into the cloth and the garment stands on the piece rather than
+     on a photograph of a studio. */
+  mix-blend-mode: darken;
+  transition: filter .45s var(--pf-lift), transform .55s var(--pf-lift);
+}
+/* AT REST every garment is legible and none is loud. Attention brings one to
+   full presence; the rest stay exactly where they are and let it have the
+   field. */
+.pf-lay__cloth:has(.pf-lay__piece:hover) .pf-lay__piece:not(:hover),
+.pf-lay__cloth:has(.pf-lay__piece:focus-visible) .pf-lay__piece:not(:focus-visible) {
+  opacity: .58;
+}
+.pf-lay__piece:hover .pf-lay__media img,
+.pf-lay__piece:focus-visible .pf-lay__media img {
+  transform: scale(1.03);
+  filter: contrast(1.04);
+}
+.pf-lay__piece:not([data-open]) .pf-lay__media img { filter: saturate(.18) brightness(1.04); }
+
+.pf-lay__type {
+  position: absolute;
+  /* Horizontally inside the piece's seam-free rectangle; vertically in the
+     band of cloth the picture is inset from. */
+  left: calc(var(--sx, 0) * 100% + clamp(.9rem, 1.6vw, 1.6rem));
+  top: calc(var(--sy, 0) * 100% + clamp(.8rem, 1.4vh, 1.2rem));
+  width: calc(var(--sw, 1) * 100% - clamp(1.8rem, 3.2vw, 3.2rem));
+  display: grid;
+  gap: .3rem;
+  /* Type sits in the head of its own piece: the three names in a course share
+     one baseline, and the two courses' do not, so five names never line up
+     into a table. */
+  align-content: start;
+}
+.pf-lay__label {
   font-family: var(--display);
   font-weight: 800;
-  /* A grid item will not shrink below its longest word unless told to. */
-  min-width: 0;
-  font-size: clamp(1.45rem, 5.6vw, 2rem);
-  line-height: 1.02;
-  letter-spacing: -.035em;
-  overflow-wrap: break-word;
-  transition: font-size .5s var(--pf-lift);
+  /* THE SAME SIZE IN EVERY PIECE. A label that scales with its piece would
+     rank the pieces, and the pieces are equal. */
+  font-size: clamp(1.05rem, 1.5vw, 1.55rem);
+  line-height: 1.04;
+  letter-spacing: -.03em;
+  text-wrap: balance;
 }
-.pf-cat__blurb {
-  max-width: 48ch;
+.pf-lay__blurb {
+  max-width: 38ch;
   color: var(--ink-soft);
-  font-size: .86rem;
-  line-height: 1.5;
+  font-size: .78rem;
+  line-height: 1.4;
 }
-.pf-cat__count { color: var(--muted); font-size: .8rem; font-weight: 400; }
-.pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
-
-/* A category with nothing in it yet is not a link and does not pretend to be
-   one. It keeps its place so the architecture stays legible, and it is
-   visibly quieter. */
-.pf-cat:not([data-open]) { cursor: default; }
-.pf-cat:not([data-open]) .pf-cat__media img { filter: saturate(.2) brightness(1.05); }
-.pf-cat:not([data-open]) .pf-cat__count { color: var(--signal); }
-
-@media (min-width: 768px) {
-  /* THE BANDS. Garment at the left, name and line to its right, all five the
-     same height. The band's height is carried by the media's aspect ratio, so
-     opening a band is a change of ratio — which the image follows for free. */
-  .pf-cat {
-    grid-template-columns: clamp(132px, 14vw, 208px) minmax(0, 1fr) auto;
-    grid-template-rows: minmax(0, 1fr);
-    align-items: center;
-    gap: clamp(1.5rem, 3.5vw, 3.5rem);
-    padding: clamp(1rem, 2.2vw, 1.6rem) clamp(.75rem, 1.6vw, 1.25rem);
-    /* Room for the garment to read as a garment rather than as an icon. */
-    min-height: clamp(200px, 27vh, 320px);
-  }
-  /* At band height the frame is taller than 4:5, so the ratio steps aside and
-     the garment takes the height it is given. */
-  .pf-cat__media { aspect-ratio: auto; height: 100%; }
-  /* The count sits at the far edge of the band, on the selvedge, where a
-     quantity belongs — not wedged under the name. */
-  .pf-cat__count { grid-column: 3; justify-self: end; }
-  .pf-cat__media { grid-column: 1; }
-  .pf-cat__content { grid-column: 2; align-content: center; }
-  .pf-cat__label { font-size: clamp(1.5rem, 2.3vw, 2.3rem); }
-
-  /* THE BAND UNDER ATTENTION DOES NOT CHANGE THE PAGE'S SHAPE.
-     Growing a band pushed the four below it down the page, which reads as the
-     list flinching rather than as emphasis — and a contained garment gains
-     almost nothing from a taller frame anyway. So the interactive idea is
-     spent once, on the four pieces of the landing, where only the column
-     fractions move and nothing reflows. Here attention lights a band instead:
-     the field comes up to the inspection colour, the garment steps forward
-     inside its own frame, and the others stand back. */
-  .pf-cat[data-open]:hover .pf-cat__label,
-  .pf-cat[data-open]:focus-visible .pf-cat__label { color: var(--ink); }
-  .pf-cat[data-open]:hover .pf-cat__media img,
-  .pf-cat[data-open]:focus-visible .pf-cat__media img { transform: scale(1.05); }
-  .pf-cats__list:has(.pf-cat[data-open]:hover) .pf-cat:not(:hover) .pf-cat__media img,
-  .pf-cats__list:has(.pf-cat[data-open]:focus-visible) .pf-cat:not(:focus-visible) .pf-cat__media img {
-    filter: saturate(.55) brightness(1.04);
-  }
+.pf-lay__count {
+  font-family: var(--mono);
+  font-size: .62rem;
+  font-weight: 400;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .35s var(--pf-lift);
 }
-@media (min-width: 1280px) {
-  .pf-cat { grid-template-columns: clamp(180px, 15vw, 240px) minmax(0, 1fr) auto; }
+.pf-lay__piece:hover .pf-lay__count,
+.pf-lay__piece:focus-visible .pf-lay__count { color: var(--signal); }
+.pf-lay__piece:not([data-open]) .pf-lay__count { color: var(--muted); }
+
+/* ---- the seams, and the one straight line ------------------------------ */
+
+.pf-lay__seams {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.pf-lay__seams path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 34%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+/* THE GRAIN LINE. One line the length of the cloth, through every piece in
+   both courses: the mark that says all of this was cut the same way up. The
+   arrowheads are the patternmaker's, and they are the reason it is drawn in
+   CSS rather than in the stretched viewBox the seams use. */
+.pf-lay__grain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--pf-gutter) + (100% - 2 * var(--pf-gutter)) * .38);
+  z-index: 5;
+  width: 0;
+  border-left: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  pointer-events: none;
+}
+.pf-lay__grain::before,
+.pf-lay__grain::after {
+  content: '';
+  position: absolute;
+  left: -4.5px;
+  width: 0;
+  height: 0;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+}
+.pf-lay__grain::before {
+  top: 0;
+  border-bottom: 8px solid color-mix(in srgb, var(--ink) 30%, transparent);
+}
+.pf-lay__grain::after {
+  bottom: 0;
+  border-top: 8px solid color-mix(in srgb, var(--ink) 30%, transparent);
+}
+
+/* ---- narrow: the cloth is folded, not abandoned ------------------------ */
+
+/* A LAY ON A NARROW CLOTH IS ONE PIECE WIDE. A cutter facing a 90cm cloth
+   does not redesign the garment; the same pieces go down the length in one
+   file. So on a phone the courses stack: every piece still holds the same
+   area of the cloth, still has two curved edges, and the grain line still
+   runs the whole length. The runtime lays them in one column and the CSS only
+   has to let the cloth grow tall enough to hold them. */
+@media (max-width: 767px) {
+  /* A NARROW CLOTH IS LONG. Five pieces in single file need the length: at
+     150svh each band was 190px, and a band that short holds a garment the
+     size of a thumbnail, which is the one thing a portfolio must not do to
+     its own work. */
+  .pf-lay { --pf-band: 7rem; }
+  .pf-lay__cloth { height: clamp(56rem, 214svh, 110rem); }
+  .pf-lay__label { font-size: clamp(1.15rem, 5.4vw, 1.5rem); }
+  .pf-lay__blurb { font-size: .78rem; }
+  .pf-lay__grain { left: calc(var(--pf-gutter) + (100% - 2 * var(--pf-gutter)) * .26); }
 }
 
 /* ==========================================================================
@@ -1002,8 +1097,8 @@
 .pf-slot__figure img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: 50% 100%;
+  object-fit: cover;
+  object-position: 50% 62%;
   background: transparent;
   pointer-events: none;
   -webkit-user-drag: none;

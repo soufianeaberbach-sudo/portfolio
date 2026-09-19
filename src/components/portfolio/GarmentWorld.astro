@@ -66,61 +66,67 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
       <p class="pf-head__descriptor">{world.descriptor}</p>
     </header>
 
-    {/* THE FIELD, CUT THE OTHER WAY.
-        The landing cuts one field into four vertical pieces; a chapter cuts
-        its field into horizontal bands. Same device, same discipline, rotated
-        — which is what makes the two screens feel like one practice rather
-        than two templates.
+    {/* THE LAY.
 
-        Every category is on screen at rest and every band is the same height,
-        so nothing is ranked. Bring attention to one and it opens: the band
-        grows, its garment comes up to editorial scale, and the others give up
-        the room and take it back afterwards. No rail, no snap points, no
-        "scroll to discover", and no numbers — five categories are an index,
-        not a sequence, and numbering them said so falsely. */}
-    <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`}>
-      <ol class="pf-cats__list">
+        A marker, or lay plan, is how a cutter puts a garment's pattern pieces
+        on a length of cloth: nested against each other along their own edges,
+        in courses across the width, every piece sharing one grain direction.
+        It is the craft's own answer to exactly this problem — arrange several
+        pieces of different shape on one surface so that the cloth is fully
+        used and none of them is privileged.
+
+        So the categories are LAID, not listed. Every piece holds the same
+        area of the field and no two have the same shape: equal value without
+        identical cards. The edges between them are the seam curves the landing
+        is cut along, and one grain line runs the length of the field through
+        the whole composition.
+
+        THE ROW OF BANDS THIS REPLACES was a picture on the left and a
+        paragraph on the right, five times down the page. It ranked nothing,
+        but it composed nothing either.
+
+        FOCUS IS TEMPORARY AND IT MOVES NOTHING. Bringing attention to a piece
+        — pointer, keyboard, or tap — brings its garment to full presence and
+        lets the others recede. No piece grows, so the lay never relayouts and
+        the composition a visitor is reading does not move under them. */}
+    <div class="pf-lay" data-lay-field data-pieces={world.categories.length}>
+      <ul class="pf-lay__cloth" aria-label={`${world.title} categories`}>
         {world.categories.map((category, categoryIndex) => {
           const count = slotsFor(category).length;
           const open = count > 0;
           const visual = category.cover ?? category.projects[0]?.finalGarmentImage ?? category.references[0]?.image;
           const Tag = open ? 'a' : 'div';
           return (
-            <li>
+            <li class="pf-lay__slot">
               <Tag
-                class="pf-cat"
+                class="pf-lay__piece"
                 href={open ? `#${world.id}/${category.id}` : undefined}
                 data-nav={open ? '' : undefined}
+                data-lay={categoryIndex}
                 data-category={category.id}
                 data-open={open ? '' : undefined}
                 aria-label={open ? `${category.label} — ${count} ${noun.toLowerCase()}${count === 1 ? '' : 's'}` : `${category.label} — pending`}
               >
-                {/* The cut this band is scored along. */}
-                <span class="pf-cat__cut" aria-hidden="true"></span>
                 {visual && (
-                  <span class="pf-cat__media" aria-hidden="true">
+                  <span class="pf-lay__media" aria-hidden="true">
                     <img
                       src={visual.src}
                       srcset={visual.srcset}
-                      sizes="(max-width: 767px) 92vw, (max-width: 1023px) 56vw, 46vw"
+                      sizes="(max-width: 767px) 92vw, 42vw"
                       width={visual.width}
                       height={visual.height}
                       alt=""
-                      {/* A category cover is behind a chapter the visitor has
-                          not opened yet, so none of them is eager: the four
-                          landing covers are the only images the first frame
-                          owes anything to. */}
                       loading="lazy"
                       decoding="async"
                     />
                   </span>
                 )}
-                <span class="pf-cat__content">
-                  <span class="pf-cat__label">{category.label}</span>
+                <span class="pf-lay__type">
+                  <span class="pf-lay__label">{category.label}</span>
                   {/* One line, always present. Discovery never depends on a
                       pointer hovering something. */}
-                  <small class="pf-cat__blurb">{category.blurb}</small>
-                  <b class="pf-cat__count">
+                  <small class="pf-lay__blurb">{category.blurb}</small>
+                  <b class="pf-lay__count">
                     {open ? `${count} ${noun.toLowerCase()}${count === 1 ? '' : 's'}` : 'Pending'}
                   </b>
                 </span>
@@ -128,8 +134,18 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
             </li>
           );
         })}
-      </ol>
-    </nav>
+      </ul>
+
+      {/* The seams, drawn on the same curves the pieces are cut along, so the
+          line a visitor sees IS the edge. */}
+      <svg class="pf-lay__seams" data-lay-seams viewBox="0 0 100 100"
+        preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+
+      {/* THE GRAIN LINE. One line, the length of the cloth, through every
+          piece in both courses — the mark that says all of this was cut the
+          same way up. It is the only straight line in the composition. */}
+      <span class="pf-lay__grain" aria-hidden="true"></span>
+    </div>
   </div>
 
   {/* ---- SCREEN 2..n — one viewer per category ----------------------- */}
