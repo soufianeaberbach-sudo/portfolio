@@ -1048,6 +1048,11 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
                a self-crossing path, which fills by winding rule and printed a
                few pixels of the next chapter down the margin. */
             if ((leftX ?? 0) >= 1) {
+              /* Shut, and stated as such: the picture in a region that has
+                 not opened is not merely clipped away, it is taken out of the
+                 composition. A one-pixel-tall image is indistinguishable,
+                 from the outside, from a broken one. */
+              panel.setAttribute('data-shut', '');
               panel.style.clipPath = 'inset(0 100% 0 0)';
               panel.style.setProperty('--own', '0');
               panel.style.setProperty('--l', '1');
@@ -1071,6 +1076,7 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
             /* How much of the field this chapter holds, and where its centre
                is — the type uses both, so a name appears only once its own
                region is wide enough to carry it. */
+            panel.removeAttribute('data-shut');
             const l = leftX ?? 0;
             const r = rightX ?? 1;
             panel.style.setProperty('--own', (r - l).toFixed(4));
