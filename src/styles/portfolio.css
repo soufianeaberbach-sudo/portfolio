@@ -124,361 +124,568 @@
    because a mark with no meaning to carry is decoration. */
 
 /* ==========================================================================
-   1. THE LANDING — one composition, separated by scroll.
+   1. ONE PLATE — the opening, and the stack it spreads into.
 
-   `--sep` runs 0 → 1 across the landing's own scroll and is written by the
-   runtime, rAF-throttled. At 0 the four pieces are nested into the opening
-   composition; at 1 they have separated into their four positions.
+   `--t` runs 0 → 1 across the plate's own scroll and is written by the
+   runtime, rAF-throttled. `--e` is the same value eased, so everything that
+   travels travels together. At 0 the screen is a fashion plate; at 1 it is
+   four destinations on one rail, carrying the same statement and the same
+   photograph.
 
-   TWO RULES MAKE THIS SAFE:
-     · every piece is fully visible and clickable at --sep: 0. Nothing is
-       parked at opacity 0 waiting for an observer, so a failed script, a
-       reduced-motion setting or a fast scroll all leave a complete page.
-     · only `transform` is interpolated. No layout property is animated, so
-       the separation costs no reflow and cannot fight the visitor's scroll.
-   -------------------------------------------------------------------------- */
-.pf-intro {
-  max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: calc(var(--header-h) + clamp(1.25rem, 3.5vw, 2.75rem)) var(--pf-gutter) clamp(1.25rem, 2.5vw, 2rem);
-}
-.pf-intro > .label { color: var(--muted); }
+   THE WHOLE COMPOSITION ANSWERS TO ONE AXIS. `--axis` is where the image's
+   left edge and the statement's second line agree, and it is the line the
+   stack spreads along. That is the only place patternmaking appears on this
+   screen: as registration, not as drawing. There is no seam geometry, no
+   pattern-piece shape and no technical graphic anywhere in this section.
 
-/* The opening: type and garment in ONE composition rather than a heading on
-   the left and a picture on the right. The image occupies the middle column
-   and the two halves of the statement sit across it — "instinct" above and to
-   the left, "construction" below and to the right — so the words and the
-   garment share the same space instead of dividing it. */
-.pf-opening {
+   WITH NO SCRIPT, OR UNDER REDUCED MOTION, `--t` is 1 — the resolved screen,
+   every plate placed and every link live. Nothing is parked at zero waiting
+   for an observer.
+   ========================================================================== */
+
+.pf-lay {
+  --t: 1;
+  /* Eased on POSITION, not on time: the curve shapes WHERE things are for a
+     given scroll offset, so reading back up runs it backwards through exactly
+     the same frames. */
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+  /* The statement is on a FASTER curve than the plates. It has to be out of
+     the way before the plates arrive under it, or the middle of the
+     transformation is two lines of display type across a photograph. */
+  --s: clamp(0, calc(var(--t) * 2.1), 1);
+  --se: calc(var(--s) * var(--s) * (3 - 2 * var(--s)));
+  /* The axis, as a fraction of the field. */
+  --axis: 34.5%;
   position: relative;
-  display: grid;
-  margin-top: clamp(1.25rem, 3vw, 2.5rem);
-  /* Rows, not a two-column split: the figure is row 2 and the two type lines
-     overlap into it from above and below. */
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 0;
 }
-.pf-opening h1 {
+.pf-lay__track {
   position: relative;
-  z-index: 2;
-  margin: 0;
-  font-size: clamp(2.6rem, 11vw, 8.5rem);
-  line-height: .9;
-  letter-spacing: -.045em;
+  /* Long enough that the stack is read rather than skipped past, short enough
+     that nobody feels held. The last fifth holds the resolved screen on
+     screen instead of letting it arrive as the field unsticks. */
+  height: 260svh;
 }
-.pf-opening h1 span { display: block; }
-/* The second half sits deliberately off the first half's axis, the way a
-   second piece is laid to the fabric edge rather than centred under the
-   first. Indented on wide screens only — at phone width it would just look
-   like a mistake. */
-.pf-opening__two { padding-left: 0; }
-.pf-opening__figure {
-  position: relative;
-  z-index: 1;
-  margin: clamp(-1rem, -2.5vw, -2.5rem) 0 clamp(-.75rem, -2vw, -2rem);
-  aspect-ratio: 16 / 11;
+.pf-lay__field {
+  position: sticky;
+  top: var(--header-h, 5rem);
+  height: calc(100svh - var(--header-h, 5rem));
+  min-height: 34rem;
   overflow: hidden;
-  background: var(--pf-field);
-}
-.pf-opening__figure img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* THE CROP IS THE ARGUMENT.
-     Every rendition is a two-up: the same garment front and back. Cropping
-     through the bodice line shows both of them at once — the front view and
-     the back view of one garment, which is what "construction" means — and it
-     puts that band of the image directly under the word. Lower and it is two
-     skirts; higher and it is two faces. */
-  object-position: 50% 40%;
-}
-.pf-opening__note {
-  position: relative;
-  z-index: 2;
-  max-width: 34ch;
-  margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
-  color: var(--ink-soft);
-  font-size: clamp(.95rem, 1.1vw, 1.05rem);
-  line-height: 1.6;
+  background: var(--paper-bright);
 }
 
-@media (min-width: 768px) {
-  .pf-opening {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
-    column-gap: clamp(1.5rem, 3vw, 3rem);
-  }
-  .pf-opening h1 {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    font-size: clamp(3.4rem, 8.6vw, 8.5rem);
-  }
-  /* The figure rises into the headline's own line box, so the descenders of
-     "instinct" cross the top of the image. The type is above it (z-index 2),
-     so nothing is obscured — they occupy one another's space, which is the
-     point of the composition. */
-  .pf-opening__figure {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin-top: clamp(-4rem, -6vw, -7rem);
-    aspect-ratio: 21 / 9;
-    /* Capped so the first frame holds the statement, the garment AND the top
-       of the four-piece composition. An uncapped 21:9 at 1440 is 598px tall
-       and pushes everything else past the fold. */
-    max-height: 46vh;
-  }
-  .pf-opening__note { grid-column: 1; grid-row: 3; }
-  .pf-opening__meta {
-    grid-column: 2;
-    grid-row: 3;
-    justify-self: end;
-    align-self: start;
-    margin-top: clamp(1.25rem, 2.5vw, 2rem);
-    text-align: right;
-    color: var(--muted);
-  }
+/* ---- the axis ---------------------------------------------------------- */
+
+/* Not there at rest. Construction becomes perceptible when the reader moves,
+   and this is the whole of it: one hairline, and one point on it. */
+.pf-lay__axis {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--axis);
+  width: 1px;
+  background: var(--pf-edge-strong);
+  opacity: clamp(0, calc((var(--t) - .04) * 9), 1);
+  pointer-events: none;
+  z-index: 6;
 }
-@media (min-width: 1024px) {
-  .pf-opening h1 { font-size: clamp(5rem, 7.6vw, 8.5rem); }
-  /* Off-axis second line — a piece laid to the edge, not under the first. */
-  .pf-opening__two { padding-left: 12%; }
-}
-.pf-opening__meta { display: none; }
-@media (min-width: 768px) { .pf-opening__meta { display: block; } }
-
-/* ==========================================================================
-   2. THE FOUR WORLDS — four pieces of one composition.
-
-   NOT four equal tiles and not a 2×2 grid. The four occupy deliberately
-   unequal areas of a 12-column field, laid out the way pieces are nested:
-   the largest piece placed first, the others fitted into what it leaves.
-
-   Each piece also behaves differently, which is where its personality comes
-   from — not from colour:
-
-     01 Womenswear   the tallest piece, image full-bleed, the garment moves
-                     (slow scale on the still) — silhouette and movement
-     02 Menswear     a short wide piece, image held to a hard top edge with a
-                     visible rule under it — structure and alignment
-     03 Tech Packs   the sheet: paper ground, the page inset with margins
-                     around it, nothing bleeding — documentation
-     04 Pattern Dev  the only ink-ground piece, image contained rather than
-                     cropped, with a grain line under it — transformation
-   -------------------------------------------------------------------------- */
-.pf-covers {
-  display: grid;
-  max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: clamp(1rem, 2vw, 2rem) var(--pf-gutter) clamp(2rem, 5vw, 4rem);
-  gap: clamp(.75rem, 1.4vw, 1.25rem);
-  /* hand: one column of pieces with different heights. NOT a shrunken desk
-     layout — each piece keeps its own proportion. */
-  grid-template-columns: minmax(0, 1fr);
+.pf-lay__axis::after {
+  /* The notch: the one registration point, and the only orange on the
+     screen. It sits where the statement's second line crosses the axis and
+     travels with it. */
+  content: '';
+  position: absolute;
+  left: -2.5px;
+  top: calc(66% - 48% * var(--se));
+  width: 6px;
+  height: 6px;
+  background: var(--signal);
 }
 
-.pf-cover {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+/* ---- the four plates --------------------------------------------------- */
+
+/* Stacked on the axis at rest and spread along it by reading. Every plate is
+   positioned in the same terms — a left edge, a width and a depth, each
+   interpolated from the stack to the rail — so the spread is one expression
+   applied four times rather than four animations.
+
+   THE RAIL. At rest the plates hang from the top of the field; resolved, they
+   hang from one line a little below it, with the statement above. Their
+   depths differ, so four names follow a rag instead of lining up: that, and
+   their materials, is what makes four equals look like one composition and
+   not like four cards. */
+.pf-leaf {
+  position: absolute;
+  top: calc(var(--y0, 0%) + (var(--y1, 17%) - var(--y0, 0%)) * var(--el));
+  left: calc(var(--x0) + (var(--x1) - var(--x0)) * var(--el));
+  width: calc(var(--w0) + (var(--w1) - var(--w0)) * var(--el));
+  height: calc(var(--h0) + (var(--h1) - var(--h0)) * var(--el));
+  display: block;
   color: var(--ink);
   text-decoration: none;
-  background: var(--pf-field);
-  /* The separation transform. `--sep-*` are per-piece offsets set below;
-     the runtime only ever changes `--sep`. */
-  transform: translate3d(
-    calc(var(--sep-x, 0px) * (1 - var(--sep, 1))),
-    calc(var(--sep-y, 0px) * (1 - var(--sep, 1))),
-    0
-  );
-  transition: box-shadow .3s var(--pf-lift);
+  /* EACH PLATE HAS ITS OWN PROGRESS. They do not all travel together: the
+     fan opens in reading order, so the fashion plate settles first and the
+     dark plate last. Moving as one, the three siblings spent the middle of
+     the transformation piled on top of each other at nearly full size, and
+     the largest, darkest one was on top — a lurch, not a recomposition.
+     `--span` is 1/(1 - lead), precomputed so the easing stays a plain
+     multiplication. */
+  --lead: 0;
+  --span: 1;
+  /* The fashion plate leads: the field cannot open until it has given up the
+     room. */
+  --l: clamp(0, calc((var(--t) - var(--lead)) * var(--span)), 1);
+  --el: calc(var(--l) * var(--l) * (3 - 2 * var(--l)));
+  /* THE FASHION PLATE IS ON TOP, AND THE OTHER THREE ARE UNDER IT — which is
+     what a stack is. Nothing travels across the fashion photograph and
+     nothing covers it: the three plates behind it are UNCOVERED as its right
+     edge sweeps left, the way the next sheet appears when you slide the top
+     one off a pile. An earlier pass had them travelling over it instead, and
+     by a fifth of the way down the page the figure the visitor arrived on was
+     completely hidden behind a second photograph. */
+  z-index: calc(5 - var(--i));
+  opacity: 1;
 }
-.pf--js .pf-cover { will-change: transform; }
+/* The three plates are behind the fashion plate, so they need no fade: they
+   are simply covered. They are held out of the backdrop for the first frame
+   alone, because the fashion plate has no ground of its own there and they
+   would otherwise ghost up through its studio sweep. */
+.pf-leaf:not(.pf-leaf--womenswear) {
+  opacity: clamp(0, calc(var(--t) * 26), 1);
+}
+.pf-leaf:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
-/* The register: number and kind, on one rule above the piece. A drawn line,
-   the way a piece is labelled along its edge. */
-.pf-cover__register {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .7rem .9rem .55rem;
-  border-top: 1px solid var(--ink);
-}
-.pf-cover__num {
-  font-family: var(--mono);
-  font-size: .8rem;
-  font-style: normal;
-  font-weight: 500;
-  color: var(--ink);
-}
-.pf-cover__kind {
-  font-family: var(--mono);
-  font-size: .56rem;
-  font-style: normal;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+/* THE STACK, and THE RAIL. `--x0/--w0/--h0` is where every plate starts: the
+   fashion plate's own box, on the axis. `--x1/--w1/--h1` is where each one
+   ends.
 
-.pf-cover__art {
-  position: relative;
+   THE WIDTHS AND DEPTHS ARE NOT EQUAL, AND THAT IS HOW THEY ARE EQUAL. A
+   near-black surface and a paper one of identical size do not carry identical
+   weight, so the darkest plate is the narrowest, the lightest is the widest,
+   and the paper one is shallowest because typography is denser than a
+   photograph. Judged by eye, not by width. */
+.pf-leaf {
+  /* THE PLATE'S LEFT EDGE IS THE AXIS. It bleeds off the top, the right and
+     the bottom, so the composition has exactly ONE straight boundary — and
+     that boundary is the line the statement's second line is set to, which is
+     why the hairline that appears on the first scroll has somewhere to be. A
+     full-bleed box cannot do this: with a portrait photograph in a landscape
+     box, `cover` matches the width and the figure is locked to the centre, so
+     there is no void to set type in. The plate's own position is what opens
+     the void. */
+  --x0: var(--axis);
+  --w0: 68%;
+  --y0: -6%;
+  --h0: 120%;
+}
+/* THE FIRST GAP IS THE WIDEST, AND IT SITS ON THE AXIS. The hairline has to
+   fall in a gap, not a few pixels inside a photograph, and a gap that is
+   deliberately wider than the other two reads as the seam allowance the
+   composition was laid out with rather than as a mistake. */
+/* WHERE EACH PLATE STARTS. The three under the fashion plate are already at
+   their places on the rail — they do not travel sideways at all, because
+   there is nowhere for them to travel from that is not across the
+   photograph. They start FULL FIELD DEPTH, hidden under the fashion plate,
+   and rise to the rail as it retreats: the plates move apart in depth, the
+   negative space for the names opens underneath them, and the only thing
+   crossing the field is the fashion plate's own right edge.
+
+   Each one waits its turn, so the field resolves in sequence rather than all
+   at once. */
+.pf-leaf--menswear,
+.pf-leaf--tech-packs,
+.pf-leaf--3d-simulation {
+  --x0: var(--x1);
+  --w0: var(--w1);
+  --y0: -6%;
+  --h0: 120%;
+}
+.pf-leaf--3d-simulation { --lead: .1;  --span: 1.112; }
+.pf-leaf--tech-packs    { --lead: .2;  --span: 1.25; }
+.pf-leaf--menswear      { --lead: .3;  --span: 1.43; }
+
+/* Balanced by eye, then checked against the render. The first pass gave the
+   fashion plate the extra room a light surface needs and it came out plainly
+   dominant — a black garment on a white sweep is not a quiet surface, so the
+   compensation was backwards. It is now the widest by a little, not by a lot,
+   and the dark plate gains the width its weight can carry. */
+.pf-leaf--womenswear   { --x1: 3.4%;  --w1: 29.2%; --h1: 44%; --span: 1.35; }
+.pf-leaf--menswear     { --x1: 36.4%; --w1: 22.0%; --h1: 50%; }
+.pf-leaf--tech-packs   { --x1: 60.4%; --w1: 19.2%; --h1: 47%; }
+.pf-leaf--3d-simulation{ --x1: 81.6%; --w1: 15.0%; --h1: 62%; }
+
+.pf-leaf__surface {
+  position: absolute;
+  inset: 0;
   display: block;
   overflow: hidden;
-  min-height: 0;
-  background: #e6e3da;
 }
-.pf-cover__still {
+.pf-leaf__img,
+.pf-leaf__clip {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 28%;
-  transition: transform 1.1s var(--pf-lift);
+  object-position: 50% 12%;
 }
+/* THE FASHION PLATE. One crop, from the first frame to the last: the figure
+   the visitor arrived on is the surface they enter Womenswear through, which
+   is what makes the resolved screen the same composition rather than another
+   one. The crop tightens onto the garment as the plate narrows. */
+.pf-leaf__img--hero {
+  /* The crop travels with the plate: the hero box is portrait and shows the
+     whole gesture, the resolved plate is a wide letterbox where the same
+     framing would show a face and nothing of the garment. */
+  object-position: 50% calc(20% + 9% * var(--e));
+}
+/* THE BLEND IS ON THE PLATE, NOT ON THE PICTURE INSIDE IT.
+   A blend resolves against the backdrop inside the nearest stacking context,
+   and a plate IS one — it is positioned and z-indexed. With the blend on the
+   image, it had nothing to blend into and the photograph came up as a hard
+   white rectangle on the right of the screen: the text-left / image-right
+   formula, arrived at by accident.
 
-.pf-cover__type {
-  display: block;
-  padding: .9rem .9rem 1rem;
+   With the blend on the plate, the group composites against the FIELD, which
+   already carries the statement. The studio sweep is brighter than the bone,
+   so it disappears; the garment is darker, so it stays; and where the fishnet
+   sleeve crosses the statement, the mesh paints over the letters and the
+   letters show through its holes. That crossing is the one place image and
+   type touch, and it costs one line of CSS rather than a mask.
+
+   It is a treatment of THIS asset. Final photography with its own environment
+   sits in the same box with this line removed. */
+/* THE BLEND IS ON THE SURFACE AND THE PLATE'S GROUND ARRIVES WITH THE FIRST
+   MOVEMENT. At rest the plate has no ground of its own, so the surface blends
+   with the FIELD — the studio sweep disappears into the bone, the statement
+   shows through it, and the fishnet sleeve paints over the letters. The
+   moment the reader moves, the plate takes its own ground, so the three
+   plates waiting underneath cannot ghost up through the sweep. The ground is
+   the field's own colour, so nothing about the photograph changes. */
+.pf-leaf--womenswear .pf-leaf__surface { mix-blend-mode: darken; }
+.pf-leaf--womenswear {
+  background-color: rgb(251 250 246 / clamp(0, calc(var(--t) * 26), 1));
 }
-.pf-cover__name {
-  display: block;
+.pf-leaf--menswear .pf-leaf__img { object-position: 50% 26%; }
+/* Only the SURFACE is dark. The name under it sits on the bone page, so it
+   stays ink — a light name inherited from the plate was invisible. */
+.pf-leaf--3d-simulation .pf-leaf__surface { background: var(--ink); }
+.pf-leaf--3d-simulation .pf-leaf__img,
+.pf-leaf--3d-simulation .pf-leaf__clip { object-position: 50% 34%; }
+
+/* PAPER. The documentation plate's surface is its contents, ruled — and its
+   ground is a shade off the field, so it reads as a SHEET laid on the page
+   rather than as a hole in it. Tone, not a border: a hairline box around it
+   would be the card chrome the rest of the screen refuses. */
+.pf-leaf--tech-packs { background: var(--paper); }
+.pf-leaf__paper {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: space-between;
+  padding: clamp(.85rem, 1.4vw, 1.25rem) clamp(.7rem, 1.1vw, 1rem) clamp(1rem, 1.7vw, 1.5rem);
   font-family: var(--display);
-  font-weight: 850;
-  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
-  line-height: 1.02;
-  letter-spacing: -.035em;
+  font-weight: 700;
+  font-size: clamp(.78rem, 1vw, 1.05rem);
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  /* Held back until the plate is wide enough to set a line in. */
+  opacity: clamp(0, calc((var(--t) - .5) * 5), 1);
 }
-.pf-cover__intent {
-  display: block;
-  margin-top: .45rem;
-  max-width: 30ch;
+.pf-leaf__paper span {
+  padding-bottom: clamp(.3rem, .8vh, .6rem);
+  border-bottom: 1px solid var(--pf-edge);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-leaf__paper span:last-child { border-bottom: 0; }
+
+/* ---- each plate's name ------------------------------------------------- */
+
+/* Under the plate's own lower edge, so the four names follow the rag of four
+   different depths. Held back until the stack has actually opened: at arrival
+   the screen carries a photograph and a statement, and no chapter UI at all
+   — not even the fashion plate's own name. */
+.pf-leaf__type {
+  position: absolute;
+  top: calc(100% + clamp(.7rem, 1.6vh, 1.1rem));
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: .25rem;
+  opacity: clamp(0, calc((var(--t) - .66) * 6), 1);
+}
+.pf-leaf__name {
+  font-family: var(--display);
+  font-weight: 800;
+  /* THE SAME SIZE ON ALL FOUR. A name scaled to its plate would rank the
+     plates, and the plates are equal. */
+  font-size: clamp(1rem, 1.35vw, 1.4rem);
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.pf-leaf__intent {
   color: var(--ink-soft);
   font-size: .8rem;
-  line-height: 1.5;
+  line-height: 1.4;
+  max-width: 26ch;
 }
-/* The action carries its own information scent — never four identical
-   labels. See the per-world strings in the component. */
-.pf-cover__go {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  margin-top: .9rem;
-  font-size: .58rem;
-  color: var(--ink);
-}
-.pf-cover__go .arrow {
-  width: 13px;
-  color: var(--signal);
-  transition: transform .3s var(--pf-lift);
-}
-.pf-cover:hover .pf-cover__go .arrow,
-.pf-cover:focus-visible .pf-cover__go .arrow { transform: translate(3px, -3px); }
-.pf-cover:hover .pf-cover__still { transform: scale(1.03); }
-.pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
-
-/* Piece heights at hand width. Unequal on purpose. */
-.pf-cover[data-chapter='womenswear'] .pf-cover__art { height: 62vh; max-height: 520px; }
-.pf-cover[data-chapter='menswear'] .pf-cover__art { height: 34vh; max-height: 300px; }
-.pf-cover[data-chapter='tech-packs'] .pf-cover__art { height: 40vh; max-height: 340px; }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__art { height: 44vh; max-height: 380px; }
-
-/* 03 — the sheet. Paper ground, the page inset with a margin all round, the
-   document contained rather than cropped. It should read as a document on a
-   table, not as a photograph. */
-.pf-cover[data-chapter='tech-packs'] .pf-cover__art {
-  padding: clamp(1rem, 2.4vw, 1.75rem);
-  background: #e9e6dd;
-}
-.pf-cover[data-chapter='tech-packs'] .pf-cover__still {
-  object-fit: contain;
-  object-position: 50% 0;
-}
-
-/* 04 — the only ink piece in the set, because the chapter it opens is the
-   only one whose content is a moving image on a dark ground. Contained, not
-   cropped: a simulation frame has an edge and cropping it loses the garment. */
-.pf-cover[data-chapter='3d-simulation'] {
-  background: var(--ink);
-  color: var(--paper-bright);
-}
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__register { border-top-color: var(--pf-ink-line); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__num { color: var(--paper-bright); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__kind,
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__intent { color: var(--pf-ink-muted); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__go { color: var(--paper-bright); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__art { background: #08090a; }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__still { object-fit: contain; }
-.pf-cover[data-chapter='3d-simulation'] .pf-notch { background: var(--pf-ink-line); }
-
-/* 02 — structure. A hard rule under the image and the type aligned to it. */
-.pf-cover[data-chapter='menswear'] .pf-cover__art { border-bottom: 1px solid var(--ink); }
-
-@media (min-width: 768px) {
-  /* table + desk: the nested field. Twelve columns, four pieces, deliberately
-     unequal areas, and the negative space in the lower-right of the first row
-     is part of the composition rather than a gap to fill. */
-  .pf-covers {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-auto-rows: min-content;
-    /* Each piece is its own height. Without this the two-row Womenswear piece
-       stretches its neighbours and their type blocks drift to the bottom of a
-       row they do not own. */
-    align-items: start;
-  }
-  .pf-cover { align-self: start; }
-  .pf-cover[data-chapter='womenswear'] { grid-column: 1 / 8; grid-row: 1 / 3; }
-  .pf-cover[data-chapter='menswear']   { grid-column: 8 / 13; grid-row: 1; }
-  .pf-cover[data-chapter='tech-packs'] { grid-column: 8 / 13; grid-row: 2; }
-  .pf-cover[data-chapter='3d-simulation'] { grid-column: 1 / 13; grid-row: 3; }
-
-  /* The leading piece is the largest by a clear margin — that is the point of
-     an unequal composition — but it is capped against the viewport. Uncapped,
-     a 4:5 piece seven columns wide is 974px tall at 1440 and the other three
-     read as an afterthought rather than as the rest of one composition. */
-  .pf-cover[data-chapter='womenswear'] .pf-cover__art { height: auto; max-height: 68vh; aspect-ratio: 4 / 5; }
-  .pf-cover[data-chapter='menswear'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 16 / 9; }
-  .pf-cover[data-chapter='tech-packs'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 16 / 10; }
-  .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 32 / 9; }
-
-  /* Separation offsets. Each piece arrives from where it sat in the nested
-     opening — up and inward — so the scroll reads as one shape coming apart
-     rather than four blocks sliding in.
-
-     THE HORIZONTAL OFFSETS STAY INSIDE THE GRID GAP. The vertical offsets do
-     the work; sideways they only lean. At 3% and -6% the leading piece and the
-     one beside it crossed by about thirty pixels before the scroll separated
-     them, and since every piece is a link, the upper one took clicks meant for
-     the image under it. Kept under the gap, the pieces lean without ever
-     covering one another at any scroll position. */
-  .pf-cover[data-chapter='womenswear']    { --sep-x: .6%;  --sep-y: -58px; }
-  .pf-cover[data-chapter='menswear']      { --sep-x: -1.2%; --sep-y: -40px; }
-  .pf-cover[data-chapter='tech-packs']    { --sep-x: -.8%; --sep-y: -18px; }
-  .pf-cover[data-chapter='3d-simulation'] { --sep-x: 0;    --sep-y: -8px;  }
-}
-
-@media (min-width: 1024px) {
-  .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { aspect-ratio: 40 / 9; }
-  .pf-cover__name { font-size: clamp(1.7rem, 2.4vw, 2.5rem); }
-}
-
-/* The colophon: three short lines, one alignment. The reference disclosure
-   is NOT fine print here — it is the same size as the rest of the row and it
-   is the last thing read before entering a chapter. */
-.pf-colophon {
-  display: grid;
-  gap: .6rem;
-  max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: 0 var(--pf-gutter) clamp(2.5rem, 6vw, 5rem);
+/* The way in, under the plate's own name. It follows the rag with everything
+   else: four plates of four depths, four blocks of type at four heights, and
+   the field's own lower edge as the level line under all of them. */
+.pf-leaf__go {
   color: var(--muted);
   font-size: .78rem;
-  line-height: 1.55;
-  border-top: 1px solid var(--pf-edge);
-  padding-top: 1rem;
+  line-height: 1;
+  transition: color .3s var(--pf-lift);
+  opacity: clamp(0, calc((var(--t) - .74) * 6), 1);
 }
-.pf-colophon p { margin: 0; max-width: 46ch; }
-.pf-colophon .label { color: var(--ink); font-size: .58rem; }
-@media (min-width: 768px) {
-  .pf-colophon { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.pf-leaf:hover .pf-leaf__go,
+.pf-leaf:focus-visible .pf-leaf__go { color: var(--signal); }
+
+
+/* ---- the one crossing -------------------------------------------------- */
+
+/* The fashion plate's box, repeated once over the statement and blended, so
+   the sleeve is in front of the type and the sweep is not. It is the first
+   frame's composition and nothing else: by four per cent of the track it is
+   gone, and from then on the statement is above every plate and cannot be
+   clipped by one. */
+.pf-lay__cross {
+  position: absolute;
+  left: var(--axis);
+  top: -6%;
+  width: 68%;
+  height: 120%;
+  z-index: 7;
+  display: block;
+  mix-blend-mode: darken;
+  pointer-events: none;
+  opacity: clamp(0, calc(1 - var(--t) * 26), 1);
+}
+.pf-lay__cross img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+/* ---- the statement ----------------------------------------------------- */
+
+/* AT ARRIVAL it is half the composition: two lines set in the void the raised
+   arm opens, the second running far enough right that the sleeve passes over
+   its last word. The garment is ABOVE the type there, so the crossing is the
+   composition rather than an accident of stacking.
+
+   AS THE STACK SPREADS the statement rises and settles above the rail at the
+   size of a standing head. The resolved screen still carries the words the
+   visitor arrived on, which is what makes it the same plate. */
+.pf-lay__say {
+  position: absolute;
+  inset: 0;
+  /* Above every plate. The crossing is handled by the layer above it, so the
+     statement never has to sit underneath a photograph to be crossed by one
+     — which is what clipped it in half as the plate took its own ground. */
+  z-index: 6;
+  margin: 0;
+  pointer-events: none;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -.042em;
+  line-height: calc(.92 + .2 * var(--se));
+}
+.pf-lay__line {
+  position: absolute;
+  white-space: nowrap;
+  font-size: calc(clamp(1.9rem, 4.6vw, 4.3rem) * (1 - .6 * var(--se)));
+}
+.pf-lay__line--a {
+  left: var(--pf-gutter);
+  top: calc(44% - 38.5% * var(--se));
+}
+/* Indented to the axis at rest — the second line STARTS where the image
+   starts, which is the registration the whole plate is built on — and back to
+   the gutter, under the first line, once the stack has opened. */
+/* Indented at rest, so both lines cross the crop boundary and the statement
+   reads as set INTO the photograph rather than beside it — the first line
+   under the sleeve, the second across the sweep below it. It stops short of
+   the bodice, because black type on a black garment is not a composition. As
+   the stack opens it returns to the gutter, under the first line. */
+.pf-lay__line--b {
+  left: calc(var(--pf-gutter) + 6.2% * (1 - var(--se)));
+  top: calc(57% - 47.7% * var(--se));
+}
+
+.pf-lay__note {
+  position: absolute;
+  left: var(--pf-gutter);
+  bottom: clamp(2.4rem, 8vh, 4.6rem);
+  z-index: 4;
+  max-width: 32ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(.88rem, 1vw, 1rem);
+  line-height: 1.5;
+  pointer-events: none;
+  /* It belongs to the arrival and goes as the stack opens: the resolved
+     screen is four destinations, not four destinations and a paragraph. */
+  opacity: clamp(0, calc(1 - var(--t) * 5.5), 1);
+}
+
+/* ---- temporary hierarchy ----------------------------------------------- */
+
+/* AT REST no plate is louder than another. Attention gives one of them the
+   room: it breathes open DOWNWARD along the rag — the only axis the rail
+   leaves free — its crop opens, its name and its line come forward, and the
+   others quieten without moving. Nothing scales, nothing lifts and nothing
+   nudges an arrow; the composition is still the composition when the pointer
+   leaves. */
+/* Only the DEPTH is transitioned, and only so that focus breathes rather than
+   snaps. Opacity is scroll-mapped, and a transition on a scroll-mapped value
+   makes it lag the reader — the plates were still fading four hundred
+   milliseconds after the scroll had stopped. */
+/* And the depth is transitioned ONLY once the stack has resolved, which is
+   the only time it is a focus gesture. While the reader is scrolling, depth
+   is a scroll-mapped value, and a transition on a scroll-mapped value makes
+   the whole composition lag half a second behind the reader. */
+.pf-lay[data-open] .pf-leaf { transition: height .5s var(--pf-lift); }
+.pf-leaf__img,
+.pf-leaf__clip {
+  transition: object-position .6s var(--pf-lift), filter .45s var(--pf-lift);
+}
+.pf--js .pf-lay[data-open] .pf-leaf:hover,
+.pf--js .pf-lay[data-open] .pf-leaf:focus-visible {
+  /* Enough to read as a breath, and no more: the deepest plate has the least
+     room under it, and at nine per cent its own name ran off the foot of the
+     field. */
+  height: calc(var(--h1) + 5%);
+}
+.pf--js .pf-lay[data-open] .pf-leaf:hover .pf-leaf__img,
+.pf--js .pf-lay[data-open] .pf-leaf:focus-visible .pf-leaf__img {
+  object-position: 50% 44%;
+}
+.pf--js .pf-lay[data-open]:has(.pf-leaf:hover) .pf-leaf:not(:hover) .pf-leaf__surface,
+.pf--js .pf-lay[data-open]:has(.pf-leaf:focus-visible) .pf-leaf:not(:focus-visible) .pf-leaf__surface {
+  filter: saturate(.72) contrast(.97);
+}
+.pf--js .pf-lay[data-open]:has(.pf-leaf:hover) .pf-leaf:not(:hover) .pf-leaf__type,
+.pf--js .pf-lay[data-open]:has(.pf-leaf:focus-visible) .pf-leaf:not(:focus-visible) .pf-leaf__type {
+  opacity: .5;
+}
+
+@media (min-width: 1200px) {
+  .pf-leaf__name { font-size: clamp(1.15rem, 1.35vw, 1.45rem); }
+}
+
+/* A PORTRAIT TABLET is the same plate on a narrower cloth: the statement's
+   indent is a proportion of the field and its length a proportion of the type
+   size, and the two stop agreeing below 1200. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* The axis has to fall in the gap between the first two plates, not on the
+     edge of one — at 30% the notch sat on the fashion plate's own border and
+     read as a stray mark. */
+  .pf-lay { --axis: 32.4%; }
+  .pf-lay__cross { left: var(--axis); width: 74%; }
+  .pf-leaf { --w0: 74%; }
+  .pf-lay__line { font-size: calc(clamp(1.8rem, 5.4vw, 3.4rem) * (1 - .62 * var(--se))); }
+  .pf-lay__line--b { top: calc(57% - 49.1% * var(--se)); }
+  .pf-leaf__intent { display: none; }
+  /* A PORTRAIT FIELD NEEDS DEEP PLATES. At the desk's proportions the four
+     plates used the top two thirds of a 1,030px field and left a third of the
+     screen empty underneath them. Depth is the dimension a portrait tablet has
+     to spare, so the rail sits higher and every plate takes it. */
+  .pf-leaf--womenswear   { --x1: 3.4%;  --w1: 25.4%; --y1: 15%; --h1: 66%; }
+  .pf-leaf--menswear     { --x1: 37.4%; --w1: 21.6%; --y1: 15%; --h1: 61%; }
+  .pf-leaf--tech-packs   { --x1: 61.2%; --w1: 18.4%; --y1: 15%; --h1: 51%; }
+  .pf-leaf--3d-simulation{ --x1: 81.6%; --w1: 15%;   --y1: 15%; --h1: 63%; }
+}
+
+/* ==========================================================================
+   2. A HAND — the same narrative, turned.
+
+   A phone cannot hold four destinations across a rail, and four stacked cards
+   is not this composition. So the stack spreads DOWN instead of across: the
+   fashion plate stays at the top at nearly full width, and the three under it
+   come out below it at descending widths, hung off the same axis — which on a
+   phone is a left-hand margin rather than a line across the middle. The
+   narrative is identical: fashion, then registration, then four destinations.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* On a phone the axis is a left-hand margin rather than a line across the
+     middle, and the stack spreads DOWN instead of across. Everything else is
+     the same: the fashion plate retreats, the three plates behind it are
+     uncovered as its lower edge sweeps up, and each one settles at its own
+     depth with its name under it. */
+  .pf-lay { --axis: 20%; }
+  .pf-lay__track { height: 300svh; }
+
+  /* THE VOID IS UNDER THE FIGURE, NOT BESIDE IT. A 390-wide field has no room
+     for a void beside a standing figure: the photograph fills the width, and
+     type set over it lands on a black garment and disappears. So the plate
+     takes the upper seven tenths of the field and the statement is set on the
+     bone beneath it — the same composition of photograph, statement and
+     negative space, turned through ninety degrees.
+
+     The three plates behind it start in the same box, so the fashion plate
+     covers them completely until it retreats. */
+  .pf-leaf {
+    --x0: 0%;
+    --w0: 100%;
+    --y0: -6%;
+    --h0: 76%;
+  }
+  /* The crop travels as well as the plate: at rest the box is portrait and
+     the figure fills it; resolved, the band is a wide letterbox and the same
+     `object-position` would show nothing but a head. */
+  .pf-leaf__img--hero { object-position: calc(62% - 12% * var(--e)) calc(14% + 28% * var(--e)); }
+  /* No crossing on a phone: there is no type over the photograph to cross. */
+  .pf-lay__cross { display: none; }
+
+  /* Four bands, four depths, four left edges: a rag down the field and a rag
+     across it. Three of them bleed off the right edge, so none of them can
+     read as a card sitting in a column. */
+  .pf-leaf--womenswear   { --x1: 0%;  --w1: 88%;  --y1: 2%;  --h1: 24%; }
+  .pf-leaf--menswear     { --x1: 10%; --w1: 92%;  --y1: 31%; --h1: 21%; }
+  .pf-leaf--tech-packs   { --x1: 4%;  --w1: 76%;  --y1: 57%; --h1: 15%; }
+  .pf-leaf--3d-simulation{ --x1: 16%; --w1: 86%;  --y1: 77%; --h1: 16%; }
+
+  /* The three plates are uncovered top to bottom as the fashion plate's lower
+     edge sweeps up past them. */
+  .pf-leaf--menswear      { --lead: .1;  --span: 1.112; }
+  .pf-leaf--tech-packs    { --lead: .22; --span: 1.282; }
+  .pf-leaf--3d-simulation { --lead: .34; --span: 1.515; }
+
+  .pf-leaf__intent { display: none; }
+  .pf-leaf__go { display: none; }
+  .pf-leaf__name { font-size: clamp(1.05rem, 4.6vw, 1.35rem); }
+  .pf-leaf__type { gap: 0; }
+  .pf-leaf__paper { font-size: .7rem; padding: .7rem .7rem .8rem; }
+
+  /* The statement settles into a two-line head above the first band. */
+  .pf-lay__line { font-size: calc(clamp(1.7rem, 8.6vw, 2.7rem) * (1 - .62 * var(--se))); }
+  /* THE STATEMENT BELONGS TO THE ARRIVAL ON A PHONE, and it leaves with it.
+     There is nowhere on a 390-wide field for it to settle that the four bands
+     do not occupy, and travelling to the top means crossing the photograph —
+     where it is black type on a black garment for most of the journey. It
+     lifts a little and goes. The continuity the desk gets from the statement
+     is carried here by the photograph itself: the first band IS the opening
+     image, in the same crop the visitor arrived on. */
+  .pf-lay__say { opacity: clamp(0, calc(1 - (var(--t) - .06) * 5), 1); }
+  .pf-lay__line--a { left: var(--pf-gutter); top: calc(73% - 6% * var(--se)); }
+  .pf-lay__line--b {
+    left: calc(var(--pf-gutter) + 7% * (1 - var(--se)));
+    top: calc(81% - 6% * var(--se));
+  }
+  .pf-lay__note {
+    top: 90%;
+    bottom: auto;
+    max-width: 30ch;
+    font-size: .82rem;
+    opacity: clamp(0, calc(1 - var(--t) * 8), 1);
+  }
 }
 
 /* ==========================================================================

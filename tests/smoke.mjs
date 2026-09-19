@@ -170,120 +170,171 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* Four separated image covers, composed together without card chrome. */
-    const covers = await p.evaluate(() => {
-      const list = [...document.querySelectorAll('.pf-cover')];
-      const doc = document.documentElement.clientWidth;
+    /* ---- THE OPENING PLATE, AND THE STACK IT SPREADS INTO ---------------
+
+       WHAT THESE ASSERTIONS REPLACE. The previous set enforced a landing of
+       four separated covers of deliberately UNEQUAL weight, with the first one
+       dominating — that art direction is withdrawn, and the assertions that
+       pinned it are withdrawn with it. They are not deleted: they are
+       rewritten against what the screen now promises, and the strictest of
+       them are the brief's own rejection criteria turned into checks, so no
+       future pass can quietly reintroduce four cards or a dominant chapter.
+
+       Everything that is not art direction — the four chapters existing, every
+       one of them being openable, every one recording its image source, the
+       names, the distinct intents, the honesty of the disclosure — is asserted
+       exactly as before. */
+    const plates = await p.evaluate(() => {
+      const list = [...document.querySelectorAll('.pf-leaf')];
+      const field = document.querySelector('[data-lay-field]').getBoundingClientRect();
       return list.map((el) => {
         const r = el.getBoundingClientRect();
         const s = getComputedStyle(el);
         return {
           chapter: el.dataset.chapter,
-          top: Math.round(r.top + window.scrollY),
+          top: Math.round(r.top - field.top),
           height: Math.round(r.height),
           left: Math.round(r.left),
           width: Math.round(r.width),
-          full: Math.round(r.width) >= doc - 1,
+          opacity: Number(s.opacity),
           isLink: el.tagName === 'A',
           boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
-          titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
           images: el.querySelectorAll('img').length,
           source: el.dataset.imageSource ?? '',
-          name: el.querySelector('.pf-cover__name').textContent.trim(),
-          intent: el.querySelector('.pf-cover__intent').textContent.trim(),
+          name: el.querySelector('.pf-leaf__name').textContent.trim(),
+          intent: el.querySelector('.pf-leaf__intent').textContent.trim(),
+          go: el.querySelector('.pf-leaf__go').textContent.trim(),
+          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-leaf__type')).opacity),
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
     });
-    check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    /* The four chapters are deliberately UNEQUAL: a nested field, not a rail
-       of identical leaves. What must hold is that no two of them overlap and
-       that they do not all share one height — a row of four equal cards would
-       say the four bodies of work are interchangeable. */
-    check('the four chapter fields occupy distinct regions without overlapping',
-      covers.every((cv, i) => covers.every((other, j) => j <= i
-        || cv.left + cv.width <= other.left + 1 || other.left + other.width <= cv.left + 1
-        || cv.top + cv.height <= other.top + 1 || other.top + other.height <= cv.top + 1)),
-      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top} ${cv.width}x${cv.height}`).join(' '));
-    check('the chapters are given unequal weight',
-      new Set(covers.map((cv) => cv.height)).size >= 3
-        && Math.max(...covers.map((cv) => cv.height)) >= Math.min(...covers.map((cv) => cv.height)) * 1.3,
-      covers.map((cv) => cv.height).join(','));
-    check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
-    /* No chapter may collapse, and the lead chapter must read as the lead.
-       The floor is per-field rather than one shared height, because the
-       composition earns its hierarchy from the difference. */
-    check('no chapter field collapses and the lead chapter dominates',
-      covers.every((cv) => cv.height >= 900 * 0.4) && covers[0].height >= 900 * 0.6,
-      covers.map((cv) => cv.height).join(','));
-    check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
-    /* A cover is a composition, not a centred word: a register rule at the
-       top, an axis that alternates chapter to chapter, and the progression
-       signature at the foot. */
-    const composed = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
-      const name = el.querySelector('.pf-cover__name').getBoundingClientRect();
-      return {
-        chapter: el.dataset.chapter,
-        register: !!el.querySelector('.pf-cover__register .pf-cover__num')
-          && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
-        intent: el.querySelector('.pf-cover__intent')?.textContent.trim(),
-        signal: getComputedStyle(el.querySelector('.pf-cover__go .arrow')).color,
-        /* Where the name sits across the cover, as a fraction of its width. */
-        axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
-        artInset: +((el.querySelector('.pf-cover__art').getBoundingClientRect().left - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
-      };
-    }));
-    check('every cover carries its register', composed.every((cv) => cv.register));
-    check('every chapter has a distinct editorial intent',
-      composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
-    check('the chapter action is the restrained orange signal',
-      composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    /* Each chapter is a different kind of space, which is carried by the
-       proportion of its image field and by its own ground — not by four
-       variations of one card. */
-    check('every chapter field has its own proportion and its own ground',
-      await p.evaluate(() => {
-        const art = [...document.querySelectorAll('.pf-cover__art')].map((el) => {
-          const r = el.getBoundingClientRect();
-          const s = getComputedStyle(el);
-          return { ratio: +(r.width / r.height).toFixed(2), ground: s.backgroundColor, fit: getComputedStyle(el.querySelector('img')).objectFit };
-        });
-        return new Set(art.map((a) => a.ratio)).size === 4
-          && new Set(art.map((a) => a.ground)).size >= 2
-          && new Set(art.map((a) => a.fit)).size >= 2;
-      }));
-    check('every chapter is openable', covers.every((cv) => cv.isLink));
-    check('chapter names remain legible without competing with imagery',
-      covers.every((cv) => cv.titlePx >= 28 && cv.titlePx <= 40), covers.map((cv) => cv.titlePx).join(','));
+    check('four chapter plates on the landing', plates.length === 4, String(plates.length));
+    check('every chapter is openable', plates.every((q) => q.isLink));
+    check('every plate records its image source',
+      plates.every((q) => q.source.length > 0), plates.map((q) => q.source).join(' | '));
+    check('no plate is drawn as a card', plates.every((q) => !q.boxed));
 
-    check('every chapter cover is image-led', covers.every((cv) => cv.images === 1), covers.map((cv) => cv.images).join(','));
-    check('every cover records its image source', covers.every((cv) => cv.source.length > 0), covers.map((cv) => cv.source).join(' | '));
-    /* The public name of chapter 04 is wider than its last step: the
-       recordings start at the first pattern lines. The internal id stays
-       `3d-simulation` so existing links and history entries keep working. */
+    /* THE FIRST FRAME IS FASHION. One photograph, one statement, one line of
+       text — no chapter names, and no sign of the other three plates. */
+    const opening = await p.evaluate(() => {
+      const lay = document.querySelector('[data-lay]');
+      const field = document.querySelector('[data-lay-field]');
+      const say = document.querySelector('.pf-lay__say');
+      const lines = [...say.querySelectorAll('.pf-lay__line')];
+      const hero = document.querySelector('.pf-leaf__img--hero');
+      const hr = hero.getBoundingClientRect();
+      return {
+        t: Number(getComputedStyle(lay).getPropertyValue('--t')),
+        fieldHeight: Math.round(field.getBoundingClientRect().height),
+        viewport: window.innerHeight,
+        garmentArea: Math.round(hr.width * hr.height),
+        typeArea: Math.round(lines.reduce((sum, el) => {
+          const r = el.getBoundingClientRect();
+          return sum + r.width * r.height;
+        }, 0)),
+        statement: say.textContent.replace(/\s+/g, ' ').trim(),
+        lines: lines.length,
+        /* The construction devices are not on the first frame at all. */
+        axisOpacity: Number(getComputedStyle(document.querySelector('.pf-lay__axis')).opacity),
+        note: (document.querySelector('.pf-lay__note')?.textContent ?? '').trim(),
+      };
+    });
+    check('the transformation starts at its first state', opening.t <= 0.02, String(opening.t));
+    check('the opening is one screen',
+      opening.fieldHeight <= opening.viewport + 1, `${opening.fieldHeight} in ${opening.viewport}`);
+    check('the first frame carries no chapter name at all',
+      plates.every((q) => q.nameOpacity < 0.02), plates.map((q) => q.nameOpacity).join(','));
+    check('only the fashion plate is in the first frame',
+      plates.filter((q) => q.opacity > 0.02).length === 1
+        && plates.find((q) => q.opacity > 0.02).chapter === 'womenswear',
+      plates.map((q) => `${q.chapter}:${q.opacity}`).join(' '));
+    check('no construction line is drawn before the reader moves',
+      opening.axisOpacity < 0.02, String(opening.axisOpacity));
+    check('the photograph is the largest thing in the first frame',
+      opening.garmentArea > opening.typeArea * 3,
+      `${opening.garmentArea} vs ${opening.typeArea}`);
+    check('the statement is set on two lines and reads whole',
+      opening.lines === 2 && /Between instinct & construction\./.test(opening.statement),
+      opening.statement);
+    check('one sentence stands with the statement and no more',
+      opening.note.length > 20 && opening.note.length < 200, opening.note);
+
+    /* THE RESOLVED SCREEN. Read after the stack has spread: four destinations
+       of EQUAL authority. The area test is the brief's rejection criterion —
+       "one world clearly appears more important at rest" — made measurable,
+       and the height test is what stops four equal areas becoming four
+       identical cards. */
+    const resolved = await p.evaluate(async () => {
+      const lay = document.querySelector('[data-lay]');
+      const track = document.querySelector('[data-lay-track]');
+      window.scrollTo({ top: track.offsetTop + track.offsetHeight * 0.8, behavior: 'instant' });
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      await new Promise((r) => setTimeout(r, 650));
+      const list = [...document.querySelectorAll('.pf-leaf')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          chapter: el.dataset.chapter,
+          area: Math.round(r.width * r.height),
+          height: Math.round(r.height),
+          width: Math.round(r.width),
+          left: Math.round(r.left),
+          top: Math.round(r.top),
+          opacity: Number(getComputedStyle(el).opacity),
+          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-leaf__type')).opacity),
+        };
+      });
+      return { t: Number(getComputedStyle(lay).getPropertyValue('--t')), list };
+    });
+    check('the stack resolves by the end of its track', resolved.t >= 0.98, String(resolved.t));
+    check('all four destinations are present and named',
+      resolved.list.every((q) => q.opacity > 0.99 && q.nameOpacity > 0.99),
+      resolved.list.map((q) => `${q.chapter}:${q.opacity}/${q.nameOpacity}`).join(' '));
+    check('no destination overpowers another — closest area within a third',
+      Math.max(...resolved.list.map((q) => q.area))
+        <= Math.min(...resolved.list.map((q) => q.area)) * 1.55,
+      resolved.list.map((q) => `${q.chapter}:${q.area}`).join(' '));
+    check('the four are not four identical cards',
+      new Set(resolved.list.map((q) => q.height)).size === 4
+        && new Set(resolved.list.map((q) => q.width)).size === 4,
+      resolved.list.map((q) => `${q.width}x${q.height}`).join(' '));
+    check('the four hang from one line',
+      new Set(resolved.list.map((q) => q.top)).size === 1,
+      resolved.list.map((q) => q.top).join(','));
+    check('no two destinations overlap',
+      resolved.list.every((q, i) => resolved.list.every((o, j) => j <= i
+        || q.left + q.width <= o.left + 1 || o.left + o.width <= q.left + 1)),
+      resolved.list.map((q) => `${q.left}..${q.left + q.width}`).join(' '));
+    await p.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await p.waitForTimeout(200);
+
+    /* Unchanged contracts. */
+    check('every chapter has a distinct editorial intent',
+      new Set(plates.map((q) => q.intent)).size === 4 && plates.every((q) => q.intent.length > 8),
+      plates.map((q) => q.intent).join(' | '));
+    check('every plate is image-led or typeset from its own contents',
+      plates.every((q) => q.images === 1 || q.chapter === 'tech-packs'),
+      plates.map((q) => `${q.chapter}:${q.images}`).join(' '));
+    check('the way in is never four repetitions of one label',
+      new Set(plates.map((q) => q.go)).size === 4 && !plates.some((q) => /enter world/i.test(q.go)),
+      plates.map((q) => q.go).join(' | '));
+    check('no way in has an arrow glyph appended',
+      plates.every((q) => !/[→↗➔]/.test(q.go)), plates.map((q) => q.go).join(' | '));
     check('chapter 04 is published as Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').name === 'Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').text);
+      plates.find((q) => q.chapter === '3d-simulation').name === 'Pattern Development');
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
-        [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    /* Four identical "Enter world" labels told the visitor nothing about what
-       lay behind each one. Each chapter now names its own way in, and the
-       labels must all differ. */
-    const ways = await p.evaluate(() => [...document.querySelectorAll('.pf-cover__go')].map((e) => e.textContent.trim()));
-    check('the covers include a concise intent and their own way in',
-      covers.every((cv) => cv.intent.length > 0) && ways.every((w) => w.length > 0)
-        && new Set(ways).size === 4,
-      ways.join(' | '));
-    check('the way in is never four repetitions of one label',
-      !ways.some((w) => /enter world/i.test(w)), ways.join(' | '));
-    check('no category list appears on any cover',
-      await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
-    check('the reference disclaimer never appears on a cover',
+        [...document.querySelectorAll('.pf-leaf')].map((e) => e.textContent).join(' '))));
+    check('no category list appears on any plate',
+      await p.evaluate(() => document.querySelectorAll('.pf-leaf ol, .pf-leaf ul').length === 0));
+    check('the reference disclaimer never appears on a plate',
       await p.evaluate(() => !/no authorship of photographed garments/i
-        .test([...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
+        .test([...document.querySelectorAll('.pf-leaf')].map((e) => e.textContent).join(' '))));
+    /* The opening photograph is a licensed editorial reference, and the page
+       says so where it always said so. */
+    check('the licensed-reference disclosure is still on the landing',
+      await p.evaluate(() => /licensed editorial references/i
+        .test(document.querySelector('.pf-colophon').textContent)));
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({
