@@ -35,18 +35,6 @@ const published = sessions.filter((session) => Boolean(session.youtubeId));
 const capacity = sessions.length;
 const num = (i: number) => String(i + 1).padStart(2, '0');
 
-/* THE TRANSFORMATION, named. This chapter's subject is a garment changing
- * state, so the five states are the chapter's own index rather than a
- * decorative timeline. The runtime fills each bar as the page's scroll passes
- * it; the names are readable at any scroll position, so nothing here depends
- * on the motion happening. */
-const TRANSFORM_STEPS = [
-  ['01', 'Idea'],
-  ['02', '2D'],
-  ['03', 'Construction'],
-  ['04', '3D'],
-  ['05', 'Fit'],
-];
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
@@ -67,47 +55,94 @@ const TRANSFORM_STEPS = [
       </p>
     </header>
 
-    {/* THE TRANSFORMATION, SEEN — not named.
-        Naming five stages under a heading is a caption, not a chapter about
-        change. This is a real recording of one of Soufiane's own garments
-        simulating: the cloth moves, the drape settles, the form resolves. It
-        is the one thing on this route that shows 2D becoming 3D instead of
-        claiming it.
+    {/* ONE GARMENT, SIX STATES, ONE STAGE.
 
-        The five states run beside it as the chapter's spine, and the scroll
-        advances them, so the visitor reads the sequence while watching the
-        thing the sequence describes. The recording is muted, loops, has no
-        controls and no sound, plays only while it is on screen, and never
-        plays at all under reduced motion or on a connection asking to save
-        data — the poster frame stands in, so the frame is never empty. */}
-    <div class="pf-change">
-      <figure class="pf-change__frame">
-        <video
-          class="pf-change__clip"
-          data-change-clip
-                    poster="/CLO3D-poster.jpg"
-          muted
-          loop
-          playsinline
-          preload="none"
-          aria-label="A garment simulating in CLO3D: the cloth settles into its finished drape."
-        >
-          {/* VP9 first: a third of the weight, and the only codec some
-              browsers ship without a licence. H.264 behind it covers
-              everything else. */}
-          <source src="/CLO3D.webm" type="video/webm" />
-          <source src="/CLO3D.mp4" type="video/mp4" />
-        </video>
-      </figure>
+        What this replaces was a recording on the left and five words set
+        large on the right. Five words are a caption; a chapter about
+        transformation has to SHOW one thing becoming another, and a list of
+        the stages it passes through is not that.
 
-      <ol class="pf-change__track" data-transform-track aria-label="Development sequence">
-        {TRANSFORM_STEPS.map(([index, name], i) => (
-          <li class="pf-change__state" style={`--step-from:${i / TRANSFORM_STEPS.length}`}>
-            <i class="pf-change__bar" aria-hidden="true"></i>
-            <b class="pf-change__name">{name}</b>
-          </li>
-        ))}
-      </ol>
+        So this is one stage holding ONE garment, and what changes as the
+        chapter is read is how much of that garment exists yet:
+
+          IDEA          one construction line, alone on the field.
+          2D            it closes into panels, laid flat across the cloth.
+          CONSTRUCTION  the panels gather onto the body and the recording
+                        appears under them.
+          3D            the recording runs — the cloth moving.
+          FIT           it settles into its finished drape.
+          PRODUCT       the lines are gone and the garment stands finished.
+
+        There are no six slides, no timeline and no six labels: one word names
+        the state the stage is actually in, and it changes because the stage
+        has changed. Reading back up runs it backwards.
+
+        WHAT IS REAL HERE AND WHAT IS DRAWN, because this route does not blur
+        that line. The garment is a real recording from the development
+        archive and it is the only imagery on the stage. The construction
+        lines are DRAWN, from the same pattern geometry the rest of the route
+        is cut along — they are a diagram of how a panelled garment is built,
+        registered over the recording, and they are not presented as this
+        garment's own pattern. The note under the stage says so.
+
+        Nothing here depends on the motion happening: under reduced motion or
+        with no script the stage resolves to its last state — the garment
+        finished, at full presence, with the recording's poster frame
+        standing in. */}
+    <div class="pf-make" data-make>
+      <div class="pf-make__track" data-make-track>
+        <div class="pf-make__field" data-make-field>
+
+          {/* THE RECORDING. Seeked, not played: the scroll position IS the
+              time, so the cloth moves exactly as fast as the chapter is
+              read, stops when the reader stops, and runs backwards when
+              they read back up. */}
+          <video
+            class="pf-make__clip"
+            data-make-clip
+            poster="/CLO3D-poster.jpg"
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-label="A garment simulating in CLO3D: the cloth settles into its finished drape."
+          >
+            {/* VP9 first: a third of the weight, and the only codec some
+                browsers ship without a licence. H.264 behind it covers
+                everything else. */}
+            <source src="/CLO3D.webm" type="video/webm" />
+            <source src="/CLO3D.mp4" type="video/mp4" />
+          </video>
+
+          {/* THE CONSTRUCTION LINES. Three panels with curved sides, from
+              `scripts/pattern.ts`: an armhole scoop, a princess seam's waist
+              suppression, a side seam's hip spring. The runtime draws them,
+              closes them, and moves them from the flat onto the body. */}
+          <svg class="pf-make__draw" data-make-draw viewBox="0 0 100 56"
+            preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+            <g data-panel-g="0"><path data-panel-p="0" /></g>
+            <g data-panel-g="1"><path data-panel-p="1" /></g>
+            <g data-panel-g="2"><path data-panel-p="2" /></g>
+          </svg>
+
+          {/* ONE WORD. It names the state the stage is in, and it is legible
+              at every scroll position, so the sequence can be read even if
+              nothing ever moves. */}
+          <p class="pf-make__state">
+            <b data-make-word>Product</b>
+          </p>
+        </div>
+      </div>
+
+      <p class="pf-make__note">
+        <span class="label">What this is</span>
+        <span>
+          A recording of one of Soufiane&rsquo;s own garments simulating in CLO3D.
+          The construction lines over it are drawn from pattern geometry — a
+          diagram of how a panelled garment is built, not this garment&rsquo;s
+          own pattern.
+        </span>
+      </p>
     </div>
 
     {published.length > 0 && (

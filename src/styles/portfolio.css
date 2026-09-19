@@ -151,11 +151,11 @@
 }
 
 /* DIRECTION — the second pattern-derived mark, and the only other one.
-   A grain line says which way the piece runs. It earns its place in exactly
-   one chapter, Pattern Development, where direction over time IS the subject:
-   the five rules of `.pf-transform__track` are that mark, sized to the
-   sequence they measure. It is not declared as a standalone decoration here,
-   because a mark with no meaning to carry is decoration. */
+   A grain line says which way the piece runs, and it earns its place in
+   exactly two screens: the lay, where it is one line the length of the cloth
+   through every piece, and Pattern Development, where the construction lines
+   carry the same job over time. It is not declared as a standalone decoration
+   here, because a mark with no meaning to carry is decoration. */
 
 /* ==========================================================================
    1. ONE FIELD, CUT INTO FOUR.
@@ -917,7 +917,7 @@
   font-weight: 800;
   /* THE SAME SIZE IN EVERY PIECE. A label that scales with its piece would
      rank the pieces, and the pieces are equal. */
-  font-size: clamp(1.05rem, 1.5vw, 1.55rem);
+  font-size: clamp(1.25rem, 1.95vw, 1.95rem);
   line-height: 1.04;
   letter-spacing: -.03em;
   text-wrap: balance;
@@ -1097,7 +1097,11 @@
 .pf-slot__figure img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* The rule said `cover` under a comment that said `contain`, and the
+     assertion that would have caught it was passing vacuously — it ran before
+     a category was open, so it measured an empty list. A garment in the
+     inspection deck is never cropped. */
+  object-fit: contain;
   object-position: 50% 62%;
   background: transparent;
   pointer-events: none;
@@ -1557,98 +1561,116 @@
 .pf-world--reading { overflow: hidden; }
 
 /* ==========================================================================
-   8. PATTERN DEVELOPMENT — transformation, told by scroll.
+   8. PATTERN DEVELOPMENT — ONE STAGE, ONE GARMENT, SIX STATES.
 
-   The subject IS transformation, so this is the one chapter where the motion
-   carries the argument: one silhouette passes through construction lines,
-   pattern geometry and 3D form. `--tr` runs 0 → 1 across the sequence's own
-   scroll, written by the runtime; the stages are all present and readable at
-   any value, so nothing here can hide content.
-   -------------------------------------------------------------------------- */
-/* THE TRANSFORMATION, SEEN.
+   `--q` is this chapter's read position, 0 at the top of the stage's track
+   and 1 once it has been read, written by the runtime from the chapter's own
+   scroll. Every value below is a function of it, so the transformation is
+   wherever the reader is: stop and it stops, read back up and it reverses.
 
-   This was five 11px labels on hairlines under a heading. A chapter whose
-   subject is a garment changing state cannot communicate that with five
-   captions, and nobody would read them as a sequence.
+   With no script or under reduced motion `--q` is 1, which is the LAST state
+   — the garment finished, at full presence, construction lines gone. Nothing
+   is parked at zero waiting for an observer.
+   ========================================================================== */
 
-   So the chapter opens on the change itself: a real recording of a garment
-   simulating, large, beside the five states it passes through. The states
-   fill as the chapter is read, so the sequence advances while the thing it
-   describes is moving. One orchestrated moment, in the one chapter that has
-   earned it.
-   -------------------------------------------------------------------------- */
-.pf-change {
-  display: grid;
-  gap: clamp(1.5rem, 3.5vw, 2.5rem);
+.pf-make {
+  --q: 1;
   max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: 0 var(--pf-gutter) clamp(2.5rem, 5vw, 4rem);
+  margin: clamp(1rem, 2.4vw, 2rem) auto 0;
+  padding-inline: var(--pf-gutter);
 }
-.pf-change__frame {
+.pf-make__track {
   position: relative;
-  margin: 0;
-  overflow: hidden;
-  background: #0d0e0f;
-  aspect-ratio: 512 / 910;
-  max-height: 72vh;
+  /* The length of the transformation. Six states need room to be read as six
+     states rather than as one blur. */
+  height: 320svh;
 }
-.pf-change__clip {
-  display: block;
+.pf-make__field {
+  position: sticky;
+  top: clamp(4rem, 9vh, 7rem);
+  height: min(78svh, 46rem);
+  /* The stage is the dark room the recording was made in. */
+  background: #07070a;
+  border: 1px solid rgba(251, 250, 246, .1);
+  overflow: hidden;
+}
+
+/* ---- the recording ------------------------------------------------------ */
+
+.pf-make__clip {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* Contained: the clip is vertical and the stage is not, and the space it
+     leaves either side is where the panels lie flat before they gather. */
+  object-fit: contain;
+  /* STATE 1 AND 2 are construction only, so the garment is not there yet; it
+     arrives as the panels reach the body and is at full presence by the last
+     state. */
+  opacity: clamp(0, calc((var(--q) - .34) * 3.4), 1);
 }
 
-.pf-change__track {
-  display: grid;
-  align-content: center;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.pf-change__state {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: .5rem;
-  padding: clamp(.8rem, 1.8vw, 1.2rem) 0;
-  border-top: 1px solid var(--pf-ink-line);
-}
-/* The rule that fills: each state owns a fifth of the chapter's reading. */
-.pf-change__bar {
+/* ---- the construction lines -------------------------------------------- */
+
+.pf-make__draw {
   position: absolute;
-  top: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--paper-bright);
-  transform-origin: left;
-  transform: scaleX(clamp(0, calc((var(--tr, 1) - var(--step-from)) * 5), 1));
-  transition: transform .3s linear;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-.pf-change__state[data-reached] .pf-change__bar { background: var(--signal); }
-.pf-change__name {
+.pf-make__draw path {
+  fill: rgba(212, 95, 54, .07);
+  stroke: var(--signal);
+  /* IN VIEWBOX UNITS, and deliberately not `non-scaling-stroke`. That
+     keyword moves the stroke — and with it the DASH PATTERN — into screen
+     space, while `getTotalLength()` stays in viewBox units: the draw-on ran a
+     361-unit dash along a 4,600-pixel outline, so every panel came up as six
+     disconnected fragments. The viewBox is fitted uniformly, so a stroke
+     measured in its units is even at every size anyway. */
+  stroke-width: .1;
+  stroke-linejoin: round;
+}
+/* The lines are the whole stage at the start and gone at the end: what is
+   left is the garment, which is the point of the six states. */
+.pf-make__draw { opacity: clamp(0, calc(1 - (var(--q) - .78) * 4.6), 1); }
+
+/* ---- the one word ------------------------------------------------------- */
+
+.pf-make__state {
+  position: absolute;
+  left: clamp(1rem, 2.4vw, 2rem);
+  bottom: clamp(.9rem, 2.4vh, 1.6rem);
+  z-index: 3;
+  margin: 0;
+  color: var(--paper-bright);
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(1.4rem, 4.6vw, 2.2rem);
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
   line-height: 1;
-  letter-spacing: -.03em;
-  color: var(--pf-ink-soft);
-  transition: color .4s var(--pf-lift);
+  letter-spacing: -.04em;
+  pointer-events: none;
 }
-.pf-change__state[data-reached] .pf-change__name { color: var(--paper-bright); }
+.pf-make__state b { font-weight: inherit; }
+
+.pf-make__note {
+  display: grid;
+  gap: .3rem;
+  margin: clamp(.9rem, 2vh, 1.4rem) 0 0;
+  max-width: 58ch;
+  color: var(--pf-ink-soft);
+  font-size: .8rem;
+  line-height: 1.5;
+}
+.pf-make__note .label { color: var(--pf-ink-muted); }
 
 @media (min-width: 768px) {
-  /* The recording at the left, the sequence standing beside it. Reading down
-     the chapter advances the states; watching the clip is what they describe. */
-  .pf-change {
-    grid-template-columns: minmax(0, 48fr) minmax(0, 52fr);
-    align-items: stretch;
-    gap: clamp(2rem, 5vw, 5rem);
-  }
-  .pf-change__frame { max-height: 76vh; }
-  .pf-change__name { font-size: clamp(1.8rem, 3.6vw, 3.2rem); }
+  .pf-make__note { grid-template-columns: 10rem 1fr; gap: 1.5rem; }
+}
+@media (max-width: 767px) {
+  .pf-make__track { height: 300svh; }
+  .pf-make__field { height: min(64svh, 34rem); }
 }
 
 /* THE RECORDINGS. Two across on a desk in one ruled register, the same
@@ -1886,7 +1908,7 @@
 @media (max-width: 430px) {
   .pf { --pf-notch: 7px; }
   .pf-piece__name { font-size: 1.45rem; }
-  .pf-cat__label { font-size: 1.3rem; }
+  .pf-lay__label { font-size: 1.3rem; }
   .pf-dev__plates { gap: .4rem; }
   .pf-plate__label { font-size: .64rem; }
   .pf-runbar { gap: .75rem; }
@@ -1904,15 +1926,15 @@
    every link is live.
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .pf { --tr: 1; }
   .pf-cut { --p: 1; }
+  .pf-stage { --q: 1; }
   .pf-piece,
   .pf-piece__type,
   .pf-piece__enter,
-  .pf-cat__media img,
+  .pf-lay__piece,
+  .pf-lay__media img,
   .pf-doc__page,
   .pf-slot,
-  .pf-transform__bar,
   .pf-plate__art,
   .pf-notch { transition: none !important; }
 }

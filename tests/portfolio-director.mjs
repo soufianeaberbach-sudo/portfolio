@@ -35,7 +35,7 @@ try {
       await open(world);
       await capture(`${world}-categories`);
       if (width === 1440 || width === 390) {
-        for (const card of await page.locator(`[data-world="${world}"] .pf-cat`).all()) {
+        for (const card of await page.locator(`[data-world="${world}"] .pf-lay__piece`).all()) {
           await card.scrollIntoViewIfNeeded();
           await capture(`${world}-${await card.getAttribute('data-category')}-index`);
         }

@@ -25,6 +25,11 @@ export interface SeamOptions {
   /* Field size in CSS pixels. */
   width: number;
   height: number;
+  /* How far the curve is allowed to swing, as a multiple of its own profile.
+     1 is the seam as it is cut. A DIAGRAM of a panel needs more than that:
+     drawn at a quarter of the field's width, a seam's real ±5% comes out at a
+     pixel and a half and the piece reads as a trapezoid. */
+  bow?: number;
   /* Which way the seam runs. 'x' is a seam down the field, dividing it left
      from right — the desk composition. 'y' is the same seam turned, running
      across the field and dividing top from bottom, which is what a phone
@@ -57,9 +62,12 @@ const SEAMS: ReadonlyArray<ReadonlyArray<readonly [number, number]>> = [
  * converted to Bézier: it passes through every point, which matters because
  * each point is a named body landmark rather than a handle. */
 const seamPoints = (o: SeamOptions): Array<[number, number]> =>
-  SEAMS[o.kind].map(([ty, dx]) => (o.axis === 'y'
-    ? [ty * o.width, (o.x + dx) * o.height]
-    : [(o.x + dx) * o.width, ty * o.height]));
+  SEAMS[o.kind].map(([ty, dx0]) => {
+    const dx = dx0 * (o.bow ?? 1);
+    return (o.axis === 'y'
+      ? [ty * o.width, (o.x + dx) * o.height]
+      : [(o.x + dx) * o.width, ty * o.height]) as [number, number];
+  });
 
 const curveThrough = (pts: Array<[number, number]>): string => {
   if (pts.length < 2) return '';

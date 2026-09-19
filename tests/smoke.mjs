@@ -150,7 +150,7 @@ try {
   };
   const openCategory = async (p, world, category) => {
     await p.evaluate(([w, c]) => {
-      document.querySelector(`[data-world="${w}"] a.pf-cat[data-category="${c}"]`).click();
+      document.querySelector(`[data-world="${w}"] a.pf-lay__piece[data-category="${c}"]`).click();
     }, [world, category]);
     await p.waitForTimeout(800);
   };
@@ -204,13 +204,34 @@ try {
     check('the four chapters are equal in width and height',
       new Set(pieces.map((q) => q.width)).size === 1 && new Set(pieces.map((q) => q.height)).size === 1,
       pieces.map((q) => `${q.width}x${q.height}`).join(' '));
-    /* Cut from one field, so they touch: a gap would make them four cards. */
-    check('the pieces touch — one field, not four cards',
-      pieces.slice(1).every((q, i) => Math.abs(q.left - pieces[i].right) <= 1),
+    /* ONE FIELD, CUT — which is now literally true and so is tested
+       literally: all four layers occupy the SAME box, the field's, and what
+       separates them is a clip path each. Four boxes side by side with no gap
+       was the previous implementation; it is what "four cards, touching"
+       looks like, and this is not that. */
+    const field = await p.evaluate(() => {
+      const f = document.querySelector('[data-cut-field]').getBoundingClientRect();
+      return { left: Math.round(f.left), right: Math.round(f.right), width: Math.round(f.width) };
+    });
+    check('the four pieces are one field, each with its own cut',
+      pieces.every((q) => Math.abs(q.left - field.left) <= 1 && Math.abs(q.right - field.right) <= 1),
       pieces.map((q) => `${q.left}..${q.right}`).join(' '));
+    /* AT ARRIVAL the field is entirely chapter 01 and the other three are cut
+       to nothing — which is the storyboard's first state stated as geometry
+       rather than as a screenshot. Every layer is clipped; three are empty. */
+    check('at arrival the whole field is chapter 01 and the rest are cut to nothing',
+      await p.evaluate(() => {
+        const list = [...document.querySelectorAll('.pf-piece')];
+        const clips = list.map((e) => getComputedStyle(e).clipPath);
+        const collapsed = clips.filter((c) => /inset\(0(px)? 100%/.test(c)).length;
+        return clips.every((c) => c && c !== 'none')
+          && collapsed === 3
+          && !/inset\(0(px)? 100%/.test(clips[0])
+          && list[0].dataset.chapter === 'womenswear';
+      }));
     check('the field runs edge to edge',
-      pieces[0].left <= 1 && pieces[3].right >= (await p.evaluate(() => document.documentElement.clientWidth)) - 1,
-      `${pieces[0].left} .. ${pieces[3].right}`);
+      field.left <= 1 && field.right >= (await p.evaluate(() => document.documentElement.clientWidth)) - 1,
+      `${field.left} .. ${field.right}`);
     check('no piece is drawn as a card', pieces.every((q) => !q.boxed));
     check('every chapter is openable', pieces.every((q) => q.isLink));
     check('every chapter records its image source', pieces.every((q) => q.source.length > 0));
@@ -218,24 +239,24 @@ try {
     /* THREE CUTS, AND NOTHING ELSE RULED. The cuts are the only rules on the
        screen, and they are scored by the scroll rather than drawn at rest. */
     const cuts = await p.evaluate(() => {
-      const list = [...document.querySelectorAll('.pf-piece__cut')];
+      const list = [...document.querySelectorAll('[data-cut-seams] [data-seam]')];
       return {
         count: list.length,
-        onRightEdges: list.every((el) => {
-          const piece = el.closest('.pf-piece').getBoundingClientRect();
-          return Math.abs(el.getBoundingClientRect().right - piece.right) <= 1;
-        }),
+        drawn: list.filter((el) => (el.getAttribute('d') ?? '').length > 10).length,
+        /* Generated geometry, not three copies of one line. */
+        distinct: new Set(list.map((el) => el.getAttribute('d'))).size,
       };
     });
     check('three cuts divide the four pieces', cuts.count === 3, String(cuts.count));
-    check('each cut sits on the division it makes', cuts.onRightEdges);
+    check('each cut is a real curve, and no two are the same curve',
+      cuts.drawn === 3 && cuts.distinct === 3, `${cuts.drawn} drawn / ${cuts.distinct} distinct`);
 
     /* EQUAL VALUE, DIFFERENT NATURE. The pieces do not differ in area — they
        differ in what is in them: a photograph, a photograph, a typeset
        document and a moving simulation. That is how four things are made
        distinct without any of them being ranked. */
     const natures = await p.evaluate(() => ({
-      photographs: document.querySelectorAll('.pf-piece[data-chapter="womenswear"] .pf-piece__still, .pf-piece[data-chapter="menswear"] .pf-piece__still').length,
+      photographs: document.querySelectorAll('.pf-piece[data-chapter="womenswear"] .pf-piece__img, .pf-piece[data-chapter="menswear"] .pf-piece__img').length,
       typeset: document.querySelectorAll('.pf-piece[data-chapter="tech-packs"] .pf-piece__doc span').length,
       motion: document.querySelectorAll('.pf-piece[data-chapter="3d-simulation"] video source').length,
       grounds: new Set([...document.querySelectorAll('.pf-piece')].map((e) => getComputedStyle(e).backgroundColor)).size,
@@ -269,52 +290,65 @@ try {
       await p.evaluate(() => !/\b3D Simulation\b/.test(
         [...document.querySelectorAll('.pf-piece')].map((e) => e.textContent).join(' '))));
     check('no category list appears on any piece',
-      await p.evaluate(() => document.querySelectorAll('.pf-piece .pf-cat, .pf-piece ol, .pf-piece ul').length === 0));
+      await p.evaluate(() => document.querySelectorAll('.pf-piece .pf-lay, .pf-piece ol, .pf-piece ul').length === 0));
     check('the reference disclaimer never appears on a piece',
       await p.evaluate(() => !/no authorship of photographed garments/i
         .test([...document.querySelectorAll('.pf-piece')].map((e) => e.textContent).join(' '))));
 
-    /* THE OPENING IS FASHION AND NOTHING ELSE. No rule, no number, no label —
-       a visitor who does not know what a notch is has nothing to decode on the
-       first screen. The garment is whole and it is the largest thing there. */
+    /* THE OPENING IS FASHION AND NOTHING ELSE. No rule, no number, no label,
+       and no chapter UI either — not even the first chapter's own name. A
+       visitor who does not know what a notch is has nothing to decode on the
+       first screen: a garment, a statement, one sentence.
+
+       WHAT CHANGED SINCE THIS WAS WRITTEN. The opening is no longer a section
+       of its own above the chapters; it is the first state of the field the
+       chapters are cut out of, so it is measured on the field and on the
+       layer that holds the opening rendition. The contract is the same one. */
     const opening = await p.evaluate(() => {
-      const field = document.querySelector('.pf-open');
-      const fig = document.querySelector('.pf-open__figure img');
-      const title = document.querySelector('.pf-open__title');
+      const cut = document.querySelector('[data-cut]');
+      const f = document.querySelector('[data-cut-field]');
+      const fig = document.querySelector('.pf-piece__img--opening');
+      const title = document.querySelector('.pf-cut__statement');
       const fr = fig.getBoundingClientRect();
       const tr = title.getBoundingClientRect();
+      const lines = [...title.querySelectorAll('.pf-cut__line')];
       return {
-        fieldHeight: Math.round(field.getBoundingClientRect().height),
+        progress: Number(getComputedStyle(cut).getPropertyValue('--p')),
+        fieldHeight: Math.round(f.getBoundingClientRect().height),
         viewport: window.innerHeight,
         fit: getComputedStyle(fig).objectFit,
         garmentArea: Math.round(fr.width * fr.height),
-        titleArea: Math.round(tr.width * tr.height),
-        /* Type and image may share the field; they may never share a pixel. */
-        overlap: Math.max(0, Math.min(fr.right, tr.right) - Math.max(fr.left, tr.left))
-               * Math.max(0, Math.min(fr.bottom, tr.bottom) - Math.max(fr.top, tr.top)),
-        /* Both stand on the same floor. */
-        /* The statement block — the title and the one sentence under it —
-           stands on the same floor as the hem. Measured on the block, because
-           the block is what the eye reads as sitting on the line. */
-        floorGap: Math.abs(Math.round(fr.bottom - document.querySelector('.pf-open__type').getBoundingClientRect().bottom)),
-        labels: field.querySelectorAll('.label, .pf-notch').length,
-        titleLines: title.querySelectorAll('span').length,
+        /* The statement's own ink, not the box it is positioned in: the
+           statement spans the field so it can be set across the garment. */
+        titleArea: Math.round(lines.reduce((sum, el) => {
+          const r = el.getBoundingClientRect();
+          return sum + r.width * r.height;
+        }, 0)),
+        /* At arrival there is no chapter name on the field at all. */
+        chapterType: [...document.querySelectorAll('.pf-piece__type')]
+          .filter((el) => Number(getComputedStyle(el).opacity) > 0.02).length,
+        labels: f.querySelectorAll('.label, .pf-notch').length,
+        titleLines: lines.length,
         titleText: title.textContent.replace(/\s+/g, ' ').trim(),
+        note: (document.querySelector('.pf-cut__note')?.textContent ?? '').trim(),
       };
     });
+    check('the transformation starts at its first state', opening.progress <= 0.02,
+      String(opening.progress));
     check('the opening is one screen', opening.fieldHeight <= opening.viewport + 1,
       `${opening.fieldHeight} in ${opening.viewport}`);
     check('the opening garment is whole, never cropped', opening.fit === 'contain', opening.fit);
     check('the garment is the largest thing in the first frame',
       opening.garmentArea > opening.titleArea, `${opening.garmentArea} vs ${opening.titleArea}`);
-    check('the statement and the garment never overlap', opening.overlap === 0, String(opening.overlap));
-    check('the statement and the garment stand on one floor',
-      opening.floorGap <= 40, `${opening.floorGap}px apart`);
+    check('no chapter name is on the field at arrival',
+      opening.chapterType === 0, `${opening.chapterType} visible`);
     check('the first screen carries no label, rule or mark',
       opening.labels === 0, `${opening.labels} found`);
     check('the statement is set on two lines and reads whole',
       opening.titleLines === 2 && /Between instinct & construction\./.test(opening.titleText),
       opening.titleText);
+    check('one sentence stands with the statement and no more',
+      opening.note.length > 20 && opening.note.length < 200, opening.note);
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({
@@ -402,11 +436,11 @@ try {
       const visible = (el) => el.getBoundingClientRect().width > 0 && !el.closest('[hidden]');
       return {
         screens: shown.map((e) => e.dataset.screen),
-        cats: [...w.querySelectorAll('[data-screen="index"] .pf-cat__label')].map((e) => e.textContent.trim()),
-        catLinks: w.querySelectorAll('[data-screen="index"] a.pf-cat').length,
-        labelPx: [...w.querySelectorAll('[data-screen="index"] .pf-cat__label')]
+        cats: [...w.querySelectorAll('[data-screen="index"] .pf-lay__label')].map((e) => e.textContent.trim()),
+        catLinks: w.querySelectorAll('[data-screen="index"] a.pf-lay__piece').length,
+        labelPx: [...w.querySelectorAll('[data-screen="index"] .pf-lay__label')]
           .map((e) => Math.round(parseFloat(getComputedStyle(e).fontSize))),
-        categoryCovers: [...w.querySelectorAll('[data-screen="index"] .pf-cat__media img')].filter(visible).length,
+        categoryCovers: [...w.querySelectorAll('[data-screen="index"] .pf-lay__media img')].filter(visible).length,
         garments: [...w.querySelectorAll('.pf-slot img')].filter(visible).length,
         stages: [...w.querySelectorAll('[data-stage]')].filter(visible).length,
         plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
@@ -493,9 +527,9 @@ try {
     const men = await p.evaluate(() => {
       const w = document.querySelector('[data-world="menswear"]');
       return {
-        cats: [...w.querySelectorAll('.pf-cat__label')].map((e) => e.textContent.trim()),
-        links: w.querySelectorAll('a.pf-cat').length,
-        pending: [...w.querySelectorAll('.pf-cat__count')].filter((e) => /pending/i.test(e.textContent)).length,
+        cats: [...w.querySelectorAll('.pf-lay__label')].map((e) => e.textContent.trim()),
+        links: w.querySelectorAll('a.pf-lay__piece').length,
+        pending: [...w.querySelectorAll('.pf-lay__count')].filter((e) => /pending/i.test(e.textContent)).length,
         garments: w.querySelectorAll('.pf-slot').length,
         publication: w.dataset.publication,
       };
@@ -1154,22 +1188,67 @@ try {
     check('the chapter heading is Pattern Development',
       naming.heading === 'Pattern Development', naming.heading);
     check('the navigation label matches', naming.bar === '04 Pattern Development', naming.bar);
-    /* THE ARC MUST BE NAMED — BY THE CHAPTER, NOT NECESSARILY BY ITS
-       DESCRIPTOR. It used to be three clauses inside one long sentence, which
-       is exactly the paragraph this chapter should not open with. The five
-       stations below the title name it as a sequence instead, which is both
-       shorter and clearer, so that is what is checked. */
-    const arc = await p.evaluate(() => [...document.querySelectorAll(
-      '[data-world="3d-simulation"] [data-transform-track] .pf-change__name')].map((e) => e.textContent.trim()));
-    check('the chapter names the development arc as a sequence',
-      arc.join(' → ') === 'Idea → 2D → Construction → 3D → Fit', arc.join(' → '));
+    /* THE ARC IS SHOWN, NOT LISTED.
+       Five words set large beside a video were a caption, and this chapter's
+       subject is one thing becoming another. There is now ONE stage carrying
+       ONE garment, and one word names the state that stage is actually in.
+       So what is asserted is the sequence the stage can reach — every state,
+       in order, from the read position — rather than five labels being
+       present on the screen at once. */
+    const arc = await p.evaluate(async () => {
+      const world = document.querySelector('[data-world="3d-simulation"]');
+      const make = world.querySelector('[data-make]');
+      const track = world.querySelector('[data-make-track]');
+      const word = world.querySelector('[data-make-word]');
+      const seen = [];
+      const top = track.getBoundingClientRect().top + world.scrollTop;
+      const span = track.offsetHeight;
+      for (let i = 0; i <= 24; i += 1) {
+        world.scrollTop = top + (span * i) / 24;
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const name = word.textContent.trim();
+        if (seen[seen.length - 1] !== name) seen.push(name);
+      }
+      world.scrollTop = 0;
+      /* The stage paints on a frame, so the value is read after one. */
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      return { seen, states: seen.length, progress: Number(getComputedStyle(make).getPropertyValue('--q')) };
+    });
+    check('the stage passes through the whole development arc, in order',
+      arc.seen.join(' → ') === 'Idea → 2D → Construction → 3D → Fit → Product',
+      arc.seen.join(' → '));
+    check('reading back up returns the stage to its first state',
+      arc.progress <= 0.02, String(arc.progress));
+    check('the arc is one changing word, not six labels on screen at once',
+      await p.evaluate(() => document.querySelectorAll('[data-make] [data-make-word]').length === 1
+        && document.querySelectorAll('[data-make] .pf-make__state').length === 1));
+
+    /* THE CONSTRUCTION LINES ARE DRAWN GEOMETRY, and the chapter says so in
+       words next to them. Three panels, generated — not three copies of one
+       shape, and not a photograph of a pattern. */
+    const drawn = await p.evaluate(() => {
+      const paths = [...document.querySelectorAll('[data-make] [data-panel-p]')];
+      return {
+        count: paths.length,
+        distinct: new Set(paths.map((e) => e.getAttribute('d'))).size,
+        closed: paths.every((e) => /Z\s*$/.test(e.getAttribute('d') ?? '')),
+        note: (document.querySelector('.pf-make__note')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+      };
+    });
+    check('three construction panels, each its own geometry',
+      drawn.count === 3 && drawn.distinct === 3 && drawn.closed,
+      `${drawn.count}/${drawn.distinct} closed:${drawn.closed}`);
+    check('the stage says which part of it is a recording and which is drawn',
+      /recording/i.test(drawn.note) && /drawn/i.test(drawn.note)
+        && /not this garment/i.test(drawn.note), drawn.note);
+
     check('the descriptor stays to one line', naming.descriptor.length <= 110, naming.descriptor);
     /* NAMING THE STAGES IS NOT SHOWING THE CHANGE. The chapter opens on a real
        recording of a garment simulating — the one thing on the route that
        shows 2D becoming 3D instead of claiming it — and it is muted, looping,
        controlless and does not fetch a byte until it is on screen. */
     const change = await p.evaluate(() => {
-      const v = document.querySelector('[data-world="3d-simulation"] [data-change-clip]');
+      const v = document.querySelector('[data-world="3d-simulation"] [data-make-clip]');
       if (!v) return null;
       const r = v.getBoundingClientRect();
       return {

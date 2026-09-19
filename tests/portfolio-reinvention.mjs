@@ -27,7 +27,7 @@ try {
   if(width===1440){await page.locator('[data-chapter="tech-packs"]').hover();await shot('opening-expanded')}
   for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
-   check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');
+   check(await page.locator('[data-world="'+world+'"] .pf-lay__piece').count()>=4,'categories retained');
    await open(world+'/'+cat);await shot(world+'-viewer');
    const active=page.locator('[data-world="'+world+'"] [data-screen="category"]:not([hidden])');
    /* EVIDENCE PLATES ARE DRAWN ONLY FOR AUTHORED SURFACES.

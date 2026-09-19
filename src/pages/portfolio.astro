@@ -1258,57 +1258,194 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
         }
       }
 
-      const transformTrack = root.querySelector<HTMLElement>('[data-transform-track]');
-      const transformSteps = transformTrack
-        ? [...transformTrack.querySelectorAll<HTMLElement>('.pf-transform__step')]
-        : [];
+      /* ---- PATTERN DEVELOPMENT: one garment, six states, one stage -----
 
-      if (!reduced() && transformTrack) {
-        let frame = 0;
-        const measure = () => {
-          frame = 0;
-          {
-            /* WHAT THE TRACK MEASURES.
-               Not its own distance up the viewport — it sits near the top of
-               the chapter and is therefore fully in view the moment the
-               chapter opens, which pinned it at 1 and meant nothing ever
-               moved. It measures HOW FAR THROUGH THE CHAPTER YOU HAVE READ,
-               which is the honest mapping: the chapter's subject is a garment
-               passing through five states, and the recordings below the track
-               are that passage. Reading down the chapter advances the state.
+         `--q` is how far through the stage's track the chapter has been read.
+         Everything on the stage is a function of it — the lines being drawn,
+         the panels closing, the panels gathering onto the body, the
+         recording's TIME, and the word that names the state. There is no
+         timeline and nothing is queued: the reader's position IS the state,
+         so it stops when they stop and reverses when they read back up.
 
-               An open chapter is a fixed scroll container; on the fallback
-               page (no script) it is in normal flow, so the viewport measure
-               is the fallback. */
-            const scroller = transformTrack.closest<HTMLElement>('[data-world]');
-            const scrollable = scroller && scroller.scrollHeight - scroller.clientHeight > 4;
-            const progress = scrollable
-              ? clamp01(scroller.scrollTop / (scroller.scrollHeight - scroller.clientHeight))
-              : clamp01((window.innerHeight - transformTrack.getBoundingClientRect().top)
-                  / Math.max(1, transformTrack.offsetHeight + window.innerHeight * 0.5));
-            transformTrack.style.setProperty('--tr', String(progress));
-            transformSteps.forEach((step, i) => {
-              /* Step 01 is reached at rest: you are at "Idea" before you
-                 scroll. The last is reached only at the end of the chapter. */
-              step.toggleAttribute('data-reached', progress >= i / transformSteps.length);
-            });
+         THE RECORDING IS SEEKED, NOT PLAYED. `currentTime` is set from the
+         scroll, which is the only way the cloth can move exactly as fast as
+         the chapter is read. Playing it would make the garment's progress and
+         the reader's progress two different things. */
+      const make = root.querySelector<HTMLElement>('[data-make]');
+      if (make) {
+        const makeTrack = make.querySelector<HTMLElement>('[data-make-track]')!;
+        const makeField = make.querySelector<HTMLElement>('[data-make-field]')!;
+        const makeClip = make.querySelector<HTMLVideoElement>('[data-make-clip]');
+        const panelGroups = [...make.querySelectorAll<SVGGElement>('[data-panel-g]')];
+        const panelPaths = [...make.querySelectorAll<SVGPathElement>('[data-panel-p]')];
+        const word = make.querySelector<HTMLElement>('[data-make-word]');
+
+        /* THE SIX STATES, and where each one begins. They are not equal
+           lengths: drawing a line and closing it are quick, and the cloth
+           settling is the part worth the room. */
+        const STATES: Array<[number, string]> = [
+          [0, 'Idea'],
+          [0.16, '2D'],
+          [0.34, 'Construction'],
+          [0.5, '3D'],
+          [0.72, 'Fit'],
+          [0.9, 'Product'],
+        ];
+
+        /* THE PANELS ARE REGENERATED IN PLACE, NOT SQUASHED.
+           An earlier pass drew each panel once in a 0..100 box and scaled the
+           group to its target. That looks equivalent and is not: a
+           non-uniform `scale()` plus `vector-effect: non-scaling-stroke`
+           makes the browser dash the stroke in SCREEN space while
+           `getTotalLength()` measures in local units, so the draw-on ran a
+           361-unit dash pattern along a 110-unit outline and the panel came
+           up as two disconnected curves with no top or bottom. The geometry
+           is now built at the size it is drawn at, and the group only
+           translates — so one unit of path is one unit of the field, the
+           dashes are honest, and the seam curves keep their real shape at
+           every size instead of being stretched into one. */
+
+        /* FLAT, then ON THE BODY. Laid out across the stage the way pattern
+           pieces lie on cloth, and gathered onto the standing figure as the
+           construction state is read. The target column is where the
+           contained vertical recording actually stands, so the lines land on
+           the garment rather than near it. */
+        const FLAT = [
+          { x: 5, y: 9, w: 24, h: 38 },
+          { x: 38, y: 9, w: 24, h: 38 },
+          { x: 71, y: 9, w: 24, h: 38 },
+        ];
+        /* WHERE THE BODY ACTUALLY IS.
+           The recording is contained in the stage, so where it stands depends
+           on the stage's aspect, not on a number typed once: at 1440 a fixed
+           target put the lines a few per cent to the right of the garments,
+           and at another size it would miss by more. The clip's own box is
+           worked out in the overlay's coordinates and the three panels are
+           laid across it, so the construction lines land ON the garment at
+           every width. */
+        const VB = { w: 100, h: 56 };
+        const CLIP = { w: 512, h: 910 };
+        const bodyTargets = (fieldW: number, fieldH: number) => {
+          const scale = Math.min(fieldW / VB.w, fieldH / VB.h);
+          const ox = (fieldW - VB.w * scale) / 2;
+          const oy = (fieldH - VB.h * scale) / 2;
+          const cs = Math.min(fieldW / CLIP.w, fieldH / CLIP.h);
+          const cw = CLIP.w * cs;
+          const ch = CLIP.h * cs;
+          const vx = ((fieldW - cw) / 2 - ox) / scale;
+          const vy = ((fieldH - ch) / 2 - oy) / scale;
+          const vw = cw / scale;
+          const vh = ch / scale;
+          return [0, 1, 2].map((k) => ({
+            x: vx + vw * (0.05 + k * 0.3),
+            y: vy + vh * (k === 1 ? 0.05 : 0.08),
+            w: vw * 0.3,
+            h: vh * (k === 1 ? 0.88 : 0.82),
+          }));
+        };
+
+        let makeFrame = 0;
+        const paintMake = () => {
+          makeFrame = 0;
+          /* An open chapter is its own scroll container, so the stage's
+             progress is read from the track's own box inside it. */
+          const box = makeTrack.getBoundingClientRect();
+          const fieldH = makeField.getBoundingClientRect().height;
+          const travel = Math.max(1, makeTrack.offsetHeight - fieldH);
+          const top = makeField.getBoundingClientRect().top - box.top;
+          const q = reduced() ? 1 : clamp01(top / (travel * 0.92));
+          make.style.setProperty('--q', String(q));
+
+          /* 1 IDEA → 2 2D → 3 CONSTRUCTION, in one expression: the panel is
+             built at wherever it is on its way from the flat to the body, its
+             outline is drawn on over its own window of the first third, and it
+             closes into a piece as the 2D state is read.
+
+             Eased on POSITION, not on time, so reading back up runs the
+             gathering backwards through exactly the same shapes. */
+          const g = clamp01((q - 0.3) / 0.22);
+          const e = g * g * (3 - 2 * g);
+          const body = bodyTargets(makeField.clientWidth, makeField.clientHeight);
+          panelPaths.forEach((path, k) => {
+            const a = FLAT[k];
+            const b = body[k];
+            const bx = a.x + (b.x - a.x) * e;
+            const by = a.y + (b.y - a.y) * e;
+            const bw = a.w + (b.w - a.w) * e;
+            const bh = a.h + (b.h - a.h) * e;
+            panelGroups[k].setAttribute('transform', `translate(${bx.toFixed(3)} ${by.toFixed(3)})`);
+            path.setAttribute('d', panelPath(
+              { x: 0.1, kind: k as 0 | 1 | 2, width: bw, height: bh, bow: 3.4 },
+              { x: 0.9, kind: ((k + 1) % 3) as 0 | 1 | 2, width: bw, height: bh, bow: 3.4 },
+              bw, bh,
+            ));
+            /* Drawn, not merely revealed: the line is laid down end to end,
+               one panel starting after the last. */
+            const len = path.getTotalLength();
+            const from = 0.02 + k * 0.055;
+            const drawn = clamp01((q - from) / 0.115);
+            /* `len` alone repeats with period `len` and is therefore always
+               fully on; `len len` is one dash and one equal gap, which is what
+               an offset can walk along. */
+            path.style.strokeDasharray = `${len} ${len}`;
+            path.style.strokeDashoffset = String(len * (1 - drawn));
+            path.style.fillOpacity = String(clamp01((q - 0.17) / 0.14) * 0.9);
+          });
+
+          /* 4 3D → 5 FIT. The recording's time is the reader's position. */
+          if (makeClip) {
+            const t = clamp01((q - 0.44) / 0.46);
+            if (makeClip.readyState >= 1 && Number.isFinite(makeClip.duration)) {
+              const want = makeClip.duration * t;
+              /* Seeking costs a decode, so only ask when the frame would
+                 actually change. */
+              if (Math.abs(makeClip.currentTime - want) > 0.04) makeClip.currentTime = want;
+            }
+          }
+
+          /* 6 PRODUCT. One word, and it is the state the stage is in. */
+          if (word) {
+            let name = STATES[0][1];
+            for (const [from, label] of STATES) if (q >= from) name = label;
+            if (word.textContent !== name) word.textContent = name;
           }
         };
-        const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
-        /* AN OPEN CHAPTER IS ITS OWN SCROLL CONTAINER.
-           `.pf-world` is `position: fixed; overflow-y: auto` once the script
-           runs, so scrolling inside a chapter never fires a scroll event on
-           `window` and the transformation track would have sat permanently at
-           whatever value the chapter opened with. Each chapter gets the same
-           passive listener, and `measureScroll` is called on open so the value
-           is correct from the first frame. */
+
+        const onMakeScroll = () => {
+          if (!makeFrame) makeFrame = requestAnimationFrame(paintMake);
+        };
+        window.addEventListener('scroll', onMakeScroll, { passive: true });
+        window.addEventListener('resize', onMakeScroll, { passive: true });
         for (const world of worlds.values()) {
-          world.addEventListener('scroll', onScroll, { passive: true });
+          world.addEventListener('scroll', onMakeScroll, { passive: true });
         }
-        measureScroll = measure;
-        measure();
+        measureScroll = paintMake;
+
+        /* THE CLIP HAS TO BE IN MEMORY TO BE SEEKED, and `preload` alone does
+           not start a fetch on an element created with `none`. It is asked
+           for when the chapter opens, not when the page loads, and never
+           under reduced motion or on a connection asking to save data — then
+           the poster frame stands in and the stage resolves without it. */
+        if (makeClip && !reduced() && (navigator as any).connection?.saveData !== true) {
+          const wake = () => {
+            if (makeClip.preload === 'none') {
+              makeClip.preload = 'auto';
+              makeClip.load();
+            }
+          };
+          if ('IntersectionObserver' in window) {
+            const watch = new IntersectionObserver((entries, self) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) { wake(); self.disconnect(); }
+              }
+            }, { threshold: 0.05 });
+            watch.observe(makeField);
+          } else {
+            wake();
+          }
+          makeClip.addEventListener('loadedmetadata', paintMake, { once: true });
+        }
+        paintMake();
       }
 
       /* ---- relayout ---------------------------------------------------- */
