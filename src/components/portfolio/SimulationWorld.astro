@@ -60,9 +60,9 @@ const TRANSFORM_STEPS = [
 
     <header class="pf-head">
       <h2 class="display" id="simulation-title">Pattern Development</h2>
+      {/* One line. The five stations below say the rest of it. */}
       <p class="pf-head__descriptor">
-        Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
-        and fit decisions — the part of the work a photograph cannot hold still.
+        The part of the work a photograph cannot hold still.
       </p>
     </header>
 
@@ -80,6 +80,14 @@ const TRANSFORM_STEPS = [
         ))}
       </ol>
     </div>
+
+    {published.length > 0 && (
+      /* Said once for the chapter rather than under each frame. */
+      <p class="pf-videos__note">
+        <span class="label">{published.length} supplied recordings</span>
+        <span>From the pattern and 3D development archive. Playing one loads a player from YouTube.</span>
+      </p>
+    )}
 
     {published.length > 0 ? (
       <ol class="pf-videos" data-capacity={capacity}>
@@ -111,8 +119,9 @@ const TRANSFORM_STEPS = [
               <div class="pf-video__player" data-player hidden></div>
             </div>
 
-            <p class="pf-video__desc">{session.description}</p>
-            <p class="pf-video__privacy">Playing this video loads a player from YouTube.</p>
+            {/* The per-recording description was the same sentence five times,
+                and the privacy line under it made ten repeated lines on one
+                screen. Both are stated once for the chapter, below. */}
           </li>
         ))}
       </ol>

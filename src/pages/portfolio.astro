@@ -37,6 +37,12 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
   description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
   marker="SA-PORTFOLIO-V8"
   page="portfolio"
+  {/* THE WORK DOES THE SELLING HERE. Every other route ends on the site's
+      contact callout — a full dark band with a three-line statement in it.
+      After four chapters of garments and documents that band reads as a shout
+      at the end of a quiet room, so this route ends on its own single line
+      instead. The callout is untouched everywhere else. */}
+  footerCallout={false}
 >
   <!-- BUILD-MARKER: SA-PORTFOLIO-V8 -->
   <div class="pf" data-pf-root>
@@ -47,29 +53,27 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    {/* ---- THE FIRST FRAME ---------------------------------------------
-        Type and garment in ONE composition. The statement is split across
-        two lines and the image rises into the gap between them, so the words
-        and the garment share the same space instead of dividing the screen
-        into a heading column and a picture column. */}
+    {/* ---- THE FIRST FRAME — ONE STUDIO SHEET ------------------------
+        A registration rule along the top, the garment standing whole in the
+        right half, the statement set in the clear left half. One field, one
+        composition; the type and the garment never cross. See the stylesheet
+        for why the previous version's overlap was removed. */}
     <section class="pf-intro" id="portfolio-index">
-      <p class="label">Soufiane Aberbach / Portfolio</p>
       <div class="pf-opening">
-        <h1 class="display">
-          <span>Between instinct</span>
-          <span class="pf-opening__two">&amp; construction.</span>
-        </h1>
+        <p class="label pf-opening__reg">
+          <span><span class="pf-notch" aria-hidden="true"></span> Soufiane Aberbach / Portfolio</span>
+          <span><b>Four chapters</b> One practice</span>
+        </p>
         <figure class="pf-opening__figure">
-          {/* AUTHORED WORK IN THE FIRST FRAME.
-              This was the chapter-01 cover, which is a licensed editorial
-              photograph — so the same stock image opened the page, headed the
-              Womenswear chapter and headed its first category. The opening
-              image is now one of the 49 authored garment renditions: the first
-              thing a visitor sees is the work rather than a reference. */}
+          {/* AUTHORED WORK IN THE FIRST FRAME. This was a licensed editorial
+              photograph, so one stock image opened the page and also headed
+              the Womenswear chapter and its first category. It is now one of
+              the authored garment renditions: the first thing a visitor sees
+              is the work. */}
           <img
             src={openingGarment.src}
             srcset={openingGarment.srcset}
-            sizes="100vw"
+            sizes="(max-width: 767px) 92vw, 50vw"
             width={openingGarment.width}
             height={openingGarment.height}
             alt={openingGarment.alt}
@@ -77,10 +81,15 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
             decoding="async"
           />
         </figure>
-        <p class="pf-opening__note">
-          Fashion seen from both sides. The creative intention, and the precision that gives it form.
-        </p>
-        <p class="label pf-opening__meta">Four chapters<br />One practice</p>
+        <div class="pf-opening__type">
+          <h1 class="display">
+            <span>Between instinct</span>
+            <span>&amp; construction.</span>
+          </h1>
+          <p class="pf-opening__note">
+            Fashion seen from both sides — the intention, and the precision that gives it form.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -118,10 +127,12 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
       ))}
     </section>
 
+    {/* Two short lines: what the chapters are, and what the imagery is. The
+        third sentence said the same thing twice. */}
     <div class="pf-colophon">
-      <p class="label">Four perspectives / One practice</p>
-      <p>Each chapter opens on its own terms. The work is shown as development, not as decoration.</p>
-      <p>Chapter covers are licensed editorial references. Project, reference and demo status is disclosed inside every chapter.</p>
+      <p class="label">Four chapters / One practice</p>
+      <p>Shown as development, not as decoration.</p>
+      <p>Chapter covers are licensed editorial references; status is disclosed inside every chapter.</p>
     </div>
 
     <div class="pf-worlds" data-worlds>
@@ -199,15 +210,12 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
         if (!opener) return;
         evidenceOpener = opener;
         evidenceReader.querySelector('#pf-evidence-title')!.textContent = opener.dataset.evidenceTitle ?? '';
-        const art = opener.querySelector('img,.pf-plate__blank')!;
+        /* Only authored surfaces are rendered now, so the reader always has a
+           real image to enlarge. */
+        const art = opener.querySelector('img')!;
         evidenceReader.querySelector('[data-evidence-mount]')!.replaceChildren(art.cloneNode(true));
-        const kind = opener.dataset.evidenceKind;
         evidenceReader.querySelector('[data-evidence-caption]')!.textContent =
-          kind === 'authored'
-            ? 'Development evidence / Full image'
-            : kind === 'preview'
-              ? 'Temporary preview / The active garment, not the development asset'
-              : 'No asset supplied yet';
+          'Development evidence / Full image';
         evidenceReader.showModal();
       });
 
@@ -506,7 +514,24 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
         const widest = [...queue.fronts].sort((a, b) => b - a);
         let span = 1;
         for (let k = 0; k < nominal - 1; k += 1) span += scale[k] * (widest[k] ?? 0.6);
-        const width0 = stageWidth / span;
+        /* THE STAGE IS CAPPED TO THE ROOM IT HAS.
+           The height follows the leading card's width, so a wide stage makes a
+           tall one. Once the evidence column stopped reserving a third of the
+           screen the deck got the full width — and with it a stage taller than
+           the viewport, which cut the hems off the garments it exists to show.
+           So the width is reduced until the composition fits the space left
+           under the chapter head, and the garments stay whole. */
+        let width0 = stageWidth / span;
+        /* The room left under the chapter head — but never less than a little
+           over half the viewport. On a phone the head legitimately takes a
+           third of the screen, and measuring strictly from the stage's top
+           left the garments smaller than they need to be on a page that
+           scrolls anyway. */
+        const room = Math.max(
+          window.innerHeight * 0.52,
+          window.innerHeight - queue.stage.getBoundingClientRect().top - 104,
+        );
+        if (width0 / CANVAS > room) width0 = room * CANVAS;
         const height0 = width0 / CANVAS;
         queue.width = width0;
         queue.stage.style.setProperty('--stage-h', `${Math.round(height0)}px`);

@@ -30,19 +30,31 @@ try {
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');
    await open(world+'/'+cat);await shot(world+'-viewer');
    const active=page.locator('[data-world="'+world+'"] [data-screen="category"]:not([hidden])');
-   const plate=active.locator('[data-evidence-open]').first();
-   await plate.scrollIntoViewIfNeeded();
+   /* EVIDENCE PLATES ARE DRAWN ONLY FOR AUTHORED SURFACES.
+      No authored asset exists in the repository yet, so there is nothing to
+      enlarge and the reader cannot be exercised. The contract below is kept,
+      not deleted: it runs the moment a real sketch, pattern or simulation is
+      supplied. Until then the check is that NOTHING is drawn in its place and
+      that the visitor is told what will publish there — which is the actual
+      correction this pass made. */
+   const plateCount=await active.locator('[data-evidence-open]').count();
    const scroll=await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop);
    const state=await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex);
-   for(let i=0;i<3;i++){
-    const target=active.locator('[data-evidence-open]').nth(i);
-    await target.click();
-    check(await page.locator('[data-evidence-reader]').evaluate(e=>e.open),'evidence opened');
-    check(await page.locator('[data-evidence-mount]').evaluate(e=>e.clientHeight>500),'evidence enlarged');
-    if(i===0)await shot(world+'-evidence-open');
-    if(i===1)await page.keyboard.press('Escape');else await page.locator('[data-evidence-close]').click();
-    check(await target.evaluate(e=>document.activeElement===e),'evidence focus restored');
-    check(await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex)===state,'garment state preserved');
+   if(plateCount===0){
+    check(await active.locator('.pf-plate img').count()===0,'no garment photograph stands in for a development surface');
+    check(/publish with each garment/i.test(await active.locator('[data-evidence-pending]').first().innerText()),'pending surfaces are stated in one line');
+   } else {
+    await active.locator('[data-evidence-open]').first().scrollIntoViewIfNeeded();
+    for(let i=0;i<plateCount;i++){
+     const target=active.locator('[data-evidence-open]').nth(i);
+     await target.click();
+     check(await page.locator('[data-evidence-reader]').evaluate(e=>e.open),'evidence opened');
+     check(await page.locator('[data-evidence-mount]').evaluate(e=>e.clientHeight>500),'evidence enlarged');
+     if(i===0)await shot(world+'-evidence-open');
+     if(i%2===1)await page.keyboard.press('Escape');else await page.locator('[data-evidence-close]').click();
+     check(await target.evaluate(e=>document.activeElement===e),'evidence focus restored');
+     check(await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex)===state,'garment state preserved');
+    }
    }
    check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
   }
@@ -81,6 +93,15 @@ try {
   check(await docs.count()===5,'five documents');
   for(const mode of ['button','escape']){
    const opener=docs.nth(2);await opener.scrollIntoViewIfNeeded();
+   /* THE RESTORE IS ONLY EXERCISED FROM A NON-ZERO POSITION.
+      This used to rely on the layout being tall enough that reaching document
+      03 required scrolling, and asserted the captured offset was above zero.
+      The register is compact now, so document 03 is reachable without
+      scrolling and that assertion failed on a layout improvement rather than
+      on a defect. The world is scrolled deliberately instead, which tests the
+      same contract at any layout. */
+   await page.locator('[data-world="tech-packs"]').evaluate(e=>{e.scrollTop=Math.min(240,e.scrollHeight-e.clientHeight)});
+   await page.waitForTimeout(120);
    const scroll=await page.locator('[data-world="tech-packs"]').evaluate(e=>e.scrollTop);
    await opener.click();
    check(await page.locator('[data-reader]').evaluate(e=>e.open),'reader open');
@@ -88,7 +109,7 @@ try {
    check(await close.evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('[data-reader-close]')}),'reader close unobstructed');
    await shot('pdf-open');
    const captured=Number(await page.locator('[data-reader]').getAttribute('data-scroll-top'));
-   check(Number.isFinite(captured)&&captured>0,'PDF origin scroll captured');
+   check(Number.isFinite(captured)&&Math.abs(captured-scroll)<=1,'PDF origin scroll captured: '+scroll+' -> '+captured);
    if(mode==='button')await close.click();else await page.keyboard.press('Escape');
    await page.waitForTimeout(120);
    check(await opener.evaluate(e=>document.activeElement===e),'PDF focus restored');

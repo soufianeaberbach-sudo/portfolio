@@ -12,24 +12,39 @@
    So: ONE file, ONE set of breakpoints, no override layer. If a rule here
    looks odd, the comment above it says why.
 
-   THE SPATIAL IDEA — THE PATTERN CUTTING TABLE.
-   Not a picture of a table. The principles a patternmaker works by, used as
-   composition rules:
+   THE SPATIAL IDEA — THE PATTERN CUTTING TABLE, CORRECTED.
 
-     pieces        every surface is a piece with its own proportion, never a
-                   card in a grid of equal cards
-     nesting       pieces are laid into one another's negative space the way
-                   they are nested on a fabric width, so the gaps are as
-                   designed as the shapes
-     separation    the landing is one composition that comes apart into four
-                   pieces as you scroll — a pattern being separated
-     registration  the notch is the only recurring mark. It says "this aligns
+   The first attempt at this read "pattern" as irregularity: every surface got
+   its own proportion, pieces were nested into one another's negative space,
+   and the four chapters were given deliberately unequal areas. On screen that
+   was not pattern language. It was clutter — arbitrary scale, wrong hierarchy,
+   and two chapter covers destroyed by the odd frames they had been given. It
+   also said something untrue: that one chapter matters and three are filler.
+
+   Pattern cutting is not irregularity. It is DISCIPLINE applied to different
+   shapes — one table, one set of marks, one grain direction, every piece
+   measured. So the composition rules here are:
+
+     one sheet     every screen is a field with a ruled edge, and things are
+                   laid ON it rather than floated in boxes over it
+     equal pieces  the four chapters are identical in size, because they are
+                   equal in value. Character comes from what happens INSIDE
+                   the identical frame: its ground, and whether its image is
+                   cropped like a photograph or laid whole like a rendition
+     marks         a number, a rule, and the notch cut into that rule. The
+                   notch is the only recurring mark and it means "this aligns
                    here", nothing else
+     grain         renditions are always CONTAINED and stand on the field's
+                   floor; photographs are cropped. The rule never varies, so
+                   the whites line up into columns instead of scattering
      depth         garments advance toward inspection instead of sliding past
 
    BREAKPOINTS — the whole set, and nothing outside it.
-     ≥ 1024   desk     the five-position deck, nested category composition
-       768    table    four-piece landing holds, deck keeps five positions
+     ≥ 1024   desk     five-position deck, three category cells across
+       768    table    two chapter cells across, two category cells across
+       640    —        one measured exception: the five transformation
+                       stations go from a vertical list to a row here,
+                       because "Construction" clips below it
      < 768    hand     one column, three-position deck
      ≤ 430    narrow   tightened type and spacing only — never a new layout
 
@@ -144,320 +159,332 @@
 }
 .pf-intro > .label { color: var(--muted); }
 
-/* The opening: type and garment in ONE composition rather than a heading on
-   the left and a picture on the right. The image occupies the middle column
-   and the two halves of the statement sit across it — "instinct" above and to
-   the left, "construction" below and to the right — so the words and the
-   garment share the same space instead of dividing it. */
+/* THE FIRST FRAME — ONE STUDIO SHEET.
+
+   What was here before set the statement in two lines and let the image rise
+   into the gap between them. On screen the second line landed across the top
+   edge of the photograph and cut the heads off the figures, and the render's
+   own white ground read as a white box dropped onto the bone page. It looked
+   like an accident, not a composition.
+
+   This is the correction. The fold is ONE field — the same white studio field
+   the garment viewer uses, so the whole Portfolio reads as one system — with a
+   registration rule along its top edge, the garment standing in the right half
+   of it, and the statement set in the clear left half. Type and garment share
+   one rectangle and never share a pixel. The overlap is gone because the
+   overlap was the problem; what is left is a controlled frame.
+   -------------------------------------------------------------------------- */
 .pf-opening {
   position: relative;
   display: grid;
-  margin-top: clamp(1.25rem, 3vw, 2.5rem);
-  /* Rows, not a two-column split: the figure is row 2 and the two type lines
-     overlap into it from above and below. */
   grid-template-columns: minmax(0, 1fr);
-  row-gap: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+  margin-top: clamp(1rem, 2.2vw, 2rem);
+  padding: clamp(.9rem, 1.6vw, 1.4rem) clamp(1.1rem, 2.4vw, 2.2rem) clamp(1.6rem, 3vw, 2.6rem);
+  background: var(--pf-field);
+  border-top: 1px solid var(--pf-edge-strong);
+  border-bottom: 1px solid var(--pf-edge);
 }
-.pf-opening h1 {
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  font-size: clamp(2.6rem, 11vw, 8.5rem);
-  line-height: .9;
-  letter-spacing: -.045em;
+
+/* The registration rule: where you are, and how much there is. A drawn line
+   along the top of the sheet, the way a piece is marked along its edge. */
+.pf-opening__reg {
+  grid-row: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: clamp(.7rem, 1.4vw, 1.1rem);
+  border-bottom: 1px solid var(--pf-edge);
+  color: var(--muted);
+  font-size: .6rem;
 }
-.pf-opening h1 span { display: block; }
-/* The second half sits deliberately off the first half's axis, the way a
-   second piece is laid to the fabric edge rather than centred under the
-   first. Indented on wide screens only — at phone width it would just look
-   like a mistake. */
-.pf-opening__two { padding-left: 0; }
+.pf-opening__reg b { color: var(--ink); font-weight: 600; }
+/* On a phone the count wrapped to two lines beside a breadcrumb that had also
+   wrapped, and two ragged blocks on one rule read as debris rather than as a
+   mark. The rule keeps the breadcrumb; the count returns with the room. */
+.pf-opening__reg > span:last-child { display: none; }
+@media (min-width: 560px) { .pf-opening__reg > span:last-child { display: block; } }
+
 .pf-opening__figure {
   position: relative;
-  z-index: 1;
-  margin: clamp(-1rem, -2.5vw, -2.5rem) 0 clamp(-.75rem, -2vw, -2rem);
-  aspect-ratio: 16 / 11;
-  overflow: hidden;
-  background: var(--pf-field);
+  grid-row: 2;
+  margin: 0;
+  /* min-height: 0 lets the row be smaller than the image's intrinsic size;
+     without it a contained 4:5 render forces the sheet to its own height and
+     pushes the statement off the fold. */
+  min-height: 0;
+  height: min(52vh, 420px);
 }
 .pf-opening__figure img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  /* THE CROP IS THE ARGUMENT.
-     Every rendition is a two-up: the same garment front and back. Cropping
-     through the bodice line shows both of them at once — the front view and
-     the back view of one garment, which is what "construction" means — and it
-     puts that band of the image directly under the word. Lower and it is two
-     skirts; higher and it is two faces. */
-  object-position: 50% 40%;
+  /* CONTAIN, AND STANDING ON THE FLOOR OF THE SHEET. The garment is whole —
+     no head, hem or train is cut — and it sits on the field's baseline rather
+     than floating in it. */
+  object-fit: contain;
+  object-position: 50% 100%;
 }
+
+.pf-opening__type {
+  grid-row: 3;
+  display: grid;
+  gap: clamp(.8rem, 1.6vw, 1.2rem);
+  /* Air between the hem and the statement. Stacked on a phone the heels sat
+     directly on the cap line, which reads as a collision even though nothing
+     overlaps. */
+  padding-top: clamp(1.1rem, 4vw, 1.75rem);
+}
+.pf-opening h1 {
+  margin: 0;
+  /* Sized to the column it sits in, so neither line ever wraps — a lone "&"
+     on its own line was the phone version of the same accident. */
+  font-size: clamp(2rem, 9.2vw, 3rem);
+  line-height: .94;
+  letter-spacing: -.04em;
+}
+.pf-opening h1 span { display: block; white-space: nowrap; }
 .pf-opening__note {
-  position: relative;
-  z-index: 2;
-  max-width: 34ch;
-  margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
+  max-width: 42ch;
+  margin: 0;
   color: var(--ink-soft);
-  font-size: clamp(.95rem, 1.1vw, 1.05rem);
-  line-height: 1.6;
+  font-size: clamp(.92rem, 1.05vw, 1rem);
+  line-height: 1.55;
 }
 
 @media (min-width: 768px) {
+  /* The sheet: type on the left, the garment standing on the right. Two
+     halves of one field, each with room to breathe. */
   .pf-opening {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
+    grid-template-columns: minmax(0, 47fr) minmax(0, 53fr);
+    grid-template-rows: auto minmax(0, 1fr);
     column-gap: clamp(1.5rem, 3vw, 3rem);
+    /* A FIXED SHEET, NOT A MINIMUM. The figure contains inside it, so the
+       proportion of the frame is a decision rather than a side effect of
+       whichever render happens to be first. */
+    height: min(72vh, 620px);
+    padding-bottom: clamp(1.8rem, 3vw, 2.8rem);
   }
-  .pf-opening h1 {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    font-size: clamp(3.4rem, 8.6vw, 8.5rem);
-  }
-  /* The figure rises into the headline's own line box, so the descenders of
-     "instinct" cross the top of the image. The type is above it (z-index 2),
-     so nothing is obscured — they occupy one another's space, which is the
-     point of the composition. */
-  .pf-opening__figure {
-    grid-column: 1 / -1;
+  .pf-opening__figure { height: auto; }
+  .pf-opening__type { padding-top: 0; }
+  .pf-opening__reg { grid-column: 1 / -1; grid-row: 1; }
+  .pf-opening__type {
+    grid-column: 1;
     grid-row: 2;
-    margin-top: clamp(-4rem, -6vw, -7rem);
-    aspect-ratio: 21 / 9;
-    /* Capped so the first frame holds the statement, the garment AND the top
-       of the four-piece composition. An uncapped 21:9 at 1440 is 598px tall
-       and pushes everything else past the fold. */
-    max-height: 46vh;
+    align-content: end;
+    padding-bottom: clamp(.5rem, 1.5vw, 1.5rem);
   }
-  .pf-opening__note { grid-column: 1; grid-row: 3; }
-  .pf-opening__meta {
-    grid-column: 2;
-    grid-row: 3;
-    justify-self: end;
-    align-self: start;
-    margin-top: clamp(1.25rem, 2.5vw, 2rem);
-    text-align: right;
-    color: var(--muted);
-  }
+  .pf-opening__figure { grid-column: 2; grid-row: 2; }
+  .pf-opening h1 { font-size: clamp(2.4rem, 4.5vw, 4.4rem); }
 }
-@media (min-width: 1024px) {
-  .pf-opening h1 { font-size: clamp(5rem, 7.6vw, 8.5rem); }
-  /* Off-axis second line — a piece laid to the edge, not under the first. */
-  .pf-opening__two { padding-left: 12%; }
+@media (min-width: 1440px) {
+  .pf-opening { height: min(74vh, 660px); }
+  .pf-opening h1 { font-size: 4.6rem; }
 }
-.pf-opening__meta { display: none; }
-@media (min-width: 768px) { .pf-opening__meta { display: block; } }
 
 /* ==========================================================================
-   2. THE FOUR WORLDS — four pieces of one composition.
+   2. THE FOUR CHAPTERS — FOUR EQUAL PIECES ON ONE SHEET.
 
-   NOT four equal tiles and not a 2×2 grid. The four occupy deliberately
-   unequal areas of a 12-column field, laid out the way pieces are nested:
-   the largest piece placed first, the others fitted into what it leaves.
+   WHAT WAS WRONG HERE. The previous version gave the four chapters
+   deliberately unequal areas: Womenswear seven columns and three rows,
+   Menswear and Tech Packs a fifth of that, Pattern Development a 32:9 band.
+   Three things went wrong at once. It read as a value ranking — one chapter
+   that matters and three that are filler — when all four are equally
+   important to the practice. The tall piece left a third of itself empty
+   under a short image. And two of the four covers were destroyed by their own
+   frame: a 1200x849 document page matted inside a wide box looked like a grey
+   blank, and a 512x910 portrait contained in a 40:9 band was a black stripe
+   with an invisible sliver of image in it.
 
-   Each piece also behaves differently, which is where its personality comes
-   from — not from colour:
+   THE CORRECTION. Four pieces of identical size, laid out on one sheet in a
+   2x2 with a hairline between them — four pattern pieces marked up on the
+   same table. Equal area is the only honest way to say equal value. The
+   character of each chapter comes from what happens INSIDE its identical
+   frame: how its image is scaled, what ground it sits on, and the rule under
+   it. That is what pattern language actually is — the same discipline applied
+   to different shapes — not four different-sized boxes.
 
-     01 Womenswear   the tallest piece, image full-bleed, the garment moves
-                     (slow scale on the still) — silhouette and movement
-     02 Menswear     a short wide piece, image held to a hard top edge with a
-                     visible rule under it — structure and alignment
-     03 Tech Packs   the sheet: paper ground, the page inset with margins
-                     around it, nothing bleeding — documentation
-     04 Pattern Dev  the only ink-ground piece, image contained rather than
-                     cropped, with a grain line under it — transformation
+     01 Womenswear   image full-bleed in the frame, high focal point: the
+                     silhouette, cropped the way an editorial page crops it.
+     02 Menswear     image full-bleed, held under a hard rule with a fine
+                     vertical grain mark: structure and alignment.
+     03 Tech Packs   the page CONTAINED with a margin all round, lying on the
+                     paper ground: a document on the table.
+     04 Pattern Dev  the one ink ground, image full-bleed: the digital room.
+                     Diagonally opposite 01, which balances the composition
+                     rather than ranking it.
    -------------------------------------------------------------------------- */
 .pf-covers {
   display: grid;
   max-width: var(--pf-max);
   margin-inline: auto;
-  padding: clamp(1rem, 2vw, 2rem) var(--pf-gutter) clamp(2rem, 5vw, 4rem);
-  gap: clamp(.75rem, 1.4vw, 1.25rem);
-  /* hand: one column of pieces with different heights. NOT a shrunken desk
-     layout — each piece keeps its own proportion. */
+  padding: clamp(1.75rem, 4vw, 3.25rem) var(--pf-gutter) clamp(2rem, 5vw, 4rem);
+  gap: clamp(1rem, 1.8vw, 1.6rem);
   grid-template-columns: minmax(0, 1fr);
+  /* THE REVEAL IS ONE MOVEMENT OF THE WHOLE SHEET, NOT FOUR.
+     Each piece used to carry its own offset and they arrived in a stagger. On
+     screen that meant the four register rules were never quite on the same
+     line while the scroll was in range — five pixels of drift that reads as
+     carelessness, not as choreography, and it was a smaller version of exactly
+     the arbitrariness this pass set out to remove. The sheet rises and settles
+     as one shape, so the grid is never out of true. */
+  transform: translate3d(0, calc(var(--sep-y, -40px) * (1 - var(--sep, 1))), 0);
+  /* MOVEMENT ONLY, NO FADE. A fade tied to scroll means the sheet is at
+     partial opacity whenever the range is partway through — which is what any
+     full-page capture of this route sees, and it makes finished work look
+     unfinished. The rise alone reads as one shape arriving, and the pieces are
+     at full strength and fully clickable at every point in the range. */
 }
 
 .pf-cover {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* Image, then type. Two rows and nothing else, so a piece can never carry
+     an empty region the way the tall one used to. */
+  grid-template-rows: auto auto;
   color: var(--ink);
   text-decoration: none;
-  background: var(--pf-field);
-  /* The separation transform. `--sep-*` are per-piece offsets set below;
-     the runtime only ever changes `--sep`. */
-  transform: translate3d(
-    calc(var(--sep-x, 0px) * (1 - var(--sep, 1))),
-    calc(var(--sep-y, 0px) * (1 - var(--sep, 1))),
-    0
-  );
-  transition: box-shadow .3s var(--pf-lift);
 }
-.pf--js .pf-cover { will-change: transform; }
+.pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
-/* The register: number and kind, on one rule above the piece. A drawn line,
-   the way a piece is labelled along its edge. */
+/* The register: number and kind on one rule above the piece. */
 .pf-cover__register {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: .7rem .9rem .55rem;
-  border-top: 1px solid var(--ink);
+  padding: 0 0 .5rem;
+  border-bottom: 1px solid var(--pf-edge-strong);
 }
-.pf-cover__num {
-  font-family: var(--mono);
-  font-size: .8rem;
-  font-style: normal;
-  font-weight: 500;
-  color: var(--ink);
-}
+.pf-cover__num { font-family: var(--mono); font-size: .68rem; font-style: normal; color: var(--ink); }
 .pf-cover__kind {
   font-family: var(--mono);
-  font-size: .56rem;
+  font-size: .58rem;
   font-style: normal;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
+/* THE FRAME. Identical for all four: same ratio, same ground rules, same
+   hairline. Only what happens inside it changes. */
 .pf-cover__art {
   position: relative;
-  display: block;
+  grid-row: 2;
   overflow: hidden;
-  min-height: 0;
-  background: #e6e3da;
+  background: var(--pf-field);
+  aspect-ratio: 4 / 3;
 }
 .pf-cover__still {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 28%;
-  transition: transform 1.1s var(--pf-lift);
+  object-position: 50% 30%;
+  transition: transform .9s var(--pf-lift);
 }
-
 .pf-cover__type {
-  display: block;
-  padding: .9rem .9rem 1rem;
+  grid-row: 3;
+  display: grid;
+  gap: .3rem;
+  padding-top: clamp(.7rem, 1.2vw, 1rem);
 }
 .pf-cover__name {
-  display: block;
-  font-family: var(--display);
-  font-weight: 850;
-  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
+  margin: 0;
+  font-size: clamp(1.45rem, 2.1vw, 2.1rem);
   line-height: 1.02;
-  letter-spacing: -.035em;
+  letter-spacing: -.03em;
 }
-.pf-cover__intent {
-  display: block;
-  margin-top: .45rem;
-  max-width: 30ch;
-  color: var(--ink-soft);
-  font-size: .8rem;
-  line-height: 1.5;
-}
-/* The action carries its own information scent — never four identical
-   labels. See the per-world strings in the component. */
+.pf-cover__intent { color: var(--ink-soft); font-size: clamp(.86rem, .95vw, .95rem); }
 .pf-cover__go {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: .5rem;
-  margin-top: .9rem;
-  font-size: .58rem;
-  color: var(--ink);
+  margin-top: .35rem;
+  min-height: 24px;
+  font-size: .6rem;
+  color: var(--muted);
 }
-.pf-cover__go .arrow {
-  width: 13px;
-  color: var(--signal);
-  transition: transform .3s var(--pf-lift);
-}
+.pf-cover__go .arrow { width: 13px; color: var(--signal); transition: transform .4s var(--pf-lift); }
+.pf-cover:hover .pf-cover__go,
+.pf-cover:focus-visible .pf-cover__go { color: var(--ink); }
 .pf-cover:hover .pf-cover__go .arrow,
 .pf-cover:focus-visible .pf-cover__go .arrow { transform: translate(3px, -3px); }
-.pf-cover:hover .pf-cover__still { transform: scale(1.03); }
-.pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.pf-cover:hover .pf-cover__still { transform: scale(1.02); }
 
-/* Piece heights at hand width. Unequal on purpose. */
-.pf-cover[data-chapter='womenswear'] .pf-cover__art { height: 62vh; max-height: 520px; }
-.pf-cover[data-chapter='menswear'] .pf-cover__art { height: 34vh; max-height: 300px; }
-.pf-cover[data-chapter='tech-packs'] .pf-cover__art { height: 40vh; max-height: 340px; }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__art { height: 44vh; max-height: 380px; }
+/* The notch: the one recurring construction mark. It is CUT INTO the register
+   rule rather than floating above the number — hung in the air at 9px it read
+   as a speck of dirt, which is the opposite of a registration mark. On the
+   rule it reads as what it is: a notch snipped at the edge of a piece. Orange
+   when the piece is the active choice; orange is a decision, never
+   decoration. */
+.pf-cover__register { position: relative; }
+.pf-cover .pf-notch {
+  position: absolute;
+  top: auto;
+  bottom: -1px;
+  left: 0;
+  z-index: 2;
+  opacity: .75;
+  clip-path: polygon(0 100%, 100% 100%, 0 0);
+}
+.pf-cover:hover .pf-notch,
+.pf-cover:focus-visible .pf-notch { background: var(--signal); }
 
-/* 03 — the sheet. Paper ground, the page inset with a margin all round, the
-   document contained rather than cropped. It should read as a document on a
-   table, not as a photograph. */
+/* ---- character, inside the identical frame ---------------------------- */
+
+/* 01 — the silhouette, cropped high the way an editorial page crops it. */
+.pf-cover[data-chapter='womenswear'] .pf-cover__still { object-position: 50% 42%; }
+
+/* 02 — structure: the image is held under the register rule with a fine
+   vertical grain mark down its left edge. */
+.pf-cover[data-chapter='menswear'] .pf-cover__still { object-position: 50% 26%; }
+.pf-cover[data-chapter='menswear'] .pf-cover__art::after {
+  content: '';
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  left: clamp(.7rem, 1.4vw, 1.2rem);
+  width: 1px;
+  background: rgba(251, 250, 246, .55);
+}
+
+/* 03 — the sheet: the page lies ON the ground with a margin all round, so it
+   reads as a document on the table rather than a cropped photograph. */
 .pf-cover[data-chapter='tech-packs'] .pf-cover__art {
-  padding: clamp(1rem, 2.4vw, 1.75rem);
-  background: #e9e6dd;
+  background: var(--paper-bright);
+  padding: clamp(.9rem, 2vw, 1.75rem);
 }
 .pf-cover[data-chapter='tech-packs'] .pf-cover__still {
+  /* Cropped to the page's head, not contained whole: a demo pack's fields are
+     deliberately blank, so the full page shrank to a pale empty rectangle.
+     The head of the document — its rule, its section mark and the technical
+     flat under them — is the part that reads as documentation. */
+  object-position: 50% 6%;
+  border: 1px solid var(--pf-edge);
+  background: #fff;
+}
+
+/* 04 — the digital room: the one ink ground, and the only chapter whose image
+   is a render rather than a photograph. So it is laid whole on the dark ground
+   with room around it — a simulation displayed in a dark room — instead of
+   being cropped to a band of shoulders. Contained here, cropped in 01 and 02:
+   the same rule the garment renders follow everywhere else on the page. */
+.pf-cover[data-chapter='3d-simulation'] .pf-cover__art {
+  background: #0d0e0f;
+  padding: clamp(.6rem, 1.4vw, 1.1rem);
+}
+.pf-cover[data-chapter='3d-simulation'] .pf-cover__still {
   object-fit: contain;
-  object-position: 50% 0;
+  object-position: 50% 50%;
 }
-
-/* 04 — the only ink piece in the set, because the chapter it opens is the
-   only one whose content is a moving image on a dark ground. Contained, not
-   cropped: a simulation frame has an edge and cropping it loses the garment. */
-.pf-cover[data-chapter='3d-simulation'] {
-  background: var(--ink);
-  color: var(--paper-bright);
-}
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__register { border-top-color: var(--pf-ink-line); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__num { color: var(--paper-bright); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__kind,
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__intent { color: var(--pf-ink-muted); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__go { color: var(--paper-bright); }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__art { background: #08090a; }
-.pf-cover[data-chapter='3d-simulation'] .pf-cover__still { object-fit: contain; }
-.pf-cover[data-chapter='3d-simulation'] .pf-notch { background: var(--pf-ink-line); }
-
-/* 02 — structure. A hard rule under the image and the type aligned to it. */
-.pf-cover[data-chapter='menswear'] .pf-cover__art { border-bottom: 1px solid var(--ink); }
+.pf-cover[data-chapter='3d-simulation'] .pf-cover__register { border-bottom-color: var(--pf-edge-strong); }
 
 @media (min-width: 768px) {
-  /* table + desk: the nested field. Twelve columns, four pieces, deliberately
-     unequal areas, and the negative space in the lower-right of the first row
-     is part of the composition rather than a gap to fill. */
-  .pf-covers {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-auto-rows: min-content;
-    /* Each piece is its own height. Without this the two-row Womenswear piece
-       stretches its neighbours and their type blocks drift to the bottom of a
-       row they do not own. */
-    align-items: start;
-  }
-  .pf-cover { align-self: start; }
-  .pf-cover[data-chapter='womenswear'] { grid-column: 1 / 8; grid-row: 1 / 3; }
-  .pf-cover[data-chapter='menswear']   { grid-column: 8 / 13; grid-row: 1; }
-  .pf-cover[data-chapter='tech-packs'] { grid-column: 8 / 13; grid-row: 2; }
-  .pf-cover[data-chapter='3d-simulation'] { grid-column: 1 / 13; grid-row: 3; }
-
-  /* The leading piece is the largest by a clear margin — that is the point of
-     an unequal composition — but it is capped against the viewport. Uncapped,
-     a 4:5 piece seven columns wide is 974px tall at 1440 and the other three
-     read as an afterthought rather than as the rest of one composition. */
-  .pf-cover[data-chapter='womenswear'] .pf-cover__art { height: auto; max-height: 68vh; aspect-ratio: 4 / 5; }
-  .pf-cover[data-chapter='menswear'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 16 / 9; }
-  .pf-cover[data-chapter='tech-packs'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 16 / 10; }
-  .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { height: auto; max-height: none; aspect-ratio: 32 / 9; }
-
-  /* Separation offsets. Each piece arrives from where it sat in the nested
-     opening — up and inward — so the scroll reads as one shape coming apart
-     rather than four blocks sliding in.
-
-     THE HORIZONTAL OFFSETS STAY INSIDE THE GRID GAP. The vertical offsets do
-     the work; sideways they only lean. At 3% and -6% the leading piece and the
-     one beside it crossed by about thirty pixels before the scroll separated
-     them, and since every piece is a link, the upper one took clicks meant for
-     the image under it. Kept under the gap, the pieces lean without ever
-     covering one another at any scroll position. */
-  .pf-cover[data-chapter='womenswear']    { --sep-x: .6%;  --sep-y: -58px; }
-  .pf-cover[data-chapter='menswear']      { --sep-x: -1.2%; --sep-y: -40px; }
-  .pf-cover[data-chapter='tech-packs']    { --sep-x: -.8%; --sep-y: -18px; }
-  .pf-cover[data-chapter='3d-simulation'] { --sep-x: 0;    --sep-y: -8px;  }
-}
-
-@media (min-width: 1024px) {
-  .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { aspect-ratio: 40 / 9; }
-  .pf-cover__name { font-size: clamp(1.7rem, 2.4vw, 2.5rem); }
+  /* TWO BY TWO. Equal cells, one hairline gap, one sheet. */
+  .pf-covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pf-covers { --sep-y: -56px; }
 }
 
 /* The colophon: three short lines, one alignment. The reference disclosure
@@ -468,12 +495,11 @@
   gap: .6rem;
   max-width: var(--pf-max);
   margin-inline: auto;
-  padding: 0 var(--pf-gutter) clamp(2.5rem, 6vw, 5rem);
+  padding: 1rem var(--pf-gutter) clamp(1.75rem, 3.5vw, 3rem);
   color: var(--muted);
   font-size: .78rem;
   line-height: 1.55;
   border-top: 1px solid var(--pf-edge);
-  padding-top: 1rem;
 }
 .pf-colophon p { margin: 0; max-width: 46ch; }
 .pf-colophon .label { color: var(--ink); font-size: .58rem; }
@@ -653,7 +679,13 @@
   line-height: 1.6;
 }
 .pf-world--motion .pf-head__descriptor { color: var(--pf-ink-soft); }
-.pf-head--category h2 { font-size: clamp(1.9rem, 3.8vw, 3.4rem); }
+/* A CATEGORY HEAD IS A LABEL, NOT A COVER. Inside the viewer every pixel the
+   head takes comes off the garments, which are the reason for the screen —
+   so the category name is set one step down from a chapter name and its head
+   is tighter. */
+.pf-head--category { padding-bottom: clamp(1rem, 1.8vw, 1.5rem); }
+.pf-head--category h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
+.pf-head--category .pf-head__descriptor { font-size: .88rem; flex-basis: 40ch; }
 @media (min-width: 768px) {
   .pf-head {
     display: flex;
@@ -665,16 +697,29 @@
 }
 
 /* ==========================================================================
-   4. CATEGORY DISCOVERY — a nested layout, not a rail.
+   4. CATEGORY DISCOVERY — a marked-up sheet, not a rail and not a collage.
 
-   WHY THIS IS NOT A HORIZONTAL SCROLL-SNAP RAIL ANY MORE.
+   WHY THIS IS NOT A HORIZONTAL SCROLL-SNAP RAIL.
    Categories are a CHOICE. A rail shows one card at a time, hides how many
    exist, gives no overview and depends on a small "scroll to discover" label
    as its only affordance. A choice needs the whole field visible.
 
-   WHY IT IS NOT A CARD GRID EITHER. Equal cards say the options are
-   interchangeable. They are not: they are market categories of different
-   weight, and the composition says so through area.
+   WHY IT IS NOT THE NESTED COLLAGE THAT REPLACED THE RAIL EITHER.
+   That version gave each category a different span and a different ratio and
+   staggered them down a twelve-column field. On screen it was not a
+   composition, it was clutter: two categories filled a screen, the fourth hung
+   above the third for no reason a visitor could read, and the white ground of
+   each render turned into a differently sized white rectangle at a different
+   height. Irregular boxes are not pattern language — they are just irregular
+   boxes, and the choice got harder to make, not more beautiful.
+
+   THE CORRECTION. Every category is the same size, on the same baseline, in a
+   grid the eye can read in one pass — the way pieces are laid out on a table
+   before anything is cut. The garment renders share one ground and one frame
+   ratio, so the whites line up into columns instead of scattering. Character
+   comes from the garments themselves and from the marks around them: a number,
+   a rule, a notch on the one being chosen. Clarity first, and the clarity is
+   what makes it elegant.
 
    THE ZERO-HEIGHT BUG, AND WHY IT CANNOT COME BACK.
    The old rule set gave `.pf-cat` an `aspect-ratio` and `display: flex` at
@@ -713,15 +758,23 @@
   position: relative;
   display: block;
   overflow: hidden;
-  background: #e6e3da;
+  /* ONE GROUND FOR EVERY RENDER. The garments are photographed on white, so a
+     tinted frame put a hard white rectangle inside every cell. Sharing the
+     field colour makes the garment appear to stand in the frame instead. */
+  background: var(--pf-field);
   /* The one line that makes a zero height impossible. */
   aspect-ratio: 4 / 5;
 }
 .pf-cat__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 26%;
+  /* CONTAIN, STANDING ON THE FLOOR — the same language as the opening sheet
+     and the garment deck. These are garment renditions, not photographs:
+     cropping one cuts the hem or the head off the thing being shown, and a
+     category is chosen on silhouette. Photographs (the chapter covers) still
+     crop; renditions never do. */
+  object-fit: contain;
+  object-position: 50% 100%;
   transition: transform .8s var(--pf-lift), filter .5s var(--pf-lift);
 }
 /* Secondary pieces recede very slightly while one is chosen, so there is
@@ -735,11 +788,14 @@
 .pf-cat:focus-visible .pf-cat__media img { transform: scale(1.025); }
 .pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
 
+/* THE MARK BLOCK under each cell: number, name, count, one line, and the
+   notch. Four rows in one narrow column rather than a three-column strip —
+   with equal cells the name needs the whole width, and a count parked on the
+   same rule as the name squeezed it into a third of it. */
 .pf-cat__content {
   display: grid;
-  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: .3rem .8rem;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: .35rem .7rem;
 }
 .pf-cat__num {
   grid-column: 1;
@@ -766,17 +822,17 @@
   hyphens: auto;
 }
 .pf-cat__count {
-  grid-column: 3;
-  grid-row: 1;
-  font-size: .56rem;
+  grid-column: 2;
+  grid-row: 2;
+  font-size: .58rem;
   color: var(--muted);
   white-space: nowrap;
 }
 /* One line of description, always present rather than revealed on hover:
    discovery must not depend on a pointer. */
 .pf-cat__blurb {
-  grid-column: 2 / -1;
-  grid-row: 2;
+  grid-column: 2;
+  grid-row: 3;
   max-width: 46ch;
   color: var(--ink-soft);
   font-size: .8rem;
@@ -784,8 +840,9 @@
 }
 .pf-cat__go {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 2 / 4;
   display: inline-flex;
+  align-self: start;
   width: 14px;
   color: var(--ink);
 }
@@ -797,52 +854,24 @@
 .pf-cat:not([data-open]) .pf-cat__count { color: var(--signal); }
 
 @media (min-width: 768px) {
-  /* THE NESTED FIELD. Twelve columns. The first category is the largest piece
-     and the others are fitted around it, alternating side so the eye moves
-     down the page in a zig rather than scanning a grid. `--cat-span` and
-     `--cat-ratio` are set per position below; the composition is the same
-     shape for a four-category chapter and a five-category one. */
+  /* TWO ACROSS on a tablet, THREE on a desk. Equal cells, one baseline, one
+     ratio — five categories readable in a single pass. */
   .pf-cats__list {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: clamp(1.25rem, 2.4vw, 2.5rem) clamp(1rem, 2vw, 2rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 2.6vw, 2.5rem) clamp(1rem, 2vw, 2rem);
     align-items: start;
   }
-  .pf-cats__list > li { grid-column: var(--cat-span, span 6); }
-  .pf-cat__media { aspect-ratio: var(--cat-ratio, 4 / 5); }
-
-  /* 01 — the leading piece: widest and tallest. */
-  .pf-cats__list > li:nth-child(1) { --cat-span: 1 / 8; --cat-ratio: 4 / 5; }
-  /* 02 — nested into the column the leading piece leaves, and dropped so its
-     top edge aligns to the leading piece's optical centre. */
-  .pf-cats__list > li:nth-child(2) { --cat-span: 9 / 13; --cat-ratio: 3 / 4; margin-top: clamp(2rem, 7vw, 6rem); }
-  /* 03 — a wide, short piece on the opposite side. */
-  .pf-cats__list > li:nth-child(3) { --cat-span: 6 / 13; --cat-ratio: 16 / 11; }
-  /* 04 — small, high, left. */
-  .pf-cats__list > li:nth-child(4) { --cat-span: 1 / 5; --cat-ratio: 3 / 4; margin-top: clamp(-6rem, -7vw, -2rem); }
-  /* 05 — the closing piece, wide and low. Only Womenswear has one. */
-  .pf-cats__list > li:nth-child(5) { --cat-span: 5 / 12; --cat-ratio: 16 / 10; }
+  .pf-cat__label { font-size: clamp(1.15rem, 2.2vw, 1.5rem); }
 }
-/* THE TABLE BAND, 768–1023. The nested pieces are narrower here than the
-   label's display size assumes, so the label gets the full remaining width
-   (its own row) and a size that fits it. This is the one place the content
-   block changes shape, and it changes for a measured reason rather than a
-   guessed breakpoint. */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .pf-cat__content { grid-template-columns: 1.4rem minmax(0, 1fr); }
-  .pf-cat__label { grid-column: 2; grid-row: 1; font-size: clamp(1.15rem, 2.6vw, 1.5rem); }
-  .pf-cat__count { grid-column: 2; grid-row: 2; }
-  .pf-cat__blurb { grid-column: 2; grid-row: 3; }
-  .pf-cat__go { grid-column: 1; grid-row: 2; }
-}
-
 @media (min-width: 1024px) {
-  .pf-cats__list > li:nth-child(2) { margin-top: clamp(3rem, 8vw, 7rem); }
-  /* A category name is a display line, not a caption: on the desk it is set
-     large enough to carry the composition. `min-width: 0` and `break-word`
-     above mean the widest name ("Ready-to-Wear & Contemporary") wraps inside
-     its piece at 1024 rather than being cut off, so the size can be set for
-     the type instead of for the tightest column. */
-  .pf-cat__label { font-size: clamp(1.5rem, 2.2vw, 2.4rem); }
+  .pf-cats__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* A category name is a display line, not a caption. `min-width: 0` and
+     `break-word` on the label mean the widest name wraps inside its own cell
+     rather than being cut off, so the size is set for the type. */
+  .pf-cat__label { font-size: clamp(1.15rem, 1.45vw, 1.6rem); }
+}
+@media (min-width: 1440px) {
+  .pf-cat__label { font-size: 1.78rem; }
 }
 
 /* ==========================================================================
@@ -1040,10 +1069,11 @@
    block per garment is in the DOM and the runtime shows the active one, so
    advancing the deck advances the evidence with it.
 
-   WEIGHT FOLLOWS CONTENT. When all three surfaces are stand-ins, the rail is
-   deliberately quiet: three small plates in a row under the garment rather
-   than a column of three large boxes taking a third of the best screen on the
-   site. A single real asset turns the rail up.
+   CONTENT DRIVES THE LAYOUT. Only authored surfaces are drawn. A garment
+   with one real sketch shows one plate. A garment with none shows no plates
+   at all and one quiet line instead, and the deck takes the whole width — a
+   column reserved for a surface that does not exist yet is a third of the
+   best screen on the site spent on a promise.
    -------------------------------------------------------------------------- */
 .pf-devcol { min-width: 0; }
 .pf-dev { margin: 0; }
@@ -1057,20 +1087,40 @@
   border-bottom: 1px solid var(--pf-edge);
 }
 .pf-dev__title { color: var(--ink); font-size: .6rem; }
-/* Sentence case and body face: two lines of letterspaced mono caps at 9px
-   was a legibility problem exactly where the honesty note has to be read. */
-.pf-dev__note {
-  color: var(--ink-soft);
-  font-family: var(--body);
-  font-size: .72rem;
-  letter-spacing: 0;
-  text-transform: none;
-  line-height: 1.45;
-  max-width: 42ch;
+/* WHAT IS COMING, IN ONE LINE, WITH NO BOX AROUND IT. This replaced three
+   stamped stand-in plates. A caption states the same fact and costs the
+   garment nothing. */
+.pf-dev__pending {
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+  margin: clamp(.9rem, 1.8vw, 1.4rem) 0 0;
+  padding-top: .7rem;
+  border-top: 1px solid var(--pf-edge);
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.5;
+  max-width: 52ch;
 }
+/* The notch is absolutely positioned by default, so inside a flex line it
+   has to be told to stay in the flow — otherwise it escapes to the corner of
+   the nearest positioned ancestor, which is the whole panel. */
+.pf-dev__pending .pf-notch {
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
+  transform: translateY(.3em);
+}
+/* Beside a garment that DOES have authored surfaces the line is a footnote
+   under them, so it stays inside the column. */
+.pf-dev[data-has-authored] .pf-dev__pending { max-width: none; font-size: .72rem; }
 .pf-dev__plates {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* As many across as there are surfaces, up to three — a single authored
+     sketch is not squeezed into a third of the row to keep two empty
+     columns company. */
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: clamp(.5rem, 1.4vw, .9rem);
   margin: 0;
   padding: 0;
@@ -1098,38 +1148,9 @@
 .pf-plate__art:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 .pf-plate__art:hover { border-color: var(--pf-edge-strong); }
 
-/* A stand-in is dimmed and stamped. It is never presented as a sketch, a
-   pattern or a simulation — the stamp is part of the surface, not a caption
-   under it that can be read separately from the image. */
-.pf-plate[data-preview] .pf-plate__art img { opacity: .5; filter: saturate(.5); }
-.pf-plate__stamp {
-  position: absolute;
-  top: .35rem;
-  left: .35rem;
-  z-index: 2;
-  padding: .2rem .4rem;
-  background: var(--ink);
-  color: var(--paper-bright);
-  /* The stamp is the one thing on this surface that must never be missed, so
-     it is not set at the size of a caption. At .48rem it was 7.7px — fine
-     print on exactly the mark that stops a borrowed photograph being read as
-     a sketch. It is sized to fit inside the narrowest plate at .62rem. */
-  font-size: .62rem;
-  font-style: normal;
-  letter-spacing: .08em;
-}
-/* A stamp states a status. Orange in this chapter means an ACTIVE DECISION —
-   the notch on the chosen thing — so a status stamp stays in ink. */
-.pf-plate[data-preview] .pf-plate__stamp { background: var(--ink-soft); }
-.pf-plate__blank {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  /* A ruled sheet — an empty technical layout, which is what it is. It never
-     draws a plausible sketch, because that would be fabricating evidence. */
-  background: repeating-linear-gradient(0deg, transparent 0 15px, rgba(17, 17, 15, .05) 15px 16px);
-}
+/* The dimmed-and-stamped stand-in plate is gone with the stand-ins: a plate
+   now only ever holds a real asset, so it is never dimmed and never carries a
+   status stamp. Every plate on screen is evidence. */
 .pf-plate__inspect {
   position: absolute;
   right: .35rem;
@@ -1157,11 +1178,15 @@
      depends on whether it holds anything real. 22% for stand-ins, 27% once a
      real asset exists — the garment stays the largest thing on screen either
      way. */
-  .pf-viewer {
-    grid-template-columns: minmax(0, 1fr) minmax(190px, var(--pf-dev-col, 22%));
-    align-items: start;
+  /* THE GARMENT OWNS THE SCREEN UNTIL THERE IS SOMETHING TO SET BESIDE IT.
+     A column reserved for evidence that does not exist is a third of the best
+     screen on the site spent on a promise. So the viewer is ONE column by
+     default, and the evidence column only appears for a garment that actually
+     has an authored surface. */
+  .pf-viewer { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .pf-viewer:has(.pf-dev[data-has-authored]) {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 27%);
   }
-  .pf-viewer:has(.pf-dev[data-has-authored]) { --pf-dev-col: 27%; }
   .pf-dev__plates { grid-template-columns: minmax(0, 1fr); gap: clamp(.6rem, 1.2vw, 1rem); }
   /* A CONTACT SHEET, NOT THREE LARGE BOXES.
      Three plates each as wide as the column stood 1369px tall — more than
@@ -1191,62 +1216,94 @@
    margin of a technical drawing.
    -------------------------------------------------------------------------- */
 .pf-world--docs { background: var(--paper); }
+
+/* THE REGISTER. Five ruled rows on paper: number, the page it opens, what is
+   in it, its status, and the way to read it. The row IS the link, so the whole
+   line is a 44px-plus target and nothing has to be aimed at. */
 .pf-docs {
   max-width: 1180px;
   margin-inline: auto;
   padding: 0 var(--pf-gutter) clamp(3rem, 7vw, 6rem);
   list-style: none;
+  border-bottom: 1px solid var(--pf-edge);
 }
-.pf-doc {
-  display: grid;
-  gap: 1.25rem;
-  padding: clamp(1.75rem, 4vw, 3.25rem) 0;
-  border-top: 1px solid var(--pf-edge-strong);
-}
+.pf-doc { display: block; }
 .pf-doc__page {
   position: relative;
-  display: block;
-  width: 100%;
-  background: var(--pf-field);
-  border: 1px solid var(--pf-edge);
-  /* The sheet is inset inside its mount, so there is paper around the page —
-     a document on a surface, not an image bled to its own edge. */
-  padding: clamp(.6rem, 1.4vw, 1rem);
-  transition: border-color .3s var(--pf-lift);
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  align-items: start;
+  gap: .75rem 1rem;
+  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  border-top: 1px solid var(--pf-edge);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background .3s var(--pf-lift);
 }
-.pf-doc__page img { width: 100%; height: auto; display: block; }
-.pf-doc__page:hover, .pf-doc__page:focus-visible { border-color: var(--pf-edge-strong); }
-.pf-doc__page:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.pf-doc__page:hover { background: var(--paper-bright); }
+.pf-doc__page:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+.pf-doc__page:hover .pf-notch,
+.pf-doc__page:focus-visible .pf-notch { background: var(--signal); opacity: 1; }
+.pf-doc__num { grid-column: 1; font-style: normal; font-size: .68rem; color: var(--muted); }
+.pf-doc__page:hover .pf-doc__num { color: var(--ink); }
+
+/* The page itself, at the size of a thumbnail in a register: a white sheet
+   with a hairline, inset on the paper. Full size belongs in the reader. */
+.pf-doc__sheet {
+  grid-column: 2;
+  display: block;
+  width: clamp(104px, 15vw, 150px);
+  background: #fff;
+  border: 1px solid var(--pf-edge);
+  padding: 4px;
+}
+.pf-doc__sheet img { display: block; width: 100%; height: auto; }
 .pf-doc__blank { display: block; width: 100%; aspect-ratio: 1.41; background: var(--paper); }
-.pf-doc__meta { min-width: 0; }
-.pf-doc__num { color: var(--signal); font-size: .68rem; margin: 0; }
+
+.pf-doc__meta { grid-column: 2; display: grid; gap: .3rem; min-width: 0; }
 .pf-doc__title {
-  margin: .5rem 0 0;
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
-  line-height: 1.05;
+  font-size: clamp(1.25rem, 2.1vw, 1.85rem);
+  line-height: 1.04;
   letter-spacing: -.03em;
 }
-.pf-doc__line { margin: .6rem 0 0; color: var(--ink-soft); font-size: .8rem; }
+.pf-doc__line { color: var(--ink-soft); font-size: .8rem; }
+/* What is inside the document — the thing a production contact asks for. */
+.pf-doc__scope {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .6rem;
+  line-height: 1.7;
+}
+.pf-doc__state {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 .pf-doc__stamp {
-  display: inline-block;
-  margin: .9rem 0 0;
-  padding: .25rem .45rem;
+  padding: .22rem .45rem;
   border: 1px solid var(--pf-edge-strong);
   color: var(--ink);
-  font-size: .5rem;
+  font-size: .52rem;
 }
-.pf-doc__instruction { margin: .9rem 0 0; color: var(--muted); font-size: .54rem; }
+.pf-doc__open { display: inline-flex; align-items: center; gap: .5rem; min-height: 24px; font-size: .6rem; color: var(--muted); }
+.pf-doc__open .arrow { width: 13px; color: var(--signal); transition: transform .4s var(--pf-lift); }
+.pf-doc__page:hover .pf-doc__open { color: var(--ink); }
+.pf-doc__page:hover .pf-doc__open .arrow { transform: translate(3px, -3px); }
+
 @media (min-width: 768px) {
-  /* The stamp block in the margin. Alternating side keeps five documents from
-     reading as a list of five identical rows. */
-  .pf-doc { grid-template-columns: minmax(0, 1fr) 30%; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
-  .pf-doc__page { grid-column: 1; }
-  .pf-doc__meta { grid-column: 2; padding-top: .5rem; }
-  .pf-doc[data-side='right'] { grid-template-columns: 30% minmax(0, 1fr); }
-  .pf-doc[data-side='right'] .pf-doc__page { grid-column: 2; }
-  .pf-doc[data-side='right'] .pf-doc__meta { grid-column: 1; }
+  /* One line per document: mark, sheet, contents, status. A register reads
+     across, not down. */
+  .pf-doc__page {
+    grid-template-columns: 2.4rem clamp(104px, 13vw, 150px) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(1.25rem, 2.6vw, 2.5rem);
+  }
+  .pf-doc__sheet { grid-column: 2; width: 100%; }
+  .pf-doc__meta { grid-column: 3; }
+  .pf-doc__state { grid-column: 4; justify-content: flex-end; }
 }
 
 .pf-empty {
@@ -1338,62 +1395,119 @@
    scroll, written by the runtime; the stages are all present and readable at
    any value, so nothing here can hide content.
    -------------------------------------------------------------------------- */
+/* THE TRANSFORMATION, AS THE CHAPTER'S SPINE.
+
+   This chapter's subject is a garment changing state, so the five states are
+   its index. Before, they were a thin row of 11px labels over hairlines that
+   nobody would read as a sequence. Now each state is a marked station on one
+   rule: a number, a name, a cut line between it and the next, and a rule that
+   fills as the page's own scroll passes it. The names are legible whether the
+   rule has filled or not, so nothing here depends on the motion happening. */
 .pf-transform {
   max-width: var(--pf-max);
   margin-inline: auto;
-  padding: 0 var(--pf-gutter) clamp(1.25rem, 2.5vw, 2rem);
+  padding: 0 var(--pf-gutter) clamp(2rem, 4vw, 3.25rem);
 }
 .pf-transform__track {
   display: grid;
-  gap: clamp(.75rem, 1.6vw, 1.25rem);
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  align-items: end;
+  gap: 0;
+  /* ONE COLUMN ON A PHONE. Five stations across 390px gives each 78px, and
+     "Construction" needs about 110 — so the names ran into one another and the
+     sequence read as "Constructi3Dn". Below 640 the sequence is vertical,
+     which is what a sequence looks like when there is no room for a row. */
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
   margin: 0;
-  padding: 0 0 1rem;
+  padding: 0;
   list-style: none;
+  border-top: 1px solid var(--pf-ink-line);
   border-bottom: 1px solid var(--pf-ink-line);
 }
-.pf-transform__step { position: relative; min-width: 0; }
+.pf-transform__step {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .75rem 0;
+  /* The cut line between two stations. */
+  border-top: 1px solid var(--pf-ink-line);
+}
+.pf-transform__step:first-child { border-top: 0; }
+
+/* 640, not 560: measured, not guessed. At 560 a station column is 89px of
+   usable width and "Construction" sets to 90px at the smallest size the name
+   is allowed, so it clipped by a hair. */
+@media (min-width: 640px) {
+  .pf-transform__track { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pf-transform__name { margin-top: .35rem; }
+  .pf-transform__step {
+    display: block;
+    padding: clamp(.9rem, 1.8vw, 1.4rem) clamp(.5rem, 1.2vw, 1rem);
+    border-top: 0;
+    border-left: 1px solid var(--pf-ink-line);
+  }
+  .pf-transform__step:first-child { border-left: 0; padding-left: 0; }
+}
+/* The rule that fills: each station owns a fifth of the sequence's range. */
 .pf-transform__bar {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
   display: block;
   height: 2px;
-  background: var(--pf-ink-line);
+  background: var(--paper-bright);
   transform-origin: left;
-  /* Each step fills as the sequence's progress passes it. Five steps, so each
-     one owns a fifth of the range. */
   transform: scaleX(clamp(0, calc((var(--tr, 1) - var(--step-from)) * 5), 1));
-  transition: transform .25s linear;
+  transition: transform .3s linear;
 }
 .pf-transform__step[data-reached] .pf-transform__bar { background: var(--signal); }
 .pf-transform__num {
   display: block;
-  margin-top: .5rem;
   font-family: var(--mono);
-  font-size: .56rem;
+  font-size: .6rem;
   color: var(--pf-ink-muted);
 }
 .pf-transform__name {
   display: block;
-  margin-top: .2rem;
+  margin-top: 0;
   font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(.78rem, 1.5vw, 1.05rem);
-  line-height: 1.1;
-  color: var(--paper-bright);
+  font-weight: 800;
+  font-size: clamp(.95rem, 1.9vw, 1.55rem);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--pf-ink-soft);
+  transition: color .3s var(--pf-lift);
 }
+/* A station the sequence has reached is lit; the ones ahead of it are still
+   legible but quiet. Orange marks the one being passed — a decision, not
+   decoration. */
+.pf-transform__step[data-reached] .pf-transform__name { color: var(--paper-bright); }
 .pf-transform__step[data-reached] .pf-transform__num { color: var(--signal); }
 
+/* THE RECORDINGS. Two across on a desk in one ruled register, the same
+   discipline as the Tech Packs register on the opposite ground — five
+   full-width frames down a dark page was a lot of screen for five thumbnails
+   of the same application window. */
 .pf-videos {
-  max-width: 1280px;
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 2.4vw, 2rem);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: var(--pf-max);
   margin-inline: auto;
   padding: 0 var(--pf-gutter) clamp(3rem, 7vw, 6rem);
   list-style: none;
 }
 .pf-video {
   display: grid;
-  gap: 1rem;
-  padding: clamp(1.75rem, 4vw, 3rem) 0;
-  border-bottom: 1px solid var(--pf-ink-line);
+  gap: .75rem;
+  align-content: start;
+  padding-top: clamp(.9rem, 1.6vw, 1.2rem);
+  border-top: 1px solid var(--pf-ink-line);
+}
+@media (min-width: 768px) {
+  .pf-videos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .pf-video__head { display: flex; align-items: baseline; gap: 1rem; }
 .pf-video__num { color: var(--signal); font-size: .66rem; font-style: normal; }
@@ -1411,7 +1525,30 @@
   background: #151514;
   overflow: hidden;
 }
-.pf-video__poster { width: 100%; height: 100%; object-fit: cover; }
+/* THE POSTER, IN THE CHAPTER'S OWN TONALITY.
+   These are YouTube's own thumbnails and several carry a large red marketing
+   title burned across them. Shown at full strength, five of them turned a calm
+   ink chapter into a wall of other people's display type; cropping them cut
+   that type in half, which was worse. So the frame holds the whole poster and
+   renders it the way this chapter renders everything — desaturated and pulled
+   down into the ink — which lets the garment and the pattern window read while
+   the burned-in type recedes into texture. Engaging with a frame brings it
+   back up. Nothing is cropped away and nothing is added.
+
+   When real poster frames are supplied, only this treatment needs relaxing. */
+.pf-video__poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(.52) contrast(.92);
+  transform: scale(1.01);
+  transition: filter .5s var(--pf-lift), transform .7s var(--pf-lift);
+}
+.pf-video:hover .pf-video__poster,
+.pf-video:focus-within .pf-video__poster {
+  filter: grayscale(.35) brightness(.72) contrast(.95);
+  transform: scale(1.03);
+}
 .pf-play {
   position: absolute;
   inset: 0;
@@ -1419,14 +1556,14 @@
   place-items: center;
   gap: .6rem;
   border: 0;
-  background: rgba(8, 9, 10, .28);
+  background: transparent;
   color: var(--paper-bright);
   cursor: pointer;
 }
 .pf-play__mark {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border: 1px solid var(--paper-bright);
   border-radius: 50%;
   background: transparent;
@@ -1450,13 +1587,20 @@
 .pf-video__player { position: absolute; inset: 0; }
 .pf-video__player iframe { width: 100%; height: 100%; border: 0; }
 .pf-video__desc { margin: 0; color: var(--pf-ink-soft); font-size: .88rem; line-height: 1.6; max-width: 62ch; }
-.pf-video__privacy { margin: 0; color: var(--pf-ink-muted); font-size: .62rem; }
-@media (min-width: 768px) {
-  .pf-video { grid-template-columns: 150px minmax(0, 1fr); gap: 1rem clamp(1.5rem, 3vw, 3rem); }
-  .pf-video__head { grid-column: 1; grid-row: 1 / 4; display: block; }
-  .pf-video__head h3 { margin-top: 1rem; }
-  .pf-video__frame, .pf-video__desc, .pf-video__privacy { grid-column: 2; }
+/* The chapter's one note about the recordings and about the player. */
+.pf-videos__note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem 1.25rem;
+  max-width: var(--pf-max);
+  margin: 0 auto clamp(1.25rem, 2.4vw, 2rem);
+  padding: 0 var(--pf-gutter);
+  color: var(--pf-ink-muted);
+  font-size: .78rem;
 }
+.pf-videos__note .label { color: var(--paper-bright); font-size: .6rem; }
+.pf-video__privacy { margin: 0; color: var(--pf-ink-muted); font-size: .62rem; }
 
 .pf-soon {
   max-width: 52ch;
@@ -1528,7 +1672,6 @@
   margin: 1rem auto;
 }
 .pf-evidence-reader__art img { width: 100%; height: 100%; object-fit: contain; }
-.pf-evidence-reader__art .pf-plate__blank { background: repeating-linear-gradient(0deg, transparent 0 39px, rgba(17, 17, 15, .05) 39px 40px); }
 .pf-evidence-reader > p { text-align: center; font-size: .6rem; color: var(--muted); }
 
 /* ==========================================================================
@@ -1577,8 +1720,7 @@
    ========================================================================== */
 @media (max-width: 430px) {
   .pf { --pf-notch: 7px; }
-  .pf-opening h1 { font-size: clamp(2.3rem, 12vw, 3.2rem); }
-  .pf-cover__name { font-size: 1.55rem; }
+  .pf-cover__name { font-size: 1.5rem; }
   .pf-cat__label { font-size: 1.3rem; }
   .pf-dev__plates { gap: .4rem; }
   .pf-plate__label { font-size: .64rem; }
@@ -1596,7 +1738,7 @@
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .pf { --sep: 1; --tr: 1; }
-  .pf-cover,
+  .pf-covers,
   .pf-cover__still,
   .pf-cat__media img,
   .pf-doc__page,

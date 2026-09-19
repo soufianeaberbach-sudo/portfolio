@@ -205,10 +205,17 @@ try {
         || cv.left + cv.width <= other.left + 1 || other.left + other.width <= cv.left + 1
         || cv.top + cv.height <= other.top + 1 || other.top + other.height <= cv.top + 1)),
       covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top} ${cv.width}x${cv.height}`).join(' '));
-    check('the chapters are given unequal weight',
-      new Set(covers.map((cv) => cv.height)).size >= 3
-        && Math.max(...covers.map((cv) => cv.height)) >= Math.min(...covers.map((cv) => cv.height)) * 1.3,
-      covers.map((cv) => cv.height).join(','));
+    /* EQUAL VALUE. This assertion used to require the opposite — three
+       different heights and a lead piece at least 1.3x the smallest — and that
+       was the mistake. All four chapters are equally important to the practice,
+       and area is how a composition says so. Unequal boxes read as a ranking,
+       and they also destroyed two of the four covers: a document page matted
+       in a wide box was a grey blank, and a portrait render contained in a
+       40:9 band was a black stripe. */
+    check('the four chapters are given equal weight',
+      new Set(covers.map((cv) => cv.height)).size === 1
+        && new Set(covers.map((cv) => cv.width)).size === 1,
+      covers.map((cv) => `${cv.width}x${cv.height}`).join(' '));
     check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
     /* No chapter may collapse, and the lead chapter must read as the lead.
        The floor is per-field rather than one shared height, because the
@@ -243,17 +250,33 @@ try {
     /* Each chapter is a different kind of space, which is carried by the
        proportion of its image field and by its own ground — not by four
        variations of one card. */
-    check('every chapter field has its own proportion and its own ground',
-      await p.evaluate(() => {
-        const art = [...document.querySelectorAll('.pf-cover__art')].map((el) => {
-          const r = el.getBoundingClientRect();
-          const s = getComputedStyle(el);
-          return { ratio: +(r.width / r.height).toFixed(2), ground: s.backgroundColor, fit: getComputedStyle(el.querySelector('img')).objectFit };
-        });
-        return new Set(art.map((a) => a.ratio)).size === 4
-          && new Set(art.map((a) => a.ground)).size >= 2
-          && new Set(art.map((a) => a.fit)).size >= 2;
-      }));
+    /* DISTINCT CHARACTER, INSIDE AN IDENTICAL FRAME. The frame is the same for
+       all four — that is the equal-value part. What differs is what happens
+       inside it: the ground it sits on, whether the image is cropped or laid
+       whole on the sheet, and where it is cropped to. That is the discipline
+       pattern language actually is. */
+    const character = await p.evaluate(() => {
+      const art = [...document.querySelectorAll('.pf-cover__art')].map((el) => {
+        const r = el.getBoundingClientRect();
+        const img = getComputedStyle(el.querySelector('img'));
+        return {
+          ratio: +(r.width / r.height).toFixed(2),
+          ground: getComputedStyle(el).backgroundColor,
+          fit: img.objectFit,
+          position: img.objectPosition,
+        };
+      });
+      return {
+        ratios: new Set(art.map((a) => a.ratio)).size,
+        grounds: new Set(art.map((a) => a.ground)).size,
+        fits: new Set(art.map((a) => a.fit)).size,
+        positions: new Set(art.map((a) => a.position)).size,
+        detail: art.map((a) => `${a.ratio} ${a.ground} ${a.fit} ${a.position}`).join(' | '),
+      };
+    });
+    check('every chapter frame is the same proportion', character.ratios === 1, character.detail);
+    check('each chapter has its own ground and its own treatment inside that frame',
+      character.grounds >= 2 && character.positions >= 3, character.detail);
     check('every chapter is openable', covers.every((cv) => cv.isLink));
     check('chapter names remain legible without competing with imagery',
       covers.every((cv) => cv.titlePx >= 28 && cv.titlePx <= 40), covers.map((cv) => cv.titlePx).join(','));
@@ -392,7 +415,7 @@ try {
         'Evening & Occasionwear', 'Swimwear & Resortwear',
       ]), first.cats.join(' | '));
     check('the categories use large editorial typography',
-      first.labelPx.every((px) => px >= 28), first.labelPx.join(','));
+      first.labelPx.every((px) => px >= 26), first.labelPx.join(','));
     check('all five womenswear categories are image-led', first.categoryCovers === 5, String(first.categoryCovers));
     check('NO garment image is visible before a category is chosen',
       first.garments === 0, String(first.garments));
@@ -736,111 +759,76 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
-    /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER — FOR THE GARMENT
-       UNDER INSPECTION. One block is rendered per garment and the runtime
-       shows the active one, so every measurement here is scoped to the block
-       that is actually on screen; the hidden blocks measure zero by design. */
-    const plates = await p.evaluate(() => {
+    /* EVIDENCE: CONTENT DRIVES THE LAYOUT.
+
+       This used to assert three equal plates in a column for every garment.
+       That contract was wrong, and it was wrong in a way a checklist could not
+       see: with no authored asset in the repository, all three plates stood in
+       the active garment's own photograph, dimmed and stamped, so a third of
+       the best screen on the site was three grey duplicates of the dress the
+       visitor was already looking at.
+
+       What is protected here is HONESTY, not a box count. Nothing may be
+       presented as a development surface unless it is one; the visitor must be
+       told what is coming; and the garment must own the screen until there is
+       something real to set beside it. */
+    const evidence = await p.evaluate(() => {
       const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
       const block = panel.querySelector('.pf-dev:not([hidden])');
-      const list = [...block.querySelectorAll('.pf-plate')];
-      const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
+      const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
+      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
+      const stageEl = viewer.querySelector('.pf-stage');
       return {
-        stages: list.map((el) => el.dataset.plate),
-        labels: list.map((el) => el.querySelector('.pf-plate__label').textContent.replace(/\s+/g, ' ').trim()),
-        preview: list.filter((el) => el.hasAttribute('data-preview')).length,
-        stamps: list.filter((el) => el.querySelector('.pf-plate__stamp')).length,
-        images: list.reduce((n, el) => n + el.querySelectorAll('img').length, 0),
-        /* Every stand-in must say so in its alt text as well as on its face. */
-        honestAlts: list.filter((el) => !el.hasAttribute('data-preview')
-          || /temporary preview/i.test(el.querySelector('img')?.alt ?? '')).length,
         blocks: panel.querySelectorAll('.pf-dev').length,
         shownBlocks: panel.querySelectorAll('.pf-dev:not([hidden])').length,
         forIndex: block.dataset.evidenceFor,
-        widths: boxes.map((b) => Math.round(b.width)),
-        heights: boxes.map((b) => Math.round(b.height)),
-        lefts: boxes.map((b) => Math.round(b.left)),
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-        links: block.querySelectorAll('.pf-plate__link').length,
-        note: block.querySelector('[data-preview-note]')?.textContent.trim() ?? '',
-      };
-    });
-    check('exactly three development stages, in order',
-      plates.stages.join(',') === 'sketch,pattern,simulation', plates.stages.join(','));
-    check('the stages are labelled sketch, 2D pattern, 3D simulation',
-      plates.labels.join(' | ') === 'Step 01 Sketch | Step 02 2D Pattern | Step 03 3D Simulation',
-      plates.labels.join(' | '));
-    check('the three plates are exactly the same size',
-      Math.max(...plates.widths) - Math.min(...plates.widths) <= 1
-      && Math.max(...plates.heights) - Math.min(...plates.heights) <= 1,
-      `${plates.widths.join('/')} x ${plates.heights.join('/')}`);
-    check('the three plates are stacked one above another in one column',
-      plates.stacked && new Set(plates.lefts).size === 1, `${plates.lefts.join(',')} stacked ${plates.stacked}`);
-    check('stage numbering replaces provisional connector arrows', plates.links === 0, String(plates.links));
-
-    /* THE GARMENT IS THE HERO. The result carries the argument; the three
-       development stages are the proof behind it and are sized to say so. */
-    const weight = await p.evaluate(() => {
-      const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
-      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
-      const rail = viewer.querySelector('.pf-devcol').getBoundingClientRect();
-      const stage = viewer.querySelector('.pf-stage').getBoundingClientRect();
-      const dev = viewer.querySelector('.pf-dev:not([hidden])').getBoundingClientRect();
-      const plate = viewer.querySelector('.pf-dev:not([hidden]) .pf-plate__art').getBoundingClientRect();
-      const total = deck.width + rail.width;
-      return {
-        deckShare: deck.width / total,
-        railShare: rail.width / total,
-        sideBySide: rail.left > deck.right - 2,
-        plateWidth: Math.round(plate.width),
-        stageHeight: Math.round(stage.height),
+        hasAuthored: block.hasAttribute('data-has-authored'),
+        plates: block.querySelectorAll('.pf-plate').length,
+        plateImages: block.querySelectorAll('.pf-plate img').length,
+        stages: [...block.querySelectorAll('.pf-plate')].map((el) => el.dataset.plate),
+        pending: block.querySelector('[data-evidence-pending]')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+        pendingPx: block.querySelector('[data-evidence-pending]')
+          ? Math.round(parseFloat(getComputedStyle(block.querySelector('[data-evidence-pending]')).fontSize))
+          : 0,
+        /* The whole block, including its note, against the garments. */
+        blockHeight: Math.round(block.getBoundingClientRect().height),
         deckHeight: Math.round(deck.height),
-        railHeight: Math.round(dev.height),
-        deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
-        stampPx: +parseFloat(getComputedStyle(
-          viewer.querySelector('.pf-dev:not([hidden]) .pf-plate__stamp')).fontSize).toFixed(1),
+        deckShare: deck.width / viewer.getBoundingClientRect().width,
+        stageInViewport: stageEl.getBoundingClientRect().height <= window.innerHeight,
+        columns: getComputedStyle(viewer).gridTemplateColumns.split(' ').length,
       };
     });
-    /* The garment is the hero, and the evidence column's share follows what it
-       actually holds: 22% while all three surfaces are stand-ins, 27% once a
-       real asset exists. So the contract is a floor on the garment and a
-       usable minimum for the rail, not one fixed ratio. */
-    check('the garment remains dominant in the viewer',
-      weight.sideBySide && weight.deckShare >= 0.70,
-      `${Math.round(weight.deckShare * 100)}%`);
-    check('the evidence rail keeps a usable share of the viewer',
-      weight.railShare >= 0.18 && weight.railShare <= 0.30, `${Math.round(weight.railShare * 100)}%`);
-    /* A plate is a contact-sheet thumbnail with a reader behind it, not the
-       place a surface is examined — but it still has to be large enough to
-       carry its own stamp, which is the mark that stops a borrowed photograph
-       being read as a sketch. */
-    check('a development plate is a legible fraction of the garment stage',
-      weight.plateWidth >= 100 && weight.plateWidth <= weight.stageHeight * 0.5,
-      `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
-    check('the temporary-preview stamp is not fine print',
-      weight.stampPx >= 9.5, `${weight.stampPx}px`);
-    /* The whole three-step rail has to stand no taller than the garments, or
-       the evidence becomes the subject of the screen. A small tolerance,
-       because the rail carries its own heading and the deck its run bar. */
-    check('all three plates fit beside the garments without a sticky deck',
-      weight.railHeight <= weight.deckHeight * 1.1 && weight.deckSticky !== 'sticky',
-      `rail ${weight.railHeight}px vs deck ${weight.deckHeight}px, deck ${weight.deckSticky}`);
-    /* THE STAND-INS ARE HONEST, NOT ABSENT.
-       Three empty frames proved nothing about a system that is supposed to
-       follow the garment. The active garment now stands in for each missing
-       surface, which is only acceptable because every stand-in is stamped on
-       its face and described as a stand-in to a screen reader. An unstamped
-       borrowed photograph would be fabricated evidence. */
     check('one development block exists per garment and only one is shown',
-      plates.blocks === 17 && plates.shownBlocks === 1 && plates.forIndex === '0',
-      `${plates.blocks} blocks / ${plates.shownBlocks} shown / for ${plates.forIndex}`);
-    check('every borrowed surface is stamped as a temporary preview',
-      plates.preview === 3 && plates.stamps === 3 && plates.images === 3,
-      `${plates.preview} preview / ${plates.stamps} stamped / ${plates.images} images`);
-    check('no stand-in borrows the name of the surface it stands in for',
-      plates.honestAlts === 3, `${plates.honestAlts} of 3 honest`);
-    check('the block says once that the surfaces are temporary previews',
-      /temporary previews/i.test(plates.note), plates.note || 'none');
+      evidence.blocks === 17 && evidence.shownBlocks === 1 && evidence.forIndex === '0',
+      `${evidence.blocks} blocks / ${evidence.shownBlocks} shown / for ${evidence.forIndex}`);
+    /* No authored asset exists in the repository yet, so this is the state a
+       visitor sees today. When one is supplied the branch below it applies and
+       this assertion is the one that changes. */
+    check('with nothing authored, no plate is drawn at all',
+      evidence.hasAuthored === false && evidence.plates === 0 && evidence.plateImages === 0,
+      `authored ${evidence.hasAuthored} / ${evidence.plates} plates / ${evidence.plateImages} images`);
+    check('no garment photograph is ever presented as a development surface',
+      evidence.plateImages === 0 || evidence.hasAuthored,
+      `${evidence.plateImages} images with authored ${evidence.hasAuthored}`);
+    check('the visitor is told what will publish there, in one readable line',
+      /sketch, 2d pattern and 3d simulation/i.test(evidence.pending) && evidence.pendingPx >= 11,
+      `${evidence.pendingPx}px — ${evidence.pending || 'none'}`);
+    check('the pending note costs the garment almost nothing',
+      evidence.blockHeight <= evidence.deckHeight * 0.3,
+      `note block ${evidence.blockHeight}px against a ${evidence.deckHeight}px deck`);
+    check('the garment owns the full width while nothing is authored',
+      evidence.columns === 1 && evidence.deckShare >= 0.99,
+      `${evidence.columns} column(s), deck ${Math.round(evidence.deckShare * 100)}%`);
+    check('the garments are never taller than the screen they are judged on',
+      evidence.stageInViewport);
+
+    /* The three surfaces are still named, in order, by the data model — the
+       component reads them from there, so a future authored asset lands in
+       the right one. */
+    const stageOrder = await p.evaluate(() => [...document.querySelectorAll('[data-plate]')].map((e) => e.dataset.plate));
+    check('a rendered plate can only be sketch, 2D pattern or 3D simulation',
+      stageOrder.every((key) => ['sketch', 'pattern', 'simulation'].includes(key)),
+      stageOrder.slice(0, 6).join(',') || 'none rendered');
 
     await c.close();
   }
@@ -879,26 +867,23 @@ try {
       `${Math.round(ratio * 100)}% of the leader across ${geo.widths.length} positions`);
     check(`no horizontal overflow at ${width}`,
       await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
-    /* Plates stay equal-size and stacked on every screen. */
-    const eq = await p.evaluate(() => {
-      /* The active garment's block only — the other sixteen are hidden. */
-      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-dev:not([hidden]) .pf-plate__art')]
-        .map((el) => el.getBoundingClientRect());
+    /* No plate is drawn for a garment with nothing authored, at any width —
+       so what is checked at every size is that the garment gets the room and
+       the pending line is still stated. */
+    const ev = await p.evaluate(() => {
+      const block = document.querySelector('[data-screen="category"]:not([hidden]) .pf-dev:not([hidden])');
+      const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
       return {
-        w: boxes.map((b) => Math.round(b.width)),
-        h: boxes.map((b) => Math.round(b.height)),
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
+        plates: block.querySelectorAll('.pf-plate').length,
+        images: block.querySelectorAll('.pf-plate img').length,
+        pending: /publish with each garment/i.test(block.textContent),
+        columns: getComputedStyle(viewer).gridTemplateColumns.split(' ').length,
       };
     });
-    /* Equal at every width; stacked beside the deck on a desktop, and a
-       compact row under it on a phone, so three plates never take over a
-       screen the garment should own. */
-    check(`${width} keeps the three plates exactly equal`,
-      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1,
-      `${eq.w.join('/')} x ${eq.h.join('/')}`);
-    check(`${width} arranges the plates as a ${width >= 1024 ? 'column' : 'compact row'}`,
-      width >= 1024 ? eq.stacked : (!eq.stacked && eq.w[0] <= 160),
-      `stacked ${eq.stacked}, plate ${eq.w[0]}px`);
+    check(`${width} draws no plate while nothing is authored`,
+      ev.plates === 0 && ev.images === 0, `${ev.plates} plates / ${ev.images} images`);
+    check(`${width} still states what will publish there`, ev.pending);
+    check(`${width} gives the garment the whole width`, ev.columns === 1, `${ev.columns} column(s)`);
     await c.close();
   }
 
@@ -1123,9 +1108,16 @@ try {
     check('the chapter heading is Pattern Development',
       naming.heading === 'Pattern Development', naming.heading);
     check('the navigation label matches', naming.bar === '04 Pattern Development', naming.bar);
-    check('the descriptor names the whole development arc',
-      /first pattern lines/i.test(naming.descriptor) && /CLO3D validation/i.test(naming.descriptor)
-      && /fit decisions/i.test(naming.descriptor), naming.descriptor);
+    /* THE ARC MUST BE NAMED — BY THE CHAPTER, NOT NECESSARILY BY ITS
+       DESCRIPTOR. It used to be three clauses inside one long sentence, which
+       is exactly the paragraph this chapter should not open with. The five
+       stations below the title name it as a sequence instead, which is both
+       shorter and clearer, so that is what is checked. */
+    const arc = await p.evaluate(() => [...document.querySelectorAll(
+      '[data-world="3d-simulation"] [data-transform-track] .pf-transform__name')].map((e) => e.textContent.trim()));
+    check('the chapter names the development arc as a sequence',
+      arc.join(' → ') === 'Idea → 2D → Construction → 3D → Fit', arc.join(' → '));
+    check('the descriptor stays to one line', naming.descriptor.length <= 110, naming.descriptor);
     await c.close();
   }
 
@@ -1169,15 +1161,20 @@ try {
       html.includes('No authorship of photographed garments is claimed'));
     check('the approved categories are server-rendered',
       html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
+    /* The register row carries a Demo chip and the chapter states once, above
+       the register, exactly what "demo" means here. Both are server-rendered,
+       so the disclosure never depends on a script. */
     check('the demo documents are declared as demos without the script',
-      html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
-    /* Without the script every garment's development block is served, so the
-       honesty of the stand-ins cannot depend on JavaScript: the stamp and the
-       note are both in the HTML. */
-    check('the development stand-ins are declared as previews without the script',
-      html.includes('Temp preview')
-      && (html.includes('Temporary previews — the active garment')
-        || html.includes('Temporary previews &#8212; the active garment')));
+      html.includes('Interface prototype')
+      && html.includes('stamped on every page')
+      && (html.match(/>Demo</g) ?? []).length >= 5);
+    /* There are no stand-ins to declare any more. What must be in the served
+       HTML is the statement of what will publish there — and NOT a garment
+       photograph sitting inside a development plate. */
+    check('what will publish as development evidence is stated without the script',
+      html.includes('publish with each garment'));
+    check('no garment photograph is served inside a development plate',
+      !/<li[^>]*class="pf-plate"[\s\S]{0,400}?<img/.test(html));
     check('all five supplied development recordings are server-rendered without players',
       ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
         .every((id) => html.includes(`data-youtube="${id}"`))

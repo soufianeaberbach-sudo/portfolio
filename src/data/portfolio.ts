@@ -679,28 +679,25 @@ export interface GarmentSlot {
   project: Project | null;
 }
 
-/* The marker printed on a surface that is standing in for an asset that does
-   not exist yet. Exported so the component and the tests read one string. */
-export const EVIDENCE_PREVIEW_MARK = 'Temp preview';
-
-/* Said once, beside the three surfaces, when any of them is a stand-in. */
-export const EVIDENCE_PREVIEW_NOTE =
-  'Temporary previews — the active garment shown in place of its development assets.';
-
+/* Resolves the three development surfaces for one garment.
+ *
+ * `authored` is a real supplied asset. Everything else is `pending`: there is
+ * no `preview` state any more, because standing the garment's own photograph
+ * in for its sketch produced three dimmed duplicates of the thing the visitor
+ * was already looking at, and a layout built around them. The viewer draws
+ * authored surfaces and states the rest in one line.
+ *
+ * `kind` keeps its three values so the type is stable and a future source of
+ * real stand-ins (a scan, a low-resolution proof) has somewhere to live. */
 export const garmentEvidence = (slot: GarmentSlot): EvidenceSurface[] =>
   EVIDENCE_STAGES.map(({ key, step, name }) => {
     const authored = slot.project?.evidence?.[key];
-    if (authored) {
-      return { key, step, name, kind: 'authored' as const, image: authored.image, note: authored.note };
-    }
-    if (slot.image) {
-      return { key, step, name, kind: 'preview' as const, image: slot.image };
-    }
-    return { key, step, name, kind: 'empty' as const };
+    return authored
+      ? { key, step, name, kind: 'authored' as const, image: authored.image, note: authored.note }
+      : { key, step, name, kind: 'empty' as const };
   });
 
-/* True when not one of the three surfaces holds a real asset. The viewer uses
-   it to keep the evidence rail at a lower visual weight rather than giving a
-   third of the best screen to three stand-ins. */
-export const evidenceIsAllPreview = (surfaces: EvidenceSurface[]): boolean =>
+/* True when not one of the three surfaces holds a real asset — the viewer
+   uses it to give the whole width to the garment. */
+export const evidenceIsAllPending = (surfaces: EvidenceSurface[]): boolean =>
   surfaces.every((surface) => surface.kind !== 'authored');
