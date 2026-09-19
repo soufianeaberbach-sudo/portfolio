@@ -158,394 +158,394 @@
    because a mark with no meaning to carry is decoration. */
 
 /* ==========================================================================
-   1. THE LANDING — one composition, separated by scroll.
+   1. ONE FIELD, CUT INTO FOUR.
 
-   `--sep` runs 0 → 1 across the landing's own scroll and is written by the
-   runtime, rAF-throttled. At 0 the four pieces are nested into the opening
-   composition; at 1 they have separated into their four positions.
+   This is the route's one bold moment and it is a single composition that
+   transforms, not a hero with a section under it. Two earlier attempts put a
+   fashion frame on top of four chapter tiles and called the boundary a
+   transition; a boundary between two things is not one thing becoming
+   another.
 
-   TWO RULES MAKE THIS SAFE:
-     · every piece is fully visible and clickable at --sep: 0. Nothing is
-       parked at opacity 0 waiting for an observer, so a failed script, a
-       reduced-motion setting or a fast scroll all leave a complete page.
-     · only `transform` is interpolated. No layout property is animated, so
-       the separation costs no reflow and cannot fight the visitor's scroll.
+   HOW IT WORKS. A tall track holds one sticky field. Four chapters are four
+   layers in that field, each image laid out in FIELD coordinates. Nothing
+   resizes and nothing arrives: what moves is where the seams fall. At the top
+   of the track all three seams sit at the field's right edge, so the field is
+   entirely the Womenswear rendition with the statement set across it. Reading
+   the track walks the seams inward, and the three chapters already underneath
+   are uncovered. One thing becomes four because the four were always the same
+   field.
+
+   THE SEAMS ARE PATTERN GEOMETRY. An armhole scoop, a princess seam's waist
+   suppression, a side seam's hip spring — generated in `scripts/pattern.ts`
+   and applied as `clip-path: path()`, recomputed per frame. The pattern
+   language is in the geometry of the cut, not drawn on top of the page. The
+   drawn line and the clip edge are the same curve, so the line a visitor sees
+   IS the cut.
+
+   SCROLL IS NEVER TAKEN. Every value here is a function of `--p`, which is
+   the scroll position inside the track. Faster scroll, faster transformation;
+   stop and it stops; scroll back and it reverses, because there is no state
+   to unwind. With no script or under reduced motion, `--p` is 1: the resolved
+   four-chapter composition, every link live.
    -------------------------------------------------------------------------- */
-.pf-intro {
-  max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: calc(var(--header-h) + clamp(1.25rem, 3.5vw, 2.75rem)) var(--pf-gutter) clamp(1.25rem, 2.5vw, 2rem);
-}
-.pf-intro > .label { color: var(--muted); }
-
-/* ==========================================================================
-   1. ONE FIELD, AND THE CUT.
-
-   THE THIRD ANSWER. Two directions failed here. Unequal pieces read as a
-   ranking — the big one mattered, the small ones were filler. Equal pieces
-   with gaps, rounded corners and a hover on each one read as four cards, and
-   lost every trace of personality getting there. Neither is patternmaking.
-
-   What a lay actually is: ONE length of cloth, and the cuts that divide it.
-   The pieces are equal because none of them is optional, the composition is
-   rigorous because the cuts are placed, and the precision is in the placement
-   rather than printed on the surface. So:
-
-     - the Portfolio opens as one field. One garment, the statement in the
-       space it leaves, no rules and no labels. The first screen is fashion.
-     - the scroll SCORES that field: three cuts grow out of the boundary of
-       the opening composition and divide it into the four chapters.
-     - the four chapters are equal in width and height, they touch, and the
-       three cuts are the only rules on the screen.
-     - attention opens one of them. The piece under the pointer or the
-       keyboard takes room from the other three and gives it back when it is
-       released, so hierarchy exists only while someone is looking at it and
-       is never printed into the layout.
-   -------------------------------------------------------------------------- */
-
-.pf-open {
-  /* THE FIELD IS FULL-BLEED AND IT IS THE INSPECTION FIELD.
-     The renditions are photographed on white. Put one on the bone page and
-     its own ground becomes a hard white rectangle pasted across the screen —
-     which is what the first two attempts at this page looked like. Give the
-     whole first screen the inspection field's colour instead and the rectangle
-     disappears: the garment simply stands in the field. It also means
-     something. The first screen is the field work is judged in; the page below
-     it is bone. When the renditions arrive with transparent grounds, nothing
-     here needs changing. */
+.pf-cut {
+  --p: 1;
+  /* The same progress, eased out: used for anything that has to CLEAR the
+     composition rather than travel with it, so the statement is up in its
+     band before the figures arrive under it instead of crossing a face on
+     the way. */
+  --pe: calc(var(--p) * (2 - var(--p)));
   position: relative;
-  /* A DEFINITE HEIGHT, not a minimum. The figure row is `1fr`, and a
-     fractional row inside an auto-height parent resolves to the image's own
-     intrinsic height — which put the statement seventeen hundred pixels below
-     the fold. One screen, and the composition is inside it. */
+}
+.pf-cut__track {
+  position: relative;
+  /* The length of the transformation. Long enough that the cut is read rather
+     than skipped past, short enough that nobody feels held. */
+  height: 250svh;
+}
+.pf-cut__field {
+  position: sticky;
+  top: var(--header-h, 5rem);
   height: calc(100svh - var(--header-h, 5rem));
-  min-height: 34rem;
-  display: grid;
+  min-height: 30rem;
+  overflow: hidden;
+  /* The field is the inspection ground: the renditions are shot on white, so
+     they stand in it rather than sitting on a rectangle laid over the page. */
   background: var(--pf-field);
-  padding: 0;
-}
-.pf-open__field {
-  position: relative;
-  display: grid;
-  /* THE GARMENT STANDS ON THE STATEMENT.
-     Not "headline left, picture right" — that is a formula, and the garment's
-     own ground fought the column edge. The figure occupies the upper field and
-     its hem lands on the cap line of the type beneath it, so the two are one
-     composition with an inevitable relationship and no overlap at all. */
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: clamp(1rem, 2.5vw, 1.75rem);
-  width: 100%;
-  min-height: 0;
-  max-width: var(--pf-max);
-  margin-inline: auto;
-  padding: clamp(1rem, 2.5vw, 2rem) var(--pf-gutter) clamp(1.75rem, 4vw, 3rem);
-}
-.pf-open__figure {
-  position: relative;
-  margin: 0;
-  min-height: 0;
-}
-.pf-open__figure img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* Contained and standing: the garment is whole, and it stands on the floor
-     of the field, which is the line the type begins at. */
-  object-fit: contain;
-  object-position: 50% 100%;
-  /* THE PLACEHOLDER'S GROUND, BLENDED INTO THE FIELD.
-     The renditions are opaque WebP on a pure #ffffff studio ground. On a field
-     of bright paper that ground is a white rectangle across the first screen —
-     the single most visible fault on the page, and one that belongs to the
-     asset rather than to the design. `darken` keeps whichever is darker of the
-     image and the field, so a white ground resolves to the field exactly while
-     the garment, which is darker everywhere, is untouched.
-
-     This is a treatment of a temporary asset, not a layout decision: it costs
-     a little of the specular highlight on satin, and it comes out in one line
-     the day the renditions arrive with transparent grounds.
-
-     NOT USED IN THE GARMENT DECK. There the cards overlap on purpose, and a
-     blend mode on an occluding card lets the card behind it show through —
-     the occlusion is the whole idea of that composition. */
-  mix-blend-mode: darken;
-}
-.pf-open__type { display: grid; }
-.pf-open__title {
-  margin: 0;
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(2.05rem, 9.4vw, 3rem);
-  line-height: .9;
-  letter-spacing: -.045em;
-}
-.pf-open__title span { display: block; white-space: nowrap; }
-.pf-open__note {
-  max-width: 44ch;
-  margin: clamp(.9rem, 2vw, 1.25rem) 0 0;
-  color: var(--ink-soft);
-  font-size: clamp(.95rem, 1.05vw, 1.05rem);
-  line-height: 1.55;
 }
 
-@media (min-width: 768px) {
-  /* ONE SHARED FLOOR LINE.
-     The garment takes the WHOLE height of the field, offset to the right, and
-     the statement sits at the bottom left. Both stand on the same line: the
-     hem and the baseline land together. That is the relationship between the
-     type and the image, and it is the reason neither has to overlap the other
-     to feel like one composition.
-
-     The garment got the height because scale is the argument on a fashion
-     page. Sharing a row with the type left it a third of the field wide in an
-     empty screen, which read as a small picture with a caption. The upper left
-     is deliberately empty: the field has to have somewhere to breathe, and
-     that void is the shape the garment cuts out of it. */
-  .pf-open__field {
-    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
-    grid-template-rows: minmax(0, 1fr);
-    align-items: end;
-    column-gap: clamp(1.5rem, 3vw, 3rem);
-    padding-bottom: clamp(2rem, 4.5vw, 3.25rem);
-  }
-  .pf-open__figure { grid-column: 2; grid-row: 1; height: 100%; }
-  .pf-open__figure img { object-position: 50% 100%; }
-  .pf-open__type {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: end;
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .pf-open__title { font-size: clamp(2.4rem, 5vw, 4.9rem); }
-  .pf-open__note { max-width: 38ch; }
-}
-@media (min-width: 1440px) { .pf-open__title { font-size: 5rem; } }
-
-/* ---- the lay: four pieces of one field --------------------------------- */
-
-.pf-lay {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  /* NO GAP. The pieces are cut from one field, so they touch; the three cuts
-     between them are the only rules. A gap would make them four cards. */
-  gap: 0;
-  /* Full-bleed: the field runs to the edge of the page, because cloth does. */
-  width: 100%;
-}
+/* ---- the four layers --------------------------------------------------- */
 
 .pf-piece {
-  position: relative;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  min-width: 0;
-  height: clamp(340px, 52vh, 460px);
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
+  display: block;
   color: var(--ink);
   text-decoration: none;
-  background: var(--paper-bright);
-  /* Opening and closing is a change of grid track, so the easing lives on the
-     track and on the type; see the desk band below. */
-  transition: background .5s var(--pf-lift);
+  /* THE GROUND IS ON THE PIECE, NOT ONLY ON THE FIELD. `mix-blend-mode`
+     resolves against the backdrop inside the nearest stacking context, and a
+     piece IS one (positioned, z-indexed). With the ground only on the field,
+     the opening rendition's white studio paper had nothing to blend into
+     inside its own group and came out as a pasted white rectangle. */
+  background: var(--pf-field);
+  /* Set by the runtime; the fallback is the resolved quarter so the field is
+     correct before a single frame has run. */
+  clip-path: inset(0 calc(100% - (var(--i) + 1) * 25%) 0 calc(var(--i) * 25%));
+  z-index: calc(20 - var(--i));
+  /* Each chapter's subject, as a fraction of the field width and as the point
+     in the source picture that must land in the middle of the region.
+     Overridden per chapter below. */
+  --box: .34;
+  --focus: 50%;
+  --high: 24%;
 }
 .pf-piece:focus-visible { outline: 2px solid var(--signal); outline-offset: -3px; }
+.pf-piece__plate { position: absolute; inset: 0; display: block; overflow: hidden; }
 
-.pf-piece__art { position: relative; overflow: hidden; }
-.pf-piece__still {
-  width: 100%;
-  height: 100%;
+/* WHERE EACH SUBJECT STANDS.
+   The picture is a full-height slab whose width is a fraction of the FIELD,
+   and its centre is `--mid`: the middle of whatever region its chapter holds
+   at this instant. So at arrival all four slabs are stacked on the centre of
+   the field — literally one composition — and as the seams travel each slab
+   walks to the middle of its own region. Nothing resizes; the subject moves
+   to where it belongs, which is the difference between a composition
+   separating and four boxes being animated.
+
+   The slab is taller than it is wide and the seams cut its sides, so it never
+   reads as a rectangle laid on the page: its top and bottom are flush with
+   the field and its left and right ARE the pattern curves.
+
+   THE EARLIER VERSION SIZED EVERY PICTURE TO THE WHOLE FIELD. That is what
+   "field coordinates" sounded like it meant, and it magnified a portrait
+   photograph so far that an uncovered chapter showed an ear, or a blur, or
+   nothing at all. A subject has to be legible the moment its region opens. */
+.pf-piece__img,
+.pf-piece__clip {
+  position: absolute;
+  /* TWO REGISTRATION BANDS open as the cut resolves: the statement settles
+     into the one above, the chapter names live in the one below. At arrival
+     there is no band at the top — the photograph is the whole field. */
+  top: calc(9% * var(--p));
+  left: calc(var(--mid, .5) * 100%);
+  translate: -50% 0;
+  /* THE SLAB RESOLVES INTO ITS REGION.
+     While the cut is travelling the slab is wider than the region it belongs
+     to, so the seams are cutting one picture rather than framing four; by the
+     end it is exactly its region's width, so nothing is cropped by the field's
+     own edge and nothing leaves a strip of bare paper beside a photograph's
+     rectangular edge. The only resize on this page, and it runs toward the
+     shape the picture finally has. */
+  width: calc((var(--box) + (var(--own, .25) - var(--box)) * var(--p)) * 100%);
+  /* THE FOUR SUBJECTS STAND ON ONE BASELINE and the band below it belongs to
+     their names. An earlier pass ran the pictures to the bottom of the field
+     and washed a gradient over them so the type would read; finished work
+     dissolving into paper looks unfinished, which is the opposite of what a
+     portfolio is for. Nothing is faded now — the names have their own
+     ground. */
+  height: calc(82% - 9% * var(--p));
   object-fit: cover;
-  object-position: 50% 22%;
-  /* Settles into the scored field as the cuts complete. A transform on
-     content that is already placed — never a reveal, so the piece is legible
-     and clickable at every point in the range. */
-  transform: translate3d(0, calc(4% * (1 - var(--sep, 1))), 0) scale(calc(1.04 - .04 * var(--sep, 1)));
-  transition: transform .8s var(--pf-lift), filter .6s var(--pf-lift);
+  object-position: var(--focus) var(--high);
 }
 
-.pf-piece__type {
+/* 01 — THE ARRIVAL. A whole garment standing in the field: contained, so no
+   hem or head is ever cut, and blended so the rendition's own white studio
+   ground resolves into the field instead of reading as a pasted rectangle.
+   That blend is a treatment of a temporary asset and comes out in one line
+   when the renditions arrive with transparent grounds.
+   The slab is wide because the rendition holds the garment front AND back;
+   `--focus` favours the front view, so when the region narrows to a quarter
+   what stays in it is one complete figure. */
+.pf-piece[data-chapter='womenswear'] {
+  --box: .38;
+  --focus: 28%;
+}
+.pf-piece__img--opening {
+  object-fit: contain;
+  object-position: 34% 100%;
+  mix-blend-mode: darken;
+}
+.pf-piece[data-chapter='menswear'] { --box: .3; --focus: 52%; --high: 20%; }
+.pf-piece[data-chapter='3d-simulation'] {
+  --box: .3;
+  --focus: 50%;
+  --high: 30%;
+  background: var(--ink);
+  color: var(--paper-bright);
+}
+/* The still is the clip's first frame: it holds the region until the
+   recording is asked for, and stays under it afterwards. */
+.pf-piece[data-chapter='3d-simulation'] .pf-piece__clip { z-index: 1; }
+
+/* 03 — the documentation chapter's face is its contents, set as type. A
+   technical pack's fields are deliberately blank, so every attempt to make
+   its page into a picture produced a pale rectangle; what a pack offers is
+   what is in it. The page itself stays far back as paper texture.
+
+   It is bounded by its own region (`--l` and `--r`, written per frame), not by
+   the field: a line of type that runs under a seam and gets cut in half reads
+   as a bug, not as a cut. */
+.pf-piece__doc {
+  position: absolute;
+  left: calc(var(--ld, 0) * 100% + clamp(.85rem, 1.6vw, 1.5rem));
+  right: calc((1 - var(--rd, 1)) * 100% + clamp(.85rem, 1.6vw, 1.5rem));
+  top: calc(9% * var(--p) + clamp(1rem, 3vh, 2.4rem));
+  bottom: 21%;
   display: grid;
   align-content: start;
-  gap: .25rem;
-  padding: clamp(.9rem, 2vw, 1.4rem) clamp(1rem, 2.4vw, 1.75rem) clamp(1.1rem, 2.4vw, 1.6rem);
-  /* ONE BASELINE ACROSS THE FOUR. "Pattern Development" wraps to two lines and
-     the others do not, so without a reserved block the four art fields ended
-     at four different heights and the row read as untidy. The block is sized
-     for the longest name; the shorter ones simply have air under them. */
-  min-height: 9.5rem;
+  gap: clamp(.4rem, 1.4vh, .95rem);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(.8rem, 1.05vw, 1.12rem);
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  /* Legible only once the region is wide enough to hold it. */
+  opacity: clamp(0, calc((var(--own, 1) - .19) * 14), 1);
+}
+.pf-piece__doc span {
+  padding-bottom: clamp(.35rem, 1vh, .7rem);
+  border-bottom: 1px solid var(--pf-edge);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-piece__doc span:last-child { border-bottom: 0; }
+
+/* ---- the seams, drawn ------------------------------------------------- */
+
+.pf-cut__seams {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* STATE B. Nothing is ruled at arrival. The three lines are marked across
+     the opening photograph about a sixth of the way in — construction found
+     inside the fashion composition, before anything has been cut. */
+  opacity: clamp(0, calc((var(--p) - .1) * 9), 1);
+}
+.pf-cut__seams path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 40%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- the chapter's own type ------------------------------------------- */
+
+/* Set INSIDE the region the chapter holds, measured from both of its seams,
+   so a name can never overhang the chapter next door — which is exactly what
+   a centre-plus-translate did: at three quarters of the way through the cut,
+   "Pattern Development" was lying across the Tech Packs region. */
+.pf-piece__type {
+  position: absolute;
+  left: calc(var(--lt, 0) * 100% + clamp(.85rem, 1.6vw, 1.5rem));
+  right: calc((1 - var(--rt, 1)) * 100% + clamp(.85rem, 1.6vw, 1.5rem));
+  bottom: clamp(1.1rem, 3.2vh, 2.1rem);
+  z-index: 22;
+  display: grid;
+  gap: .2rem;
+  /* TWO GATES, AND BOTH MATTER.
+     `--own` holds the name back until the region is wide enough to carry it.
+     `--p` holds every chapter name back until the cut has actually begun, so
+     STATE A is a fashion composition and a statement — no chapter UI on it at
+     all, not even the first chapter's own. */
+  opacity: calc(
+    clamp(0, calc((var(--own, 1) - .145) * 13), 1) *
+    clamp(0, calc((var(--p) - .26) * 8), 1)
+  );
 }
 .pf-piece__name {
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(1.5rem, 4.4vw, 2.1rem);
-  line-height: 1;
+  font-size: clamp(1.05rem, 1.9vw, 1.9rem);
+  line-height: 1.02;
   letter-spacing: -.035em;
+  /* A quarter of a 1440 field is 360px and "Pattern Development" does not fit
+     on one line in it. It wraps rather than being shrunk to fit, because the
+     four names have to stay the same size as each other: equal value. */
+  text-wrap: balance;
 }
-.pf-piece__intent {
-  color: var(--ink-soft);
-  font-size: clamp(.86rem, 1vw, .95rem);
-  line-height: 1.4;
-}
-/* The way in, in the body face and in sentence case. It used to be tracked-out
-   caps with an arrow stuck on the end, which is the commonest tell of a
-   generated page and said nothing the words did not already say. */
+.pf-piece__intent,
 .pf-piece__enter {
-  margin-top: .4rem;
-  color: var(--muted);
   font-size: .82rem;
-  transition: color .4s var(--pf-lift);
+  line-height: 1.35;
+  /* The sentence and the way in arrive later than the name, so a narrow
+     region is never a wall of small text. */
+  opacity: clamp(0, calc((var(--own, 1) - .2) * 14), 1);
 }
-
-/* THE CUT. One line per division, growing out of the boundary of the opening
-   composition as the scroll scores the field. The fourth piece has none: it
-   ends at the selvedge. */
-.pf-piece__cut {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  background: var(--pf-edge-strong);
-  transform: scaleY(var(--sep, 1));
-  transform-origin: 50% 100%;
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  /* THE TABLE BAND: TWO BY TWO, NOT FOUR ACROSS.
-     Four columns of a 834px field are 209px each — the pieces became vertical
-     slivers a thousand pixels tall and the names broke across three lines.
-     Two by two keeps every piece a usable shape and keeps all four equal,
-     which is the part that matters. The expansion belongs to the desk, where
-     there is room for a piece to take room from three others. */
-  .pf-lay { grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; }
-  .pf-piece { height: min(52vh, 460px); }
-}
-
-@media (min-width: 1024px) {
-  /* FOUR VERTICAL PIECES, EQUAL AT REST.
-     The grid is four equal fractions. Opening one piece changes those
-     fractions — the room comes out of the other three and goes back when
-     attention leaves. Nothing about the resting state ranks them. */
-  .pf-lay {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    /* FULL HEIGHT. At 76vh each piece's image field was almost square, and a
-       near-square frame is the wrong shape for a standing garment — three of
-       the four crops came out as abstract fragments. Full height makes every
-       field a tall portrait, which is the shape a garment is photographed in
-       and the shape a length of cloth hangs in. It also makes the lay a screen
-       of its own rather than a band under the opening. */
-    height: calc(100svh - var(--header-h, 5rem));
-    min-height: 32rem;
-    transition: grid-template-columns .62s var(--pf-lift);
-  }
-  .pf-piece { height: 100%; }
-
-  /* The piece under attention opens; its three neighbours give up the room.
-     `:has` keeps this in CSS, so it works with a pointer and with a keyboard
-     and needs no script. */
-  /* KEYED ON THE CHAPTER, NOT ON A CHILD INDEX.
-     `:nth-child` counts every element child, and the list's accessible
-     heading is one of them — so the index was off by one and hovering
-     Menswear opened Tech Packs while Menswear's own name stayed clipped in
-     an unexpanded column. Naming the chapter cannot drift. */
-  .pf-lay:has([data-chapter='womenswear']:hover),
-  .pf-lay:has([data-chapter='womenswear']:focus-visible) { grid-template-columns: 1.84fr .72fr .72fr .72fr; }
-  .pf-lay:has([data-chapter='menswear']:hover),
-  .pf-lay:has([data-chapter='menswear']:focus-visible) { grid-template-columns: .72fr 1.84fr .72fr .72fr; }
-  .pf-lay:has([data-chapter='tech-packs']:hover),
-  .pf-lay:has([data-chapter='tech-packs']:focus-visible) { grid-template-columns: .72fr .72fr 1.84fr .72fr; }
-  .pf-lay:has([data-chapter='3d-simulation']:hover),
-  .pf-lay:has([data-chapter='3d-simulation']:focus-visible) { grid-template-columns: .72fr .72fr .72fr 1.84fr; }
-
-  /* What the open piece gains: the image comes forward, the name grows into
-     the room, and the way in is stated in ink rather than grey. The pieces
-     that gave up room lose their sentence, not their name — so a narrow piece
-     is never an unreadable sliver. */
-  .pf-piece__name,
-  .pf-piece__intent { transition: font-size .55s var(--pf-lift), opacity .45s var(--pf-lift), color .4s var(--pf-lift); }
-  .pf-lay:has(.pf-piece:hover) .pf-piece:not(:hover) .pf-piece__intent,
-  .pf-lay:has(.pf-piece:focus-visible) .pf-piece:not(:focus-visible) .pf-piece__intent { opacity: 0; }
-  .pf-lay:has(.pf-piece:hover) .pf-piece:not(:hover) .pf-piece__enter,
-  .pf-lay:has(.pf-piece:focus-visible) .pf-piece:not(:focus-visible) .pf-piece__enter { opacity: 0; }
-  .pf-piece:hover .pf-piece__name,
-  .pf-piece:focus-visible .pf-piece__name { font-size: clamp(2.1rem, 3.4vw, 3.4rem); }
-  .pf-piece:hover .pf-piece__enter,
-  .pf-piece:focus-visible .pf-piece__enter { color: var(--ink); }
-  .pf-piece:hover .pf-piece__still,
-  .pf-piece:focus-visible .pf-piece__still { transform: scale(1.02); }
-  /* The pieces standing back recede very slightly, so there is one place to
-     look. Applied to the IMAGE, never to the piece, so the type above it is
-     never touched. */
-  .pf-lay:has(.pf-piece:hover) .pf-piece:not(:hover) .pf-piece__still,
-  .pf-lay:has(.pf-piece:focus-visible) .pf-piece:not(:focus-visible) .pf-piece__still { filter: saturate(.62) brightness(1.03); }
-}
-
-/* ---- what happens inside each identical piece -------------------------- */
-
-/* 01 the silhouette — the figure, cropped the way an editorial page crops. */
-.pf-piece[data-chapter='womenswear'] .pf-piece__still { object-position: 50% 14%; }
-/* 02 construction — held on the shoulder line and the lapel. */
-.pf-piece[data-chapter='menswear'] .pf-piece__still { object-position: 50% 22%; }
-/* 03 THE DOCUMENT, SET AS TYPE.
-   The contents of a pack, one section per line, on the field — with the page
-   itself held far back as paper texture underneath. It is the one piece of
-   the four whose face is typographic, and that is the point: a technical pack
-   is a document, and what a document offers is its contents. Three attempts
-   at photographing a deliberately blank page produced a blank rectangle. */
-.pf-piece[data-chapter='tech-packs'] .pf-piece__art {
-  background: var(--pf-field);
-  display: grid;
-}
-.pf-piece[data-chapter='tech-packs'] .pf-piece__still {
-  grid-area: 1 / 1;
-  object-fit: cover;
-  object-position: 50% 8%;
-  opacity: .16;
-  transform: none;
-}
-.pf-piece__doc {
-  grid-area: 1 / 1;
-  align-self: center;
-  display: grid;
-  gap: clamp(.5rem, 1.4vh, .95rem);
-  padding: clamp(1rem, 2.4vw, 1.75rem);
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(.95rem, 1.35vw, 1.3rem);
-  line-height: 1.12;
-  letter-spacing: -.015em;
-  color: var(--ink);
-}
-.pf-piece__doc span {
-  padding-bottom: clamp(.5rem, 1.4vh, .95rem);
-  border-bottom: 1px solid var(--pf-edge);
-}
-.pf-piece__doc span:last-child { border-bottom: 0; padding-bottom: 0; }
-
-/* 04 the digital room — the one ink piece, and the only one whose image is a
-   render, so it is laid whole on the dark ground. */
-.pf-piece[data-chapter='3d-simulation'] {
-  background: var(--ink);
-  color: var(--paper-bright);
-}
-.pf-piece[data-chapter='3d-simulation'] .pf-piece__art { background: var(--ink); }
-.pf-piece[data-chapter='3d-simulation'] .pf-piece__still { object-fit: cover; object-position: 50% 30%; }
-/* The recording sits over its own poster frame and fills the piece. When it
-   has not been asked to play — reduced motion, saved data, no observer — the
-   poster underneath is what shows, so the piece is never blank. */
-.pf-piece__motion {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
-  background: var(--ink);
-}
+.pf-piece__intent { color: var(--ink-soft); }
+.pf-piece__enter { margin-top: .3rem; color: var(--muted); transition: color .35s var(--pf-lift); }
+.pf-piece:hover .pf-piece__enter,
+.pf-piece:focus-visible .pf-piece__enter { color: var(--ink); }
 .pf-piece[data-chapter='3d-simulation'] .pf-piece__intent { color: var(--pf-ink-soft); }
 .pf-piece[data-chapter='3d-simulation'] .pf-piece__enter { color: var(--pf-ink-muted); }
-.pf-piece[data-chapter='3d-simulation']:hover .pf-piece__enter,
-.pf-piece[data-chapter='3d-simulation']:focus-visible .pf-piece__enter { color: var(--paper-bright); }
-.pf-piece[data-chapter='3d-simulation'] .pf-piece__cut { background: var(--pf-ink-line); }
+.pf-piece[data-chapter='3d-simulation']:hover .pf-piece__enter { color: var(--paper-bright); }
+
+/* ---- the statement ---------------------------------------------------- */
+
+/* AT ARRIVAL it is half the composition: two lines set across the lower left
+   of the field with the garment standing up through them. The garment is
+   BEHIND the type, so every word stays legible while the two occupy one
+   rectangle and interlock — the overlap is the composition, not an accident
+   of stacking.
+
+   AS THE FIELD IS CUT the lines separate to opposite corners and shrink into
+   the field's registration. The resolved four-chapter state still carries the
+   opening statement, which is what makes it read as the same composition
+   rather than a different screen. */
+.pf-cut__statement {
+  position: absolute;
+  inset: 0;
+  z-index: 26;
+  margin: 0;
+  pointer-events: none;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  /* Tight at hero scale, opened up as it shrinks into the registration band:
+     .9 leading on 24px type has the two lines touching. */
+  line-height: calc(.9 + .22 * var(--p));
+}
+.pf-cut__line {
+  position: absolute;
+  white-space: nowrap;
+  transition: none;
+}
+.pf-cut__line--a {
+  left: var(--pf-gutter);
+  top: calc(46% - 44.5% * var(--pe));
+  font-size: calc(clamp(2rem, 8.4vw, 5.4rem) * (1 - .77 * var(--p)));
+}
+/* The second line arrives indented far to the right, so at arrival the two
+   lines run diagonally across the figure. It travels back to the gutter and
+   settles directly under the first: the resolved state still carries the
+   whole opening sentence, two lines in the field's own registration, and it
+   sits at the TOP because the bottom of every region now belongs to a
+   chapter name. An earlier version left it docked bottom-right, where it lay
+   across "Pattern Development". */
+.pf-cut__line--b {
+  left: calc(var(--pf-gutter) + 42% * (1 - var(--p) * var(--p) * var(--p)));
+  top: calc(58% - 53.6% * var(--pe));
+  font-size: calc(clamp(2rem, 8.4vw, 5.4rem) * (1 - .77 * var(--p)));
+}
+/* The one sentence belongs to the arrival and goes as the cut begins: the
+   resolved state is four chapters, not four chapters and a paragraph. */
+.pf-cut__note {
+  position: absolute;
+  left: var(--pf-gutter);
+  bottom: clamp(1.5rem, 5vh, 3rem);
+  z-index: 26;
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(.92rem, 1.05vw, 1.02rem);
+  line-height: 1.5;
+  pointer-events: none;
+  opacity: clamp(0, calc(1 - var(--p) * 4), 1);
+}
+
+@media (min-width: 1200px) {
+  .pf-piece__name { font-size: clamp(1.3rem, 1.9vw, 2rem); }
+}
+
+/* A PHONE GETS THE SAME CUT, TURNED. Four vertical slivers on a 390px screen
+   would be unreadable, so the seams run across the field and divide it into
+   four bands — the same geometry on the other axis, and the same story. */
+@media (max-width: 767px) {
+  .pf-piece {
+    clip-path: inset(calc(var(--i) * 25%) 0 calc(100% - (var(--i) + 1) * 25%) 0);
+  }
+  /* THE BAND IS THE REGION, and it is built the same way the desktop region
+     is: a picture, and under it that chapter's own ground carrying its name.
+     Not type laid over a photograph — four bands of 190px cannot carry a
+     standing figure AND legible type in the same pixels, and a scrim over
+     finished work is the thing this page refuses to do. So each band is a
+     detail strip of the garment with its name on paper beneath it, cut top
+     and bottom by the same pattern curves. */
+  .pf-piece__img,
+  .pf-piece__clip {
+    left: 0;
+    translate: none;
+    width: 100%;
+    top: calc(var(--l, 0) * 100%);
+    height: calc(var(--own, .25) * 100% - 4.4rem);
+    object-position: 50% var(--high);
+  }
+  .pf-piece__img--opening { object-fit: cover; object-position: 50% 24%; }
+  /* Held in the band's bottom 4.4rem, measured from the band's own lower
+     seam rather than from the field, so it moves with its band. */
+  .pf-piece__type {
+    left: var(--pf-gutter);
+    right: var(--pf-gutter);
+    bottom: calc((1 - var(--rt, 1)) * 100% + .7rem);
+    z-index: 23;
+    gap: .1rem;
+  }
+  .pf-piece__doc {
+    left: var(--pf-gutter);
+    right: var(--pf-gutter);
+    top: calc(var(--ld, 0) * 100% + .55rem);
+    bottom: calc((1 - var(--rt, 1)) * 100% + 5.2rem);
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, auto);
+    gap: .25rem 1.2rem;
+    font-size: .72rem;
+  }
+  .pf-piece__name { font-size: clamp(1.25rem, 5.6vw, 1.7rem); }
+  .pf-piece__intent { font-size: .78rem; }
+  .pf-piece__enter { display: none; }
+  /* A phone has no room for a registration band at the top of the field, so
+     the statement belongs to the arrival and leaves with it. The memory of
+     the opening composition is carried by the first band, which is still the
+     opening rendition. */
+  .pf-cut__statement { opacity: clamp(0, calc(1 - (var(--p) - .5) * 3.2), 1); }
+  .pf-cut__line--a { top: calc(34% - 30% * var(--pe)); }
+  .pf-cut__line--b {
+    top: calc(44% - 34% * var(--pe));
+    left: calc(var(--pf-gutter) + 14% * (1 - var(--p) * var(--p) * var(--p)));
+  }
+}
 
 /* The colophon: three short lines, one alignment. The reference disclosure
    is NOT fine print here — it is the same size as the rest of the row and it
@@ -1800,31 +1800,24 @@
 /* ==========================================================================
    12. REDUCED MOTION.
 
-   Not "everything off". Every animated property here only ever moves an
-   element FROM a temporary offset TO where it already belongs, so removing
-   the motion leaves the finished composition — the separation sits at 1, the
-   transformation track sits at 1, and the deck changes position instantly
-   instead of gliding. Nothing is left half-placed.
+   Not "everything off". Every animated property on this route only ever moves
+   an element FROM a temporary offset TO where it already belongs, so removing
+   the motion leaves the FINISHED composition rather than an empty page: the
+   cut sits resolved at `--p: 1` (the runtime writes 1 directly and never
+   listens to scroll), the transformation track sits at 1, and the deck jumps
+   between depth positions instead of gliding. Nothing is left half-placed and
+   every link is live.
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .pf { --sep: 1; --tr: 1; }
-  .pf-lay,
+  .pf { --tr: 1; }
+  .pf-cut { --p: 1; }
   .pf-piece,
-  .pf-piece__still,
-  .pf-piece__name,
-  .pf-piece__intent,
+  .pf-piece__type,
+  .pf-piece__enter,
   .pf-cat__media img,
   .pf-doc__page,
   .pf-slot,
   .pf-transform__bar,
   .pf-plate__art,
   .pf-notch { transition: none !important; }
-  /* The pieces stay at their resting fractions: opening one is motion, and
-     the resting state is the finished composition. The name still grows on
-     focus so a keyboard user gets the same emphasis, it simply arrives
-     without a tween. */
-  .pf-lay:has(.pf-piece:hover) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .pf-piece:hover .pf-piece__still,
-  .pf-piece:focus-visible .pf-piece__still { transform: none; }
-  .pf-lay:has(.pf-piece:hover) .pf-piece:not(:hover) .pf-piece__still { filter: none; }
 }

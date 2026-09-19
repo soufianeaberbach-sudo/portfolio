@@ -63,124 +63,133 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    {/* ---- ONE FIELD ---------------------------------------------------
-        The Portfolio opens as a single uninterrupted field: one garment, and
-        the statement set in the space the garment leaves. Nothing is ruled,
-        numbered or labelled here — the first screen is fashion, and a visitor
-        who does not yet know what a notch is has nothing to decode.
+    {/* ==================================================================
+        ONE FIELD, CUT INTO FOUR.
 
-        The statement is positioned BY the garment: its baseline sits on the
-        garment's hem line and its left edge on the field's own axis, so the
-        two read as one composition rather than a headline beside a picture.
-        They never overlap. The single orange mark is the registration point
-        where the statement's axis meets the garment's shoulder — the only
-        orange on the screen. */}
-    <section class="pf-open" id="portfolio-index">
-      <div class="pf-open__field">
-        <figure class="pf-open__figure">
-          {/* AUTHORED WORK IN THE FIRST FRAME — one of the garment
-              renditions, not the licensed editorial photograph that used to
-              open the page and also head two screens below it. */}
-          <img
-            src={openingGarment.src}
-            srcset={openingGarment.srcset}
-            sizes="(max-width: 767px) 86vw, 46vw"
-            width={openingGarment.width}
-            height={openingGarment.height}
-            alt={openingGarment.alt}
-            fetchpriority="high"
-            decoding="async"
-          />
-        </figure>
-        <div class="pf-open__type">
-          <h1 class="pf-open__title">
-            <span>Between instinct</span>
-            <span>&amp; construction.</span>
+        This is a single composition that TRANSFORMS. It is not a hero
+        followed by a chapter section — those were two things, and two things
+        cannot become one another.
+
+        The mechanics: a tall scroll track holds one sticky field. The four
+        chapters are four layers stacked in that field, each one's image
+        positioned in FIELD space rather than in its own box, so nothing
+        resizes or slides in from anywhere. What changes is where the SEAMS
+        fall. At the top of the track the seams sit at the field's right edge,
+        so the whole field is the Womenswear rendition and the statement, and
+        nothing else exists. As the track is read, three seams travel left
+        into the field and open it: the other three chapters are already
+        there, underneath, and the seams reveal them. One thing becomes four
+        because the four were always the same field.
+
+        The seams are not straight. They are cubic curves built from the
+        geometry a patternmaker actually cuts — an armhole scoop, a princess
+        seam's waist suppression, a side seam's hip spring — generated in
+        `pattern.ts` and written as `clip-path: path()` per frame. That is
+        where the pattern language lives: in the geometry of the transition,
+        not drawn on top of it.
+
+        Scroll is never taken. Everything below is a pure function of scroll
+        position within the track: scroll faster and it moves faster, stop and
+        it stops, scroll back and it reverses. Nothing is timed and nothing
+        waits for an animation. With no script, or under reduced motion, the
+        field renders at its resolved state — four chapters, four links. */}
+    <section class="pf-cut" id="portfolio-index" data-cut>
+      <div class="pf-cut__track" data-cut-track>
+        <div class="pf-cut__field" data-cut-field>
+
+          {/* The four layers. Order matters: chapter 01 is on top, because at
+              arrival it is the whole field. */}
+          {chapters.map((chapter, index) => (
+            <a class="pf-piece" href={`#${chapter.id}`} data-nav
+              data-piece={index}
+              data-chapter={chapter.id}
+              data-publication={chapter.publication}
+              data-image-source={chapter.cover.credit.source}
+              data-image-source-page={chapter.cover.credit.sourcePage}
+              data-image-photographer={chapter.cover.credit.photographer}
+              style={`--i:${index}`}>
+
+              {/* The image is sized and placed in FIELD space, so a seam
+                  moving across it reveals more or less of one unmoving
+                  picture — the field is being cut, not re-laid out. */}
+              <span class="pf-piece__plate" aria-hidden="true">
+                {index === 0 ? (
+                  <img class="pf-piece__img pf-piece__img--opening"
+                    src={openingGarment.src} srcset={openingGarment.srcset}
+                    sizes="100vw"
+                    width={openingGarment.width} height={openingGarment.height}
+                    alt="" fetchpriority="high" decoding="async" />
+                ) : chapter.id === '3d-simulation' ? (
+                  <>
+                    <img class="pf-piece__img" src={chapter.cover.image.src}
+                      srcset={chapter.cover.image.srcset} sizes="60vw"
+                      width={chapter.cover.image.width} height={chapter.cover.image.height}
+                      alt="" loading="lazy" decoding="async" />
+                    {/* The one moving layer: a real recording of a garment
+                        simulating. It plays only while the field is on screen
+                        and only when motion is welcome. */}
+                    <video class="pf-piece__clip" data-piece-motion
+                      poster="/CLO3D-poster.jpg" muted loop playsinline
+                      preload="none" aria-hidden="true" tabindex="-1">
+                      <source src="/CLO3D.webm" type="video/webm" />
+                      <source src="/CLO3D.mp4" type="video/mp4" />
+                    </video>
+                  </>
+                ) : chapter.id === 'tech-packs' ? (
+                  /* NO PICTURE HERE, AND THAT IS THE POINT.
+                     A technical pack's fields are deliberately blank until a
+                     factory fills them, so every attempt to give this chapter
+                     a photographic face produced a pale rectangle with a
+                     DEMO stamp floating behind the type. Its subject is a
+                     document, so its face is the document's contents, set as
+                     type on the paper ground. Four chapters of equal value,
+                     and one of them is typographic. */
+                  null
+                ) : (
+                  <img class="pf-piece__img" src={chapter.cover.image.src}
+                    srcset={chapter.cover.image.srcset} sizes="60vw"
+                    width={chapter.cover.image.width} height={chapter.cover.image.height}
+                    alt="" loading="lazy" decoding="async" />
+                )}
+              </span>
+
+              {chapter.id === 'tech-packs' && PACK_CONTENTS.length > 0 && (
+                <span class="pf-piece__doc" aria-hidden="true">
+                  {PACK_CONTENTS.map((section) => <span>{section}</span>)}
+                </span>
+              )}
+
+              {/* The chapter's own name, which only becomes legible as its
+                  region opens. */}
+              <span class="pf-piece__type">
+                <b class="pf-piece__name">{chapter.title}</b>
+                <span class="pf-piece__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
+                <span class="pf-piece__enter">{CHAPTER_ACTION[chapter.id].action}</span>
+              </span>
+            </a>
+          ))}
+
+          {/* THE SEAMS, drawn. Each one is the curve the clip-paths are cut
+              along, so the line a visitor sees IS the cut, not a decoration
+              beside it. */}
+          <svg class="pf-cut__seams" data-cut-seams viewBox="0 0 100 100"
+            preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path data-seam="0" /><path data-seam="1" /><path data-seam="2" />
+          </svg>
+
+          {/* THE STATEMENT. At arrival it is the composition's other half:
+              set across the field's lower left with the garment rising behind
+              it, so the type and the garment occupy one rectangle and
+              interlock. As the field is cut, the two lines separate to
+              opposite corners and become the field's registration — the
+              memory of the opening composition in the resolved state. */}
+          <h1 class="pf-cut__statement">
+            <span class="pf-cut__line pf-cut__line--a">Between instinct</span>
+            <span class="pf-cut__line pf-cut__line--b">&amp; construction.</span>
           </h1>
-          <p class="pf-open__note">
-            Fashion seen from both sides: the intention, and the precision that gives it form.
-          </p>
+          <p class="pf-cut__note">Fashion seen from both sides: the intention, and the precision that gives it form.</p>
         </div>
       </div>
-    </section>
-
-    {/* ---- THE CUT ------------------------------------------------------
-        The one field becomes four. Three cuts grow up out of the boundary of
-        the opening composition and score the field into the four chapters,
-        and the chapters settle into the scored field as the cuts complete.
-        `--sep` drives all of it; the cuts and the settle are transforms on
-        content that is already placed and already linked, so every chapter is
-        readable and clickable at any point in the range and nothing waits for
-        an animation. Scroll is never taken.
-
-        FOUR PIECES OF EQUAL WIDTH AND EQUAL HEIGHT. Equal area is the only
-        honest way a composition says equal value, and two earlier attempts
-        proved it: unequal pieces read as a ranking, and equal pieces with
-        gaps and shadows read as four cards. These touch. The hierarchy is
-        temporary and earned — bring attention to one and it opens, taking the
-        room from the other three, then gives it back. */}
-    <section class="pf-lay" aria-labelledby="pf-lay-title" data-covers>
-      <h2 class="pf-sr" id="pf-lay-title">Portfolio chapters</h2>
-      {chapters.map((chapter, index) => (
-        <a class="pf-piece" href={`#${chapter.id}`} data-nav
-          data-chapter={chapter.id} data-publication={chapter.publication}
-          data-cover-index={index + 1}
-          data-image-source={chapter.cover.credit.source}
-          data-image-source-page={chapter.cover.credit.sourcePage}
-          data-image-photographer={chapter.cover.credit.photographer}>
-          <span class="pf-piece__art" aria-hidden="true">
-            <img class="pf-piece__still" src={chapter.cover.image.src}
-              srcset={chapter.cover.image.srcset} sizes="(max-width: 767px) 100vw, 46vw"
-              width={chapter.cover.image.width} height={chapter.cover.image.height}
-              alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
-            {chapter.id === 'tech-packs' && PACK_CONTENTS.length > 0 && (
-              <span class="pf-piece__doc">
-                {PACK_CONTENTS.map((section) => <span>{section}</span>)}
-              </span>
-            )}
-            {chapter.id === '3d-simulation' && (
-              /* THE ONE MOVING PIECE.
-                 Four pieces of equal size, and one of them is alive. This is a
-                 real recording of one of Soufiane's own garments simulating —
-                 public/CLO3D.mp4, which was sitting unused in the repository —
-                 so the chapter about a garment changing state is the only
-                 chapter that moves. Equal area, different KIND: two
-                 photographs, one document, one simulation. That is how the
-                 four differ without any of them being ranked.
-
-                 It costs nothing until it is needed: `preload="none"` and no
-                 `autoplay`, and the runtime starts it only when the lay
-                 scrolls into view, only on a pointer-capable connection that
-                 has not asked to save data, and never under reduced motion. */
-              <video
-                class="pf-piece__motion"
-                data-piece-motion
-                                poster="/CLO3D-poster.jpg"
-                muted
-                loop
-                playsinline
-                preload="none"
-                aria-hidden="true"
-                tabindex="-1"
-              >
-                {/* VP9 first: a third of the weight, and the only codec some
-                    browsers ship without a licence. H.264 behind it covers
-                    everything else. */}
-                <source src="/CLO3D.webm" type="video/webm" />
-                <source src="/CLO3D.mp4" type="video/mp4" />
-              </video>
-            )}
-          </span>
-          <span class="pf-piece__type">
-            <b class="pf-piece__name">{chapter.title}</b>
-            <span class="pf-piece__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
-            <span class="pf-piece__enter">{CHAPTER_ACTION[chapter.id].action}</span>
-          </span>
-          {/* The cut this piece is scored along. The last piece has no cut to
-              its right — it ends at the selvedge. */}
-          {index < chapters.length - 1 && <span class="pf-piece__cut" aria-hidden="true"></span>}
-        </a>
-      ))}
     </section>
 
     {/* Two short lines: what the chapters are, and what the imagery is. The
@@ -221,6 +230,8 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
   </div>
 
   <script>
+    import { panelPath, seamOffsetAt, seamPathUnit } from '../scripts/pattern';
+
     /* --------------------------------------------------------------------
        Portfolio runtime.
 
@@ -950,6 +961,173 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
          1, which is the finished composition. */
       const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 
+      /* ---- THE CUT: one field becoming four ---------------------------
+         Everything here is a pure function of scroll position inside the
+         track. There is no timeline, no easing over time and nothing that
+         waits: the caller scrolls, and the composition is wherever the
+         scroll says it is. Backwards scrolling runs it backwards because
+         there is no state to unwind.
+
+         The seams travel from the field's right edge to their resting
+         quarters. Each chapter is clipped to the region between its two
+         seams, and each chapter's IMAGE is laid out in field coordinates, so
+         a seam sweeping across it uncovers more of one unmoving picture
+         rather than resizing a box. That is the difference between cutting a
+         field and animating four cards. */
+      const cut = root.querySelector<HTMLElement>('[data-cut]');
+      if (cut) {
+        const track = cut.querySelector<HTMLElement>('[data-cut-track]')!;
+        const field = cut.querySelector<HTMLElement>('[data-cut-field]')!;
+        const panels = [...cut.querySelectorAll<HTMLElement>('.pf-piece')];
+        const seams = [...cut.querySelectorAll<SVGPathElement>('[data-seam]')];
+        /* `path()` carries the curve. Where it is unavailable the same
+           geometry degrades to a straight cut, which is still a cut. */
+        const curved = CSS.supports('clip-path', 'path("M0 0L1 1")');
+
+        let cutFrame = 0;
+        const paintCut = () => {
+          cutFrame = 0;
+          const box = field.getBoundingClientRect();
+          const w = box.width;
+          const h = box.height;
+          if (w === 0 || h === 0) return;
+
+          /* Progress through the track: 0 while the field's top is still at
+             the top of the track, 1 once the track has been read. */
+          const trackBox = track.getBoundingClientRect();
+          const travel = Math.max(1, track.offsetHeight - h);
+          /* THE RESOLVED STATE IS HELD.
+             The cut finishes with roughly a fifth of the track still to read,
+             so the four-chapter composition stands complete and fully on
+             screen — statement, seams, all four names — instead of arriving
+             in the same instant the field unsticks and slides away. Nothing
+             is taken from the visitor: the page keeps scrolling normally, the
+             transformation simply has an end that can be looked at. */
+          const p = reduced() ? 1 : clamp01(-trackBox.top / (travel * 0.78));
+          cut.style.setProperty('--p', String(p));
+
+          /* THE SEAM POSITIONS. All three begin at the right edge — so the
+             field is entirely chapter 01 — and settle on the quarters. They
+             do not travel together: the first seam leads, which is what makes
+             the field look like it is being opened rather than wiped. */
+          const lead = [0.0, 0.14, 0.28];
+          /* A seam's own curve swings up to 3% of the field either side of its
+             nominal position, so a seam nominally AT the right edge still lets
+             a few pixels of the chapter behind it show through. The cut starts
+             just beyond the edge, which is why the arrival is one photograph
+             with nothing peeking in at the margin. */
+          const OVER = 0.05;
+          const rest = (k: number) => (k + 1) / 4;
+          const at = (k: number) => {
+            const local = clamp01((p - lead[k]) / (1 - lead[k]));
+            /* Eased on POSITION, not on time — the curve shapes where the
+               seam is for a given scroll offset, and reverses identically. */
+            const e = local * local * (3 - 2 * local);
+            return 1 + OVER + (rest(k) - 1 - OVER) * e;
+          };
+          const xs = [at(0), at(1), at(2)];
+          /* A phone gets the same cut, turned: four bands rather than four
+             slivers. The geometry is identical — only the axis changes. */
+          const axis: 'x' | 'y' = window.innerWidth < 768 ? 'y' : 'x';
+          cut.dataset.axis = axis;
+
+          for (let i = 0; i < panels.length; i += 1) {
+            const panel = panels[i];
+            const leftX = i === 0 ? null : xs[i - 1];
+            const rightX = i === panels.length - 1 ? null : xs[i];
+            /* A REGION THAT HAS NOT OPENED YET IS EMPTY, EXPLICITLY.
+               While a seam sits beyond the field's edge, the region behind it
+               runs from a left edge that is to the RIGHT of its right edge:
+               a self-crossing path, which fills by winding rule and printed a
+               few pixels of the next chapter down the margin. */
+            if ((leftX ?? 0) >= 1) {
+              panel.style.clipPath = 'inset(0 100% 0 0)';
+              panel.style.setProperty('--own', '0');
+              panel.style.setProperty('--l', '1');
+              panel.style.setProperty('--r', '1');
+              panel.style.setProperty('--mid', '1');
+              continue;
+            }
+            if (curved) {
+              panel.style.clipPath = `path("${panelPath(
+                leftX === null ? null : { x: leftX, kind: ((i - 1) % 3) as 0 | 1 | 2, width: w, height: h, axis },
+                rightX === null ? null : { x: rightX, kind: (i % 3) as 0 | 1 | 2, width: w, height: h, axis },
+                w, h,
+              )}")`;
+            } else {
+              const a = (leftX ?? 0) * 100;
+              const b = 100 - (rightX ?? 1) * 100;
+              panel.style.clipPath = axis === 'y'
+                ? `inset(${a.toFixed(2)}% 0 ${b.toFixed(2)}% 0)`
+                : `inset(0 ${b.toFixed(2)}% 0 ${a.toFixed(2)}%)`;
+            }
+            /* How much of the field this chapter holds, and where its centre
+               is — the type uses both, so a name appears only once its own
+               region is wide enough to carry it. */
+            const l = leftX ?? 0;
+            const r = rightX ?? 1;
+            panel.style.setProperty('--own', (r - l).toFixed(4));
+            panel.style.setProperty('--l', l.toFixed(4));
+            panel.style.setProperty('--r', r.toFixed(4));
+            /* The middle of the region is where this chapter's subject
+               stands, so the picture walks to it as the seams travel. */
+            panel.style.setProperty('--mid', ((l + r) / 2).toFixed(4));
+            /* THE EDGE AS IT REALLY FALLS, over the band the type occupies.
+               A seam's nominal position is not its edge: the curve swings up
+               to 5% of the field either side of it, so type set from the
+               nominal position sat inside the chapter next door and was cut
+               in half by its own seam. Each band is sampled across its own
+               height and bounded by the WORST edge in it — the furthest right
+               for a left bound, the furthest left for a right bound — so no
+               line of type can cross a seam at any height it occupies. */
+            const edge = (kind: 0 | 1 | 2, y0: number, y1: number, worst: 'max' | 'min') => {
+              let out = seamOffsetAt(kind, y0);
+              for (let t = 1; t <= 4; t += 1) {
+                const o = seamOffsetAt(kind, y0 + ((y1 - y0) * t) / 4);
+                out = worst === 'max' ? Math.max(out, o) : Math.min(out, o);
+              }
+              return out;
+            };
+            const leftKind = ((i + 2) % 3) as 0 | 1 | 2;
+            const rightKind = (i % 3) as 0 | 1 | 2;
+            const bounds = (y0: number, y1: number): [number, number] => [
+              leftX === null ? 0 : Math.max(0, l + edge(leftKind, y0, y1, 'max')),
+              rightX === null ? 1 : Math.min(1, r + edge(rightKind, y0, y1, 'min')),
+            ];
+            /* The names sit in the bottom band; the documentation list runs
+               from below the statement down to it. Turned onto the y axis the
+               seam runs ACROSS the field, so both bands span its whole width
+               and are bounded by the worst edge anywhere along it. */
+            const [lt, rt] = axis === 'y' ? bounds(0, 1) : bounds(0.82, 1);
+            const [ld, rd] = axis === 'y' ? bounds(0, 1) : bounds(0.06, 0.8);
+            panel.style.setProperty('--lt', lt.toFixed(4));
+            panel.style.setProperty('--rt', rt.toFixed(4));
+            panel.style.setProperty('--ld', ld.toFixed(4));
+            panel.style.setProperty('--rd', rd.toFixed(4));
+          }
+
+          /* THE LINE IS MARKED BEFORE THE CLOTH IS CUT.
+             The drawn seams do NOT travel with the clip. They appear across
+             the fashion composition at the positions the cut will finally
+             take — which is the order the work actually happens in: the
+             pattern is marked on the cloth, and only then is it cut. So the
+             first evidence of construction is discovered INSIDE the opening
+             photograph rather than arriving with a new region, and when the
+             cut catches up, the line and the cut are the same curve. */
+          for (let k = 0; k < seams.length; k += 1) {
+            seams[k].setAttribute('d', seamPathUnit(rest(k), (k % 3) as 0 | 1 | 2, axis));
+          }
+        };
+        const onCutScroll = () => { if (!cutFrame) cutFrame = requestAnimationFrame(paintCut); };
+        window.addEventListener('scroll', onCutScroll, { passive: true });
+        window.addEventListener('resize', onCutScroll, { passive: true });
+        paintCut();
+        /* The opening rendition decides the field's first frame, so the seams
+           are re-cut once it has actually painted. */
+        const openingImg = cut.querySelector<HTMLImageElement>('.pf-piece__img--opening');
+        if (openingImg && !openingImg.complete) openingImg.addEventListener('load', paintCut, { once: true });
+      }
+
       /* ---- the one moving piece ----------------------------------------
          The Pattern Development piece carries a real recording of a garment
          simulating. It is the only motion on the landing that the visitor did
@@ -988,24 +1166,16 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
         }
       }
 
-      const separation = root.querySelector<HTMLElement>('[data-covers]');
       const transformTrack = root.querySelector<HTMLElement>('[data-transform-track]');
       const transformSteps = transformTrack
         ? [...transformTrack.querySelectorAll<HTMLElement>('.pf-transform__step')]
         : [];
 
-      if (!reduced() && (separation || transformTrack)) {
+      if (!reduced() && transformTrack) {
         let frame = 0;
         const measure = () => {
           frame = 0;
-          if (separation) {
-            /* 0 while the covers are still below the fold, 1 by the time
-               their top third has passed the middle of the viewport. */
-            const box = separation.getBoundingClientRect();
-            const span = Math.max(1, window.innerHeight * 0.55);
-            root.style.setProperty('--sep', String(clamp01((window.innerHeight - box.top) / span)));
-          }
-          if (transformTrack) {
+          {
             /* WHAT THE TRACK MEASURES.
                Not its own distance up the viewport — it sits near the top of
                the chapter and is therefore fully in view the moment the
