@@ -37,16 +37,39 @@ try {
       supplied. Until then the check is that NOTHING is drawn in its place and
       that the visitor is told what will publish there — which is the actual
       correction this pass made. */
-   const plateCount=await active.locator('[data-evidence-open]').count();
-   const scroll=await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop);
+   /* THE SURFACES LIVE INSIDE A DISCLOSURE NOW.
+      Closed by default, because fashion keeps the screen; a visitor who wants
+      the technical layer opens it. So the contract starts by opening it — and
+      checks that it WAS closed, which is the part that protects the garment. */
+   /* SCOPED TO THE LAYER THAT IS SHOWN. One <details> exists per garment, so
+      an unscoped selector matched all fifty-one surfaces and walked into the
+      hidden ones. */
+   const layer=active.locator('.pf-dev:not([hidden])').first();
+   const surfaces=active.locator('.pf-dev:not([hidden]) [data-evidence-open]');
+   check(await layer.evaluate(e=>e.open===false),'the development layer is closed until it is asked for');
+   await layer.evaluate(e=>{e.open=true});
+   await page.waitForTimeout(250);
+   const plateCount=await surfaces.count();
    const state=await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex);
    if(plateCount===0){
-    check(await active.locator('.pf-plate img').count()===0,'no garment photograph stands in for a development surface');
-    check(/publish with each garment/i.test(await active.locator('[data-evidence-pending]').first().innerText()),'pending surfaces are stated in one line');
+    check(await active.locator('.pf-dev:not([hidden]) .pf-plate img').count()===0,'no surface is drawn without an asset');
    } else {
-    await active.locator('[data-evidence-open]').first().scrollIntoViewIfNeeded();
+    /* Every stand-in is stamped on its face and says so in its alt text. An
+       unmarked borrowed photograph would be fabricated evidence. */
+    const previews=await active.locator('.pf-dev:not([hidden]) .pf-plate[data-preview]').count();
+    check(await active.locator('.pf-dev:not([hidden]) .pf-plate[data-preview] .pf-plate__stamp').count()===previews,'every stand-in is stamped');
+    check(await active.locator('.pf-dev:not([hidden]) .pf-plate[data-preview] img').evaluateAll(
+      els=>els.every(e=>/temporary preview/i.test(e.alt))),'every stand-in says so in its alt text');
+    await surfaces.first().scrollIntoViewIfNeeded();
+    await page.waitForTimeout(200);
+    /* THE BASELINE IS TAKEN HERE, not before the layer was opened.
+       What this protects is that opening and closing a surface does not lose
+       the visitor's place — so the reference position is where the visitor
+       actually is when they reach for a surface, after the layer has been
+       opened and scrolled to. */
+    const scroll=await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop);
     for(let i=0;i<plateCount;i++){
-     const target=active.locator('[data-evidence-open]').nth(i);
+     const target=surfaces.nth(i);
      await target.click();
      check(await page.locator('[data-evidence-reader]').evaluate(e=>e.open),'evidence opened');
      check(await page.locator('[data-evidence-mount]').evaluate(e=>e.clientHeight>500),'evidence enlarged');
@@ -54,9 +77,9 @@ try {
      if(i%2===1)await page.keyboard.press('Escape');else await page.locator('[data-evidence-close]').click();
      check(await target.evaluate(e=>document.activeElement===e),'evidence focus restored');
      check(await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex)===state,'garment state preserved');
+     check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
     }
    }
-   check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
   }
   await open('womenswear/rtw');
   const stage=page.locator('[data-world="womenswear"] [data-screen="category"]:not([hidden]) [data-stage]');
@@ -93,15 +116,21 @@ try {
   check(await docs.count()===5,'five documents');
   for(const mode of ['button','escape']){
    const opener=docs.nth(2);await opener.scrollIntoViewIfNeeded();
-   /* THE RESTORE IS ONLY EXERCISED FROM A NON-ZERO POSITION.
-      This used to rely on the layout being tall enough that reaching document
-      03 required scrolling, and asserted the captured offset was above zero.
-      The register is compact now, so document 03 is reachable without
-      scrolling and that assertion failed on a layout improvement rather than
-      on a defect. The world is scrolled deliberately instead, which tests the
-      same contract at any layout. */
-   await page.locator('[data-world="tech-packs"]').evaluate(e=>{e.scrollTop=Math.min(240,e.scrollHeight-e.clientHeight)});
-   await page.waitForTimeout(120);
+   /* THE RESTORE IS ONLY EXERCISED FROM A NON-ZERO POSITION, AND THE BASELINE
+      HAS TO BE READ AFTER THE PAGE HAS SETTLED THERE.
+      The third sheet of the cascade sits below the fold, so bringing it into
+      view is what puts the world at a non-zero offset — and reading the
+      baseline before that (or before the click's own auto-scroll) compared
+      two different positions and failed on a taller layout rather than on a
+      defect. */
+   /* One pass from the top of the chapter and one from part-way down it, so
+      the restore is exercised at zero and at a real offset without assuming
+      how tall the cascade happens to be. The baseline is read after the
+      element is in view, because the click does its own scrolling otherwise
+      and the two positions would not be comparable. */
+   if(mode==='escape')await page.locator('[data-world="tech-packs"]').evaluate(e=>{e.scrollTop=Math.min(260,e.scrollHeight-e.clientHeight)});
+   await opener.scrollIntoViewIfNeeded();
+   await page.waitForTimeout(250);
    const scroll=await page.locator('[data-world="tech-packs"]').evaluate(e=>e.scrollTop);
    await opener.click();
    check(await page.locator('[data-reader]').evaluate(e=>e.open),'reader open');

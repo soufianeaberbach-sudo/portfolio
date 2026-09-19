@@ -170,143 +170,151 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* Four separated image covers, composed together without card chrome. */
-    const covers = await p.evaluate(() => {
-      const list = [...document.querySelectorAll('.pf-cover')];
-      const doc = document.documentElement.clientWidth;
+    /* THE LAY: FOUR PIECES CUT FROM ONE FIELD.
+       Rewritten for the third direction. The first assumed the four chapters
+       were deliberately unequal (they read as a ranking). The second assumed
+       they were four equal cards with gaps between them (they read as a
+       template). They are now four pieces of one field: equal in width and
+       height, TOUCHING, divided by three cuts, and differing in what each one
+       holds rather than in how much room it gets. */
+    const pieces = await p.evaluate(() => {
+      const list = [...document.querySelectorAll('.pf-piece')];
       return list.map((el) => {
         const r = el.getBoundingClientRect();
         const s = getComputedStyle(el);
         return {
           chapter: el.dataset.chapter,
           top: Math.round(r.top + window.scrollY),
-          height: Math.round(r.height),
           left: Math.round(r.left),
+          right: Math.round(r.right),
           width: Math.round(r.width),
-          full: Math.round(r.width) >= doc - 1,
+          height: Math.round(r.height),
           isLink: el.tagName === 'A',
           boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
-          titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
-          images: el.querySelectorAll('img').length,
+          namePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-piece__name')).fontSize)),
+          name: el.querySelector('.pf-piece__name').textContent.trim(),
+          intent: el.querySelector('.pf-piece__intent').textContent.trim(),
+          enter: el.querySelector('.pf-piece__enter').textContent.trim(),
           source: el.dataset.imageSource ?? '',
-          name: el.querySelector('.pf-cover__name').textContent.trim(),
-          intent: el.querySelector('.pf-cover__intent').textContent.trim(),
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
     });
-    check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    /* The four chapters are deliberately UNEQUAL: a nested field, not a rail
-       of identical leaves. What must hold is that no two of them overlap and
-       that they do not all share one height — a row of four equal cards would
-       say the four bodies of work are interchangeable. */
-    check('the four chapter fields occupy distinct regions without overlapping',
-      covers.every((cv, i) => covers.every((other, j) => j <= i
-        || cv.left + cv.width <= other.left + 1 || other.left + other.width <= cv.left + 1
-        || cv.top + cv.height <= other.top + 1 || other.top + other.height <= cv.top + 1)),
-      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top} ${cv.width}x${cv.height}`).join(' '));
-    /* EQUAL VALUE. This assertion used to require the opposite — three
-       different heights and a lead piece at least 1.3x the smallest — and that
-       was the mistake. All four chapters are equally important to the practice,
-       and area is how a composition says so. Unequal boxes read as a ranking,
-       and they also destroyed two of the four covers: a document page matted
-       in a wide box was a grey blank, and a portrait render contained in a
-       40:9 band was a black stripe. */
-    check('the four chapters are given equal weight',
-      new Set(covers.map((cv) => cv.height)).size === 1
-        && new Set(covers.map((cv) => cv.width)).size === 1,
-      covers.map((cv) => `${cv.width}x${cv.height}`).join(' '));
-    check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
-    /* No chapter may collapse, and the lead chapter must read as the lead.
-       The floor is per-field rather than one shared height, because the
-       composition earns its hierarchy from the difference. */
-    check('no chapter field collapses and the lead chapter dominates',
-      covers.every((cv) => cv.height >= 900 * 0.4) && covers[0].height >= 900 * 0.6,
-      covers.map((cv) => cv.height).join(','));
-    check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
-    /* A cover is a composition, not a centred word: a register rule at the
-       top, an axis that alternates chapter to chapter, and the progression
-       signature at the foot. */
-    const composed = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
-      const name = el.querySelector('.pf-cover__name').getBoundingClientRect();
+    check('four chapter pieces on the landing', pieces.length === 4, String(pieces.length));
+    check('the four chapters are equal in width and height',
+      new Set(pieces.map((q) => q.width)).size === 1 && new Set(pieces.map((q) => q.height)).size === 1,
+      pieces.map((q) => `${q.width}x${q.height}`).join(' '));
+    /* Cut from one field, so they touch: a gap would make them four cards. */
+    check('the pieces touch — one field, not four cards',
+      pieces.slice(1).every((q, i) => Math.abs(q.left - pieces[i].right) <= 1),
+      pieces.map((q) => `${q.left}..${q.right}`).join(' '));
+    check('the field runs edge to edge',
+      pieces[0].left <= 1 && pieces[3].right >= (await p.evaluate(() => document.documentElement.clientWidth)) - 1,
+      `${pieces[0].left} .. ${pieces[3].right}`);
+    check('no piece is drawn as a card', pieces.every((q) => !q.boxed));
+    check('every chapter is openable', pieces.every((q) => q.isLink));
+    check('every chapter records its image source', pieces.every((q) => q.source.length > 0));
+
+    /* THREE CUTS, AND NOTHING ELSE RULED. The cuts are the only rules on the
+       screen, and they are scored by the scroll rather than drawn at rest. */
+    const cuts = await p.evaluate(() => {
+      const list = [...document.querySelectorAll('.pf-piece__cut')];
       return {
-        chapter: el.dataset.chapter,
-        register: !!el.querySelector('.pf-cover__register .pf-cover__num')
-          && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
-        intent: el.querySelector('.pf-cover__intent')?.textContent.trim(),
-        signal: getComputedStyle(el.querySelector('.pf-cover__go .arrow')).color,
-        /* Where the name sits across the cover, as a fraction of its width. */
-        axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
-        artInset: +((el.querySelector('.pf-cover__art').getBoundingClientRect().left - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
-      };
-    }));
-    check('every cover carries its register', composed.every((cv) => cv.register));
-    check('every chapter has a distinct editorial intent',
-      composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
-    check('the chapter action is the restrained orange signal',
-      composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    /* Each chapter is a different kind of space, which is carried by the
-       proportion of its image field and by its own ground — not by four
-       variations of one card. */
-    /* DISTINCT CHARACTER, INSIDE AN IDENTICAL FRAME. The frame is the same for
-       all four — that is the equal-value part. What differs is what happens
-       inside it: the ground it sits on, whether the image is cropped or laid
-       whole on the sheet, and where it is cropped to. That is the discipline
-       pattern language actually is. */
-    const character = await p.evaluate(() => {
-      const art = [...document.querySelectorAll('.pf-cover__art')].map((el) => {
-        const r = el.getBoundingClientRect();
-        const img = getComputedStyle(el.querySelector('img'));
-        return {
-          ratio: +(r.width / r.height).toFixed(2),
-          ground: getComputedStyle(el).backgroundColor,
-          fit: img.objectFit,
-          position: img.objectPosition,
-        };
-      });
-      return {
-        ratios: new Set(art.map((a) => a.ratio)).size,
-        grounds: new Set(art.map((a) => a.ground)).size,
-        fits: new Set(art.map((a) => a.fit)).size,
-        positions: new Set(art.map((a) => a.position)).size,
-        detail: art.map((a) => `${a.ratio} ${a.ground} ${a.fit} ${a.position}`).join(' | '),
+        count: list.length,
+        onRightEdges: list.every((el) => {
+          const piece = el.closest('.pf-piece').getBoundingClientRect();
+          return Math.abs(el.getBoundingClientRect().right - piece.right) <= 1;
+        }),
       };
     });
-    check('every chapter frame is the same proportion', character.ratios === 1, character.detail);
-    check('each chapter has its own ground and its own treatment inside that frame',
-      character.grounds >= 2 && character.positions >= 3, character.detail);
-    check('every chapter is openable', covers.every((cv) => cv.isLink));
-    check('chapter names remain legible without competing with imagery',
-      covers.every((cv) => cv.titlePx >= 28 && cv.titlePx <= 40), covers.map((cv) => cv.titlePx).join(','));
+    check('three cuts divide the four pieces', cuts.count === 3, String(cuts.count));
+    check('each cut sits on the division it makes', cuts.onRightEdges);
 
-    check('every chapter cover is image-led', covers.every((cv) => cv.images === 1), covers.map((cv) => cv.images).join(','));
-    check('every cover records its image source', covers.every((cv) => cv.source.length > 0), covers.map((cv) => cv.source).join(' | '));
-    /* The public name of chapter 04 is wider than its last step: the
-       recordings start at the first pattern lines. The internal id stays
-       `3d-simulation` so existing links and history entries keep working. */
+    /* EQUAL VALUE, DIFFERENT NATURE. The pieces do not differ in area — they
+       differ in what is in them: a photograph, a photograph, a typeset
+       document and a moving simulation. That is how four things are made
+       distinct without any of them being ranked. */
+    const natures = await p.evaluate(() => ({
+      photographs: document.querySelectorAll('.pf-piece[data-chapter="womenswear"] .pf-piece__still, .pf-piece[data-chapter="menswear"] .pf-piece__still').length,
+      typeset: document.querySelectorAll('.pf-piece[data-chapter="tech-packs"] .pf-piece__doc span').length,
+      motion: document.querySelectorAll('.pf-piece[data-chapter="3d-simulation"] video source').length,
+      grounds: new Set([...document.querySelectorAll('.pf-piece')].map((e) => getComputedStyle(e).backgroundColor)).size,
+    }));
+    check('two chapters are photographs', natures.photographs === 2, String(natures.photographs));
+    check('the documentation chapter is typeset from its real contents',
+      natures.typeset >= 5, `${natures.typeset} sections`);
+    check('the transformation chapter moves, with a fallback codec',
+      natures.motion === 2, `${natures.motion} sources`);
+    check('one chapter stands on ink', natures.grounds === 2, `${natures.grounds} grounds`);
+
+    /* Four identical "Enter world" labels told a visitor nothing. Each chapter
+       names its own way in, in the body face and in sentence case — not
+       tracked-out caps with an arrow stuck on the end. */
+    check('every chapter has a distinct intent and its own way in',
+      pieces.every((q) => q.intent && q.enter)
+        && new Set(pieces.map((q) => q.intent)).size === 4
+        && new Set(pieces.map((q) => q.enter)).size === 4,
+      pieces.map((q) => q.enter).join(' | '));
+    check('the way in is never four repetitions of one label',
+      !pieces.some((q) => /enter world/i.test(q.enter)));
+    check('no way in has an arrow glyph appended',
+      pieces.every((q) => !/[→↗➔]/.test(q.enter)), pieces.map((q) => q.enter).join(' | '));
+    check('chapter names are set as display type',
+      pieces.every((q) => q.namePx >= 22), pieces.map((q) => q.namePx).join(','));
+
+    /* The public name of chapter 04 is wider than its last step. */
     check('chapter 04 is published as Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').name === 'Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').text);
+      pieces.find((q) => q.chapter === '3d-simulation').name === 'Pattern Development');
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
-        [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    /* Four identical "Enter world" labels told the visitor nothing about what
-       lay behind each one. Each chapter now names its own way in, and the
-       labels must all differ. */
-    const ways = await p.evaluate(() => [...document.querySelectorAll('.pf-cover__go')].map((e) => e.textContent.trim()));
-    check('the covers include a concise intent and their own way in',
-      covers.every((cv) => cv.intent.length > 0) && ways.every((w) => w.length > 0)
-        && new Set(ways).size === 4,
-      ways.join(' | '));
-    check('the way in is never four repetitions of one label',
-      !ways.some((w) => /enter world/i.test(w)), ways.join(' | '));
-    check('no category list appears on any cover',
-      await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
-    check('the reference disclaimer never appears on a cover',
+        [...document.querySelectorAll('.pf-piece')].map((e) => e.textContent).join(' '))));
+    check('no category list appears on any piece',
+      await p.evaluate(() => document.querySelectorAll('.pf-piece .pf-cat, .pf-piece ol, .pf-piece ul').length === 0));
+    check('the reference disclaimer never appears on a piece',
       await p.evaluate(() => !/no authorship of photographed garments/i
-        .test([...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
+        .test([...document.querySelectorAll('.pf-piece')].map((e) => e.textContent).join(' '))));
+
+    /* THE OPENING IS FASHION AND NOTHING ELSE. No rule, no number, no label —
+       a visitor who does not know what a notch is has nothing to decode on the
+       first screen. The garment is whole and it is the largest thing there. */
+    const opening = await p.evaluate(() => {
+      const field = document.querySelector('.pf-open');
+      const fig = document.querySelector('.pf-open__figure img');
+      const title = document.querySelector('.pf-open__title');
+      const fr = fig.getBoundingClientRect();
+      const tr = title.getBoundingClientRect();
+      return {
+        fieldHeight: Math.round(field.getBoundingClientRect().height),
+        viewport: window.innerHeight,
+        fit: getComputedStyle(fig).objectFit,
+        garmentArea: Math.round(fr.width * fr.height),
+        titleArea: Math.round(tr.width * tr.height),
+        /* Type and image may share the field; they may never share a pixel. */
+        overlap: Math.max(0, Math.min(fr.right, tr.right) - Math.max(fr.left, tr.left))
+               * Math.max(0, Math.min(fr.bottom, tr.bottom) - Math.max(fr.top, tr.top)),
+        /* Both stand on the same floor. */
+        /* The statement block — the title and the one sentence under it —
+           stands on the same floor as the hem. Measured on the block, because
+           the block is what the eye reads as sitting on the line. */
+        floorGap: Math.abs(Math.round(fr.bottom - document.querySelector('.pf-open__type').getBoundingClientRect().bottom)),
+        labels: field.querySelectorAll('.label, .pf-notch').length,
+        titleLines: title.querySelectorAll('span').length,
+        titleText: title.textContent.replace(/\s+/g, ' ').trim(),
+      };
+    });
+    check('the opening is one screen', opening.fieldHeight <= opening.viewport + 1,
+      `${opening.fieldHeight} in ${opening.viewport}`);
+    check('the opening garment is whole, never cropped', opening.fit === 'contain', opening.fit);
+    check('the garment is the largest thing in the first frame',
+      opening.garmentArea > opening.titleArea, `${opening.garmentArea} vs ${opening.titleArea}`);
+    check('the statement and the garment never overlap', opening.overlap === 0, String(opening.overlap));
+    check('the statement and the garment stand on one floor',
+      opening.floorGap <= 40, `${opening.floorGap}px apart`);
+    check('the first screen carries no label, rule or mark',
+      opening.labels === 0, `${opening.labels} found`);
+    check('the statement is set on two lines and reads whole',
+      opening.titleLines === 2 && /Between instinct & construction\./.test(opening.titleText),
+      opening.titleText);
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({
@@ -626,8 +634,12 @@ try {
       const st = getComputedStyle(band);
       return { left: Math.round(r.left), width: Math.round(r.width), vw: document.documentElement.clientWidth, bg: st.backgroundColor };
     });
-    check('the viewer sits in one full-width white field',
-      studio.left === 0 && studio.width >= studio.vw - 1 && studio.bg === 'rgb(255, 255, 255)',
+    /* BRIGHT PAPER, NOT WHITE AND NEVER BLACK. The field was pinned to pure
+       white while the renditions were opaque white on white; the design value
+       is one step up from the page, and the final transparent assets are made
+       for it. */
+    check('the viewer sits in one full-width field of bright paper',
+      studio.left === 0 && studio.width >= studio.vw - 1 && studio.bg === 'rgb(251, 250, 246)',
       JSON.stringify(studio));
 
     // Keyboard alone must drive the deck.
@@ -759,76 +771,96 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
-    /* EVIDENCE: CONTENT DRIVES THE LAYOUT.
+    /* EVIDENCE: A LAYER THE VISITOR OPENS.
 
-       This used to assert three equal plates in a column for every garment.
-       That contract was wrong, and it was wrong in a way a checklist could not
-       see: with no authored asset in the repository, all three plates stood in
-       the active garment's own photograph, dimmed and stamped, so a third of
-       the best screen on the site was three grey duplicates of the dress the
-       visitor was already looking at.
+       Three contracts have stood here and the first two were each half right.
+       A permanent column beside the deck showed three stamped stand-ins next
+       to every garment — a third of the best screen spent on a promise.
+       Drawing nothing was honest but gave up the one thing the interface has
+       to demonstrate: that the three surfaces belong to the garment in FRONT
+       and change when it changes.
 
-       What is protected here is HONESTY, not a box count. Nothing may be
-       presented as a development surface unless it is one; the visitor must be
-       told what is coming; and the garment must own the screen until there is
-       something real to set beside it. */
+       So: closed by default, because fashion keeps the screen; opened, the
+       three surfaces for the active garment; and every stand-in stamped on its
+       face and described as a stand-in in its alt text, because an unmarked
+       borrowed photograph is fabricated evidence. */
     const evidence = await p.evaluate(() => {
       const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
       const block = panel.querySelector('.pf-dev:not([hidden])');
       const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
-      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
-      const stageEl = viewer.querySelector('.pf-stage');
+      const plates = [...block.querySelectorAll('.pf-plate')];
       return {
         blocks: panel.querySelectorAll('.pf-dev').length,
         shownBlocks: panel.querySelectorAll('.pf-dev:not([hidden])').length,
         forIndex: block.dataset.evidenceFor,
-        hasAuthored: block.hasAttribute('data-has-authored'),
-        plates: block.querySelectorAll('.pf-plate').length,
-        plateImages: block.querySelectorAll('.pf-plate img').length,
-        stages: [...block.querySelectorAll('.pf-plate')].map((el) => el.dataset.plate),
-        pending: block.querySelector('[data-evidence-pending]')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
-        pendingPx: block.querySelector('[data-evidence-pending]')
-          ? Math.round(parseFloat(getComputedStyle(block.querySelector('[data-evidence-pending]')).fontSize))
+        /* A <details>, so the state is the element's and needs no script. */
+        tag: block.tagName,
+        closedByDefault: block.open === false,
+        summary: block.querySelector('summary') ? true : false,
+        stages: plates.map((el) => el.dataset.plate),
+        labels: plates.map((el) => el.querySelector('.pf-plate__label').textContent.trim()),
+        previews: plates.filter((el) => el.hasAttribute('data-preview')).length,
+        stamped: plates.filter((el) => el.querySelector('.pf-plate__stamp')).length,
+        stampPx: plates[0].querySelector('.pf-plate__stamp')
+          ? Math.round(parseFloat(getComputedStyle(plates[0].querySelector('.pf-plate__stamp')).fontSize))
           : 0,
-        /* The whole block, including its note, against the garments. */
-        blockHeight: Math.round(block.getBoundingClientRect().height),
-        deckHeight: Math.round(deck.height),
-        deckShare: deck.width / viewer.getBoundingClientRect().width,
-        stageInViewport: stageEl.getBoundingClientRect().height <= window.innerHeight,
+        honestAlts: plates.filter((el) => !el.hasAttribute('data-preview')
+          || /temporary preview/i.test(el.querySelector('img')?.alt ?? '')).length,
+        /* Closed, the whole layer costs one line. */
+        closedHeight: Math.round(block.getBoundingClientRect().height),
+        deckHeight: Math.round(viewer.querySelector('.pf-deck').getBoundingClientRect().height),
         columns: getComputedStyle(viewer).gridTemplateColumns.split(' ').length,
+        stageInViewport: viewer.querySelector('.pf-stage').getBoundingClientRect().height <= window.innerHeight,
       };
     });
     check('one development block exists per garment and only one is shown',
       evidence.blocks === 17 && evidence.shownBlocks === 1 && evidence.forIndex === '0',
       `${evidence.blocks} blocks / ${evidence.shownBlocks} shown / for ${evidence.forIndex}`);
-    /* No authored asset exists in the repository yet, so this is the state a
-       visitor sees today. When one is supplied the branch below it applies and
-       this assertion is the one that changes. */
-    check('with nothing authored, no plate is drawn at all',
-      evidence.hasAuthored === false && evidence.plates === 0 && evidence.plateImages === 0,
-      `authored ${evidence.hasAuthored} / ${evidence.plates} plates / ${evidence.plateImages} images`);
-    check('no garment photograph is ever presented as a development surface',
-      evidence.plateImages === 0 || evidence.hasAuthored,
-      `${evidence.plateImages} images with authored ${evidence.hasAuthored}`);
-    check('the visitor is told what will publish there, in one readable line',
-      /sketch, 2d pattern and 3d simulation/i.test(evidence.pending) && evidence.pendingPx >= 11,
-      `${evidence.pendingPx}px — ${evidence.pending || 'none'}`);
-    check('the pending note costs the garment almost nothing',
-      evidence.blockHeight <= evidence.deckHeight * 0.3,
-      `note block ${evidence.blockHeight}px against a ${evidence.deckHeight}px deck`);
-    check('the garment owns the full width while nothing is authored',
-      evidence.columns === 1 && evidence.deckShare >= 0.99,
-      `${evidence.columns} column(s), deck ${Math.round(evidence.deckShare * 100)}%`);
-    check('the garments are never taller than the screen they are judged on',
-      evidence.stageInViewport);
+    check('the layer is a disclosure that needs no script',
+      evidence.tag === 'DETAILS' && evidence.summary, evidence.tag);
+    check('it is closed until the visitor asks for it', evidence.closedByDefault);
+    check('closed, it costs the garment one line',
+      evidence.closedHeight <= evidence.deckHeight * 0.18,
+      `${evidence.closedHeight}px against a ${evidence.deckHeight}px deck`);
+    check('the garment keeps the full width of the viewer',
+      evidence.columns === 1 && evidence.stageInViewport, `${evidence.columns} column(s)`);
+    check('exactly three surfaces, in order',
+      evidence.stages.join(',') === 'sketch,pattern,simulation', evidence.stages.join(','));
+    check('the surfaces are named, not numbered',
+      evidence.labels.join(' | ') === 'Sketch | 2D Pattern | 3D Simulation', evidence.labels.join(' | '));
+    /* No authored asset exists yet, so all three stand in — and every one of
+       them must say so twice: on its face, and to a screen reader. */
+    check('every stand-in is stamped on its face',
+      evidence.previews === 3 && evidence.stamped === 3,
+      `${evidence.previews} stand-ins / ${evidence.stamped} stamped`);
+    check('the stamp is not fine print', evidence.stampPx >= 10, `${evidence.stampPx}px`);
+    check('no stand-in borrows the name of the surface it stands in for',
+      evidence.honestAlts === 3, `${evidence.honestAlts} of 3 honest`);
 
-    /* The three surfaces are still named, in order, by the data model — the
-       component reads them from there, so a future authored asset lands in
-       the right one. */
-    const stageOrder = await p.evaluate(() => [...document.querySelectorAll('[data-plate]')].map((e) => e.dataset.plate));
-    check('a rendered plate can only be sketch, 2D pattern or 3D simulation',
-      stageOrder.every((key) => ['sketch', 'pattern', 'simulation'].includes(key)),
-      stageOrder.slice(0, 6).join(',') || 'none rendered');
+    /* AND IT FOLLOWS THE GARMENT. Opening the layer and advancing the deck
+       must leave the layer open on the NEXT garment's surfaces — that is the
+       whole reason the stand-ins are allowed to exist. */
+    const follows = await p.evaluate(async () => {
+      const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
+      const first = panel.querySelector('.pf-dev:not([hidden])');
+      first.open = true;
+      const api = window.__portfolioRunway;
+      api.goTo(1);
+      await new Promise((r) => setTimeout(r, 700));
+      const now = panel.querySelector('.pf-dev:not([hidden])');
+      const out = {
+        movedTo: now.dataset.evidenceFor,
+        stillOpen: now.open === true,
+        differentBlock: now !== first,
+        firstClosedAway: first.hidden === true,
+      };
+      api.goTo(0);
+      return out;
+    });
+    check('advancing the garment advances the surfaces',
+      follows.movedTo === '1' && follows.differentBlock && follows.firstClosedAway,
+      JSON.stringify(follows));
+    check('the layer stays open across the change', follows.stillOpen, JSON.stringify(follows));
 
     await c.close();
   }
@@ -867,22 +899,21 @@ try {
       `${Math.round(ratio * 100)}% of the leader across ${geo.widths.length} positions`);
     check(`no horizontal overflow at ${width}`,
       await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
-    /* No plate is drawn for a garment with nothing authored, at any width —
-       so what is checked at every size is that the garment gets the room and
-       the pending line is still stated. */
+    /* At every width the layer is closed until asked for, and the garment has
+       the whole viewer. */
     const ev = await p.evaluate(() => {
       const block = document.querySelector('[data-screen="category"]:not([hidden]) .pf-dev:not([hidden])');
       const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
       return {
+        closed: block.open === false,
         plates: block.querySelectorAll('.pf-plate').length,
-        images: block.querySelectorAll('.pf-plate img').length,
-        pending: /publish with each garment/i.test(block.textContent),
+        stamped: block.querySelectorAll('.pf-plate__stamp').length,
         columns: getComputedStyle(viewer).gridTemplateColumns.split(' ').length,
       };
     });
-    check(`${width} draws no plate while nothing is authored`,
-      ev.plates === 0 && ev.images === 0, `${ev.plates} plates / ${ev.images} images`);
-    check(`${width} still states what will publish there`, ev.pending);
+    check(`${width} keeps the development layer closed until it is asked for`, ev.closed);
+    check(`${width} stamps every stand-in it holds`,
+      ev.plates === 3 && ev.stamped === 3, `${ev.plates} plates / ${ev.stamped} stamped`);
     check(`${width} gives the garment the whole width`, ev.columns === 1, `${ev.columns} column(s)`);
     await c.close();
   }
@@ -910,19 +941,29 @@ try {
         previews: list.map((el) => el.querySelector('.pf-doc__page img')?.getAttribute('src') ?? ''),
         previewLinks: list.map((el) => el.querySelector('.pf-doc__page')?.getAttribute('href') ?? ''),
         previewWidths: list.map((el) => Math.round(el.querySelector('.pf-doc__page').getBoundingClientRect().width)),
-        numbers: list.map((el) => el.querySelector('.pf-doc__num').textContent.trim()),
+        titles: list.map((el) => el.querySelector('.pf-doc__title').textContent.trim()),
+        /* The set overlaps: a cascade of sheets on a surface, not five
+           separate items in a column. */
+        overlaps: boxes.slice(1).filter((b, i) => b.top < boxes[i].bottom - 2).length,
+        zOrder: list.map((el) => Number(getComputedStyle(el).zIndex) || 0),
         opens: list.map((el) => el.querySelector('[data-open-pdf]')?.getAttribute('href') ?? ''),
         stamps: list.filter((el) => /demo/i.test(el.querySelector('.pf-doc__stamp')?.textContent ?? '')).length,
         carousel: w.querySelectorAll('.pf-folio, .pf-library__pile, [data-dossier]').length,
       };
     });
     check('five demo documents', docs.count === 5, String(docs.count));
-    check('the documents run one below another',
-      docs.stacked && new Set(docs.lefts).size === 1, `${docs.lefts.join(',')} stacked ${docs.stacked}`);
-    check('the numbering runs 01 to 05', docs.numbers.join(',') === '01,02,03,04,05', docs.numbers.join(','));
-    check('each shows its own first page, large',
+    /* THE ROOM IS A CASCADE, NOT A LIST. Two earlier versions were a column
+       of five full pages (five screens of a deliberately blank form) and then
+       a ruled register (honest, legible, and completely ordinary). Documents
+       in a room lie on a surface, overlapping, every head readable, one of
+       them pulled clear when you want it. */
+    check('the set overlaps as a cascade', docs.overlaps === 4, `${docs.overlaps} of 4 overlap`);
+    check('the later sheets lie in front',
+      docs.zOrder.every((z, i) => i === 0 || z > docs.zOrder[i - 1]), docs.zOrder.join(','));
+    check('every document is named', docs.titles.every((t) => t.length > 2), docs.titles.join(' | '));
+    check('each shows its own first page at a readable size',
       docs.previews.every((src) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(src))
-      && docs.previewWidths.every((w) => w >= 400),
+      && docs.previewWidths.every((w) => w >= 300),
       `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.previewWidths.join(',')}`);
     check('each is marked a demo', docs.stamps === 5, String(docs.stamps));
     check('each offers its own PDF',
@@ -1012,8 +1053,13 @@ try {
     check('every recording has its localized YouTube poster', reel.posters.every((src, index) => src === `/portfolio/posters/${suppliedIds[index]}.jpg`), reel.posters.join(' | '));
     check('no player exists before a click, while all play controls do',
       reel.players === 0 && reel.playControls === 5, `${reel.players}/${reel.playControls}`);
-    check('the local home-page clip is not used as a library video',
-      reel.localVideo === false || reel.localVideo === 0, String(reel.localVideo));
+    /* The clip is not one of the five recorded sessions — it is a different
+       kind of thing, and passing it off as a library entry would misrepresent
+       both. It opens the chapter as the transformation itself instead, which
+       is checked below. */
+    check('the local clip is not passed off as one of the recorded sessions',
+      await p.evaluate(() => ![...document.querySelectorAll('[data-video]')]
+        .some((e) => /CLO3D\.(mp4|webm)/.test(e.innerHTML))));
     check('the rejected hero-plus-film-strip interface is gone', reel.strip === 0, String(reel.strip));
 
     check('no privacy-enhanced player is requested before play', media.every((url) => !/youtube-nocookie\.com\/embed/i.test(url)), media.join(' | '));
@@ -1114,10 +1160,34 @@ try {
        stations below the title name it as a sequence instead, which is both
        shorter and clearer, so that is what is checked. */
     const arc = await p.evaluate(() => [...document.querySelectorAll(
-      '[data-world="3d-simulation"] [data-transform-track] .pf-transform__name')].map((e) => e.textContent.trim()));
+      '[data-world="3d-simulation"] [data-transform-track] .pf-change__name')].map((e) => e.textContent.trim()));
     check('the chapter names the development arc as a sequence',
       arc.join(' → ') === 'Idea → 2D → Construction → 3D → Fit', arc.join(' → '));
     check('the descriptor stays to one line', naming.descriptor.length <= 110, naming.descriptor);
+    /* NAMING THE STAGES IS NOT SHOWING THE CHANGE. The chapter opens on a real
+       recording of a garment simulating — the one thing on the route that
+       shows 2D becoming 3D instead of claiming it — and it is muted, looping,
+       controlless and does not fetch a byte until it is on screen. */
+    const change = await p.evaluate(() => {
+      const v = document.querySelector('[data-world="3d-simulation"] [data-change-clip]');
+      if (!v) return null;
+      const r = v.getBoundingClientRect();
+      return {
+        sources: [...v.querySelectorAll('source')].map((sc) => sc.type),
+        muted: v.muted, loop: v.loop, controls: v.controls,
+        autoplayAttr: v.hasAttribute('autoplay'),
+        labelled: (v.getAttribute('aria-label') ?? '').length > 20,
+        area: Math.round(r.width * r.height),
+      };
+    });
+    check('the chapter shows the change, with a real recording',
+      change && change.area > 100000, change ? `${change.area}px²` : 'missing');
+    check('the recording is muted, looping and has no controls',
+      change.muted && change.loop && !change.controls && change.labelled);
+    check('it never autoplays by attribute — the runtime decides, in view only',
+      change.autoplayAttr === false);
+    check('it offers a licence-free codec first',
+      change.sources.join(',') === 'video/webm,video/mp4', change.sources.join(','));
     await c.close();
   }
 
@@ -1168,17 +1238,17 @@ try {
       html.includes('Interface prototype')
       && html.includes('stamped on every page')
       && (html.match(/>Demo</g) ?? []).length >= 5);
-    /* There are no stand-ins to declare any more. What must be in the served
-       HTML is the statement of what will publish there — and NOT a garment
-       photograph sitting inside a development plate. */
-    check('what will publish as development evidence is stated without the script',
-      html.includes('publish with each garment'));
-    check('no garment photograph is served inside a development plate',
-      !/<li[^>]*class="pf-plate"[\s\S]{0,400}?<img/.test(html));
-    check('all five supplied development recordings are server-rendered without players',
-      ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
-        .every((id) => html.includes(`data-youtube="${id}"`))
-      && !html.includes('youtube-nocookie.com/embed/'));
+    /* WITHOUT A SCRIPT the stand-ins are still served — so their honesty
+       cannot depend on JavaScript. Both marks must be in the HTML: the stamp
+       on the face of every borrowed image, and the same statement in its alt
+       text. The layer is a <details>, so it is closed without a script too. */
+    check('every stand-in is stamped in the served HTML',
+      (html.match(/pf-plate__stamp/g) ?? []).length >= 3 && html.includes('Temp preview'));
+    check('every stand-in says so in its alt text in the served HTML',
+      (html.match(/Temporary preview: the active garment/g) ?? []).length >= 3);
+    check('the development layer is a disclosure, closed, without a script',
+      /<details[^>]*class="pf-dev"/.test(html) && !/<details[^>]*class="pf-dev"[^>]*\sopen/.test(html));
+
     const visible = await p.evaluate(() => {
       const slots = [...document.querySelectorAll('.pf-slot')];
       return { total: slots.length, shown: slots.filter((s) => s.getBoundingClientRect().width > 20).length };

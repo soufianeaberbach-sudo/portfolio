@@ -9,10 +9,11 @@
  * The exact five supplied YouTube ids are published. Titles remain neutral
  * because the source material, not an inferred marketing story, names them.
  *
- * public/CLO3D.mp4 is deliberately absent. It is a vertical, self-hosted clip
- * of a finished simulation running — a different format and a different kind
- * of thing from a recorded working session — and standing it in as Video 01
- * would misrepresent both the library and the clip.
+ * public/CLO3D.mp4 is NOT one of the library entries. It is a vertical clip of
+ * a finished simulation running — a different format and a different kind of
+ * thing from a recorded working session — so standing it in as Video 01 would
+ * misrepresent both. It now opens the chapter instead, where a garment that
+ * actually moves is the subject rather than an entry in a list.
  *
  * When real ids arrive: the poster renders first and the <iframe> is created
  * by the click that asks for it, from youtube-nocookie.com. Nothing contacts
@@ -66,16 +67,44 @@ const TRANSFORM_STEPS = [
       </p>
     </header>
 
-    {/* The transformation the chapter is about, as its index. Five states,
-        each with its own rule; the rules fill as the page scrolls past them
-        and the names are legible whether they have filled or not. */}
-    <div class="pf-transform">
-      <ol class="pf-transform__track" data-transform-track aria-label="Development sequence">
+    {/* THE TRANSFORMATION, SEEN — not named.
+        Naming five stages under a heading is a caption, not a chapter about
+        change. This is a real recording of one of Soufiane's own garments
+        simulating: the cloth moves, the drape settles, the form resolves. It
+        is the one thing on this route that shows 2D becoming 3D instead of
+        claiming it.
+
+        The five states run beside it as the chapter's spine, and the scroll
+        advances them, so the visitor reads the sequence while watching the
+        thing the sequence describes. The recording is muted, loops, has no
+        controls and no sound, plays only while it is on screen, and never
+        plays at all under reduced motion or on a connection asking to save
+        data — the poster frame stands in, so the frame is never empty. */}
+    <div class="pf-change">
+      <figure class="pf-change__frame">
+        <video
+          class="pf-change__clip"
+          data-change-clip
+                    poster="/CLO3D-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-label="A garment simulating in CLO3D: the cloth settles into its finished drape."
+        >
+          {/* VP9 first: a third of the weight, and the only codec some
+              browsers ship without a licence. H.264 behind it covers
+              everything else. */}
+          <source src="/CLO3D.webm" type="video/webm" />
+          <source src="/CLO3D.mp4" type="video/mp4" />
+        </video>
+      </figure>
+
+      <ol class="pf-change__track" data-transform-track aria-label="Development sequence">
         {TRANSFORM_STEPS.map(([index, name], i) => (
-          <li class="pf-transform__step" style={`--step-from:${i / TRANSFORM_STEPS.length}`}>
-            <i class="pf-transform__bar" aria-hidden="true"></i>
-            <i class="pf-transform__num">{index}</i>
-            <b class="pf-transform__name">{name}</b>
+          <li class="pf-change__state" style={`--step-from:${i / TRANSFORM_STEPS.length}`}>
+            <i class="pf-change__bar" aria-hidden="true"></i>
+            <b class="pf-change__name">{name}</b>
           </li>
         ))}
       </ol>

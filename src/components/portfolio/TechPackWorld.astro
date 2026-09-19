@@ -62,9 +62,14 @@ const anyDemo = packs.some((pack) => pack.demo);
     </header>
 
     {packs.length > 0 ? (
-      <ol class="pf-docs">
+      /* THE ROOM: the set on the table, fanned so every sheet's page is
+         visible at once and none of them is buried. Attention lifts one clear
+         of the others — the same grammar as the four pieces on the landing —
+         and selecting it opens the document at full size in the reader, which
+         is where full size belongs. */
+      <ol class="pf-docs" aria-label="Technical documents">
         {packs.map((pack, index) => (
-          <li class="pf-doc" data-doc={pack.id}>
+          <li class="pf-doc" data-doc={pack.id} style={`--sheet: ${index}`}>
             <a
               class="pf-doc__page"
               id={`preview-${pack.id}`}
@@ -75,41 +80,29 @@ const anyDemo = packs.some((pack) => pack.demo);
               data-doc-title={pack.title}
               aria-label={`Open ${pack.title} — ${pack.pageCount ?? 0} pages`}
             >
-              <span class="pf-notch" aria-hidden="true"></span>
-              <i class="label pf-doc__num">{String(index + 1).padStart(2, '0')}</i>
-
               <span class="pf-doc__sheet">
                 {pack.coverImage ? (
                   <img
                     src={pack.coverImage.src}
                     srcset={pack.coverImage.srcset}
-                    sizes="(max-width: 767px) 40vw, 18vw"
+                    sizes="(max-width: 767px) 62vw, 24vw"
                     width={pack.coverImage.width}
                     height={pack.coverImage.height}
                     alt={pack.coverImage.alt}
-                    loading={index < 2 ? 'eager' : 'lazy'}
+                    loading={index < 3 ? 'eager' : 'lazy'}
                     decoding="async"
                   />
                 ) : (
                   <span class="pf-doc__blank" aria-hidden="true"></span>
                 )}
+                {pack.demo && <span class="pf-doc__stamp">Demo</span>}
               </span>
 
               <span class="pf-doc__meta">
                 <b class="pf-doc__title">{pack.title}</b>
                 <span class="pf-doc__line">
-                  {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount} pages` : ''}
+                  {pack.garmentType}{pack.pageCount ? `, ${pack.pageCount} pages` : ''}
                 </span>
-                {pack.scope && pack.scope.length > 0 && (
-                  /* The contents of the document, which is the thing a
-                     production contact actually wants to know. */
-                  <span class="pf-doc__scope">{pack.scope.join(' · ')}</span>
-                )}
-              </span>
-
-              <span class="pf-doc__state">
-                {pack.demo && <span class="label pf-doc__stamp">Demo</span>}
-                <span class="label pf-doc__open">Read <i aria-hidden="true"><Arrow /></i></span>
               </span>
             </a>
           </li>

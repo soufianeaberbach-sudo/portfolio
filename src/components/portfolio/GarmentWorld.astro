@@ -66,9 +66,18 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
       <p class="pf-head__descriptor">{world.descriptor}</p>
     </header>
 
-    {/* The whole field, at once. Nesting and area carry the hierarchy; the
-        list order and the numbers carry the reading order. No rail, no snap
-        points, no "scroll to discover" — every category is on screen. */}
+    {/* THE FIELD, CUT THE OTHER WAY.
+        The landing cuts one field into four vertical pieces; a chapter cuts
+        its field into horizontal bands. Same device, same discipline, rotated
+        — which is what makes the two screens feel like one practice rather
+        than two templates.
+
+        Every category is on screen at rest and every band is the same height,
+        so nothing is ranked. Bring attention to one and it opens: the band
+        grows, its garment comes up to editorial scale, and the others give up
+        the room and take it back afterwards. No rail, no snap points, no
+        "scroll to discover", and no numbers — five categories are an index,
+        not a sequence, and numbering them said so falsely. */}
     <nav class={`pf-cats pf-cats--${world.id}`} aria-label={`${world.title} categories`}>
       <ol class="pf-cats__list">
         {world.categories.map((category, categoryIndex) => {
@@ -86,7 +95,8 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                 data-open={open ? '' : undefined}
                 aria-label={open ? `${category.label} — ${count} ${noun.toLowerCase()}${count === 1 ? '' : 's'}` : `${category.label} — pending`}
               >
-                <span class="pf-notch" aria-hidden="true"></span>
+                {/* The cut this band is scored along. */}
+                <span class="pf-cat__cut" aria-hidden="true"></span>
                 {visual && (
                   <span class="pf-cat__media" aria-hidden="true">
                     <img
@@ -106,15 +116,13 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                   </span>
                 )}
                 <span class="pf-cat__content">
-                  <i class="pf-cat__num">{category.number}</i>
                   <span class="pf-cat__label">{category.label}</span>
-                  <b class="pf-cat__count label">
-                    {open ? `${String(count).padStart(2, '0')} ${noun.toLowerCase()}s` : 'Pending'}
-                  </b>
                   {/* One line, always present. Discovery never depends on a
                       pointer hovering something. */}
                   <small class="pf-cat__blurb">{category.blurb}</small>
-                  {open && <i class="pf-cat__go" aria-hidden="true"><Arrow /></i>}
+                  <b class="pf-cat__count">
+                    {open ? `${count} ${noun.toLowerCase()}${count === 1 ? '' : 's'}` : 'Pending'}
+                  </b>
                 </span>
               </Tag>
             </li>

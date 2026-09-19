@@ -1,111 +1,93 @@
 ---
 /* The development surfaces of ONE garment — sketch, 2D pattern, 3D simulation.
  *
- * WHAT CHANGED, AND WHY.
+ * TWO THINGS HAD TO BE TRUE AT ONCE and earlier versions each got one.
  *
- * First this was rendered once per CATEGORY: three fixed plates that stayed
- * the same while the visitor advanced through seventeen garments. Evidence
- * that does not follow the garment is not evidence of anything, so one block
- * is now rendered per garment and the runtime shows the active one.
+ * A permanent column beside the deck showed three stamped stand-ins next to
+ * every garment: a third of the best screen on the site spent on a promise,
+ * and three grey duplicates of the dress the visitor was already looking at.
+ * Removing it entirely was honest but gave up the thing the interface is
+ * supposed to demonstrate — that the evidence belongs to the ACTIVE garment
+ * and changes when the garment changes.
  *
- * Then, while no real asset existed, all three plates stood in the active
- * garment's own photograph, dimmed and stamped. That was honest but it was
- * bad design: three near-identical grey ghosts of the dress you are already
- * looking at, labelled Sketch, 2D Pattern and 3D Simulation. A third of the
- * best screen on the site was a layout built around emptiness, and the
- * stand-ins undersold the garment they sat beside.
+ * So it is a LAYER THE VISITOR OPENS. Closed, it costs one line under the run
+ * bar; fashion keeps the screen. Opened, the three surfaces for the garment in
+ * front appear, and advancing the deck advances them. `<details>` carries the
+ * state, so it works with no script, from the keyboard, and in the fallback
+ * page, and the runtime only has to carry the open state across to the next
+ * garment's block.
  *
- * THE RULE NOW: CONTENT DRIVES THE LAYOUT.
- *
- *   one or more authored surfaces  →  show exactly those, at full strength.
- *                                     A garment with one real sketch shows
- *                                     one plate, not one plate and two
- *                                     apologies.
- *   nothing authored yet           →  no plates at all. One quiet line states
- *                                     what will publish here, and the garment
- *                                     keeps the whole stage.
- *
- * Nothing here fabricates a surface: a demo plate never draws a plausible
- * sketch, because an invented sketch is invented evidence. Supplying
- * `project.evidence.sketch` turns that one surface on and changes no code.
+ * HONESTY IS NOT NEGOTIABLE. A surface with no asset yet stands in the active
+ * garment's own photograph, dimmed, and stamped TEMP PREVIEW on its face — and
+ * says the same thing again in its alt text, so it is a stand-in to a screen
+ * reader too. It never draws a plausible sketch: an invented sketch is
+ * invented evidence. Supplying `project.evidence.sketch` turns that one
+ * surface real and changes nothing here.
  */
 import type { EvidenceSurface } from '../../data/portfolio';
+import { EVIDENCE_PREVIEW_MARK } from '../../data/portfolio';
 
 interface Props {
   surfaces: EvidenceSurface[];
-  /* Which garment these belong to — the runtime matches it against the deck's
-     active index. */
   index: number;
-  /* The garment's own label, so the heading names what is being inspected. */
   garmentLabel: string;
 }
 
 const { surfaces, index, garmentLabel } = Astro.props;
-
-/* Only real assets are rendered. `preview` and `empty` surfaces are not
-   drawn — they are summarised in one line below. */
-const authored = surfaces.filter((surface) => surface.kind === 'authored');
-const pending = surfaces.filter((surface) => surface.kind !== 'authored');
-const pendingNames = pending.map((surface) => surface.name.toLowerCase());
-const pendingLine = pendingNames.length === 3
-  ? 'Sketch, 2D pattern and 3D simulation publish with each garment.'
-  : `Also publishing here: ${pendingNames.join(' and ')}.`;
+const authored = surfaces.filter((surface) => surface.kind === 'authored').length;
 ---
 
-<section
+<details
   class="pf-dev"
   data-dev
   data-evidence-for={index}
-  data-has-authored={authored.length > 0 ? '' : undefined}
-  aria-label={`Development surfaces — ${garmentLabel}`}
+  data-has-authored={authored > 0 ? '' : undefined}
   hidden={index !== 0}
 >
-  {authored.length > 0 && (
-    <>
-      <p class="pf-dev__head">
-        <span class="label pf-dev__title">Development</span>
-      </p>
-      <ol class="pf-dev__plates">
-        {authored.map((surface) => (
-          <li class="pf-plate" data-plate={surface.key}>
-            <button
-              type="button"
-              class="pf-plate__art"
-              data-evidence-open
-              data-evidence-title={`${surface.step} / ${surface.name}`}
-              data-evidence-kind={surface.kind}
-              aria-label={`Enlarge ${surface.name} — ${garmentLabel}`}
-            >
-              <span class="pf-notch" aria-hidden="true"></span>
-              <img
-                src={surface.image!.src}
-                srcset={surface.image!.srcset}
-                sizes="(max-width: 1023px) 30vw, 20vw"
-                width={surface.image!.width}
-                height={surface.image!.height}
-                alt={surface.image!.alt}
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="pf-plate__inspect" aria-hidden="true">Inspect +</span>
-            </button>
-            <p class="pf-plate__label">
-              <b class="label">Step {surface.step}</b>
-              <span>{surface.name}</span>
-            </p>
-          </li>
-        ))}
-      </ol>
-    </>
-  )}
+  <summary class="pf-dev__open">
+    <span class="pf-dev__open-label">Inspect development</span>
+    <span class="pf-dev__open-hint">
+      {authored > 0
+        ? `Sketch, 2D pattern and 3D simulation — ${garmentLabel}`
+        : 'Sketch, 2D pattern and 3D simulation'}
+    </span>
+  </summary>
 
-  {pending.length > 0 && (
-    /* Stated once, at the weight of a caption, with no box around it. The
-       visitor learns what is coming without a third of the screen being
-       reserved for it. */
-    <p class="pf-dev__pending" data-evidence-pending>
-      <span class="pf-notch" aria-hidden="true"></span>
-      <span>{pendingLine}</span>
-    </p>
-  )}
-</section>
+  <ol class="pf-dev__plates" aria-label={`Development surfaces — ${garmentLabel}`}>
+    {surfaces.map((surface) => (
+      <li class="pf-plate" data-plate={surface.key} data-preview={surface.kind !== 'authored' ? '' : undefined}>
+        <button
+          type="button"
+          class="pf-plate__art"
+          data-evidence-open
+          data-evidence-title={`${surface.step} / ${surface.name}`}
+          data-evidence-kind={surface.kind}
+          aria-label={surface.kind === 'authored'
+            ? `Enlarge ${surface.name} — ${garmentLabel}`
+            : `Enlarge the temporary preview standing in for the ${surface.name.toLowerCase()} — ${garmentLabel}`}
+        >
+          {surface.kind !== 'authored' && (
+            <span class="pf-plate__stamp">{EVIDENCE_PREVIEW_MARK}</span>
+          )}
+          {surface.image ? (
+            <img
+              src={surface.image.src}
+              srcset={surface.image.srcset}
+              sizes="(max-width: 767px) 44vw, 22vw"
+              width={surface.image.width}
+              height={surface.image.height}
+              alt={surface.kind === 'authored'
+                ? surface.image.alt
+                : `Temporary preview: the active garment shown in place of the ${surface.name.toLowerCase()} for ${garmentLabel}`}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="pf-plate__blank"></span>
+          )}
+        </button>
+        <p class="pf-plate__label">{surface.name}</p>
+      </li>
+    ))}
+  </ol>
+</details>

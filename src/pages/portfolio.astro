@@ -24,6 +24,16 @@ const openingGarment =
 
 /* Each chapter's action says what is behind the door. Four identical "Enter
    world" labels gave a visitor no reason to choose one over another. */
+/* THE DOCUMENTATION PIECE IS TYPE, NOT A PHOTOGRAPH.
+   A technical pack's fields are deliberately blank, so every attempt to make
+   its page into a picture produced a pale rectangle sitting beside three rich
+   images — the one piece of four that looked unfinished, which breaks the
+   equal-value promise as surely as making it smaller would. What a pack
+   actually contains is the interesting thing about it, and it is real data on
+   the object, so the piece is set as type. Four pieces of equal size and four
+   different natures: two photographs, one typeset document, one simulation. */
+const PACK_CONTENTS = techPacks[0]?.scope ?? [];
+
 const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
   womenswear: { intent: 'Where the silhouette is decided.', action: 'Explore silhouettes' },
   menswear: { intent: 'Where the structure is decided.', action: 'Enter construction' },
@@ -53,27 +63,28 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    {/* ---- THE FIRST FRAME — ONE STUDIO SHEET ------------------------
-        A registration rule along the top, the garment standing whole in the
-        right half, the statement set in the clear left half. One field, one
-        composition; the type and the garment never cross. See the stylesheet
-        for why the previous version's overlap was removed. */}
-    <section class="pf-intro" id="portfolio-index">
-      <div class="pf-opening">
-        <p class="label pf-opening__reg">
-          <span><span class="pf-notch" aria-hidden="true"></span> Soufiane Aberbach / Portfolio</span>
-          <span><b>Four chapters</b> One practice</span>
-        </p>
-        <figure class="pf-opening__figure">
-          {/* AUTHORED WORK IN THE FIRST FRAME. This was a licensed editorial
-              photograph, so one stock image opened the page and also headed
-              the Womenswear chapter and its first category. It is now one of
-              the authored garment renditions: the first thing a visitor sees
-              is the work. */}
+    {/* ---- ONE FIELD ---------------------------------------------------
+        The Portfolio opens as a single uninterrupted field: one garment, and
+        the statement set in the space the garment leaves. Nothing is ruled,
+        numbered or labelled here — the first screen is fashion, and a visitor
+        who does not yet know what a notch is has nothing to decode.
+
+        The statement is positioned BY the garment: its baseline sits on the
+        garment's hem line and its left edge on the field's own axis, so the
+        two read as one composition rather than a headline beside a picture.
+        They never overlap. The single orange mark is the registration point
+        where the statement's axis meets the garment's shoulder — the only
+        orange on the screen. */}
+    <section class="pf-open" id="portfolio-index">
+      <div class="pf-open__field">
+        <figure class="pf-open__figure">
+          {/* AUTHORED WORK IN THE FIRST FRAME — one of the garment
+              renditions, not the licensed editorial photograph that used to
+              open the page and also head two screens below it. */}
           <img
             src={openingGarment.src}
             srcset={openingGarment.srcset}
-            sizes="(max-width: 767px) 92vw, 50vw"
+            sizes="(max-width: 767px) 86vw, 46vw"
             width={openingGarment.width}
             height={openingGarment.height}
             alt={openingGarment.alt}
@@ -81,48 +92,93 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
             decoding="async"
           />
         </figure>
-        <div class="pf-opening__type">
-          <h1 class="display">
+        <div class="pf-open__type">
+          <h1 class="pf-open__title">
             <span>Between instinct</span>
             <span>&amp; construction.</span>
           </h1>
-          <p class="pf-opening__note">
-            Fashion seen from both sides — the intention, and the precision that gives it form.
+          <p class="pf-open__note">
+            Fashion seen from both sides: the intention, and the precision that gives it form.
           </p>
         </div>
       </div>
     </section>
 
-    {/* ---- THE FOUR WORLDS ---------------------------------------------
-        Four unequal pieces of one composition. At rest they sit slightly
-        nested; the first scroll separates them. Every piece is visible and
-        every link works at any point in that range — the separation is a
-        transform on already-placed content, never a reveal. */}
-    <section class="pf-covers" aria-labelledby="pf-covers-title" data-covers>
-      <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
+    {/* ---- THE CUT ------------------------------------------------------
+        The one field becomes four. Three cuts grow up out of the boundary of
+        the opening composition and score the field into the four chapters,
+        and the chapters settle into the scored field as the cuts complete.
+        `--sep` drives all of it; the cuts and the settle are transforms on
+        content that is already placed and already linked, so every chapter is
+        readable and clickable at any point in the range and nothing waits for
+        an animation. Scroll is never taken.
+
+        FOUR PIECES OF EQUAL WIDTH AND EQUAL HEIGHT. Equal area is the only
+        honest way a composition says equal value, and two earlier attempts
+        proved it: unequal pieces read as a ranking, and equal pieces with
+        gaps and shadows read as four cards. These touch. The hierarchy is
+        temporary and earned — bring attention to one and it opens, taking the
+        room from the other three, then gives it back. */}
+    <section class="pf-lay" aria-labelledby="pf-lay-title" data-covers>
+      <h2 class="pf-sr" id="pf-lay-title">Portfolio chapters</h2>
       {chapters.map((chapter, index) => (
-        <a class="pf-cover" href={`#${chapter.id}`} data-nav
+        <a class="pf-piece" href={`#${chapter.id}`} data-nav
           data-chapter={chapter.id} data-publication={chapter.publication}
           data-cover-index={index + 1}
           data-image-source={chapter.cover.credit.source}
           data-image-source-page={chapter.cover.credit.sourcePage}
           data-image-photographer={chapter.cover.credit.photographer}>
-          <span class="pf-notch" aria-hidden="true"></span>
-          <span class="pf-cover__register">
-            <i class="pf-cover__num">{chapter.number}</i>
-            <i class="pf-cover__kind">{chapter.kind}</i>
-          </span>
-          <span class="pf-cover__art" aria-hidden="true">
-            <img class="pf-cover__still" src={chapter.cover.image.src}
-              srcset={chapter.cover.image.srcset} sizes="(max-width: 767px) 92vw, 58vw"
+          <span class="pf-piece__art" aria-hidden="true">
+            <img class="pf-piece__still" src={chapter.cover.image.src}
+              srcset={chapter.cover.image.srcset} sizes="(max-width: 767px) 100vw, 46vw"
               width={chapter.cover.image.width} height={chapter.cover.image.height}
               alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
+            {chapter.id === 'tech-packs' && PACK_CONTENTS.length > 0 && (
+              <span class="pf-piece__doc">
+                {PACK_CONTENTS.map((section) => <span>{section}</span>)}
+              </span>
+            )}
+            {chapter.id === '3d-simulation' && (
+              /* THE ONE MOVING PIECE.
+                 Four pieces of equal size, and one of them is alive. This is a
+                 real recording of one of Soufiane's own garments simulating —
+                 public/CLO3D.mp4, which was sitting unused in the repository —
+                 so the chapter about a garment changing state is the only
+                 chapter that moves. Equal area, different KIND: two
+                 photographs, one document, one simulation. That is how the
+                 four differ without any of them being ranked.
+
+                 It costs nothing until it is needed: `preload="none"` and no
+                 `autoplay`, and the runtime starts it only when the lay
+                 scrolls into view, only on a pointer-capable connection that
+                 has not asked to save data, and never under reduced motion. */
+              <video
+                class="pf-piece__motion"
+                data-piece-motion
+                                poster="/CLO3D-poster.jpg"
+                muted
+                loop
+                playsinline
+                preload="none"
+                aria-hidden="true"
+                tabindex="-1"
+              >
+                {/* VP9 first: a third of the weight, and the only codec some
+                    browsers ship without a licence. H.264 behind it covers
+                    everything else. */}
+                <source src="/CLO3D.webm" type="video/webm" />
+                <source src="/CLO3D.mp4" type="video/mp4" />
+              </video>
+            )}
           </span>
-          <span class="pf-cover__type">
-            <b class="display pf-cover__name">{chapter.title}</b>
-            <span class="pf-cover__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
-            <span class="pf-cover__go label">{CHAPTER_ACTION[chapter.id].action} <Arrow /></span>
+          <span class="pf-piece__type">
+            <b class="pf-piece__name">{chapter.title}</b>
+            <span class="pf-piece__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
+            <span class="pf-piece__enter">{CHAPTER_ACTION[chapter.id].action}</span>
           </span>
+          {/* The cut this piece is scored along. The last piece has no cut to
+              its right — it ends at the selvedge. */}
+          {index < chapters.length - 1 && <span class="pf-piece__cut" aria-hidden="true"></span>}
         </a>
       ))}
     </section>
@@ -223,7 +279,7 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
         for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
           if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
-        for (const el of [root.querySelector('.pf-covers'), root.querySelector('.pf-intro'), root.querySelector('.pf-close')]) {
+        for (const el of [root.querySelector('.pf-lay'), root.querySelector('.pf-open'), root.querySelector('.pf-close')]) {
           if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
       };
@@ -588,8 +644,19 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
          a button, an arrow key, a drag, Home/End — moves the three surfaces
          with it. */
       const syncGarment = (queue: Queue) => {
+        /* THE OPEN STATE BELONGS TO THE VISITOR, NOT TO THE GARMENT.
+           Each garment has its own <details>, so swapping which one is shown
+           would otherwise close the layer every time the deck advanced — and
+           the whole point of the layer is that a visitor can open it ONCE and
+           then watch the three surfaces change as they step through the
+           garments. So the state carries across. */
+        const wasOpen = queue.evidence.some(
+          (block) => !block.hidden && (block as HTMLDetailsElement).open,
+        );
         for (const block of queue.evidence) {
-          block.hidden = Number(block.dataset.evidenceFor) !== queue.index;
+          const mine = Number(block.dataset.evidenceFor) === queue.index;
+          block.hidden = !mine;
+          if (mine) (block as HTMLDetailsElement).open = wasOpen;
         }
         for (const card of queue.info) {
           card.hidden = Number(card.dataset.projectInfo) !== queue.index;
@@ -882,6 +949,44 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
          Reduced motion skips the listener entirely and the CSS holds both at
          1, which is the finished composition. */
       const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+      /* ---- the one moving piece ----------------------------------------
+         The Pattern Development piece carries a real recording of a garment
+         simulating. It is the only motion on the landing that the visitor did
+         not ask for, so it is spent carefully: it loads and plays only when
+         the lay is actually on screen, it pauses again when it leaves, and it
+         never starts at all for someone who has asked for reduced motion or
+         who is saving data. The poster frame stands in either way, so the
+         piece is never empty. */
+      /* Both recordings that play by themselves — the landing's fourth piece
+         and the head of the Pattern Development chapter — are governed by the
+         same rule, in one place. */
+      const motionClips = [...root.querySelectorAll<HTMLVideoElement>('[data-piece-motion], [data-change-clip]')];
+      const motion = motionClips[0] ?? null;
+      if (motion && 'IntersectionObserver' in window) {
+        const saveData = (navigator as any).connection?.saveData === true;
+        if (!reduced() && !saveData) {
+          const watcher = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              const clip = entry.target as HTMLVideoElement;
+              if (entry.isIntersecting) {
+                if (clip.preload === 'none') {
+                  /* `preload` alone does not start a fetch once the element
+                     has already been created with `none` — the source has to
+                     be asked for. Without the load() the clip sat at
+                     readyState 0 and play() resolved against nothing. */
+                  clip.preload = 'auto';
+                  clip.load();
+                }
+                void clip.play().catch(() => {});
+              } else {
+                clip.pause();
+              }
+            }
+          }, { threshold: 0.25 });
+          for (const clip of motionClips) watcher.observe(clip);
+        }
+      }
 
       const separation = root.querySelector<HTMLElement>('[data-covers]');
       const transformTrack = root.querySelector<HTMLElement>('[data-transform-track]');
