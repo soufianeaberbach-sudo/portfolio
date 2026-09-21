@@ -518,7 +518,7 @@ export const simulationSessions: SimulationSession[] = suppliedYouTubeIds.map((y
   youtubeId,
   poster: `/portfolio/posters/${youtubeId}.jpg`,
   posterAlt: `Poster frame for development recording ${String(index + 1).padStart(2, '0')}.`,
-  description: 'A supplied recording from the pattern and 3D development archive.',
+  description: 'A supplied recording from the pattern and 3D development process.',
 }));
 
 /* --------------------------------------------------------------------------

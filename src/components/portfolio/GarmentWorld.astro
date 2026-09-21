@@ -24,7 +24,7 @@
  * Everything is server-rendered, so a failed script leaves a readable page.
  */
 import type { GarmentWorld, GarmentSlot } from '../../data/portfolio';
-import { REFERENCE_DISCLAIMER, worldPublication, garmentEvidence } from '../../data/portfolio';
+import { REFERENCE_DISCLAIMER, worldPublication, garmentEvidence, chapters } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import DevPlates from './DevPlates.astro';
 import WorldNavigation from './WorldNavigation.astro';
@@ -47,9 +47,10 @@ const slotsFor = (category: GarmentWorld['categories'][number]): GarmentSlot[] =
 
 const noun = publication === 'published' ? 'Project' : 'Reference';
 const live = world.categories.filter((c) => slotsFor(c).length > 0);
+const worldCover = chapters.find((chapter) => chapter.id === world.id)?.cover;
 ---
 
-<section class="pf-world" id={world.id} data-world={world.id} data-publication={publication} tabindex="-1" aria-labelledby={`${world.id}-title`}>
+<section class={`pf-world pf-world--garment pf-world--${world.id}`} id={world.id} data-world={world.id} data-publication={publication} tabindex="-1" aria-labelledby={`${world.id}-title`}>
   <WorldNavigation current={world.id} />
 
   {/* ---- SCREEN 1 — the category index ------------------------------- */}
@@ -61,10 +62,28 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
       <p class="label pf-bar__tag"><b>{world.number}</b> {world.title}</p>
     </div>
 
-    <header class="pf-head">
-      <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
-      <p class="pf-head__descriptor">{world.descriptor}</p>
-    </header>
+    <div class="pf-world-arrival">
+      {worldCover && (
+        <figure class="pf-world-arrival__media">
+          <img
+            src={worldCover.image.src}
+            srcset={worldCover.image.srcset}
+            sizes="(max-width: 767px) 100vw, 78vw"
+            width={worldCover.image.width}
+            height={worldCover.image.height}
+            alt={worldCover.image.alt}
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
+      )}
+      <header class="pf-head">
+        <p class="pf-head__kicker label">{world.id === 'womenswear' ? 'Silhouette / instinct' : 'Structure / construction'}</p>
+        <h2 class="display" id={`${world.id}-title`}>{world.title}</h2>
+        <p class="pf-head__descriptor">{world.descriptor}</p>
+      </header>
+      <span class="pf-world-arrival__register" aria-hidden="true"></span>
+    </div>
 
     {/* The whole field, at once. Nesting and area carry the hierarchy; the
         list order and the numbers carry the reading order. No rail, no snap
@@ -210,15 +229,20 @@ const live = world.categories.filter((c) => slotsFor(c).length > 0);
                 {/* The three surfaces, one block per garment. The runtime
                     shows the block whose index matches the deck, so the
                     evidence is always the active garment's own. */}
-                <div class="pf-devcol">
-                  {slots.map((slot, index) => (
-                    <DevPlates
-                      surfaces={garmentEvidence(slot)}
-                      index={index}
-                      garmentLabel={slot.project?.title ?? `${noun} ${pad(index)}`}
-                    />
-                  ))}
-                </div>
+                {slots.some((slot) => garmentEvidence(slot).some((surface) => surface.kind === 'authored')) && (
+                  <div class="pf-devcol">
+                    {slots.map((slot, index) => {
+                      const authored = garmentEvidence(slot).filter((surface) => surface.kind === 'authored');
+                      return authored.length > 0 && (
+                        <DevPlates
+                          surfaces={authored}
+                          index={index}
+                          garmentLabel={slot.project?.title ?? `${noun} ${pad(index)}`}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {publication === 'published' && slots.map((slot, index) => (

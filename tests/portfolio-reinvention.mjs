@@ -24,25 +24,33 @@ try {
   const open=async hash=>{await page.evaluate(h=>{location.hash=h},hash);await page.waitForTimeout(700)};
   await shot('opening');
   await page.screenshot({path:output+'/'+width+'-flow.png',fullPage:true});
-  if(width===1440){await page.locator('[data-chapter="tech-packs"]').hover();await shot('opening-expanded')}
+  if(width===1440){
+   await page.evaluate(()=>{document.documentElement.style.scrollBehavior='auto';const track=document.querySelector('[data-lay-track]');scrollTo(0,track.offsetTop+track.scrollHeight-innerHeight-8)});
+   await page.waitForTimeout(350);
+   await page.locator('[data-chapter="tech-packs"]').hover();await shot('opening-expanded')
+  }
   for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');
    await open(world+'/'+cat);await shot(world+'-viewer');
    const active=page.locator('[data-world="'+world+'"] [data-screen="category"]:not([hidden])');
-   const plate=active.locator('[data-evidence-open]').first();
-   await plate.scrollIntoViewIfNeeded();
    const scroll=await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop);
    const state=await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex);
-   for(let i=0;i<3;i++){
-    const target=active.locator('[data-evidence-open]').nth(i);
-    await target.click();
-    check(await page.locator('[data-evidence-reader]').evaluate(e=>e.open),'evidence opened');
-    check(await page.locator('[data-evidence-mount]').evaluate(e=>e.clientHeight>500),'evidence enlarged');
-    if(i===0)await shot(world+'-evidence-open');
-    if(i===1)await page.keyboard.press('Escape');else await page.locator('[data-evidence-close]').click();
-    check(await target.evaluate(e=>document.activeElement===e),'evidence focus restored');
-    check(await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex)===state,'garment state preserved');
+   const evidence=active.locator('[data-evidence-open]');
+   if(await evidence.count()){
+    const plate=evidence.first(); await plate.scrollIntoViewIfNeeded();
+    for(let i=0;i<await evidence.count();i++){
+     const target=evidence.nth(i);
+     await target.click();
+     check(await page.locator('[data-evidence-reader]').evaluate(e=>e.open),'evidence opened');
+     check(await page.locator('[data-evidence-mount]').evaluate(e=>e.clientHeight>500),'evidence enlarged');
+     if(i===0)await shot(world+'-evidence-open');
+     if(i===1)await page.keyboard.press('Escape');else await page.locator('[data-evidence-close]').click();
+     check(await target.evaluate(e=>document.activeElement===e),'evidence focus restored');
+     check(await page.evaluate(()=>window.__portfolioRunway.getState().activeIndex)===state,'garment state preserved');
+    }
+   }else{
+    check(await active.locator('.pf-devcol').count()===0,'no evidence rail is reserved when authored proof is absent');
    }
    check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
   }

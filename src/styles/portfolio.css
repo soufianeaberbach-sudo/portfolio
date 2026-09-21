@@ -67,6 +67,15 @@
   color: var(--ink);
 }
 
+/* The Portfolio begins with a full-viewport composition. Give its persistent
+   masthead a paper ground so navigation remains a quiet, legible datum rather
+   than becoming accidental type over the opening photograph. */
+html[data-page='portfolio'] .site-header {
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  border-bottom: 1px solid var(--pf-edge, rgba(17, 17, 15, .14));
+  backdrop-filter: blur(10px);
+}
+
 /* Screen-reader-only, local to the portfolio so the page owns its own copy. */
 .pf-sr {
   position: absolute;
@@ -163,12 +172,14 @@
   /* Long enough that the stack is read rather than skipped past, short enough
      that nobody feels held. The last fifth holds the resolved screen on
      screen instead of letting it arrive as the field unsticks. */
-  height: 260svh;
+  height: 285svh;
 }
 .pf-lay__field {
   position: sticky;
-  top: var(--header-h, 5rem);
-  height: calc(100svh - var(--header-h, 5rem));
+  /* The global header retreats on downward scroll. Pinning below its original
+     height left an empty black shelf above the composition once it had gone. */
+  top: 0;
+  height: 100svh;
   min-height: 34rem;
   overflow: hidden;
   background: var(--paper-bright);
@@ -250,9 +261,7 @@
    are simply covered. They are held out of the backdrop for the first frame
    alone, because the fashion plate has no ground of its own there and they
    would otherwise ghost up through its studio sweep. */
-.pf-leaf:not(.pf-leaf--womenswear) {
-  opacity: clamp(0, calc(var(--t) * 26), 1);
-}
+.pf-leaf:not(.pf-leaf--womenswear) { opacity: var(--el); }
 .pf-leaf:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
 /* THE STACK, and THE RAIL. `--x0/--w0/--h0` is where every plate starts: the
@@ -273,10 +282,10 @@
      box, `cover` matches the width and the figure is locked to the centre, so
      there is no void to set type in. The plate's own position is what opens
      the void. */
-  --x0: var(--axis);
-  --w0: 68%;
-  --y0: -6%;
-  --h0: 120%;
+  --x0: 20%;
+  --w0: 78%;
+  --y0: 0%;
+  --h0: 100%;
 }
 /* THE FIRST GAP IS THE WIDEST, AND IT SITS ON THE AXIS. The hairline has to
    fall in a gap, not a few pixels inside a photograph, and a gap that is
@@ -297,22 +306,22 @@
 .pf-leaf--3d-simulation {
   --x0: var(--x1);
   --w0: var(--w1);
-  --y0: -6%;
-  --h0: 120%;
+  --y0: var(--y1);
+  --h0: var(--h1);
 }
-.pf-leaf--3d-simulation { --lead: .1;  --span: 1.112; }
-.pf-leaf--tech-packs    { --lead: .2;  --span: 1.25; }
-.pf-leaf--menswear      { --lead: .3;  --span: 1.43; }
+.pf-leaf--menswear      { --lead: .18; --span: 1.22; }
+.pf-leaf--tech-packs    { --lead: .32; --span: 1.47; }
+.pf-leaf--3d-simulation { --lead: .46; --span: 1.85; }
 
 /* Balanced by eye, then checked against the render. The first pass gave the
    fashion plate the extra room a light surface needs and it came out plainly
    dominant — a black garment on a white sweep is not a quiet surface, so the
    compensation was backwards. It is now the widest by a little, not by a lot,
    and the dark plate gains the width its weight can carry. */
-.pf-leaf--womenswear   { --x1: 3.4%;  --w1: 29.2%; --h1: 44%; --span: 1.35; }
-.pf-leaf--menswear     { --x1: 36.4%; --w1: 22.0%; --h1: 50%; }
-.pf-leaf--tech-packs   { --x1: 60.4%; --w1: 19.2%; --h1: 47%; }
-.pf-leaf--3d-simulation{ --x1: 81.6%; --w1: 15.0%; --h1: 62%; }
+.pf-leaf--womenswear   { --x1: 3.3%; --w1: 35%; --y1: 22%; --h1: 54%; --span: 1.28; }
+.pf-leaf--menswear     { --x1: 43%;  --w1: 27%; --y1: 11%; --h1: 49%; }
+.pf-leaf--tech-packs   { --x1: 40%;  --w1: 34%; --y1: 66%; --h1: 22%; }
+.pf-leaf--3d-simulation{ --x1: 77%;  --w1: 20%; --y1: 34%; --h1: 57%; }
 
 .pf-leaf__surface {
   position: absolute;
@@ -390,7 +399,8 @@
   line-height: 1.15;
   letter-spacing: -.015em;
   /* Held back until the plate is wide enough to set a line in. */
-  opacity: clamp(0, calc((var(--t) - .5) * 5), 1);
+  color: var(--ink);
+  opacity: clamp(0, calc((var(--t) - .38) * 5), 1);
 }
 .pf-leaf__paper span {
   padding-bottom: clamp(.3rem, .8vh, .6rem);
@@ -414,7 +424,7 @@
   right: 0;
   display: grid;
   gap: .25rem;
-  opacity: clamp(0, calc((var(--t) - .66) * 6), 1);
+  opacity: clamp(0, calc((var(--t) - .64) * 5), 1);
 }
 .pf-leaf__name {
   font-family: var(--display);
@@ -440,7 +450,7 @@
   font-size: .78rem;
   line-height: 1;
   transition: color .3s var(--pf-lift);
-  opacity: clamp(0, calc((var(--t) - .74) * 6), 1);
+  opacity: clamp(0, calc((var(--t) - .72) * 6), 1);
 }
 .pf-leaf:hover .pf-leaf__go,
 .pf-leaf:focus-visible .pf-leaf__go { color: var(--signal); }
@@ -454,16 +464,7 @@
    gone, and from then on the statement is above every plate and cannot be
    clipped by one. */
 .pf-lay__cross {
-  position: absolute;
-  left: var(--axis);
-  top: -6%;
-  width: 68%;
-  height: 120%;
-  z-index: 7;
-  display: block;
-  mix-blend-mode: darken;
-  pointer-events: none;
-  opacity: clamp(0, calc(1 - var(--t) * 26), 1);
+  display: none;
 }
 .pf-lay__cross img {
   width: 100%;
@@ -488,22 +489,27 @@
   /* Above every plate. The crossing is handled by the layer above it, so the
      statement never has to sit underneath a photograph to be crossed by one
      — which is what clipped it in half as the plate took its own ground. */
-  z-index: 6;
+  z-index: 8;
   margin: 0;
   pointer-events: none;
   font-family: var(--display);
   font-weight: 800;
   letter-spacing: -.042em;
-  line-height: calc(.92 + .2 * var(--se));
+  line-height: .82;
+  color: var(--ink);
 }
 .pf-lay__line {
   position: absolute;
   white-space: nowrap;
-  font-size: calc(clamp(1.9rem, 4.6vw, 4.3rem) * (1 - .6 * var(--se)));
+  font-size: calc(clamp(4rem, 6.6vw, 7rem) * (1 - .68 * var(--se)));
+  padding: .01em .08em .07em;
+  background: rgb(251 250 246 / calc(1 - var(--se)));
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 .pf-lay__line--a {
   left: var(--pf-gutter);
-  top: calc(44% - 38.5% * var(--se));
+  top: calc(18% - 13% * var(--se));
 }
 /* Indented to the axis at rest — the second line STARTS where the image
    starts, which is the registration the whole plate is built on — and back to
@@ -514,15 +520,49 @@
    the bodice, because black type on a black garment is not a composition. As
    the stack opens it returns to the gutter, under the first line. */
 .pf-lay__line--b {
-  left: calc(var(--pf-gutter) + 6.2% * (1 - var(--se)));
-  top: calc(57% - 47.7% * var(--se));
+  left: calc(var(--pf-gutter) + 7% * (1 - var(--se)));
+  top: calc(40% - 31% * var(--se));
 }
+.pf-lay__line--c {
+  left: calc(var(--pf-gutter) + 1.5% * (1 - var(--se)));
+  top: calc(62% - 49% * var(--se));
+}
+
+.pf-lay__folio {
+  position: absolute;
+  z-index: 8;
+  top: clamp(1.1rem, 3vh, 2rem);
+  left: var(--pf-gutter);
+  right: var(--pf-gutter);
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  color: var(--muted);
+  font-size: .54rem;
+  opacity: clamp(0, calc(1 - var(--t) * 5), 1);
+  pointer-events: none;
+}
+.pf-lay__read {
+  position: absolute;
+  z-index: 8;
+  right: var(--pf-gutter);
+  bottom: clamp(2.5rem, 7vh, 4.5rem);
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: .54rem;
+  opacity: clamp(0, calc(1 - var(--t) * 6), 1);
+  pointer-events: none;
+}
+.pf-lay__read span { width: 2.75rem; height: 1px; background: var(--signal); }
 
 .pf-lay__note {
   position: absolute;
   left: var(--pf-gutter);
   bottom: clamp(2.4rem, 8vh, 4.6rem);
-  z-index: 4;
+  z-index: 9;
   max-width: 32ch;
   margin: 0;
   color: var(--ink-soft);
@@ -556,12 +596,7 @@
   transition: object-position .6s var(--pf-lift), filter .45s var(--pf-lift);
 }
 .pf--js .pf-lay[data-open] .pf-leaf:hover,
-.pf--js .pf-lay[data-open] .pf-leaf:focus-visible {
-  /* Enough to read as a breath, and no more: the deepest plate has the least
-     room under it, and at nine per cent its own name ran off the foot of the
-     field. */
-  height: calc(var(--h1) + 5%);
-}
+.pf--js .pf-lay[data-open] .pf-leaf:focus-visible { height: calc(var(--h1) + 3%); }
 .pf--js .pf-lay[data-open] .pf-leaf:hover .pf-leaf__img,
 .pf--js .pf-lay[data-open] .pf-leaf:focus-visible .pf-leaf__img {
   object-position: 50% 44%;
@@ -586,20 +621,19 @@
   /* The axis has to fall in the gap between the first two plates, not on the
      edge of one — at 30% the notch sat on the fashion plate's own border and
      read as a stray mark. */
-  .pf-lay { --axis: 32.4%; }
-  .pf-lay__cross { left: var(--axis); width: 74%; }
-  .pf-leaf { --w0: 74%; }
-  .pf-lay__line { font-size: calc(clamp(1.8rem, 5.4vw, 3.4rem) * (1 - .62 * var(--se))); }
-  .pf-lay__line--b { top: calc(57% - 49.1% * var(--se)); }
+  .pf-lay { --axis: 31%; }
+  .pf-leaf { --x0: 20%; --w0: 78%; --y0: 0%; --h0: 100%; }
+  .pf-lay__line { font-size: calc(clamp(3rem, 6.5vw, 4.5rem) * (1 - .66 * var(--se))); }
+  .pf-lay__note { max-width: 16ch; }
   .pf-leaf__intent { display: none; }
   /* A PORTRAIT FIELD NEEDS DEEP PLATES. At the desk's proportions the four
      plates used the top two thirds of a 1,030px field and left a third of the
      screen empty underneath them. Depth is the dimension a portrait tablet has
      to spare, so the rail sits higher and every plate takes it. */
-  .pf-leaf--womenswear   { --x1: 3.4%;  --w1: 25.4%; --y1: 15%; --h1: 66%; }
-  .pf-leaf--menswear     { --x1: 37.4%; --w1: 21.6%; --y1: 15%; --h1: 61%; }
-  .pf-leaf--tech-packs   { --x1: 61.2%; --w1: 18.4%; --y1: 15%; --h1: 51%; }
-  .pf-leaf--3d-simulation{ --x1: 81.6%; --w1: 15%;   --y1: 15%; --h1: 63%; }
+  .pf-leaf--womenswear   { --x1: 3%;  --w1: 37%; --y1: 20%; --h1: 54%; }
+  .pf-leaf--menswear     { --x1: 44%; --w1: 28%; --y1: 10%; --h1: 48%; }
+  .pf-leaf--tech-packs   { --x1: 41%; --w1: 33%; --y1: 64%; --h1: 22%; }
+  .pf-leaf--3d-simulation{ --x1: 77%; --w1: 20%; --y1: 32%; --h1: 58%; }
 }
 
 /* ==========================================================================
@@ -620,7 +654,7 @@
      uncovered as its lower edge sweeps up, and each one settles at its own
      depth with its name under it. */
   .pf-lay { --axis: 20%; }
-  .pf-lay__track { height: 300svh; }
+  .pf-lay__track { height: 285svh; }
 
   /* THE VOID IS UNDER THE FIGURE, NOT BESIDE IT. A 390-wide field has no room
      for a void beside a standing figure: the photograph fills the width, and
@@ -634,8 +668,8 @@
   .pf-leaf {
     --x0: 0%;
     --w0: 100%;
-    --y0: -6%;
-    --h0: 76%;
+    --y0: 0%;
+    --h0: 70%;
   }
   /* The crop travels as well as the plate: at rest the box is portrait and
      the figure fills it; resolved, the band is a wide letterbox and the same
@@ -647,10 +681,10 @@
   /* Four bands, four depths, four left edges: a rag down the field and a rag
      across it. Three of them bleed off the right edge, so none of them can
      read as a card sitting in a column. */
-  .pf-leaf--womenswear   { --x1: 0%;  --w1: 88%;  --y1: 2%;  --h1: 24%; }
-  .pf-leaf--menswear     { --x1: 10%; --w1: 92%;  --y1: 31%; --h1: 21%; }
-  .pf-leaf--tech-packs   { --x1: 4%;  --w1: 76%;  --y1: 57%; --h1: 15%; }
-  .pf-leaf--3d-simulation{ --x1: 16%; --w1: 86%;  --y1: 77%; --h1: 16%; }
+  .pf-leaf--womenswear   { --x1: 0%;  --w1: 88%;  --y1: 3%;  --h1: 26%; }
+  .pf-leaf--menswear     { --x1: 12%; --w1: 88%;  --y1: 34%; --h1: 23%; }
+  .pf-leaf--tech-packs   { --x1: 0%;  --w1: 78%;  --y1: 62%; --h1: 16%; }
+  .pf-leaf--3d-simulation{ --x1: 18%; --w1: 82%;  --y1: 82%; --h1: 15%; }
 
   /* The three plates are uncovered top to bottom as the fashion plate's lower
      edge sweeps up past them. */
@@ -658,14 +692,27 @@
   .pf-leaf--tech-packs    { --lead: .22; --span: 1.282; }
   .pf-leaf--3d-simulation { --lead: .34; --span: 1.515; }
 
+  /* On a hand the three lower leaves are uncovered in place while the hero
+     contracts. Making full-height sheets travel through one another produced
+     an unreadable mid-frame; registration is clearer than collision. */
+  .pf-leaf--menswear,
+  .pf-leaf--tech-packs,
+  .pf-leaf--3d-simulation {
+    --x0: var(--x1);
+    --w0: var(--w1);
+    --y0: var(--y1);
+    --h0: var(--h1);
+  }
+
   .pf-leaf__intent { display: none; }
   .pf-leaf__go { display: none; }
   .pf-leaf__name { font-size: clamp(1.05rem, 4.6vw, 1.35rem); }
   .pf-leaf__type { gap: 0; }
   .pf-leaf__paper { font-size: .7rem; padding: .7rem .7rem .8rem; }
 
-  /* The statement settles into a two-line head above the first band. */
-  .pf-lay__line { font-size: calc(clamp(1.7rem, 8.6vw, 2.7rem) * (1 - .62 * var(--se))); }
+  /* The statement is a three-line editorial lock-up in the paper left by the
+     portrait, then gives the whole field to the four chapter bands. */
+  .pf-lay__line { font-size: clamp(2.05rem, 10vw, 2.75rem); }
   /* THE STATEMENT BELONGS TO THE ARRIVAL ON A PHONE, and it leaves with it.
      There is nowhere on a 390-wide field for it to settle that the four bands
      do not occupy, and travelling to the top means crossing the photograph —
@@ -674,18 +721,20 @@
      is carried here by the photograph itself: the first band IS the opening
      image, in the same crop the visitor arrived on. */
   .pf-lay__say { opacity: clamp(0, calc(1 - (var(--t) - .06) * 5), 1); }
-  .pf-lay__line--a { left: var(--pf-gutter); top: calc(73% - 6% * var(--se)); }
+  .pf-lay__line--a { left: var(--pf-gutter); top: 72%; }
   .pf-lay__line--b {
-    left: calc(var(--pf-gutter) + 7% * (1 - var(--se)));
-    top: calc(81% - 6% * var(--se));
+    left: calc(var(--pf-gutter) + 7%);
+    top: 78%;
   }
+  .pf-lay__line--c { left: var(--pf-gutter); top: 84%; }
   .pf-lay__note {
-    top: 90%;
+    top: 91.5%;
     bottom: auto;
     max-width: 30ch;
     font-size: .82rem;
     opacity: clamp(0, calc(1 - var(--t) * 8), 1);
   }
+  .pf-lay__folio, .pf-lay__read { display: none; }
 }
 
 /* ==========================================================================
@@ -846,6 +895,11 @@
   margin-inline: auto;
   padding: clamp(.5rem, 1.5vw, 1rem) var(--pf-gutter) clamp(1.5rem, 3vw, 2.5rem);
 }
+.pf-head__kicker {
+  margin: 0 0 .8rem;
+  color: var(--signal);
+  font-size: .56rem;
+}
 .pf-head h2 {
   margin: 0;
   font-size: clamp(2.2rem, 6vw, 5rem);
@@ -861,14 +915,98 @@
 }
 .pf-world--motion .pf-head__descriptor { color: var(--pf-ink-soft); }
 .pf-head--category h2 { font-size: clamp(1.9rem, 3.8vw, 3.4rem); }
+
+/* A garment world opens as an editorial image field, not another heading
+   block. The title crosses the photograph's lower registration edge while
+   the descriptor occupies the clean paper beyond it. */
+.pf-world-arrival {
+  position: relative;
+  min-height: min(82svh, 800px);
+  max-width: var(--pf-max);
+  margin-inline: auto;
+  overflow: hidden;
+}
+.pf-world-arrival__media {
+  position: absolute;
+  inset: 0 12% 28% 8%;
+  margin: 0;
+  overflow: hidden;
+  background: #e6e3da;
+}
+.pf-world-arrival__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+}
+.pf-world-arrival .pf-head {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.pf-world-arrival .pf-head h2 {
+  font-size: clamp(3.8rem, 7vw, 7rem);
+  line-height: .86;
+}
+.pf-world-arrival .pf-head__descriptor {
+  align-self: end;
+  padding-bottom: .35rem;
+}
+.pf-world-arrival__register {
+  position: absolute;
+  z-index: 3;
+  left: 8%;
+  top: 76%;
+  width: 7px;
+  height: 7px;
+  background: var(--signal);
+}
+.pf-world--menswear .pf-world-arrival__media { inset: 2% 5% 29% 28%; }
+.pf-world--menswear .pf-world-arrival__media img { object-position: 50% 31%; }
+.pf-world--menswear .pf-world-arrival__register { left: auto; right: 5%; top: 77%; }
+.pf-world--menswear .pf-world-arrival .pf-head h2 { text-align: right; }
+.pf-world--menswear .pf-world-arrival .pf-head__kicker { text-align: right; }
+
 @media (min-width: 768px) {
   .pf-head {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 34rem);
     align-items: flex-end;
     justify-content: space-between;
     gap: clamp(2rem, 5vw, 5rem);
   }
-  .pf-head__descriptor { margin-top: 0; flex: 0 1 44ch; }
+  .pf-head__kicker { grid-column: 1 / -1; }
+  .pf-head__descriptor { margin-top: 0; }
+}
+
+@media (max-width: 767px) {
+  .pf-world-arrival { min-height: 76svh; }
+  .pf-world-arrival__media,
+  .pf-world--menswear .pf-world-arrival__media { inset: 0 0 38% 0; }
+  .pf-world-arrival__media img { object-position: 50% 28%; }
+  .pf-world--menswear .pf-world-arrival__media img { object-position: 50% 26%; }
+  .pf-world-arrival .pf-head { inset: auto 0 0; padding-top: 0; }
+  .pf-world-arrival .pf-head h2,
+  .pf-world--menswear .pf-world-arrival .pf-head h2 {
+    font-size: clamp(2.9rem, 13.5vw, 4rem);
+    text-align: left;
+  }
+  .pf-world--menswear .pf-world-arrival .pf-head__kicker { text-align: left; }
+  .pf-world-arrival__register,
+  .pf-world--menswear .pf-world-arrival__register { left: var(--pf-gutter); right: auto; top: 62%; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pf-world-arrival .pf-head { display: block; }
+  .pf-world-arrival .pf-head h2 {
+    max-width: none;
+    font-size: clamp(3.4rem, 7vw, 4.4rem);
+  }
+  .pf-world-arrival .pf-head__descriptor {
+    max-width: 42ch;
+    margin-top: .8rem;
+  }
 }
 
 /* ==========================================================================
@@ -931,6 +1069,22 @@
   object-position: 50% 26%;
   transition: transform .8s var(--pf-lift), filter .5s var(--pf-lift);
 }
+
+/* As a category crosses the reading band it resolves from a quieter crop into
+   full presence. The motion is tied to native scroll and is deliberately
+   shallow; it changes hierarchy without turning discovery into parallax. */
+@supports (animation-timeline: view()) {
+  .pf-cat {
+    animation: pf-category-register linear both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 42%;
+  }
+  .pf-cats__list > li:nth-child(even) .pf-cat { animation-range: entry 2% cover 48%; }
+  @keyframes pf-category-register {
+    from { opacity: .58; transform: translateY(1.75rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
 /* Secondary pieces recede very slightly while one is chosen, so there is
    always one place to look. Clarity, not decoration — and it is a filter on
    the IMAGE, never on the piece, so it can never break the label above it. */
@@ -943,6 +1097,8 @@
 .pf-cat:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
 
 .pf-cat__content {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr) auto;
   align-items: baseline;
@@ -1016,6 +1172,12 @@
   }
   .pf-cats__list > li { grid-column: var(--cat-span, span 6); }
   .pf-cat__media { aspect-ratio: var(--cat-ratio, 4 / 5); }
+  .pf-cat__content {
+    width: min(92%, 42rem);
+    margin-top: -1.4rem;
+    padding: 1rem 1rem .2rem 0;
+    background: var(--paper);
+  }
 
   /* 01 — the leading piece: widest and tallest. */
   .pf-cats__list > li:nth-child(1) { --cat-span: 1 / 8; --cat-ratio: 4 / 5; }
@@ -1028,6 +1190,15 @@
   .pf-cats__list > li:nth-child(4) { --cat-span: 1 / 5; --cat-ratio: 3 / 4; margin-top: clamp(-6rem, -7vw, -2rem); }
   /* 05 — the closing piece, wide and low. Only Womenswear has one. */
   .pf-cats__list > li:nth-child(5) { --cat-span: 5 / 12; --cat-ratio: 16 / 10; }
+
+  /* Menswear answers Womenswear rather than cloning it: the same measured
+     pieces are registered from the opposite edge and read as a firmer,
+     architectural descent. */
+  .pf-cats--menswear .pf-cats__list > li:nth-child(1) { --cat-span: 6 / 13; --cat-ratio: 5 / 4; }
+  .pf-cats--menswear .pf-cats__list > li:nth-child(2) { --cat-span: 1 / 5; --cat-ratio: 3 / 4; margin-top: clamp(5rem, 10vw, 9rem); }
+  .pf-cats--menswear .pf-cats__list > li:nth-child(3) { --cat-span: 1 / 8; --cat-ratio: 16 / 11; }
+  .pf-cats--menswear .pf-cats__list > li:nth-child(4) { --cat-span: 9 / 13; --cat-ratio: 4 / 5; margin-top: clamp(-5rem, -6vw, -2rem); }
+  .pf-cats--menswear .pf-cat__content { margin-left: auto; padding-right: 0; padding-left: 1rem; }
 }
 /* THE TABLE BAND, 768–1023. The nested pieces are narrower here than the
    label's display size assumes, so the label gets the full remaining width
@@ -1364,7 +1535,7 @@
      depends on whether it holds anything real. 22% for stand-ins, 27% once a
      real asset exists — the garment stays the largest thing on screen either
      way. */
-  .pf-viewer {
+  .pf-viewer:has(.pf-devcol) {
     grid-template-columns: minmax(0, 1fr) minmax(190px, var(--pf-dev-col, 22%));
     align-items: start;
   }
@@ -1659,10 +1830,33 @@
 .pf-video__desc { margin: 0; color: var(--pf-ink-soft); font-size: .88rem; line-height: 1.6; max-width: 62ch; }
 .pf-video__privacy { margin: 0; color: var(--pf-ink-muted); font-size: .62rem; }
 @media (min-width: 768px) {
-  .pf-video { grid-template-columns: 150px minmax(0, 1fr); gap: 1rem clamp(1.5rem, 3vw, 3rem); }
-  .pf-video__head { grid-column: 1; grid-row: 1 / 4; display: block; }
+  .pf-video { grid-template-columns: minmax(8rem, 2fr) minmax(0, 8fr); gap: 1rem clamp(1.5rem, 4vw, 4rem); }
+  .pf-video__head { grid-column: 1; grid-row: 1 / 4; display: block; padding-top: .35rem; }
   .pf-video__head h3 { margin-top: 1rem; }
   .pf-video__frame, .pf-video__desc, .pf-video__privacy { grid-column: 2; }
+
+  .pf-video:first-child {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+  }
+  .pf-video:first-child .pf-video__head {
+    grid-column: 1;
+    grid-row: auto;
+    display: flex;
+    align-items: baseline;
+    max-width: 70rem;
+    padding: 0;
+  }
+  .pf-video:first-child .pf-video__head h3 { margin: 0; font-size: clamp(1.8rem, 4vw, 3.8rem); }
+  .pf-video:first-child .pf-video__frame,
+  .pf-video:first-child .pf-video__desc,
+  .pf-video:first-child .pf-video__privacy { grid-column: 1; }
+
+  .pf-video:nth-child(even) { grid-template-columns: minmax(0, 8fr) minmax(8rem, 2fr); }
+  .pf-video:nth-child(even) .pf-video__head { grid-column: 2; }
+  .pf-video:nth-child(even) .pf-video__frame,
+  .pf-video:nth-child(even) .pf-video__desc,
+  .pf-video:nth-child(even) .pf-video__privacy { grid-column: 1; }
 }
 
 .pf-soon {

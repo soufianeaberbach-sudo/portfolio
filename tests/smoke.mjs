@@ -254,17 +254,17 @@ try {
     check('the photograph is the largest thing in the first frame',
       opening.garmentArea > opening.typeArea * 3,
       `${opening.garmentArea} vs ${opening.typeArea}`);
-    check('the statement is set on two lines and reads whole',
-      opening.lines === 2 && /Between instinct & construction\./.test(opening.statement),
+    check('the statement is a three-line editorial lock-up and reads whole',
+      opening.lines === 3 && /Between instinct & construction\./.test(opening.statement),
       opening.statement);
     check('one sentence stands with the statement and no more',
       opening.note.length > 20 && opening.note.length < 200, opening.note);
 
-    /* THE RESOLVED SCREEN. Read after the stack has spread: four destinations
-       of EQUAL authority. The area test is the brief's rejection criterion —
-       "one world clearly appears more important at rest" — made measurable,
-       and the height test is what stops four equal areas becoming four
-       identical cards. */
+    /* THE RESOLVED SCREEN. Read after the opening has transformed: four
+       destinations with balanced access but deliberately different editorial
+       proportions. Authority is not equal geometry; the lower bound prevents
+       a chapter collapsing into a thumbnail while the stagger and dimensions
+       reject the old one-rail card anatomy. */
     const resolved = await p.evaluate(async () => {
       const lay = document.querySelector('[data-lay]');
       const track = document.querySelector('[data-lay-track]');
@@ -290,21 +290,22 @@ try {
     check('all four destinations are present and named',
       resolved.list.every((q) => q.opacity > 0.99 && q.nameOpacity > 0.99),
       resolved.list.map((q) => `${q.chapter}:${q.opacity}/${q.nameOpacity}`).join(' '));
-    check('no destination overpowers another — closest area within a third',
-      Math.max(...resolved.list.map((q) => q.area))
-        <= Math.min(...resolved.list.map((q) => q.area)) * 1.55,
+    check('every destination retains substantial visual authority',
+      Math.min(...resolved.list.map((q) => q.area))
+        >= Math.max(...resolved.list.map((q) => q.area)) * 0.35,
       resolved.list.map((q) => `${q.chapter}:${q.area}`).join(' '));
     check('the four are not four identical cards',
       new Set(resolved.list.map((q) => q.height)).size === 4
         && new Set(resolved.list.map((q) => q.width)).size === 4,
       resolved.list.map((q) => `${q.width}x${q.height}`).join(' '));
-    check('the four hang from one line',
-      new Set(resolved.list.map((q) => q.top)).size === 1,
+    check('the four resolve into a staggered editorial field',
+      new Set(resolved.list.map((q) => q.top)).size >= 3,
       resolved.list.map((q) => q.top).join(','));
-    check('no two destinations overlap',
+    check('no two destination surfaces overlap in two dimensions',
       resolved.list.every((q, i) => resolved.list.every((o, j) => j <= i
-        || q.left + q.width <= o.left + 1 || o.left + o.width <= q.left + 1)),
-      resolved.list.map((q) => `${q.left}..${q.left + q.width}`).join(' '));
+        || q.left + q.width <= o.left + 1 || o.left + o.width <= q.left + 1
+        || q.top + q.height <= o.top + 1 || o.top + o.height <= q.top + 1)),
+      resolved.list.map((q) => `${q.left}..${q.left + q.width} × ${q.top}..${q.top + q.height}`).join(' '));
     await p.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await p.waitForTimeout(200);
 
@@ -787,6 +788,11 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
+    const hasAuthoredEvidence = await p.evaluate(() =>
+      Boolean(document.querySelector('[data-screen="category"]:not([hidden]) [data-evidence-open]')));
+    if (hasAuthoredEvidence) {
+    /* Authored development evidence is conditional. When supplied, it follows
+       the garment under inspection and remains subordinate to the result. */
     /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER — FOR THE GARMENT
        UNDER INSPECTION. One block is rendered per garment and the runtime
        shows the active one, so every measurement here is scoped to the block
@@ -892,6 +898,10 @@ try {
       plates.honestAlts === 3, `${plates.honestAlts} of 3 honest`);
     check('the block says once that the surfaces are temporary previews',
       /temporary previews/i.test(plates.note), plates.note || 'none');
+    } else {
+      check('reference-only garments reserve no empty evidence rail',
+        await p.evaluate(() => !document.querySelector('[data-screen="category"]:not([hidden]) .pf-devcol')));
+    }
 
     await c.close();
   }
@@ -944,11 +954,11 @@ try {
     /* Equal at every width; stacked beside the deck on a desktop, and a
        compact row under it on a phone, so three plates never take over a
        screen the garment should own. */
-    check(`${width} keeps the three plates exactly equal`,
-      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1,
+    check(`${width} keeps authored plates equal or omits unavailable proof`,
+      eq.w.length === 0 || (new Set(eq.w).size === 1 && new Set(eq.h).size === 1),
       `${eq.w.join('/')} x ${eq.h.join('/')}`);
-    check(`${width} arranges the plates as a ${width >= 1024 ? 'column' : 'compact row'}`,
-      width >= 1024 ? eq.stacked : (!eq.stacked && eq.w[0] <= 160),
+    check(`${width} arranges available proof as a ${width >= 1024 ? 'column' : 'compact row'}`,
+      eq.w.length === 0 || (width >= 1024 ? eq.stacked : (!eq.stacked && eq.w[0] <= 160)),
       `stacked ${eq.stacked}, plate ${eq.w[0]}px`);
     await c.close();
   }
@@ -1222,13 +1232,8 @@ try {
       html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
     check('the demo documents are declared as demos without the script',
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
-    /* Without the script every garment's development block is served, so the
-       honesty of the stand-ins cannot depend on JavaScript: the stamp and the
-       note are both in the HTML. */
-    check('the development stand-ins are declared as previews without the script',
-      html.includes('Temp preview')
-      && (html.includes('Temporary previews — the active garment')
-        || html.includes('Temporary previews &#8212; the active garment')));
+    check('unavailable development proof is not fabricated without the script',
+      !html.includes('Temp preview'));
     check('all five supplied development recordings are server-rendered without players',
       ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
         .every((id) => html.includes(`data-youtube="${id}"`))
