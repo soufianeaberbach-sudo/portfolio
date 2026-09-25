@@ -1,8 +1,8 @@
 import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 
-const base = 'http://127.0.0.1:4360/portfolio/';
-const out = '.qa-review/final-brief';
+const base = process.env.QA_BASE ?? 'http://127.0.0.1:4360/portfolio/';
+const out = process.env.QA_OUT ?? '.qa-review/final-brief';
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch();
 
@@ -48,7 +48,9 @@ await shot(desktop, '09-desktop-garment-viewer-advanced');
 
 await desktop.keyboard.press('Escape'); await desktop.keyboard.press('Escape');
 await clickWorld(desktop, 'tech-packs'); await shot(desktop, '10-desktop-tech-packs');
-await desktop.locator('[data-open-pdf]').first().click(); await desktop.waitForTimeout(850); await shot(desktop, '11-desktop-pdf-open');
+await desktop.mouse.wheel(0, 760); await desktop.waitForTimeout(250); await shot(desktop, '10a-desktop-document-room');
+await desktop.locator('[data-doc-select]').nth(2).click(); await desktop.waitForTimeout(350); await shot(desktop, '10b-desktop-document-selected');
+await desktop.locator('[data-open-pdf]:visible').click(); await desktop.waitForTimeout(850); await shot(desktop, '11-desktop-pdf-open');
 await desktop.keyboard.press('Escape'); await desktop.keyboard.press('Escape');
 
 await clickWorld(desktop, '3d-simulation');
@@ -64,6 +66,11 @@ await shot(tablet, '16-tablet-opening');
 await moveOpening(tablet, .98); await shot(tablet, '17-tablet-worlds');
 await clickWorld(tablet, 'womenswear'); await tablet.mouse.wheel(0, 720); await tablet.waitForTimeout(250); await shot(tablet, '18-tablet-category-discovery');
 
+const transition = await browser.newPage({ viewport: { width: 1024, height: 768 } });
+await transition.goto(base, { waitUntil: 'networkidle' }); await clean(transition);
+await shot(transition, '18a-1024-opening');
+await moveOpening(transition, .98); await shot(transition, '18b-1024-worlds');
+
 const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 await mobile.goto(base, { waitUntil: 'networkidle' }); await clean(mobile);
 await shot(mobile, '19-mobile-opening');
@@ -72,7 +79,15 @@ await moveOpening(mobile, .98); await shot(mobile, '21-mobile-worlds');
 await clickWorld(mobile, 'womenswear'); await mobile.mouse.wheel(0, 620); await mobile.waitForTimeout(250); await shot(mobile, '22-mobile-category-discovery');
 await mobile.locator('.pf-cat[data-category="rtw"]').click(); await mobile.waitForTimeout(350); await shot(mobile, '23-mobile-viewer');
 await mobile.keyboard.press('Escape'); await mobile.keyboard.press('Escape');
+await clickWorld(mobile, 'tech-packs'); await shot(mobile, '23a-mobile-tech-packs');
+await mobile.mouse.wheel(0, 620); await mobile.waitForTimeout(250); await shot(mobile, '23b-mobile-document-room');
+await mobile.keyboard.press('Escape');
 await clickWorld(mobile, '3d-simulation'); await mobile.mouse.wheel(0, 700); await mobile.waitForTimeout(250); await shot(mobile, '24-mobile-pattern');
+
+const narrow = await browser.newPage({ viewport: { width: 320, height: 740 }, isMobile: true, hasTouch: true });
+await narrow.goto(base, { waitUntil: 'networkidle' }); await clean(narrow);
+await shot(narrow, '25-narrow-opening');
+await moveOpening(narrow, .98); await shot(narrow, '26-narrow-worlds');
 
 await browser.close();
 console.log(`screenshots: ${out}`);

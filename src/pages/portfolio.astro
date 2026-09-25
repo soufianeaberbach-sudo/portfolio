@@ -11,30 +11,6 @@ import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/
    removed and why. There is no override layer any more. */
 import '../styles/portfolio.css';
 
-/* The opening image: the first garment of the first live category of the
-   first garment chapter. Derived rather than hard-coded, so it follows the
-   data instead of pinning a filename that may be replaced. */
-const firstCategory = garmentWorlds[0].categories.find(
-  (category) => category.projects.length > 0 || category.references.length > 0,
-);
-const openingGarment =
-  firstCategory?.projects[0]?.finalGarmentImage ??
-  firstCategory?.references[0]?.image ??
-  chapters[0].cover.image;
-
-/* THE OPENING IMAGE IS AN EDITORIAL PHOTOGRAPH, NOT A CATALOGUE RENDITION.
-   The 49 authored renditions are front-and-back product shots of a garment on
-   a white sweep: two small figures floating in empty space, which is a
-   catalogue page, not a fashion plate. The opening needs a photograph with a
-   gesture in it — a silhouette, a material, a garment doing something — so it
-   uses the Womenswear chapter's editorial reference, and the colophon says so
-   as it already did. Temporary art direction: final photography replaces this
-   file without touching the layout. */
-const HERO = chapters[0].cover;
-
-/* What a technical pack contains, from the pack itself. */
-const PACK_CONTENTS = techPacks[0]?.scope ?? [];
-
 /* Each chapter's action says what is behind the door. Four identical "Enter
    world" labels gave a visitor no reason to choose one over another. */
 const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
@@ -50,6 +26,7 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
   description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
   marker="SA-PORTFOLIO-V8"
   page="portfolio"
+  footerCallout={false}
 >
   <!-- BUILD-MARKER: SA-PORTFOLIO-V8 -->
   <div class="pf" data-pf-root>
@@ -60,149 +37,58 @@ const CHAPTER_ACTION: Record<string, { intent: string; action: string }> = {
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    {/* ---- ONE PLATE ---------------------------------------------------
+    {/* One fashion image owns the opening. Reading reorganises that same field
+        into four chapter territories; it never hands the visitor to a second
+        menu composition. */}
+    <section class="pf-entry" id="portfolio-index" data-lay>
+      <div class="pf-entry__track" data-lay-track>
+        <div class="pf-entry__field" data-lay-field>
+          <span class="pf-entry__axis" aria-hidden="true"><i></i></span>
 
-        THE COMPOSITION. A fashion plate on bone white: one figure bleeding
-        off the right edge, and the statement set in the void the raised arm
-        opens on the left. Image and type are one composition — they share a
-        vertical axis, and the second line runs far enough right that the
-        fishnet sleeve passes over its last word. That single crossing is the
-        only place they touch, and it is the reason they read as one thing
-        rather than a heading beside a picture.
-
-        WHERE PATTERNMAKING IS. Not drawn anywhere. It is in the registration:
-        the plate has ONE axis that the image's edge and the type's second
-        line both answer to, and everything that happens afterwards happens
-        along it. A patternmaker aligns two pieces by matching one notch; this
-        page aligns its whole composition the same way. There are no seam
-        curves, no pattern-piece shapes and no technical graphics.
-
-        THE TRANSFORMATION. This plate does not get replaced by a chapter
-        screen. It is a STACK: four plates laid on the same axis, the fashion
-        plate on top. Reading down the page spreads the stack along the axis
-        into four destinations on one rail — the statement rises and settles
-        above the rail, the fashion plate narrows and stays where it is, and
-        the three behind it move out from under it. Scrolling back closes the
-        stack. Nothing arrives; nothing is cut.
-        -------------------------------------------------------------------- */}
-    <section class="pf-lay" id="portfolio-index" data-lay>
-      <div class="pf-lay__track" data-lay-track>
-        <div class="pf-lay__field" data-lay-field>
-
-          {/* THE AXIS. It is not decoration and it is not there at rest: the
-              first frame is a fashion photograph and a statement, nothing
-              else. It is drawn once the reader moves, because that is when
-              the composition starts to answer to it. */}
-          <span class="pf-lay__axis" aria-hidden="true"></span>
-
-          {/* THE FOUR PLATES, stacked on the axis and spread by reading.
-              Chapter 01 is the fashion plate: it is the hero, and it stays
-              the hero. The other three lie under it. */}
           {chapters.map((chapter, index) => (
-            <a class={`pf-leaf pf-leaf--${chapter.id}`} href={`#${chapter.id}`} data-nav
+            <a
+              class={`pf-entry__world pf-leaf pf-leaf--${chapter.id}`}
+              href={`#${chapter.id}`}
+              data-nav
               data-leaf={index}
               data-chapter={chapter.id}
               data-publication={chapter.publication}
               data-image-source={chapter.cover.credit.source}
-              data-image-source-page={chapter.cover.credit.sourcePage}
-              data-image-photographer={chapter.cover.credit.photographer}
-              style={`--i:${index}`}>
-
-              <span class="pf-leaf__surface" aria-hidden="true">
-                {chapter.id === 'womenswear' ? (
-                  /* THE FASHION PLATE. Blended into the page rather than
-                     framed in it: the rendition is shot on white, so the
-                     studio ground resolves into the bone and the garment
-                     stands in the composition instead of sitting in a
-                     rectangle laid over it. The blend is a treatment of THIS
-                     asset — the layout does not depend on it, and final
-                     photography with its own environment drops into the same
-                     box. */
-                  <img class="pf-leaf__img pf-leaf__img--hero"
-                    src={HERO.image.src} srcset={HERO.image.srcset}
-                    sizes="(max-width: 767px) 100vw, 72vw"
-                    width={HERO.image.width} height={HERO.image.height}
-                    alt="" fetchpriority="high" decoding="async" />
-                ) : chapter.id === 'tech-packs' ? (
-                  /* PAPER. A pack's fields are blank until a factory fills
-                     them, so a photograph of one is a pale rectangle. What a
-                     pack offers is what is in it, and that is typography. */
-                  <span class="pf-leaf__paper">
-                    {PACK_CONTENTS.map((section) => <span>{section}</span>)}
-                  </span>
-                ) : chapter.id === '3d-simulation' ? (
-                  <>
-                    <img class="pf-leaf__img" src={chapter.cover.image.src}
-                      srcset={chapter.cover.image.srcset} sizes="30vw"
-                      width={chapter.cover.image.width} height={chapter.cover.image.height}
-                      alt="" loading="lazy" decoding="async" />
-                    {/* The one moving surface. It plays only while it is on
-                        screen and only where motion is welcome. */}
-                    <video class="pf-leaf__clip" data-leaf-motion
-                      poster="/CLO3D-poster.jpg" muted loop playsinline
-                      preload="none" aria-hidden="true" tabindex="-1">
-                      <source src="/CLO3D.webm" type="video/webm" />
-                      <source src="/CLO3D.mp4" type="video/mp4" />
-                    </video>
-                  </>
-                ) : (
-                  <img class="pf-leaf__img" src={chapter.cover.image.src}
-                    srcset={chapter.cover.image.srcset} sizes="34vw"
-                    width={chapter.cover.image.width} height={chapter.cover.image.height}
-                    alt="" loading="lazy" decoding="async" />
-                )}
+              style={`--i:${index}`}
+            >
+              <span class="pf-entry__media" aria-hidden="true">
+                <img
+                  class:list={['pf-entry__image', { 'pf-leaf__img--hero': chapter.id === 'womenswear' }]}
+                  src={chapter.cover.image.src}
+                  srcset={chapter.cover.image.srcset}
+                  sizes={chapter.id === 'womenswear' ? '100vw' : '(max-width: 767px) 92vw, 48vw'}
+                  width={chapter.cover.image.width}
+                  height={chapter.cover.image.height}
+                  alt=""
+                  fetchpriority={chapter.id === 'womenswear' ? 'high' : undefined}
+                  loading={chapter.id === 'womenswear' ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
               </span>
-
-              {/* The name and the way in, under the plate's own lower edge —
-                  so four names follow the rag of four different depths
-                  instead of lining up into a row of cards. */}
-              <span class="pf-leaf__type">
-                <b class="pf-leaf__name">{chapter.title}</b>
-                <span class="pf-leaf__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
-                <span class="pf-leaf__go">{CHAPTER_ACTION[chapter.id].action}</span>
+              <span class="pf-entry__caption">
+                <i class="pf-entry__number">{chapter.number}</i>
+                <b class="pf-entry__name">{chapter.title}</b>
+                <span class="pf-entry__intent">{CHAPTER_ACTION[chapter.id].intent}</span>
+                <span class="pf-entry__action">{CHAPTER_ACTION[chapter.id].action}</span>
               </span>
             </a>
           ))}
 
-          {/* THE ONE CROSSING. A second copy of the fashion photograph, laid
-              over the statement and blended, so the fishnet sleeve passes in
-              FRONT of the letters while the studio sweep around it stays
-              invisible. It exists for the first frame only and is gone within
-              the first few per cent of the scroll, which is why the statement
-              can sit above the plates for the rest of it and never be clipped
-              by one.
-
-              This is the single place where image and type touch. It is one
-              element and one blend — no mask, no traced outline, no shape cut
-              to the garment. Final photography with its own environment drops
-              this layer and keeps the layout. */}
-          <span class="pf-lay__cross" aria-hidden="true">
-            <img src={HERO.image.src} srcset={HERO.image.srcset}
-              sizes="(max-width: 767px) 100vw, 72vw"
-              width={HERO.image.width} height={HERO.image.height}
-              alt="" fetchpriority="high" decoding="async" />
-          </span>
-
-          {/* THE STATEMENT. Set in the void the raised arm opens, and the
-              reason the plate is one composition. It rises and settles above
-              the rail as the stack spreads, so the resolved screen still
-              carries the words the visitor arrived on. */}
-          <p class="pf-lay__folio label" aria-hidden="true">
+          <p class="pf-entry__folio label" aria-hidden="true">
             <span>Portfolio / 04 worlds</span><span>Fashion → Production</span>
           </p>
-
-          <h1 class="pf-lay__say">
-            <span class="pf-lay__line pf-lay__line--a">Between</span>
-            <span class="pf-lay__line pf-lay__line--b">instinct</span>
-            <span class="pf-lay__line pf-lay__line--c">&amp; construction.</span>
+          <h1 class="pf-entry__title">
+            <span>Between</span>
+            <span>instinct</span>
+            <span>&amp; construction.</span>
           </h1>
-
-          <p class="pf-lay__note">
-            Fashion seen from both sides: the intention, and the precision that
-            gives it form.
-          </p>
-
-          <p class="pf-lay__read label" aria-hidden="true"><span></span> Scroll to open the work</p>
+          <p class="pf-entry__note">Fashion ideas developed into products that can actually be made.</p>
+          <p class="pf-entry__read label" aria-hidden="true"><span></span> Scroll to separate the work</p>
         </div>
       </div>
     </section>

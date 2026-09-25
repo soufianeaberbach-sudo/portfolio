@@ -20,6 +20,7 @@
  * than five documents.
  */
 import type { TechPack } from '../../data/portfolio';
+import { chapters } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import WorldNavigation from './WorldNavigation.astro';
 
@@ -29,6 +30,7 @@ interface Props {
 
 const { packs } = Astro.props;
 const anyDemo = packs.some((pack) => pack.demo);
+const chapter = chapters.find((item) => item.id === 'tech-packs')!;
 ---
 
 <section class="pf-world pf-world--docs" id="tech-packs" data-world="tech-packs" tabindex="-1" aria-labelledby="tech-packs-title">
@@ -41,26 +43,72 @@ const anyDemo = packs.some((pack) => pack.demo);
       <p class="label pf-bar__tag"><b>03</b> Tech Packs</p>
     </div>
 
-    <header class="pf-head">
-      <h2 class="display" id="tech-packs-title">Tech Packs</h2>
-      <p class="pf-head__descriptor">
-        Production-ready technical documentation — the document a factory can build from without calling to ask what was meant.
-      </p>
-      {anyDemo && (
-        <p class="pf-prov" data-demo-notice>
-          <b class="label">Interface prototype</b>
-          <span>
-            These are demo packs, marked DEMO on every page and carrying no client name, measurement,
-            grading or bill-of-materials value. Selected real technical packs will replace them.
-          </span>
-        </p>
-      )}
+    <header class="pf-docroom__arrival">
+      <div class="pf-docroom__copy">
+        <p class="label">Documentation / production handoff</p>
+        <h2 class="display" id="tech-packs-title">Tech<br />Packs</h2>
+        <p>Production-ready instructions a factory can build from.</p>
+      </div>
+      <figure class="pf-docroom__cover">
+        <img
+          src={chapter.cover.image.src}
+          srcset={chapter.cover.image.srcset}
+          sizes="(max-width: 767px) 92vw, 58vw"
+          width={chapter.cover.image.width}
+          height={chapter.cover.image.height}
+          alt={chapter.cover.image.alt}
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption><span>Chapter cover</span><b>Technical specification / supplied reference</b></figcaption>
+      </figure>
+      <span class="pf-docroom__register" aria-hidden="true"></span>
     </header>
 
+    {anyDemo && (
+      <p class="pf-prov pf-docroom__notice" data-demo-notice>
+        <b class="label">Interface prototype</b>
+        <span>
+          These are demo packs, marked DEMO on every page and carrying no client name, measurement,
+          grading or bill-of-materials value. Selected real technical packs will replace them.
+        </span>
+      </p>
+    )}
+
     {packs.length > 0 ? (
-      <ol class="pf-docs">
-        {packs.map((pack, index) => (
-          <li class="pf-doc" data-doc={pack.id} data-side={index % 2 === 0 ? 'left' : 'right'}>
+      <div class="pf-docroom" data-document-room>
+        <nav class="pf-docroom__index" aria-label="Document index" role="tablist">
+          <p class="label">Five production dossiers</p>
+          <ol>
+            {packs.map((pack, index) => (
+              <li>
+                <a
+                  id={`document-tab-${pack.id}`}
+                  href={`#preview-${pack.id}`}
+                  role="tab"
+                  aria-controls={`document-${pack.id}`}
+                  aria-selected={index === 0 ? 'true' : 'false'}
+                  tabindex={index === 0 ? '0' : '-1'}
+                  data-doc-select={pack.id}
+                >
+                  <i>{String(index + 1).padStart(2, '0')}</i>
+                  <span>{pack.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <ol class="pf-docs">
+          {packs.map((pack, index) => (
+          <li
+            class="pf-doc"
+            id={`document-${pack.id}`}
+            data-doc={pack.id}
+            data-doc-panel
+            data-active={index === 0 ? '' : undefined}
+            role="tabpanel"
+            aria-labelledby={`document-tab-${pack.id}`}
+          >
             <a
               class="pf-doc__page"
               id={`preview-${pack.id}`}
@@ -97,8 +145,9 @@ const anyDemo = packs.some((pack) => pack.demo);
               <p class="label pf-doc__instruction">Select the document to read</p>
             </div>
           </li>
-        ))}
-      </ol>
+          ))}
+        </ol>
+      </div>
     ) : (
       <div class="pf-empty">
         <p class="pf-empty__lead">Selected technical pack examples will appear here.</p>
@@ -122,3 +171,38 @@ const anyDemo = packs.some((pack) => pack.demo);
     <div class="pf-reader__mount" data-reader-mount></div>
   </dialog>
 </section>
+
+<script>
+  const room = document.querySelector<HTMLElement>('[data-document-room]');
+  if (room) {
+    const tabs = [...room.querySelectorAll<HTMLAnchorElement>('[data-doc-select]')];
+    const panels = [...room.querySelectorAll<HTMLElement>('[data-doc-panel]')];
+    const select = (id: string, focus = false) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.docSelect === id;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        if (active && focus) tab.focus();
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.doc === id;
+        panel.hidden = !active;
+        panel.toggleAttribute('data-active', active);
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', (event) => {
+        event.preventDefault();
+        select(tab.dataset.docSelect ?? '');
+      });
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
+          : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        select(tabs[next]?.dataset.docSelect ?? '', true);
+      });
+    });
+    select(tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.dataset.docSelect ?? '');
+  }
+</script>

@@ -88,7 +88,8 @@ try {
   const docs=page.locator('[data-open-pdf]');
   check(await docs.count()===5,'five documents');
   for(const mode of ['button','escape']){
-   const opener=docs.nth(2);await opener.scrollIntoViewIfNeeded();
+   await page.locator('[data-doc-select="tp-03"]').click();
+   const opener=page.locator('[data-doc="tp-03"] [data-open-pdf]');await opener.scrollIntoViewIfNeeded();
    const scroll=await page.locator('[data-world="tech-packs"]').evaluate(e=>e.scrollTop);
    await opener.click();
    check(await page.locator('[data-reader]').evaluate(e=>e.open),'reader open');

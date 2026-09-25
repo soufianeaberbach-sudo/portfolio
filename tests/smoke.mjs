@@ -201,10 +201,10 @@ try {
           boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
           images: el.querySelectorAll('img').length,
           source: el.dataset.imageSource ?? '',
-          name: el.querySelector('.pf-leaf__name').textContent.trim(),
-          intent: el.querySelector('.pf-leaf__intent').textContent.trim(),
-          go: el.querySelector('.pf-leaf__go').textContent.trim(),
-          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-leaf__type')).opacity),
+          name: el.querySelector('.pf-entry__name').textContent.trim(),
+          intent: el.querySelector('.pf-entry__intent').textContent.trim(),
+          go: el.querySelector('.pf-entry__action').textContent.trim(),
+          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-entry__caption')).opacity),
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
@@ -220,8 +220,8 @@ try {
     const opening = await p.evaluate(() => {
       const lay = document.querySelector('[data-lay]');
       const field = document.querySelector('[data-lay-field]');
-      const say = document.querySelector('.pf-lay__say');
-      const lines = [...say.querySelectorAll('.pf-lay__line')];
+      const say = document.querySelector('.pf-entry__title');
+      const lines = [...say.querySelectorAll('span')];
       const hero = document.querySelector('.pf-leaf__img--hero');
       const hr = hero.getBoundingClientRect();
       return {
@@ -236,8 +236,8 @@ try {
         statement: say.textContent.replace(/\s+/g, ' ').trim(),
         lines: lines.length,
         /* The construction devices are not on the first frame at all. */
-        axisOpacity: Number(getComputedStyle(document.querySelector('.pf-lay__axis')).opacity),
-        note: (document.querySelector('.pf-lay__note')?.textContent ?? '').trim(),
+        axisOpacity: Number(getComputedStyle(document.querySelector('.pf-entry__axis')).opacity),
+        note: (document.querySelector('.pf-entry__note')?.textContent ?? '').trim(),
       };
     });
     check('the transformation starts at its first state', opening.t <= 0.02, String(opening.t));
@@ -281,7 +281,7 @@ try {
           left: Math.round(r.left),
           top: Math.round(r.top),
           opacity: Number(getComputedStyle(el).opacity),
-          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-leaf__type')).opacity),
+          nameOpacity: Number(getComputedStyle(el.querySelector('.pf-entry__caption')).opacity),
         };
       });
       return { t: Number(getComputedStyle(lay).getPropertyValue('--t')), list };
@@ -295,8 +295,8 @@ try {
         >= Math.max(...resolved.list.map((q) => q.area)) * 0.35,
       resolved.list.map((q) => `${q.chapter}:${q.area}`).join(' '));
     check('the four are not four identical cards',
-      new Set(resolved.list.map((q) => q.height)).size === 4
-        && new Set(resolved.list.map((q) => q.width)).size === 4,
+      new Set(resolved.list.map((q) => q.height)).size >= 3
+        && new Set(resolved.list.map((q) => q.width)).size >= 3,
       resolved.list.map((q) => `${q.width}x${q.height}`).join(' '));
     check('the four resolve into a staggered editorial field',
       new Set(resolved.list.map((q) => q.top)).size >= 3,
@@ -963,7 +963,7 @@ try {
     await c.close();
   }
 
-  // ---- Tech Packs: five documents in a column, and a reader
+  // ---- Tech Packs: five dossiers in one documentation room, and a reader
   console.log('\nportfolio tech packs');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -978,14 +978,14 @@ try {
     const docs = await p.evaluate(() => {
       const w = document.querySelector('[data-world="tech-packs"]');
       const list = [...w.querySelectorAll('.pf-doc')];
-      const boxes = list.map((el) => el.getBoundingClientRect());
       return {
         count: list.length,
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-        lefts: boxes.map((b) => Math.round(b.left)),
+        tabs: w.querySelectorAll('[data-doc-select]').length,
+        selectedTabs: w.querySelectorAll('[data-doc-select][aria-selected="true"]').length,
+        activePanels: list.filter((el) => !el.hidden && el.hasAttribute('data-active')).length,
         previews: list.map((el) => el.querySelector('.pf-doc__page img')?.getAttribute('src') ?? ''),
         previewLinks: list.map((el) => el.querySelector('.pf-doc__page')?.getAttribute('href') ?? ''),
-        previewWidths: list.map((el) => Math.round(el.querySelector('.pf-doc__page').getBoundingClientRect().width)),
+        activePreviewWidth: Math.round(w.querySelector('.pf-doc[data-active] .pf-doc__page').getBoundingClientRect().width),
         numbers: list.map((el) => el.querySelector('.pf-doc__num').textContent.trim()),
         opens: list.map((el) => el.querySelector('[data-open-pdf]')?.getAttribute('href') ?? ''),
         stamps: list.filter((el) => /demo/i.test(el.querySelector('.pf-doc__stamp')?.textContent ?? '')).length,
@@ -993,13 +993,14 @@ try {
       };
     });
     check('five demo documents', docs.count === 5, String(docs.count));
-    check('the documents run one below another',
-      docs.stacked && new Set(docs.lefts).size === 1, `${docs.lefts.join(',')} stacked ${docs.stacked}`);
+    check('the documentation room exposes one selected dossier at a time',
+      docs.tabs === 5 && docs.selectedTabs === 1 && docs.activePanels === 1,
+      `${docs.tabs} tabs / ${docs.selectedTabs} selected / ${docs.activePanels} panels`);
     check('the numbering runs 01 to 05', docs.numbers.join(',') === '01,02,03,04,05', docs.numbers.join(','));
     check('each shows its own first page, large',
       docs.previews.every((src) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(src))
-      && docs.previewWidths.every((w) => w >= 400),
-      `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.previewWidths.join(',')}`);
+      && docs.activePreviewWidth >= 700,
+      `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.activePreviewWidth}`);
     check('each is marked a demo', docs.stamps === 5, String(docs.stamps));
     check('each offers its own PDF',
       docs.opens.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.opens.join(' '));
@@ -1009,7 +1010,12 @@ try {
 
     check('no PDF byte is fetched when the chapter opens', pdfRequests.length === 0, pdfRequests.join(','));
 
-    await p.evaluate(() => document.querySelector('[data-world="tech-packs"] [data-open-pdf]').click());
+    await p.locator('[data-doc-select="tp-03"]').click();
+    check('selecting a dossier changes the document surface without opening a PDF',
+      await p.locator('[data-doc="tp-03"]').evaluate((el) => !el.hidden && el.hasAttribute('data-active'))
+      && pdfRequests.length === 0);
+
+    await p.locator('[data-doc="tp-03"] [data-open-pdf]').click();
     await p.waitForTimeout(900);
     const reader = await p.evaluate(() => {
       const r = document.querySelector('[data-reader]');
@@ -1141,8 +1147,8 @@ try {
            chapter's own ground. */
         bar: bg('.pf-continuity'),
         barSticky: getComputedStyle(w.querySelector('.pf-continuity')).position,
-        title: getComputedStyle(w.querySelector('.pf-head h2')).color,
-        titleLum: lum(getComputedStyle(w.querySelector('.pf-head h2')).color),
+        title: getComputedStyle(w.querySelector('.pf-motion-arrival__copy h2')).color,
+        titleLum: lum(getComputedStyle(w.querySelector('.pf-motion-arrival__copy h2')).color),
         gapLum: lum(getComputedStyle(w.querySelector('[data-screen]')).backgroundColor === 'rgba(0, 0, 0, 0)'
           ? getComputedStyle(w).backgroundColor
           : getComputedStyle(w.querySelector('[data-screen]')).backgroundColor),
@@ -1176,9 +1182,9 @@ try {
     const naming = await p.evaluate(() => {
       const w = document.querySelector('[data-world="3d-simulation"]');
       return {
-        heading: w.querySelector('.pf-head h2').textContent.trim(),
+        heading: w.querySelector('.pf-motion-arrival__copy h2').textContent.trim(),
         bar: w.querySelector('.pf-bar__tag').textContent.replace(/\s+/g, ' ').trim(),
-        descriptor: w.querySelector('.pf-head__descriptor').textContent.replace(/\s+/g, ' ').trim(),
+        descriptor: w.querySelector('.pf-motion-arrival__copy > p:last-child').textContent.replace(/\s+/g, ' ').trim(),
       };
     });
     check('the chapter heading is Pattern Development',
