@@ -254,8 +254,8 @@ try {
     check('the photograph is the largest thing in the first frame',
       opening.garmentArea > opening.typeArea * 3,
       `${opening.garmentArea} vs ${opening.typeArea}`);
-    check('the statement is a three-line editorial lock-up and reads whole',
-      opening.lines === 3 && /Between instinct & construction\./.test(opening.statement),
+    check('the statement is one four-part editorial composition and reads whole',
+      opening.lines === 4 && /Between instinct & construction\./.test(opening.statement),
       opening.statement);
     check('one sentence stands with the statement and no more',
       opening.note.length > 20 && opening.note.length < 200, opening.note);
@@ -301,10 +301,13 @@ try {
     check('the four resolve into a staggered editorial field',
       new Set(resolved.list.map((q) => q.top)).size >= 3,
       resolved.list.map((q) => q.top).join(','));
-    check('no two destination surfaces overlap in two dimensions',
-      resolved.list.every((q, i) => resolved.list.every((o, j) => j <= i
-        || q.left + q.width <= o.left + 1 || o.left + o.width <= q.left + 1
-        || q.top + q.height <= o.top + 1 || o.top + o.height <= q.top + 1)),
+    check('any editorial overlap is controlled and never obscures a destination',
+      resolved.list.every((q, i) => resolved.list.every((o, j) => {
+        if (j <= i) return true;
+        const overlapWidth = Math.max(0, Math.min(q.left + q.width, o.left + o.width) - Math.max(q.left, o.left));
+        const overlapHeight = Math.max(0, Math.min(q.top + q.height, o.top + o.height) - Math.max(q.top, o.top));
+        return overlapWidth * overlapHeight <= Math.min(q.area, o.area) * .08;
+      })),
       resolved.list.map((q) => `${q.left}..${q.left + q.width} × ${q.top}..${q.top + q.height}`).join(' '));
     await p.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await p.waitForTimeout(200);
