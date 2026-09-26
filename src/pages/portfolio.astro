@@ -94,7 +94,7 @@ const chapterNotes = [
         </div>
 
         <nav class="pf-living-index" aria-label="Portfolio chapters" data-living-index>
-          <p class="label"><span>Living index</span><span>Four chapters / one practice</span></p>
+          <p class="label"><span>Portfolio chapters</span><span>Four areas of practice</span></p>
           <ol>
             {chapters.map((chapter, index) => (
               <li>
@@ -130,8 +130,8 @@ const chapterNotes = [
           </nav>
           <div class="pf-women-threshold__copy">
             <p class="label"><span>01</span> Womenswear</p>
-            <h2 class="display" id="womenswear-entry-title">Silhouette<br />before explanation.</h2>
-            <p>Shape, movement and proportion lead. Construction waits beneath the surface.</p>
+            <h2 class="display" id="womenswear-entry-title">Designed<br />to move.</h2>
+            <p>Silhouette and proportion guide every cut.</p>
             <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
               Continue to Womenswear <Arrow />
             </a>
@@ -357,8 +357,10 @@ const chapterNotes = [
         if (!already) {
           if (openWorld) openWorld.removeAttribute('data-open');
           if (!restoreFocusTo) {
-            restoreFocusTo = chapterLinks.find((link) => link.dataset.chapter === id)
-              ?? (document.activeElement as HTMLElement | null);
+            const active = document.activeElement as HTMLElement | null;
+            restoreFocusTo = active && root.contains(active) && active.matches('a[data-nav],[data-chapter]')
+              ? active
+              : chapterLinks.find((link) => link.dataset.chapter === id) ?? active;
           }
           openWorld = next;
           next.setAttribute('data-open', '');

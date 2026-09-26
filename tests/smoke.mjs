@@ -141,12 +141,22 @@ try {
      architecture.
      ------------------------------------------------------------------------ */
   const openChapter = async (p, id) => {
-    await p.evaluate((chapter) => {
-      const link = document.querySelector(`[data-chapter="${chapter}"]`);
-      link.id = 'smoke-trigger';
-      link.click();
-    }, id);
-    await p.waitForTimeout(800);
+    await p.evaluate(() => {
+      const cinema = document.querySelector('.pf-cinema');
+      scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * 0.56);
+    });
+    await p.waitForTimeout(500);
+    const trigger = p.locator(`[data-index-row][data-chapter="${id}"]`);
+    await trigger.evaluate((link) => { link.id = 'smoke-trigger'; });
+    await trigger.click();
+    await p.waitForTimeout(id === 'womenswear' ? 900 : 800);
+    if (id === 'womenswear') {
+      await trigger.evaluate((link) => link.removeAttribute('id'));
+      const entry = p.locator('.pf-women-threshold__action');
+      await entry.evaluate((link) => { link.id = 'smoke-trigger'; });
+      await entry.click();
+      await p.waitForTimeout(800);
+    }
   };
   const openCategory = async (p, world, category) => {
     await p.evaluate(([w, c]) => {
@@ -170,89 +180,83 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* Four separated image covers, composed together without card chrome. */
-    const covers = await p.evaluate(() => {
-      const list = [...document.querySelectorAll('.pf-cover')];
-      const doc = document.documentElement.clientWidth;
-      return list.map((el) => {
+    /* One shared image plane changes chapter; four equal rows provide the
+       destinations. This deliberately guards against regressing to a card or
+       cover mosaic while retaining provenance for every visual. */
+    const chapterIndex = await p.evaluate(() => {
+      const media = document.querySelector('.pf-cinema__media');
+      const mediaRect = media.getBoundingClientRect();
+      const visuals = [...media.querySelectorAll('.pf-cinema__visual')].map((el) => {
         const r = el.getBoundingClientRect();
         const s = getComputedStyle(el);
         return {
-          chapter: el.dataset.chapter,
-          top: Math.round(r.top + window.scrollY),
-          height: Math.round(r.height),
-          left: Math.round(r.left),
-          full: Math.round(r.width) >= doc - 1,
-          isLink: el.tagName === 'A',
-          boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
-          titlePx: Math.round(parseFloat(getComputedStyle(el.querySelector('.pf-cover__name')).fontSize)),
-          images: el.querySelectorAll('img').length,
+          chapter: el.dataset.mediaChapter,
           source: el.dataset.imageSource ?? '',
-          name: el.querySelector('.pf-cover__name').textContent.trim(),
-          intent: el.querySelector('.pf-cover__intent').textContent.trim(),
+          images: el.querySelectorAll('img').length,
+          boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
+          sameField: Math.abs(r.left - mediaRect.left) <= 1
+            && Math.abs(r.top - mediaRect.top) <= 1
+            && Math.abs(r.width - mediaRect.width) <= 1
+            && Math.abs(r.height - mediaRect.height) <= 1,
+        };
+      });
+      const rows = [...document.querySelectorAll('.pf-index-row')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          chapter: el.dataset.chapter,
+          height: Math.round(r.height),
+          width: Math.round(r.width),
+          isLink: el.tagName === 'A',
+          name: el.querySelector('.pf-index-row__title').textContent.trim(),
+          intent: el.querySelector('.pf-index-row__note').textContent.trim(),
+          action: el.querySelector('.pf-index-row__action').textContent.replace(/\s+/g, ' ').trim(),
           text: el.textContent.replace(/\s+/g, ' ').trim(),
         };
       });
-    });
-    check('four chapter covers on the landing', covers.length === 4, String(covers.length));
-    check('the four hinged leaves share a baseline without overlapping',
-      covers.every((cv, i) => i === 0 || (cv.left > covers[i - 1].left && Math.abs(cv.top - covers[0].top) <= 1)),
-      covers.map((cv) => `${cv.chapter}@${cv.left},${cv.top}`).join(' '));
-    check('the covers are separated visual fields, not full-width bands', covers.every((cv) => !cv.full && cv.left > 0));
-    check('every cover is a substantial editorial image field', covers.every((cv) => cv.height >= 900 * 0.52),
-      covers.map((cv) => cv.height).join(','));
-    check('no cover is drawn as a card', covers.every((cv) => !cv.boxed));
-    /* A cover is a composition, not a centred word: a register rule at the
-       top, an axis that alternates chapter to chapter, and the progression
-       signature at the foot. */
-    const composed = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
-      const name = el.querySelector('.pf-cover__name').getBoundingClientRect();
       return {
-        chapter: el.dataset.chapter,
-        register: !!el.querySelector('.pf-cover__register .pf-cover__num')
-          && !!el.querySelector('.pf-cover__register .pf-cover__kind'),
-        intent: el.querySelector('.pf-cover__intent')?.textContent.trim(),
-        signal: getComputedStyle(el.querySelector('.pf-cover__go .arrow')).color,
-        /* Where the name sits across the cover, as a fraction of its width. */
-        axis: +((name.left + name.width / 2 - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
-        artInset: +((el.querySelector('.pf-cover__art').getBoundingClientRect().left - el.getBoundingClientRect().left)
-          / el.getBoundingClientRect().width).toFixed(2),
+        mediaCount: document.querySelectorAll('.pf-cinema__media').length,
+        visuals,
+        rows,
+        registerSignal: getComputedStyle(document.querySelector('.pf-cinema__register b')).backgroundColor,
       };
-    }));
-    check('every cover carries its register', composed.every((cv) => cv.register));
+    });
+    check('one shared chapter image field', chapterIndex.mediaCount === 1, String(chapterIndex.mediaCount));
+    check('four chapter visuals occupy that same field',
+      chapterIndex.visuals.length === 4 && chapterIndex.visuals.every((visual) => visual.sameField),
+      chapterIndex.visuals.map((visual) => `${visual.chapter}:${visual.sameField}`).join(' '));
+    check('the shared visual field is not drawn as a card', chapterIndex.visuals.every((visual) => !visual.boxed));
+    check('four equal-value chapter rows', chapterIndex.rows.length === 4
+      && Math.max(...chapterIndex.rows.map((row) => row.height)) - Math.min(...chapterIndex.rows.map((row) => row.height)) <= 1
+      && new Set(chapterIndex.rows.map((row) => row.width)).size === 1,
+      chapterIndex.rows.map((row) => `${row.width}x${row.height}`).join(','));
+    check('every chapter is openable', chapterIndex.rows.every((row) => row.isLink));
     check('every chapter has a distinct editorial intent',
-      composed.every((cv) => cv.intent) && new Set(composed.map((cv) => cv.intent)).size === 4);
-    check('the chapter action is the restrained orange signal',
-      composed.every((cv) => cv.signal === 'rgb(212, 95, 54)'), composed.map((cv) => cv.signal).join(' '));
-    check('the opening has distinct photographic, cut, paper and cinematic treatments',
-      await p.evaluate(() => {
-        const art = [...document.querySelectorAll('.pf-cover__art')].map(e=>getComputedStyle(e));
-        return art[1].clipPath !== 'none' && art[2].paddingTop !== '0px' && art[3].backgroundColor !== art[0].backgroundColor;
-      }));
-    check('every chapter is openable', covers.every((cv) => cv.isLink));
-    check('chapter names remain legible without competing with imagery',
-      covers.every((cv) => cv.titlePx >= 28 && cv.titlePx <= 40), covers.map((cv) => cv.titlePx).join(','));
-
-    check('every chapter cover is image-led', covers.every((cv) => cv.images === 1), covers.map((cv) => cv.images).join(','));
-    check('every cover records its image source', covers.every((cv) => cv.source.length > 0), covers.map((cv) => cv.source).join(' | '));
+      chapterIndex.rows.every((row) => row.intent) && new Set(chapterIndex.rows.map((row) => row.intent)).size === 4);
+    check('every chapter has distinct action language',
+      chapterIndex.rows.every((row) => row.action) && new Set(chapterIndex.rows.map((row) => row.action)).size === 4);
+    check('the registration point is the restrained orange signal',
+      chapterIndex.registerSignal === 'rgb(212, 95, 54)', chapterIndex.registerSignal);
+    check('every chapter visual is image-led',
+      chapterIndex.visuals.every((visual) => visual.images === 1), chapterIndex.visuals.map((visual) => visual.images).join(','));
+    check('every chapter visual records its image source',
+      chapterIndex.visuals.every((visual) => visual.source.length > 0), chapterIndex.visuals.map((visual) => visual.source).join(' | '));
     /* The public name of chapter 04 is wider than its last step: the
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
     check('chapter 04 is published as Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').name === 'Pattern Development',
-      covers.find((cv) => cv.chapter === '3d-simulation').text);
+      chapterIndex.rows.find((row) => row.chapter === '3d-simulation').name === 'Pattern Development',
+      chapterIndex.rows.find((row) => row.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
-        [...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
-    check('the covers include a concise intent and the way in',
-      covers.every((cv) => cv.intent.length > 0 && cv.text.includes('Enter world')),
-      covers.map((cv) => cv.text).join(' | '));
-    check('no category list appears on any cover',
-      await p.evaluate(() => document.querySelectorAll('.pf-cover .pf-cat, .pf-cover ol, .pf-cover ul').length === 0));
-    check('the reference disclaimer never appears on a cover',
+        [...document.querySelectorAll('.pf-living-index')].map((e) => e.textContent).join(' '))));
+    check('the index includes concise intent and wayfinding',
+      chapterIndex.rows.every((row) => row.intent.length > 0 && row.action.length > 0),
+      chapterIndex.rows.map((row) => row.text).join(' | '));
+    check('no category list appears inside the chapter index',
+      await p.evaluate(() => document.querySelectorAll('.pf-living-index .pf-cat').length === 0));
+    check('the reference disclaimer never appears in the chapter index',
       await p.evaluate(() => !/no authorship of photographed garments/i
-        .test([...document.querySelectorAll('.pf-cover')].map((e) => e.textContent).join(' '))));
+        .test(document.querySelector('.pf-living-index').textContent)));
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({
@@ -293,21 +297,35 @@ try {
   }
 
   for (const width of [390, 430]) {
-    console.log(`\nportfolio cover gallery at ${width}`);
+    console.log(`\nportfolio living chapter index at ${width}`);
     const c = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 932 }, isMobile: true, hasTouch: true });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    const mobileCovers = await p.evaluate(() => [...document.querySelectorAll('.pf-cover')].map((el) => {
-      const r = el.getBoundingClientRect();
-      return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top + scrollY), height: Math.round(r.height) };
+    await p.evaluate(() => {
+      const cinema = document.querySelector('.pf-cinema');
+      scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * 0.56);
+    });
+    await p.waitForTimeout(500);
+    const mobileIndex = await p.evaluate(() => ({
+      media: (() => {
+        const r = document.querySelector('.pf-cinema__media').getBoundingClientRect();
+        return { left: Math.round(r.left), right: Math.round(r.right), height: Math.round(r.height) };
+      })(),
+      rows: [...document.querySelectorAll('.pf-index-row')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return { left: Math.round(r.left), right: Math.round(r.right), height: Math.round(r.height) };
+      }),
+      phase: document.querySelector('.pf-cinema').dataset.phase,
     }));
-    check(`${width} offers substantial chapter leaves in a contained swipe rail`,
-      mobileCovers.every((cover, index) => cover.height >= 480
-        && cover.left >= 16 && cover.right - cover.left < width
-        && (index === 0 || cover.left >= mobileCovers[index - 1].right)),
-      JSON.stringify(mobileCovers));
-    check(`no horizontal overflow in the ${width} cover gallery`,
+    check(`${width} resolves to one contained visual field and four equal chapter rows`,
+      mobileIndex.phase === 'index'
+        && mobileIndex.media.left >= 16 && mobileIndex.media.right <= width - 16
+        && mobileIndex.rows.length === 4
+        && mobileIndex.rows.every((row) => row.left >= 16 && row.right <= width - 16)
+        && Math.max(...mobileIndex.rows.map((row) => row.height)) - Math.min(...mobileIndex.rows.map((row) => row.height)) <= 1,
+      JSON.stringify(mobileIndex));
+    check(`no horizontal overflow in the ${width} chapter index`,
       await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     await c.close();
   }

@@ -21,7 +21,11 @@ try {
   const open=async hash=>{await page.evaluate(h=>{location.hash=h},hash);await page.waitForTimeout(700)};
   await shot('opening');
   await page.screenshot({path:output+'/'+width+'-flow.png',fullPage:true});
-  if(width===1440){await page.locator('[data-chapter="tech-packs"]').hover();await shot('opening-expanded')}
+  if(width===1440){
+   await page.evaluate(()=>{const cinema=document.querySelector('.pf-cinema');scrollTo(0,cinema.offsetTop+(cinema.offsetHeight-innerHeight)*.56)});
+   await page.waitForTimeout(500);
+   await page.locator('[data-index-row][data-chapter="tech-packs"]').hover();await shot('opening-expanded')
+  }
   for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');
