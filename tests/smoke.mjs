@@ -141,22 +141,13 @@ try {
      architecture.
      ------------------------------------------------------------------------ */
   const openChapter = async (p, id) => {
-    await p.evaluate(() => {
-      const cinema = document.querySelector('.pf-cinema');
-      scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * 0.56);
-    });
-    await p.waitForTimeout(500);
-    const trigger = p.locator(`[data-index-row][data-chapter="${id}"]`);
+    const journeyLink = p.locator(`[data-journey-index="${id}"]`);
+    await journeyLink.click();
+    await p.waitForTimeout(850);
+    const trigger = p.locator(`[data-journey-scene="${id}"] [data-nav]`);
     await trigger.evaluate((link) => { link.id = 'smoke-trigger'; });
     await trigger.click();
-    await p.waitForTimeout(id === 'womenswear' ? 900 : 800);
-    if (id === 'womenswear') {
-      await trigger.evaluate((link) => link.removeAttribute('id'));
-      const entry = p.locator('.pf-women-threshold__action');
-      await entry.evaluate((link) => { link.id = 'smoke-trigger'; });
-      await entry.click();
-      await p.waitForTimeout(800);
-    }
+    await p.waitForTimeout(800);
   };
   const openCategory = async (p, world, category) => {
     await p.evaluate(([w, c]) => {

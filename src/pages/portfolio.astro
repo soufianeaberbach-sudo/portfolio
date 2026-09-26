@@ -8,6 +8,7 @@ import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
+import '../styles/portfolio-journey.css';
 
 const chapterActions = [
   'Explore silhouettes',
@@ -21,6 +22,29 @@ const chapterNotes = [
   'Structure / balance / tailoring',
   'Specification / clarity / handoff',
   'Pattern / validation / resolution',
+];
+
+const journeyCopy = [
+  {
+    eyebrow: 'Silhouette / movement / form',
+    title: 'Silhouette in motion.',
+    text: 'Fashion led by proportion, gesture and the way a garment moves.',
+  },
+  {
+    eyebrow: 'Structure / tailoring / proportion',
+    title: 'Cut with clarity.',
+    text: 'A more architectural rhythm, where every line earns its place.',
+  },
+  {
+    eyebrow: 'Specification / decision / handoff',
+    title: 'The product, made legible.',
+    text: 'Documents become the shared language between design and production.',
+  },
+  {
+    eyebrow: 'Pattern / validation / resolution',
+    title: 'Form becomes resolved.',
+    text: 'Development makes construction, fit and digital validation visible.',
+  },
 ];
 
 /* Every chapter opens. A chapter with nothing published still has an
@@ -100,8 +124,8 @@ const chapterNotes = [
               <li>
                 <a
                   class="pf-index-row"
-                  href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-                  data-nav={chapter.id === 'womenswear' ? undefined : true}
+                  href={`#journey-${chapter.id}`}
+                  data-journey-nav={index}
                   data-chapter={chapter.id}
                   data-index-row
                   aria-current={chapter.id === 'womenswear' ? 'true' : undefined}
@@ -118,10 +142,10 @@ const chapterNotes = [
 
         <div class="pf-women-threshold" data-women-threshold aria-labelledby="womenswear-entry-title">
           <nav class="pf-women-threshold__index" aria-label="Portfolio chapter index">
-            {chapters.map((chapter) => (
+            {chapters.map((chapter, index) => (
               <a
-                href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-                data-nav={chapter.id === 'womenswear' ? undefined : true}
+                href={`#journey-${chapter.id}`}
+                data-journey-nav={index}
                 aria-current={chapter.id === 'womenswear' ? 'page' : undefined}
               >
                 <span>{chapter.number}</span>{chapter.title}
@@ -132,8 +156,8 @@ const chapterNotes = [
             <p class="label"><span>01</span> Womenswear</p>
             <h2 class="display" id="womenswear-entry-title">Designed<br />to move.</h2>
             <p>Silhouette and proportion guide every cut.</p>
-            <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
-              Continue to Womenswear <Arrow />
+            <a class="pf-women-threshold__action label" href="#journey-womenswear" data-journey-nav="0">
+              Follow the journey <Arrow />
             </a>
           </div>
           <p class="pf-women-threshold__credit label">Chapter cover / visual direction asset</p>
@@ -145,6 +169,85 @@ const chapterNotes = [
       </div>
       <span class="pf-cinema__entry-anchor" id="womenswear-entry" aria-hidden="true"></span>
     </section>
+
+    <section class="pf-journey" data-journey aria-label="Portfolio journey" data-active-chapter="womenswear">
+      <div class="pf-journey__sticky">
+        <nav class="pf-journey__index" aria-label="Portfolio journey chapters">
+          <p class="label"><span>Portfolio journey</span><span data-journey-counter>01 / 04</span></p>
+          <ol>
+            {chapters.map((chapter, index) => (
+              <li>
+                <a
+                  href={`#journey-${chapter.id}`}
+                  data-journey-nav={index}
+                  data-journey-index={chapter.id}
+                  aria-current={index === 0 ? 'step' : undefined}
+                >
+                  <span>{chapter.number}</span><strong>{chapter.title}</strong>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div class="pf-journey__stage" data-journey-stage>
+          {chapters.map((chapter, index) => (
+            <article
+              class={`pf-journey__scene pf-journey__scene--${chapter.id}`}
+              data-journey-scene={chapter.id}
+              data-scene-index={index}
+              aria-hidden={index === 0 ? 'false' : 'true'}
+            >
+              <figure class="pf-journey__image" data-journey-image>
+                <img
+                  src={chapter.cover.image.src}
+                  srcset={chapter.cover.image.srcset}
+                  sizes="100vw"
+                  width={chapter.cover.image.width}
+                  height={chapter.cover.image.height}
+                  alt=""
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
+                />
+              </figure>
+              <div class="pf-journey__wash" aria-hidden="true"></div>
+              <div class="pf-journey__copy">
+                <p class="pf-journey__eyebrow label"><span>{chapter.number}</span>{journeyCopy[index].eyebrow}</p>
+                <h2 class="display">{journeyCopy[index].title}</h2>
+                <p>{journeyCopy[index].text}</p>
+                <a class="pf-journey__action label" href={`#${chapter.id}`} data-nav>
+                  {chapterActions[index]} <Arrow />
+                </a>
+              </div>
+              <p class="pf-journey__chapter display" aria-hidden="true">{chapter.title}</p>
+              <span class="pf-journey__register" aria-hidden="true"><i></i></span>
+            </article>
+          ))}
+
+          <article class="pf-journey__scene pf-journey__scene--ending" data-journey-scene="ending" data-scene-index="4" aria-hidden="true">
+            <div class="pf-journey__ending-copy">
+              <p class="label">The work continues</p>
+              <h2 class="display">Have something<br />in development?</h2>
+              <a class="pf-journey__action label" href="/contact/">Discuss a product <Arrow /></a>
+            </div>
+            <p class="pf-journey__ending-note">Design intent, translated into a product that can be made.</p>
+          </article>
+        </div>
+      </div>
+
+      {chapters.map((chapter, index) => (
+        <span
+          class="pf-journey__anchor"
+          id={`journey-${chapter.id}`}
+          data-journey-anchor={index}
+          style={`--anchor-step:${index}`}
+          aria-hidden="true"
+        ></span>
+      ))}
+      <span class="pf-journey__anchor pf-journey__anchor--ending" id="journey-ending" aria-hidden="true"></span>
+    </section>
+
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
       <TechPackWorld packs={techPacks} />
@@ -257,6 +360,119 @@ const chapterNotes = [
         .to([register, folio], { autoAlpha: 0, duration: 0.13 }, 0.73)
         .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: 0.27 }, 0.72)
         .fromTo(threshold, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.19 }, 0.81);
+    }
+  </script>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const journey = document.querySelector<HTMLElement>('[data-journey]');
+
+    if (journey) {
+      const scenes = [...journey.querySelectorAll<HTMLElement>('[data-journey-scene]')];
+      const indexLinks = [...journey.querySelectorAll<HTMLAnchorElement>('[data-journey-index]')];
+      const counter = journey.querySelector<HTMLElement>('[data-journey-counter]');
+      const reduceJourneyMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const chapterIds = ['womenswear', 'menswear', 'tech-packs', '3d-simulation', 'ending'];
+      const accents = ['#c83d46', '#3157c8', '#d48a2c', '#7668d8', '#11110f'];
+      let activeScene = -1;
+
+      const setActiveScene = (next: number) => {
+        if (next === activeScene) return;
+        activeScene = next;
+        journey.dataset.activeChapter = chapterIds[next];
+        journey.style.setProperty('--journey-accent', accents[next]);
+        scenes.forEach((scene, index) => scene.setAttribute('aria-hidden', index === next ? 'false' : 'true'));
+        indexLinks.forEach((link, index) => {
+          if (index === next) link.setAttribute('aria-current', 'step');
+          else link.removeAttribute('aria-current');
+        });
+        if (counter) counter.textContent = next < 4 ? `0${next + 1} / 04` : 'Journey complete';
+      };
+
+      setActiveScene(0);
+
+      for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-journey-nav]')) {
+        link.addEventListener('click', (event) => {
+          const requested = Number(link.dataset.journeyNav ?? 0);
+          if (!Number.isFinite(requested)) return;
+          event.preventDefault();
+
+          if (reduceJourneyMotion()) {
+            scenes[requested]?.scrollIntoView({ behavior: 'auto', block: 'start' });
+            return;
+          }
+
+          const travel = Math.max(0, journey.offsetHeight - window.innerHeight);
+          const destination = journey.offsetTop + travel * (requested / 4);
+          window.scrollTo({ top: destination, behavior: 'smooth' });
+        });
+      }
+
+      if (!reduceJourneyMotion()) {
+        gsap.set(scenes, { autoAlpha: 0 });
+        gsap.set(scenes[0], { autoAlpha: 1 });
+
+        const sceneTimeline = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: 'portfolio-full-journey',
+            trigger: journey,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.5,
+            invalidateOnRefresh: true,
+            onUpdate: ({ progress }) => setActiveScene(Math.min(4, Math.round(progress * 4))),
+          },
+        });
+
+        const entries = [
+          { clipPath: 'inset(0 0 0 44%)', xPercent: 5, scale: 1 },
+          { clipPath: 'inset(7% 5% 7% 36%)', yPercent: 4, rotation: 0.7, scale: 1 },
+          { clipPath: 'inset(0 0 0 28%)', xPercent: 4, scale: 1.055 },
+          { clipPath: 'inset(0 0 8% 0)', yPercent: 5, scale: 1 },
+        ];
+        const exits = [
+          { xPercent: -6, scale: 1.035 },
+          { xPercent: -3, scale: 0.985 },
+          { yPercent: -3, rotation: -0.5, scale: 0.98 },
+          { scale: 0.96 },
+        ];
+
+        for (let index = 1; index < scenes.length; index += 1) {
+          const at = index - 0.58;
+          const outgoingCopy = scenes[index - 1].querySelector<HTMLElement>('.pf-journey__copy,.pf-journey__ending-copy');
+          const incomingCopy = scenes[index].querySelector<HTMLElement>('.pf-journey__copy,.pf-journey__ending-copy');
+          sceneTimeline
+            .to(scenes[index - 1], { autoAlpha: 0, duration: 0.58, ...exits[index - 1] }, at)
+            .fromTo(
+              scenes[index],
+              { autoAlpha: 0, ...entries[index - 1] },
+              { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', xPercent: 0, yPercent: 0, rotation: 0, scale: 1, duration: 0.62 },
+              at,
+            );
+
+          if (outgoingCopy) sceneTimeline.to(outgoingCopy, { autoAlpha: 0, y: -12, duration: 0.2 }, at);
+          if (incomingCopy) {
+            sceneTimeline.fromTo(
+              incomingCopy,
+              { autoAlpha: 0, y: 18 },
+              { autoAlpha: 1, y: 0, duration: 0.3 },
+              at + 0.25,
+            );
+          }
+
+          const image = scenes[index].querySelector<HTMLImageElement>('.pf-journey__image img');
+          if (image) {
+            sceneTimeline.fromTo(image, { scale: 1.035 }, { scale: 1, duration: 0.8 }, at);
+          }
+        }
+
+        sceneTimeline.to({}, { duration: 0.42 });
+      }
     }
   </script>
 
