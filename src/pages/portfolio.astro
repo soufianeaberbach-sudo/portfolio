@@ -44,7 +44,13 @@ const chapterNotes = [
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    <section class="pf-cinema" id="portfolio-index" data-cinema aria-labelledby="pf-cinema-title">
+    <section
+      class="pf-cinema"
+      id="portfolio-index"
+      data-cinema
+      data-active-chapter="womenswear"
+      aria-labelledby="pf-cinema-title"
+    >
       <div class="pf-cinema__sticky">
         <p class="pf-cinema__folio label" data-cinema-folio>
           <span>Soufiane Aberbach</span><span>Selected work / 2026</span>
@@ -60,84 +66,84 @@ const chapterNotes = [
           Fashion ideas developed into products that can be made.
         </p>
 
-        <div class="pf-cinema__register" aria-hidden="true" data-cinema-register>
-          <i></i><b></b><span class="label">01—04 / Chapters</span>
-        </div>
-
-        <nav class="pf-chapter-field" aria-label="Portfolio chapters" data-chapter-field>
+        <div class="pf-cinema__media" data-cinema-media aria-hidden="true">
           {chapters.map((chapter, index) => (
-            <a
-              class={`pf-door pf-door--${chapter.id}`}
-              href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-              data-nav={chapter.id === 'womenswear' ? undefined : true}
-              data-chapter={chapter.id}
-              data-publication={chapter.publication}
-              data-cover-index={index + 1}
+            <figure
+              class={`pf-cinema__visual pf-cinema__visual--${chapter.id}`}
+              data-media-chapter={chapter.id}
               data-image-source={chapter.cover.credit.source}
             >
-              <span class="pf-door__image" aria-hidden="true">
-                <img
-                  src={chapter.cover.image.src}
-                  srcset={chapter.cover.image.srcset}
-                  sizes={index === 0 ? '(max-width: 767px) 94vw, 86vw' : '(max-width: 767px) 84vw, 46vw'}
-                  width={chapter.cover.image.width}
-                  height={chapter.cover.image.height}
-                  alt=""
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  fetchpriority={index === 0 ? 'high' : undefined}
-                  decoding="async"
-                  style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
-                />
-              </span>
-              <span class="pf-door__copy">
-                <span class="pf-door__number label">{chapter.number}</span>
-                <strong class="pf-door__title display">{chapter.title}</strong>
-                <span class="pf-door__note">{chapterNotes[index]}</span>
-                <span class="pf-door__action label">{chapterActions[index]} <Arrow /></span>
-              </span>
-            </a>
+              <img
+                src={chapter.cover.image.src}
+                srcset={chapter.cover.image.srcset}
+                sizes="(max-width: 767px) 100vw, 82vw"
+                width={chapter.cover.image.width}
+                height={chapter.cover.image.height}
+                alt=""
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchpriority={index === 0 ? 'high' : undefined}
+                decoding="async"
+                style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
+              />
+            </figure>
           ))}
+        </div>
+
+        <div class="pf-cinema__register" aria-hidden="true" data-cinema-register>
+          <i></i><b></b><span class="label">01—04</span>
+        </div>
+
+        <nav class="pf-living-index" aria-label="Portfolio chapters" data-living-index>
+          <p class="label"><span>Living index</span><span>Four chapters / one practice</span></p>
+          <ol>
+            {chapters.map((chapter, index) => (
+              <li>
+                <a
+                  class="pf-index-row"
+                  href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
+                  data-nav={chapter.id === 'womenswear' ? undefined : true}
+                  data-chapter={chapter.id}
+                  data-index-row
+                  aria-current={chapter.id === 'womenswear' ? 'true' : undefined}
+                >
+                  <span class="pf-index-row__number label">{chapter.number}</span>
+                  <strong class="pf-index-row__title display">{chapter.title}</strong>
+                  <span class="pf-index-row__note">{chapterNotes[index]}</span>
+                  <span class="pf-index-row__action label">{chapterActions[index]} <Arrow /></span>
+                </a>
+              </li>
+            ))}
+          </ol>
         </nav>
+
+        <div class="pf-women-threshold" data-women-threshold aria-labelledby="womenswear-entry-title">
+          <nav class="pf-women-threshold__index" aria-label="Portfolio chapter index">
+            {chapters.map((chapter) => (
+              <a
+                href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
+                data-nav={chapter.id === 'womenswear' ? undefined : true}
+                aria-current={chapter.id === 'womenswear' ? 'page' : undefined}
+              >
+                <span>{chapter.number}</span>{chapter.title}
+              </a>
+            ))}
+          </nav>
+          <div class="pf-women-threshold__copy">
+            <p class="label"><span>01</span> Womenswear</p>
+            <h2 class="display" id="womenswear-entry-title">Silhouette<br />before explanation.</h2>
+            <p>Shape, movement and proportion lead. Construction waits beneath the surface.</p>
+            <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
+              Continue to Womenswear <Arrow />
+            </a>
+          </div>
+          <p class="pf-women-threshold__credit label">Chapter cover / visual direction asset</p>
+        </div>
 
         <p class="pf-cinema__scroll label" data-cinema-scroll>
           <span>Scroll to open the practice</span><i aria-hidden="true"></i>
         </p>
       </div>
-    </section>
-
-    <section class="pf-women-entry" id="womenswear-entry" aria-labelledby="womenswear-entry-title" data-women-entry>
-      <nav class="pf-women-entry__index" aria-label="Portfolio chapter index">
-        {chapters.map((chapter) => (
-          <a
-            href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-            data-nav={chapter.id === 'womenswear' ? undefined : true}
-            aria-current={chapter.id === 'womenswear' ? 'page' : undefined}
-          >
-            <span>{chapter.number}</span>{chapter.title}
-          </a>
-        ))}
-      </nav>
-      <figure class="pf-women-entry__visual" aria-hidden="true">
-        <img
-          src={chapters[0].cover.image.src}
-          srcset={chapters[0].cover.image.srcset}
-          sizes="100vw"
-          width={chapters[0].cover.image.width}
-          height={chapters[0].cover.image.height}
-          alt=""
-          loading="eager"
-          decoding="async"
-        />
-      </figure>
-      <div class="pf-women-entry__copy">
-        <p class="label"><span>01</span> Womenswear</p>
-        <h2 class="display" id="womenswear-entry-title">Silhouette<br />before explanation.</h2>
-        <p>Shape, movement and proportion lead. Construction waits beneath the surface.</p>
-        <a class="pf-women-entry__action label" href="#womenswear" data-nav>
-          Continue to Womenswear <Arrow />
-        </a>
-      </div>
-      <p class="pf-women-entry__credit label">Chapter cover / visual direction asset</p>
+      <span class="pf-cinema__entry-anchor" id="womenswear-entry" aria-hidden="true"></span>
     </section>
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
@@ -168,12 +174,11 @@ const chapterNotes = [
     gsap.registerPlugin(ScrollTrigger);
 
     const cinema = document.querySelector<HTMLElement>('[data-cinema]');
-    const womenEntry = document.querySelector<HTMLElement>('[data-women-entry]');
 
     if (cinema && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const women = cinema.querySelector<HTMLElement>('[data-chapter="womenswear"]')!;
-      const otherDoors = [...cinema.querySelectorAll<HTMLElement>('.pf-door:not([data-chapter="womenswear"])')];
-      const copies = [...cinema.querySelectorAll<HTMLElement>('.pf-door__copy')];
+      const media = cinema.querySelector<HTMLElement>('[data-cinema-media]')!;
+      const index = cinema.querySelector<HTMLElement>('[data-living-index]')!;
+      const rows = [...cinema.querySelectorAll<HTMLAnchorElement>('[data-index-row]')];
       const register = cinema.querySelector<HTMLElement>('[data-cinema-register]')!;
       const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
       const instinct = cinema.querySelector<HTMLElement>('[data-title-instinct]')!;
@@ -182,6 +187,31 @@ const chapterNotes = [
       const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
       const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
       const cue = cinema.querySelector<HTMLElement>('[data-cinema-scroll]')!;
+      const threshold = cinema.querySelector<HTMLElement>('[data-women-threshold]')!;
+      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+      const activateChapter = (id: string) => {
+        cinema.dataset.activeChapter = id;
+        const activeIndex = rows.findIndex((row) => row.dataset.chapter === id);
+        cinema.style.setProperty('--register-y', `${18 + Math.max(0, activeIndex) * 22}%`);
+        for (const row of rows) {
+          if (row.dataset.chapter === id) row.setAttribute('aria-current', 'true');
+          else row.removeAttribute('aria-current');
+        }
+      };
+
+      for (const row of rows) {
+        const activate = () => activateChapter(row.dataset.chapter ?? 'womenswear');
+        row.addEventListener('pointerenter', activate);
+        row.addEventListener('focus', activate);
+        row.addEventListener('touchstart', activate, { passive: true });
+      }
+
+      cinema.querySelector<HTMLAnchorElement>('a[href="#womenswear-entry"]')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        const destination = cinema.offsetTop + cinema.offsetHeight - window.innerHeight;
+        window.scrollTo({ top: destination, behavior: 'smooth' });
+      });
 
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
@@ -192,64 +222,41 @@ const chapterNotes = [
           end: 'bottom bottom',
           scrub: 0.45,
           invalidateOnRefresh: true,
+          onUpdate: ({ progress }) => {
+            cinema.dataset.phase = progress > 0.72 ? 'womenswear' : progress > 0.3 ? 'index' : 'opening';
+            if (progress > 0.72) activateChapter('womenswear');
+          },
         },
       });
 
       timeline
-        .to([cue, thesis], { autoAlpha: 0, y: -18, duration: 0.13 }, 0.03)
-        .to(folio, { autoAlpha: 0.45, duration: 0.12 }, 0.05)
-        .to(instinct, { xPercent: -13, yPercent: -115, scale: 0.42, autoAlpha: 0.14, duration: 0.34 }, 0.08)
-        .to(construction, { xPercent: 11, yPercent: 132, scale: 0.38, autoAlpha: 0.1, duration: 0.34 }, 0.08)
-        .to(between, { xPercent: -18, yPercent: -35, scale: 0.82, autoAlpha: 0.5, duration: 0.34 }, 0.08)
-        .to(register, { autoAlpha: 1, duration: 0.12 }, 0.18);
+        .to([cue, thesis], { autoAlpha: 0, y: -16, duration: 0.12 }, 0.02)
+        .to(folio, { autoAlpha: 0.42, duration: 0.14 }, 0.04)
+        .to(instinct, { xPercent: -10, yPercent: -88, scale: 0.5, autoAlpha: 0.08, duration: 0.3 }, 0.06)
+        .to(construction, { xPercent: 8, yPercent: 86, scale: 0.5, autoAlpha: 0.06, duration: 0.3 }, 0.06)
+        .to(between, { xPercent: -12, yPercent: -25, scale: 0.78, autoAlpha: 0.18, duration: 0.3 }, 0.06)
+        .to(register, { autoAlpha: 1, duration: 0.1 }, 0.17);
 
-      if (window.matchMedia('(min-width: 768px)').matches) {
-        timeline.to(women, {
-          left: '0%', top: '4%', width: '55%', height: '46%', duration: 0.48,
-        }, 0.08);
+      if (!isMobile) {
+        timeline.to(media, {
+          left: '50%', top: '13%', width: '46%', height: '73%', duration: 0.34,
+        }, 0.07);
       } else {
-        timeline.to(women, { top: '1%', height: '49%', duration: 0.4 }, 0.08);
+        timeline.to(media, {
+          left: '4.6%', top: '12.5%', width: '90.8%', height: '39%', duration: 0.34,
+        }, 0.07);
       }
 
       timeline
-        .fromTo(otherDoors,
-          { autoAlpha: 0, scale: 0.82, yPercent: 8 },
-          { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.045, duration: 0.32 },
-          0.34,
-        )
-        .to(title, { autoAlpha: 0.18, duration: 0.18 }, 0.5)
-        .to(copies, { autoAlpha: 1, stagger: 0.035, duration: 0.2 }, 0.55);
-
-      for (const door of cinema.querySelectorAll<HTMLElement>('.pf-door')) {
-        door.addEventListener('focus', () => {
-          if (window.innerWidth < 768) {
-            for (const item of cinema.querySelectorAll<HTMLElement>('.pf-door')) item.style.zIndex = '';
-            door.style.zIndex = '12';
-          }
-        });
-      }
-    }
-
-    if (womenEntry && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const visual = womenEntry.querySelector<HTMLElement>('.pf-women-entry__visual img');
-      const copy = womenEntry.querySelector<HTMLElement>('.pf-women-entry__copy');
-      gsap.fromTo(visual, { scale: 1.09 }, {
-        scale: 1.02,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: womenEntry,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.6,
-        },
-      });
-      gsap.fromTo(copy, { y: 50, autoAlpha: 0.25 }, {
-        y: 0,
-        autoAlpha: 1,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: womenEntry, start: 'top 68%', toggleActions: 'play none none reverse' },
-      });
+        .to(title, { autoAlpha: 0, duration: 0.12 }, 0.25)
+        .fromTo(index, { autoAlpha: 0, x: isMobile ? 0 : -22, y: isMobile ? 18 : 0 }, {
+          autoAlpha: 1, x: 0, y: 0, duration: 0.2,
+        }, 0.25)
+        .to({}, { duration: 0.26 }, 0.45)
+        .to(index, { autoAlpha: 0, x: isMobile ? 0 : -24, y: isMobile ? 18 : 0, duration: 0.16 }, 0.71)
+        .to([register, folio], { autoAlpha: 0, duration: 0.13 }, 0.73)
+        .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: 0.27 }, 0.72)
+        .fromTo(threshold, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.19 }, 0.81);
     }
   </script>
 
