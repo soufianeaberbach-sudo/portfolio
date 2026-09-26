@@ -1,42 +1,9 @@
-/* Hinged chapter leaves / silhouette rail / inspection table. */
-.pf .pf-cover { text-decoration: none; margin: 0; min-height: 0; }
-.pf .pf-cover:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
-.pf .pf-cover__num,.pf .pf-cover__kind { font: .65rem var(--mono); text-transform: uppercase; }
-.pf .pf-cover__name { font-family: var(--display); font-weight: 850; }
+/* Garment discovery, Viewer, documentation and development interiors. The
+   Opening and chapter threshold live in portfolio-cinematic.css. */
 .pf .pf-cat__label { grid-row: 1 !important; }
 .pf .pf-cat__blurb { grid-row: 2 !important; }
 .pf.pf--js .pf-slot[data-depth='3'] .pf-slot__figure img { filter: blur(.55px); }
 @media (max-width: 1023px) { .pf.pf--js .pf-slot[data-depth='2'] .pf-slot__figure img { filter: blur(.4px); } }
-.pf .pf-intro { padding: 9rem var(--gutter) 2rem; max-width: 1600px; margin: auto; }
-.pf .pf-opening { display: flex; justify-content: space-between; align-items: end; gap: 3rem; margin-top: 2rem; }
-.pf .pf-opening h1 { font-size: clamp(3rem,5.8vw,6rem); line-height: .98; letter-spacing: -.055em; margin: 0; }
-.pf .pf-opening p { font-size: .95rem; line-height: 1.65; margin: 0; max-width: 29ch; }
-.pf .pf-gates { display: flex; gap: 8px; height: 510px; padding: 0 var(--gutter); margin: 1.5rem auto 0; max-width: 1600px; border: 0; }
-.pf .pf-gates .pf-cover { position: relative; display: flex; flex-direction: column; flex: 1; width: 0; min-width: 0; height: 100%; padding: 0; border: 0; background: transparent; color: var(--ink); overflow: hidden; transition: flex 750ms cubic-bezier(.2,.7,.2,1); }
-.pf .pf-gates .pf-cover:first-of-type { flex: 1.7; }
-.pf .pf-gates:has(.pf-cover:is(:hover,:focus-visible)) .pf-cover { flex: 1; }
-.pf .pf-gates .pf-cover:is(:hover,:focus-visible) { flex: 2.2 !important; }
-.pf .pf-gates .pf-cover__art { position: relative; inset: auto; display: block; height: 350px; flex: 1; min-height: 0; overflow: hidden; background: #dfdcd3; }
-.pf .pf-gates .pf-cover__art::after,.pf .pf-gate__folio { display: none; }
-.pf .pf-gates .pf-cover__still { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; transform: none; filter: none; transition: transform 750ms ease; }
-.pf .pf-gates .pf-cover:is(:hover,:focus-visible) .pf-cover__still { transform: scale(1.025); }
-.pf .pf-gates .pf-cover__register { position: relative; inset: auto; display: flex; justify-content: space-between; align-items: center; padding: .7rem 0; order: -1; border-top: 1px solid var(--ink); }
-.pf .pf-gates .pf-cover__num { color: var(--signal); font-size: .8rem; }
-.pf .pf-gates .pf-cover__kind { color: var(--ink-soft); font-size: .5rem; letter-spacing: .08em; }
-.pf .pf-gates .pf-cover__type { position: static; display: block; padding: 1rem 0 0; color: inherit; min-height: 105px; }
-.pf .pf-gates .pf-cover__name { display: block; color: inherit; font-size: clamp(1.35rem,2.15vw,2.4rem); line-height: 1.05; letter-spacing: -.04em; }
-.pf .pf-gates .pf-cover__intent { display: block; margin-top: .6rem; font-size: .75rem; }
-.pf .pf-gates .pf-cover__go { display: flex; justify-content: space-between; font-size: .55rem; color: var(--ink-soft); margin-top: 1rem; }
-.pf .pf-gates .pf-cover__go .arrow { width: 14px; color: var(--signal); }
-.pf .pf-gates .pf-cover[data-chapter='menswear'] .pf-cover__art { clip-path: polygon(0 12%,100% 0,100% 100%,0 100%); }
-.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__art { padding: 24px 18px; background: #dedbd2; }
-.pf .pf-gates .pf-cover[data-chapter='tech-packs'] .pf-cover__still { object-fit: contain; transform: rotate(-5deg); }
-.pf .pf-gates .pf-cover[data-chapter='tech-packs']:is(:hover,:focus-visible) .pf-cover__still { transform: rotate(0); }
-.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__art { background: var(--ink); padding: 50px 0; }
-.pf .pf-gates .pf-cover[data-chapter='3d-simulation'] .pf-cover__still { object-fit: contain; }
-.pf .pf-colophon { display: flex; justify-content: space-between; gap: 2rem; padding: 2rem var(--gutter) 5rem; max-width: 1600px; margin: auto; }
-.pf .pf-colophon p { font-size: .7rem; line-height: 1.6; }
-.pf .pf-colophon .label { font-size: .55rem; }
 .pf .pf-continuity { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem var(--gutter); background: var(--paper); color: var(--ink); border-bottom: 1px solid var(--line); }
 .pf .pf-continuity a { color: inherit; display: flex; gap: .5rem; align-items: center; min-height: 44px; font-size: .75rem; text-decoration: none; box-shadow: none; }
 .pf .pf-continuity a span { font: .6rem var(--mono); color: var(--muted); }
@@ -129,15 +96,6 @@ body:has(.pf) .desktop-nav a::after { background: var(--ink); }
  .pf .pf-video { grid-template-columns: 120px minmax(0,1fr); gap: 1rem 1.5rem; }
 }
 @media (max-width: 767px) {
- .pf .pf-intro { padding-top: 7rem; padding-bottom: 1rem; }
- .pf .pf-opening { display: block; margin-top: 1.5rem; }
- .pf .pf-opening h1 { font-size: clamp(2.6rem,10vw,4rem); }
- .pf .pf-opening p { margin-top: 1.5rem; font-size: .85rem; }
- .pf .pf-gates { height: 500px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); gap: 1rem; padding-bottom: 1rem; }
- .pf .pf-gates .pf-cover,.pf .pf-gates .pf-cover:first-of-type,.pf .pf-gates .pf-cover:is(:hover,:focus-visible) { flex: 0 0 78vw !important; scroll-snap-align: start; }
- .pf .pf-gates .pf-cover__name { font-size: 1.9rem; }
- .pf .pf-colophon { display: block; padding-block: 1rem 3rem; }
- .pf .pf-colophon > p:nth-child(2) { display: none; }
  .pf .pf-continuity { display: grid; grid-template-columns: 1fr 1fr; gap: 0 .7rem; padding-block: .5rem; }
  .pf .pf-continuity .pf-continuity__index { display: none; }
  .pf .pf-continuity a { font-size: .7rem; }
@@ -168,5 +126,5 @@ body:has(.pf) .desktop-nav a::after { background: var(--ink); }
  .pf .pf-video__privacy { margin-top: .7rem; }
 }
 @media (prefers-reduced-motion: reduce) {
- .pf .pf-gates .pf-cover,.pf .pf-gates .pf-cover__still,.pf .pf-cat__media img,.pf .pf-doc__page { transition: none; }
+ .pf .pf-cat__media img,.pf .pf-doc__page { transition: none; }
 }

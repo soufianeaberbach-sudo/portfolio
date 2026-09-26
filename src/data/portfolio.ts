@@ -494,11 +494,6 @@ export const techPacks: TechPack[] = [
 /* The five supplied recordings. Posters are YouTube's own static thumbnails;
  * the privacy-enhanced player is still created only after an intentional
  * click, so opening the chapter never preloads an iframe. */
-export const SIMULATION_COVER = {
-  src: '/CLO3D-cover.jpg',
-  alt: 'Two digital avatars mid-walk in CLO3D, one in a corduroy harrington jacket and wide trousers, one in a ribbed top and wide trousers.',
-};
-
 const suppliedYouTubeIds = [
   'dfbUl82h8Ck',
   'iOyhNjVEe_U',
@@ -555,8 +550,16 @@ export const chapters: Chapter[] = [
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     cover: {
-      ...editorial[13364876],
-      focalPosition: '50% 38%',
+      image: {
+        src: '/portfolio/covers/womenswear-ivory-editorial.jpg',
+        srcset: '/portfolio/covers/womenswear-ivory-editorial.jpg 1280w',
+        width: 1280,
+        height: 720,
+        alt: 'Woman in a flowing ivory dress moving through a warm architectural space.',
+        front: 1,
+      },
+      credit: { source: 'User-supplied chapter cover' },
+      focalPosition: '60% 50%',
     },
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
   },
@@ -568,8 +571,16 @@ export const chapters: Chapter[] = [
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     cover: {
-      ...editorial[4651396],
-      focalPosition: '50% 32%',
+      image: {
+        src: '/portfolio/covers/menswear-tailoring-editorial.jpg',
+        srcset: '/portfolio/covers/menswear-tailoring-editorial.jpg 1280w',
+        width: 1280,
+        height: 720,
+        alt: 'Man in black tailoring standing in a warm architectural space.',
+        front: 1,
+      },
+      credit: { source: 'User-supplied chapter cover' },
+      focalPosition: '57% 50%',
     },
     stateNote: 'Selected menswear work will be published here.',
   },
@@ -586,9 +597,16 @@ export const chapters: Chapter[] = [
       ? 'published'
       : techPacks.length > 0 ? 'reference-preview' : 'unpublished',
     cover: {
-      image: techPacks[0].coverImage!,
-      credit: { source: 'Portfolio demo document archive' },
-      focalPosition: '50% 18%',
+      image: {
+        src: '/portfolio/covers/tech-packs-yarima-specification.jpg',
+        srcset: '/portfolio/covers/tech-packs-yarima-specification.jpg 1200w',
+        width: 1200,
+        height: 850,
+        alt: 'Technical specification sheet for a jacket, with front and back flats and material details.',
+        front: 1,
+      },
+      credit: { source: 'User-supplied chapter cover' },
+      focalPosition: '50% 50%',
     },
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
@@ -609,15 +627,15 @@ export const chapters: Chapter[] = [
       : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',
     cover: {
       image: {
-        src: SIMULATION_COVER.src,
-        srcset: `${SIMULATION_COVER.src} 512w`,
-        width: 512,
-        height: 910,
-        alt: SIMULATION_COVER.alt,
+        src: '/portfolio/covers/pattern-development-chrome-studio.jpg',
+        srcset: '/portfolio/covers/pattern-development-chrome-studio.jpg 1280w',
+        width: 1280,
+        height: 720,
+        alt: 'Two chrome mannequin figures wearing blue-grey garments in a dark studio.',
         front: 1,
       },
-      credit: { source: 'Portfolio CLO3D archive' },
-      focalPosition: '50% 32%',
+      credit: { source: 'User-supplied chapter cover' },
+      focalPosition: '58% 50%',
     },
   },
 ];

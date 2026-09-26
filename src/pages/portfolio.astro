@@ -7,12 +7,21 @@ import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
 import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 import '../styles/portfolio-director.css';
+import '../styles/portfolio-cinematic.css';
 
-/* A cover title is set to fill its measure, not to a fixed size: a short name
-   and a long one should occupy about the same optical width, the way they
-   would on four covers of the same book. The scale is derived from the name's
-   own length and capped at both ends. */
-const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.length));
+const chapterActions = [
+  'Explore silhouettes',
+  'Enter construction',
+  'Open documentation',
+  'Trace development',
+];
+
+const chapterNotes = [
+  'Movement / form / proportion',
+  'Structure / balance / tailoring',
+  'Specification / clarity / handoff',
+  'Pattern / validation / resolution',
+];
 
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
@@ -35,51 +44,101 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
-    <section class="pf-intro" id="portfolio-index">
-      <p class="label">Soufiane Aberbach / Portfolio</p>
-      <div class="pf-opening">
-        <h1 class="display">Between instinct<br />&amp; construction.</h1>
-        <p>Fashion seen from both sides.<br />The creative intention.<br />The precision that gives it form.</p>
+    <section class="pf-cinema" id="portfolio-index" data-cinema aria-labelledby="pf-cinema-title">
+      <div class="pf-cinema__sticky">
+        <p class="pf-cinema__folio label" data-cinema-folio>
+          <span>Soufiane Aberbach</span><span>Selected work / 2026</span>
+        </p>
+
+        <h1 class="pf-cinema__title display" id="pf-cinema-title" data-cinema-title>
+          <span class="pf-cinema__between" data-title-between>Between</span>
+          <span class="pf-cinema__instinct" data-title-instinct>Instinct</span>
+          <span class="pf-cinema__construction" data-title-construction>&amp; Construction</span>
+        </h1>
+
+        <p class="pf-cinema__thesis" data-cinema-thesis>
+          Fashion ideas developed into products that can be made.
+        </p>
+
+        <div class="pf-cinema__register" aria-hidden="true" data-cinema-register>
+          <i></i><b></b><span class="label">01—04 / Chapters</span>
+        </div>
+
+        <nav class="pf-chapter-field" aria-label="Portfolio chapters" data-chapter-field>
+          {chapters.map((chapter, index) => (
+            <a
+              class={`pf-door pf-door--${chapter.id}`}
+              href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
+              data-nav={chapter.id === 'womenswear' ? undefined : true}
+              data-chapter={chapter.id}
+              data-publication={chapter.publication}
+              data-cover-index={index + 1}
+              data-image-source={chapter.cover.credit.source}
+            >
+              <span class="pf-door__image" aria-hidden="true">
+                <img
+                  src={chapter.cover.image.src}
+                  srcset={chapter.cover.image.srcset}
+                  sizes={index === 0 ? '(max-width: 767px) 94vw, 86vw' : '(max-width: 767px) 84vw, 46vw'}
+                  width={chapter.cover.image.width}
+                  height={chapter.cover.image.height}
+                  alt=""
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
+                  decoding="async"
+                  style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
+                />
+              </span>
+              <span class="pf-door__copy">
+                <span class="pf-door__number label">{chapter.number}</span>
+                <strong class="pf-door__title display">{chapter.title}</strong>
+                <span class="pf-door__note">{chapterNotes[index]}</span>
+                <span class="pf-door__action label">{chapterActions[index]} <Arrow /></span>
+              </span>
+            </a>
+          ))}
+        </nav>
+
+        <p class="pf-cinema__scroll label" data-cinema-scroll>
+          <span>Scroll to open the practice</span><i aria-hidden="true"></i>
+        </p>
       </div>
     </section>
 
-    <section class="pf-covers pf-gates" aria-labelledby="pf-covers-title" data-covers>
-      <h2 class="pf-sr" id="pf-covers-title">Portfolio chapters</h2>
-      {chapters.map((chapter, index) => (
-        <a class="pf-cover pf-gate" href={`#${chapter.id}`} data-nav
-          data-chapter={chapter.id} data-publication={chapter.publication}
-          data-cover-index={index + 1}
-          data-image-source={chapter.cover.credit.source}
-          data-image-source-page={chapter.cover.credit.sourcePage}
-          data-image-photographer={chapter.cover.credit.photographer}>
-          <span class="pf-cover__register">
-            <i class="pf-cover__num">{chapter.number}</i>
-            <i class="pf-cover__kind">{chapter.kind}</i>
-          </span>
-          <span class="pf-cover__art" aria-hidden="true">
-            <img class="pf-cover__still" src={chapter.cover.image.src}
-              srcset={chapter.cover.image.srcset} sizes="(max-width: 767px) 90vw, 65vw"
-              width={chapter.cover.image.width} height={chapter.cover.image.height}
-              alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
-          </span>
-          <span class="pf-cover__type">
-            <b class="display pf-cover__name">{chapter.title}</b>
-            <span class="pf-cover__intent">{[
-              'The silhouette comes first.',
-              'A study in structure.',
-              'The language of making.',
-              'Inside the development process.',
-            ][index]}</span>
-            <span class="pf-cover__go label">Enter world <Arrow /></span>
-          </span>
-          <span class="pf-gate__folio label" aria-hidden="true">{[
-            'Form / movement / proportion', 'Balance / volume / construction',
-            'Five technical dossiers', 'Five recorded sessions',
-          ][index]}</span>
+    <section class="pf-women-entry" id="womenswear-entry" aria-labelledby="womenswear-entry-title" data-women-entry>
+      <nav class="pf-women-entry__index" aria-label="Portfolio chapter index">
+        {chapters.map((chapter) => (
+          <a
+            href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
+            data-nav={chapter.id === 'womenswear' ? undefined : true}
+            aria-current={chapter.id === 'womenswear' ? 'page' : undefined}
+          >
+            <span>{chapter.number}</span>{chapter.title}
+          </a>
+        ))}
+      </nav>
+      <figure class="pf-women-entry__visual" aria-hidden="true">
+        <img
+          src={chapters[0].cover.image.src}
+          srcset={chapters[0].cover.image.srcset}
+          sizes="100vw"
+          width={chapters[0].cover.image.width}
+          height={chapters[0].cover.image.height}
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+      <div class="pf-women-entry__copy">
+        <p class="label"><span>01</span> Womenswear</p>
+        <h2 class="display" id="womenswear-entry-title">Silhouette<br />before explanation.</h2>
+        <p>Shape, movement and proportion lead. Construction waits beneath the surface.</p>
+        <a class="pf-women-entry__action label" href="#womenswear" data-nav>
+          Continue to Womenswear <Arrow />
         </a>
-      ))}
+      </div>
+      <p class="pf-women-entry__credit label">Chapter cover / visual direction asset</p>
     </section>
-    <div class="pf-colophon"><p class="label">Four perspectives / One practice</p><p>Explore a world. Follow the work.</p><p class="label">Editorial covers are references.<br />Project and demo status is disclosed inside.</p></div>
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
       <TechPackWorld packs={techPacks} />
@@ -101,6 +160,98 @@ const coverScale = (title: string) => Math.min(11, Math.max(5.6, 148 / title.len
       }
     </script>
   </div>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const cinema = document.querySelector<HTMLElement>('[data-cinema]');
+    const womenEntry = document.querySelector<HTMLElement>('[data-women-entry]');
+
+    if (cinema && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const women = cinema.querySelector<HTMLElement>('[data-chapter="womenswear"]')!;
+      const otherDoors = [...cinema.querySelectorAll<HTMLElement>('.pf-door:not([data-chapter="womenswear"])')];
+      const copies = [...cinema.querySelectorAll<HTMLElement>('.pf-door__copy')];
+      const register = cinema.querySelector<HTMLElement>('[data-cinema-register]')!;
+      const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
+      const instinct = cinema.querySelector<HTMLElement>('[data-title-instinct]')!;
+      const construction = cinema.querySelector<HTMLElement>('[data-title-construction]')!;
+      const between = cinema.querySelector<HTMLElement>('[data-title-between]')!;
+      const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
+      const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
+      const cue = cinema.querySelector<HTMLElement>('[data-cinema-scroll]')!;
+
+      const timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          id: 'portfolio-cinematic-opening',
+          trigger: cinema,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.45,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      timeline
+        .to([cue, thesis], { autoAlpha: 0, y: -18, duration: 0.13 }, 0.03)
+        .to(folio, { autoAlpha: 0.45, duration: 0.12 }, 0.05)
+        .to(instinct, { xPercent: -13, yPercent: -115, scale: 0.42, autoAlpha: 0.14, duration: 0.34 }, 0.08)
+        .to(construction, { xPercent: 11, yPercent: 132, scale: 0.38, autoAlpha: 0.1, duration: 0.34 }, 0.08)
+        .to(between, { xPercent: -18, yPercent: -35, scale: 0.82, autoAlpha: 0.5, duration: 0.34 }, 0.08)
+        .to(register, { autoAlpha: 1, duration: 0.12 }, 0.18);
+
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        timeline.to(women, {
+          left: '0%', top: '4%', width: '55%', height: '46%', duration: 0.48,
+        }, 0.08);
+      } else {
+        timeline.to(women, { top: '1%', height: '49%', duration: 0.4 }, 0.08);
+      }
+
+      timeline
+        .fromTo(otherDoors,
+          { autoAlpha: 0, scale: 0.82, yPercent: 8 },
+          { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.045, duration: 0.32 },
+          0.34,
+        )
+        .to(title, { autoAlpha: 0.18, duration: 0.18 }, 0.5)
+        .to(copies, { autoAlpha: 1, stagger: 0.035, duration: 0.2 }, 0.55);
+
+      for (const door of cinema.querySelectorAll<HTMLElement>('.pf-door')) {
+        door.addEventListener('focus', () => {
+          if (window.innerWidth < 768) {
+            for (const item of cinema.querySelectorAll<HTMLElement>('.pf-door')) item.style.zIndex = '';
+            door.style.zIndex = '12';
+          }
+        });
+      }
+    }
+
+    if (womenEntry && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const visual = womenEntry.querySelector<HTMLElement>('.pf-women-entry__visual img');
+      const copy = womenEntry.querySelector<HTMLElement>('.pf-women-entry__copy');
+      gsap.fromTo(visual, { scale: 1.09 }, {
+        scale: 1.02,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: womenEntry,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
+      });
+      gsap.fromTo(copy, { y: 50, autoAlpha: 0.25 }, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: womenEntry, start: 'top 68%', toggleActions: 'play none none reverse' },
+      });
+    }
+  </script>
 
   <script>
     /* --------------------------------------------------------------------

@@ -1,0 +1,499 @@
+/* Portfolio visual prototype — cinematic editorial chapters.
+   Scope: Opening → scroll transformation → living index → Womenswear entry. */
+
+.pf-cinema {
+  position: relative;
+  min-height: 100svh;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.js .pf-cinema { height: 330svh; }
+
+.pf-cinema__sticky {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  isolation: isolate;
+}
+
+.js .pf-cinema__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.pf-cinema__folio {
+  position: absolute;
+  z-index: 12;
+  top: max(6.7rem, 11.5vh);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  font-size: .57rem;
+}
+
+.pf-cinema__title {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  font-size: clamp(4.5rem, 10vw, 10.3rem);
+  line-height: .74;
+  letter-spacing: -.085em;
+}
+
+.pf-cinema__title > span { position: absolute; display: block; }
+.pf-cinema__between {
+  top: 20%;
+  left: 6.5%;
+  font-size: .25em;
+  line-height: 1;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  font-variation-settings: 'wdth' 88;
+}
+.pf-cinema__instinct {
+  top: 27%;
+  left: 3%;
+}
+.pf-cinema__construction {
+  right: 3%;
+  bottom: 15%;
+  white-space: nowrap;
+  color: var(--paper-bright);
+  text-shadow: 0 1px 10px rgb(17 17 15 / 15%);
+}
+
+.pf-cinema__thesis {
+  position: absolute;
+  z-index: 10;
+  left: var(--gutter);
+  bottom: 5vh;
+  max-width: 27ch;
+  margin: 0;
+  font-size: clamp(.8rem, 1vw, .95rem);
+  line-height: 1.5;
+}
+
+.pf-cinema__scroll {
+  position: absolute;
+  z-index: 10;
+  right: var(--gutter);
+  bottom: 4.7vh;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  font-size: .55rem;
+}
+.pf-cinema__scroll i {
+  width: 3.6rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+.pf-cinema__scroll i::after {
+  content: '';
+  display: block;
+  width: 45%;
+  height: 100%;
+  background: var(--ink);
+  animation: pf-scroll-cue 1.8s ease-in-out infinite;
+}
+@keyframes pf-scroll-cue { 0%,100% { transform: translateX(-110%); } 55% { transform: translateX(250%); } }
+
+.pf-chapter-field {
+  position: absolute;
+  z-index: 2;
+  inset: max(6.1rem, 9vh) var(--gutter) 7vh;
+}
+
+.pf-door {
+  position: absolute;
+  display: block;
+  color: var(--ink);
+  outline-offset: 5px;
+  will-change: left, top, width, height, transform, opacity;
+}
+
+.pf-door__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background: #ddd7cc;
+}
+.pf-door__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease), filter 450ms ease;
+}
+.pf-door__copy {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: .35rem .8rem;
+  min-width: 15rem;
+  pointer-events: none;
+}
+.js .pf-door__copy { opacity: 0; }
+.pf-door__number {
+  grid-row: 1;
+  color: var(--signal);
+  font-size: .58rem;
+}
+.pf-door__title {
+  grid-column: 2;
+  font-size: clamp(1.45rem, 2.45vw, 2.75rem);
+  line-height: .92;
+  letter-spacing: -.065em;
+}
+.pf-door__note {
+  grid-column: 2;
+  max-width: 29ch;
+  font-size: .67rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+.pf-door__action {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-top: .3rem;
+  font-size: .5rem;
+  opacity: .72;
+}
+.pf-door__action .arrow { color: var(--signal); }
+
+/* The first image is the Opening itself. GSAP changes these dimensions into
+   its resolved chapter position so the photograph changes role in place. */
+.pf-door--womenswear {
+  z-index: 4;
+  left: 9%;
+  top: 5%;
+  width: 83%;
+  height: 78%;
+}
+.pf-door--womenswear .pf-door__copy {
+  left: 0;
+  top: calc(100% + 1rem);
+}
+
+.pf-door--menswear {
+  z-index: 3;
+  right: 0;
+  top: 0;
+  width: 27%;
+  height: 52%;
+  opacity: 0;
+}
+.pf-door--menswear .pf-door__copy {
+  top: calc(100% + .8rem);
+  right: 0;
+  text-align: right;
+}
+.pf-door--menswear .pf-door__copy > * { grid-column: 2; }
+.pf-door--menswear .pf-door__number { grid-column: 1; }
+
+.pf-door--tech-packs {
+  z-index: 3;
+  left: 8%;
+  bottom: 0;
+  width: 26%;
+  height: 31%;
+  opacity: 0;
+  background: #d9d4ca;
+}
+.pf-door--tech-packs .pf-door__image { padding: 1rem; }
+.pf-door--tech-packs .pf-door__image img { object-fit: contain; }
+.pf-door--tech-packs .pf-door__copy {
+  left: calc(100% + 1rem);
+  bottom: 0;
+  width: 8.5rem;
+}
+
+.pf-door--3d-simulation {
+  z-index: 2;
+  right: 17%;
+  bottom: 0;
+  width: 43%;
+  height: 30%;
+  color: var(--paper);
+  opacity: 0;
+}
+.pf-door--3d-simulation .pf-door__copy {
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: auto;
+}
+.pf-door--3d-simulation .pf-door__note { color: rgb(243 240 233 / 78%); }
+.pf-door--3d-simulation .pf-door__action { color: var(--paper); }
+
+.pf-chapter-field:has(.pf-door:is(:hover,:focus-visible)) .pf-door:not(:hover):not(:focus-visible) {
+  opacity: .42 !important;
+  filter: saturate(.55);
+}
+.pf-door:is(:hover,:focus-visible) .pf-door__image img { transform: scale(1.025); }
+.pf-door--tech-packs:is(:hover,:focus-visible) .pf-door__image img { transform: scale(1.015) rotate(-.7deg); }
+
+.pf-cinema__register {
+  position: absolute;
+  z-index: 11;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 51%;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.pf-cinema__register i { flex: 1; height: 1px; background: var(--line-strong); }
+.pf-cinema__register b {
+  width: 7px;
+  height: 7px;
+  margin-left: -1px;
+  background: var(--signal);
+  transform: rotate(45deg);
+}
+.pf-cinema__register span { margin-left: 1rem; font-size: .5rem; }
+
+/* Womenswear is the first visual room, not a category UI. The categories and
+   Viewer remain untouched behind the explicit continuation link. */
+.pf-women-entry {
+  position: relative;
+  min-height: 112svh;
+  overflow: clip;
+  color: var(--paper-bright);
+  background: var(--ink);
+  isolation: isolate;
+}
+.pf-women-entry__visual {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+.pf-women-entry__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(17 17 15 / 78%) 0%, rgb(17 17 15 / 24%) 42%, transparent 70%),
+              linear-gradient(0deg, rgb(17 17 15 / 38%), transparent 45%);
+}
+.pf-women-entry__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 61% center;
+  transform: scale(1.055);
+}
+.pf-women-entry__copy {
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  bottom: 9vh;
+  max-width: min(53rem, 62vw);
+}
+.pf-women-entry__copy > .label { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+.pf-women-entry__copy > .label span { color: var(--signal); }
+.pf-women-entry__copy h2 {
+  font-size: clamp(4rem, 8vw, 9rem);
+  line-height: .78;
+  color: var(--paper-bright);
+}
+.pf-women-entry__copy > p:not(.label) {
+  max-width: 34ch;
+  margin: 1.8rem 0 0;
+  font-size: .88rem;
+  line-height: 1.55;
+}
+.pf-women-entry__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-bottom: .65rem;
+  border-bottom: 1px solid rgb(243 240 233 / 65%);
+  font-size: .58rem;
+}
+.pf-women-entry__action .arrow { color: var(--signal); }
+.pf-women-entry__index {
+  position: absolute;
+  z-index: 4;
+  top: 9rem;
+  right: var(--gutter);
+  display: grid;
+  width: min(25rem, 34vw);
+}
+.pf-women-entry__index a {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: .7rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid rgb(17 17 15 / 25%);
+  font-size: .72rem;
+  color: rgb(17 17 15 / 58%);
+}
+.pf-women-entry__index a span { font: .54rem var(--mono); color: inherit; }
+.pf-women-entry__index a[aria-current] { color: var(--ink); }
+.pf-women-entry__index a[aria-current] span { color: var(--signal); }
+.pf-women-entry__credit {
+  position: absolute;
+  z-index: 3;
+  right: var(--gutter);
+  bottom: 2rem;
+  margin: 0;
+  font-size: .48rem;
+  opacity: .6;
+}
+
+@media (max-width: 1023px) {
+  .pf-cinema__title { font-size: clamp(4.2rem, 11vw, 7.2rem); }
+  .pf-cinema__construction { right: 2%; bottom: 17%; }
+  .pf-door--womenswear { left: 5%; width: 90%; }
+  .pf-door--tech-packs { left: 2%; width: 28%; }
+  .pf-door--3d-simulation { right: 14%; width: 47%; }
+  .pf-door__title { font-size: clamp(1.3rem, 2.6vw, 2.2rem); }
+  .pf-door__note { display: none; }
+  .pf-women-entry__copy { max-width: 70vw; }
+}
+
+@media (max-width: 767px) {
+  .js .pf-cinema { height: 285svh; }
+  .pf-cinema__folio {
+    top: 6.35rem;
+    font-size: .48rem;
+  }
+  .pf-cinema__folio span:last-child { display: none; }
+  .pf-chapter-field { inset: 8.5rem 0 5.8rem; }
+  .pf-cinema__title { font-size: clamp(3.6rem, 19vw, 5.4rem); }
+  .pf-cinema__between { top: 20%; left: var(--gutter); font-size: .19em; }
+  .pf-cinema__instinct { top: 25%; left: 2.5%; }
+  .pf-cinema__construction {
+    right: auto;
+    left: var(--gutter);
+    bottom: 22%;
+    max-width: none;
+    white-space: nowrap;
+    font-size: .46em;
+    line-height: 1;
+    letter-spacing: -.07em;
+  }
+  .pf-cinema__thesis {
+    left: var(--gutter);
+    right: auto;
+    bottom: 4.3rem;
+    max-width: 24ch;
+    font-size: .72rem;
+  }
+  .pf-cinema__scroll { right: var(--gutter); bottom: 1.7rem; font-size: .45rem; }
+  .pf-cinema__scroll span { display: none; }
+  .pf-cinema__scroll i { width: 2.8rem; }
+
+  /* Mobile resolves as a cover stage plus a typographic chapter index. The
+     covers share one field instead of becoming four generic stacked cards. */
+  .pf-door,
+  .pf-door--womenswear,
+  .pf-door--menswear,
+  .pf-door--tech-packs,
+  .pf-door--3d-simulation {
+    left: var(--gutter);
+    right: var(--gutter);
+    top: 4%;
+    bottom: auto;
+    width: auto;
+    height: 48%;
+  }
+  .pf-door { pointer-events: none; }
+  .pf-door:focus-visible { z-index: 12; }
+  .pf-door--womenswear { z-index: 4; }
+  .pf-door--menswear { z-index: 3; }
+  .pf-door--tech-packs { z-index: 2; background: #d9d4ca; }
+  .pf-door--3d-simulation { z-index: 1; }
+  .pf-door__copy,
+  .pf-door--womenswear .pf-door__copy,
+  .pf-door--menswear .pf-door__copy,
+  .pf-door--tech-packs .pf-door__copy,
+  .pf-door--3d-simulation .pf-door__copy {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: auto;
+    min-width: 0;
+    width: auto;
+    text-align: left;
+    color: var(--ink);
+  }
+  .pf-door--womenswear .pf-door__copy { top: 109%; }
+  .pf-door--menswear .pf-door__copy { top: 125%; }
+  .pf-door--tech-packs .pf-door__copy { top: 141%; }
+  .pf-door--3d-simulation .pf-door__copy { top: 157%; }
+  .pf-door__copy { grid-template-columns: 1.6rem 1fr auto; align-items: center; gap: .15rem .4rem; }
+  .pf-door__copy { pointer-events: auto; }
+  .pf-door__number { grid-column: 1; grid-row: 1; }
+  .pf-door__title,
+  .pf-door--menswear .pf-door__copy > .pf-door__title { grid-column: 2; grid-row: 1; font-size: 1.18rem; }
+  .pf-door__note { display: none; }
+  .pf-door__action { grid-column: 3; grid-row: 1; margin: 0; font-size: 0; }
+  .pf-door__action .arrow { width: .8rem; height: .8rem; }
+  .pf-chapter-field:has(.pf-door:is(:hover,:focus-visible)) .pf-door:not(:hover):not(:focus-visible) { opacity: .16 !important; }
+  .pf-cinema__register { left: var(--gutter); right: var(--gutter); top: 61%; }
+
+  .pf-women-entry { min-height: 100svh; }
+  .pf-women-entry__visual::after {
+    background: linear-gradient(0deg, rgb(17 17 15 / 88%) 0%, rgb(17 17 15 / 20%) 62%, transparent 82%);
+  }
+  .pf-women-entry__visual img { object-position: 66% center; transform: scale(1.08); }
+  .pf-women-entry__index {
+    top: 6.2rem;
+    left: var(--gutter);
+    right: var(--gutter);
+    display: flex;
+    width: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgb(17 17 15 / 25%);
+  }
+  .pf-women-entry__index::-webkit-scrollbar { display: none; }
+  .pf-women-entry__index a {
+    flex: none;
+    grid-template-columns: auto 1fr;
+    min-width: max-content;
+    padding: .65rem 1.1rem .65rem 0;
+    border: 0;
+    font-size: .6rem;
+  }
+  .pf-women-entry__copy {
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 3.8rem;
+    max-width: none;
+  }
+  .pf-women-entry__copy h2 { font-size: clamp(3.2rem, 15vw, 5rem); line-height: .82; }
+  .pf-women-entry__copy > p:not(.label) { max-width: 30ch; font-size: .72rem; }
+  .pf-women-entry__action { margin-top: 1.4rem; font-size: .5rem; }
+  .pf-women-entry__credit { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .pf-cinema { height: auto; }
+  .js .pf-cinema__sticky { position: relative; min-height: 100svh; height: auto; }
+  .pf-cinema__scroll { display: none; }
+  .pf-cinema__title { opacity: .16; }
+  .pf-cinema__thesis { opacity: 0; }
+  .pf-cinema__register { opacity: 1; }
+  .pf-door--womenswear { left: 0; top: 4%; width: 55%; height: 46%; }
+  .pf-door--menswear,
+  .pf-door--tech-packs,
+  .pf-door--3d-simulation { opacity: 1; }
+  .js .pf-door__copy { opacity: 1; }
+  .pf-door__image img,
+  .pf-cinema__scroll i::after { animation: none; transition: none; }
+}
