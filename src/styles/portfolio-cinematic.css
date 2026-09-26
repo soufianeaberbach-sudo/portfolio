@@ -28,6 +28,9 @@
 .pf-cinema__visual img {
   width: 100%; height: 100%; object-fit: cover; transform: scale(1.01); transition: transform 900ms var(--ease);
 }
+.pf-cinema__visual--womenswear img { object-position: 60% 44% !important; }
+.pf-cinema__visual--menswear img { object-position: 57% 45% !important; }
+.pf-cinema__visual--3d-simulation img { object-position: 58% 44% !important; }
 .pf-cinema__visual--tech-packs { background: #d9d4ca; }
 .pf-cinema__visual--tech-packs img { object-fit: contain; padding: clamp(1rem, 3vw, 3rem); }
 .pf-cinema[data-active-chapter='womenswear'] .pf-cinema__visual--womenswear,
@@ -175,8 +178,10 @@
   .pf-cinema__media {
     left: 1.1rem; right: 1.1rem; top: 7.25rem; bottom: 1.1rem; width: auto; height: auto;
   }
-  .pf-cinema__visual img { object-position: 61% center !important; }
-  .pf-cinema__title { font-size: clamp(3.65rem, 18.8vw, 5.2rem); }
+  .pf-cinema__visual--womenswear img { object-position: 64% 43% !important; }
+  .pf-cinema__visual--menswear img { object-position: 58% 42% !important; }
+  .pf-cinema__visual--3d-simulation img { object-position: 61% 42% !important; }
+  .pf-cinema__title { font-size: clamp(3.45rem, 16.2vw, 4.65rem); }
   .pf-cinema__between { top: 17.5%; left: 1.15rem; font-size: .19em; }
   .pf-cinema__instinct { top: 22%; left: .9rem; }
   .pf-cinema__construction {

@@ -378,6 +378,15 @@ const journeyCopy = [
       const reduceJourneyMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const chapterIds = ['womenswear', 'menswear', 'tech-packs', '3d-simulation', 'ending'];
       const accents = ['#c83d46', '#3157c8', '#d48a2c', '#7668d8', '#11110f'];
+      const foregrounds = ['#11110f', '#11110f', '#11110f', '#15171d', '#11110f'];
+      const surfaces = ['#f3f0e9', '#f3f0e9', '#e7e2d9', '#d9dbe1', '#f3f0e9'];
+      const mutedForegrounds = [
+        'rgb(17 17 15 / 56%)',
+        'rgb(17 17 15 / 56%)',
+        'rgb(17 17 15 / 56%)',
+        'rgb(21 23 29 / 58%)',
+        'rgb(17 17 15 / 56%)',
+      ];
       let activeScene = -1;
 
       const setActiveScene = (next: number) => {
@@ -385,7 +394,13 @@ const journeyCopy = [
         activeScene = next;
         journey.dataset.activeChapter = chapterIds[next];
         journey.style.setProperty('--journey-accent', accents[next]);
-        scenes.forEach((scene, index) => scene.setAttribute('aria-hidden', index === next ? 'false' : 'true'));
+        journey.style.setProperty('--journey-foreground', foregrounds[next]);
+        journey.style.setProperty('--journey-surface', surfaces[next]);
+        journey.style.setProperty('--journey-muted', mutedForegrounds[next]);
+        scenes.forEach((scene, index) => scene.setAttribute(
+          'aria-hidden',
+          reduceJourneyMotion() || index === next ? 'false' : 'true',
+        ));
         indexLinks.forEach((link, index) => {
           if (index === next) link.setAttribute('aria-current', 'step');
           else link.removeAttribute('aria-current');
@@ -400,6 +415,7 @@ const journeyCopy = [
           const requested = Number(link.dataset.journeyNav ?? 0);
           if (!Number.isFinite(requested)) return;
           event.preventDefault();
+          setActiveScene(requested);
 
           if (reduceJourneyMotion()) {
             scenes[requested]?.scrollIntoView({ behavior: 'auto', block: 'start' });
@@ -407,12 +423,22 @@ const journeyCopy = [
           }
 
           const travel = Math.max(0, journey.offsetHeight - window.innerHeight);
-          const destination = journey.offsetTop + travel * (requested / 4);
+          const chapterProgress = requested === 0 ? 0.085 : requested / 4;
+          const destination = journey.offsetTop + travel * chapterProgress;
           window.scrollTo({ top: destination, behavior: 'smooth' });
         });
       }
 
-      if (!reduceJourneyMotion()) {
+      if (reduceJourneyMotion()) {
+        const reducedObserver = new IntersectionObserver((entries) => {
+          const mostVisible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!mostVisible) return;
+          setActiveScene(Number((mostVisible.target as HTMLElement).dataset.sceneIndex ?? 0));
+        }, { threshold: [0.45, 0.65] });
+        scenes.forEach((scene) => reducedObserver.observe(scene));
+      } else {
         gsap.set(scenes, { autoAlpha: 0 });
         gsap.set(scenes[0], { autoAlpha: 1 });
 
@@ -429,6 +455,23 @@ const journeyCopy = [
           },
         });
 
+        const womenImage = scenes[0].querySelector<HTMLElement>('.pf-journey__image');
+        const womenCopy = scenes[0].querySelector<HTMLElement>('.pf-journey__copy');
+        const womenChapter = scenes[0].querySelector<HTMLElement>('.pf-journey__chapter');
+        const journeyMobile = window.matchMedia('(max-width: 767px)').matches;
+
+        if (womenImage) {
+          sceneTimeline.fromTo(
+            womenImage,
+            { left: '0%', top: '0%', width: '100%', height: '100%', right: 'auto', bottom: 'auto' },
+            journeyMobile
+              ? { left: '1.1rem', top: '10rem', width: 'calc(100% - 2.2rem)', height: '42%', duration: 0.34 }
+              : { left: '39%', top: '13%', width: '56.5%', height: '80%', duration: 0.34 },
+            0,
+          );
+        }
+        if (womenCopy) sceneTimeline.fromTo(womenCopy, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.24 }, 0.12);
+        if (womenChapter) sceneTimeline.fromTo(womenChapter, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.22 }, 0.13);
         const entries = [
           { clipPath: 'inset(0 0 0 44%)', xPercent: 5, scale: 1 },
           { clipPath: 'inset(7% 5% 7% 36%)', yPercent: 4, rotation: 0.7, scale: 1 },

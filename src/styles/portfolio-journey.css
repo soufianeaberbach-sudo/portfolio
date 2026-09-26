@@ -3,6 +3,9 @@
 
 .pf-journey {
   --journey-accent: #c83d46;
+  --journey-foreground: #11110f;
+  --journey-surface: #f3f0e9;
+  --journey-muted: rgb(17 17 15 / 56%);
   position: relative;
   color: var(--ink);
   background: var(--paper);
@@ -67,7 +70,7 @@
 /* Womenswear: fluid image authority and a restrained crimson current. */
 .pf-journey__scene--womenswear { --journey-accent: #c83d46; }
 .pf-journey__scene--womenswear .pf-journey__image { inset: 13% 4.5% 7% 39%; }
-.pf-journey__scene--womenswear .pf-journey__image img { object-position: 62% 50% !important; }
+.pf-journey__scene--womenswear .pf-journey__image img { object-position: 60% 44% !important; }
 .pf-journey__scene--womenswear .pf-journey__wash {
   inset: 0 auto 0 0; width: 35%;
   background: linear-gradient(110deg, rgb(200 61 70 / 13%), transparent 72%);
@@ -118,20 +121,26 @@
 
 /* Pattern Development: the strongest transformation, without becoming neon or sci-fi. */
 .pf-journey__scene--3d-simulation {
-  --journey-accent: #7668d8; color: #f1eee8; background: #11141b;
+  --journey-accent: #7668d8; color: #15171d; background: #d9dbe1;
 }
-.pf-journey__scene--3d-simulation .pf-journey__image { inset: 0 0 0 26%; }
-.pf-journey__scene--3d-simulation .pf-journey__image img { object-position: 56% 50% !important; }
+.pf-journey__scene--3d-simulation::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(118deg, #e6e3dc 0%, #d9dbe1 42%, rgb(118 104 216 / 13%) 100%);
+}
+.pf-journey__scene--3d-simulation .pf-journey__image { inset: 16% 3.5% 5.5% 35%; }
+.pf-journey__scene--3d-simulation .pf-journey__image img { object-position: 58% 48% !important; }
 .pf-journey__scene--3d-simulation .pf-journey__wash {
-  inset: 0;
-  background: linear-gradient(90deg, #11141b 0%, rgb(17 20 27 / 94%) 20%, rgb(17 20 27 / 24%) 55%, rgb(118 104 216 / 8%) 100%);
+  inset: 16% 3.5% 5.5% 35%;
+  background: linear-gradient(90deg, rgb(30 33 42 / 26%) 0%, transparent 38%, rgb(118 104 216 / 10%) 100%);
 }
-.pf-journey__scene--3d-simulation .pf-journey__copy { left: var(--gutter); top: 32%; width: 39%; }
-.pf-journey__scene--3d-simulation .pf-journey__copy h2 { color: #f1eee8; }
+.pf-journey__scene--3d-simulation .pf-journey__copy { left: var(--gutter); top: 34%; width: 29%; }
+.pf-journey__scene--3d-simulation .pf-journey__copy h2 {
+  color: #15171d; font-size: clamp(4rem, 6vw, 7rem);
+}
 .pf-journey__scene--3d-simulation .pf-journey__chapter {
-  right: -3%; bottom: 1%; color: rgb(220 224 237 / 8%);
+  right: -3%; bottom: 1%; color: rgb(21 23 29 / 8%);
 }
-.pf-journey__scene--3d-simulation .pf-journey__register { left: 23%; top: 17%; height: 67%; color: #dce0ed; }
+.pf-journey__scene--3d-simulation .pf-journey__register { left: 32%; top: 18%; height: 65%; color: #15171d; }
 
 /* A quiet return to the core identity resolves the chromatic journey. */
 .pf-journey__scene--ending {
@@ -149,7 +158,8 @@
 /* Persistent orientation, kept deliberately quieter than the work. */
 .pf-journey__index {
   position: absolute; z-index: 20; top: max(6.3rem, 9vh); left: var(--gutter); right: var(--gutter);
-  color: var(--ink); mix-blend-mode: normal;
+  color: var(--journey-foreground); mix-blend-mode: normal;
+  transition: color 320ms ease, opacity 320ms ease;
 }
 .pf-journey__index > p {
   display: flex; justify-content: space-between; margin: 0 0 .6rem; font-size: .46rem; opacity: .66;
@@ -163,6 +173,7 @@
   padding: .7rem 0; border-top: 1px solid currentColor; color: inherit; opacity: .35;
   transition: opacity 300ms ease, color 350ms ease, transform 450ms var(--ease);
 }
+.pf-journey__index a:not([aria-current]) { color: var(--journey-muted); opacity: 1; }
 .pf-journey__index a::before {
   content: ''; position: absolute; top: -1px; left: 0; width: 0; height: 2px;
   background: var(--journey-accent); transition: width 500ms var(--ease);
@@ -190,7 +201,6 @@
 .pf--js .pf-journey__scene:first-child { opacity: 1; visibility: visible; }
 .pf--js .pf-journey__scene + .pf-journey__scene { border: 0; }
 
-.pf-journey[data-active-chapter='3d-simulation'] .pf-journey__index { color: #f1eee8; }
 .pf-journey[data-active-chapter='ending'] .pf-journey__index { opacity: 0; pointer-events: none; }
 
 @media (max-width: 1023px) {
@@ -204,14 +214,20 @@
 
 @media (max-width: 767px) {
   .pf--js .pf-journey { height: 565svh; }
-  .pf-journey__index { top: 5.5rem; left: 1.1rem; right: 1.1rem; }
+  .pf-journey__index {
+    top: 4.85rem; left: 1.1rem; right: 1.1rem; padding: .2rem 0 .35rem;
+    background: linear-gradient(180deg, var(--journey-surface) 0%, var(--journey-surface) 78%, transparent 100%);
+  }
   .pf-journey__index > p { display: none; }
-  .pf-journey__index ol { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .42rem; }
-  .pf-journey__index a { display: block; min-width: 0; padding: .52rem 0; }
-  .pf-journey__index a span { display: block; margin-bottom: .28rem; font-size: .43rem; }
+  .pf-journey__index ol { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .1rem 1rem; }
+  .pf-journey__index a {
+    display: grid; grid-template-columns: 1.35rem minmax(0, 1fr); align-items: start;
+    min-width: 0; min-height: 2.05rem; padding: .38rem 0;
+  }
+  .pf-journey__index a span { display: block; margin: .08rem 0 0; font-size: .45rem; }
   .pf-journey__index a strong {
-    display: block; overflow: hidden; font-size: .47rem; font-weight: 550; line-height: 1.05;
-    text-overflow: ellipsis; white-space: nowrap;
+    display: block; overflow: visible; font-size: .61rem; font-weight: 550; line-height: 1.08;
+    text-overflow: clip; white-space: normal;
   }
 
   .pf-journey__copy { left: 1.1rem !important; right: 1.1rem !important; top: auto !important; bottom: 2.7rem !important; width: auto !important; }
@@ -222,32 +238,38 @@
   .pf-journey__chapter { font-size: 29vw; }
 
   .pf-journey__scene--womenswear .pf-journey__image {
-    left: 1.1rem; right: 1.1rem; top: 8.7rem; bottom: auto; width: auto; height: 47%;
+    left: 1.1rem; right: 1.1rem; top: 10rem; bottom: auto; width: auto; height: 42%;
   }
-  .pf-journey__scene--womenswear .pf-journey__image img { object-position: 64% 50% !important; }
+  .pf-journey__scene--womenswear .pf-journey__image img { object-position: 64% 43% !important; }
   .pf-journey__scene--womenswear .pf-journey__wash { width: 68%; }
   .pf-journey__scene--womenswear .pf-journey__chapter { right: -3%; top: 38%; writing-mode: horizontal-tb; }
   .pf-journey__scene--womenswear .pf-journey__register { display: none; }
 
   .pf-journey__scene--menswear::before { inset: 0; background: linear-gradient(180deg, transparent 40%, rgb(49 87 200 / 12%)); }
   .pf-journey__scene--menswear .pf-journey__image {
-    left: 1.1rem; right: 1.1rem; top: 8.7rem; width: auto; height: 47%;
+    left: 1.1rem; right: 1.1rem; top: 10rem; width: auto; height: 42%;
   }
-  .pf-journey__scene--menswear .pf-journey__image img { object-position: 58% 48% !important; }
-  .pf-journey__scene--menswear .pf-journey__wash { left: 1.1rem; top: 8.7rem; width: 1px; height: 47%; }
+  .pf-journey__scene--menswear .pf-journey__image img { object-position: 58% 44% !important; }
+  .pf-journey__scene--menswear .pf-journey__wash { left: 1.1rem; top: 10rem; width: 1px; height: 42%; }
   .pf-journey__scene--menswear .pf-journey__register { display: none; }
 
   .pf-journey__scene--tech-packs .pf-journey__image {
-    left: 1.1rem; right: 1.1rem; top: 8.7rem; width: auto; height: 46%; padding: .7rem;
+    left: 1.1rem; right: 1.1rem; top: 10rem; width: auto; height: 41%; padding: .7rem;
   }
-  .pf-journey__scene--tech-packs .pf-journey__wash { left: 1.1rem; right: 1.1rem; top: 8.7rem; width: auto; height: 46%; }
+  .pf-journey__scene--tech-packs .pf-journey__wash { left: 1.1rem; right: 1.1rem; top: 10rem; width: auto; height: 41%; }
   .pf-journey__scene--tech-packs .pf-journey__copy h2 { font-size: clamp(3rem, 14vw, 4.1rem); }
   .pf-journey__scene--tech-packs .pf-journey__register { display: none; }
 
-  .pf-journey__scene--3d-simulation .pf-journey__image { inset: 0; }
-  .pf-journey__scene--3d-simulation .pf-journey__image img { object-position: 62% 39% !important; }
+  .pf-journey__scene--3d-simulation .pf-journey__image {
+    inset: auto 1.1rem auto 1.1rem; top: 10rem; width: auto; height: 43%;
+  }
+  .pf-journey__scene--3d-simulation .pf-journey__image img { object-position: 61% 43% !important; }
   .pf-journey__scene--3d-simulation .pf-journey__wash {
-    background: linear-gradient(0deg, #11141b 0%, rgb(17 20 27 / 96%) 25%, rgb(17 20 27 / 22%) 70%, rgb(118 104 216 / 10%));
+    inset: auto 1.1rem auto 1.1rem; top: 10rem; width: auto; height: 43%;
+    background: linear-gradient(0deg, rgb(217 219 225 / 62%) 0%, transparent 42%, rgb(118 104 216 / 9%));
+  }
+  .pf-journey__scene--3d-simulation .pf-journey__copy h2 {
+    font-size: clamp(3.15rem, 14vw, 4rem);
   }
   .pf-journey__scene--3d-simulation .pf-journey__register { display: none; }
 
