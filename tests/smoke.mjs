@@ -20,8 +20,13 @@ try{
   ok(await p.locator('[data-world]').count()===4,`four real worlds @${width}`);
   ok(await p.locator('[data-transition]').count()===4,`four semantic transitions @${width}`);
   ok(await p.locator('.pf-cinema__media').count()===0,`old cinema absent @${width}`);
-  const overflow=await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
-  ok(overflow===0,`horizontal overflow ${overflow}px @${width}`);
+  const overflowReport=await p.evaluate(()=>{
+    const viewport=document.documentElement.clientWidth;
+    const describe=(el)=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);return{selector:[el.tagName.toLowerCase(),el.id?`#${el.id}`:'',...[...el.classList].map(c=>`.${c}`)].join(''),left:r.left,right:r.right,width:r.width,computedWidth:cs.width,margin:`${cs.marginLeft} ${cs.marginRight}`,padding:`${cs.paddingLeft} ${cs.paddingRight}`,transform:cs.transform,position:cs.position}};
+    const offenders=[...document.querySelectorAll('body *')].filter(el=>{const r=el.getBoundingClientRect();return r.right>viewport+.5||r.left<-.5}).map(describe);
+    return{overflow:document.documentElement.scrollWidth-viewport,offenders};
+  });
+  ok(overflowReport.overflow===0,`horizontal overflow ${overflowReport.overflow}px @${width}: ${JSON.stringify(overflowReport.offenders)}`);
   const labels=await p.locator('.pf > .pf-continuity a',{hasText:'Pattern Development'}).allTextContents().catch(()=>[]);
   ok(labels.length===1 && labels[0].trim().includes('Pattern Development'),`full index label @${width}`);
   if(width<=430){const h=await p.locator('.pf > .pf-continuity a[href="#3d-simulation"]').evaluate(e=>e.getBoundingClientRect().height);ok(h>=44,`touch target ${h}px @${width}`)}
