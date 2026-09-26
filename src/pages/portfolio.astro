@@ -4,9 +4,18 @@ import Arrow from '../components/Arrow.astro';
 import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
+import ChapterTransition from '../components/portfolio/ChapterTransition.astro';
+import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
+
+const masterScene = {
+  desktop: chapters[0].cover.image,
+  mobile: chapters[0].cover.image,
+  focalDesktop: '50% 24%',
+  focalMobile: '61% 18%',
+};
 
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
@@ -31,17 +40,13 @@ import '../styles/portfolio-cinematic.css';
 
     <section class="pf-opening" id="portfolio-index" aria-labelledby="pf-opening-title">
       <div class="pf-opening__frame">
-        <figure class="pf-opening__media" style="--hero-focal-desktop:50% 24%;--hero-focal-mobile:61% 18%;">
-          <img
-            src={chapters[0].cover.image.src}
-            srcset={chapters[0].cover.image.srcset}
-            sizes="100vw"
-            width={chapters[0].cover.image.width}
-            height={chapters[0].cover.image.height}
-            alt={chapters[0].cover.image.alt}
-            loading="eager"
-            fetchpriority="high"
-          />
+        <figure class="pf-opening__media" style={`--hero-focal-desktop:${masterScene.focalDesktop};--hero-focal-mobile:${masterScene.focalMobile};`}>
+          <picture>
+            <source media="(max-width: 767px)" srcset={masterScene.mobile.srcset} />
+            <source media="(min-width: 768px)" srcset={masterScene.desktop.srcset} />
+            <img src={masterScene.desktop.src} width={masterScene.desktop.width} height={masterScene.desktop.height}
+              alt={masterScene.desktop.alt} loading="eager" fetchpriority="high" />
+          </picture>
         </figure>
         <div class="pf-opening__veil" aria-hidden="true"></div>
         <p class="pf-opening__folio label"><span>Soufiane Aberbach</span><span>Independent Fashion Designer &amp; Product Developer</span></p>
@@ -51,10 +56,16 @@ import '../styles/portfolio-cinematic.css';
       </div>
     </section>
 
+    <WorldNavigation current="womenswear" />
     <div class="pf-worlds" data-worlds>
-      {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
+      <GarmentWorld world={garmentWorlds[0]} />
+      <ChapterTransition from="womenswear" to="menswear" eyebrow="From instinct to proportion" lead="Fluidity" resolve="Structure" />
+      <GarmentWorld world={garmentWorlds[1]} />
+      <ChapterTransition from="menswear" to="tech-packs" eyebrow="From garment to specification" lead="Structure" resolve="Documentation" />
       <TechPackWorld packs={techPacks} />
+      <ChapterTransition from="tech-packs" to="3d-simulation" eyebrow="From specification to validation" lead="Document" resolve="Dimension" />
       <SimulationWorld sessions={simulationSessions} />
+      <ChapterTransition from="3d-simulation" to="ending" eyebrow="Complexity resolves" lead="Validation" resolve="Clarity" />
     </div>
 
     <section class="pf-ending" id="portfolio-ending" aria-labelledby="pf-ending-title">
@@ -91,6 +102,17 @@ import '../styles/portfolio-cinematic.css';
        -------------------------------------------------------------------- */
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
+      const transitionStages = [...root.querySelectorAll<HTMLElement>('[data-transition]')];
+      const updateTransitions = () => {
+        for (const stage of transitionStages) {
+          const rect = stage.getBoundingClientRect();
+          const travel = Math.max(1, rect.height - innerHeight);
+          stage.style.setProperty('--progress', String(Math.max(0, Math.min(1, -rect.top / travel))));
+        }
+      };
+      addEventListener('scroll', updateTransitions, { passive: true });
+      addEventListener('resize', updateTransitions);
+      updateTransitions();
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
 
@@ -98,6 +120,23 @@ import '../styles/portfolio-cinematic.css';
       const worlds = new Map<string, HTMLElement>(
         [...root.querySelectorAll<HTMLElement>('[data-world]')].map((el) => [el.dataset.world!, el]),
       );
+      const livingIndex = root.querySelector<HTMLElement>(':scope > .pf-continuity');
+      const indexLinks = [...(livingIndex?.querySelectorAll<HTMLAnchorElement>('a[href^="#"]') ?? [])];
+      const setActiveChapter = (id: string) => {
+        const colors: Record<string,string> = { womenswear:'#C83D46', menswear:'#3157C8', 'tech-packs':'#D48A2C', '3d-simulation':'#7668D8' };
+        root.style.setProperty('--active-chapter', colors[id] ?? '#11110f');
+        for (const link of indexLinks) {
+          if (link.getAttribute('href') === `#${id}`) link.setAttribute('aria-current','page');
+          else link.removeAttribute('aria-current');
+        }
+      };
+      const chapterObserver = new IntersectionObserver((entries) => {
+        const active = entries.filter((entry) => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+        const id = (active?.target as HTMLElement | undefined)?.dataset.world;
+        if (id) setActiveChapter(id);
+      }, { rootMargin:'-20% 0px -55% 0px', threshold:[0,.1,.25,.5] });
+      for (const world of worlds.values()) chapterObserver.observe(world);
+      setActiveChapter('womenswear');
       const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
       let openWorld: HTMLElement | null = null;
       let restoreFocusTo: HTMLElement | null = null;
@@ -124,12 +163,15 @@ import '../styles/portfolio-cinematic.css';
       }
 
       const setInert = (on: boolean) => {
-        for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
+        for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer'),
+          root.querySelector(':scope > .pf-opening'), root.querySelector(':scope > .pf-continuity'),
+          root.querySelector(':scope > .pf-ending')]) {
           if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
-        for (const el of [root.querySelector('.pf-covers'), root.querySelector('.pf-intro')]) {
-          if (el) (el as HTMLElement).toggleAttribute('inert', on);
+        for (const world of worlds.values()) {
+          if (world !== openWorld) world.toggleAttribute('inert', on);
         }
+        for (const transition of root.querySelectorAll<HTMLElement>('[data-transition]')) transition.toggleAttribute('inert', on);
       };
 
       /* Which screen of a chapter is showing. `null` is the chapter's own
@@ -1663,39 +1705,43 @@ import '../styles/portfolio-cinematic.css';
   </style>
 
   <style is:global>
-    /* Architecture override: chapter indexes live in document flow; only a
-       selected garment category becomes an immersive layer. */
-    .pf.pf--js .pf-worlds { display: block; }
-    .pf.pf--js .pf-world {
-      --chapter: var(--ink);
-      position: relative; inset: auto; z-index: auto; visibility: visible; opacity: 1;
-      transform: none; overflow: visible; min-height: 100svh; border-top: 0;
-      background: var(--paper); color: var(--ink); scroll-margin-top: var(--header-h);
-    }
-    .pf.pf--js .pf-world[data-open] { position: fixed; inset: 0; z-index: 150; overflow-y: auto; overscroll-behavior: contain; }
-    .pf .pf-world::before { content:''; display:block; height:clamp(5rem,9vw,9rem); background:var(--chapter); clip-path:polygon(0 0,100% 55%,100% 100%,0 100%); }
-    .pf .pf-world[data-world='womenswear'] { --chapter:#C83D46; background:linear-gradient(135deg,#C83D4618 0 24%,transparent 48%),var(--paper); }
-    .pf .pf-world[data-world='menswear'] { --chapter:#3157C8; background:linear-gradient(90deg,#3157C814 0 32%,transparent 32%),var(--paper); }
-    .pf .pf-world[data-world='tech-packs'] { --chapter:#D48A2C; background:linear-gradient(#D48A2C16 1px,transparent 1px),var(--paper); background-size:100% 3rem; }
-    .pf .pf-world[data-world='3d-simulation'] { --chapter:#7668D8; background:linear-gradient(125deg,#eef1f6 0 48%,#7668D81c 48% 64%,#f7f6f2 64%); color:var(--ink); }
-    .pf .pf-world[data-world='3d-simulation']::before { background:linear-gradient(90deg,#D48A2C,#7668D8 58%,#dfe4eb); }
-    .pf .pf-world .pf-continuity { position:sticky; top:var(--header-h); z-index:12; background:color-mix(in srgb,var(--paper) 92%,var(--chapter)); border-bottom:1px solid color-mix(in srgb,var(--chapter) 45%,transparent); }
-    .pf .pf-continuity a[aria-current] { color:var(--chapter); }
-    .pf .pf-continuity a[aria-current]::before { background:var(--chapter); width:7px; height:7px; }
-    .pf .pf-head h2,.pf .pf-cat__num,.pf .pf-doc__num,.pf .pf-video__num { color:var(--chapter); }
-    .pf .pf-world--motion .pf-continuity,.pf .pf-world--motion .pf-bar { color:var(--ink); background:color-mix(in srgb,#eef1f6 88%,#7668D8); }
-    .pf .pf-world--motion .pf-head { border-color:#7668D855; }
-    .pf .pf-video { border-color:#7668D844; }
-    .pf .pf-video__frame { box-shadow:1.2rem 1.2rem 0 #7668D824; }
-    .pf .pf-doc__page { box-shadow:1rem 1rem 0 #D48A2C25; }
-    .pf .pf-doc:nth-child(even) .pf-doc__page { box-shadow:-1rem 1rem 0 #D48A2C25; }
-    .pf .pf-cats--womenswear .pf-cat__media { border-radius:50% 50% 4px 4px / 18% 18% 4px 4px; }
-    .pf .pf-cats--menswear .pf-cat__media { clip-path:polygon(0 0,92% 0,100% 12%,100% 100%,0 100%); }
-    .pf.pf--js .pf-world[data-open]::before { display:none; }
+    /* Integrated architecture: chapters stay in flow; only a selected garment
+       category becomes an immersive layer above the journey. */
+    .pf { --active-chapter:#C83D46; }
+    .pf > .pf-continuity { position:sticky; top:0; z-index:80; width:100%; min-width:0; background:rgb(247 245 239 / 94%); backdrop-filter:blur(12px); }
+    .pf > .pf-continuity a { min-width:0; }
+    .pf > .pf-continuity a[aria-current] { color:var(--active-chapter); }
+    .pf > .pf-continuity a[aria-current]::before { background:var(--active-chapter); }
+    .pf.pf--js .pf-worlds { display:block; }
+    .pf.pf--js .pf-world { --chapter:var(--ink); --chapter-text:var(--ink); position:relative; inset:auto; z-index:auto; visibility:visible; opacity:1; transform:none; overflow:visible; min-height:100svh; border:0; background:var(--paper); color:var(--ink); scroll-margin-top:6rem; }
+    .pf.pf--js .pf-world[data-open] { position:fixed; inset:0; z-index:150; overflow-y:auto; overscroll-behavior:contain; }
+    .pf .pf-world[data-world='womenswear'] { --chapter:#C83D46; --chapter-text:#8f2330; background:radial-gradient(ellipse at 8% 12%,#C83D4617,transparent 35%),var(--paper); }
+    .pf .pf-world[data-world='menswear'] { --chapter:#3157C8; --chapter-text:#24449f; background:linear-gradient(90deg,#3157C810 0 18%,transparent 18% 100%),var(--paper); }
+    .pf .pf-world[data-world='tech-packs'] { --chapter:#D48A2C; --chapter-text:#85500f; background:linear-gradient(#D48A2C12 1px,transparent 1px),var(--paper); background-size:100% 3rem; }
+    .pf .pf-world[data-world='3d-simulation'] { --chapter:#7668D8; --chapter-text:#4e429f; background:radial-gradient(circle at 78% 12%,#7668D81b,transparent 30%),linear-gradient(135deg,#f8f7f2,#edf1f5 56%,#f8f7f2); color:var(--ink); }
+    .pf .pf-head h2 { color:var(--ink); }
+    .pf .pf-cat__num,.pf .pf-doc__num,.pf .pf-video__num,.pf .pf-bar__tag b { color:var(--chapter-text); }
+    .pf .pf-doc__stamp { color:#74450c; }
+    .pf .pf-doc__page { box-shadow:1rem 1rem 0 #D48A2C24; }
+    .pf .pf-doc:nth-child(even) .pf-doc__page { box-shadow:-1rem 1rem 0 #D48A2C24; }
+    .pf .pf-cats--womenswear .pf-cat__media { border-radius:48% 48% 3px 3px / 14% 14% 3px 3px; }
+    .pf .pf-cats--menswear .pf-cat__media { clip-path:polygon(0 0,92% 0,100% 10%,100% 100%,0 100%); }
+    .pf .pf-world--motion :is(.pf-head__descriptor,.pf-back,.pf-bar__tag,.pf-video__desc,.pf-video__privacy,.pf-video__head h3,.pf-play__text,.pf-soon__label,.pf-soon__lead,.pf-soon__note) { color:var(--ink); }
+    .pf .pf-world--motion .pf-head { border-color:#7668D84d; }
+    .pf .pf-world--motion .pf-bar { color:var(--ink); background:#f2f3f4; }
+    .pf .pf-world--motion .pf-video { border-color:#7668D84a; }
+    .pf .pf-world--motion .pf-video__privacy { color:#514f59; }
+    .pf .pf-world--motion .pf-play { color:var(--paper-bright); }
+    .pf .pf-world--motion .pf-video__frame { background:#dce1e7; box-shadow:1.2rem 1.2rem 0 #7668D828; }
+    .pf .pf-world--motion a:visited { color:inherit; }
+    .pf.pf--js .pf-world[data-open] { background:var(--paper); }
+    .pf.pf--js .pf-world[data-open] :is(.pf-bar,.pf-head__descriptor) { color:var(--ink); }
     @media(max-width:767px){
-      .pf .pf-continuity { grid-template-columns:1fr 1fr; padding-block:.55rem; }
-      .pf .pf-continuity a { white-space:normal; line-height:1.15; min-height:38px; }
-      .pf .pf-world::before { height:4.5rem; }
+      .pf > .pf-continuity { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0 .5rem; padding:.4rem 1rem; }
+      .pf > .pf-continuity a { min-height:44px; white-space:normal; overflow-wrap:anywhere; line-height:1.15; font-size:.68rem; }
+      .pf .pf-category-instruction { margin-inline:1rem; }
+      .pf .pf-cats { padding-inline:1rem; scroll-padding-inline:1rem; }
+      .pf .pf-cats__list > li:nth-child(n) { width:min(82vw,350px); }
     }
   </style>
 </SiteLayout>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  from: 'womenswear' | 'menswear' | 'tech-packs' | '3d-simulation';
+  to: 'menswear' | 'tech-packs' | '3d-simulation' | 'ending';
+  eyebrow: string;
+  lead: string;
+  resolve: string;
+}
+const { from, to, eyebrow, lead, resolve } = Astro.props;
+---
+<section class={`pf-transition pf-transition--${from}-to-${to}`} data-transition={`${from}:${to}`} aria-label={`${lead} becomes ${resolve}`}>
+  <div class="pf-transition__stage">
+    <p class="pf-transition__eyebrow label">{eyebrow}</p>
+    <p class="pf-transition__statement display"><span>{lead}</span><i aria-hidden="true">→</i><strong>{resolve}</strong></p>
+    <div class="pf-transition__geometry" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b><b></b></div>
+    <p class="pf-transition__count label">{from === 'womenswear' ? '01 / 02' : from === 'menswear' ? '02 / 03' : from === 'tech-packs' ? '03 / 04' : '04 / End'}</p>
+  </div>
+</section>

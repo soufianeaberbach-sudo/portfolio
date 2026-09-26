@@ -20,7 +20,6 @@
  */
 import type { SimulationSession } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
-import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
   sessions: SimulationSession[];
@@ -36,7 +35,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section class="pf-world pf-world--motion" id="3d-simulation" data-world="3d-simulation" tabindex="-1" aria-labelledby="simulation-title">
-  <WorldNavigation current="3d-simulation" />
   <div class="pf-screen" data-screen="index">
     <div class="pf-bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
