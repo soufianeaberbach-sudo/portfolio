@@ -47,3 +47,14 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - run: npm run test:smoke
+
+      - name: Capture integrated Portfolio review states
+        run: npm run capture:portfolio
+
+      - name: Upload Portfolio visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-integrated-worlds-${{ github.sha }}
+          path: artifacts/portfolio-integrated-worlds/
+          if-no-files-found: error

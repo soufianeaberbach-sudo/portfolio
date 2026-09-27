@@ -10,7 +10,9 @@
     "deploy": "wrangler deploy",
     "test:smoke": "node tests/smoke.mjs",
     "test:worker": "node tests/worker.mjs",
-    "test:domain": "node tests/domain.mjs"
+    "test:domain": "node tests/domain.mjs",
+    "test:portfolio": "node tests/smoke.mjs",
+    "capture:portfolio": "node tests/portfolio-screenshots.mjs"
   },
   "devDependencies": {
     "astro": "^5.16.6",
