@@ -11,7 +11,7 @@
 .pf-opening__thesis { position:absolute; z-index:2; right:var(--gutter); bottom:16vh; max-width:23ch; font-size:.9rem; }
 .pf-opening__enter { position:absolute; z-index:2; right:var(--gutter); bottom:7vh; display:flex; gap:1rem; align-items:center; color:inherit; }
 .pf-ending { min-height:76svh; padding:clamp(8rem,15vw,14rem) var(--gutter) 5rem; background:linear-gradient(180deg,#f5f1e9,#faf8f3 48%); color:var(--ink); position:relative; }
-.pf-ending::before { content:''; position:absolute; top:0; left:var(--gutter); right:var(--gutter); height:1px; background:linear-gradient(90deg,#7668D8,#b8bec8 28%,transparent 72%); }
+.pf-ending::before { content:''; position:absolute; top:0; left:var(--gutter); right:var(--gutter); height:1px; background:linear-gradient(90deg,#19B9C5,#b8bec8 28%,transparent 72%); }
 .pf-ending h2 { max-width:9ch; font-size:clamp(4rem,10vw,9rem); line-height:.84; letter-spacing:-.06em; margin:2rem 0 4rem; }
 .pf-ending .button { background:var(--ink); color:var(--paper); }
 .pf-ending__note { max-width:34ch; margin:6rem 0 0 auto; color:#4e4c47; }
@@ -45,14 +45,14 @@
 .pf-transition--menswear-to-tech-packs .pf-transition__geometry { inset:12% 6%; border:1px solid #3157C85c; transform:scale(calc(.78 + var(--progress) * .14)); background:repeating-linear-gradient(90deg,transparent 0 calc(12.5% - 1px),#3157C82f calc(12.5% - 1px) 12.5%); }
 .pf-transition--menswear-to-tech-packs .pf-transition__geometry::after { content:''; position:absolute; inset:calc(var(--progress) * 6%) calc(var(--progress) * 16%); border:1px solid #D48A2C; background:#f9f7f1; box-shadow:1rem 1rem 0 #D48A2C20; }
 /* Paper folds into pattern axes, then gains a restrained dimensional plane. */
-.pf-transition--tech-packs-to-3d-simulation { height:175svh; background:linear-gradient(135deg,#faf7ef,#eef1f5 62%,#7668D815); }
+.pf-transition--tech-packs-to-3d-simulation { height:175svh; background:linear-gradient(135deg,#faf7ef,#eef1f5 62%,#19B9C515); }
 .pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry { inset:10% 8%; perspective:900px; }
 .pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry::before { content:''; position:absolute; inset:8% 18%; background:#fff; border:1px solid #D48A2C8a; transform:rotateX(calc(var(--progress) * 48deg)) rotateZ(calc(var(--progress) * -5deg)); transform-origin:bottom; box-shadow:0 calc(var(--progress) * 2rem) 3rem #45415b24; }
-.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i { left:50%; top:5%; bottom:5%; width:1px; background:#7668D8; transform:rotate(calc((var(--progress) - .5) * 22deg)); }
-.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(2){transform:rotate(calc((var(--progress) - .5) * -22deg))}.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(3){left:20%;background:#D48A2C66}.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(4){left:80%;background:#7668D866}
+.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i { left:50%; top:5%; bottom:5%; width:1px; background:#19B9C5; transform:rotate(calc((var(--progress) - .5) * 22deg)); }
+.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(2){transform:rotate(calc((var(--progress) - .5) * -22deg))}.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(3){left:20%;background:#D48A2C66}.pf-transition--tech-packs-to-3d-simulation .pf-transition__geometry i:nth-child(4){left:80%;background:#19B9C566}
 /* Complexity resolves: construction lines retreat into one quiet rule. */
 .pf-transition--3d-simulation-to-ending { height:125svh; background:linear-gradient(180deg,#edf1f5,#f5f1e9 72%); }
-.pf-transition--3d-simulation-to-ending .pf-transition__geometry i { left:var(--gutter); right:var(--gutter); top:calc(25% + var(--progress) * 55%); height:1px; background:linear-gradient(90deg,#7668D8,transparent); transform:scaleX(calc(1 - var(--progress) * .82)); transform-origin:left; }
+.pf-transition--3d-simulation-to-ending .pf-transition__geometry i { left:var(--gutter); right:var(--gutter); top:calc(25% + var(--progress) * 55%); height:1px; background:linear-gradient(90deg,#19B9C5,transparent); transform:scaleX(calc(1 - var(--progress) * .82)); transform-origin:left; }
 @media(max-width:767px){
  .pf-transition{height:125svh}.pf-transition__stage{padding:7rem 1rem 2rem}.pf-transition__statement{display:block;margin-top:18vh;font-size:clamp(2.7rem,15vw,4.5rem)}.pf-transition__statement>*{display:block}.pf-transition__statement i{margin:1.2rem 0}.pf-transition__statement strong{text-align:left}.pf-transition__count{right:1rem}
 }

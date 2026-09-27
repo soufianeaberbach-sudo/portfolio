@@ -123,7 +123,7 @@ const masterScene = {
       const livingIndex = root.querySelector<HTMLElement>(':scope > .pf-continuity');
       const indexLinks = [...(livingIndex?.querySelectorAll<HTMLAnchorElement>('a[href^="#"]') ?? [])];
       const setActiveChapter = (id: string) => {
-        const colors: Record<string,string> = { womenswear:'#C83D46', menswear:'#3157C8', 'tech-packs':'#D48A2C', '3d-simulation':'#7668D8' };
+        const colors: Record<string,string> = { womenswear:'#C83D46', menswear:'#3157C8', 'tech-packs':'#D48A2C', '3d-simulation':'#159EAA' };
         root.style.setProperty('--active-chapter', colors[id] ?? '#11110f');
         for (const link of indexLinks) {
           if (link.getAttribute('href') === `#${id}`) link.setAttribute('aria-current','page');
@@ -176,9 +176,9 @@ const masterScene = {
 
       /* Which screen of a chapter is showing. `null` is the chapter's own
          index; a category id is that category's viewer. */
-      const showScreen = (world: HTMLElement, category: string | null) => {
+      const showScreen = (world: HTMLElement, category: string | null): HTMLElement | null => {
         const screens = [...world.querySelectorAll<HTMLElement>('[data-screen]')];
-        if (screens.length === 0) return;
+        if (screens.length === 0) return null;
         let shown: HTMLElement | null = null;
         for (const screen of screens) {
           const match = screen.dataset.screen === 'index'
@@ -190,9 +190,13 @@ const masterScene = {
         /* An unknown category falls back to the index rather than leaving the
            chapter blank. */
         if (!shown) {
-          for (const screen of screens) screen.hidden = screen.dataset.screen !== 'index';
+          for (const screen of screens) {
+            screen.hidden = screen.dataset.screen !== 'index';
+            if (!screen.hidden) shown = screen;
+          }
         }
         world.scrollTop = 0;
+        return shown;
       };
 
       const closeWorld = () => {
@@ -228,7 +232,7 @@ const masterScene = {
           next.setAttribute('data-open', '');
           document.body.classList.add('no-scroll');
         }
-        showScreen(next, category);
+        const shownScreen = showScreen(next, category);
         if (!already && !reduced()) {
           const entrance = next.querySelector<HTMLElement>('.pf-head');
           entrance?.animate([
@@ -244,7 +248,7 @@ const masterScene = {
            when a focused element's container becomes inert lands after a focus
            call made on the same tick. */
         void next.offsetHeight;
-        const first = next.querySelector<HTMLElement>(FOCUSABLE);
+        const first = shownScreen?.querySelector<HTMLElement>(FOCUSABLE);
         (first ?? next).focus({ preventScroll: true });
         if (!already) setInert(true);
         layoutAll();
@@ -1718,7 +1722,7 @@ const masterScene = {
     .pf .pf-world[data-world='womenswear'] { --chapter:#C83D46; --chapter-text:#8f2330; background:radial-gradient(ellipse at 8% 12%,#C83D4617,transparent 35%),var(--paper); }
     .pf .pf-world[data-world='menswear'] { --chapter:#3157C8; --chapter-text:#24449f; background:linear-gradient(90deg,#3157C810 0 18%,transparent 18% 100%),var(--paper); }
     .pf .pf-world[data-world='tech-packs'] { --chapter:#D48A2C; --chapter-text:#85500f; background:linear-gradient(#D48A2C12 1px,transparent 1px),var(--paper); background-size:100% 3rem; }
-    .pf .pf-world[data-world='3d-simulation'] { --chapter:#7668D8; --chapter-text:#4e429f; background:radial-gradient(circle at 78% 12%,#7668D81b,transparent 30%),linear-gradient(135deg,#f8f7f2,#edf1f5 56%,#f8f7f2); color:var(--ink); }
+    .pf .pf-world[data-world='3d-simulation'] { --chapter:#19B9C5; --chapter-text:#0B6972; background:radial-gradient(circle at 78% 12%,#19B9C51b,transparent 30%),linear-gradient(135deg,#f8f7f2,#edf1f5 56%,#f8f7f2); color:var(--ink); }
     .pf .pf-head h2 { color:var(--ink); }
     .pf .pf-cat__num,.pf .pf-doc__num,.pf .pf-video__num,.pf .pf-bar__tag b { color:var(--chapter-text); }
     .pf .pf-doc__stamp { color:#74450c; }
@@ -1727,12 +1731,12 @@ const masterScene = {
     .pf .pf-cats--womenswear .pf-cat__media { border-radius:48% 48% 3px 3px / 14% 14% 3px 3px; }
     .pf .pf-cats--menswear .pf-cat__media { clip-path:polygon(0 0,92% 0,100% 10%,100% 100%,0 100%); }
     .pf .pf-world--motion :is(.pf-head__descriptor,.pf-back,.pf-bar__tag,.pf-video__desc,.pf-video__privacy,.pf-video__head h3,.pf-play__text,.pf-soon__label,.pf-soon__lead,.pf-soon__note) { color:var(--ink); }
-    .pf .pf-world--motion .pf-head { border-color:#7668D84d; }
+    .pf .pf-world--motion .pf-head { border-color:#19B9C54d; }
     .pf .pf-world--motion .pf-bar { color:var(--ink); background:#f2f3f4; }
-    .pf .pf-world--motion .pf-video { border-color:#7668D84a; }
+    .pf .pf-world--motion .pf-video { border-color:#19B9C54a; }
     .pf .pf-world--motion .pf-video__privacy { color:#514f59; }
     .pf .pf-world--motion .pf-play { color:var(--paper-bright); }
-    .pf .pf-world--motion .pf-video__frame { background:#dce1e7; box-shadow:1.2rem 1.2rem 0 #7668D828; }
+    .pf .pf-world--motion .pf-video__frame { background:#dce1e7; box-shadow:1.2rem 1.2rem 0 #19B9C528; }
     .pf .pf-world--motion a:visited { color:inherit; }
     .pf.pf--js .pf-world[data-open] { background:var(--paper); }
     .pf.pf--js .pf-world[data-open] :is(.pf-bar,.pf-head__descriptor) { color:var(--ink); }
