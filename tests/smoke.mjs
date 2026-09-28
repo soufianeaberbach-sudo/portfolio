@@ -183,7 +183,7 @@ try {
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(500);
+    await p.waitForTimeout(600);
 
     const worlds = await p.evaluate(() => [...document.querySelectorAll('[data-world]')].map((e) => e.dataset.world));
     check('exactly four top-level chapters', worlds.length === 4, worlds.join(','));
@@ -191,164 +191,204 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* THE JOURNEY. Each chapter arrives as its own cover and hands over to
-       what is inside it; the running order is the navigation. The oversized
-       chapter-list screen that used to sit in the middle of this is gone, and
-       the assertions that described it are re-asserted here against the
-       sequence that replaced it — every factual-integrity rule they carried
-       is kept: image-led covers, provenance for every visual, nothing drawn
-       as a card, distinct intent and action language per chapter, and no
-       category list or reference disclaimer in the chapter index. */
+    /* THE JOURNEY. Four covers and nothing between them: the chapter's own
+       name is the headline, one sentence carries one coloured word, and one
+       control carries the position. The oversized chapter-list screen, the
+       per-cover register, the edge rail and the four contents rails are all
+       gone, and every factual-integrity rule they used to carry is
+       re-asserted here against what replaced them. */
     const sequence = await p.evaluate(() => {
       const shown = (el) => getComputedStyle(el).display !== 'none';
       const covers = [...document.querySelectorAll('.pf-cover')].filter(shown).map((el) => {
         const plate = el.querySelector('.pf-cover__plate')
           ?? (el.hasAttribute('data-women-threshold') ? document.querySelector('.pf-scene--women') : null);
-        const s = plate ? getComputedStyle(plate) : null;
+        const st = plate ? getComputedStyle(plate) : null;
+        const name = el.querySelector('.pf-cover__name');
+        const em = el.querySelector('.pf-cover__statement em');
         const copy = el.querySelector('.pf-cover__copy').getBoundingClientRect();
+        const nameBox = name.getBoundingClientRect();
         return {
           id: el.dataset.cover ?? (el.hasAttribute('data-women-threshold') ? 'womenswear' : ''),
-          number: el.querySelector('.pf-cover__eyebrow span').textContent.trim(),
-          name: el.querySelector('.pf-cover__eyebrow').textContent.replace(/\s+/g, ' ').replace(/^\d+\s*/, '').trim(),
-          line: el.querySelector('.pf-cover__line').textContent.replace(/\s+/g, ' ').trim(),
+          name: name.textContent.trim(),
+          nameSize: parseFloat(getComputedStyle(name).fontSize),
+          statement: el.querySelector('.pf-cover__statement').textContent.replace(/\s+/g, ' ').trim(),
+          word: em?.textContent.trim() ?? '',
+          wordColour: em ? getComputedStyle(em).color : '',
+          wordSize: em ? parseFloat(getComputedStyle(em).fontSize) : 0,
+          statementSize: parseFloat(getComputedStyle(el.querySelector('.pf-cover__statement')).fontSize),
           action: el.querySelector('.pf-cover__action').textContent.replace(/\s+/g, ' ').trim(),
           href: el.querySelector('.pf-cover__action').getAttribute('href'),
           images: plate ? plate.querySelectorAll('img').length : 0,
           source: plate?.dataset.imageSource
             ?? el.querySelector('[data-image-source]')?.dataset.imageSource ?? '',
-          boxed: s ? (s.borderRadius !== '0px' || s.boxShadow !== 'none') : true,
+          boxed: st ? (st.borderRadius !== '0px' || st.boxShadow !== 'none') : true,
           copyLeft: Math.round(copy.left),
+          /* Nothing may be cut by the frame. A name is allowed to run past its
+             own column into the plate's negative space, so what is measured is
+             where its glyphs actually stop. */
+          namePainted: Math.round(nameBox.left + Math.max(name.scrollWidth, nameBox.width)),
+          /* AND the name's own box has to hold its own glyphs. A cover clips
+             its name's box as it arrives, so a box narrower than its text is
+             not a harmless overflow — it cuts the word. A stale `max-width`
+             from a cover system that no longer exists once turned MENSWEAR
+             into MENSWEA on a phone exactly this way. */
+          nameFits: (() => {
+            /* The glyphs, measured with a range: Development's name carries an
+               outlined echo as a pseudo-element, which a scrollWidth counts. */
+            const range = document.createRange();
+            range.selectNodeContents(name.firstChild);
+            return range.getBoundingClientRect().right <= nameBox.right + 2;
+          })(),
+          accent: getComputedStyle(el).getPropertyValue('--accent').trim(),
         };
       });
-      const flow = [...document.querySelectorAll('.pf-cinema, [data-cover], [data-contents], .pf-outro')]
+      const flow = [...document.querySelectorAll('.pf-cinema, [data-cover], .pf-outro')]
         .filter(shown)
         .map((el) => (el.classList.contains('pf-cinema') ? 'opening'
-          : el.classList.contains('pf-outro') ? 'ending'
-            : el.dataset.cover ? `cover:${el.dataset.cover}` : `contents:${el.dataset.contents}`));
-      const index = document.querySelector('[data-living-index]');
-      const rows = [...document.querySelectorAll('.pf-index-row')].map((el) => {
-        const r = el.getBoundingClientRect();
-        return {
-          chapter: el.dataset.chapter,
-          height: Math.round(r.height),
-          width: Math.round(r.width),
-          isLink: el.tagName === 'A',
-          name: el.querySelector('.pf-index-row__title').textContent.trim(),
-          intent: el.querySelector('.pf-index-row__note').textContent.trim(),
-          action: el.querySelector('.pf-index-row__action').textContent.replace(/\s+/g, ' ').trim(),
-          text: el.textContent.replace(/\s+/g, ' ').trim(),
-        };
-      });
+          : el.classList.contains('pf-outro') ? 'ending' : `cover:${el.dataset.cover}`));
+      const control = document.querySelector('[data-where]');
       return {
         covers,
         flow,
-        rows,
-        indexCount: document.querySelectorAll('[data-living-index]').length,
-        indexInEnding: !!index?.closest('.pf-outro'),
-        indexAt: (index.getBoundingClientRect().top + scrollY) / document.documentElement.scrollHeight,
-        indexInOpening: document.querySelectorAll('.pf-cinema [data-living-index]').length,
-        contents: [...document.querySelectorAll('[data-contents]')].map((el) => ({
-          id: el.dataset.contents,
-          items: [...el.querySelectorAll('.pf-contents__list a')].map((a) => a.getAttribute('href')),
-        })),
+        width: innerWidth,
+        /* The navigation systems that were removed. */
+        leftovers: {
+          livingIndex: document.querySelectorAll('[data-living-index]').length,
+          contents: document.querySelectorAll('[data-contents]').length,
+          rail: document.querySelectorAll('[data-rail]').length,
+          register: document.querySelectorAll('.pf-cover__register').length,
+        },
+        control: control ? {
+          count: control.querySelector('[data-where-count]').textContent.trim(),
+          links: [...control.querySelectorAll('[data-where-link]')].map((a) => a.dataset.whereLink),
+          expanded: control.querySelector('[data-where-toggle]').getAttribute('aria-expanded'),
+        } : null,
+        /* Every number printed anywhere in the sequence. */
+        numbered: [...document.querySelectorAll('.pf-cover, .pf-outro')]
+          .filter(shown)
+          .filter((el) => /\b0[1-4]\b/.test(el.textContent)).length,
       };
     });
 
-    check('the journey is opening → cover → contents, four times, then the ending',
-      sequence.flow.join(' ') === [
-        'opening', 'contents:womenswear',
-        'cover:menswear', 'contents:menswear',
-        'cover:3d-simulation', 'contents:3d-simulation',
-        'cover:tech-packs', 'contents:tech-packs',
-        'ending',
-      ].join(' '), sequence.flow.join(' '));
-    check('four chapter covers, numbered in the running order',
-      sequence.covers.map((cover) => `${cover.number}:${cover.id}`).join(' ')
-        === '01:womenswear 02:menswear 03:3d-simulation 04:tech-packs',
-      sequence.covers.map((cover) => `${cover.number}:${cover.id}`).join(' '));
+    check('the journey is four covers and an ending, with no screen between them',
+      sequence.flow.join(' ') === 'opening cover:menswear cover:3d-simulation cover:tech-packs ending',
+      sequence.flow.join(' '));
+    check('four chapter covers, in the running order',
+      sequence.covers.map((cv) => cv.id).join(' ') === 'womenswear menswear 3d-simulation tech-packs',
+      sequence.covers.map((cv) => cv.id).join(' '));
     check('Development comes before Tech Packs',
-      sequence.covers.findIndex((cover) => cover.id === '3d-simulation')
-        < sequence.covers.findIndex((cover) => cover.id === 'tech-packs'));
-    check('every cover is image-led',
-      sequence.covers.every((cover) => cover.images === 1),
-      sequence.covers.map((cover) => cover.images).join(','));
-    check('every cover records its image source',
-      sequence.covers.every((cover) => cover.source.length > 0),
-      sequence.covers.map((cover) => cover.source).join(' | '));
-    check('no cover is drawn as a card', sequence.covers.every((cover) => !cover.boxed));
+      sequence.covers.findIndex((cv) => cv.id === '3d-simulation')
+        < sequence.covers.findIndex((cv) => cv.id === 'tech-packs'));
+
+    /* THE HIERARCHY. The chapter's own name is the headline — it used to be a
+       number-sized label beside a generic line. */
+    check('every cover is headlined by its chapter name',
+      sequence.covers.map((cv) => cv.name).join('|') === 'Womenswear|Menswear|Development|Tech Packs',
+      sequence.covers.map((cv) => cv.name).join('|'));
+    check("the chapter name is the cover's largest type, by a clear margin",
+      sequence.covers.every((cv) => cv.nameSize >= cv.statementSize * 3),
+      sequence.covers.map((cv) => `${cv.name} ${cv.nameSize}/${cv.statementSize}`).join(' · '));
+    check('Development is named Development on its cover, not after its last step',
+      sequence.covers.find((cv) => cv.id === '3d-simulation').name === 'Development');
+    check('no name is cut off by the frame',
+      sequence.covers.every((cv) => cv.namePainted <= sequence.width + 1),
+      sequence.covers.map((cv) => `${cv.name}:${cv.namePainted}`).join(' '));
+    check("and no name is cut off by its own box, which a cover's clip follows",
+      sequence.covers.every((cv) => cv.nameFits),
+      sequence.covers.filter((cv) => !cv.nameFits).map((cv) => cv.name).join(' ') || 'all hold their text');
+
+    /* ONE COLOURED WORD PER CHAPTER, and it is the capability being sold. */
+    check('each chapter states what it sells in one sentence',
+      sequence.covers.map((cv) => cv.statement).join('|') === [
+        'Designing silhouettes with identity, movement and purpose.',
+        'Building proportion through structure, tailoring and balance.',
+        'Building patterns that resolve fit, balance and construction.',
+        'Translating product decisions into specifications a factory can follow.',
+      ].join('|'), sequence.covers.map((cv) => cv.statement).join(' | '));
+    check('exactly one word of each statement is coloured, and it is the capability',
+      sequence.covers.map((cv) => cv.word).join(' ') === 'silhouettes proportion patterns specifications',
+      sequence.covers.map((cv) => cv.word).join(' '));
+    check('every chapter colours that word with its own token',
+      new Set(sequence.covers.map((cv) => cv.wordColour)).size === 4,
+      sequence.covers.map((cv) => cv.wordColour).join(' '));
+    /* A garment's own colour is whatever the garment is, and there are no
+       darker variants of these tokens — so the word has to be large text,
+       where 3:1 is the threshold, for the sampled colours to be usable. */
+    check('the coloured word is large text, so a faithful garment colour can carry it',
+      sequence.covers.every((cv) => cv.wordSize >= 18.66),
+      sequence.covers.map((cv) => cv.wordSize).join(' '));
+    check('every cover offers one way in, into its own chapter',
+      sequence.covers.every((cv) => cv.href === `#${cv.id}`) && new Set(sequence.covers.map((cv) => cv.action)).size === 4,
+      sequence.covers.map((cv) => `${cv.action} ${cv.href}`).join(' | '));
+
+    /* SAME GRAMMAR. */
+    check('every cover is image-led', sequence.covers.every((cv) => cv.images === 1),
+      sequence.covers.map((cv) => cv.images).join(','));
+    check('every cover records its image source', sequence.covers.every((cv) => cv.source.length > 0),
+      sequence.covers.map((cv) => cv.source).join(' | '));
+    check('no cover is drawn as a card', sequence.covers.every((cv) => !cv.boxed));
     check('every cover sets its type in the same place',
-      new Set(sequence.covers.map((cover) => cover.copyLeft)).size === 1,
-      sequence.covers.map((cover) => cover.copyLeft).join(' '));
-    check('every chapter has its own line and its own action language',
-      new Set(sequence.covers.map((cover) => cover.line)).size === 4
-      && new Set(sequence.covers.map((cover) => cover.action)).size === 4,
-      sequence.covers.map((cover) => `${cover.line} / ${cover.action}`).join(' | '));
-    check('every cover opens its chapter',
-      sequence.covers.every((cover) => cover.href === `#${cover.id}`),
-      sequence.covers.map((cover) => cover.href).join(' '));
+      new Set(sequence.covers.map((cv) => cv.copyLeft)).size === 1,
+      sequence.covers.map((cv) => cv.copyLeft).join(' '));
 
-    /* Each cover hands straight over to that chapter's real sections. */
-    check('each chapter\'s contents follow its cover and name real sections',
-      sequence.contents.length === 4
-      && sequence.contents.every((entry) => entry.items.length >= 4 && entry.items.every((href) => href.startsWith('#'))),
-      sequence.contents.map((entry) => `${entry.id}:${entry.items.length}`).join(' '));
+    /* ONE NAVIGATION, AND ONE ONLY. */
+    check('the oversized chapter index is gone', sequence.leftovers.livingIndex === 0);
+    check('the four contents rails are gone', sequence.leftovers.contents === 0);
+    check('the edge position rail is gone', sequence.leftovers.rail === 0);
+    check("the per-cover register is gone", sequence.leftovers.register === 0);
+    check('one control carries the position, and lists the four chapters',
+      sequence.control !== null && sequence.control.links.join(' ') === 'womenswear menswear 3d-simulation tech-packs',
+      JSON.stringify(sequence.control));
+    check('it is closed until it is asked for', sequence.control.expanded === 'false');
+    check('nothing else in the journey numbers a chapter',
+      sequence.numbered === 0, `${sequence.numbered} sections print a chapter number`);
 
-    /* THE ONE CHAPTER LIST, and it is the ending. */
-    check('there is exactly one chapter list on the page', sequence.indexCount === 1, String(sequence.indexCount));
-    check('the chapter list is the ending, not a stop in the middle of the journey',
-      sequence.indexInEnding && sequence.indexAt > 0.75,
-      `at ${(sequence.indexAt * 100).toFixed(0)}% of the page`);
-    check('the opening carries no chapter list at all', sequence.indexInOpening === 0);
-    check('four equal-value chapter rows', sequence.rows.length === 4
-      && Math.max(...sequence.rows.map((row) => row.height)) - Math.min(...sequence.rows.map((row) => row.height)) <= 1
-      && new Set(sequence.rows.map((row) => row.width)).size === 1,
-      sequence.rows.map((row) => `${row.width}x${row.height}`).join(','));
-    check('every chapter is openable', sequence.rows.every((row) => row.isLink));
-    check('every chapter has a distinct editorial intent',
-      sequence.rows.every((row) => row.intent) && new Set(sequence.rows.map((row) => row.intent)).size === 4);
-    check('every chapter has distinct action language',
-      sequence.rows.every((row) => row.action) && new Set(sequence.rows.map((row) => row.action)).size === 4);
-    check('the index includes concise intent and wayfinding',
-      sequence.rows.every((row) => row.intent.length > 0 && row.action.length > 0),
-      sequence.rows.map((row) => row.text).join(' | '));
-    /* The public name of Pattern Development is wider than its last step: the
-       recordings start at the first pattern lines. The internal id stays
-       `3d-simulation` so existing links and history entries keep working. */
-    check('chapter 03 is published as Pattern Development',
-      sequence.rows.find((row) => row.chapter === '3d-simulation').name === 'Pattern Development',
-      sequence.rows.find((row) => row.chapter === '3d-simulation').text);
-    check('the old narrower name is gone from the landing',
+    check('the old narrower name is gone from the sequence',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
-        [...document.querySelectorAll('[data-living-index], .pf-cover, .pf-contents')]
-          .map((e) => e.textContent).join(' '))));
-    check('no category list appears inside the chapter index',
-      await p.evaluate(() => document.querySelectorAll('.pf-living-index .pf-cat').length === 0));
-    check('the reference disclaimer never appears in the chapter index',
-      await p.evaluate(() => !/no authorship of photographed garments/i
-        .test(document.querySelector('.pf-living-index').textContent)));
+        [...document.querySelectorAll('.pf-cover, .pf-outro')].map((e) => e.textContent).join(' '))));
+    check('the reference disclaimer never appears on a cover',
+      await p.evaluate(() => ![...document.querySelectorAll('.pf-cover')]
+        .some((el) => /no authorship of photographed garments/i.test(el.textContent))));
 
-    /* A chapter's colour is a signal — a number, a rule, an arrow — and never
-       a surface. This replaces the registration-mark assertion that guarded
-       the same rule on the interface the covers took over from. */
+    /* A chapter's colour is a signal — a word, a rule, an arrow — never a
+       surface. This replaces the registration-mark assertion that guarded the
+       same rule on the interface the covers took over from. */
     const surfaces = await p.evaluate(() => {
       const accents = [...document.querySelectorAll('.pf-cover')]
         .map((el) => getComputedStyle(el).getPropertyValue('--accent').trim().toLowerCase());
       const bad = [];
-      for (const el of document.querySelectorAll('.pf-cover *, .pf-contents *, .pf-outro *')) {
-        const style = getComputedStyle(el);
-        const bg = style.backgroundColor;
+      for (const el of document.querySelectorAll('.pf-cover *, .pf-outro *')) {
+        /* The site's own filled primary CTA is a component, not chapter
+           paint: Home and Contact both end on exactly this button. What this
+           guards is a chapter turning its colour into a surface. */
+        if (el.closest('.button')) continue;
+        const bg = getComputedStyle(el).backgroundColor;
         if (bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') continue;
         const hex = `#${bg.match(/\d+/g).slice(0, 3).map((v) => Number(v).toString(16).padStart(2, '0')).join('')}`;
         if (!accents.includes(hex)) continue;
         const r = el.getBoundingClientRect();
         if (r.width * r.height > 2400) bad.push(`${el.className}:${Math.round(r.width)}x${Math.round(r.height)}`);
       }
-      return { accents, bad };
+      return bad;
     });
-    check('each chapter carries its own signal colour',
-      new Set(surfaces.accents).size === 4, surfaces.accents.join(' '));
-    check('a chapter colour is a signal, never a surface',
-      surfaces.bad.length === 0, surfaces.bad.join(' '));
+    check('a chapter colour is a signal, never a surface', surfaces.length === 0, surfaces.join(' '));
+
+    /* THE ENDING resolves the journey instead of repeating it. */
+    const ending = await p.evaluate(() => {
+      const el = document.querySelector('.pf-outro');
+      return {
+        title: el.querySelector('.pf-outro__title').textContent.replace(/\s+/g, ' ').trim(),
+        word: el.querySelector('.pf-outro__title em')?.textContent.trim() ?? '',
+        links: [...el.querySelectorAll('a')].map((a) => a.getAttribute('href')),
+        chapterLinks: el.querySelectorAll('[data-chapter], [data-index-row]').length,
+      };
+    });
+    check('the ending resolves the story in one line', ending.title === 'One practice.From design to production.',
+      ending.title);
+    check("it carries the site's one coloured word", ending.word === 'production', ending.word);
+    check('it is not another chapter directory', ending.chapterLinks === 0 && ending.links.length === 1,
+      `${ending.chapterLinks} chapter links, ${ending.links.length} links`);
+    check('and it offers the brief', ending.links[0] === '/contact/', ending.links.join(' '));
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({

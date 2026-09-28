@@ -23,7 +23,25 @@
    mismatch there is invisible; a boundary is a hard edge, so the same
    mismatch there is a rule drawn across the page. One value, sitting between
    all four, is the right trade. */
-.pf { --bone: #eee1da; }
+.pf {
+  --bone: #eee1da;
+  /* ONE COLOUR PER WORLD, SAMPLED FROM THAT WORLD'S OWN GARMENT.
+     There are deliberately no variants — no lighter text tint, no darker
+     hover, no secondary shade. Each token carries its chapter's highlighted
+     display word, its rule and its motion cues; wherever a token would not be
+     legible at small size the text is ink instead, which is why there is no
+     "safe" darker version of any of them.
+
+       --ww-accent   #c7020c  red dress, upper mid-tone of the lit satin
+       --mw-accent   #2d81de  blue suit, lower mid-tone of the cloth
+       --dev-accent  #087888  aqua gown, the garment's most frequent colour
+
+     Tech Packs has no garment to sample and uses the site's own technical
+     signal, --signal, with the same restraint as the rest of aberbach.co. */
+  --ww-accent: #c7020c;
+  --mw-accent: #2d81de;
+  --dev-accent: #087888;
+}
 
 /* ---- the scene tokens, shared by the opening and every cover --------------
    The scene's own studio bone, sampled from the supplied plates, so the
@@ -35,10 +53,15 @@
   --bone: #eee1da;
   --scene-w: 100%;
   --scene-drop: -4%;
-  /* The caption band sits in the scene's own empty floor, below the figures.
-     It is tuned per width because the scene's height follows its width while
-     the field's does not, so the floor is a different depth at each size. */
-  --caption-b: 3.4vh;
+  /* The caption band sits in the scene's own empty floor, below the figures —
+     BELOW THE HEM, not across it. It is tuned per width because the scene's
+     height follows its width while the field's does not, so the floor is a
+     different depth at each size. At laptop heights the red train sweeps down
+     into the lower left, and a 3.4vh band put the supporting line's first
+     line across it; the floor that is actually empty there begins about
+     12-14px from the trim, so the band sits low and the scroll cue keeps its
+     baseline. */
+  --caption-b: 1.6vh;
   /* The chapter's signal colour. Set per cover from the chapter's own data;
      the opening's statement belongs to no chapter, so it falls back to the
      site's one accent. */
@@ -54,7 +77,6 @@
    shared token block above would paint the photograph out. */
 .pf-cinema,
 .pf-cover--section,
-.pf-contents,
 .pf-outro { background: var(--bone); }
 
 .pf-cinema {
@@ -67,15 +89,28 @@
   position: relative;
   min-height: 100svh;
 }
+/* THE BAND IS RESERVED BY THE PLATE'S HEIGHT, NOT BY HOPE.
+   A 16:9 plate at full bleed in a 16:9 viewport leaves NO band above the
+   figures — which is exactly what happened at 1366x768, where the statement
+   landed across three faces. The plate's width is therefore capped against
+   the viewport's HEIGHT: its height can never exceed ~66svh, so the figures'
+   crowns always sit at about 43% of the screen and the top of the frame is
+   always the type's. On tall and narrow viewports the cap never binds and the
+   plate stays full width, as it did before. */
+.pf-cinema { --scene-w: min(100%, 112svh); }
 .js .pf-cinema { height: 240svh; }
 .pf-cinema__sticky { position: relative; min-height: 100svh; overflow: clip; isolation: isolate; }
 .js .pf-cinema__sticky { position: sticky; top: 0; height: 100svh; }
 .pf-cinema__entry-anchor { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; }
 
+/* The folio is the right-hand register only. Its left half used to read
+   SOUFIANE ABERBACH, which the site header already says two rows above it,
+   and which collided with BETWEEN once the statement moved into that column. */
 .pf-cinema__folio {
   position: absolute; z-index: 12; top: max(6.7rem, 11.5vh); left: var(--gutter); right: var(--gutter);
-  display: flex; justify-content: space-between; margin: 0; font-size: .57rem;
+  display: flex; justify-content: flex-end; margin: 0; font-size: .57rem;
 }
+.pf-cinema__folio span:first-child { display: none; }
 
 /* ---- the one image plane ------------------------------------------------ */
 
@@ -122,32 +157,85 @@
 }
 .pf-scene img,
 .pf-cover__plate img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* THE PLATE'S OWN VERTICAL EDGES.
+   The opening's plate is capped against the viewport's height so that a band
+   is always reserved for the statement, which means at a short wide viewport
+   it is narrower than the frame — and its left and right edges then sit in
+   the middle of the page as two hard lines, turning the photograph back into
+   a rectangle. Its own bone is what is on the far side of them, so they
+   dissolve into the ground exactly as its top and bottom already do. The
+   field's edge dissolves stay: those catch a plate that is panned past the
+   frame during the push. */
+.pf-scene::before,
+.pf-scene::after {
+  content: ''; position: absolute; top: 0; bottom: 0; z-index: 1;
+  width: 4.5%; pointer-events: none;
+}
+.pf-scene::before { left: 0; background: linear-gradient(90deg, var(--bone), transparent); }
+.pf-scene::after { right: 0; background: linear-gradient(270deg, var(--bone), transparent); }
 /* Each opening plate turns about the woman in red — her centre in ITS own
    frame — so a scale applied to both pins her to one point on screen through
    the whole push-in. Measured from the supplied files, not estimated. */
 .pf-scene--master { transform-origin: 26.4% 48.65%; z-index: 1; }
 .pf-scene--women { transform-origin: 75.85% 49.3%; z-index: 2; opacity: 0; }
 
-/* ---- the opening's statement --------------------------------------------
-   Set in the band the scene leaves above the figures, gutter to gutter, and
-   tracked so the line spans the measure. One line at rest: a campaign plate,
-   not a headline column beside a picture. */
+/* ---- THE OPENING'S STATEMENT --------------------------------------------
+   BETWEEN INSTINCT & CONSTRUCTION, set as the thing it describes.
+
+   BETWEEN is not a word of the headline: it is a register mark — mono, small,
+   letter-spaced — the same device the rest of the site uses to frame a
+   statement. INSTINCT is solid ink. CONSTRUCTION is drawn and not filled,
+   using the outlined display face this site already owns (ABERBACH on the
+   home page is set exactly this way), so the pair reads as the felt thing
+   beside the described thing. No new typeface was introduced: the contrast
+   the concept needs already exists in the identity.
+
+   The size is capped against the viewport's height as well as its width, so
+   the block cannot grow into the band the figures stand in. */
 .pf-cinema__title {
   position: absolute; z-index: 5; left: var(--gutter); right: var(--gutter);
-  top: max(8.6rem, 15.4vh);
+  top: max(7.6rem, 13.2vh);
   margin: 0; pointer-events: none;
-  /* Sized in vw with no cap so the two halves keep spanning the measure at
-     every desktop width: the gap between them is the composition, and a
-     capped size turned it into a hole. */
-  font-size: 5.06vw; line-height: .96; letter-spacing: -.055em;
-  text-transform: uppercase; font-variation-settings: 'wdth' 92;
-  display: flex; justify-content: space-between; gap: .4em;
+  display: grid; justify-items: start; gap: max(.5rem, 1.1vh);
 }
-.pf-cinema__title span { display: block; white-space: nowrap; }
+.pf-cinema__between {
+  font-size: clamp(.5rem, .62vw, .68rem);
+  color: var(--ink-soft);
+  padding-left: .18em;
+}
+.pf-cinema__word {
+  /* Capped to the grid's own width. A grid item with `justify-items: start`
+     takes its max-content size, so on a phone "& CONSTRUCTION" sized itself
+     past the gutter instead of wrapping. */
+  display: block; max-width: 100%;
+  font-size: min(9.6vw, 12.6svh);
+  line-height: .84;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pf-cinema__word--solid { color: var(--ink); }
+/* Drawn, not filled. The stroke scales with the type so the line stays a
+   drawing rather than becoming a weight of its own. The word space after the
+   ampersand is a real space, so the statement reads as three words to anything
+   that reads text rather than looks at it, tightened back to the gap the
+   setting wants. */
+.pf-cinema__word--drawn {
+  color: transparent;
+  -webkit-text-stroke: max(1px, .022em) var(--ink);
+  word-spacing: -.14em;
+}
+/* The ampersand stays solid: it is what holds the two halves together. */
+.pf-cinema__word--drawn b {
+  font-weight: inherit;
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+}
 
 .pf-cinema__thesis {
-  position: absolute; z-index: 10; left: var(--gutter); bottom: var(--caption-b); max-width: 27ch;
-  margin: 0; font-size: clamp(.8rem, 1vw, .95rem); line-height: 1.5;
+  position: absolute; z-index: 10; left: var(--gutter); bottom: var(--caption-b);
+  max-width: 46ch; margin: 0;
+  font-size: clamp(.8rem, 1vw, .95rem); line-height: 1.55; color: var(--ink-soft);
 }
 
 .pf-cinema__scroll {
@@ -162,49 +250,87 @@
 @keyframes pf-scroll-cue { 0%,100% { transform: translateX(-110%); } 55% { transform: translateX(250%); } }
 
 /* ---- A CHAPTER COVER -----------------------------------------------------
+   THE CHAPTER'S NAME IS THE HEADLINE. A visitor must know which world they
+   have entered before they read a word of body copy, so WOMENSWEAR / MENSWEAR
+   / DEVELOPMENT / TECH PACKS is the largest thing on the cover and the
+   sentence under it explains what is offered inside. That is the reverse of
+   what this was: a generic line was the headline and the chapter's name was
+   metadata beside a number.
+
    One rule set, four chapters. Womenswear's copy block is the landing frame
-   of the opening's match cut and therefore lives inside the sticky field;
-   the other three are sections of their own. Both carry .pf-cover, so the
-   geometry below is written once and cannot drift apart. */
+   of the opening's match cut and lives inside the sticky field; the other
+   three are sections of their own. Both carry .pf-cover, so the geometry
+   below is written once and cannot drift apart. */
 .pf-cover--section { position: relative; min-height: 100svh; }
 .pf-cover__frame { position: relative; min-height: 100svh; overflow: clip; isolation: isolate; }
-.pf-cover__plate { clip-path: inset(calc(var(--aperture) * 1%) 0); }
+/* Two apertures: the band that opens top and bottom, and — for Development —
+   one that opens from the sides as well, which is a drawing being squared up
+   rather than a camera pushing in. */
+.pf-cover__plate {
+  --aperture-x: 0;
+  clip-path: inset(calc(var(--aperture) * 1%) calc(var(--aperture-x) * 1%));
+}
 
 .pf-cover__copy,
 .pf-women-threshold__copy {
   /* Set against the figure's shoulder line rather than dropped to the foot of
      the screen, so the type block and the subject read as one composition and
      the left field is not split into two distant islands. */
-  position: absolute; z-index: 4; left: var(--gutter); top: 38%;
-  max-width: min(32rem, 40vw);
+  position: absolute; z-index: 4; left: var(--gutter); top: 34%;
+  max-width: min(36rem, 44vw);
 }
-.pf-cover__eyebrow {
-  display: flex; align-items: center; gap: .8rem; margin: 0 0 1.5rem;
-  padding-bottom: .9rem; border-bottom: 1px solid var(--line);
+/* The chapter's colour, once, as a rule above its name. */
+.pf-cover__rule {
+  width: 3.2rem; height: 2px; margin: 0 0 1.1rem;
+  background: var(--accent); transform-origin: left center;
 }
-/* The number carries the chapter's colour, and the chapter's NAME is set in
-   ink immediately beside it — the colour is never the only thing saying which
-   chapter this is. */
-.pf-cover__eyebrow span { color: var(--accent); }
-.pf-cover__line {
+.pf-cover__name {
   margin: 0; color: var(--ink);
-  font-size: clamp(2.8rem, 4.6vw, 5.2rem); line-height: .86; letter-spacing: -.05em;
+  font-size: min(7.4vw, 11svh);
+  line-height: .82; letter-spacing: -.055em; text-transform: uppercase;
+  /* DEVELOPMENT and WOMENSWEAR are longer than the copy column at several
+     widths. A chapter's name broken as DEVELOP / MENT is not an option, so it
+     is allowed to run past the column into the negative space the plate
+     leaves — which is the composition — and never to break.
+     ITS BOX THEREFORE TAKES THE WIDTH OF THE WORD, not of the column: two of
+     the covers reveal their name by clipping it, and a clip follows the box,
+     so a box narrower than the word would cut the word instead of revealing
+     it. The column still governs the statement, which is what the measure is
+     for. */
+  white-space: nowrap;
+  width: max-content;
+  max-width: none;
 }
-.pf-cover__descriptor {
-  max-width: 34ch; margin: 1.4rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.55;
+/* THE ONE COLOURED WORD. `.display em` is aberbach.co's signature — one word
+   of a statement, never a line — and here it takes the chapter's own sampled
+   colour instead of the site's orange. The word is the capability being sold,
+   which is why it is the only thing in the sentence that is not ink. */
+/* Sized so the coloured word is never small text. A garment's own colour is
+   whatever the garment is — the blue suit's cloth sits at 3.09:1 on bone and
+   the aqua gown's at 4.05:1 — and the brief for this system is one faithful
+   token per world with no "safe" darker variant. The way to keep both is to
+   make the word large: at 19px and 600 weight it is large text, where 3:1 is
+   the threshold, so the sampled colours can be used exactly as sampled. */
+.pf-cover__statement {
+  max-width: 28ch; margin: 1.4rem 0 0; color: var(--ink);
+  font-size: clamp(1.18rem, 1.45vw, 1.5rem); line-height: 1.45;
 }
+.pf-cover__statement em {
+  font-style: normal; font-weight: 600; color: var(--accent);
+}
+/* The rule under the way in is an INK hairline, not the chapter's colour. A
+   coloured rule sitting directly beneath words reads as a spell-check mark
+   and is banned from this site's visual language — which the Tech Packs cover
+   proved, since its token is the site's orange. The colour is carried by the
+   arrow, and the rule takes it only on hover, where it is a response rather
+   than a state. */
 .pf-cover__action {
-  display: inline-flex; align-items: center; gap: 1rem; margin-top: 2.2rem; padding-bottom: .6rem;
-  border-bottom: 1px solid var(--accent); color: var(--ink); font-size: .55rem;
+  display: inline-flex; align-items: center; gap: 1rem; margin-top: 2rem; padding-bottom: .6rem;
+  border-bottom: 1px solid var(--line-strong); color: var(--ink); font-size: .55rem;
+  transition: color 300ms ease, border-color 300ms ease;
 }
 .pf-cover__action .arrow { color: var(--accent); }
-.pf-cover__action:is(:hover, :focus-visible) { color: var(--accent); }
-.pf-cover__register {
-  position: absolute; z-index: 4; left: var(--gutter); right: var(--gutter); bottom: 2.2vh;
-  display: flex; justify-content: space-between; gap: 1rem; margin: 0;
-  font-size: .5rem; color: var(--ink-soft);
-}
-.pf-cover__register span:first-child { color: var(--accent); }
+.pf-cover__action:is(:hover, :focus-visible) { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* The landing frame is laid over the opening while it is still invisible, so
    it only takes the pointer — and only joins the focus order, via `inert` —
@@ -221,28 +347,77 @@
 .pf:not(.pf--js) .pf-cover--still { display: block; }
 .pf:not(.pf--js) .pf-women-threshold { display: none; }
 
-/* ---- THE TECH PACK FILE --------------------------------------------------
+/* ---- WOMENSWEAR'S DIALECT: fluid ----------------------------------------
+   The chapter is movement, so its type block is the one that is allowed to
+   travel — it drifts in along the direction the dress's train flows. Its name
+   is the largest of the four and sits lower in the frame, where the skirt's
+   energy leaves the most room. Nothing here is a decorative curve: the
+   difference is crop, scale and direction. */
+.pf-cover--womenswear .pf-cover__copy,
+.pf-women-threshold__copy { top: 37%; }
+.pf-cover--womenswear .pf-cover__name,
+.pf-women-threshold .pf-cover__name { font-size: min(8.2vw, 12svh); }
+
+/* ---- MENSWEAR'S DIALECT: measured ---------------------------------------
+   The grid the layout is already built on, made visible: three hairlines on
+   the measure's thirds. It is the discipline the chapter is selling, and it
+   claims nothing — it is not a pattern drawing and carries no measurements. */
+.pf-cover__grid {
+  position: absolute; z-index: 3; inset: 0 var(--gutter);
+  display: grid; grid-template-columns: repeat(3, 1fr); pointer-events: none;
+}
+.pf-cover__grid i {
+  grid-row: 1; justify-self: end; width: 1px; height: 100%;
+  background: linear-gradient(180deg, transparent, rgb(17 17 15 / 22%) 16%, rgb(17 17 15 / 22%) 84%, transparent);
+  transform-origin: top center;
+}
+/* The type is LOCKED to that grid, which is the whole point of showing it:
+   the name spans two of the three columns and its block ends exactly on the
+   second hairline, the statement measures to the first, and the rule under it
+   runs the full column instead of being a stub. Nothing here floats. */
+.pf-cover--menswear .pf-cover__name { letter-spacing: -.045em; }
+@media (min-width: 1024px) {
+  .pf-cover--menswear { --pf-col: calc((100vw - 2 * var(--gutter)) / 3); }
+  .pf-cover--menswear .pf-cover__copy { max-width: calc(var(--pf-col) * 2); }
+  .pf-cover--menswear .pf-cover__statement { max-width: var(--pf-col); }
+  .pf-cover--menswear .pf-cover__rule { width: var(--pf-col); height: 1px; }
+}
+
+/* ---- DEVELOPMENT'S DIALECT: drawn ---------------------------------------
+   The name is drawn before it is filled. An outlined copy of the word —
+   `data-echo`, a CSS content string, so it never reaches the accessibility
+   tree or the page's text — starts offset and a degree off true and settles
+   onto the solid word as the cover arrives. 2D line becoming a dimensional
+   thing is the chapter's entire subject, and the outline is the same device
+   the opening uses for CONSTRUCTION. */
+.pf-cover__name[data-echo] { position: relative; --echo-x: 0; --echo-y: 0; --echo-r: 0deg; --echo-o: 0; }
+.pf-cover__name[data-echo]::before {
+  content: attr(data-echo);
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  color: transparent; -webkit-text-stroke: 1px var(--accent);
+  opacity: var(--echo-o);
+  transform: translate(calc(var(--echo-x) * 1px), calc(var(--echo-y) * 1px)) rotate(var(--echo-r));
+  transform-origin: left center;
+  pointer-events: none;
+}
+/* Registration ticks: the corner marks a drawing is squared up against. */
+.pf-cover--3d-simulation .pf-cover__rule {
+  width: 4.4rem;
+  background:
+    linear-gradient(90deg, var(--accent) 0 1.6rem, transparent 1.6rem 2rem, var(--accent) 2rem 2.4rem,
+      transparent 2.4rem 2.8rem, var(--accent) 2.8rem 100%);
+}
+
+/* ---- TECH PACKS' DIALECT: paper -----------------------------------------
    A tech pack is not a photograph, it is a document, so this cover stages one
    as an object: the supplied cover sheet at the front of a small file, three
    more sheets behind it, standing in the same zone of the frame the
-   photographic plates stand in. The amber is a signal on one edge and nothing
-   else — the chapter is bone and ink like the rest of the sequence. */
-/* This one is not a plate laid at a scene's aspect, so every part of the
-   shared plate geometry above has to be handed back: the left/margin centring,
-   the 16:9 box, the dissolved edges and the aperture clip. Leaving `left: 50%`
-   standing alongside `right` put the file in the opposite half of the frame,
-   on top of the type. */
+   photographic plates stand in. The orange is a signal on one edge and one
+   arrow — the chapter is bone and ink like the rest of the sequence. */
 .pf-cover__plate--file {
   position: absolute; z-index: 2;
-  /* Held off the right edge far enough that the file's tab has somewhere to
-     come out to, and narrow enough to keep a clear field between it and the
-     type on the left. */
   top: 0; bottom: 0; left: auto; right: clamp(1.5rem, 8vw, 9rem);
   width: min(40vw, 36rem); margin: 0; aspect-ratio: auto;
-  /* Stood on the floor of the frame rather than floated in the middle of it:
-     the three photographic covers put their subject's feet near the foot of
-     the section, and a file centred in the same box left a dead band between
-     itself and the chapter's contents. */
   display: grid; align-content: end;
   padding-bottom: clamp(3.5rem, 11vh, 8rem);
   clip-path: none;
@@ -251,20 +426,13 @@
 }
 .pf-file {
   --spread: 0;
-  position: relative; aspect-ratio: 1200 / 849;
-  /* The cover's aperture, spoken in this cover's own language: the file rises
-     into the frame on exactly the scrub the other three plates open on. */
-  margin-top: calc(var(--aperture) * 0.55vh);
+  position: relative; aspect-ratio: 1199 / 848;
   transform-style: preserve-3d;
   transform:
     rotateY(var(--lean-x, 0deg)) rotateX(var(--lean-y, 0deg))
     translate3d(var(--lean-px, 0px), var(--lean-py, 0px), 0);
   transition: transform 640ms var(--ease);
 }
-
-/* The sheets behind. Fanned up and to the right at rest, so the file has
-   depth standing still, and stepped further apart — with a stagger, back
-   sheet last — when the chapter is given attention. */
 .pf-file__sheet {
   position: absolute; inset: 0;
   background: #f8f3ed;
@@ -272,16 +440,10 @@
   box-shadow: 0 8px 20px -18px rgb(17 17 15 / 50%);
   transition: transform 660ms var(--ease);
 }
-/* A ruled block, only ever glimpsed at the edge — enough that the sheets read
-   as pages of a document rather than as blank cards. */
 .pf-file__sheet::after {
   content: ''; position: absolute; inset: 14% 8% 18% 10%;
   background: repeating-linear-gradient(180deg, rgb(17 17 15 / 7%) 0 1px, transparent 1px 9px);
 }
-/* The fan runs straight up, with the rotations alternating so the file reads
-   as loosely stacked paper rather than a mechanical ladder — and so nothing
-   travels sideways off the edge of the frame, which is what the earlier
-   up-and-right fan did. */
 .pf-file__sheet--b {
   transform: translateY(calc(-3% - var(--spread) * 4.4%)) rotate(calc(-.5deg - var(--spread) * .5deg));
   transition-delay: 0ms;
@@ -294,12 +456,6 @@
   transform: translateY(calc(-9% - var(--spread) * 13.2%)) rotate(calc(-1.05deg - var(--spread) * 1.1deg));
   transition-delay: 120ms;
 }
-
-/* The file's own tab, behind the front page until the file opens. */
-/* The file's own tab, flush behind the front page and drawn out by exactly
-   its own width, so what is revealed is the whole label and not its last
-   four letters. Amber appears here and on the arrow, and nowhere else in the
-   chapter. */
 .pf-file__tab {
   position: absolute; bottom: 14%; right: 0;
   padding: .5rem .85rem; background: #f8f3ed;
@@ -310,9 +466,6 @@
   transition: transform 700ms var(--ease), opacity 460ms ease;
   transition-delay: 40ms;
 }
-
-/* The front page: a real sheet, with a paper edge and a shadow that deepens
-   as it lifts off the ones behind it. Never a flat screenshot. */
 .pf-file__front {
   position: relative; display: block; margin: 0; overflow: hidden;
   background: var(--paper-bright);
@@ -324,188 +477,95 @@
   transition: transform 640ms var(--ease), box-shadow 640ms var(--ease);
 }
 .pf-file__front img { display: block; width: 100%; height: auto; }
-/* The document's own right edge, caught by the light as the page lifts. */
 .pf-file__front::after {
   content: ''; position: absolute; inset: 0 0 0 auto; width: 3px;
   background: linear-gradient(90deg, rgb(17 17 15 / 10%), transparent);
   opacity: calc(var(--spread) * .9);
   transition: opacity 520ms ease;
 }
-/* The trigger is the FILE, not the screen. Scoped to the whole cover, a
-   pointer resting anywhere in a full-height section — including the far side,
-   over the type — held the file open permanently, which is not a response to
-   attention, it is a default. Keyboard focus is carried by an attribute the
-   runtime sets when something inside the cover takes visible focus, so the
-   same state is reachable without a pointer and without :has(). */
+/* The trigger is the FILE, not the screen. Keyboard focus is carried by an
+   attribute the runtime sets when something inside the cover takes visible
+   focus, so the same state is reachable without a pointer. */
 .pf-file:hover { --spread: 1; }
 .pf-cover--tech-packs[data-file-open] .pf-file { --spread: 1; }
 
-/* ---- what is inside a chapter -------------------------------------------
-   The cover hands straight over to the chapter's real sections, named from
-   the chapter's own content. This is the "content follows the cover" half of
-   the sequence, and it is the same object under all four covers. */
-.pf-contents {
-  /* The studio floor the plates stand on, sampled from all three supplied
-     scenes — they agree to within a unit or two, so one value serves. */
-  --floor: #fbefee;
-  position: relative; color: var(--ink);
-  padding: clamp(3.4rem, 7vh, 5.5rem) var(--gutter) clamp(3.8rem, 9vh, 6.5rem);
-}
-/* A plate is anchored below the foot of its own section, so its dissolved
-   bottom edge never finishes on screen and the section boundary showed as a
-   hard line where the lit studio floor met the page. The rail under it opens
-   with that floor and lets it recede into the ground over a few rem, which is
-   the same device the plates use on their own edges — a photograph dissolving
-   into the page rather than being cut out of it. */
-.pf-contents--floor::before {
-  content: ''; position: absolute; left: 0; right: 0; top: 0;
-  height: clamp(3.5rem, 8vh, 6rem); pointer-events: none;
-  background: linear-gradient(180deg, var(--floor), var(--bone));
-}
-.pf-contents__head {
-  position: relative; z-index: 1;
-  display: flex; justify-content: space-between; gap: 1rem;
-  margin: 0 0 1.2rem; font-size: .55rem;
-}
-.pf-contents__head span:last-child { color: var(--muted); }
-/* A list, and only a row of columns where a row of columns fits WITHOUT
-   orphaning. Five categories across four tracks left the fifth alone on a
-   second line under a hairline that stopped a quarter of the way across the
-   page, which reads as a mistake rather than as a wrap. Below 1300 the rail
-   is one column, which is what it is. */
-.pf-contents__list { list-style: none; margin: 0; padding: 0; display: grid; }
-@media (min-width: 1300px) {
-  .pf-contents__list {
-    grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
-    column-gap: clamp(1rem, 2.4vw, 2.4rem);
-  }
-}
-.pf-contents__list li { margin: 0; min-width: 0; }
-.pf-contents__list a {
-  display: grid; grid-template-columns: 1.9rem minmax(0, 1fr) .9rem; align-items: center; gap: .75rem;
-  padding: 1.1rem 0; border-top: 1px solid var(--line-strong);
-  color: var(--ink); font-size: clamp(.92rem, 1.15vw, 1.1rem); line-height: 1.2;
-  transition: color 320ms ease, padding-left 420ms var(--ease);
-}
-.pf-contents__list a .label { color: var(--muted); font-size: .5rem; }
-.pf-contents__list a i { display: flex; opacity: 0; transition: opacity 320ms ease; }
-.pf-contents__list a .arrow { color: var(--signal); }
-.pf-contents__list a:is(:hover, :focus-visible) { padding-left: .4rem; }
-.pf-contents__list a:is(:hover, :focus-visible) i { opacity: 1; }
-.pf-contents__state {
-  margin: 1.6rem 0 0; max-width: 62ch; color: var(--muted); font-size: .5rem; line-height: 1.7;
-}
-
-/* ---- the ending ----------------------------------------------------------
-   The sequence closes on its own index: the four chapters listed once, at the
-   end, where a contents page belongs in a book. It is deliberately not a stop
-   in the middle of the journey. */
+/* ---- THE ENDING ---------------------------------------------------------
+   The visitor has been through all four worlds. Repeating them as a directory
+   would explain the journey they just took, so the ending resolves it instead:
+   one line, in the site's own voice, with the site's own single coloured word,
+   and one thing to do next. */
 .pf-outro {
   position: relative; color: var(--ink);
-  padding: clamp(4.5rem, 11vh, 8rem) var(--gutter) clamp(5rem, 12vh, 8.5rem);
+  display: grid; justify-items: start; align-content: center;
+  min-height: 78svh;
+  padding: clamp(4rem, 10vh, 7rem) var(--gutter);
 }
-.pf-outro__eyebrow {
-  display: flex; justify-content: space-between; gap: 1rem;
-  margin: 0 0 1.5rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line-strong);
-  font-size: .55rem;
-}
-.pf-outro__eyebrow span:last-child { color: var(--muted); }
+.pf-outro__rule { width: 3.2rem; height: 2px; margin: 0 0 2rem; background: var(--signal); }
 .pf-outro__title {
-  margin: 0; font-size: clamp(2.6rem, 5.4vw, 5.6rem); line-height: .88; letter-spacing: -.055em;
+  margin: 0; font-size: min(7vw, 10.5svh); line-height: .86; letter-spacing: -.055em;
 }
-.pf-outro__lead {
-  max-width: 44ch; margin: 1.5rem 0 0; color: var(--ink-soft);
-  font-size: clamp(.86rem, 1.05vw, 1rem); line-height: 1.6;
-}
+.pf-outro__title em { font-style: normal; color: var(--signal); }
 .pf-outro__brief { margin-top: clamp(2.5rem, 5vh, 3.5rem); }
 
-.pf-living-index { margin: clamp(3rem, 6vh, 4.5rem) 0 0; }
-.pf-living-index ol { list-style: none; padding: 0; margin: 0; }
-.pf-living-index li { margin: 0; }
-.pf-index-row {
-  display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; grid-template-rows: auto auto;
-  align-items: center; column-gap: .85rem; min-height: clamp(4.4rem, 8.6vh, 5.8rem);
-  border-top: 1px solid var(--line-strong); color: rgb(17 17 15 / 72%);
-  transition: color 360ms ease, padding-left 450ms var(--ease);
+/* ---- THE ONE PORTFOLIO CONTROL ------------------------------------------
+   Where you are, and the four places you can be. It replaces the cover
+   register, the edge rail, the four contents rails and the ending's
+   directory: this is the only thing in the journey that numbers anything. */
+.pf-where {
+  position: fixed; z-index: 40; right: var(--gutter); bottom: max(1.4rem, 3.2vh);
+  opacity: 0; pointer-events: none;
+  transition: opacity 480ms var(--ease);
 }
-.pf-living-index li:last-child .pf-index-row { border-bottom: 1px solid var(--line-strong); }
-.pf-index-row__number { grid-column: 1; grid-row: 1 / 3; font-size: .56rem; color: inherit; }
-.pf-index-row__title {
-  grid-column: 2; grid-row: 1 / 3; font-size: clamp(1.6rem, 2.8vw, 2.9rem);
-  line-height: .92; letter-spacing: -.06em;
+.pf-where[data-live='true'] { opacity: 1; pointer-events: auto; }
+.pf-where__now {
+  display: flex; align-items: center; gap: .7rem;
+  margin: 0; padding: .62rem .8rem;
+  background: color-mix(in srgb, var(--bone) 88%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--line); border-radius: 0;
+  color: var(--ink); font-size: .5rem; cursor: pointer;
 }
-.pf-index-row__note {
-  grid-column: 3; grid-row: 1; align-self: end; max-width: 20ch; font-size: .62rem; line-height: 1.25;
-  opacity: .0; transform: translateY(.35rem); transition: opacity 320ms ease, transform 420ms var(--ease);
+.pf-where__count { color: var(--accent); }
+.pf-where__caret {
+  width: .4rem; height: .4rem; margin-left: .2rem;
+  border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
+  transform: rotate(-45deg); transition: transform 360ms var(--ease);
 }
-.pf-index-row__action {
-  grid-column: 3; grid-row: 2; align-self: start; display: flex; align-items: center; justify-content: flex-end;
-  gap: .65rem; margin-top: .25rem; font-size: .48rem; opacity: 0; transition: opacity 320ms ease;
+.pf-where[data-open] .pf-where__caret { transform: rotate(135deg); }
+.pf-where__list {
+  list-style: none; margin: 0; padding: 0;
+  position: absolute; right: 0; bottom: calc(100% + .45rem);
+  display: grid; min-width: 11.5rem;
+  background: var(--paper-bright); border: 1px solid var(--line);
+  opacity: 0; transform: translateY(.4rem); pointer-events: none;
+  transition: opacity 300ms ease, transform 360ms var(--ease);
 }
-.pf-index-row__action .arrow { color: var(--accent, var(--signal)); }
-.pf-index-row:is(:hover, :focus-visible) { color: var(--ink); padding-left: .45rem; }
-.pf-index-row:is(:hover, :focus-visible) .pf-index-row__number { color: var(--accent, var(--signal)); }
-.pf-index-row:is(:hover, :focus-visible) :is(.pf-index-row__note, .pf-index-row__action) {
-  opacity: 1; transform: none;
+.pf-where[data-open] .pf-where__list { opacity: 1; transform: none; pointer-events: auto; }
+.pf-where__list li { margin: 0; }
+.pf-where__list a {
+  display: grid; grid-template-columns: 1.9rem 1fr; align-items: center; gap: .5rem;
+  padding: .66rem .8rem; color: var(--ink-soft); font-size: .72rem;
+  border-bottom: 1px solid var(--line);
 }
-
-/* ---- the position marker -------------------------------------------------
-   Not an index: four numbers at the edge of the page saying where in the
-   sequence the reader is. The names are there for a pointer and for a screen
-   reader, and are held back until one of the two asks. */
-.pf-rail {
-  position: fixed; z-index: 40; right: 0; top: 50%; transform: translateY(-50%);
-  padding: 0 clamp(.7rem, 1.2vw, 1.3rem);
-  opacity: 0; pointer-events: none; transition: opacity 560ms var(--ease);
-}
-.pf-rail[data-live='true'] { opacity: 1; pointer-events: auto; }
-.pf-rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; justify-items: end; }
-.pf-rail li { margin: 0; }
-.pf-rail a {
-  display: flex; align-items: center; justify-content: flex-end; gap: .55rem;
-  padding: .2rem 0; color: var(--muted); font-size: .47rem;
-}
-.pf-rail__n { position: relative; padding-left: 1.7rem; }
-.pf-rail__n::before {
-  content: ''; position: absolute; left: 0; top: 50%; width: 1.1rem; height: 1px;
-  background: var(--line-strong); transition: width 420ms var(--ease), background 420ms ease;
-}
-.pf-rail__name {
-  max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
-  transition: max-width 520ms var(--ease), opacity 380ms ease;
-}
-/* The chapter being read is marked by ink and by a longer tick in its own
-   colour, not by its name: a name standing open here is 145px of type at the
-   edge of the frame, and on the Tech Packs cover it landed on the document.
-   The names arrive on hover, and are in the accessibility tree throughout. */
-.pf-rail a[aria-current] { color: var(--ink); }
-.pf-rail a[aria-current] .pf-rail__n::before { width: 2.3rem; background: var(--accent); }
-.pf-rail a:is(:hover, :focus-visible) { color: var(--ink); }
-.pf-rail:hover a .pf-rail__name,
-.pf-rail a:is(:hover, :focus-visible) .pf-rail__name { max-width: 11rem; opacity: 1; }
+.pf-where__list li:last-child a { border-bottom: 0; }
+.pf-where__n { color: var(--muted); font-size: .48rem; }
+.pf-where__list a[aria-current] { color: var(--ink); }
+.pf-where__list a[aria-current] .pf-where__n { color: var(--accent); }
+.pf-where__list a:is(:hover, :focus-visible) { color: var(--ink); background: var(--bone); }
 /* A chapter is open over the page; its own navigation is the one in play. */
-body.no-scroll .pf-rail { display: none; }
+body.no-scroll .pf-where { display: none; }
 
 /* ---- narrow desktop: a boxier viewport needs a taller scene --------------
    At 1440 a plate's own empty top meets the type exactly. A 1024-wide window
-   is much boxier, so the same 100%-wide plate is short and leaves a dead band
-   of page bone under the type while its feet fall behind the captions.
-   Widening the plate raises the figures and drops their feet clear. */
+   is much boxier, so the same plate is short and leaves a dead band of page
+   bone under the type while its feet fall behind the captions. Widening the
+   plate raises the figures and drops their feet clear. The opening keeps its
+   height cap on top of this: the band above the figures is reserved there at
+   every viewport, not just wide ones. */
 @media (min-width: 1024px) and (max-width: 1199px) {
-  .pf-cinema, .pf-cover { --scene-w: 114%; --scene-drop: -0.7%; --caption-b: 2.6vh; }
-  .pf-cinema__title { top: max(8.6rem, 16.5vh); }
+  .pf-cover { --scene-w: 114%; --scene-drop: -0.7%; }
+  .pf-cinema { --scene-w: min(114%, 106svh); --scene-drop: -3.4%; }
   .pf-cover__plate--file { width: 44vw; }
-}
-
-/* The marker holds the last ~4rem of the frame. Nothing in the sequence is
-   allowed to run underneath it: the fifth category of Womenswear and the
-   Tech Packs document both reached it before this. */
-@media (min-width: 1100px) {
-  .pf-contents, .pf-outro { padding-right: calc(var(--gutter) + 3.4rem); }
-  .pf-cover__register { right: calc(var(--gutter) + 3.4rem); }
-}
-@media (max-width: 1099px) {
-  .pf-rail { display: none; }
 }
 
 /* Below a desk the file has no room to draw its tab out: at 768 the tab's
@@ -515,21 +575,18 @@ body.no-scroll .pf-rail { display: none; }
   .pf-file__tab { display: none; }
 }
 
-/* ---- tablet: the statement stacks, the scene widens --------------------- */
+/* ---- tablet --------------------------------------------------------------
+   The statement keeps its three-part structure; only its scale changes. */
 @media (max-width: 1023px) {
-  .pf-cinema, .pf-cover { --scene-w: 116%; --scene-drop: -3%; }
-  .pf-cinema__title {
-    display: block; top: max(8.2rem, 13.5vh);
-    font-size: min(9.5vw, 5rem); line-height: 1.02; letter-spacing: -.05em;
-  }
-  /* Each half is its own line here, so the ampersand always travels with the
-     word it belongs to instead of being left alone on a line of its own. */
-  .pf-cinema__title span { display: block; white-space: normal; }
-  .pf-cover__copy, .pf-women-threshold__copy { max-width: 52vw; top: 40%; }
+  .pf-cover { --scene-w: 116%; --scene-drop: -3%; }
+  .pf-cinema { --scene-w: min(116%, 112svh); --scene-drop: -3%; }
+  .pf-cinema__title { top: max(7.4rem, 11vh); }
+  .pf-cover__copy, .pf-women-threshold__copy { max-width: 56vw; top: 38%; }
+  .pf-cover--womenswear .pf-cover__copy, .pf-women-threshold__copy { top: 40%; }
   .pf-cover__plate--file { width: 46vw; right: clamp(1.1rem, 4vw, 3rem); }
-  .pf-index-row__title { font-size: clamp(1.5rem, 3.4vw, 2.4rem); }
-  .pf-index-row__note { display: none; }
-  .pf-index-row__action { grid-row: 1 / 3; align-self: center; }
+  /* Three hairlines in a narrow measure read as a cage; two is the rhythm. */
+  .pf-cover__grid { grid-template-columns: repeat(2, 1fr); }
+  .pf-cover__grid i:last-child { display: none; }
 }
 
 /* A portrait tablet is a 3:4 hole for a 16:9 plate. The scene is widened to
@@ -537,35 +594,41 @@ body.no-scroll .pf-rail { display: none; }
    the floor to sit under the statement, so the upper half is one type block
    instead of a headline floating over an empty field. */
 @media (max-width: 1023px) and (orientation: portrait) {
-  .pf-cinema, .pf-cover { --scene-w: 128%; --scene-drop: 1.7%; --caption-b: 2.2vh; }
-  .pf-cinema__title { top: max(8.2rem, 17vh); }
-  /* The subject is panned left into this format, so the cover copy narrows to
-     keep off the garment. */
-  .pf-cover__copy, .pf-women-threshold__copy { max-width: 44vw; }
-  .pf-cinema__thesis { top: 35vh; bottom: auto; right: var(--gutter); max-width: 30ch; }
+  .pf-cover { --scene-w: 128%; --scene-drop: 1.7%; }
+  .pf-cinema { --scene-w: min(128%, 112svh); --scene-drop: 1.7%; --caption-b: 2.2vh; }
+  .pf-cover__copy, .pf-women-threshold__copy { max-width: 46vw; }
+  .pf-cinema__thesis { top: 34vh; bottom: auto; right: var(--gutter); max-width: 34ch; }
 }
 
 /* ---- a hand: a poster, not a shrunken desk --------------------------------
    A full-length figure inside a 16:9 frame cannot be large on a 390px screen,
    so the phone is composed the other way round: the type is the large element
    and the subject stands beneath it as a band, at more than full width so the
-   figure gains what height the format allows. The cover's copy therefore
-   moves to the foot of the frame, under the plate, and the plate rides high. */
+   figure gains what height the format allows. A cover's copy therefore moves
+   to the foot of the frame, under the plate, and the plate rides high. */
 @media (max-width: 767px) {
-  .pf-cinema, .pf-cover { --scene-w: 128%; --scene-drop: 14%; }
+  .pf-cover { --scene-w: 128%; --scene-drop: 14%; }
+  .pf-cinema { --scene-w: 128%; --scene-drop: 14%; }
   .js .pf-cinema { height: 225svh; }
   .pf-cinema__folio { top: 5.9rem; font-size: .47rem; }
   .pf-cinema__folio span:last-child { display: none; }
 
-  /* Sized so the longest line, "& CONSTRUCTION", sits inside the measure at
-     390 rather than running past the gutter. */
-  .pf-cinema__title {
-    display: block; left: 1.1rem; right: 1.1rem; top: 10.4rem;
-    font-size: min(10.7vw, 3.4rem); line-height: .94; letter-spacing: -.055em;
-  }
-  .pf-cinema__title span { display: block; white-space: normal; }
+  /* Sized so the longest word, CONSTRUCTION, sits inside the measure at 390
+     rather than running past the gutter. The three parts stay stacked, which
+     is the composition they were designed as. */
+  .pf-cinema__title { left: 1.1rem; right: 1.1rem; top: 8.4rem; gap: .45rem; }
+  /* Sized from CONSTRUCTION, the longest token, so it sits inside the measure
+     at 390 instead of being clipped by the frame. The ampersand is allowed to
+     take its own line here: BETWEEN / INSTINCT / & / CONSTRUCTION is the
+     stacked form of the same statement, and the & is its hinge. */
+  .pf-cinema__word { font-size: min(11.8vw, 2.9rem); line-height: .86; white-space: normal; }
+  /* There is no space between the ampersand and the word it belongs to — it
+     is one token, which is why capping the width could not make it wrap. On a
+     phone the ampersand takes its own line, and BETWEEN / INSTINCT / & /
+     CONSTRUCTION is the stacked form of the same statement. */
+  .pf-cinema__word--drawn b { display: block; }
   .pf-cinema__thesis {
-    left: 1.1rem; right: 1.1rem; top: 38vh; bottom: auto; max-width: 26ch; font-size: .72rem;
+    left: 1.1rem; right: 1.1rem; top: 33vh; bottom: auto; max-width: 34ch; font-size: .74rem;
   }
   .pf-cinema__scroll { right: 1.1rem; bottom: 7%; font-size: .45rem; }
   .pf-cinema__scroll span { display: none; }
@@ -573,7 +636,7 @@ body.no-scroll .pf-rail { display: none; }
 
   .pf-cover--section {
     min-height: 92svh;
-    /* The zoom, and therefore the window it leaves on the plate: 1 / 1.95 of
+    /* The zoom, and therefore the window it leaves on the plate: 1 / 1.68 of
        the frame, whatever the phone's width. The furthest right a subject can
        sit and still keep that window inside the plate is half a window in
        from the edge, which is what --subject-max is. */
@@ -588,73 +651,80 @@ body.no-scroll .pf-rail { display: none; }
      centred, and stands the type underneath. */
   .pf-cover__plate:not(.pf-cover__plate--file) {
     left: auto; margin: 0;
-    /* Stood high enough that the tallest cover's type block — Pattern
-       Development's, three lines of descriptor at 390 — clears the foot of
-       the plate instead of being set across the garment. */
-    bottom: 42%;
+    /* Stood high enough that the tallest type block clears the foot of the
+       plate instead of being set across the garment. */
+    bottom: 46%;
     right: calc(50% + var(--scene-w) * (min(var(--subject), var(--subject-max)) - 1));
   }
-  .pf-cover__copy, .pf-women-threshold__copy {
-    left: 1.1rem; right: 1.1rem; top: auto; bottom: 3.4rem; max-width: none;
+  /* Clear of the chapter control, which sits at the foot of the screen on a
+     phone: the way in and the control were reading as two stacked bars. */
+  .pf-cover__copy, .pf-women-threshold__copy,
+  .pf-cover--womenswear .pf-cover__copy {
+    left: 1.1rem; right: 1.1rem; top: auto; bottom: 5.4rem; max-width: none;
   }
-  .pf-cover__line { font-size: clamp(2.6rem, 11.6vw, 3.4rem); line-height: .86; }
-  .pf-cover__descriptor { max-width: 32ch; font-size: .72rem; }
-  .pf-cover__action { margin-top: 1.3rem; font-size: .48rem; }
-  .pf-cover__register { display: none; }
+  .pf-cover__rule { width: 2.4rem; margin-bottom: .8rem; }
+  /* Sized from WOMENSWEAR, the longest of the four names. */
+  .pf-cover__name,
+  .pf-cover--womenswear .pf-cover__name,
+  .pf-women-threshold .pf-cover__name { font-size: min(12vw, 3rem); }
+  .pf-cover__statement { max-width: 32ch; margin-top: 1rem; font-size: .84rem; }
+  .pf-cover__action { margin-top: 1.2rem; font-size: .48rem; }
+  /* A grid of hairlines is noise at this width; the chapter's measure is the
+     screen. */
+  .pf-cover__grid { display: none; }
+  .pf-cover__name[data-echo]::before { -webkit-text-stroke-width: .8px; }
 
   /* The phone's Tech Packs cover: the file is the band the other covers give
      their figure, and the type block sits under it exactly as it does there. */
   .pf-cover__plate--file {
-    top: 22%; bottom: auto; left: 1.1rem; right: 1.1rem;
+    top: 20%; bottom: auto; left: 1.1rem; right: 1.1rem;
     width: auto; max-width: 26rem; margin-inline: auto; padding-bottom: 0;
   }
 
+  .pf-outro { min-height: 70svh; }
+  .pf-outro__title { font-size: min(13vw, 3.2rem); }
 
-  .pf-contents__head { font-size: .47rem; }
-  .pf-contents__list a { padding: .95rem 0; font-size: .95rem; }
-  .pf-contents__list a i { opacity: 1; }
-
-  .pf-outro__title { font-size: clamp(2.3rem, 11vw, 3.2rem); }
-  .pf-index-row {
-    grid-template-columns: 1.7rem minmax(0, 1fr) 1rem; min-height: clamp(3.75rem, 9.6vh, 4.6rem); padding: 0;
+  /* A touch target, not a hover affordance: it sits at the foot of the screen
+     with a full-width sheet of chapters above it. */
+  .pf-where { left: 1.1rem; right: 1.1rem; bottom: 1.1rem; }
+  /* 44px, and the full width of the foot: the bar and the sheet of chapters
+     that opens above it are the same object, so they take the same measure. */
+  .pf-where__now {
+    justify-content: space-between; width: 100%; min-height: 2.75rem;
+    padding: 0 .9rem; font-size: .52rem;
   }
-  .pf-index-row__title { font-size: clamp(1.32rem, 6.1vw, 1.68rem); white-space: nowrap; }
-  .pf-index-row__action { grid-column: 3; grid-row: 1 / 3; align-self: center; font-size: 0; opacity: 1; }
-  .pf-index-row__action .arrow { width: .75rem; height: .75rem; }
-  .pf-index-row:is(:hover, :focus-visible) { padding-left: .25rem; }
+  .pf-where__list { left: 0; right: 0; min-width: 0; }
+  .pf-where__list a { padding: .95rem .9rem; font-size: .82rem; }
 }
 
 /* Landscape on a small device: the viewport is shorter than a plate would be
    at full width, so the plate is sized from the height instead and the
    opening's thesis steps back. */
 @media (max-width: 1023px) and (orientation: landscape) {
-  .pf-cinema, .pf-cover { --scene-w: min(100%, 118svh); --scene-drop: -8%; --caption-b: 1.4vh; }
-  .pf-cinema__title { top: max(5.6rem, 9vh); font-size: min(4.6vw, 2.8rem); }
+  .pf-cover { --scene-w: min(100%, 112svh); --scene-drop: -8%; }
+  .pf-cinema { --scene-w: min(100%, 112svh); --scene-drop: -8%; --caption-b: 1.4vh; }
+  .pf-cinema__title { top: max(5.2rem, 8vh); }
+  .pf-cinema__word { font-size: min(7vw, 15svh); }
   .pf-cinema__thesis { display: none; }
-  .pf-cover__copy, .pf-women-threshold__copy { top: 30%; max-width: 46vw; }
-  .pf-cover__line { font-size: min(5.6vw, 3rem); }
+  .pf-cover__copy, .pf-women-threshold__copy { top: 26%; max-width: 46vw; }
+  .pf-cover__name { font-size: min(6.4vw, 15svh); }
   .pf-cover__plate--file { width: 40vw; }
 }
 
 /* ---- no motion -----------------------------------------------------------
    There is no camera move to make, so the opening is laid out at once as one
-   static spread — the practice statement beside the master plate — and the
-   Womenswear chapter takes the same still cover the other three have. Every
-   frame is open: nothing is left waiting for a scrub that will not run. */
+   static spread and the Womenswear chapter takes the same still cover the
+   other three have. Every frame is open: nothing is left waiting for a scrub
+   that will not run. */
 @media (prefers-reduced-motion: reduce) {
   .js .pf-cinema { height: 100svh; }
   .js .pf-cinema__sticky { position: relative; height: 100svh; }
-  /* The plate stays full bleed. It used to be shrunk into the right-hand half
-     to make room for the chapter list beside it; the list is the ending's now,
-     so the opening is simply its own first frame, held still — the same
-     composition a visitor with motion sees before they scroll. */
   .pf-scene--master { opacity: 1; }
-  /* The cue still says what to do; it just stops moving. */
   .pf-cinema__scroll i::after { animation: none; transform: none; width: 100%; }
   .pf-women-threshold { display: none; }
   .pf-cover--still { display: block; }
-  .pf-cover__plate { --aperture: 0; }
+  .pf-cover__plate { --aperture: 0; --aperture-x: 0; }
+  .pf-cover__name[data-echo] { --echo-o: 0; }
   .pf-file, .pf-file__sheet, .pf-file__front, .pf-file__tab,
-  .pf-contents__list a, .pf-index-row, .pf-rail, .pf-rail a * { transition: none; }
+  .pf-where, .pf-where__list, .pf-where__caret { transition: none; }
 }
-

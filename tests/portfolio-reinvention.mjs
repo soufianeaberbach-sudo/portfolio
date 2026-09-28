@@ -37,7 +37,10 @@ try {
   }
   await page.locator('.pf-outro').scrollIntoViewIfNeeded();
   await page.waitForTimeout(700);
-  check(await page.locator('.pf-outro [data-index-row]').count()===4,'the ending lists the four chapters');
+  /* The ending resolves the journey instead of repeating it: one line, one
+     word in the site's signal, one way on. It is no longer a directory. */
+  check(await page.locator('.pf-outro a').count()===1,'the ending offers one way on, not a directory');
+  check((await page.locator('.pf-outro__title').innerText()).replace(/\s+/g,' ').trim()==='One practice. From design to production.','the ending states the practice');
   await shot('ending');
   for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
