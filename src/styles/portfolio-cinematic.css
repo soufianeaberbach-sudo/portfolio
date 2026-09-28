@@ -2,13 +2,34 @@
    One image field changes role: campaign plate → living index → Womenswear. */
 
 .pf-cinema {
+  /* The scene's own studio bone, sampled from the supplied plates, so the
+     photograph has no rectangle: the figures stand in the page. The scene
+     layers are always at least full width, so there is never a vertical
+     seam; the horizontal ones are dissolved by the mask below. */
+  --bone: #eee1da;
+  --scene-w: 100%;
+  --scene-drop: -4%;
+  /* The caption band sits in the scene's own empty floor, below the figures.
+     It is tuned per width because the scene's height follows its width while
+     the field's does not, so the floor is a different depth at each size. */
+  --caption-b: 3.4vh;
+  --women-accent: #c83d46;
   --register-y: 18%;
+  /* 0 = full bleed, 1 = fitted to the index's preview field. Scrubbed by the
+     timeline so the plate that was cropped to the viewport becomes the WHOLE
+     plate inside the framed field — otherwise a scene wider than the field
+     kept its crop when the field shrank and cut the figures' heads off. The
+     dissolved edges close over the same move, because a framed plate wants a
+     hard edge and a full-bleed one does not. */
+  --scene-fit: 0;
+  --fit-w: calc(var(--scene-w) + (100% - var(--scene-w)) * var(--scene-fit));
+  --fit-soft: calc(4.5% * (1 - var(--scene-fit)));
   position: relative;
   min-height: 100svh;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--bone);
 }
-.js .pf-cinema { height: 290svh; }
+.js .pf-cinema { height: 300svh; }
 .pf-cinema__sticky { position: relative; min-height: 100svh; overflow: clip; isolation: isolate; }
 .js .pf-cinema__sticky { position: sticky; top: 0; height: 100svh; }
 .pf-cinema__entry-anchor { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; }
@@ -18,45 +39,81 @@
   display: flex; justify-content: space-between; margin: 0; font-size: .57rem;
 }
 
+/* ---- the one image plane ------------------------------------------------ */
+
 .pf-cinema__media {
-  position: absolute; z-index: 2; left: 11.5%; top: 15%; width: 78%; height: 64%; overflow: hidden;
-  background: #dcd6cc; will-change: left, top, width, height;
+  position: absolute; z-index: 2; inset: 0; overflow: hidden;
+  will-change: left, top, width, height;
 }
+
+/* A SCENE is a supplied plate laid at its own aspect and anchored low, so the
+   figures stand near the foot of the screen and the band they leave above
+   them is the title's. The top and bottom edges are dissolved into the page
+   ground, which is why the plate never reads as a pasted rectangle at any
+   viewport height. */
+.pf-scene {
+  position: absolute; left: 50%; bottom: calc(var(--scene-drop) * (1 - var(--scene-fit)));
+  width: var(--fit-w);
+  aspect-ratio: 1672 / 941;
+  /* Centred with a margin, NOT with `translate`. GSAP folds the independent
+     `translate` property into the transform it writes, so the first tween to
+     set `xPercent` silently discarded the centring and the plate jumped half
+     a frame to the right at the end of the cut. A margin is outside the
+     transform entirely, which also makes `xPercent` mean exactly "percent of
+     this plate's width" from its resting position. */
+  margin: 0 0 0 calc(var(--fit-w) * -0.5);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--fit-soft), #000 calc(100% - var(--fit-soft)), transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 var(--fit-soft), #000 calc(100% - var(--fit-soft)), transparent 100%);
+}
+.pf-scene img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Each plate turns about the woman in red — her centre in ITS own frame —
+   so a scale applied to both pins her to one point on screen through the
+   whole push-in. Measured from the supplied files, not estimated. */
+.pf-scene--master { transform-origin: 26.4% 48.65%; z-index: 1; }
+.pf-scene--women { transform-origin: 75.85% 49.3%; z-index: 2; opacity: 0; }
+
+/* The chapter plates are the index's preview field: one of them replaces the
+   master plate only while a chapter row has attention. */
 .pf-cinema__visual {
-  position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 520ms var(--ease);
+  position: absolute; inset: 0; z-index: 3; margin: 0; opacity: 0;
+  transition: opacity 520ms var(--ease);
 }
 .pf-cinema__visual img {
-  width: 100%; height: 100%; object-fit: cover; transform: scale(1.01); transition: transform 900ms var(--ease);
+  width: 100%; height: 100%; object-fit: cover; transform: scale(1.01);
+  transition: transform 900ms var(--ease);
 }
-.pf-cinema__visual--tech-packs { background: #d9d4ca; }
+.pf-cinema__visual--tech-packs { background: #e7e0d6; }
 .pf-cinema__visual--tech-packs img { object-fit: contain; padding: clamp(1rem, 3vw, 3rem); }
-.pf-cinema[data-active-chapter='womenswear'] .pf-cinema__visual--womenswear,
-.pf-cinema[data-active-chapter='menswear'] .pf-cinema__visual--menswear,
-.pf-cinema[data-active-chapter='tech-packs'] .pf-cinema__visual--tech-packs,
-.pf-cinema[data-active-chapter='3d-simulation'] .pf-cinema__visual--3d-simulation { opacity: 1; }
-.pf-cinema[data-active-chapter] .pf-cinema__visual:is(.pf-cinema__visual--womenswear,.pf-cinema__visual--menswear,.pf-cinema__visual--3d-simulation) img { transform: scale(1.025); }
+.pf-cinema[data-phase='index'][data-active-chapter='womenswear'] .pf-cinema__visual--womenswear,
+.pf-cinema[data-phase='index'][data-active-chapter='menswear'] .pf-cinema__visual--menswear,
+.pf-cinema[data-phase='index'][data-active-chapter='tech-packs'] .pf-cinema__visual--tech-packs,
+.pf-cinema[data-phase='index'][data-active-chapter='3d-simulation'] .pf-cinema__visual--3d-simulation { opacity: 1; }
+.pf-cinema[data-active-chapter] .pf-cinema__visual img { transform: scale(1.025); }
 
+/* ---- the title ---------------------------------------------------------
+   Set in the band the scene leaves above the figures, gutter to gutter, and
+   tracked so the line spans the measure. One line at rest: a campaign plate,
+   not a headline column beside a picture. */
 .pf-cinema__title {
-  position: absolute; z-index: 5; inset: 0; pointer-events: none;
-  font-size: clamp(4.5rem, 10vw, 10.3rem); line-height: .74; letter-spacing: -.085em;
+  position: absolute; z-index: 5; left: var(--gutter); right: var(--gutter);
+  top: max(8.6rem, 15.4vh);
+  margin: 0; pointer-events: none;
+  /* Sized in vw with no cap so the two halves keep spanning the measure at
+     every desktop width: the gap between them is the composition, and a
+     capped size turned it into a hole. */
+  font-size: 5.06vw; line-height: .96; letter-spacing: -.055em;
+  text-transform: uppercase; font-variation-settings: 'wdth' 92;
+  display: flex; justify-content: space-between; gap: .4em;
 }
-.pf-cinema__title > span { position: absolute; display: block; }
-.pf-cinema__between {
-  top: 20%; left: 6.5%; font-size: .25em; line-height: 1; letter-spacing: .03em;
-  text-transform: uppercase; font-variation-settings: 'wdth' 88;
-}
-.pf-cinema__instinct { top: 27%; left: 3%; }
-.pf-cinema__construction {
-  right: 4.5%; bottom: 17%; white-space: nowrap; color: var(--ink);
-  font-size: .58em; line-height: .9; letter-spacing: -.06em;
-}
+.pf-cinema__title span { display: block; white-space: nowrap; }
+
 .pf-cinema__thesis {
-  position: absolute; z-index: 10; left: var(--gutter); bottom: 5vh; max-width: 27ch;
+  position: absolute; z-index: 10; left: var(--gutter); bottom: var(--caption-b); max-width: 27ch;
   margin: 0; font-size: clamp(.8rem, 1vw, .95rem); line-height: 1.5;
 }
 
 .pf-cinema__scroll {
-  position: absolute; z-index: 10; right: var(--gutter); bottom: 4.7vh;
+  position: absolute; z-index: 10; right: var(--gutter); bottom: var(--caption-b);
   display: flex; align-items: center; gap: 1rem; margin: 0; font-size: .55rem;
 }
 .pf-cinema__scroll i { width: 3.6rem; height: 1px; overflow: hidden; background: var(--line-strong); }
@@ -117,74 +174,129 @@
 .pf-index-row:is(:hover,:focus-visible) :is(.pf-index-row__note,.pf-index-row__action),
 .pf-index-row[aria-current='true'] :is(.pf-index-row__note,.pf-index-row__action) { opacity: 1; transform: none; }
 
-/* The first chapter is the final state of the SAME pinned image plane. */
+/* ---- the Womenswear entrance -------------------------------------------
+   The final state of the SAME image plane. The supplied Womenswear plate
+   leaves its left half clean, so the entrance is set there in ink on the
+   scene's own bone. The previous heavy dark scrim over the photograph is
+   gone: the garment is the subject, and nothing is laid over it. */
 .pf-women-threshold {
-  position: absolute; z-index: 9; inset: 0; color: var(--paper-bright); opacity: 0; pointer-events: none;
-}
-.pf-women-threshold::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgb(17 17 15 / 76%) 0%, rgb(17 17 15 / 22%) 43%, transparent 72%),
-              linear-gradient(0deg, rgb(17 17 15 / 32%), transparent 48%);
+  position: absolute; z-index: 9; inset: 0; color: var(--ink); opacity: 0; pointer-events: none;
 }
 .pf-women-threshold__copy {
-  position: absolute; z-index: 2; left: var(--gutter); bottom: 8vh;
-  max-width: min(46rem, 58vw); pointer-events: auto;
+  /* Set against her shoulder line rather than dropped to the foot of the
+     screen, so the type block and the figure read as one composition and the
+     left field is not split into two distant islands. */
+  position: absolute; z-index: 2; left: var(--gutter); top: 39%;
+  max-width: min(32rem, 42vw);
 }
-.pf-women-threshold__copy > .label { display: flex; gap: 1rem; margin: 0 0 1.3rem; }
-.pf-women-threshold__copy > .label span { color: var(--signal); }
+/* The eyebrow only. The action link also carries `.label`, so an unscoped
+   child selector beat its own rule and gave it the eyebrow's display, margin
+   and rule — which is why it sat flush under the sentence with a full-width
+   underline. */
+.pf-women-threshold__copy > .label:first-child {
+  display: flex; align-items: center; gap: .8rem; margin: 0 0 1.5rem;
+  padding-bottom: .9rem; border-bottom: 1px solid var(--line);
+}
+.pf-women-threshold__copy > .label:first-child span { color: var(--women-accent); }
 .pf-women-threshold__copy h2 {
-  margin: 0; color: var(--paper-bright); font-size: clamp(3.6rem, 5.35vw, 6rem); line-height: .82;
+  margin: 0; color: var(--ink); font-size: clamp(2.8rem, 4.6vw, 5.2rem);
+  line-height: .86; letter-spacing: -.05em;
 }
 .pf-women-threshold__copy > p:not(.label) {
-  max-width: 34ch; margin: 1.5rem 0 0; font-size: .83rem; line-height: 1.55;
+  max-width: 34ch; margin: 1.4rem 0 0; color: var(--ink-soft); font-size: .86rem; line-height: 1.55;
 }
 .pf-women-threshold__action {
-  display: inline-flex; align-items: center; gap: 1rem; margin-top: 1.7rem; padding-bottom: .55rem;
-  border-bottom: 1px solid rgb(243 240 233 / 62%); font-size: .55rem;
+  display: inline-flex; align-items: center; gap: 1rem; margin-top: 2.2rem; padding-bottom: .6rem;
+  border-bottom: 1px solid var(--women-accent); color: var(--ink); font-size: .55rem;
 }
-.pf-women-threshold__action .arrow { color: var(--signal); }
+.pf-women-threshold__action .arrow { color: var(--women-accent); }
+.pf-women-threshold__action:is(:hover, :focus-visible) { color: var(--women-accent); }
 .pf-women-threshold__index {
-  position: absolute; z-index: 3; top: 8rem; right: var(--gutter); display: grid;
-  width: min(25rem, 34vw); pointer-events: auto;
+  position: absolute; z-index: 3; top: max(8.6rem, 15.4vh); left: var(--gutter); display: grid;
+  width: min(25rem, 30vw);
 }
 .pf-women-threshold__index a {
-  display: grid; grid-template-columns: 2rem 1fr; gap: .7rem; padding: .65rem 0;
-  border-bottom: 1px solid rgb(17 17 15 / 25%); color: rgb(17 17 15 / 58%); font-size: .7rem;
+  display: grid; grid-template-columns: 2rem 1fr; gap: .7rem; padding: .62rem 0;
+  border-bottom: 1px solid var(--line); color: rgb(17 17 15 / 52%); font-size: .7rem;
 }
 .pf-women-threshold__index a span { font: .53rem var(--mono); color: inherit; }
 .pf-women-threshold__index a[aria-current] { color: var(--ink); }
-.pf-women-threshold__index a[aria-current] span { color: var(--signal); }
+.pf-women-threshold__index a[aria-current] span { color: var(--women-accent); }
+.pf-women-threshold__index a:is(:hover, :focus-visible) { color: var(--ink); }
 .pf-women-threshold__credit {
   position: absolute; z-index: 2; right: var(--gutter); bottom: 1.5rem;
-  margin: 0; font-size: .47rem; opacity: .62;
+  margin: 0; font-size: .47rem; color: var(--ink-soft); opacity: .62;
 }
+/* The entrance is laid over the index while it is still invisible, so it
+   only takes the pointer — and only joins the focus order, via `inert` — once
+   the timeline has actually arrived at it. Its children used to set
+   `pointer-events: auto` for themselves, which meant an unseen chapter link
+   sat on top of the living index and swallowed its clicks. */
 .pf-cinema[data-phase='womenswear'] .pf-women-threshold { pointer-events: auto; }
 
+/* ---- narrow desktop: a boxier viewport needs a taller scene --------------
+   At 1440 the plate's own empty top meets the title exactly. A 1024-wide
+   window is much boxier, so the same 100%-wide plate is short and leaves a
+   dead band of page bone under the title while its feet fall behind the
+   captions. Widening the plate raises the figures into the title's shadow and
+   drops their feet clear of the caption line. */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .pf-cinema { --scene-w: 114%; --scene-drop: -0.7%; --caption-b: 2.6vh; }
+  .pf-cinema__title { top: max(8.6rem, 16.5vh); }
+}
+
+/* ---- tablet: the title stacks, the scene widens ------------------------- */
 @media (max-width: 1023px) {
-  .pf-cinema__title { font-size: clamp(4.2rem, 11vw, 7.2rem); }
+  .pf-cinema { --scene-w: 116%; --scene-drop: -3%; }
+  .pf-cinema__title {
+    display: block; top: max(8.2rem, 13.5vh);
+    font-size: min(9.5vw, 5rem); line-height: 1.02; letter-spacing: -.05em;
+  }
+  /* Each half is its own line here, so the ampersand always travels with the
+     word it belongs to instead of being left alone on a line of its own. */
+  .pf-cinema__title span { display: block; white-space: normal; }
   .pf-index-row__title { font-size: clamp(1.8rem, 3.6vw, 3rem); }
   .pf-index-row__note { display: none; }
   .pf-index-row__action { grid-row: 1 / 3; align-self: center; }
-  .pf-women-threshold__copy { max-width: 70vw; }
+  .pf-women-threshold__copy { max-width: 52vw; top: 40%; }
+  .pf-women-threshold__index { width: min(20rem, 38vw); }
 }
 
+/* A portrait tablet is a 3:4 hole for a 16:9 plate. The scene is widened to
+   the edge of what the garments will take, and the thesis leaves the floor to
+   sit under the title, so the upper half is one type block instead of a
+   headline floating over an empty field. */
+@media (max-width: 1023px) and (orientation: portrait) {
+  .pf-cinema { --scene-w: 128%; --scene-drop: 1.7%; --caption-b: 2.2vh; }
+  .pf-cinema__title { top: max(8.2rem, 17vh); }
+  /* She is panned left into this format, so the entrance copy narrows to
+     keep off her dress. */
+  .pf-women-threshold__copy { max-width: 44vw; }
+  .pf-cinema__thesis { top: 35vh; bottom: auto; right: var(--gutter); max-width: 30ch; }
+}
+
+/* ---- a hand: a poster, not a shrunken desk --------------------------------
+   Three full-length figures inside a 16:9 frame cannot be large on a 390px
+   screen, so the phone is composed the other way round: the type is the
+   large element and the group stands beneath it as a band, at more than full
+   width so the figures gain what height the format allows. */
 @media (max-width: 767px) {
-  .js .pf-cinema { height: 260svh; }
-  .pf-cinema__folio { top: 6.25rem; font-size: .47rem; }
+  .pf-cinema { --scene-w: 128%; --scene-drop: 14%; }
+  .js .pf-cinema { height: 275svh; }
+  .pf-cinema__folio { top: 5.9rem; font-size: .47rem; }
   .pf-cinema__folio span:last-child { display: none; }
-  .pf-cinema__media {
-    left: 1.1rem; right: 1.1rem; top: 7.25rem; bottom: 1.1rem; width: auto; height: auto;
+
+  /* Sized so the longest line, "& CONSTRUCTION", sits inside the measure at
+     390 rather than running past the gutter. */
+  .pf-cinema__title {
+    display: block; left: 1.1rem; right: 1.1rem; top: 10.4rem;
+    font-size: min(10.7vw, 3.4rem); line-height: .94; letter-spacing: -.055em;
   }
-  .pf-cinema__visual img { object-position: 61% center !important; }
-  .pf-cinema__title { font-size: clamp(3.65rem, 18.8vw, 5.2rem); }
-  .pf-cinema__between { top: 17.5%; left: 1.15rem; font-size: .19em; }
-  .pf-cinema__instinct { top: 22%; left: .9rem; }
-  .pf-cinema__construction {
-    right: auto; left: 1.1rem; bottom: 14.5%; max-width: none; white-space: nowrap;
-    font-size: .43em; line-height: 1; letter-spacing: -.07em;
+  .pf-cinema__title span { display: block; white-space: normal; }
+  .pf-cinema__thesis {
+    left: 1.1rem; right: 1.1rem; top: 38vh; bottom: auto; max-width: 26ch; font-size: .72rem;
   }
-  .pf-cinema__thesis { left: 1.1rem; bottom: 4.6%; max-width: 24ch; font-size: .67rem; }
-  .pf-cinema__scroll { right: 1.1rem; bottom: 2.4%; font-size: .45rem; }
+  .pf-cinema__scroll { right: 1.1rem; bottom: 7%; font-size: .45rem; }
   .pf-cinema__scroll span { display: none; }
   .pf-cinema__scroll i { width: 2.7rem; }
 
@@ -204,38 +316,62 @@
   .pf-index-row__action .arrow { width: .75rem; height: .75rem; }
   .pf-index-row:is(:hover,:focus-visible), .pf-index-row[aria-current='true'] { padding-left: .25rem; }
 
-  .pf-women-threshold::before {
-    background: linear-gradient(0deg, rgb(17 17 15 / 88%) 0%, rgb(17 17 15 / 18%) 64%, transparent 83%);
-  }
   .pf-women-threshold__index {
-    top: 5.8rem; left: 1.1rem; right: 1.1rem; display: grid; grid-template-columns: 1fr 1fr;
-    width: auto; border-top: 1px solid rgb(17 17 15 / 28%);
+    top: 5.6rem; left: 1.1rem; right: 1.1rem; display: grid; grid-template-columns: 1fr 1fr;
+    width: auto; border-top: 1px solid var(--line);
   }
   .pf-women-threshold__index a {
     min-width: 0; padding: .55rem .4rem .55rem 0; font-size: .54rem; white-space: nowrap;
   }
-  .pf-women-threshold__index a:nth-child(odd) { border-right: 1px solid rgb(17 17 15 / 20%); }
+  .pf-women-threshold__index a:nth-child(odd) { border-right: 1px solid var(--line); }
   .pf-women-threshold__index a:nth-child(even) { padding-left: .65rem; }
   .pf-women-threshold__copy {
-    left: 1.1rem; right: 1.1rem; bottom: 3.2rem; max-width: none;
+    left: 1.1rem; right: 1.1rem; top: auto; bottom: 3.2rem; max-width: none;
   }
-  .pf-women-threshold__copy h2 { font-size: clamp(2.8rem, 11.6vw, 3.7rem); line-height: .84; }
-  .pf-women-threshold__copy > p:not(.label) { max-width: 30ch; font-size: .7rem; }
+  .pf-women-threshold__copy h2 { font-size: clamp(2.6rem, 11.6vw, 3.4rem); line-height: .86; }
+  .pf-women-threshold__copy > p:not(.label) { max-width: 30ch; font-size: .72rem; }
   .pf-women-threshold__action { margin-top: 1.2rem; font-size: .48rem; }
   .pf-women-threshold__credit { display: none; }
 }
 
+/* Landscape on a small device: the viewport is shorter than the plate would
+   be at full width, so the plate is sized from the height instead and the
+   thesis steps back. */
+@media (max-width: 1023px) and (orientation: landscape) {
+  .pf-cinema { --scene-w: min(100%, 118svh); --scene-drop: -8%; --caption-b: 1.4vh; }
+  .pf-cinema__title { top: max(5.6rem, 9vh); font-size: min(4.6vw, 2.8rem); }
+  .pf-cinema__thesis { display: none; }
+}
+
+/* ---- no motion: the opening resolves to its chapter index ----------------
+   There is no camera move to make, so the three states are laid out at once
+   as one static spread: the practice statement above, the four chapters on
+   the left, and the master plate framed beside them. The plate is placed
+   explicitly here rather than through the scene tokens, because full bleed is
+   a property of the move and not of this page. */
 @media (prefers-reduced-motion: reduce) {
   .js .pf-cinema { height: 100svh; }
   .js .pf-cinema__sticky { position: relative; height: 100svh; }
-  .pf-cinema__scroll { display: none; }
-  .pf-cinema__title, .pf-cinema__thesis { display: none; }
-  .pf-cinema__media { left: 50%; top: 13%; width: 46%; height: 73%; }
-  .pf-cinema__register, .pf-living-index { opacity: 1; }
+  .pf-cinema__scroll, .pf-cinema__thesis { display: none; }
+  .pf-cinema__title {
+    display: block; right: auto; top: max(8.4rem, 13vh);
+    font-size: min(3.4vw, 3.2rem); letter-spacing: -.045em;
+  }
+  .pf-cinema__title span { display: inline; white-space: normal; }
+  .pf-scene {
+    left: auto; right: var(--gutter); top: auto; bottom: 7%;
+    width: 46%; margin: 0;
+    -webkit-mask-image: none; mask-image: none;
+  }
+  .pf-scene--master { opacity: 1; }
+  .pf-cinema__register { top: 24%; height: 58%; opacity: 1; }
+  .pf-living-index { top: 27%; opacity: 1; }
   .pf-cinema__visual, .pf-cinema__visual img, .pf-index-row { transition: none; }
 }
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) {
-  .pf-cinema__media { left: 4.6%; top: 12.5%; width: 90.8%; height: 39%; }
-  .pf-cinema__register { top: 52.3%; }
+  .pf-cinema__title { top: 6.6rem; font-size: min(8.4vw, 2.2rem); }
+  .pf-cinema__title span { display: block; }
+  .pf-scene { left: 1.1rem; right: 1.1rem; top: 21%; bottom: auto; width: auto; margin: 0; }
+  .pf-cinema__register { top: 52.3%; height: 1px; }
   .pf-living-index { top: 54%; }
 }

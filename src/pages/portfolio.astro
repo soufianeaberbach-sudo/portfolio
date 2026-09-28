@@ -44,11 +44,27 @@ const chapterNotes = [
       document.currentScript.parentElement.classList.add('pf--js');
     </script>
 
+    {/* ------------------------------------------------------------------
+        THE OPENING.
+
+        One photographic environment, art-directed around the master scene:
+        three figures standing in a bone studio that is the same bone as the
+        page, so the picture has no frame and no rectangle — the practice is
+        simply standing there. The title occupies the clean band the scene
+        leaves above the figures; the chapter index and the Womenswear
+        entrance are later states of the SAME image plane, not new screens.
+
+        The handoff is a match cut. The woman in red is in both supplied
+        scenes at the same camera distance, so the view pushes in on her,
+        swaps plates while she is pinned to the same point at the same scale,
+        and pulls back into her own frame. See the runtime for the geometry.
+        ------------------------------------------------------------------ */}
     <section
       class="pf-cinema"
       id="portfolio-index"
       data-cinema
-      data-active-chapter="womenswear"
+      data-phase="opening"
+      data-active-chapter=""
       aria-labelledby="pf-cinema-title"
     >
       <div class="pf-cinema__sticky">
@@ -56,17 +72,19 @@ const chapterNotes = [
           <span>Soufiane Aberbach</span><span>Selected work / 2026</span>
         </p>
 
-        <h1 class="pf-cinema__title display" id="pf-cinema-title" data-cinema-title>
-          <span class="pf-cinema__between" data-title-between>Between</span>
-          <span class="pf-cinema__instinct" data-title-instinct>Instinct</span>
-          <span class="pf-cinema__construction" data-title-construction>&amp; Construction</span>
-        </h1>
-
-        <p class="pf-cinema__thesis" data-cinema-thesis>
-          Fashion ideas developed into products that can be made.
-        </p>
-
+        {/* ONE IMAGE PLANE. It is the campaign plate, then the index's
+            preview field, then the Womenswear entrance. */}
         <div class="pf-cinema__media" data-cinema-media aria-hidden="true">
+          <figure class="pf-scene pf-scene--master" data-scene="master">
+            <img
+              src="/portfolio/master/master-scene.png"
+              srcset="/portfolio/master/master-scene-900.webp 900w, /portfolio/master/master-scene-1400.webp 1400w, /portfolio/master/master-scene-1900.webp 1900w"
+              sizes="(max-width: 767px) 128vw, 100vw"
+              width="1672" height="941" alt=""
+              fetchpriority="high" decoding="async"
+            />
+          </figure>
+
           {chapters.map((chapter, index) => (
             <figure
               class={`pf-cinema__visual pf-cinema__visual--${chapter.id}`}
@@ -76,18 +94,37 @@ const chapterNotes = [
               <img
                 src={chapter.cover.image.src}
                 srcset={chapter.cover.image.srcset}
-                sizes="(max-width: 767px) 100vw, 82vw"
+                sizes="(max-width: 767px) 92vw, 62vw"
                 width={chapter.cover.image.width}
                 height={chapter.cover.image.height}
                 alt=""
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchpriority={index === 0 ? 'high' : undefined}
+                loading="lazy"
                 decoding="async"
                 style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
               />
             </figure>
           ))}
+
+          {/* The plate the opening cuts to. Same woman, same light, same
+              ground — which is what makes the cut read as one camera move. */}
+          <figure class="pf-scene pf-scene--women" data-scene="women">
+            <img
+              src="/portfolio/master/womenswear-scene.png"
+              srcset="/portfolio/master/womenswear-scene-900.webp 900w, /portfolio/master/womenswear-scene-1400.webp 1400w, /portfolio/master/womenswear-scene-1900.webp 1900w"
+              sizes="(max-width: 767px) 128vw, 100vw"
+              width="1672" height="941" alt=""
+              loading="lazy" decoding="async"
+            />
+          </figure>
         </div>
+
+        <h1 class="pf-cinema__title display" id="pf-cinema-title" data-cinema-title>
+          <span>Between instinct</span> <span>&amp;&nbsp;construction</span>
+        </h1>
+
+        <p class="pf-cinema__thesis" data-cinema-thesis>
+          Fashion ideas developed into products that can be made.
+        </p>
 
         <div class="pf-cinema__register" aria-hidden="true" data-cinema-register>
           <i></i><b></b><span class="label">01—04</span>
@@ -104,7 +141,6 @@ const chapterNotes = [
                   data-nav={chapter.id === 'womenswear' ? undefined : true}
                   data-chapter={chapter.id}
                   data-index-row
-                  aria-current={chapter.id === 'womenswear' ? 'true' : undefined}
                 >
                   <span class="pf-index-row__number label">{chapter.number}</span>
                   <strong class="pf-index-row__title display">{chapter.title}</strong>
@@ -116,7 +152,18 @@ const chapterNotes = [
           </ol>
         </nav>
 
+        {/* THE ENTRANCE, not the chapter. Its type sits in the negative space
+            the Womenswear plate leaves on the left, in ink on the scene's own
+            bone — no dark scrim over the photograph. */}
         <div class="pf-women-threshold" data-women-threshold aria-labelledby="womenswear-entry-title">
+          <div class="pf-women-threshold__copy">
+            <p class="label"><span>01</span> Womenswear</p>
+            <h2 class="display" id="womenswear-entry-title">Designed<br />to move.</h2>
+            <p>Silhouette and proportion guide every cut.</p>
+            <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
+              Enter the chapter <Arrow />
+            </a>
+          </div>
           <nav class="pf-women-threshold__index" aria-label="Portfolio chapter index">
             {chapters.map((chapter) => (
               <a
@@ -128,14 +175,6 @@ const chapterNotes = [
               </a>
             ))}
           </nav>
-          <div class="pf-women-threshold__copy">
-            <p class="label"><span>01</span> Womenswear</p>
-            <h2 class="display" id="womenswear-entry-title">Designed<br />to move.</h2>
-            <p>Silhouette and proportion guide every cut.</p>
-            <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
-              Continue to Womenswear <Arrow />
-            </a>
-          </div>
           <p class="pf-women-threshold__credit label">Chapter cover / visual direction asset</p>
         </div>
 
@@ -168,6 +207,33 @@ const chapterNotes = [
   </div>
 
   <script>
+    /* ----------------------------------------------------------------------
+       THE OPENING, AND THE MATCH CUT INTO WOMENSWEAR.
+
+       One sticky field carries three states of the same image plane:
+
+         opening     the master scene — three figures standing in the page's
+                     own bone, with the title in the band above them
+         index       the plane insets and the four chapters are listed beside
+                     it; a row with attention previews its own plate
+         womenswear  the plane pushes in on the woman in red, cuts to her own
+                     plate, and pulls back into her frame
+
+       WHY THE CUT WORKS. She appears in both supplied plates at the same
+       camera distance — 41.0% of frame width in the master, 42.1% in her own
+       — so no scale correction is needed, only a pan. Each plate's
+       `transform-origin` is set to HER centre in that plate (measured from
+       the files: 26.4% / 75.85% of frame width). A point sits at
+       `origin + translate` regardless of scale, so giving the second plate a
+       translate of exactly the distance between the two origins pins her to
+       the same screen point in both — at every scale, through the whole
+       push-in. The crossfade then happens while she is identical in both
+       frames, which is what makes it read as one camera move rather than a
+       dissolve between two pictures.
+
+       Scroll is never taken: this is a scrubbed timeline, so reading back up
+       runs the move backwards through the same frames.
+       ---------------------------------------------------------------------- */
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -177,18 +243,52 @@ const chapterNotes = [
 
     if (cinema && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const media = cinema.querySelector<HTMLElement>('[data-cinema-media]')!;
+      const master = cinema.querySelector<HTMLElement>('[data-scene="master"]')!;
+      const women = cinema.querySelector<HTMLElement>('[data-scene="women"]')!;
       const index = cinema.querySelector<HTMLElement>('[data-living-index]')!;
       const rows = [...cinema.querySelectorAll<HTMLAnchorElement>('[data-index-row]')];
       const register = cinema.querySelector<HTMLElement>('[data-cinema-register]')!;
       const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
-      const instinct = cinema.querySelector<HTMLElement>('[data-title-instinct]')!;
-      const construction = cinema.querySelector<HTMLElement>('[data-title-construction]')!;
-      const between = cinema.querySelector<HTMLElement>('[data-title-between]')!;
       const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
       const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
       const cue = cinema.querySelector<HTMLElement>('[data-cinema-scroll]')!;
       const threshold = cinema.querySelector<HTMLElement>('[data-women-threshold]')!;
-      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+      const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+
+      /* Where the woman in red stands in each supplied plate, as a fraction
+         of that plate's width. Measured, not estimated. */
+      const HER_IN_MASTER = 0.264;
+      const HER_IN_WOMEN = 0.7585;
+      /* The pan that aligns the two plates, in plate-width units — which is
+         what GSAP's xPercent is measured in, so it holds at any scene size. */
+      const MATCH = (HER_IN_MASTER - HER_IN_WOMEN) * 100;
+
+      /* The push, and the frame she comes to rest in, are art-directed per
+         format. A 16:9 plate inside a tall phone is a band across the middle
+         of the screen, so there the camera goes further in and lifts her into
+         the upper field, which is where the entrance copy is not. On a wide
+         screen the plate already fills the frame and none of that is needed.
+         All four values are read at refresh, so a rotation re-derives them. */
+      const isTallNarrow = () => window.matchMedia('(max-width: 1023px) and (orientation: portrait)').matches;
+      /* The offsets are taken from the VIEWPORT, not from the plate: a plate
+         percentage is a different distance at 390 and at 430, which walked her
+         head into the plate's dissolved top edge on the larger phone. */
+      const PUSH_SCALE = () => (isMobile() ? 2.1 : isTallNarrow() ? 1.7 : 1.42);
+      const PUSH_Y = () => window.innerHeight * (isMobile() ? -0.19 : isTallNarrow() ? -0.21 : 0);
+      const REST_SCALE = () => (isMobile() ? 1.55 : 1);
+      const REST_X = () => window.innerWidth * (isMobile() ? -0.28 : isTallNarrow() ? -0.14 : 0);
+      const REST_Y = () => window.innerHeight * (isMobile() ? -0.2 : 0);
+
+      /* Bring her toward the middle of the field for the push-in. The scene
+         is wider than the field on small screens, so this is measured rather
+         than fixed. */
+      const centreOnHer = () => {
+        const field = media.getBoundingClientRect().width;
+        const scene = master.getBoundingClientRect().width || field;
+        const sceneLeft = (field - scene) / 2;
+        const target = field * 0.46;
+        return ((target - sceneLeft - HER_IN_MASTER * scene) / scene) * 100;
+      };
 
       const activateChapter = (id: string) => {
         cinema.dataset.activeChapter = id;
@@ -198,6 +298,10 @@ const chapterNotes = [
           if (row.dataset.chapter === id) row.setAttribute('aria-current', 'true');
           else row.removeAttribute('aria-current');
         }
+      };
+      const clearChapter = () => {
+        cinema.dataset.activeChapter = '';
+        for (const row of rows) row.removeAttribute('aria-current');
       };
 
       for (const row of rows) {
@@ -213,6 +317,9 @@ const chapterNotes = [
         window.scrollTo({ top: destination, behavior: 'smooth' });
       });
 
+      let push = centreOnHer();
+      threshold.setAttribute('inert', '');
+
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -222,41 +329,101 @@ const chapterNotes = [
           end: 'bottom bottom',
           scrub: 0.45,
           invalidateOnRefresh: true,
+          onRefresh: () => { push = centreOnHer(); },
           onUpdate: ({ progress }) => {
-            cinema.dataset.phase = progress > 0.72 ? 'womenswear' : progress > 0.3 ? 'index' : 'opening';
-            if (progress > 0.72) activateChapter('womenswear');
+            const phase = progress > 0.66 ? 'womenswear' : progress > 0.27 ? 'index' : 'opening';
+            if (cinema.dataset.phase !== phase) {
+              cinema.dataset.phase = phase;
+              /* Outside the index the plane belongs to the master plate
+                 again, so a chapter left hovered cannot sit under the cut. */
+              if (phase !== 'index') clearChapter();
+              threshold.toggleAttribute('inert', phase !== 'womenswear');
+            }
           },
         },
       });
 
+      /* 1. The opening gives way: the title lifts out of its band and the
+            plane draws in to become the index's preview field. */
       timeline
-        .to([cue, thesis], { autoAlpha: 0, y: -16, duration: 0.12 }, 0.02)
-        .to(folio, { autoAlpha: 0.42, duration: 0.14 }, 0.04)
-        .to(instinct, { xPercent: -10, yPercent: -88, scale: 0.5, autoAlpha: 0.08, duration: 0.3 }, 0.06)
-        .to(construction, { xPercent: 8, yPercent: 86, scale: 0.5, autoAlpha: 0.06, duration: 0.3 }, 0.06)
-        .to(between, { xPercent: -12, yPercent: -25, scale: 0.78, autoAlpha: 0.18, duration: 0.3 }, 0.06)
-        .to(register, { autoAlpha: 1, duration: 0.1 }, 0.17);
+        .to([cue, thesis], { autoAlpha: 0, y: -14, duration: 0.08 }, 0.03)
+        .to(title, { autoAlpha: 0, y: -26, duration: 0.12 }, 0.06)
+        .to(folio, { autoAlpha: 0.42, duration: 0.1 }, 0.05)
+        .to(register, { autoAlpha: 1, duration: 0.08 }, 0.22);
 
-      if (!isMobile) {
-        timeline.to(media, {
-          left: '50%', top: '13%', width: '46%', height: '73%', duration: 0.34,
-        }, 0.07);
-      } else {
-        timeline.to(media, {
-          left: '4.6%', top: '12.5%', width: '90.8%', height: '39%', duration: 0.34,
-        }, 0.07);
+      /* THE INDEX'S PREVIEW FIELD.
+         Its height is derived from its width and the plates' own 16:9, so the
+         scene fills the box exactly. A box of a different shape letterboxed
+         the group inside the field and left a hole with a hard edge in it. */
+      const SCENE_RATIO = 1672 / 941;
+      const inset = () => {
+        const w = media.parentElement!.clientWidth;
+        const h = media.parentElement!.clientHeight;
+        if (isMobile()) {
+          const width = w * 0.908;
+          return { left: '4.6%', top: '11.5%', width: '90.8%', height: `${(width / SCENE_RATIO / h) * 100}%` };
+        }
+        const width = w * 0.46;
+        return { left: '50%', top: '25%', width: '46%', height: `${(width / SCENE_RATIO / h) * 100}%` };
+      };
+
+      timeline
+        .to(media, {
+          left: () => inset().left, top: () => inset().top,
+          width: () => inset().width, height: () => inset().height, duration: 0.17,
+        }, 0.08)
+        /* The plate stops being a crop of the viewport and becomes the whole
+           plate, fitted to the field it is being drawn into. */
+        .to(cinema, { '--scene-fit': 1, duration: 0.17 }, 0.08)
+        .fromTo(index, { autoAlpha: 0, x: () => (isMobile() ? 0 : -22), y: () => (isMobile() ? 18 : 0) }, {
+          autoAlpha: 1, x: 0, y: 0, duration: 0.13,
+        }, 0.22);
+
+      /* 2. The index holds while the visitor reads it. */
+      timeline.to({}, { duration: 0.21 }, 0.35);
+
+      /* 3. The push in. The plane opens back to full bleed FIRST — a plate
+            growing inside a box reads as a box growing, not as a camera
+            moving — and only then does the master plate scale about her, so
+            the other two figures leave the frame while she stays put. */
+      timeline
+        .to(index, { autoAlpha: 0, x: () => (isMobile() ? 0 : -24), y: () => (isMobile() ? 18 : 0), duration: 0.06 }, 0.56)
+        .to([register, folio], { autoAlpha: 0, duration: 0.06 }, 0.57)
+        .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: 0.08 }, 0.56)
+        .to(cinema, { '--scene-fit': 0, duration: 0.06 }, 0.56)
+        .to(master, { xPercent: () => push, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.18 }, 0.62)
+        /* Her plate rides the same push, offset by exactly the distance
+           between the two frames' versions of her — travelling in LOCKSTEP
+           with the master, not pinned at the final offset. Pinned, the two
+           plates only agreed at the very end of the push, so the crossfade
+           landed while she was still 70px apart in the two frames and the
+           cut showed a ghost. In lockstep she is in the same place at the
+           same size in both at EVERY frame, which makes the cut's timing
+           forgiving instead of critical. */
+        .fromTo(women,
+          { xPercent: () => MATCH, x: 0, y: 0, scale: 1, autoAlpha: 0 },
+          { xPercent: () => push + MATCH, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.18 }, 0.62)
+
+        /* 4. The cut, made while the two frames agree. */
+        .to(women, { autoAlpha: 1, duration: 0.06 }, 0.75)
+        .to(master, { autoAlpha: 0, duration: 0.06 }, 0.76)
+
+        /* 5. The pull back: the camera releases the push and pans right until
+              she sits in her own frame, which opens the negative space on the
+              left that the entrance is set in. */
+        .to(women, { xPercent: 0, x: REST_X, y: REST_Y, scale: REST_SCALE, duration: 0.16, ease: 'power1.out' }, 0.81)
+        .fromTo(threshold, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.11 }, 0.87);
+    } else if (cinema) {
+      /* Without motion there is no entrance to scroll into — the opening
+         resolves straight to the chapter index — so the Womenswear row opens
+         its chapter directly, exactly like the other three, and the entrance
+         that will never be reached is taken out of the page. */
+      const row = cinema.querySelector<HTMLAnchorElement>('a[href="#womenswear-entry"]');
+      if (row) {
+        row.setAttribute('href', '#womenswear');
+        row.dataset.nav = 'true';
       }
-
-      timeline
-        .to(title, { autoAlpha: 0, duration: 0.12 }, 0.25)
-        .fromTo(index, { autoAlpha: 0, x: isMobile ? 0 : -22, y: isMobile ? 18 : 0 }, {
-          autoAlpha: 1, x: 0, y: 0, duration: 0.2,
-        }, 0.25)
-        .to({}, { duration: 0.26 }, 0.45)
-        .to(index, { autoAlpha: 0, x: isMobile ? 0 : -24, y: isMobile ? 18 : 0, duration: 0.16 }, 0.71)
-        .to([register, folio], { autoAlpha: 0, duration: 0.13 }, 0.73)
-        .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: 0.27 }, 0.72)
-        .fromTo(threshold, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.19 }, 0.81);
+      cinema.querySelector('[data-women-threshold]')?.setAttribute('inert', '');
     }
   </script>
 

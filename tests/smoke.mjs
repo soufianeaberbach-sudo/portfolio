@@ -153,9 +153,14 @@ try {
     if (id === 'womenswear') {
       await trigger.evaluate((link) => link.removeAttribute('id'));
       const entry = p.locator('.pf-women-threshold__action');
-      await entry.evaluate((link) => { link.id = 'smoke-trigger'; });
-      await entry.click();
-      await p.waitForTimeout(800);
+      /* Under reduced motion there is no scrolled entrance to arrive at, so
+         the Womenswear row opens its chapter directly and the entrance is
+         inert. Everything after this point is the same either way. */
+      if (await entry.evaluate((link) => !link.closest('[inert]'))) {
+        await entry.evaluate((link) => { link.id = 'smoke-trigger'; });
+        await entry.click();
+        await p.waitForTimeout(800);
+      }
     }
   };
   const openCategory = async (p, world, category) => {
