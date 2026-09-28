@@ -21,11 +21,24 @@ try {
   const open=async hash=>{await page.evaluate(h=>{location.hash=h},hash);await page.waitForTimeout(700)};
   await shot('opening');
   await page.screenshot({path:output+'/'+width+'-flow.png',fullPage:true});
-  if(width===1440){
-   await page.evaluate(()=>{const cinema=document.querySelector('.pf-cinema');scrollTo(0,cinema.offsetTop+(cinema.offsetHeight-innerHeight)*.56)});
-   await page.waitForTimeout(500);
-   await page.locator('[data-index-row][data-chapter="tech-packs"]').hover();await shot('opening-expanded')
+  /* The sequence: each chapter arrives as its own cover, and the Tech Packs
+     file answers to attention. There is no chapter-list screen in the middle
+     of this any more, so what is captured is the covers themselves. */
+  for(const chapter of ['menswear','3d-simulation','tech-packs']){
+   await page.locator('[data-cover="'+chapter+'"]').scrollIntoViewIfNeeded();
+   await page.waitForTimeout(900);
+   check(await page.locator('[data-cover="'+chapter+'"] .pf-cover__action').count()===1,chapter+' cover offers its way in');
+   await shot('cover-'+chapter);
   }
+  if(width===1440){
+   await page.locator('[data-cover="tech-packs"] .pf-file__front').hover();
+   await page.waitForTimeout(900);
+   await shot('tech-packs-file-open');
+  }
+  await page.locator('.pf-outro').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(700);
+  check(await page.locator('.pf-outro [data-index-row]').count()===4,'the ending lists the four chapters');
+  await shot('ending');
   for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');

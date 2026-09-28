@@ -140,23 +140,34 @@ try {
      they carried alongside is kept and re-asserted here against the new
      architecture.
      ------------------------------------------------------------------------ */
+  /* A chapter is opened from its own cover. Womenswear's cover is the frame
+     the opening's match cut lands on, so getting to it means running the
+     opening out; the other three are sections of their own. With motion off
+     there is no camera move to land, and Womenswear takes the same still
+     cover the other three have — either way the way in is a .pf-cover__action
+     and everything after this point is identical. */
   const openChapter = async (p, id) => {
-    await p.evaluate(() => {
-      const cinema = document.querySelector('.pf-cinema');
-      scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * 0.56);
-    });
-    await p.waitForTimeout(500);
-    const trigger = p.locator(`[data-index-row][data-chapter="${id}"]`);
+    let trigger;
+    if (id === 'womenswear') {
+      const still = p.locator('.pf-cover--still .pf-cover__action');
+      if (await still.count() > 0 && await still.isVisible()) {
+        trigger = still;
+        await trigger.scrollIntoViewIfNeeded();
+      } else {
+        trigger = p.locator('.pf-women-threshold__action');
+        await p.evaluate(() => {
+          const cinema = document.querySelector('.pf-cinema');
+          scrollTo(0, cinema.offsetTop + cinema.offsetHeight - innerHeight);
+        });
+      }
+    } else {
+      trigger = p.locator(`[data-cover="${id}"] .pf-cover__action`);
+      await trigger.scrollIntoViewIfNeeded();
+    }
+    await p.waitForTimeout(900);
     await trigger.evaluate((link) => { link.id = 'smoke-trigger'; });
     await trigger.click();
-    await p.waitForTimeout(id === 'womenswear' ? 900 : 800);
-    if (id === 'womenswear') {
-      await trigger.evaluate((link) => link.removeAttribute('id'));
-      const entry = p.locator('.pf-women-threshold__action');
-      await entry.evaluate((link) => { link.id = 'smoke-trigger'; });
-      await entry.click();
-      await p.waitForTimeout(800);
-    }
+    await p.waitForTimeout(800);
   };
   const openCategory = async (p, world, category) => {
     await p.evaluate(([w, c]) => {
@@ -165,8 +176,8 @@ try {
     await p.waitForTimeout(800);
   };
 
-  // ---- structure: four chapters in one asymmetric editorial cover gallery
-  console.log('\nportfolio index');
+  // ---- structure: four chapters, each arriving as its own cover
+  console.log('\nportfolio sequence');
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
@@ -180,26 +191,41 @@ try {
       check(`chapter "${id}" exists`, worlds.includes(id));
     }
 
-    /* One shared image plane changes chapter; four equal rows provide the
-       destinations. This deliberately guards against regressing to a card or
-       cover mosaic while retaining provenance for every visual. */
-    const chapterIndex = await p.evaluate(() => {
-      const media = document.querySelector('.pf-cinema__media');
-      const mediaRect = media.getBoundingClientRect();
-      const visuals = [...media.querySelectorAll('.pf-cinema__visual')].map((el) => {
-        const r = el.getBoundingClientRect();
-        const s = getComputedStyle(el);
+    /* THE JOURNEY. Each chapter arrives as its own cover and hands over to
+       what is inside it; the running order is the navigation. The oversized
+       chapter-list screen that used to sit in the middle of this is gone, and
+       the assertions that described it are re-asserted here against the
+       sequence that replaced it — every factual-integrity rule they carried
+       is kept: image-led covers, provenance for every visual, nothing drawn
+       as a card, distinct intent and action language per chapter, and no
+       category list or reference disclaimer in the chapter index. */
+    const sequence = await p.evaluate(() => {
+      const shown = (el) => getComputedStyle(el).display !== 'none';
+      const covers = [...document.querySelectorAll('.pf-cover')].filter(shown).map((el) => {
+        const plate = el.querySelector('.pf-cover__plate')
+          ?? (el.hasAttribute('data-women-threshold') ? document.querySelector('.pf-scene--women') : null);
+        const s = plate ? getComputedStyle(plate) : null;
+        const copy = el.querySelector('.pf-cover__copy').getBoundingClientRect();
         return {
-          chapter: el.dataset.mediaChapter,
-          source: el.dataset.imageSource ?? '',
-          images: el.querySelectorAll('img').length,
-          boxed: s.borderRadius !== '0px' || s.boxShadow !== 'none',
-          sameField: Math.abs(r.left - mediaRect.left) <= 1
-            && Math.abs(r.top - mediaRect.top) <= 1
-            && Math.abs(r.width - mediaRect.width) <= 1
-            && Math.abs(r.height - mediaRect.height) <= 1,
+          id: el.dataset.cover ?? (el.hasAttribute('data-women-threshold') ? 'womenswear' : ''),
+          number: el.querySelector('.pf-cover__eyebrow span').textContent.trim(),
+          name: el.querySelector('.pf-cover__eyebrow').textContent.replace(/\s+/g, ' ').replace(/^\d+\s*/, '').trim(),
+          line: el.querySelector('.pf-cover__line').textContent.replace(/\s+/g, ' ').trim(),
+          action: el.querySelector('.pf-cover__action').textContent.replace(/\s+/g, ' ').trim(),
+          href: el.querySelector('.pf-cover__action').getAttribute('href'),
+          images: plate ? plate.querySelectorAll('img').length : 0,
+          source: plate?.dataset.imageSource
+            ?? el.querySelector('[data-image-source]')?.dataset.imageSource ?? '',
+          boxed: s ? (s.borderRadius !== '0px' || s.boxShadow !== 'none') : true,
+          copyLeft: Math.round(copy.left),
         };
       });
+      const flow = [...document.querySelectorAll('.pf-cinema, [data-cover], [data-contents], .pf-outro')]
+        .filter(shown)
+        .map((el) => (el.classList.contains('pf-cinema') ? 'opening'
+          : el.classList.contains('pf-outro') ? 'ending'
+            : el.dataset.cover ? `cover:${el.dataset.cover}` : `contents:${el.dataset.contents}`));
+      const index = document.querySelector('[data-living-index]');
       const rows = [...document.querySelectorAll('.pf-index-row')].map((el) => {
         const r = el.getBoundingClientRect();
         return {
@@ -214,49 +240,115 @@ try {
         };
       });
       return {
-        mediaCount: document.querySelectorAll('.pf-cinema__media').length,
-        visuals,
+        covers,
+        flow,
         rows,
-        registerSignal: getComputedStyle(document.querySelector('.pf-cinema__register b')).backgroundColor,
+        indexCount: document.querySelectorAll('[data-living-index]').length,
+        indexInEnding: !!index?.closest('.pf-outro'),
+        indexAt: (index.getBoundingClientRect().top + scrollY) / document.documentElement.scrollHeight,
+        indexInOpening: document.querySelectorAll('.pf-cinema [data-living-index]').length,
+        contents: [...document.querySelectorAll('[data-contents]')].map((el) => ({
+          id: el.dataset.contents,
+          items: [...el.querySelectorAll('.pf-contents__list a')].map((a) => a.getAttribute('href')),
+        })),
       };
     });
-    check('one shared chapter image field', chapterIndex.mediaCount === 1, String(chapterIndex.mediaCount));
-    check('four chapter visuals occupy that same field',
-      chapterIndex.visuals.length === 4 && chapterIndex.visuals.every((visual) => visual.sameField),
-      chapterIndex.visuals.map((visual) => `${visual.chapter}:${visual.sameField}`).join(' '));
-    check('the shared visual field is not drawn as a card', chapterIndex.visuals.every((visual) => !visual.boxed));
-    check('four equal-value chapter rows', chapterIndex.rows.length === 4
-      && Math.max(...chapterIndex.rows.map((row) => row.height)) - Math.min(...chapterIndex.rows.map((row) => row.height)) <= 1
-      && new Set(chapterIndex.rows.map((row) => row.width)).size === 1,
-      chapterIndex.rows.map((row) => `${row.width}x${row.height}`).join(','));
-    check('every chapter is openable', chapterIndex.rows.every((row) => row.isLink));
+
+    check('the journey is opening → cover → contents, four times, then the ending',
+      sequence.flow.join(' ') === [
+        'opening', 'contents:womenswear',
+        'cover:menswear', 'contents:menswear',
+        'cover:3d-simulation', 'contents:3d-simulation',
+        'cover:tech-packs', 'contents:tech-packs',
+        'ending',
+      ].join(' '), sequence.flow.join(' '));
+    check('four chapter covers, numbered in the running order',
+      sequence.covers.map((cover) => `${cover.number}:${cover.id}`).join(' ')
+        === '01:womenswear 02:menswear 03:3d-simulation 04:tech-packs',
+      sequence.covers.map((cover) => `${cover.number}:${cover.id}`).join(' '));
+    check('Development comes before Tech Packs',
+      sequence.covers.findIndex((cover) => cover.id === '3d-simulation')
+        < sequence.covers.findIndex((cover) => cover.id === 'tech-packs'));
+    check('every cover is image-led',
+      sequence.covers.every((cover) => cover.images === 1),
+      sequence.covers.map((cover) => cover.images).join(','));
+    check('every cover records its image source',
+      sequence.covers.every((cover) => cover.source.length > 0),
+      sequence.covers.map((cover) => cover.source).join(' | '));
+    check('no cover is drawn as a card', sequence.covers.every((cover) => !cover.boxed));
+    check('every cover sets its type in the same place',
+      new Set(sequence.covers.map((cover) => cover.copyLeft)).size === 1,
+      sequence.covers.map((cover) => cover.copyLeft).join(' '));
+    check('every chapter has its own line and its own action language',
+      new Set(sequence.covers.map((cover) => cover.line)).size === 4
+      && new Set(sequence.covers.map((cover) => cover.action)).size === 4,
+      sequence.covers.map((cover) => `${cover.line} / ${cover.action}`).join(' | '));
+    check('every cover opens its chapter',
+      sequence.covers.every((cover) => cover.href === `#${cover.id}`),
+      sequence.covers.map((cover) => cover.href).join(' '));
+
+    /* Each cover hands straight over to that chapter's real sections. */
+    check('each chapter\'s contents follow its cover and name real sections',
+      sequence.contents.length === 4
+      && sequence.contents.every((entry) => entry.items.length >= 4 && entry.items.every((href) => href.startsWith('#'))),
+      sequence.contents.map((entry) => `${entry.id}:${entry.items.length}`).join(' '));
+
+    /* THE ONE CHAPTER LIST, and it is the ending. */
+    check('there is exactly one chapter list on the page', sequence.indexCount === 1, String(sequence.indexCount));
+    check('the chapter list is the ending, not a stop in the middle of the journey',
+      sequence.indexInEnding && sequence.indexAt > 0.75,
+      `at ${(sequence.indexAt * 100).toFixed(0)}% of the page`);
+    check('the opening carries no chapter list at all', sequence.indexInOpening === 0);
+    check('four equal-value chapter rows', sequence.rows.length === 4
+      && Math.max(...sequence.rows.map((row) => row.height)) - Math.min(...sequence.rows.map((row) => row.height)) <= 1
+      && new Set(sequence.rows.map((row) => row.width)).size === 1,
+      sequence.rows.map((row) => `${row.width}x${row.height}`).join(','));
+    check('every chapter is openable', sequence.rows.every((row) => row.isLink));
     check('every chapter has a distinct editorial intent',
-      chapterIndex.rows.every((row) => row.intent) && new Set(chapterIndex.rows.map((row) => row.intent)).size === 4);
+      sequence.rows.every((row) => row.intent) && new Set(sequence.rows.map((row) => row.intent)).size === 4);
     check('every chapter has distinct action language',
-      chapterIndex.rows.every((row) => row.action) && new Set(chapterIndex.rows.map((row) => row.action)).size === 4);
-    check('the registration point is the restrained orange signal',
-      chapterIndex.registerSignal === 'rgb(212, 95, 54)', chapterIndex.registerSignal);
-    check('every chapter visual is image-led',
-      chapterIndex.visuals.every((visual) => visual.images === 1), chapterIndex.visuals.map((visual) => visual.images).join(','));
-    check('every chapter visual records its image source',
-      chapterIndex.visuals.every((visual) => visual.source.length > 0), chapterIndex.visuals.map((visual) => visual.source).join(' | '));
-    /* The public name of chapter 04 is wider than its last step: the
+      sequence.rows.every((row) => row.action) && new Set(sequence.rows.map((row) => row.action)).size === 4);
+    check('the index includes concise intent and wayfinding',
+      sequence.rows.every((row) => row.intent.length > 0 && row.action.length > 0),
+      sequence.rows.map((row) => row.text).join(' | '));
+    /* The public name of Pattern Development is wider than its last step: the
        recordings start at the first pattern lines. The internal id stays
        `3d-simulation` so existing links and history entries keep working. */
-    check('chapter 04 is published as Pattern Development',
-      chapterIndex.rows.find((row) => row.chapter === '3d-simulation').name === 'Pattern Development',
-      chapterIndex.rows.find((row) => row.chapter === '3d-simulation').text);
+    check('chapter 03 is published as Pattern Development',
+      sequence.rows.find((row) => row.chapter === '3d-simulation').name === 'Pattern Development',
+      sequence.rows.find((row) => row.chapter === '3d-simulation').text);
     check('the old narrower name is gone from the landing',
       await p.evaluate(() => !/\b3D Simulation\b/.test(
-        [...document.querySelectorAll('.pf-living-index')].map((e) => e.textContent).join(' '))));
-    check('the index includes concise intent and wayfinding',
-      chapterIndex.rows.every((row) => row.intent.length > 0 && row.action.length > 0),
-      chapterIndex.rows.map((row) => row.text).join(' | '));
+        [...document.querySelectorAll('[data-living-index], .pf-cover, .pf-contents')]
+          .map((e) => e.textContent).join(' '))));
     check('no category list appears inside the chapter index',
       await p.evaluate(() => document.querySelectorAll('.pf-living-index .pf-cat').length === 0));
     check('the reference disclaimer never appears in the chapter index',
       await p.evaluate(() => !/no authorship of photographed garments/i
         .test(document.querySelector('.pf-living-index').textContent)));
+
+    /* A chapter's colour is a signal — a number, a rule, an arrow — and never
+       a surface. This replaces the registration-mark assertion that guarded
+       the same rule on the interface the covers took over from. */
+    const surfaces = await p.evaluate(() => {
+      const accents = [...document.querySelectorAll('.pf-cover')]
+        .map((el) => getComputedStyle(el).getPropertyValue('--accent').trim().toLowerCase());
+      const bad = [];
+      for (const el of document.querySelectorAll('.pf-cover *, .pf-contents *, .pf-outro *')) {
+        const style = getComputedStyle(el);
+        const bg = style.backgroundColor;
+        if (bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') continue;
+        const hex = `#${bg.match(/\d+/g).slice(0, 3).map((v) => Number(v).toString(16).padStart(2, '0')).join('')}`;
+        if (!accents.includes(hex)) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width * r.height > 2400) bad.push(`${el.className}:${Math.round(r.width)}x${Math.round(r.height)}`);
+      }
+      return { accents, bad };
+    });
+    check('each chapter carries its own signal colour',
+      new Set(surfaces.accents).size === 4, surfaces.accents.join(' '));
+    check('a chapter colour is a signal, never a surface',
+      surfaces.bad.length === 0, surfaces.bad.join(' '));
 
     /* Nothing heavy is fetched to render the index. */
     const eager = await p.evaluate(() => ({
@@ -297,34 +389,39 @@ try {
   }
 
   for (const width of [390, 430]) {
-    console.log(`\nportfolio living chapter index at ${width}`);
+    console.log(`\nportfolio chapter covers at ${width}`);
     const c = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 932 }, isMobile: true, hasTouch: true });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.evaluate(() => {
-      const cinema = document.querySelector('.pf-cinema');
-      scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * 0.56);
-    });
-    await p.waitForTimeout(500);
-    const mobileIndex = await p.evaluate(() => ({
-      media: (() => {
-        const r = document.querySelector('.pf-cinema__media').getBoundingClientRect();
-        return { left: Math.round(r.left), right: Math.round(r.right), height: Math.round(r.height) };
-      })(),
-      rows: [...document.querySelectorAll('.pf-index-row')].map((el) => {
-        const r = el.getBoundingClientRect();
-        return { left: Math.round(r.left), right: Math.round(r.right), height: Math.round(r.height) };
-      }),
-      phase: document.querySelector('.pf-cinema').dataset.phase,
-    }));
-    check(`${width} resolves to one contained visual field and four equal chapter rows`,
-      mobileIndex.phase === 'index'
-        && mobileIndex.media.left >= 16 && mobileIndex.media.right <= width - 16
-        && mobileIndex.rows.length === 4
-        && mobileIndex.rows.every((row) => row.left >= 16 && row.right <= width - 16)
-        && Math.max(...mobileIndex.rows.map((row) => row.height)) - Math.min(...mobileIndex.rows.map((row) => row.height)) <= 1,
-      JSON.stringify(mobileIndex));
+    await p.waitForTimeout(600);
+
+    /* A phone cannot hold a full-length figure inside a 16:9 frame at any
+       useful size, so each cover zooms its plate and pans it until the
+       chapter's subject is centred, and stands the type underneath it. What
+       is asserted here is that it IS underneath: the two ways this
+       composition breaks on a phone are the subject cropped out of the frame
+       and the type set across the garment. */
+    for (const chapter of ['menswear', '3d-simulation', 'tech-packs']) {
+      await p.locator(`[data-cover="${chapter}"]`).scrollIntoViewIfNeeded();
+      await p.waitForTimeout(800);
+      const cover = await p.evaluate((id) => {
+        const el = document.querySelector(`[data-cover="${id}"]`);
+        const box = (node) => { const r = node.getBoundingClientRect(); return {
+          left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top), bottom: Math.round(r.bottom) }; };
+        const plate = box(el.querySelector('.pf-cover__plate'));
+        const copy = box(el.querySelector('.pf-cover__copy'));
+        return { plate, copy, gutter: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) };
+      }, chapter);
+      check(`${width}: the ${chapter} cover keeps its type inside the gutters`,
+        cover.copy.left >= 16 && cover.copy.right <= width - 16, JSON.stringify(cover.copy));
+      check(`${width}: the ${chapter} cover sets its type clear of the plate`,
+        cover.copy.top >= cover.plate.bottom - 2,
+        `copy from ${cover.copy.top}, plate ends ${cover.plate.bottom}`);
+      check(`${width}: the ${chapter} cover fills the frame edge to edge`,
+        cover.plate.left <= 18 && cover.plate.right >= width - 18, JSON.stringify(cover.plate));
+    }
+
     check(`no horizontal overflow in the ${width} chapter index`,
       await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     await c.close();
@@ -1046,7 +1143,7 @@ try {
     });
     check('the chapter heading is Pattern Development',
       naming.heading === 'Pattern Development', naming.heading);
-    check('the navigation label matches', naming.bar === '04 Pattern Development', naming.bar);
+    check('the navigation label matches', naming.bar === '03 Pattern Development', naming.bar);
     check('the descriptor names the whole development arc',
       /first pattern lines/i.test(naming.descriptor) && /CLO3D validation/i.test(naming.descriptor)
       && /fit decisions/i.test(naming.descriptor), naming.descriptor);

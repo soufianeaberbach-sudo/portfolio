@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "deploy": "wrangler deploy",
     "test:smoke": "node tests/smoke.mjs",
+    "test:opening": "node tests/portfolio-opening.mjs",
     "test:worker": "node tests/worker.mjs",
     "test:domain": "node tests/domain.mjs"
   },
