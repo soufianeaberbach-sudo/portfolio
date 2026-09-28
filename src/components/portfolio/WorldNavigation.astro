@@ -1,16 +1,16 @@
 ---
+/* The running order is read from the chapter sequence, never re-typed here,
+   so this navigation cannot disagree with the covers about what 03 is. */
+import { chapters } from '../../data/portfolio';
+
 interface Props { current?: string }
 const { current } = Astro.props;
-const worlds = [
-  ['womenswear', 'Womenswear'], ['menswear', 'Menswear'],
-  ['tech-packs', 'Tech Packs'], ['3d-simulation', 'Pattern Development'],
-];
 ---
 <nav class="pf-continuity" aria-label="Portfolio worlds">
   <a class="pf-continuity__index" href="#portfolio-index" data-nav aria-label="Return to Portfolio index">Index <span aria-hidden="true">↗</span></a>
-  {worlds.map(([id, title], index) => (
-    <a href={`#${id}`} data-nav aria-current={current === id ? 'page' : undefined}>
-      <span aria-hidden="true">0{index + 1}</span>{title}
+  {chapters.map((chapter) => (
+    <a href={`#${chapter.id}`} data-nav aria-current={current === chapter.id ? 'page' : undefined}>
+      <span aria-hidden="true">{chapter.number}</span>{chapter.title}
     </a>
   ))}
 </nav>

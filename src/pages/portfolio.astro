@@ -9,24 +9,52 @@ import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
 
-const chapterActions = [
-  'Explore silhouettes',
-  'Enter construction',
-  'Open documentation',
-  'Trace development',
-];
-
-const chapterNotes = [
-  'Movement / form / proportion',
-  'Structure / balance / tailoring',
-  'Specification / clarity / handoff',
-  'Pattern / validation / resolution',
-];
-
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
    pending, and nothing inside claims work that does not exist. Refusing to
    open it hid the structure without making the page any more truthful. */
+
+/* Womenswear's cover is the last frame of the opening — the match cut lands
+   on it — so it is the one chapter whose cover is not a section of its own.
+   The other three each get one, built to the same composition. */
+const [womenswearChapter, ...coverChapters] = chapters;
+
+/* WHAT IS ACTUALLY IN EACH CHAPTER, read from the chapter's own content so a
+   rail can never advertise a section that does not exist. The garment worlds
+   carry categories and the URL already addresses them one level deep; the two
+   single-column chapters address their items by name inside themselves. */
+const worldById = new Map(garmentWorlds.map((world) => [world.id, world]));
+const contentsFor = (id: string): Array<{ n: string; label: string; href: string; focus?: string }> => {
+  const world = worldById.get(id);
+  if (world) {
+    return world.categories.map((category) => ({
+      n: category.number,
+      label: category.label,
+      href: `#${id}/${category.id}`,
+    }));
+  }
+  if (id === '3d-simulation') {
+    return simulationSessions.map((session, index) => ({
+      n: String(index + 1).padStart(2, '0'),
+      label: session.title,
+      href: '#3d-simulation',
+      focus: session.id,
+    }));
+  }
+  return techPacks.map((pack, index) => ({
+    n: String(index + 1).padStart(2, '0'),
+    label: pack.title,
+    href: '#tech-packs',
+    focus: pack.id,
+  }));
+};
+
+const contentsKind: Record<string, string> = {
+  womenswear: `${garmentWorlds[0].categories.length} market categories`,
+  menswear: `${garmentWorlds[1].categories.length} market categories`,
+  '3d-simulation': `${simulationSessions.length} recorded sessions`,
+  'tech-packs': `${techPacks.length} documents`,
+};
 ---
 
 <SiteLayout
@@ -75,7 +103,7 @@ const chapterNotes = [
         {/* ONE IMAGE PLANE. It is the campaign plate, then the index's
             preview field, then the Womenswear entrance. */}
         <div class="pf-cinema__media" data-cinema-media aria-hidden="true">
-          <figure class="pf-scene pf-scene--master" data-scene="master">
+          <figure class="pf-scene pf-scene--master" data-scene="master" data-image-source="User-supplied master scene">
             <img
               src="/portfolio/master/master-scene.png"
               srcset="/portfolio/master/master-scene-900.webp 900w, /portfolio/master/master-scene-1400.webp 1400w, /portfolio/master/master-scene-1900.webp 1900w"
@@ -85,29 +113,13 @@ const chapterNotes = [
             />
           </figure>
 
-          {chapters.map((chapter, index) => (
-            <figure
-              class={`pf-cinema__visual pf-cinema__visual--${chapter.id}`}
-              data-media-chapter={chapter.id}
-              data-image-source={chapter.cover.credit.source}
-            >
-              <img
-                src={chapter.cover.image.src}
-                srcset={chapter.cover.image.srcset}
-                sizes="(max-width: 767px) 92vw, 62vw"
-                width={chapter.cover.image.width}
-                height={chapter.cover.image.height}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                style={`object-position:${chapter.cover.focalPosition ?? '50% 50%'}`}
-              />
-            </figure>
-          ))}
-
           {/* The plate the opening cuts to. Same woman, same light, same
               ground — which is what makes the cut read as one camera move. */}
-          <figure class="pf-scene pf-scene--women" data-scene="women">
+          <figure
+            class="pf-scene pf-scene--women"
+            data-scene="women"
+            data-image-source={womenswearChapter.cover.credit.source}
+          >
             <img
               src="/portfolio/master/womenswear-scene.png"
               srcset="/portfolio/master/womenswear-scene-900.webp 900w, /portfolio/master/womenswear-scene-1400.webp 1400w, /portfolio/master/womenswear-scene-1900.webp 1900w"
@@ -126,56 +138,32 @@ const chapterNotes = [
           Fashion ideas developed into products that can be made.
         </p>
 
-        <div class="pf-cinema__register" aria-hidden="true" data-cinema-register>
-          <i></i><b></b><span class="label">01—04</span>
-        </div>
-
-        <nav class="pf-living-index" aria-label="Portfolio chapters" data-living-index>
-          <p class="label"><span>Portfolio chapters</span><span>Four areas of practice</span></p>
-          <ol>
-            {chapters.map((chapter, index) => (
-              <li>
-                <a
-                  class="pf-index-row"
-                  href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-                  data-nav={chapter.id === 'womenswear' ? undefined : true}
-                  data-chapter={chapter.id}
-                  data-index-row
-                >
-                  <span class="pf-index-row__number label">{chapter.number}</span>
-                  <strong class="pf-index-row__title display">{chapter.title}</strong>
-                  <span class="pf-index-row__note">{chapterNotes[index]}</span>
-                  <span class="pf-index-row__action label">{chapterActions[index]} <Arrow /></span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        {/* THE ENTRANCE, not the chapter. Its type sits in the negative space
-            the Womenswear plate leaves on the left, in ink on the scene's own
-            bone — no dark scrim over the photograph. */}
-        <div class="pf-women-threshold" data-women-threshold aria-labelledby="womenswear-entry-title">
-          <div class="pf-women-threshold__copy">
-            <p class="label"><span>01</span> Womenswear</p>
-            <h2 class="display" id="womenswear-entry-title">Designed<br />to move.</h2>
-            <p>Silhouette and proportion guide every cut.</p>
-            <a class="pf-women-threshold__action label" href="#womenswear" data-nav>
-              Enter the chapter <Arrow />
+        {/* THE WOMENSWEAR COVER. Not a separate screen: the last frame of the
+            opening. Its type sits in the negative space the Womenswear plate
+            leaves on the left, in ink on the scene's own bone — no dark scrim
+            over the photograph. Everything about its geometry is shared with
+            the three covers that follow, which is what makes the four read as
+            one family rather than four ideas. */}
+        <div
+          class="pf-women-threshold pf-cover"
+          data-women-threshold
+          style={`--accent:${womenswearChapter.accent};--subject:${womenswearChapter.subject}`}
+          aria-labelledby="womenswear-entry-title"
+        >
+          <div class="pf-cover__copy pf-women-threshold__copy">
+            <p class="pf-cover__eyebrow label">
+              <span>{womenswearChapter.number}</span>{womenswearChapter.title}
+            </p>
+            <h2 class="pf-cover__line display" id="womenswear-entry-title">Designed<br />to move.</h2>
+            <p class="pf-cover__descriptor">Silhouette and proportion guide every cut.</p>
+            <a class="pf-cover__action pf-women-threshold__action label" href="#womenswear" data-nav>
+              {womenswearChapter.action} <Arrow />
             </a>
           </div>
-          <nav class="pf-women-threshold__index" aria-label="Portfolio chapter index">
-            {chapters.map((chapter) => (
-              <a
-                href={chapter.id === 'womenswear' ? '#womenswear-entry' : `#${chapter.id}`}
-                data-nav={chapter.id === 'womenswear' ? undefined : true}
-                aria-current={chapter.id === 'womenswear' ? 'page' : undefined}
-              >
-                <span>{chapter.number}</span>{chapter.title}
-              </a>
-            ))}
-          </nav>
-          <p class="pf-women-threshold__credit label">Chapter cover / visual direction asset</p>
+          <p class="pf-cover__register label" aria-hidden="true">
+            <span>{womenswearChapter.number} / {chapters.length}</span>
+            <span>{womenswearChapter.kind}</span>
+          </p>
         </div>
 
         <p class="pf-cinema__scroll label" data-cinema-scroll>
@@ -184,10 +172,230 @@ const chapterNotes = [
       </div>
       <span class="pf-cinema__entry-anchor" id="womenswear-entry" aria-hidden="true"></span>
     </section>
+
+    {/* ------------------------------------------------------------------
+        THE SEQUENCE.
+
+        Opening → Womenswear cover → Womenswear contents → Menswear cover →
+        Menswear contents → Development cover → Development contents →
+        Tech Packs cover → Tech Packs contents → ending.
+
+        There is no index screen in the middle of that. Each chapter arrives
+        as its own cover and hands over to what is inside it; the running
+        order is the navigation, and the rail at the edge is only a position
+        marker. Every cover is built from the same three parts — a plate on
+        the right, a type block in the negative space it leaves, a register
+        at the foot — so the differences between them are the chapter's, not
+        the layout's.
+        ------------------------------------------------------------------ */}
+
+    {/* Womenswear's cover is the match cut's landing frame, which only exists
+        while there is motion to land it. With motion off there is no camera
+        move and the opening resolves to the master scene alone, so the chapter
+        is given the same cover the other three get, built from the same parts.
+        Exactly one of the two is ever rendered — see the reduced-motion block
+        in the stylesheet. */}
+    <section
+      class="pf-cover pf-cover--section pf-cover--womenswear pf-cover--still"
+      id="cover-womenswear"
+      data-cover={womenswearChapter.id}
+      style={`--accent:${womenswearChapter.accent};--subject:${womenswearChapter.subject}`}
+      aria-labelledby="cover-womenswear-line"
+    >
+      <div class="pf-cover__frame">
+        <figure class="pf-cover__plate" data-image-source={womenswearChapter.cover.credit.source}>
+          <img
+            src={womenswearChapter.cover.image.src}
+            srcset={womenswearChapter.cover.image.srcset}
+            sizes="(max-width: 767px) 128vw, 100vw"
+            width={womenswearChapter.cover.image.width}
+            height={womenswearChapter.cover.image.height}
+            alt={womenswearChapter.cover.image.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <div class="pf-cover__copy">
+          <p class="pf-cover__eyebrow label">
+            <span>{womenswearChapter.number}</span>{womenswearChapter.title}
+          </p>
+          <h2 class="pf-cover__line display" id="cover-womenswear-line">{womenswearChapter.line}</h2>
+          <p class="pf-cover__descriptor">{womenswearChapter.descriptor}</p>
+          <a class="pf-cover__action label" href="#womenswear" data-nav data-chapter={womenswearChapter.id}>
+            {womenswearChapter.action} <Arrow />
+          </a>
+        </div>
+        <p class="pf-cover__register label" aria-hidden="true">
+          <span>{womenswearChapter.number} / {chapters.length}</span>
+          <span>{womenswearChapter.kind}</span>
+        </p>
+      </div>
+    </section>
+
+    <section
+      class="pf-contents pf-contents--floor"
+      aria-labelledby="contents-womenswear"
+      data-contents={womenswearChapter.id}
+    >
+      <h2 class="pf-contents__head label" id="contents-womenswear">
+        <span>In {womenswearChapter.title}</span>
+        <span>{contentsKind[womenswearChapter.id]}</span>
+      </h2>
+      <ol class="pf-contents__list">
+        {contentsFor(womenswearChapter.id).map((item) => (
+          <li>
+            <a href={item.href} data-nav data-focus={item.focus}>
+              <span class="label">{item.n}</span>{item.label}<i aria-hidden="true"><Arrow /></i>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    {coverChapters.map((chapter) => (
+      <Fragment>
+        <section
+          class={`pf-cover pf-cover--section pf-cover--${chapter.id}`}
+          id={`cover-${chapter.id}`}
+          data-cover={chapter.id}
+          style={`--accent:${chapter.accent};--subject:${chapter.subject}`}
+          aria-labelledby={`cover-${chapter.id}-line`}
+        >
+          <div class="pf-cover__frame">
+            {chapter.id === 'tech-packs' ? (
+              /* A tech pack is a FILE, so the cover stages one: the supplied
+                 cover sheet at the front of a small stack of three more,
+                 standing in the same zone the photographic plates occupy. */
+              <div class="pf-cover__plate pf-cover__plate--file" data-file-stack>
+                <div class="pf-file">
+                  <span class="pf-file__sheet pf-file__sheet--d" aria-hidden="true"></span>
+                  <span class="pf-file__sheet pf-file__sheet--c" aria-hidden="true"></span>
+                  <span class="pf-file__sheet pf-file__sheet--b" aria-hidden="true"></span>
+                  {/* Behind the front page, so it slides out from under it. */}
+                  <span class="pf-file__tab label" aria-hidden="true">Style file</span>
+                  <figure class="pf-file__front" data-image-source={chapter.cover.credit.source}>
+                    <img
+                      src={chapter.cover.image.src}
+                      srcset={chapter.cover.image.srcset}
+                      sizes="(max-width: 767px) 84vw, 42vw"
+                      width={chapter.cover.image.width}
+                      height={chapter.cover.image.height}
+                      alt={chapter.cover.image.alt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </figure>
+                </div>
+              </div>
+            ) : (
+              <figure class="pf-cover__plate" data-image-source={chapter.cover.credit.source}>
+                <img
+                  src={chapter.cover.image.src}
+                  srcset={chapter.cover.image.srcset}
+                  sizes="(max-width: 767px) 128vw, 100vw"
+                  width={chapter.cover.image.width}
+                  height={chapter.cover.image.height}
+                  alt={chapter.cover.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            )}
+
+            <div class="pf-cover__copy">
+              <p class="pf-cover__eyebrow label">
+                <span>{chapter.number}</span>{chapter.title}
+              </p>
+              <h2 class="pf-cover__line display" id={`cover-${chapter.id}-line`}>{chapter.line}</h2>
+              <p class="pf-cover__descriptor">{chapter.descriptor}</p>
+              <a class="pf-cover__action label" href={`#${chapter.id}`} data-nav data-chapter={chapter.id}>
+                {chapter.action} <Arrow />
+              </a>
+            </div>
+
+            <p class="pf-cover__register label" aria-hidden="true">
+              <span>{chapter.number} / {chapters.length}</span>
+              <span>{chapter.kind}</span>
+            </p>
+          </div>
+        </section>
+
+        <section
+          class={`pf-contents${chapter.id === 'tech-packs' ? '' : ' pf-contents--floor'}`}
+          aria-labelledby={`contents-${chapter.id}`}
+          data-contents={chapter.id}
+        >
+          <h2 class="pf-contents__head label" id={`contents-${chapter.id}`}>
+            <span>In {chapter.title}</span>
+            <span>{contentsKind[chapter.id]}</span>
+          </h2>
+          <ol class="pf-contents__list">
+            {contentsFor(chapter.id).map((item) => (
+              <li>
+                <a href={item.href} data-nav data-focus={item.focus}>
+                  <span class="label">{item.n}</span>{item.label}<i aria-hidden="true"><Arrow /></i>
+                </a>
+              </li>
+            ))}
+          </ol>
+          {chapter.stateNote && <p class="pf-contents__state label">{chapter.stateNote}</p>}
+        </section>
+      </Fragment>
+    ))}
+
+    {/* THE ENDING. The sequence closes on its own index — the four chapters
+        listed once, at the end, where a contents page belongs in a book. It is
+        deliberately not the middle of the journey. */}
+    <section class="pf-outro" id="portfolio-ending" aria-labelledby="pf-outro-title">
+      <p class="pf-outro__eyebrow label"><span>End of the sequence</span><span>01 — 0{chapters.length}</span></p>
+      <h2 class="pf-outro__title display" id="pf-outro-title">Four chapters,<br />one method.</h2>
+      <p class="pf-outro__lead">
+        Product development, the development that resolves it, and the documentation a factory
+        can build from. Read in any order from here.
+      </p>
+      <nav class="pf-living-index" aria-label="Portfolio chapters" data-living-index>
+        <ol>
+          {chapters.map((chapter) => (
+            <li>
+              <a
+                class="pf-index-row"
+                href={`#${chapter.id}`}
+                data-nav
+                data-chapter={chapter.id}
+                data-index-row
+                style={`--accent:${chapter.accent};--subject:${chapter.subject}`}
+              >
+                <span class="pf-index-row__number label">{chapter.number}</span>
+                <strong class="pf-index-row__title display">{chapter.title}</strong>
+                <span class="pf-index-row__note">{chapter.note}</span>
+                <span class="pf-index-row__action label">{chapter.action} <Arrow /></span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <a class="pf-outro__brief button" href="/contact/">Start a brief <span><Arrow /></span></a>
+    </section>
+
+    {/* The position marker. Secondary by construction: numbers at the edge of
+        the page, the current chapter's name shown and the rest held back. */}
+    <nav class="pf-rail" aria-label="Chapter position" data-rail hidden>
+      <ol>
+        {chapters.map((chapter) => (
+          <li>
+            <a href={`#${chapter.id}`} data-nav data-rail-link={chapter.id} style={`--accent:${chapter.accent};--subject:${chapter.subject}`}>
+              <span class="pf-rail__n label">{chapter.number}</span>
+              <span class="pf-rail__name label">{chapter.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
     <div class="pf-worlds" data-worlds>
       {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
-      <TechPackWorld packs={techPacks} />
       <SimulationWorld sessions={simulationSessions} />
+      <TechPackWorld packs={techPacks} />
     </div>
     <dialog class="pf-evidence-reader" data-evidence-reader aria-labelledby="pf-evidence-title">
       <div class="pf-evidence-reader__bar"><h2 id="pf-evidence-title" class="label"></h2><button type="button" data-evidence-close>Close <span aria-hidden="true">×</span></button></div>
@@ -210,14 +418,17 @@ const chapterNotes = [
     /* ----------------------------------------------------------------------
        THE OPENING, AND THE MATCH CUT INTO WOMENSWEAR.
 
-       One sticky field carries three states of the same image plane:
+       One sticky field carries two states of the same image plane:
 
          opening     the master scene — three figures standing in the page's
                      own bone, with the title in the band above them
-         index       the plane insets and the four chapters are listed beside
-                     it; a row with attention previews its own plate
          womenswear  the plane pushes in on the woman in red, cuts to her own
-                     plate, and pulls back into her frame
+                     plate, and pulls back into her frame, which opens the
+                     negative space the chapter's cover copy is set in
+
+       There is no index screen between them any more. The opening hands
+       straight over to the first chapter's cover, and the three that follow
+       are their own sections below it.
 
        WHY THE CUT WORKS. She appears in both supplied plates at the same
        camera distance — 41.0% of frame width in the master, 42.1% in her own
@@ -245,9 +456,6 @@ const chapterNotes = [
       const media = cinema.querySelector<HTMLElement>('[data-cinema-media]')!;
       const master = cinema.querySelector<HTMLElement>('[data-scene="master"]')!;
       const women = cinema.querySelector<HTMLElement>('[data-scene="women"]')!;
-      const index = cinema.querySelector<HTMLElement>('[data-living-index]')!;
-      const rows = [...cinema.querySelectorAll<HTMLAnchorElement>('[data-index-row]')];
-      const register = cinema.querySelector<HTMLElement>('[data-cinema-register]')!;
       const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
       const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
       const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
@@ -290,33 +498,6 @@ const chapterNotes = [
         return ((target - sceneLeft - HER_IN_MASTER * scene) / scene) * 100;
       };
 
-      const activateChapter = (id: string) => {
-        cinema.dataset.activeChapter = id;
-        const activeIndex = rows.findIndex((row) => row.dataset.chapter === id);
-        cinema.style.setProperty('--register-y', `${18 + Math.max(0, activeIndex) * 22}%`);
-        for (const row of rows) {
-          if (row.dataset.chapter === id) row.setAttribute('aria-current', 'true');
-          else row.removeAttribute('aria-current');
-        }
-      };
-      const clearChapter = () => {
-        cinema.dataset.activeChapter = '';
-        for (const row of rows) row.removeAttribute('aria-current');
-      };
-
-      for (const row of rows) {
-        const activate = () => activateChapter(row.dataset.chapter ?? 'womenswear');
-        row.addEventListener('pointerenter', activate);
-        row.addEventListener('focus', activate);
-        row.addEventListener('touchstart', activate, { passive: true });
-      }
-
-      cinema.querySelector<HTMLAnchorElement>('a[href="#womenswear-entry"]')?.addEventListener('click', (event) => {
-        event.preventDefault();
-        const destination = cinema.offsetTop + cinema.offsetHeight - window.innerHeight;
-        window.scrollTo({ top: destination, behavior: 'smooth' });
-      });
-
       let push = centreOnHer();
       threshold.setAttribute('inert', '');
 
@@ -331,67 +512,26 @@ const chapterNotes = [
           invalidateOnRefresh: true,
           onRefresh: () => { push = centreOnHer(); },
           onUpdate: ({ progress }) => {
-            const phase = progress > 0.66 ? 'womenswear' : progress > 0.27 ? 'index' : 'opening';
+            const phase = progress > 0.7 ? 'womenswear' : 'opening';
             if (cinema.dataset.phase !== phase) {
               cinema.dataset.phase = phase;
-              /* Outside the index the plane belongs to the master plate
-                 again, so a chapter left hovered cannot sit under the cut. */
-              if (phase !== 'index') clearChapter();
               threshold.toggleAttribute('inert', phase !== 'womenswear');
             }
           },
         },
       });
 
-      /* 1. The opening gives way: the title lifts out of its band and the
-            plane draws in to become the index's preview field. */
+      /* 1. The opening gives way: the statement lifts out of the band it was
+            set in, and the folio steps back to a register mark. */
       timeline
-        .to([cue, thesis], { autoAlpha: 0, y: -14, duration: 0.08 }, 0.03)
-        .to(title, { autoAlpha: 0, y: -26, duration: 0.12 }, 0.06)
-        .to(folio, { autoAlpha: 0.42, duration: 0.1 }, 0.05)
-        .to(register, { autoAlpha: 1, duration: 0.08 }, 0.22);
+        .to([cue, thesis], { autoAlpha: 0, y: -14, duration: 0.09 }, 0.04)
+        .to(title, { autoAlpha: 0, y: -26, duration: 0.13 }, 0.07)
+        .to(folio, { autoAlpha: 0.42, duration: 0.11 }, 0.06);
 
-      /* THE INDEX'S PREVIEW FIELD.
-         Its height is derived from its width and the plates' own 16:9, so the
-         scene fills the box exactly. A box of a different shape letterboxed
-         the group inside the field and left a hole with a hard edge in it. */
-      const SCENE_RATIO = 1672 / 941;
-      const inset = () => {
-        const w = media.parentElement!.clientWidth;
-        const h = media.parentElement!.clientHeight;
-        if (isMobile()) {
-          const width = w * 0.908;
-          return { left: '4.6%', top: '11.5%', width: '90.8%', height: `${(width / SCENE_RATIO / h) * 100}%` };
-        }
-        const width = w * 0.46;
-        return { left: '50%', top: '25%', width: '46%', height: `${(width / SCENE_RATIO / h) * 100}%` };
-      };
-
-      timeline
-        .to(media, {
-          left: () => inset().left, top: () => inset().top,
-          width: () => inset().width, height: () => inset().height, duration: 0.17,
-        }, 0.08)
-        /* The plate stops being a crop of the viewport and becomes the whole
-           plate, fitted to the field it is being drawn into. */
-        .to(cinema, { '--scene-fit': 1, duration: 0.17 }, 0.08)
-        .fromTo(index, { autoAlpha: 0, x: () => (isMobile() ? 0 : -22), y: () => (isMobile() ? 18 : 0) }, {
-          autoAlpha: 1, x: 0, y: 0, duration: 0.13,
-        }, 0.22);
-
-      /* 2. The index holds while the visitor reads it. */
-      timeline.to({}, { duration: 0.21 }, 0.35);
-
-      /* 3. The push in. The plane opens back to full bleed FIRST — a plate
-            growing inside a box reads as a box growing, not as a camera
-            moving — and only then does the master plate scale about her, so
+      /* 2. The push in. The master plate scales about the woman in red, so
             the other two figures leave the frame while she stays put. */
       timeline
-        .to(index, { autoAlpha: 0, x: () => (isMobile() ? 0 : -24), y: () => (isMobile() ? 18 : 0), duration: 0.06 }, 0.56)
-        .to([register, folio], { autoAlpha: 0, duration: 0.06 }, 0.57)
-        .to(media, { left: '0%', top: '0%', width: '100%', height: '100%', duration: 0.08 }, 0.56)
-        .to(cinema, { '--scene-fit': 0, duration: 0.06 }, 0.56)
-        .to(master, { xPercent: () => push, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.18 }, 0.62)
+        .to(master, { xPercent: () => push, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.4 }, 0.18)
         /* Her plate rides the same push, offset by exactly the distance
            between the two frames' versions of her — travelling in LOCKSTEP
            with the master, not pinned at the final offset. Pinned, the two
@@ -402,28 +542,154 @@ const chapterNotes = [
            forgiving instead of critical. */
         .fromTo(women,
           { xPercent: () => MATCH, x: 0, y: 0, scale: 1, autoAlpha: 0 },
-          { xPercent: () => push + MATCH, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.18 }, 0.62)
+          { xPercent: () => push + MATCH, y: PUSH_Y, scale: PUSH_SCALE, duration: 0.4 }, 0.18)
 
-        /* 4. The cut, made while the two frames agree. */
-        .to(women, { autoAlpha: 1, duration: 0.06 }, 0.75)
-        .to(master, { autoAlpha: 0, duration: 0.06 }, 0.76)
+        /* 3. The cut, made while the two frames agree. */
+        .to(women, { autoAlpha: 1, duration: 0.08 }, 0.43)
+        .to(master, { autoAlpha: 0, duration: 0.08 }, 0.45)
 
-        /* 5. The pull back: the camera releases the push and pans right until
+        /* 4. The pull back: the camera releases the push and pans right until
               she sits in her own frame, which opens the negative space on the
-              left that the entrance is set in. */
-        .to(women, { xPercent: 0, x: REST_X, y: REST_Y, scale: REST_SCALE, duration: 0.16, ease: 'power1.out' }, 0.81)
-        .fromTo(threshold, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.11 }, 0.87);
+              left that the chapter's cover copy is set in. */
+        .to(women, { xPercent: 0, x: REST_X, y: REST_Y, scale: REST_SCALE, duration: 0.24, ease: 'power1.out' }, 0.58)
+        .fromTo(threshold,
+          { autoAlpha: 0, y: () => (isMobile() ? 16 : 22) },
+          { autoAlpha: 1, y: 0, duration: 0.14 }, 0.72)
+        /* The opening's folio belongs to the opening. Once the cover has
+           arrived, the chapter's own register is the only mark on the frame. */
+        .to(folio, { autoAlpha: 0, duration: 0.08 }, 0.74);
     } else if (cinema) {
-      /* Without motion there is no entrance to scroll into — the opening
-         resolves straight to the chapter index — so the Womenswear row opens
-         its chapter directly, exactly like the other three, and the entrance
-         that will never be reached is taken out of the page. */
-      const row = cinema.querySelector<HTMLAnchorElement>('a[href="#womenswear-entry"]');
-      if (row) {
-        row.setAttribute('href', '#womenswear');
-        row.dataset.nav = 'true';
-      }
+      /* Without motion there is no camera move to land, so the opening stays
+         on the master scene and the Womenswear cover is the still section
+         below it — the one the stylesheet swaps in for exactly this case. The
+         landing frame that will never be reached leaves the page. */
       cinema.querySelector('[data-women-threshold]')?.setAttribute('inert', '');
+    }
+
+    /* ----------------------------------------------------------------------
+       THE CHAPTER COVERS.
+
+       Three sections, one behaviour. A cover does not fade in: its plate is
+       held shut as a band and the band OPENS — an aperture, scrubbed against
+       the section's own travel through the viewport — while the plate settles
+       out of a slight push. Reading back up closes it again. The copy follows
+       the aperture rather than leading it, so the frame is always what reveals
+       the chapter and never the other way round.
+       ---------------------------------------------------------------------- */
+    const covers = [...document.querySelectorAll<HTMLElement>('[data-cover]:not(.pf-cover--still)')];
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (covers.length > 0 && !still.matches) {
+      for (const cover of covers) {
+        const plate = cover.querySelector<HTMLElement>('.pf-cover__plate')!;
+        const copy = cover.querySelector<HTMLElement>('.pf-cover__copy')!;
+        const register = cover.querySelector<HTMLElement>('.pf-cover__register')!;
+
+        /* ONE timeline across the section's whole passage through the
+           viewport — in, hold, out — rather than two triggers, one keyed to
+           the section's top and one to its bottom. Those two overlapped
+           whenever a section was shorter than the viewport: on a phone the
+           92svh cover's `bottom bottom` came BEFORE its `top top`, so the
+           closing tween started while the opening one was still running and
+           the cover never opened at all. Progress 0.5 is the moment a section
+           is most visible at every section-to-viewport ratio, so the frame is
+           held open either side of it and closes only on the way out. */
+        gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: cover, start: 'top bottom', end: 'bottom top',
+            scrub: 0.4, invalidateOnRefresh: true,
+          },
+        })
+          .fromTo(plate, { '--aperture': 30, scale: 1.075 }, { '--aperture': 0, scale: 1, duration: 0.34 }, 0)
+          .fromTo([copy, register], { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.17, stagger: 0.04 }, 0.2)
+          .to(plate, { '--aperture': 22, scale: 1.04, duration: 0.3 }, 0.68)
+          .to([copy, register], { autoAlpha: 0, y: -22, duration: 0.18 }, 0.72);
+      }
+    }
+
+    /* ----------------------------------------------------------------------
+       THE TECH PACK FILE.
+
+       The stack answers to attention rather than performing on its own: the
+       sheets step apart, the front page lifts off them and the shadow under it
+       deepens. A pointer over the file also leans it a couple of degrees
+       toward the cursor — the only free motion anywhere in the sequence, and
+       capped at a few pixels so it reads as weight, not as a toy. Keyboard
+       focus on the chapter's action drives the same state through CSS, so the
+       file opens for a visitor who never touches a pointer.
+       ---------------------------------------------------------------------- */
+    const fileCover = document.querySelector<HTMLElement>('[data-cover="tech-packs"]');
+    if (fileCover) {
+      /* Keyboard parity with the hover state, without :has(). */
+      fileCover.addEventListener('focusin', () => {
+        const active = document.activeElement;
+        if (active instanceof HTMLElement && active.matches(':focus-visible')) {
+          fileCover.setAttribute('data-file-open', '');
+        }
+      });
+      fileCover.addEventListener('focusout', () => fileCover.removeAttribute('data-file-open'));
+    }
+
+    const stack = document.querySelector<HTMLElement>('[data-file-stack] .pf-file');
+    if (stack && !still.matches && window.matchMedia('(hover: hover)').matches) {
+      const TILT = 1.1;
+      const SHIFT = 7;
+      let frame = 0;
+      const lean = (event: PointerEvent) => {
+        if (frame) return;
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          const box = stack.getBoundingClientRect();
+          const x = (event.clientX - box.left) / box.width - 0.5;
+          const y = (event.clientY - box.top) / box.height - 0.5;
+          stack.style.setProperty('--lean-x', `${(x * TILT).toFixed(2)}deg`);
+          stack.style.setProperty('--lean-y', `${(-y * TILT).toFixed(2)}deg`);
+          stack.style.setProperty('--lean-px', `${(x * SHIFT).toFixed(1)}px`);
+          stack.style.setProperty('--lean-py', `${(y * SHIFT).toFixed(1)}px`);
+        });
+      };
+      const settle = () => {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        for (const prop of ['--lean-x', '--lean-y', '--lean-px', '--lean-py']) stack.style.removeProperty(prop);
+      };
+      stack.addEventListener('pointermove', lean);
+      stack.addEventListener('pointerleave', settle);
+      stack.closest('.pf-cover')?.addEventListener('focusout', settle);
+    }
+
+    /* ----------------------------------------------------------------------
+       THE POSITION MARKER. Not an index: it says where in the sequence the
+       reader is and offers the four names, and it only exists once the
+       opening has been left behind.
+       ---------------------------------------------------------------------- */
+    const rail = document.querySelector<HTMLElement>('[data-rail]');
+    if (rail && 'IntersectionObserver' in window) {
+      rail.hidden = false;
+      const links = new Map(
+        [...rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]')].map((a) => [a.dataset.railLink!, a]),
+      );
+      const mark = (id: string | null) => {
+        for (const [key, link] of links) {
+          if (key === id) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        }
+      };
+      const zones = [...document.querySelectorAll<HTMLElement>('[data-cover], [data-contents]')];
+      const seen = new Map<Element, number>();
+      const watcher = new IntersectionObserver((entries) => {
+        for (const entry of entries) seen.set(entry.target, entry.intersectionRatio);
+        let best: HTMLElement | null = null;
+        let bestRatio = 0.12;
+        for (const zone of zones) {
+          const ratio = seen.get(zone) ?? 0;
+          if (ratio > bestRatio) { bestRatio = ratio; best = zone; }
+        }
+        rail.dataset.live = best ? 'true' : 'false';
+        mark(best?.dataset.cover ?? best?.dataset.contents ?? null);
+      }, { threshold: [0, 0.12, 0.35, 0.6, 0.9] });
+      for (const zone of zones) watcher.observe(zone);
     }
   </script>
 
@@ -478,8 +744,13 @@ const chapterNotes = [
         for (const el of [document.querySelector('.site-header'), document.querySelector('.site-footer')]) {
           if (el) (el as HTMLElement).toggleAttribute('inert', on);
         }
-        for (const el of [root.querySelector('.pf-covers'), root.querySelector('.pf-intro')]) {
-          if (el) (el as HTMLElement).toggleAttribute('inert', on);
+        /* Everything the sequence is made of. A chapter opens over the page,
+           so the opening, the four covers, their contents rails, the ending
+           and the position marker all leave the focus order behind it. */
+        for (const el of root.querySelectorAll<HTMLElement>(
+          '.pf-cinema, .pf-cover--section, .pf-contents, .pf-outro, .pf-rail',
+        )) {
+          el.toggleAttribute('inert', on);
         }
       };
 
@@ -587,6 +858,16 @@ const chapterNotes = [
           if (!hash.startsWith('#')) return;
           event.preventDefault();
           go(hash === '#portfolio-index' ? '' : hash);
+          /* A contents rail names the thing it points at. Tech Packs and
+             Pattern Development are one column each, so the URL addresses the
+             chapter and the rail brings the named document or recording into
+             view inside it — the link keeps its promise without inventing a
+             second level of history that does not exist. */
+          const focus = link.dataset.focus;
+          if (focus && openWorld) {
+            const item = openWorld.querySelector<HTMLElement>(`[data-doc="${focus}"], [data-video="${focus}"]`);
+            item?.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+          }
         });
       }
 

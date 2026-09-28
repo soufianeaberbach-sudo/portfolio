@@ -20,6 +20,7 @@
  * than five documents.
  */
 import type { TechPack } from '../../data/portfolio';
+import { chapterNumber } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import WorldNavigation from './WorldNavigation.astro';
 
@@ -38,7 +39,7 @@ const anyDemo = packs.some((pack) => pack.demo);
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
         <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
       </a>
-      <p class="label pf-bar__tag"><b>03</b> Tech Packs</p>
+      <p class="label pf-bar__tag"><b>{chapterNumber('tech-packs')}</b> Tech Packs</p>
     </div>
 
     <header class="pf-head">

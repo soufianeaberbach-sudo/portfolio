@@ -19,6 +19,7 @@
  * Google while the page is merely open.
  */
 import type { SimulationSession } from '../../data/portfolio';
+import { chapterNumber } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 import WorldNavigation from './WorldNavigation.astro';
 
@@ -42,7 +43,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
         <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
       </a>
-      <p class="label pf-bar__tag"><b>04</b> Pattern Development</p>
+      <p class="label pf-bar__tag"><b>{chapterNumber('3d-simulation')}</b> Pattern Development</p>
     </div>
 
     <header class="pf-head">

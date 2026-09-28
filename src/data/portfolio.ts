@@ -536,57 +536,105 @@ export interface Chapter {
   descriptor: string;
   publication: Publication;
   cover: ChapterCover;
+  /* The chapter's own signal colour. Used for a number, a rule and an arrow
+     — never as a surface, and never as the only carrier of meaning: the
+     chapter's name is always set in ink beside it. */
+  accent: string;
+  /* Where the subject stands in this chapter's plate, as a fraction of frame
+     width — measured from the supplied file, not estimated. A phone cannot
+     hold a full-length figure inside a 16:9 frame at any useful size, so
+     there the cover zooms the plate and pans it until this point is centred.
+     Measured from the file — the stylesheet caps it to whatever the zoomed
+     window can reach without running off the edge of the plate. */
+  subject: number;
+  /* The one display line on the chapter's cover. */
+  line: string;
+  /* Three words naming the register the chapter works in, and the verb that
+     opens it. These used to be two positional arrays in the page, which meant
+     reordering the chapters silently reassigned every one of them. */
+  note: string;
+  action: string;
   /* One restrained line shown when the chapter is not published work. Never
      promotional, never a promise with a date. */
   stateNote?: string;
 }
 
-export const chapters: Chapter[] = [
+/* A supplied studio plate, 16:9, subject standing right of centre with the
+   left of the frame left clean. Every photographic cover in the sequence is
+   built from one, which is what makes the four covers read as one family. */
+const scene = (name: string, alt: string): ChapterCover => ({
+  image: {
+    src: `/portfolio/master/${name}.png`,
+    srcset: `/portfolio/master/${name}-900.webp 900w, /portfolio/master/${name}-1400.webp 1400w, /portfolio/master/${name}-1900.webp 1900w`,
+    width: 1672,
+    height: 941,
+    alt,
+    front: 1,
+  },
+  credit: { source: 'User-supplied chapter cover' },
+});
+
+/* THE SEQUENCE.
+ *
+ * The portfolio is read in the order the work is actually made: the two
+ * product chapters first, then the development that proves them, then the
+ * documentation that hands them over. Development therefore precedes Tech
+ * Packs — a pack is written from a resolved pattern, not the other way round.
+ *
+ * Numbering is not stored twice. It is derived from this array's order below,
+ * so a chapter cannot be moved without its number moving with it. */
+const chapterSequence: Array<Omit<Chapter, 'number'>> = [
   {
     id: 'womenswear',
-    number: '01',
     title: 'Womenswear',
     kind: 'Product development',
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
-    cover: {
-      image: {
-        src: '/portfolio/covers/womenswear-ivory-editorial.jpg',
-        srcset: '/portfolio/covers/womenswear-ivory-editorial.jpg 1280w',
-        width: 1280,
-        height: 720,
-        alt: 'Woman in a flowing ivory dress moving through a warm architectural space.',
-        front: 1,
-      },
-      credit: { source: 'User-supplied chapter cover' },
-      focalPosition: '60% 50%',
-    },
+    cover: scene('womenswear-scene', 'Woman in a red evening dress with the skirt in full movement, in a bone studio.'),
+    accent: '#c83d46',
+    subject: 0.755,
+    line: 'Designed to move.',
+    note: 'Movement / form / proportion',
+    action: 'Explore silhouettes',
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
   },
   {
     id: 'menswear',
-    number: '02',
     title: 'Menswear',
     kind: 'Product development',
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
-    cover: {
-      image: {
-        src: '/portfolio/covers/menswear-tailoring-editorial.jpg',
-        srcset: '/portfolio/covers/menswear-tailoring-editorial.jpg 1280w',
-        width: 1280,
-        height: 720,
-        alt: 'Man in black tailoring standing in a warm architectural space.',
-        front: 1,
-      },
-      credit: { source: 'User-supplied chapter cover' },
-      focalPosition: '57% 50%',
-    },
+    cover: scene('menswear-scene', 'Man in a cobalt double-breasted suit standing in a bone studio.'),
+    accent: '#2a62aa',
+    subject: 0.794,
+    line: 'Built to hold.',
+    note: 'Structure / balance / tailoring',
+    action: 'Enter construction',
     stateNote: 'Selected menswear work will be published here.',
   },
   {
+    /* The id stays `3d-simulation` so every link, hash and history entry that
+       already exists keeps working. The PUBLIC name is wider than that: these
+       recordings start at the first pattern lines, not at the finished
+       simulation, and calling the chapter after its last step undersold the
+       work in it. */
+    id: '3d-simulation',
+    title: 'Pattern Development',
+    kind: 'Digital validation',
+    descriptor:
+      'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
+    publication: simulationSessions.some((session) => !session.demo)
+      ? 'published'
+      : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',
+    cover: scene('pattern-scene', 'Chrome mannequin wearing a draped turquoise gown in a bone studio.'),
+    accent: '#5749b0',
+    subject: 0.788,
+    line: 'Proven before cutting.',
+    note: 'Pattern / validation / resolution',
+    action: 'Trace development',
+  },
+  {
     id: 'tech-packs',
-    number: '03',
     title: 'Tech Packs',
     kind: 'Technical documentation',
     descriptor: 'Production-ready technical documentation.',
@@ -596,46 +644,35 @@ export const chapters: Chapter[] = [
     publication: techPacks.some((pack) => !pack.demo)
       ? 'published'
       : techPacks.length > 0 ? 'reference-preview' : 'unpublished',
+    /* Not a studio plate: a sheet. The cover stages this as the front page of
+       a small file, three more sheets behind it. */
     cover: {
       image: {
-        src: '/portfolio/covers/tech-packs-yarima-specification.jpg',
-        srcset: '/portfolio/covers/tech-packs-yarima-specification.jpg 1200w',
-        width: 1200,
-        height: 850,
-        alt: 'Technical specification sheet for a jacket, with front and back flats and material details.',
+        src: '/portfolio/master/tech-pack-sheet.jpg',
+        srcset: '/portfolio/master/tech-pack-sheet-900.webp 900w, /portfolio/master/tech-pack-sheet-1400.webp 1400w',
+        width: 1199,
+        height: 848,
+        alt: 'Tech pack cover sheet: brand, season and style fields beside fabric swatches, with front and back flats of a tailored double-breasted coat.',
         front: 1,
       },
       credit: { source: 'User-supplied chapter cover' },
-      focalPosition: '50% 50%',
     },
+    accent: '#8a5412',
+    subject: 0.5,
+    line: 'Written to be made.',
+    note: 'Specification / clarity / handoff',
+    action: 'Open documentation',
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
-  {
-    /* The id stays `3d-simulation` so every link, hash and history entry that
-       already exists keeps working. The PUBLIC name is wider than that: these
-       recordings start at the first pattern lines, not at the finished
-       simulation, and calling the chapter after its last step undersold the
-       work in it. */
-    id: '3d-simulation',
-    number: '04',
-    title: 'Pattern Development',
-    kind: 'Digital validation',
-    descriptor:
-      'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
-    publication: simulationSessions.some((session) => !session.demo)
-      ? 'published'
-      : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',
-    cover: {
-      image: {
-        src: '/portfolio/covers/pattern-development-chrome-studio.jpg',
-        srcset: '/portfolio/covers/pattern-development-chrome-studio.jpg 1280w',
-        width: 1280,
-        height: 720,
-        alt: 'Two chrome mannequin figures wearing blue-grey garments in a dark studio.',
-        front: 1,
-      },
-      credit: { source: 'User-supplied chapter cover' },
-      focalPosition: '58% 50%',
-    },
-  },
 ];
+
+export const chapters: Chapter[] = chapterSequence.map((chapter, index) => ({
+  ...chapter,
+  number: String(index + 1).padStart(2, '0'),
+}));
+
+/* The one place the running order is published to the rest of the interface,
+   so a world's own bar and the continuity navigation cannot disagree with the
+   covers about what chapter 03 is. */
+export const chapterNumber = (id: string): string =>
+  chapters.find((chapter) => chapter.id === id)?.number ?? '';
