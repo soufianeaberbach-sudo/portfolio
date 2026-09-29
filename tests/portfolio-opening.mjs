@@ -20,6 +20,7 @@
      - without motion every chapter still has a cover and still opens
    --------------------------------------------------------------------------- */
 import { chromium } from 'playwright';
+import { installFonts } from './fixtures/fonts.mjs';
 import { mkdir } from 'node:fs/promises';
 
 const base = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4339';
@@ -42,9 +43,9 @@ const HER = { master: [0.264, 0.4865], women: [0.7585, 0.493] };
    from the page, so the page cannot quietly agree with itself about the wrong
    sequence or the wrong word. */
 const ORDER = [
-  ['womenswear', 'Womenswear', 'silhouettes'],
+  ['womenswear', 'Womenswear', 'silhouette'],
   ['menswear', 'Menswear', 'proportion'],
-  ['3d-simulation', 'Pattern Development', 'patterns'],
+  ['3d-simulation', 'Development', 'fit'],
   ['tech-packs', 'Tech Packs', 'specifications'],
 ];
 
@@ -116,6 +117,38 @@ const inkBehindType = async (page, width, height) => {
   return read;
 };
 
+/* How much black each word of the masthead puts on the page. */
+const inkOfWords = async (page) => {
+  const boxes = await page.evaluate(() => {
+    const out = {};
+    for (const key of ['instinct', 'construction']) {
+      const r = document.querySelector(`.pf-cinema__${key}`).getBoundingClientRect();
+      out[key] = { x: r.x - 2, y: r.y - 2, width: r.width + 4, height: r.height + 4 };
+    }
+    return out;
+  });
+  const read = async (box) => {
+    const shot = await page.screenshot({ clip: box });
+    return page.evaluate((url) => new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let dark = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          if (0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2] < 140) dark += 1;
+        }
+        resolve(dark);
+      };
+      img.src = url;
+    }), `data:image/png;base64,${shot.toString('base64')}`);
+  };
+  return { instinct: await read(boxes.instinct), construction: await read(boxes.construction) };
+};
+
 /* The air between the masthead and the picture, in pixels. */
 const airUnderType = async (page, width, height, inkBottom) => {
   const band = await page.evaluate(([bottom]) => {
@@ -160,11 +193,23 @@ const seek = (page, progress) => page.evaluate((p) => {
 }, progress);
 
 const browser = await chromium.launch();
+/* Every context in this file renders with the site's real faces — see
+   fixtures/fonts.mjs for why that is not a detail. */
+const ctxWithFonts = async (options) => {
+  const context = await browser.newContext(options);
+  await installFonts(context);
+  return context;
+};
+const pageWithFonts = async (options) => {
+  const context = await ctxWithFonts(options);
+  return context.newPage();
+};
+
 try {
   // ---- the statement, set as the thing it says ----------------------------
   console.log('\nbetween instinct & construction');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
@@ -204,9 +249,9 @@ try {
       return {
         text: t.textContent.replace(/\s+/g, ' ').trim().toUpperCase(),
         kicker: { text: kicker.textContent.trim(), family: cs(kicker).fontFamily, size: parseFloat(cs(kicker).fontSize) },
-        instinct: { text: instinct.textContent.trim(), family: cs(instinct).fontFamily, fill: cs(instinct).color, stroke: cs(instinct).webkitTextStrokeWidth, cap: capOf(instinct) },
+        instinct: { text: instinct.textContent.trim(), family: cs(instinct).fontFamily, axis: cs(instinct).fontVariationSettings, fill: cs(instinct).color, stroke: cs(instinct).webkitTextStrokeWidth, cap: capOf(instinct), width: instinct.getBoundingClientRect().width },
         amp: { fill: cs(amp).color },
-        construction: { text: construction.textContent.trim(), family: cs(construction).fontFamily, fill: cs(construction).color, cap: capOf(construction) },
+        construction: { text: construction.textContent.trim(), family: cs(construction).fontFamily, axis: cs(construction).fontVariationSettings, fill: cs(construction).color, cap: capOf(construction), width: construction.getBoundingClientRect().width },
         /* One line: every part sits on the same baseline. */
         baselines: [instinct, amp, construction].map((el) => metrics(el).baseline),
         measure: { left: title.left, right: title.right, inkRight: construction.getBoundingClientRect().right },
@@ -220,19 +265,36 @@ try {
     check('BETWEEN behaves as a kicker, not as headline type',
       /Mono/i.test(type.kicker.family) && type.kicker.size < type.instinct.cap / 3,
       `${type.kicker.family} at ${type.kicker.size}px against a ${Math.round(type.instinct.cap)}px cap`);
-    /* THE CONCEPT IS CARRIED BY TWO VOICES, NOT BY AN OUTLINE — which is the
-       home page's device and was the one thing the Portfolio must not repeat.
-       INSTINCT is the display face; CONSTRUCTION is the mono. */
-    check('INSTINCT is set in the display face, solid ink',
-      /Archivo/i.test(type.instinct.family) && type.instinct.fill === 'rgb(17, 17, 15)'
+    /* THE CONCEPT IS CARRIED BY TWO WIDTHS OF ONE FAMILY, NOT BY AN OUTLINE —
+       the outline is the home page's device and is the one thing the
+       Portfolio must not repeat. Archivo reaches this site as a variable font
+       with a width axis of 75..125; INSTINCT is set at the wide end and
+       CONSTRUCTION at the narrow one. */
+    check('both halves are set in the one display family, solid ink',
+      /Archivo/i.test(type.instinct.family) && /Archivo/i.test(type.construction.family)
+        && type.instinct.fill === 'rgb(17, 17, 15)' && type.construction.fill === 'rgb(17, 17, 15)'
         && parseFloat(type.instinct.stroke || '0') === 0,
-      `${type.instinct.family} ${type.instinct.fill} stroke ${type.instinct.stroke}`);
-    check('CONSTRUCTION is set in the technical face, and is not an outline',
-      /Mono/i.test(type.construction.family) && type.construction.fill === 'rgb(17, 17, 15)',
-      `${type.construction.family} ${type.construction.fill}`);
-    check('the two voices share a cap height, so the line reads as one line',
-      Math.abs(type.instinct.cap - type.construction.cap) <= 3,
+      `${type.instinct.family} / ${type.construction.family}`);
+    check('INSTINCT takes the wide end of the axis and CONSTRUCTION the narrow one',
+      /125/.test(type.instinct.axis) && /75/.test(type.construction.axis),
+      `${type.instinct.axis} vs ${type.construction.axis}`);
+    /* EQUAL AUTHORITY, MEASURED. Neither word may outrank the other: same
+       capital height, same set width, and the same amount of ink on the page.
+       A concept with two forces in it fails the moment one is a subtitle. */
+    check('the two halves share a cap height',
+      Math.abs(type.instinct.cap - type.construction.cap) <= 2,
       `${type.instinct.cap.toFixed(1)} vs ${type.construction.cap.toFixed(1)}`);
+    check('and a set width, to within a few per cent',
+      Math.abs(1 - type.construction.width / type.instinct.width) <= 0.09,
+      `${Math.round(type.instinct.width)} vs ${Math.round(type.construction.width)}`);
+    /* And the same amount of INK on the page — eight wide capitals against
+       twelve narrow ones. Cap height and set width can agree while one word
+       still sits heavier than the other; this is the check that cannot be
+       argued with, and it is read off the render. */
+    const ink = await inkOfWords(page);
+    check('and the same weight of ink, so neither word outranks the other',
+      Math.abs(1 - ink.construction / ink.instinct) <= 0.12,
+      `${ink.instinct} px against ${ink.construction} px`);
     check('and they sit on one baseline',
       Math.max(...type.baselines) - Math.min(...type.baselines) <= 1.5,
       type.baselines.map((b) => b.toFixed(1)).join(' / '));
@@ -243,7 +305,7 @@ try {
     check('the ampersand stays solid, holding the two together',
       type.amp.fill === 'rgb(17, 17, 15)', type.amp.fill);
     check('the supporting line says fashion AND product, not generic freelancing',
-      type.thesis === 'Fashion design, pattern development and technical product work — connected from first idea to production.',
+      type.thesis === 'Fashion design, pattern development and technical product work — connected from concept to production.',
       type.thesis);
 
     const tone = await page.evaluate(() => {
@@ -271,7 +333,7 @@ try {
   // ---- THE DEFECT THIS PASS EXISTS TO FIX --------------------------------
   console.log('\nthe statement never crosses a face');
   for (const [width, height] of VIEWPORTS) {
-    const context = await browser.newContext({
+    const context = await ctxWithFonts({
       viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768, deviceScaleFactor: 1,
     });
     const page = await context.newPage();
@@ -362,7 +424,7 @@ try {
   // ---- four worlds, one site ---------------------------------------------
   console.log('\nsame grammar, different dialect');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await page.waitForTimeout(800);
@@ -385,7 +447,7 @@ try {
             return `${cs.backgroundColor} ${cs.backgroundImage}`;
           })(),
           /* The dialects. */
-          nameFace: getComputedStyle(name).fontFamily,
+          nameAxis: getComputedStyle(name).fontVariationSettings,
           echo: [...name.querySelectorAll('[data-echo]')].map((el) => el.dataset.echo).join(' ')
             || name.dataset.echo || '',
           sheets: el.querySelectorAll('.pf-file__sheet').length,
@@ -414,20 +476,23 @@ try {
     /* SAME GRAMMAR, DIFFERENT DIALECT: exactly one world carries each device,
        so the covers cannot collapse back into four recolours of one layout. */
     const by = (id) => covers.find((c) => c.id === id);
-    /* The three garment worlds speak in the display face and Tech Packs in
-       the mono — the masthead's two voices, carried by the titles as the work
-       moves from design to production. */
-    check('Tech Packs is the one titled in the technical voice',
-      /Mono/i.test(by('tech-packs').nameFace)
-        && covers.filter((c) => /Mono/i.test(c.nameFace)).length === 1,
-      covers.map((c) => `${c.id}:${c.nameFace.split(',')[0]}`).join(' '));
+    /* THE FOUR TITLES TRAVEL THE MASTHEAD'S OWN AXIS, in running order, from
+       the wide end where INSTINCT sits to the narrow end where CONSTRUCTION
+       does: the typography moves from instinct toward construction as the
+       visitor does. */
+    const widths = covers.map((c) => Number((c.nameAxis.match(/(\d+)/) ?? [])[1]));
+    check('the four titles narrow along the journey, wide to condensed',
+      widths.every((v, i) => i === 0 || (Number.isFinite(v) && v < widths[i - 1])),
+      covers.map((c, i) => `${c.name} ${widths[i]}`).join(' → '));
+    check('and they start and end on the masthead\'s own two poles',
+      widths[0] === 125 && widths[widths.length - 1] === 75, `${widths[0]} … ${widths[widths.length - 1]}`);
     /* And no two names are set at the same size, because each is fitted to
        the field its own photograph leaves. */
     check('each name is fitted to its own field, so no two are the same size',
       new Set(covers.map((c) => Math.round(c.nameSize))).size === 4,
       covers.map((c) => `${c.name} ${Math.round(c.nameSize)}px`).join(' · '));
-    check('Pattern Development is the one whose name is drawn before it is filled',
-      by('3d-simulation').echo === 'Pattern Development' && covers.filter((c) => c.echo).length === 1,
+    check('Development is the one whose name is drawn before it is filled',
+      by('3d-simulation').echo === 'Development' && covers.filter((c) => c.echo).length === 1,
       covers.map((c) => `${c.id}:${c.echo || '-'}`).join(' '));
     check('Tech Packs is the one made of paper — a front sheet and three behind',
       by('tech-packs').sheets === 3 && covers.filter((c) => c.sheets > 0).length === 1,
@@ -464,7 +529,7 @@ try {
      MENSWEA on a phone. */
   console.log('\nno name is cut by its own box');
   for (const [width, height] of [[768, 1024], [430, 932], [390, 844]]) {
-    const context = await browser.newContext({
+    const context = await ctxWithFonts({
       viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768, deviceScaleFactor: 1,
     });
     const page = await context.newPage();
@@ -499,7 +564,7 @@ try {
   // ---- one control, and nothing else that numbers ------------------------
   console.log('\none control');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await page.waitForTimeout(800);
@@ -539,7 +604,7 @@ try {
 
     /* A touch control, not a hover affordance. */
     await context.close();
-    const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+    const phone = await ctxWithFonts({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
     const small = await phone.newPage();
     await small.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await small.locator('[data-cover="menswear"]').scrollIntoViewIfNeeded();
@@ -557,7 +622,7 @@ try {
   // ---- without motion ------------------------------------------------------
   console.log('\nwithout motion');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await page.waitForTimeout(800);

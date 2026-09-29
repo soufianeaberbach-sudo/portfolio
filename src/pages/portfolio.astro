@@ -101,29 +101,29 @@ const split = (statement: string, word: string) => {
           </figure>
         </div>
 
-        {/* THE MASTHEAD.
-            A fitted title, set on ONE baseline and measured to meet both
-            gutters — the oldest move in magazine typography and the one the
-            picture asks for: the master scene leaves a wide, shallow band of
-            empty backdrop above the figures, so the type is wide and shallow
-            and fills it.
+        {/* THE MASTHEAD — TWO EQUAL FORCES, ONE FAMILY, TWO WIDTHS.
+            Archivo is served to this site as a variable font with a WIDTH
+            axis of 75..125, and the rest of aberbach.co never leaves 104..112.
+            The Portfolio takes the ends of that axis, which is a voice the
+            home page cannot have.
 
-            The tension is carried by two voices rather than by an outline.
-            INSTINCT is the display face at full weight: felt, immediate.
-            CONSTRUCTION is the mono at a matched cap height, letter-spaced:
-            the technical voice, the thing specified. BETWEEN rides the same
-            baseline as a kicker. Nothing here repeats the home page's hero,
-            which is a stacked block with one word drawn in outline. */}
+            INSTINCT is set expanded and open — eight wide capitals, tracked
+            out, breathing. CONSTRUCTION is set condensed and packed — twelve
+            narrow capitals, tracked in. At one cap height the two words come
+            out the same width and the same weight of ink, so NEITHER
+            OUTRANKS THE OTHER: the difference between them is character, not
+            size. The ampersand between them is set light at the middle of the
+            axis — the hinge the two forces turn on. */}
         <h1 class="pf-cinema__title" id="pf-cinema-title" data-cinema-title>
           <span class="pf-cinema__kicker">Between</span>
-          <span class="pf-cinema__instinct display">Instinct</span>
-          <span class="pf-cinema__amp display">&amp;</span>
+          <span class="pf-cinema__instinct">Instinct</span>
+          <span class="pf-cinema__amp">&amp;</span>
           <span class="pf-cinema__construction">Construction</span>
         </h1>
 
         <p class="pf-cinema__thesis" data-cinema-thesis>
           Fashion design, pattern development and technical product work
-          — connected from first idea to production.
+          — connected from concept to production.
         </p>
 
         {/* THE WOMENSWEAR COVER. Not a separate screen: the last frame of the
@@ -140,7 +140,7 @@ const split = (statement: string, word: string) => {
         >
           <div class="pf-cover__copy pf-women-threshold__copy">
             <p class="pf-cover__rule" aria-hidden="true"></p>
-            <h2 class="pf-cover__name display" id="womenswear-entry-title">{womenswearChapter.title}</h2>
+            <h2 class="pf-cover__name" id="womenswear-entry-title">{womenswearChapter.title}</h2>
             <p class="pf-cover__statement">
               {split(womenswearChapter.statement, womenswearChapter.highlight)[0]}
               <em>{womenswearChapter.highlight}</em>
@@ -198,10 +198,16 @@ const split = (statement: string, word: string) => {
           aria-labelledby={`cover-${chapter.id}-name`}
         >
           <div class="pf-cover__frame">
-            {/* Menswear had three hairlines drawn across it here. They were
-                decoration standing in for structure: nothing in the layout
-                answered to them and nothing in the chapter needed them. Its
-                structure is now in the type — see the stylesheet. */}
+            {/* DEVELOPMENT'S CONSTRUCTION AXIS. One line struck across the
+                frame at the garment's own waist, ticked at both ends: the
+                axis a pattern is drafted against. It is the only graphic
+                mark in the sequence, it carries no numbers, and it is drawn
+                as the cover arrives rather than sitting there. Menswear's
+                three hairlines, which were decoration standing in for
+                structure, are gone. */}
+            {chapter.id === '3d-simulation' && (
+              <div class="pf-cover__axis" aria-hidden="true"></div>
+            )}
 
             {file ? (
               /* A tech pack is a FILE, so the cover stages one: the supplied
@@ -252,30 +258,25 @@ const split = (statement: string, word: string) => {
                   chapter's whole subject. It is decorative to no one: the
                   echo is a CSS `content` string, so it never reaches the
                   accessibility tree or the page's text. */}
-              {/* THE CHAPTER'S NAME, IN THE VOICE OF ITS WORK.
-                  The three garment worlds are set in the display face — the
-                  instinct side of the masthead. TECH PACKS is set in the mono
-                  — the construction side — because documentation is what that
-                  voice is for. The journey's two voices, carried by the titles.
+              {/* THE CHAPTER'S NAME, ON THE JOURNEY'S OWN AXIS.
+                  The masthead sets INSTINCT at the wide end of Archivo's
+                  width axis and CONSTRUCTION at the narrow end. The four
+                  chapter titles then travel between those two poles in
+                  order — WOMENSWEAR expanded, MENSWEAR at the middle,
+                  DEVELOPMENT narrowing, TECH PACKS condensed — so the
+                  typography itself moves from instinct toward construction
+                  as the visitor does. One family, four voices, no decoration.
 
-                  PATTERN DEVELOPMENT is two words on two lines, each carrying
-                  its own outlined echo: `data-echo` renders a second, drawn
-                  copy that starts offset and settles onto the solid word as
-                  the cover arrives, which is a 2D line becoming a dimensional
-                  thing — the chapter's whole subject. The echo is a CSS
-                  `content` string, so it never reaches the accessibility tree
-                  or the page's text. */}
+                  DEVELOPMENT also carries `data-echo`: a second, outlined
+                  copy of the word that starts offset and a degree off true
+                  and registers onto the solid one as the cover arrives — a
+                  2D line becoming a dimensional thing. It is a CSS `content`
+                  string, so it never reaches the accessibility tree. */}
               <h2
-                class={`pf-cover__name ${file ? 'pf-cover__name--spec' : 'display'}${
-                  chapter.id === '3d-simulation' ? ' pf-cover__name--stacked' : ''}`}
+                class="pf-cover__name"
                 id={`cover-${chapter.id}-name`}
-              >{chapter.id === '3d-simulation'
-                /* The space between the two words is a real text node, so the
-                   name still reads as two words to anything reading the page
-                   rather than looking at it; between two block spans it
-                   collapses and costs the setting nothing. */
-                ? chapter.title.split(' ').map((word, i) => <>{i > 0 ? ' ' : ''}<span data-echo={word}>{word}</span></>)
-                : chapter.title}</h2>
+                data-echo={chapter.id === '3d-simulation' ? chapter.title : undefined}
+              >{chapter.title}</h2>
               <p class="pf-cover__statement">{before}<em>{word}</em>{after}</p>
               <a class="pf-cover__action label" href={`#${chapter.id}`} data-nav data-chapter={chapter.id}>
                 {chapter.action} <Arrow />
@@ -498,24 +499,27 @@ const split = (statement: string, word: string) => {
     }
 
     /* ----------------------------------------------------------------------
-       THE CHAPTER COVERS — SAME GRAMMAR, DIFFERENT DIALECT.
+       ONE FILM WHOSE LANGUAGE EVOLVES.
 
-       Four behaviours out of one set of primitives (an aperture, an offset, an
-       outline, a hairline), each one the chapter's character rather than a
-       different animation. All four are scrubbed across the section's whole
-       passage through the viewport, so progress 0.5 is the moment the cover is
-       most visible at any section-to-viewport ratio, and all four hold open
-       either side of it and close only on the way out.
+       Not four animation demos. Each world LEAVES in the direction the next
+       world ARRIVES from, so the sequence reads as one continuous movement
+       whose grammar changes as the work does — from instinct to construction.
 
-         womenswear   FLUID. The frame opens as a band and the type drifts in
-                      along the dress's own direction — up and out of the
-                      lower left, the way the train travels.
-         menswear     MEASURED. Nothing drifts. The grid draws itself, then
-                      the type is uncovered by a vertical wipe, locked to it.
-         development  DRAWN. An outlined copy of the name sits offset from the
-                      solid one and settles onto it: a line becoming a thing.
-         tech-packs   PAPER. The file rises as one object and the sheets
-                      settle; its depth is the chapter's own interaction.
+         womenswear   FLUID. The frame opens as a band; the type drifts in
+                      along the dress's own direction. It leaves travelling
+                      RIGHT, along the train.
+         menswear     MEASURED. Picks that motion up: the name is wiped in
+                      from the LEFT, continuing the same travel, and then
+                      nothing drifts again — the plate arrives square. It
+                      leaves by closing top and bottom, like a shutter.
+         development  DRAWN. Takes that shutter and turns its axis: the plate
+                      opens from the SIDES, a drawing being squared up, while
+                      an outlined copy of the name registers onto the solid
+                      one and the construction axis is struck. It leaves by
+                      FLATTENING — the side aperture closes to a slit.
+         tech-packs   PAPER. Out of that slit a sheet arrives: no aperture,
+                      because paper has none, and a slight widening as the
+                      file settles. Construction logic has become a document.
        ---------------------------------------------------------------------- */
     const covers = [...document.querySelectorAll<HTMLElement>('[data-cover]:not(.pf-cover--still)')];
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -543,10 +547,13 @@ const split = (statement: string, word: string) => {
             timeline
               .fromTo(plate, { '--aperture': 26 }, { '--aperture': 0, duration: 0.3 }, 0)
               .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.12 }, 0.16)
-              .fromTo(name, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.16 }, 0.22)
+              /* Wiped in from the LEFT, continuing the travel Womenswear
+                 left on rather than starting a new gesture. */
+              .fromTo(name, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.2)
               .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
                 { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, stagger: 0.03 }, 0.34)
-              .to(plate, { '--aperture': 20, duration: 0.28 }, 0.7)
+              /* Leaves as a shutter: top and bottom close on the picture. */
+              .to(plate, { '--aperture': 22, duration: 0.28 }, 0.7)
               .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
             break;
 
@@ -561,10 +568,15 @@ const split = (statement: string, word: string) => {
               .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.1 }, 0.18)
               .fromTo(name, { '--echo-x': 26, '--echo-y': 16, '--echo-r': -1.1, '--echo-o': 1, autoAlpha: 0 },
                 { '--echo-x': 0, '--echo-y': 0, '--echo-r': 0, '--echo-o': 0, autoAlpha: 1, duration: 0.2 }, 0.2)
+              /* The construction axis is struck across the frame. */
+              .fromTo(cover, { '--axis': 0 }, { '--axis': 1, duration: 0.14 }, 0.28)
               .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
                 { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.1, stagger: 0.03 }, 0.32)
+              /* And it FLATTENS on the way out: the sides close toward a
+                 slit, which is the shape the next chapter arrives as. */
               .to(name, { '--echo-x': -18, '--echo-y': -12, '--echo-o': 1, duration: 0.26 }, 0.7)
-              .to(plate, { '--aperture': 18, '--aperture-x': 10, duration: 0.28 }, 0.7)
+              .to(cover, { '--axis': 0, duration: 0.12 }, 0.7)
+              .to(plate, { '--aperture': 14, '--aperture-x': 24, duration: 0.3 }, 0.7)
               .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
             break;
 
@@ -572,8 +584,10 @@ const split = (statement: string, word: string) => {
             /* Paper: one object, lifting. No aperture — a sheet does not have
                one — and no scale, because paper does not zoom. */
             timeline
-              .fromTo(plate, { y: () => window.innerHeight * 0.1, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, duration: 0.3 }, 0)
+              /* Arrives narrow and widens — out of the slit Development
+                 flattened into — and lifts. No aperture: paper has none. */
+              .fromTo(plate, { y: () => window.innerHeight * 0.1, scaleX: 0.93, autoAlpha: 0 },
+                { y: 0, scaleX: 1, autoAlpha: 1, duration: 0.32 }, 0)
               .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.1 }, 0.18)
               .fromTo(name, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.14 }, 0.2)
               .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
@@ -667,16 +681,29 @@ const split = (statement: string, word: string) => {
       const total = String(links.size).padStart(2, '0');
 
       const close = () => { where.removeAttribute('data-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      let byPointer = false;
       const open = () => { where.setAttribute('data-open', ''); toggle.setAttribute('aria-expanded', 'true'); };
-      toggle.addEventListener('click', () => (where.hasAttribute('data-open') ? close() : open()));
+      /* A click CONFIRMS what hover has already opened rather than undoing it.
+         With a plain toggle, a mouse user whose approach had opened the list
+         closed it again by clicking the control — the one gesture that should
+         never shut it. A click that lands on a pointer-opened list therefore
+         keeps it open and simply takes ownership of it. */
+      toggle.addEventListener('click', () => {
+        if (where.hasAttribute('data-open')) {
+          if (byPointer) { byPointer = false; return; }
+          close();
+          return;
+        }
+        open();
+      });
       /* A HOVERING pointer opens it on approach and closes it on leaving. On
          touch it must not: a tap fires pointerenter, then click, then
          pointerleave, so the control opened and shut again in one gesture and
          the phone could never reach the list. There, the button is the whole
          interaction. */
       if (window.matchMedia('(hover: hover)').matches) {
-        where.addEventListener('pointerenter', open);
-        where.addEventListener('pointerleave', close);
+        where.addEventListener('pointerenter', () => { byPointer = true; open(); });
+        where.addEventListener('pointerleave', () => { byPointer = false; close(); });
       }
       where.addEventListener('focusout', (event) => {
         if (!where.contains(event.relatedTarget as Node)) close();

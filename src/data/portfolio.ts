@@ -595,8 +595,8 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     cover: scene('womenswear-scene', 'Woman in a red evening dress with the skirt in full movement, in a bone studio.'),
     accent: 'var(--ww-accent)',
     subject: 0.755,
-    statement: 'Designing silhouettes with identity, movement and purpose.',
-    highlight: 'silhouettes',
+    statement: 'A strong silhouette starts with proportion, movement and a clear point of view.',
+    highlight: 'silhouette',
     action: 'Enter Womenswear',
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
   },
@@ -609,7 +609,7 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     cover: scene('menswear-scene', 'Man in a cobalt double-breasted suit standing in a bone studio.'),
     accent: 'var(--mw-accent)',
     subject: 0.794,
-    statement: 'Building proportion through structure, tailoring and balance.',
+    statement: 'Strong proportion gives tailoring its structure, balance and presence.',
     highlight: 'proportion',
     action: 'Enter Menswear',
     stateNote: 'Selected menswear work will be published here.',
@@ -621,12 +621,12 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
        simulation, and calling the chapter after its last step undersold the
        work in it. */
     id: '3d-simulation',
-    /* PATTERN DEVELOPMENT, in full, on the cover and in the navigation: it
-       names the craft rather than a generic stage, and it is what a client
-       looking for a pattern maker actually scans for. The cover sets it on
-       two lines, which is also what gives that chapter its own typographic
-       shape. */
-    title: 'Pattern Development',
+    /* DEVELOPMENT is the chapter's name on the cover and in the navigation —
+       one word, the same weight of name as WOMENSWEAR and MENSWEAR beside
+       it. The craft is named in the sentence under it and in the chapter's
+       own deeper content, where the terminology can be as specific as the
+       work is. */
+    title: 'Development',
     kind: 'Digital validation',
     descriptor:
       'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
@@ -636,9 +636,9 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     cover: scene('pattern-scene', 'Chrome mannequin wearing a draped turquoise gown in a bone studio.'),
     accent: 'var(--dev-accent)',
     subject: 0.788,
-    statement: 'Developing patterns that resolve fit and construction, validated in 3D before anything is cut.',
-    highlight: 'patterns',
-    action: 'Enter Pattern Development',
+    statement: 'Pattern development resolves fit, balance and construction before sampling.',
+    highlight: 'fit',
+    action: 'Enter Development',
   },
   {
     id: 'tech-packs',
@@ -669,7 +669,7 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
        on aberbach.co. */
     accent: 'var(--signal)',
     subject: 0.5,
-    statement: 'Turning finished design into the specifications a factory can build from without guessing.',
+    statement: 'Clear specifications turn approved design decisions into instructions a factory can follow.',
     highlight: 'specifications',
     action: 'Enter Tech Packs',
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',

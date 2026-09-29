@@ -1,15 +1,28 @@
 import { chromium } from 'playwright';
+import { installFonts } from './fixtures/fonts.mjs';
 import { mkdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 const base = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4339';
 const output = '.qa-director/reinvention';
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
+/* Every context in this file renders with the site's real faces — see
+   fixtures/fonts.mjs for why that is not a detail. */
+const ctxWithFonts = async (options) => {
+  const context = await browser.newContext(options);
+  await installFonts(context);
+  return context;
+};
+const pageWithFonts = async (options) => {
+  const context = await ctxWithFonts(options);
+  return context.newPage();
+};
+
 let checks = 0;
 const check = (value, message) => { assert(value, message); checks++; };
 try {
  for (const width of [1440,390,1024,768,430]) {
-  const page = await browser.newPage({viewport:{width,height:1000},hasTouch:width<900});
+  const page = await pageWithFonts({viewport:{width,height:1000},hasTouch:width<900});
   const errors=[]; page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'/portfolio/');
   await page.addStyleTag({content:'astro-dev-toolbar{display:none!important}'});

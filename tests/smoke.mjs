@@ -15,6 +15,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { installFonts } from './fixtures/fonts.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -89,11 +90,18 @@ async function waitForServer() {
 
 await waitForServer();
 const browser = await chromium.launch();
+/* Every context renders with the site's real faces — see fixtures/fonts.mjs
+   for why that is not a detail. */
+const ctxWithFonts = async (options) => {
+  const context = await browser.newContext(options);
+  await installFonts(context);
+  return context;
+};
 
 try {
   // ---- routes load, and no horizontal document overflow at any width
   console.log('\nroutes and overflow');
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const ctx = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
   await page.route('**://fonts.googleapis.com/**', (r) => r.abort());
   for (const route of ROUTES) {
@@ -114,7 +122,7 @@ try {
   // ---- mobile menu opens, closes, and Escape closes it
   console.log('\nmobile menu');
   {
-    const c = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const c = await ctxWithFonts({ viewport: { width: 390, height: 844 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
@@ -179,7 +187,7 @@ try {
   // ---- structure: four chapters, each arriving as its own cover
   console.log('\nportfolio sequence');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -283,15 +291,15 @@ try {
     /* THE HIERARCHY. The chapter's own name is the headline — it used to be a
        number-sized label beside a generic line. */
     check('every cover is headlined by its chapter name',
-      sequence.covers.map((cv) => cv.name).join('|') === 'Womenswear|Menswear|Pattern Development|Tech Packs',
+      sequence.covers.map((cv) => cv.name).join('|') === 'Womenswear|Menswear|Development|Tech Packs',
       sequence.covers.map((cv) => cv.name).join('|'));
     check("the chapter name is the cover's largest type, by a clear margin",
       sequence.covers.every((cv) => cv.nameSize >= cv.statementSize * 3),
       sequence.covers.map((cv) => `${cv.name} ${cv.nameSize}/${cv.statementSize}`).join(' · '));
-    /* The chapter is named after the craft, not after a tool or a stage: a
-       client looking for a pattern maker scans for PATTERN DEVELOPMENT. */
-    check('chapter 03 is named Pattern Development on its cover',
-      sequence.covers.find((cv) => cv.id === '3d-simulation').name === 'Pattern Development');
+    /* One word, the same weight of name as the two beside it. The craft is
+       named in the sentence under it, and in the chapter's own content. */
+    check('chapter 03 is named Development on its cover',
+      sequence.covers.find((cv) => cv.id === '3d-simulation').name === 'Development');
     check('no name is cut off by the frame',
       sequence.covers.every((cv) => cv.namePainted <= sequence.width + 1),
       sequence.covers.map((cv) => `${cv.name}:${cv.namePainted}`).join(' '));
@@ -302,13 +310,13 @@ try {
     /* ONE COLOURED WORD PER CHAPTER, and it is the capability being sold. */
     check('each chapter states what it sells in one sentence',
       sequence.covers.map((cv) => cv.statement).join('|') === [
-        'Designing silhouettes with identity, movement and purpose.',
-        'Building proportion through structure, tailoring and balance.',
-        'Developing patterns that resolve fit and construction, validated in 3D before anything is cut.',
-        'Turning finished design into the specifications a factory can build from without guessing.',
+        'A strong silhouette starts with proportion, movement and a clear point of view.',
+        'Strong proportion gives tailoring its structure, balance and presence.',
+        'Pattern development resolves fit, balance and construction before sampling.',
+        'Clear specifications turn approved design decisions into instructions a factory can follow.',
       ].join('|'), sequence.covers.map((cv) => cv.statement).join(' | '));
     check('exactly one word of each statement is coloured, and it is the capability',
-      sequence.covers.map((cv) => cv.word).join(' ') === 'silhouettes proportion patterns specifications',
+      sequence.covers.map((cv) => cv.word).join(' ') === 'silhouette proportion fit specifications',
       sequence.covers.map((cv) => cv.word).join(' '));
     check('every chapter colours that word with its own token',
       new Set(sequence.covers.map((cv) => cv.wordColour)).size === 4,
@@ -432,7 +440,7 @@ try {
 
   for (const width of [390, 430]) {
     console.log(`\nportfolio chapter covers at ${width}`);
-    const c = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 932 }, isMobile: true, hasTouch: true });
+    const c = await ctxWithFonts({ viewport: { width, height: width === 390 ? 844 : 932 }, isMobile: true, hasTouch: true });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -472,7 +480,7 @@ try {
   // ---- the hierarchy: chapter -> categories -> viewer -> back again
   console.log('\nportfolio navigation hierarchy');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -607,7 +615,7 @@ try {
   // ---- the garment deck: depth, occlusion, keyboard, drag, integrity
   console.log('\nportfolio garment viewer');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -923,7 +931,7 @@ try {
   // ---- the deck at 1024 and at 390
   for (const [width, height, want, mobile] of [[1024, 820, 4, false], [390, 844, 3, true]]) {
     console.log(`\nportfolio deck at ${width}`);
-    const c = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile });
+    const c = await ctxWithFonts({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -975,7 +983,7 @@ try {
   // ---- Tech Packs: five documents in a column, and a reader
   console.log('\nportfolio tech packs');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     const pdfRequests = [];
@@ -1066,7 +1074,7 @@ try {
   // ---- Pattern & 3D Development: five supplied click-to-load recordings
   console.log('\nportfolio 3D simulation');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     const media = [];
@@ -1195,7 +1203,7 @@ try {
   // ---- reduced motion: everything still reachable, nothing left mid-tween
   console.log('\nreduced motion');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -1221,7 +1229,7 @@ try {
   // ---- without JavaScript the work is still there
   console.log('\nportfolio without JavaScript');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
@@ -1251,7 +1259,7 @@ try {
   // ---- Home portrait is one transparent cut-out, never a mirrored duplicate
   console.log('\nHome portrait treatment');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
@@ -1269,7 +1277,7 @@ try {
   // ---- contact form still validates without submitting
   console.log('\ncontact form validation');
   {
-    const c = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const c = await ctxWithFonts({ viewport: { width: 390, height: 844 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
@@ -1295,7 +1303,7 @@ try {
   // ---- the upload control is present, usable and honestly labelled
   console.log('\nreference upload control');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
@@ -1396,7 +1404,7 @@ try {
   // part that regressed.
   console.log('\nTurnstile reset on failed submission');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
 
@@ -1537,7 +1545,7 @@ try {
       await new Promise((resolve) => staticServer.listen(PORT2, HOST, resolve));
       const BASE2 = `http://${HOST}:${PORT2}`;
 
-      const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+      const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
       const p = await c.newPage();
       await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
       /* The real api.js is not reachable from CI and is not what is under
@@ -1621,7 +1629,7 @@ try {
   // ---- direct contact dominates, and the number is readable
   console.log('\ndirect contact hierarchy');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
@@ -1698,7 +1706,7 @@ try {
   // ---- privacy page reachable from the footer
   console.log('\nprivacy page');
   {
-    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
