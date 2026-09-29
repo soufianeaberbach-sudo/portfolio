@@ -536,9 +536,11 @@ export interface Chapter {
   descriptor: string;
   publication: Publication;
   cover: ChapterCover;
-  /* The chapter's own signal colour. Used for a number, a rule and an arrow
-     — never as a surface, and never as the only carrier of meaning: the
-     chapter's name is always set in ink beside it. */
+  /* The chapter's own colour, as a reference to the ONE token sampled from
+     that chapter's own garment. There are no variants of it: no lighter text
+     colour, no darker hover, no secondary tint. It carries the chapter's
+     highlighted display word, its marker, its rules and its motion cues, and
+     wherever it would not be legible the text is set in ink instead. */
   accent: string;
   /* Where the subject stands in this chapter's plate, as a fraction of frame
      width — measured from the supplied file, not estimated. A phone cannot
@@ -547,12 +549,12 @@ export interface Chapter {
      Measured from the file — the stylesheet caps it to whatever the zoomed
      window can reach without running off the edge of the plate. */
   subject: number;
-  /* The one display line on the chapter's cover. */
-  line: string;
-  /* Three words naming the register the chapter works in, and the verb that
-     opens it. These used to be two positional arrays in the page, which meant
-     reordering the chapters silently reassigned every one of them. */
-  note: string;
+  /* WHAT THE CHAPTER SELLS, in one sentence, with the single word that names
+     the capability being sold. The chapter's NAME is the cover's headline —
+     this is the line under it. `highlight` must appear verbatim in
+     `statement`; the page splits on it rather than storing markup in data. */
+  statement: string;
+  highlight: string;
   action: string;
   /* One restrained line shown when the chapter is not published work. Never
      promotional, never a promise with a date. */
@@ -591,11 +593,11 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     descriptor: womenswear.descriptor,
     publication: worldPublication(womenswear),
     cover: scene('womenswear-scene', 'Woman in a red evening dress with the skirt in full movement, in a bone studio.'),
-    accent: '#c83d46',
+    accent: 'var(--ww-accent)',
     subject: 0.755,
-    line: 'Designed to move.',
-    note: 'Movement / form / proportion',
-    action: 'Explore silhouettes',
+    statement: 'A strong silhouette starts with proportion, movement and a clear point of view.',
+    highlight: 'silhouette',
+    action: 'Enter Womenswear',
     stateNote: 'Interface preview — temporary visual references, not authored project evidence.',
   },
   {
@@ -605,11 +607,11 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     descriptor: menswear.descriptor,
     publication: worldPublication(menswear),
     cover: scene('menswear-scene', 'Man in a cobalt double-breasted suit standing in a bone studio.'),
-    accent: '#2a62aa',
+    accent: 'var(--mw-accent)',
     subject: 0.794,
-    line: 'Built to hold.',
-    note: 'Structure / balance / tailoring',
-    action: 'Enter construction',
+    statement: 'Strong proportion gives tailoring its structure, balance and presence.',
+    highlight: 'proportion',
+    action: 'Enter Menswear',
     stateNote: 'Selected menswear work will be published here.',
   },
   {
@@ -619,7 +621,12 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
        simulation, and calling the chapter after its last step undersold the
        work in it. */
     id: '3d-simulation',
-    title: 'Pattern Development',
+    /* DEVELOPMENT is the chapter's name on the cover and in the navigation —
+       one word, the same weight of name as WOMENSWEAR and MENSWEAR beside
+       it. The craft is named in the sentence under it and in the chapter's
+       own deeper content, where the terminology can be as specific as the
+       work is. */
+    title: 'Development',
     kind: 'Digital validation',
     descriptor:
       'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
@@ -627,11 +634,11 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
       ? 'published'
       : simulationSessions.length > 0 ? 'reference-preview' : 'unpublished',
     cover: scene('pattern-scene', 'Chrome mannequin wearing a draped turquoise gown in a bone studio.'),
-    accent: '#5749b0',
+    accent: 'var(--dev-accent)',
     subject: 0.788,
-    line: 'Proven before cutting.',
-    note: 'Pattern / validation / resolution',
-    action: 'Trace development',
+    statement: 'Pattern development resolves fit, balance and construction before sampling.',
+    highlight: 'fit',
+    action: 'Enter Development',
   },
   {
     id: 'tech-packs',
@@ -657,11 +664,14 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
       },
       credit: { source: 'User-supplied chapter cover' },
     },
-    accent: '#8a5412',
+    /* Tech Packs is the one chapter with no garment to sample: it uses the
+       site's own technical signal, with the same restraint as everywhere else
+       on aberbach.co. */
+    accent: 'var(--signal)',
     subject: 0.5,
-    line: 'Written to be made.',
-    note: 'Specification / clarity / handoff',
-    action: 'Open documentation',
+    statement: 'Clear specifications turn approved design decisions into instructions a factory can follow.',
+    highlight: 'specifications',
+    action: 'Enter Tech Packs',
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',
   },
 ];

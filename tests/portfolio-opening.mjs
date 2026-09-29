@@ -1,28 +1,26 @@
 /* ---------------------------------------------------------------------------
-   THE OPENING, AND THE CHAPTER-COVER SEQUENCE IT HANDS OVER TO.
+   THE PORTFOLIO INTERFACE: the opening, the four chapter covers, the one
+   control, and the ending.
 
-   Focused regression coverage for the journey only. The site-wide suites
-   (smoke, director, reinvention) still own everything inside a chapter,
-   including the Womenswear content this sequence is the entrance to.
+   Focused coverage for the journey only. The site-wide suites (smoke,
+   director, reinvention) own everything inside a chapter.
 
    What is protected here:
-     - the opening is the supplied master photograph, bright, with the practice
-       statement set in its negative space and NOT a dark scrim over the picture
-     - the composition survives 390 / 430 / 768 / 1024 / 1440
-     - the handoff into Womenswear is a match cut: she lands on the same screen
-       point, at the same size, in both plates, which is what makes it read as
-       one camera move into her world rather than an image swap
-     - the running order is 01 Womenswear, 02 Menswear, 03 Pattern Development,
-       04 Tech Packs, everywhere it is visible
-     - every chapter has its own cover, all four built to the same composition,
-       and each cover is followed directly by that chapter's real contents
-     - there is no chapter-list screen in the middle of the sequence
-     - the Tech Packs cover is a staged FILE: a front sheet from the supplied
-       document with three sheets behind it, which answers to hover and to
-       keyboard focus
+     - BETWEEN INSTINCT & CONSTRUCTION is set as the thing it describes: a
+       register mark, a solid word and a drawn one
+     - the statement NEVER crosses a face, at any reviewed viewport, and
+       nothing is silently cut by the frame's overflow
+     - the handoff into Womenswear is still a match cut
+     - each chapter is headlined by its own NAME, with one sentence and one
+       word in that chapter's own sampled colour
+     - the four worlds share a grammar and differ in dialect: a grid, a drawn
+       echo, a file of paper
+     - ONE control carries the position, and nothing else numbers a chapter
+     - the ending resolves the journey instead of repeating it
      - without motion every chapter still has a cover and still opens
    --------------------------------------------------------------------------- */
 import { chromium } from 'playwright';
+import { installFonts } from './fixtures/fonts.mjs';
 import { mkdir } from 'node:fs/promises';
 
 const base = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4339';
@@ -41,14 +39,153 @@ const check = (name, ok, detail = '') => {
    either drifts the cut stops being a cut, so the test states them itself. */
 const HER = { master: [0.264, 0.4865], women: [0.7585, 0.493] };
 
-/* The running order, stated here rather than read from the page, so the page
-   cannot quietly agree with itself about the wrong sequence. */
+/* The running order and what each chapter sells, stated here rather than read
+   from the page, so the page cannot quietly agree with itself about the wrong
+   sequence or the wrong word. */
 const ORDER = [
-  ['01', 'womenswear', 'Womenswear'],
-  ['02', 'menswear', 'Menswear'],
-  ['03', '3d-simulation', 'Pattern Development'],
-  ['04', 'tech-packs', 'Tech Packs'],
+  ['womenswear', 'Womenswear', 'silhouette'],
+  ['menswear', 'Menswear', 'proportion'],
+  ['3d-simulation', 'Development', 'fit'],
+  ['tech-packs', 'Tech Packs', 'specifications'],
 ];
+
+/* Every viewport the art direction is reviewed at. 1366x768 is the one the
+   statement used to fail on: a laptop is wide without being tall. */
+const VIEWPORTS = [[1440, 900], [1366, 768], [1024, 768], [768, 1024], [430, 932], [390, 844]];
+
+/* THE DEFECT, MEASURED IN PIXELS RATHER THAN IN BOXES.
+   A box test cannot tell the difference between type set over a floor and type
+   set over a face: both are "inside the plate". So the type is hidden, the
+   band each line of it occupies is photographed, and the photograph is read —
+   the studio ground is bone (luminance ~227), a garment or a face is not. A
+   line passes only when nothing behind it is darker than the ground. */
+const inkBehindType = async (page, width, height) => {
+  const lines = await page.evaluate(() => {
+    const boxes = [];
+    for (const selector of ['[data-cinema-title]', '[data-cinema-thesis]']) {
+      const el = document.querySelector(selector);
+      if (!el || getComputedStyle(el).display === 'none') continue;
+      const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walk.nextNode())) {
+        if (!node.textContent.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        /* One rect per rendered line, tight to the glyphs — not the block. */
+        for (const r of range.getClientRects()) {
+          if (r.width < 2 || r.height < 2) continue;
+          boxes.push({ what: selector.includes('thesis') ? 'the supporting line' : 'the statement', x: r.x, y: r.y, width: r.width, height: r.height });
+        }
+      }
+    }
+    const style = document.createElement('style');
+    style.id = 'qa-hide-type';
+    style.textContent = '.pf-cinema__title,.pf-cinema__thesis,.pf-cinema__scroll,.pf-where{visibility:hidden!important}';
+    document.head.appendChild(style);
+    return boxes;
+  });
+  const read = [];
+  for (const line of lines) {
+    const clip = {
+      x: Math.max(0, line.x), y: Math.max(0, line.y),
+      width: Math.min(line.width, width - Math.max(0, line.x)),
+      height: Math.min(line.height, height - Math.max(0, line.y)),
+    };
+    if (clip.width < 2 || clip.height < 2) continue;
+    const shot = await page.screenshot({ clip });
+    const stat = await page.evaluate((url) => new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let dark = 0, min = 255;
+        for (let i = 0; i < data.length; i += 4) {
+          const l = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+          if (l < 190) dark += 1;
+          if (l < min) min = l;
+        }
+        resolve({ darkPct: (100 * dark) / (canvas.width * canvas.height), min: Math.round(min) });
+      };
+      img.src = url;
+    }), `data:image/png;base64,${shot.toString('base64')}`);
+    read.push({ ...line, ...stat });
+  }
+  await page.evaluate(() => document.getElementById('qa-hide-type')?.remove());
+  return read;
+};
+
+/* How much black each word of the masthead puts on the page. */
+const inkOfWords = async (page) => {
+  const boxes = await page.evaluate(() => {
+    const out = {};
+    for (const key of ['instinct', 'construction']) {
+      const r = document.querySelector(`.pf-cinema__${key}`).getBoundingClientRect();
+      out[key] = { x: r.x - 2, y: r.y - 2, width: r.width + 4, height: r.height + 4 };
+    }
+    return out;
+  });
+  const read = async (box) => {
+    const shot = await page.screenshot({ clip: box });
+    return page.evaluate((url) => new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let dark = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          if (0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2] < 140) dark += 1;
+        }
+        resolve(dark);
+      };
+      img.src = url;
+    }), `data:image/png;base64,${shot.toString('base64')}`);
+  };
+  return { instinct: await read(boxes.instinct), construction: await read(boxes.construction) };
+};
+
+/* The air between the masthead and the picture, in pixels. */
+const airUnderType = async (page, width, height, inkBottom) => {
+  const band = await page.evaluate(([bottom]) => {
+    const title = document.querySelector('[data-cinema-title]').getBoundingClientRect();
+    const style = document.createElement('style');
+    style.id = 'qa-hide-type';
+    style.textContent = '.pf-cinema__title,.pf-cinema__thesis,.pf-cinema__scroll,.pf-where{visibility:hidden!important}';
+    document.head.appendChild(style);
+    return { x: Math.max(0, title.left), y: Math.ceil(bottom) + 1, width: Math.min(title.width, innerWidth - Math.max(0, title.left)) };
+  }, [inkBottom]);
+  const h = Math.min(420, height - band.y - 1);
+  if (h < 4 || band.width < 4) {
+    await page.evaluate(() => document.getElementById('qa-hide-type')?.remove());
+    return { gap: null };
+  }
+  const shot = await page.screenshot({ clip: { x: band.x, y: band.y, width: band.width, height: h } });
+  const gap = await page.evaluate((url) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      for (let y = 0; y < canvas.height; y += 1) {
+        for (let x = 0; x < canvas.width; x += 1) {
+          const k = (y * canvas.width + x) * 4;
+          if (0.2126 * data[k] + 0.7152 * data[k + 1] + 0.0722 * data[k + 2] < 190) { resolve(y); return; }
+        }
+      }
+      resolve(null);
+    };
+    img.src = url;
+  }), `data:image/png;base64,${shot.toString('base64')}`);
+  await page.evaluate(() => document.getElementById('qa-hide-type')?.remove());
+  return { gap };
+};
 
 const seek = (page, progress) => page.evaluate((p) => {
   const cinema = document.querySelector('.pf-cinema');
@@ -56,365 +193,436 @@ const seek = (page, progress) => page.evaluate((p) => {
 }, progress);
 
 const browser = await chromium.launch();
+/* Every context in this file renders with the site's real faces — see
+   fixtures/fonts.mjs for why that is not a detail. */
+const ctxWithFonts = async (options) => {
+  const context = await browser.newContext(options);
+  await installFonts(context);
+  return context;
+};
+const pageWithFonts = async (options) => {
+  const context = await ctxWithFonts(options);
+  return context.newPage();
+};
+
 try {
-  // ---- the opening reads as a photograph, not a poster laid over one -------
-  console.log('\nthe opening');
+  // ---- the statement, set as the thing it says ----------------------------
+  console.log('\nbetween instinct & construction');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(1000);
 
     check('the opening is the supplied master photograph',
       await page.locator('[data-scene="master"] img').getAttribute('src').then((s) => /\/portfolio\/master\/master-scene/.test(s)));
     check('it is fetched at high priority, being the first thing seen',
       await page.locator('[data-scene="master"] img').getAttribute('fetchpriority') === 'high');
-    check('the primary title is the practice, not the chapter',
-      (await page.locator('[data-cinema-title]').innerText()).replace(/\s+/g, ' ').trim().toUpperCase()
-        .replace(' ', ' ') === 'BETWEEN INSTINCT & CONSTRUCTION');
 
-    const tone = await page.evaluate(() => {
-      const cinema = document.querySelector('.pf-cinema');
-      const title = document.querySelector('[data-cinema-title]');
-      const lum = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
-      return { ground: lum(getComputedStyle(cinema).backgroundColor), ink: lum(getComputedStyle(title).color) };
-    });
-    check('the bright bone environment is preserved', tone.ground > 200, `luminance ${tone.ground.toFixed(0)}`);
-    check('the title is ink, not reversed out of a dark scrim', tone.ink < 70, `luminance ${tone.ink.toFixed(0)}`);
-
-    /* No dark overlay anywhere in the sequence, not just over the opening. */
-    const scrim = await page.evaluate(() => [...document.querySelectorAll('.pf-cinema *, .pf-cover *, .pf-contents *, .pf-outro *')]
-      .filter((el) => {
-        const s = getComputedStyle(el);
-        if (s.opacity === '0' || s.visibility === 'hidden' || s.display === 'none') return false;
-        const bg = s.backgroundColor.match(/[\d.]+/g);
-        if (!bg || (bg[3] !== undefined && Number(bg[3]) < 0.25)) return false;
-        const lum = 0.2126 * +bg[0] + 0.7152 * +bg[1] + 0.0722 * +bg[2];
-        if (lum > 120) return false;
-        const r = el.getBoundingClientRect();
-        return r.width * r.height > innerWidth * innerHeight * 0.25;
-      }).length);
-    check('no large dark overlay anywhere in the sequence', scrim === 0, `${scrim} found`);
-    check('the opening raised no script error', errors.length === 0, errors.join(' | '));
-    await page.screenshot({ path: `${output}/1440-opening.png` });
-    await context.close();
-  }
-
-  // ---- the sequence: four covers, in order, each followed by its contents --
-  console.log('\nthe chapter sequence');
-  {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const page = await context.newPage();
-    const errors = [];
-    page.on('pageerror', (e) => errors.push(e.message));
-    await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
-    await page.waitForTimeout(700);
-
-    const flow = await page.evaluate(() => [...document.querySelectorAll(
-      '.pf-cinema, [data-cover], [data-contents], .pf-outro',
-    )].filter((el) => getComputedStyle(el).display !== 'none').map((el) => (
-      el.classList.contains('pf-cinema') ? 'opening'
-        : el.classList.contains('pf-outro') ? 'ending'
-          : el.dataset.cover ? `cover:${el.dataset.cover}` : `contents:${el.dataset.contents}`
-    )));
-    check('the journey is opening → cover → contents, four times, then the ending',
-      flow.join(' ') === [
-        'opening',
-        'contents:womenswear',
-        'cover:menswear', 'contents:menswear',
-        'cover:3d-simulation', 'contents:3d-simulation',
-        'cover:tech-packs', 'contents:tech-packs',
-        'ending',
-      ].join(' '), flow.join(' '));
-
-    /* The Womenswear cover is the opening's landing frame rather than a
-       section, so the sequence holds four covers even though only three are
-       sections of their own. */
-    check('Womenswear\'s cover is the frame the opening cuts to',
-      await page.locator('.pf-women-threshold.pf-cover .pf-cover__line').count() === 1);
-
-    const covers = await page.evaluate(() => [...document.querySelectorAll('.pf-cover')]
-      .filter((el) => getComputedStyle(el).display !== 'none')
-      .map((el) => ({
-        /* The landing frame is a cover without being a cover SECTION, so it
-           carries no data-cover; it is identified by what it is. */
-        id: el.dataset.cover ?? (el.hasAttribute('data-women-threshold') ? 'womenswear' : ''),
-        eyebrow: el.querySelector('.pf-cover__eyebrow').textContent.replace(/\s+/g, ' ').trim(),
-        number: el.querySelector('.pf-cover__eyebrow span').textContent.trim(),
-        line: el.querySelector('.pf-cover__line').textContent.replace(/\s+/g, ' ').trim(),
-        descriptor: el.querySelector('.pf-cover__descriptor').textContent.trim().length,
-        action: el.querySelector('.pf-cover__action').getAttribute('href'),
-        accent: getComputedStyle(el.querySelector('.pf-cover__eyebrow span')).color,
-        /* The landing frame's plate is the opening's own second scene — the
-           one the match cut hands over — rather than a plate of its own. */
-        hasPlate: !!el.querySelector('.pf-cover__plate')
-          || (el.hasAttribute('data-women-threshold') && !!document.querySelector('.pf-scene--women')),
-        copyLeft: Math.round(el.querySelector('.pf-cover__copy').getBoundingClientRect().left),
-      })));
-    check('four covers, in the running order',
-      covers.map((c) => `${c.number}:${c.id}`).join(' ')
-        === ORDER.map(([n, id]) => `${n}:${id}`).join(' '),
-      covers.map((c) => `${c.number}:${c.id}`).join(' '));
-    check('every cover names its chapter beside the number, not by colour alone',
-      ORDER.every(([n, , title], i) => covers[i].eyebrow === `${n}${title}` || covers[i].eyebrow === `${n} ${title}`),
-      covers.map((c) => c.eyebrow).join(' | '));
-    check('every cover carries one line, a descriptor and a way in',
-      covers.every((c) => c.line.length > 0 && c.descriptor > 0 && c.action?.startsWith('#')),
-      covers.map((c) => `${c.line}/${c.action}`).join(' | '));
-    check('every cover line is the chapter\'s own',
-      new Set(covers.map((c) => c.line)).size === 4, covers.map((c) => c.line).join(' | '));
-    check('every chapter has its own signal colour',
-      new Set(covers.map((c) => c.accent)).size === 4, covers.map((c) => c.accent).join(' '));
-    check('every cover is image-led', covers.every((c) => c.hasPlate));
-    check('every cover sets its type in the same place',
-      new Set(covers.map((c) => c.copyLeft)).size === 1, covers.map((c) => c.copyLeft).join(' '));
-
-    /* THE MAIN DESIGN RULE. No chapter list is allowed to become the middle
-       of the journey: the only one on the page is the ending's. */
-    const indexes = await page.evaluate(() => [...document.querySelectorAll('[data-living-index]')].map((el) => ({
-      inOutro: !!el.closest('.pf-outro'),
-      top: el.getBoundingClientRect().top + scrollY,
-      docHeight: document.documentElement.scrollHeight,
-    })));
-    check('there is exactly one chapter list on the page', indexes.length === 1, String(indexes.length));
-    check('and it is the ending, not a stop in the middle',
-      indexes[0].inOutro && indexes[0].top > indexes[0].docHeight * 0.75,
-      `at ${(indexes[0].top / indexes[0].docHeight * 100).toFixed(0)}% of the page`);
-    check('the opening carries no chapter list at all',
-      await page.evaluate(() => document.querySelectorAll('.pf-cinema [data-living-index]').length === 0));
-
-    const contents = await page.evaluate(() => [...document.querySelectorAll('[data-contents]')].map((el) => ({
-      id: el.dataset.contents,
-      items: [...el.querySelectorAll('.pf-contents__list a')].map((a) => ({
-        href: a.getAttribute('href'),
-        text: a.textContent.replace(/\s+/g, ' ').trim(),
-      })),
-    })));
-    check('each chapter\'s contents follow its cover, and name real sections',
-      contents.length === 4 && contents.every((c) => c.items.length >= 4 && c.items.every((i) => i.href.startsWith('#') && i.text)),
-      contents.map((c) => `${c.id}:${c.items.length}`).join(' '));
-    check('the garment chapters address their categories one level deep',
-      contents[0].items.every((i) => i.href.startsWith('#womenswear/'))
-      && contents[1].items.every((i) => i.href.startsWith('#menswear/')),
-      contents[0].items.map((i) => i.href).join(' '));
-    check('the reference disclaimer never appears in a contents rail',
-      await page.evaluate(() => ![...document.querySelectorAll('.pf-contents__list')]
-        .some((el) => /no authorship of photographed garments/i.test(el.textContent))));
-    check('the sequence raised no script error', errors.length === 0, errors.join(' | '));
-    await context.close();
-  }
-
-  // ---- the Tech Packs cover is a file, and it answers to attention --------
-  console.log('\nthe Tech Packs file');
-  {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const page = await context.newPage();
-    await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
-    await page.locator('[data-cover="tech-packs"]').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(1200);
-
-    const file = await page.evaluate(() => {
-      const cover = document.querySelector('[data-cover="tech-packs"]');
-      const front = cover.querySelector('.pf-file__front img');
-      const stack = cover.querySelector('.pf-file');
-      const copy = cover.querySelector('.pf-cover__copy').getBoundingClientRect();
-      const plate = cover.querySelector('.pf-cover__plate--file').getBoundingClientRect();
-      const other = document.querySelector('[data-cover="menswear"] .pf-cover__plate').getBoundingClientRect();
+    const type = await page.evaluate(() => {
+      const t = document.querySelector('[data-cinema-title]');
+      const kicker = t.querySelector('.pf-cinema__kicker');
+      const instinct = t.querySelector('.pf-cinema__instinct');
+      const amp = t.querySelector('.pf-cinema__amp');
+      const construction = t.querySelector('.pf-cinema__construction');
+      const cs = (el) => getComputedStyle(el);
+      /* THE INK, not the point size. Two faces at the same point size have
+         different capital heights, and the line only reads as one line when
+         the capitals agree — so this reads the font's own ink metrics and
+         works out where each word's baseline actually falls. */
+      const ctx = document.createElement('canvas').getContext('2d');
+      const metrics = (el) => {
+        const style = cs(el);
+        ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const m = ctx.measureText(el.textContent.trim().toUpperCase());
+        const rect = el.getBoundingClientRect();
+        const box = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent;
+        return {
+          cap: m.actualBoundingBoxAscent,
+          baseline: rect.top + (rect.height - box) / 2 + m.fontBoundingBoxAscent,
+        };
+      };
+      const capOf = (el) => metrics(el).cap;
+      const title = t.getBoundingClientRect();
       return {
-        src: front.getAttribute('src'),
-        sheets: cover.querySelectorAll('.pf-file__sheet').length,
-        framed: getComputedStyle(cover.querySelector('.pf-file__front')).borderTopWidth !== '0px'
-          && getComputedStyle(cover.querySelector('.pf-file__front')).boxShadow !== 'none',
-        stackRect: stack.getBoundingClientRect(),
-        copyRight: copy.right,
-        plateLeft: plate.left,
-        /* The file has to stand in the same half of the frame the photographic
-           plates put their subject in, or it stops belonging to the family. */
-        onTheSameSide: plate.left + plate.width / 2 > innerWidth * 0.5
-          && other.left + other.width * 0.76 > innerWidth * 0.5,
+        text: t.textContent.replace(/\s+/g, ' ').trim().toUpperCase(),
+        kicker: { text: kicker.textContent.trim(), family: cs(kicker).fontFamily, size: parseFloat(cs(kicker).fontSize) },
+        instinct: { text: instinct.textContent.trim(), family: cs(instinct).fontFamily, axis: cs(instinct).fontVariationSettings, fill: cs(instinct).color, stroke: cs(instinct).webkitTextStrokeWidth, cap: capOf(instinct), width: instinct.getBoundingClientRect().width },
+        amp: { fill: cs(amp).color },
+        construction: { text: construction.textContent.trim(), family: cs(construction).fontFamily, axis: cs(construction).fontVariationSettings, fill: cs(construction).color, cap: capOf(construction), width: construction.getBoundingClientRect().width },
+        /* One line: every part sits on the same baseline. */
+        baselines: [instinct, amp, construction].map((el) => metrics(el).baseline),
+        measure: { left: title.left, right: title.right, inkRight: construction.getBoundingClientRect().right },
+        thesis: document.querySelector('[data-cinema-thesis]').textContent.replace(/\s+/g, ' ').trim(),
       };
     });
-    check('the front sheet is the supplied tech pack document',
-      /\/portfolio\/master\/tech-pack-sheet/.test(file.src), file.src);
-    check('three more sheets stand behind it', file.sheets === 3, String(file.sheets));
-    check('the front sheet is a sheet, not a flat screenshot: it has an edge and a shadow', file.framed);
-    check('the file stands in the same zone the other covers give their subject', file.onTheSameSide);
-    check('the type block and the file do not collide',
-      file.copyRight <= file.plateLeft + 1,
-      `copy ends ${file.copyRight.toFixed(0)}, file starts ${file.plateLeft.toFixed(0)}`);
+    check('the statement is BETWEEN INSTINCT & CONSTRUCTION',
+      type.text.replace(/\u00a0/g, ' ') === 'BETWEEN INSTINCT & CONSTRUCTION', type.text);
+    /* BETWEEN is a kicker, not a word of the headline: mono and small, on the
+       same baseline as the words it introduces. */
+    check('BETWEEN behaves as a kicker, not as headline type',
+      /Mono/i.test(type.kicker.family) && type.kicker.size < type.instinct.cap / 3,
+      `${type.kicker.family} at ${type.kicker.size}px against a ${Math.round(type.instinct.cap)}px cap`);
+    /* THE CONCEPT IS CARRIED BY TWO WIDTHS OF ONE FAMILY, NOT BY AN OUTLINE —
+       the outline is the home page's device and is the one thing the
+       Portfolio must not repeat. Archivo reaches this site as a variable font
+       with a width axis of 75..125; INSTINCT is set at the wide end and
+       CONSTRUCTION at the narrow one. */
+    check('both halves are set in the one display family, solid ink',
+      /Archivo/i.test(type.instinct.family) && /Archivo/i.test(type.construction.family)
+        && type.instinct.fill === 'rgb(17, 17, 15)' && type.construction.fill === 'rgb(17, 17, 15)'
+        && parseFloat(type.instinct.stroke || '0') === 0,
+      `${type.instinct.family} / ${type.construction.family}`);
+    check('INSTINCT takes the wide end of the axis and CONSTRUCTION the narrow one',
+      /125/.test(type.instinct.axis) && /75/.test(type.construction.axis),
+      `${type.instinct.axis} vs ${type.construction.axis}`);
+    /* EQUAL AUTHORITY, MEASURED. Neither word may outrank the other: same
+       capital height, same set width, and the same amount of ink on the page.
+       A concept with two forces in it fails the moment one is a subtitle. */
+    check('the two halves share a cap height',
+      Math.abs(type.instinct.cap - type.construction.cap) <= 2,
+      `${type.instinct.cap.toFixed(1)} vs ${type.construction.cap.toFixed(1)}`);
+    check('and a set width, to within a few per cent',
+      Math.abs(1 - type.construction.width / type.instinct.width) <= 0.09,
+      `${Math.round(type.instinct.width)} vs ${Math.round(type.construction.width)}`);
+    /* And the same amount of INK on the page — eight wide capitals against
+       twelve narrow ones. Cap height and set width can agree while one word
+       still sits heavier than the other; this is the check that cannot be
+       argued with, and it is read off the render. */
+    const ink = await inkOfWords(page);
+    check('and the same weight of ink, so neither word outranks the other',
+      Math.abs(1 - ink.construction / ink.instinct) <= 0.12,
+      `${ink.instinct} px against ${ink.construction} px`);
+    check('and they sit on one baseline',
+      Math.max(...type.baselines) - Math.min(...type.baselines) <= 1.5,
+      type.baselines.map((b) => b.toFixed(1)).join(' / '));
+    /* A FITTED MASTHEAD: the line is measured to meet the gutters. */
+    check('the masthead is fitted to the measure',
+      type.measure.inkRight >= type.measure.left + (type.measure.right - type.measure.left) * 0.94,
+      `${Math.round(type.measure.inkRight)} of ${Math.round(type.measure.right)}`);
+    check('the ampersand stays solid, holding the two together',
+      type.amp.fill === 'rgb(17, 17, 15)', type.amp.fill);
+    check('the supporting line says fashion AND product, not generic freelancing',
+      type.thesis === 'Fashion design, pattern development and technical product work — connected from concept to production.',
+      type.thesis);
 
-    /* Hover: the sheets step apart and the front page lifts off them. */
-    /* The fan runs straight up, so what moves is `top`, and it moves further
-       the further back the sheet is. */
-    const rest = await page.evaluate(() => [...document.querySelectorAll('[data-cover="tech-packs"] .pf-file__sheet')]
-      .map((el) => el.getBoundingClientRect().top));
-    await page.locator('[data-cover="tech-packs"] .pf-file').hover();
-    await page.waitForTimeout(900);
-    const open = await page.evaluate(() => ({
-      sheets: [...document.querySelectorAll('[data-cover="tech-packs"] .pf-file__sheet')].map((el) => el.getBoundingClientRect().top),
-      tab: getComputedStyle(document.querySelector('[data-cover="tech-packs"] .pf-file__tab')).opacity,
-    }));
-    check('hovering the file steps the sheets apart, furthest one furthest',
-      open.sheets.every((x, i) => rest[i] - x > 3) && rest[0] - open.sheets[0] > rest[2] - open.sheets[2],
-      open.sheets.map((x, i) => (rest[i] - x).toFixed(1)).join(' '));
-    check('and brings the file\'s tab out from behind the page', Number(open.tab) > 0.5, open.tab);
-
-    /* Keyboard focus gets the same state, not a lesser one. */
-    await page.mouse.move(10, 10);
-    await page.waitForTimeout(800);
-    await page.locator('[data-cover="tech-packs"] .pf-cover__action').focus();
-    await page.waitForTimeout(900);
-    const focused = await page.evaluate(() => [...document.querySelectorAll('[data-cover="tech-packs"] .pf-file__sheet')]
-      .map((el) => el.getBoundingClientRect().top));
-    check('keyboard focus on the way in opens the file too',
-      focused.every((x, i) => rest[i] - x > 3),
-      focused.map((x, i) => (rest[i] - x).toFixed(1)).join(' '));
-    await page.screenshot({ path: `${output}/1440-tech-packs-cover.png` });
+    const tone = await page.evaluate(() => {
+      const lum = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+      return {
+        ground: lum(getComputedStyle(document.querySelector('.pf-cinema')).backgroundColor),
+        scrim: [...document.querySelectorAll('.pf-cinema *, .pf-cover *, .pf-outro *')].filter((el) => {
+          const s = getComputedStyle(el);
+          if (s.opacity === '0' || s.visibility === 'hidden' || s.display === 'none') return false;
+          const bg = s.backgroundColor.match(/[\d.]+/g);
+          if (!bg || (bg[3] !== undefined && Number(bg[3]) < 0.25)) return false;
+          if (0.2126 * +bg[0] + 0.7152 * +bg[1] + 0.0722 * +bg[2] > 120) return false;
+          const r = el.getBoundingClientRect();
+          return r.width * r.height > innerWidth * innerHeight * 0.25;
+        }).length,
+      };
+    });
+    check('the bright bone environment is preserved', tone.ground > 200, `luminance ${tone.ground.toFixed(0)}`);
+    check('no large dark overlay anywhere in the sequence', tone.scrim === 0, `${tone.scrim} found`);
+    check('the opening raised no script error', errors.length === 0, errors.join(' | '));
+    await page.screenshot({ path: `${output}/1440x900-statement.png` });
     await context.close();
   }
 
-  // ---- every reviewed width is its own composition ------------------------
-  for (const [width, height] of [[390, 844], [430, 844], [768, 1024], [1024, 900], [1440, 900]]) {
-    console.log(`\nthe sequence at ${width}`);
-    const context = await browser.newContext({
+  // ---- THE DEFECT THIS PASS EXISTS TO FIX --------------------------------
+  console.log('\nthe statement never crosses a face');
+  for (const [width, height] of VIEWPORTS) {
+    const context = await ctxWithFonts({
       viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768, deviceScaleFactor: 1,
     });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(1000);
 
     const frame = await page.evaluate(() => {
       const title = document.querySelector('[data-cinema-title]').getBoundingClientRect();
       const scene = document.querySelector('[data-scene="master"]').getBoundingClientRect();
-      const field = document.querySelector('[data-cinema-media]').getBoundingClientRect();
-      const caption = document.querySelector('[data-cinema-thesis]').getBoundingClientRect();
-      const cue = document.querySelector('[data-cinema-scroll]').getBoundingClientRect();
-      return { title, scene, field, caption, cue, overflow: document.documentElement.scrollWidth - innerWidth };
+      const thesis = document.querySelector('[data-cinema-thesis]').getBoundingClientRect();
+      /* Nothing may be cut by the sticky field's `overflow: clip`. */
+      const painted = [...document.querySelectorAll('.pf-cinema__title > span')].map((el) => {
+        const r = el.getBoundingClientRect();
+        return Math.round(r.left + Math.max(el.scrollWidth, r.width));
+      });
+      /* The masthead's INK bottom, not its box: a box carries descender space
+         no capital ever reaches, and this composition is measured to the
+         capitals. */
+      const ctx = document.createElement('canvas').getContext('2d');
+      const inkBottom = Math.max(...[...document.querySelectorAll('.pf-cinema__title > span')].map((el) => {
+        const cs = getComputedStyle(el);
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const m = ctx.measureText(el.textContent.trim().toUpperCase());
+        const rect = el.getBoundingClientRect();
+        const box = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent;
+        return rect.top + (rect.height - box) / 2 + m.fontBoundingBoxAscent + m.actualBoundingBoxDescent;
+      }));
+      return {
+        titleBottom: title.bottom, titleLeft: title.left, titleRight: title.right,
+        titleInkBottom: inkBottom,
+        thesisTop: thesis.top, thesisBottom: thesis.bottom,
+        painted, overflow: document.documentElement.scrollWidth - innerWidth,
+      };
     });
 
-    check(`${width}: no horizontal overflow`, frame.overflow <= 0, `${frame.overflow}px`);
-    check(`${width}: the title stays inside the measure`,
-      frame.title.left >= -0.5 && frame.title.right <= width + 0.5,
-      `${frame.title.left.toFixed(0)}…${frame.title.right.toFixed(0)}`);
-    check(`${width}: the plate covers the field, so it has no vertical seam`,
-      frame.scene.left <= frame.field.left + 0.5 && frame.scene.right >= frame.field.right - 0.5);
+    /* HOW MUCH AIR IS THERE, actually, between the last of the type and the
+       first of the photograph? Measured off the rendered page rather than
+       from a fraction of the plate: the type is hidden, the band under the
+       masthead is photographed, and the first row carrying anything darker
+       than the studio ground is found. A box test could not tell air from a
+       descender, and a fraction of the plate is an estimate. */
+    const air = await airUnderType(page, width, height, frame.titleInkBottom);
+    check(`${width}x${height}: the masthead stands clear of the figures`,
+      air.gap === null || air.gap > 10,
+      air.gap === null ? 'nothing below it in the frame' : `${Math.round(air.gap)}px of air`);
+    check(`${width}x${height}: no word is cut off by the frame`,
+      frame.painted.every((x) => x <= width + 1), `painted to ${frame.painted.join(', ')} of ${width}`);
+    check(`${width}x${height}: the statement stays inside the gutters`,
+      frame.titleLeft >= -0.5 && frame.titleRight <= width + 0.5,
+      `${frame.titleLeft.toFixed(0)}…${frame.titleRight.toFixed(0)}`);
+    /* Nothing of the photograph behind ANY line of the hero's type: not a
+       face, not a head, not a hem. Measured off the rendered page. */
+    const behind = await inkBehindType(page, width, height);
+    const over = behind.filter((l) => l.darkPct > 0.05 || l.min < 200);
+    check(`${width}x${height}: no line of type has a garment or a figure behind it`,
+      behind.length >= 4 && over.length === 0,
+      over.length
+        ? over.map((l) => `${l.what} at y${Math.round(l.y)}: ${l.darkPct.toFixed(2)}% ink, darkest ${l.min}`).join('; ')
+        : `${behind.length} lines, all on the studio ground`);
+    check(`${width}x${height}: no horizontal overflow`, frame.overflow <= 0, `${frame.overflow}px`);
+    await page.screenshot({ path: `${output}/${width}x${height}-statement.png` });
 
-    /* The figures occupy roughly the lower 92% of the plate. Their heads must
-       be below the top of the screen and their feet above the caption band —
-       the two ways this composition has actually broken. */
-    const heads = frame.scene.top + frame.scene.height * 0.08;
-    const feet = frame.scene.top + frame.scene.height * 0.83;
-    check(`${width}: no head is cropped by the top of the screen`, heads > 0, `heads at ${heads.toFixed(0)}`);
-    check(`${width}: the figures are not cut off by the foot of the screen`, feet < height, `feet at ${feet.toFixed(0)}`);
-    /* The title's box carries descender space below its last baseline, so it
-       is allowed to reach a little past the crown of the tallest head; what
-       it may never do is sit over a face. */
-    check(`${width}: the title clears the faces`, frame.title.bottom <= heads + frame.scene.height * 0.03,
-      `title ends ${frame.title.bottom.toFixed(0)}, heads ${heads.toFixed(0)}`);
-    check(`${width}: the caption band sits off the figures`,
-      frame.caption.bottom <= heads + 8 || frame.caption.top >= feet - 8,
-      `caption ${frame.caption.top.toFixed(0)}…${frame.caption.bottom.toFixed(0)}`);
-    check(`${width}: the scroll cue sits off the figures`,
-      frame.cue.bottom <= heads + 8 || frame.cue.top >= feet - 8,
-      `cue ${frame.cue.top.toFixed(0)}…${frame.cue.bottom.toFixed(0)}`);
-
-    // ---- two scroll-linked states, and nothing in between -----------------
-    const phaseAt = async (p) => { await seek(page, p); await page.waitForTimeout(700);
-      return page.evaluate(() => document.querySelector('.pf-cinema').dataset.phase); };
-    check(`${width}: it opens on the master scene`, await phaseAt(0) === 'opening');
-    check(`${width}: it arrives in Womenswear`, await phaseAt(0.95) === 'womenswear');
-
-    // ---- the match cut ----------------------------------------------------
+    // ---- the match cut is preserved ---------------------------------------
     await seek(page, 0.47);
-    await page.waitForTimeout(800);
+    await page.waitForTimeout(900);
     const cut = await page.evaluate((her) => {
       const at = (selector, [fx, fy]) => {
         const el = document.querySelector(selector);
         const m = new DOMMatrixReadOnly(getComputedStyle(el).transform);
-        /* Under a scale about its own transform-origin, that origin is the
-           one point the transform leaves alone — so her position on screen is
-           simply the untransformed origin plus the translation. */
+        /* Under a scale about its own transform-origin, that origin is the one
+           point the transform leaves alone — so her position on screen is the
+           untransformed origin plus the translation. */
         return { x: el.offsetLeft + fx * el.offsetWidth + m.e, y: el.offsetTop + fy * el.offsetHeight + m.f, scale: m.a };
       };
       return { master: at('.pf-scene--master', her.master), women: at('.pf-scene--women', her.women) };
     }, HER);
-    check(`${width}: both plates are pushed in by the same amount`,
+    check(`${width}x${height}: both plates are pushed in by the same amount`,
       Math.abs(cut.master.scale - cut.women.scale) < 0.01, `${cut.master.scale} vs ${cut.women.scale}`);
-    check(`${width}: she is at the same point on screen in both plates`,
+    check(`${width}x${height}: she is at the same point on screen in both plates`,
       Math.abs(cut.master.x - cut.women.x) < 6 && Math.abs(cut.master.y - cut.women.y) < 6,
       `dx ${(cut.women.x - cut.master.x).toFixed(1)} dy ${(cut.women.y - cut.master.y).toFixed(1)}`);
-
-    // ---- the Womenswear cover it lands on ---------------------------------
-    await seek(page, 0.97);
-    await page.waitForTimeout(900);
-    const entrance = await page.evaluate(() => {
-      const action = document.querySelector('.pf-women-threshold__action');
-      const r = action.getBoundingClientRect();
-      const women = document.querySelector('.pf-scene--women').getBoundingClientRect();
-      return {
-        href: action.getAttribute('href'),
-        inert: !!action.closest('[inert]'),
-        onScreen: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight,
-        hit: document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('.pf-women-threshold__action') !== null,
-        headTop: women.top + women.height * 0.08,
-      };
-    });
-    check(`${width}: the cover is the door to the existing chapter`, entrance.href === '#womenswear');
-    check(`${width}: it is reachable once it is reached`, !entrance.inert && entrance.onScreen && entrance.hit);
-    check(`${width}: her face is inside the frame on the cover`, entrance.headTop > 0, `head at ${entrance.headTop.toFixed(0)}`);
-    await page.screenshot({ path: `${output}/${width}-womenswear-cover.png` });
-
-    // ---- the three cover sections below it --------------------------------
-    for (const [, id] of ORDER.slice(1)) {
-      await page.locator(`[data-cover="${id}"]`).scrollIntoViewIfNeeded();
-      await page.waitForTimeout(950);
-      const cover = await page.evaluate((chapter) => {
-        const el = document.querySelector(`[data-cover="${chapter}"]`);
-        const copy = el.querySelector('.pf-cover__copy').getBoundingClientRect();
-        const line = el.querySelector('.pf-cover__line').getBoundingClientRect();
-        const action = el.querySelector('.pf-cover__action').getBoundingClientRect();
-        return {
-          overflow: document.documentElement.scrollWidth - innerWidth,
-          inside: copy.left >= -0.5 && copy.right <= innerWidth + 0.5
-            && line.top >= 0 && action.bottom <= innerHeight + 1,
-          visible: Number(getComputedStyle(el.querySelector('.pf-cover__copy')).opacity),
-          aperture: Number(getComputedStyle(el.querySelector('.pf-cover__plate')).getPropertyValue('--aperture')),
-        };
-      }, id);
-      check(`${width}: the ${id} cover has no horizontal overflow`, cover.overflow <= 0, `${cover.overflow}px`);
-      check(`${width}: the ${id} cover keeps its type inside the frame`, cover.inside);
-      check(`${width}: the ${id} cover's copy has arrived`, cover.visible > 0.85, cover.visible.toFixed(2));
-      check(`${width}: the ${id} cover's frame has opened`, cover.aperture < 4, String(cover.aperture));
-      await page.screenshot({ path: `${output}/${width}-cover-${id}.png` });
-    }
-    check(`${width}: no script error through the whole sequence`, errors.length === 0, errors.join(' | '));
+    check(`${width}x${height}: no script error through the cut`, errors.length === 0, errors.join(' | '));
     await context.close();
   }
 
-  // ---- the landing frame never steals a click from what is under it -------
-  console.log('\nthe landing frame stays out of the way until it is reached');
+  // ---- four worlds, one site ---------------------------------------------
+  console.log('\nsame grammar, different dialect');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await page.waitForTimeout(800);
-    check('it is inert over the opening',
-      await page.evaluate(() => document.querySelector('[data-women-threshold]').hasAttribute('inert')));
-    await seek(page, 0.3);
-    await page.waitForTimeout(700);
-    check('it is still inert through the push',
-      await page.evaluate(() => document.querySelector('[data-women-threshold]').hasAttribute('inert')));
+
+    const covers = await page.evaluate(() => [...document.querySelectorAll('.pf-cover')]
+      .filter((el) => getComputedStyle(el).display !== 'none')
+      .map((el) => {
+        const name = el.querySelector('.pf-cover__name');
+        const em = el.querySelector('.pf-cover__statement em');
+        return {
+          id: el.dataset.cover ?? (el.hasAttribute('data-women-threshold') ? 'womenswear' : ''),
+          name: name.textContent.trim(),
+          nameSize: parseFloat(getComputedStyle(name).fontSize),
+          statementSize: parseFloat(getComputedStyle(el.querySelector('.pf-cover__statement')).fontSize),
+          word: em.textContent.trim(),
+          colour: getComputedStyle(em).color,
+          accent: getComputedStyle(el).getPropertyValue('--accent').trim(),
+          rulePaint: (() => {
+            const cs = getComputedStyle(el.querySelector('.pf-cover__rule'));
+            return `${cs.backgroundColor} ${cs.backgroundImage}`;
+          })(),
+          /* The dialects. */
+          nameAxis: getComputedStyle(name).fontVariationSettings,
+          echo: [...name.querySelectorAll('[data-echo]')].map((el) => el.dataset.echo).join(' ')
+            || name.dataset.echo || '',
+          sheets: el.querySelectorAll('.pf-file__sheet').length,
+        };
+      }));
+
+    check('four covers, in the running order, each headlined by its own name',
+      covers.map((c) => `${c.id}:${c.name}`).join(' ')
+        === ORDER.map(([id, name]) => `${id}:${name}`).join(' '),
+      covers.map((c) => `${c.id}:${c.name}`).join(' '));
+    check('the chapter name outranks everything else on its cover',
+      covers.every((c) => c.nameSize >= c.statementSize * 3),
+      covers.map((c) => `${c.name} ${c.nameSize}/${c.statementSize}`).join(' · '));
+    check('one word of each statement is coloured, and it is the capability sold',
+      covers.map((c) => c.word).join(' ') === ORDER.map(([, , w]) => w).join(' '),
+      covers.map((c) => c.word).join(' '));
+    /* Development's rule is a row of registration ticks, so its paint is a
+       gradient rather than a fill — the token is read off whichever paint the
+       rule uses, and it still has to be the one the word is set in. */
+    check("each chapter's word and rule take the same single token",
+      covers.every((c) => c.rulePaint.includes(c.colour)),
+      covers.map((c) => `${c.colour} / ${c.rulePaint}`).join(' | '));
+    check('the four tokens are four different colours',
+      new Set(covers.map((c) => c.colour)).size === 4, covers.map((c) => c.colour).join(' '));
+
+    /* SAME GRAMMAR, DIFFERENT DIALECT: exactly one world carries each device,
+       so the covers cannot collapse back into four recolours of one layout. */
+    const by = (id) => covers.find((c) => c.id === id);
+    /* THE FOUR TITLES TRAVEL THE MASTHEAD'S OWN AXIS, in running order, from
+       the wide end where INSTINCT sits to the narrow end where CONSTRUCTION
+       does: the typography moves from instinct toward construction as the
+       visitor does. */
+    const widths = covers.map((c) => Number((c.nameAxis.match(/(\d+)/) ?? [])[1]));
+    check('the four titles narrow along the journey, wide to condensed',
+      widths.every((v, i) => i === 0 || (Number.isFinite(v) && v < widths[i - 1])),
+      covers.map((c, i) => `${c.name} ${widths[i]}`).join(' → '));
+    check('and they start and end on the masthead\'s own two poles',
+      widths[0] === 125 && widths[widths.length - 1] === 75, `${widths[0]} … ${widths[widths.length - 1]}`);
+    /* And no two names are set at the same size, because each is fitted to
+       the field its own photograph leaves. */
+    check('each name is fitted to its own field, so no two are the same size',
+      new Set(covers.map((c) => Math.round(c.nameSize))).size === 4,
+      covers.map((c) => `${c.name} ${Math.round(c.nameSize)}px`).join(' · '));
+    check('Development is the one whose name is drawn before it is filled',
+      by('3d-simulation').echo === 'Development' && covers.filter((c) => c.echo).length === 1,
+      covers.map((c) => `${c.id}:${c.echo || '-'}`).join(' '));
+    check('Tech Packs is the one made of paper — a front sheet and three behind',
+      by('tech-packs').sheets === 3 && covers.filter((c) => c.sheets > 0).length === 1,
+      covers.map((c) => `${c.id}:${c.sheets}`).join(' '));
+
+    /* The file still answers to attention, by pointer and by keyboard. */
+    await page.locator('[data-cover="tech-packs"]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1200);
+    const sheetTops = () => page.evaluate(() => [...document.querySelectorAll('[data-cover="tech-packs"] .pf-file__sheet')]
+      .map((el) => el.getBoundingClientRect().top));
+    const rest = await sheetTops();
+    await page.locator('[data-cover="tech-packs"] .pf-file__front').hover();
+    await page.waitForTimeout(900);
+    const hovered = await sheetTops();
+    check('hovering the file steps its sheets apart, furthest one furthest',
+      hovered.every((t, i) => rest[i] - t > 3) && rest[0] - hovered[0] > rest[2] - hovered[2],
+      hovered.map((t, i) => (rest[i] - t).toFixed(1)).join(' '));
+    await page.mouse.move(8, 8);
+    await page.waitForTimeout(800);
+    await page.locator('[data-cover="tech-packs"] .pf-cover__action').focus();
+    await page.waitForTimeout(900);
+    const focused = await sheetTops();
+    check('keyboard focus on the way in opens the file too',
+      focused.every((t, i) => rest[i] - t > 3), focused.map((t, i) => (rest[i] - t).toFixed(1)).join(' '));
+    await page.screenshot({ path: `${output}/1440x900-tech-packs.png` });
     await context.close();
+  }
+
+  /* EVERY NAME HOLDS ITS OWN GLYPHS, AT EVERY WIDTH.
+     A cover clips its name's box as it arrives, so a box narrower than the
+     word does not overflow harmlessly — it cuts the word. This is checked at
+     the narrow widths because that is where it happened: a `max-width: 9ch`
+     left behind by a cover system that no longer exists cut MENSWEAR to
+     MENSWEA on a phone. */
+  console.log('\nno name is cut by its own box');
+  for (const [width, height] of [[768, 1024], [430, 932], [390, 844]]) {
+    const context = await ctxWithFonts({
+      viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768, deviceScaleFactor: 1,
+    });
+    const page = await context.newPage();
+    await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
+    await page.waitForTimeout(800);
+    const names = await page.evaluate(() => [...document.querySelectorAll('.pf-cover')]
+      .filter((el) => getComputedStyle(el).display !== 'none')
+      .map((el) => {
+        const name = el.querySelector('.pf-cover__name');
+        const box = name.getBoundingClientRect();
+        /* The glyphs themselves, not the block: Development's name carries an
+           outlined echo as a pseudo-element, which a scrollWidth would count. */
+        const range = document.createRange();
+        range.selectNodeContents(name.firstChild);
+        const glyphs = range.getBoundingClientRect();
+        return {
+          name: name.textContent.trim(),
+          fits: glyphs.right <= box.right + 2,
+          inside: Math.max(glyphs.right, box.right) <= innerWidth + 1,
+          over: Math.round(glyphs.right - box.right),
+          size: Math.round(parseFloat(getComputedStyle(name).fontSize)),
+        };
+      }));
+    check(`${width}x${height}: every chapter name fits inside its own box`,
+      names.length === 4 && names.every((n) => n.fits),
+      names.filter((n) => !n.fits).map((n) => `${n.name} over by ${n.over}px`).join(' ') || names.map((n) => `${n.name} ${n.size}px`).join(' · '));
+    check(`${width}x${height}: and inside the frame`,
+      names.every((n) => n.inside), names.filter((n) => !n.inside).map((n) => n.name).join(' ') || 'all inside');
+    await context.close();
+  }
+
+  // ---- one control, and nothing else that numbers ------------------------
+  console.log('\none control');
+  {
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
+    await page.waitForTimeout(800);
+
+    const control = page.locator('[data-where]');
+    check('it is out of the way over the opening, which is not a chapter',
+      await page.evaluate(() => getComputedStyle(document.querySelector('[data-where]')).opacity === '0'));
+
+    await page.locator('[data-cover="menswear"]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1400);
+    const now = await page.evaluate(() => ({
+      live: document.querySelector('[data-where]').dataset.live,
+      count: document.querySelector('[data-where-count]').textContent.trim(),
+      name: document.querySelector('[data-where-name]').textContent.trim(),
+      current: document.querySelector('[data-where-link][aria-current]')?.dataset.whereLink,
+      expanded: document.querySelector('[data-where-toggle]').getAttribute('aria-expanded'),
+    }));
+    check('it says where you are', now.live === 'true' && now.count === '02 / 04' && now.name === 'Menswear',
+      JSON.stringify(now));
+    check('it marks the chapter being read', now.current === 'menswear', String(now.current));
+    check('it is closed until it is asked for', now.expanded === 'false');
+
+    /* Keyboard: the button opens it, Escape closes it. */
+    await page.locator('[data-where-toggle]').focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+    check('a keyboard opens it',
+      await page.locator('[data-where-toggle]').getAttribute('aria-expanded') === 'true');
+    check('and it lists the four chapters, in order',
+      (await page.locator('[data-where-link]').evaluateAll((els) => els.map((e) => e.dataset.whereLink))).join(' ')
+        === ORDER.map(([id]) => id).join(' '));
+    await page.screenshot({ path: `${output}/1440x900-control.png` });
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    check('Escape closes it again',
+      await page.locator('[data-where-toggle]').getAttribute('aria-expanded') === 'false');
+
+    /* A touch control, not a hover affordance. */
+    await context.close();
+    const phone = await ctxWithFonts({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+    const small = await phone.newPage();
+    await small.goto(`${base}/portfolio/`, { waitUntil: 'load' });
+    await small.locator('[data-cover="menswear"]').scrollIntoViewIfNeeded();
+    await small.waitForTimeout(1400);
+    await small.locator('[data-where-toggle]').click();
+    await small.waitForTimeout(500);
+    check('on a phone a tap opens it and leaves it open',
+      await small.locator('[data-where-toggle]').getAttribute('aria-expanded') === 'true');
+    const target = await small.locator('[data-where-toggle]').boundingBox();
+    check('and it is a touch target, not a hairline',
+      target.height >= 44, `${Math.round(target.height)}px tall`);
+    await phone.close();
   }
 
   // ---- without motion ------------------------------------------------------
   console.log('\nwithout motion');
   {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const context = await ctxWithFonts({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(`${base}/portfolio/`, { waitUntil: 'load' });
     await page.waitForTimeout(800);
@@ -425,17 +633,17 @@ try {
         const el = document.querySelector('[data-women-threshold]');
         return getComputedStyle(el).display === 'none' && el.hasAttribute('inert');
       }));
-    check('Womenswear still gets a cover of its own',
-      await page.evaluate(() => getComputedStyle(document.querySelector('.pf-cover--still')).display !== 'none'));
     const stillCovers = await page.evaluate(() => [...document.querySelectorAll('[data-cover]')]
       .filter((el) => getComputedStyle(el).display !== 'none')
-      .map((el) => el.querySelector('.pf-cover__eyebrow').textContent.replace(/\s+/g, ' ').trim()));
-    check('all four covers are present, in order', stillCovers.length === 4
-      && ORDER.every(([n, , title], i) => stillCovers[i].startsWith(n) && stillCovers[i].includes(title)),
-      stillCovers.join(' | '));
+      .map((el) => el.querySelector('.pf-cover__name').textContent.trim()));
+    check('all four chapters still have a cover, in order',
+      stillCovers.join('|') === ORDER.map(([, name]) => name).join('|'), stillCovers.join('|'));
     check('every frame is open: nothing waits for a scrub that will not run',
       await page.evaluate(() => [...document.querySelectorAll('.pf-cover__plate')]
         .every((el) => Number(getComputedStyle(el).getPropertyValue('--aperture') || 0) === 0)));
+    check('and no name is left drawn but unfilled',
+      await page.evaluate(() => [...document.querySelectorAll('.pf-cover__name[data-echo]')]
+        .every((el) => Number(getComputedStyle(el).getPropertyValue('--echo-o') || 0) === 0)));
 
     await page.locator('.pf-cover--still .pf-cover__action').click();
     await page.waitForTimeout(800);

@@ -19,41 +19,16 @@ import '../styles/portfolio-cinematic.css';
    The other three each get one, built to the same composition. */
 const [womenswearChapter, ...coverChapters] = chapters;
 
-/* WHAT IS ACTUALLY IN EACH CHAPTER, read from the chapter's own content so a
-   rail can never advertise a section that does not exist. The garment worlds
-   carry categories and the URL already addresses them one level deep; the two
-   single-column chapters address their items by name inside themselves. */
-const worldById = new Map(garmentWorlds.map((world) => [world.id, world]));
-const contentsFor = (id: string): Array<{ n: string; label: string; href: string; focus?: string }> => {
-  const world = worldById.get(id);
-  if (world) {
-    return world.categories.map((category) => ({
-      n: category.number,
-      label: category.label,
-      href: `#${id}/${category.id}`,
-    }));
-  }
-  if (id === '3d-simulation') {
-    return simulationSessions.map((session, index) => ({
-      n: String(index + 1).padStart(2, '0'),
-      label: session.title,
-      href: '#3d-simulation',
-      focus: session.id,
-    }));
-  }
-  return techPacks.map((pack, index) => ({
-    n: String(index + 1).padStart(2, '0'),
-    label: pack.title,
-    href: '#tech-packs',
-    focus: pack.id,
-  }));
-};
-
-const contentsKind: Record<string, string> = {
-  womenswear: `${garmentWorlds[0].categories.length} market categories`,
-  menswear: `${garmentWorlds[1].categories.length} market categories`,
-  '3d-simulation': `${simulationSessions.length} recorded sessions`,
-  'tech-packs': `${techPacks.length} documents`,
+/* THE ONE HIGHLIGHTED WORD.
+   aberbach.co sets exactly one word of a statement in colour — `.display em`
+   across the whole site. The Portfolio keeps that signature and swaps the
+   colour for the chapter's own sampled token. The word is stored as data
+   rather than as markup, so the statement can be proofread as a sentence and
+   the split is checked at build time instead of being trusted. */
+const split = (statement: string, word: string) => {
+  const at = statement.indexOf(word);
+  if (at < 0) throw new Error(`"${word}" is not in "${statement}"`);
+  return [statement.slice(0, at), word, statement.slice(at + word.length)] as const;
 };
 ---
 
@@ -96,10 +71,6 @@ const contentsKind: Record<string, string> = {
       aria-labelledby="pf-cinema-title"
     >
       <div class="pf-cinema__sticky">
-        <p class="pf-cinema__folio label" data-cinema-folio>
-          <span>Soufiane Aberbach</span><span>Selected work / 2026</span>
-        </p>
-
         {/* ONE IMAGE PLANE. It is the campaign plate, then the index's
             preview field, then the Womenswear entrance. */}
         <div class="pf-cinema__media" data-cinema-media aria-hidden="true">
@@ -130,12 +101,29 @@ const contentsKind: Record<string, string> = {
           </figure>
         </div>
 
-        <h1 class="pf-cinema__title display" id="pf-cinema-title" data-cinema-title>
-          <span>Between instinct</span> <span>&amp;&nbsp;construction</span>
+        {/* THE MASTHEAD — TWO EQUAL FORCES, ONE FAMILY, TWO WIDTHS.
+            Archivo is served to this site as a variable font with a WIDTH
+            axis of 75..125, and the rest of aberbach.co never leaves 104..112.
+            The Portfolio takes the ends of that axis, which is a voice the
+            home page cannot have.
+
+            INSTINCT is set expanded and open — eight wide capitals, tracked
+            out, breathing. CONSTRUCTION is set condensed and packed — twelve
+            narrow capitals, tracked in. At one cap height the two words come
+            out the same width and the same weight of ink, so NEITHER
+            OUTRANKS THE OTHER: the difference between them is character, not
+            size. The ampersand between them is set light at the middle of the
+            axis — the hinge the two forces turn on. */}
+        <h1 class="pf-cinema__title" id="pf-cinema-title" data-cinema-title>
+          <span class="pf-cinema__kicker">Between</span>
+          <span class="pf-cinema__instinct">Instinct</span>
+          <span class="pf-cinema__amp">&amp;</span>
+          <span class="pf-cinema__construction">Construction</span>
         </h1>
 
         <p class="pf-cinema__thesis" data-cinema-thesis>
-          Fashion ideas developed into products that can be made.
+          Fashion design, pattern development and technical product work
+          — connected from concept to production.
         </p>
 
         {/* THE WOMENSWEAR COVER. Not a separate screen: the last frame of the
@@ -151,19 +139,17 @@ const contentsKind: Record<string, string> = {
           aria-labelledby="womenswear-entry-title"
         >
           <div class="pf-cover__copy pf-women-threshold__copy">
-            <p class="pf-cover__eyebrow label">
-              <span>{womenswearChapter.number}</span>{womenswearChapter.title}
+            <p class="pf-cover__rule" aria-hidden="true"></p>
+            <h2 class="pf-cover__name" id="womenswear-entry-title">{womenswearChapter.title}</h2>
+            <p class="pf-cover__statement">
+              {split(womenswearChapter.statement, womenswearChapter.highlight)[0]}
+              <em>{womenswearChapter.highlight}</em>
+              {split(womenswearChapter.statement, womenswearChapter.highlight)[2]}
             </p>
-            <h2 class="pf-cover__line display" id="womenswear-entry-title">Designed<br />to move.</h2>
-            <p class="pf-cover__descriptor">Silhouette and proportion guide every cut.</p>
             <a class="pf-cover__action pf-women-threshold__action label" href="#womenswear" data-nav>
               {womenswearChapter.action} <Arrow />
             </a>
           </div>
-          <p class="pf-cover__register label" aria-hidden="true">
-            <span>{womenswearChapter.number} / {chapters.length}</span>
-            <span>{womenswearChapter.kind}</span>
-          </p>
         </div>
 
         <p class="pf-cinema__scroll label" data-cinema-scroll>
@@ -176,93 +162,54 @@ const contentsKind: Record<string, string> = {
     {/* ------------------------------------------------------------------
         THE SEQUENCE.
 
-        Opening → Womenswear cover → Womenswear contents → Menswear cover →
-        Menswear contents → Development cover → Development contents →
-        Tech Packs cover → Tech Packs contents → ending.
+        Opening → Womenswear → Menswear → Development → Tech Packs → ending.
 
-        There is no index screen in the middle of that. Each chapter arrives
-        as its own cover and hands over to what is inside it; the running
-        order is the navigation, and the rail at the edge is only a position
-        marker. Every cover is built from the same three parts — a plate on
-        the right, a type block in the negative space it leaves, a register
-        at the foot — so the differences between them are the chapter's, not
-        the layout's.
+        Four covers, and nothing between them. The journey travels from
+        instinct toward construction: two chapters of design, then the
+        development that resolves them, then the documentation that hands them
+        over — one practice, four capabilities, in the order the work is made.
+
+        SAME GRAMMAR, DIFFERENT DIALECT. Every cover is the chapter's NAME set
+        as the headline, one sentence with one word in the chapter's own
+        colour, and one way in — over a plate standing in the right of the
+        frame. What differs is how each one behaves: Womenswear moves with the
+        garment, Menswear locks to a grid, Development draws itself into
+        being, Tech Packs is paper. Those are the chapters' characters, not
+        four unrelated ideas.
+
+        The number is NOT repeated here. One control carries the position for
+        the whole journey.
         ------------------------------------------------------------------ */}
 
-    {/* Womenswear's cover is the match cut's landing frame, which only exists
-        while there is motion to land it. With motion off there is no camera
-        move and the opening resolves to the master scene alone, so the chapter
-        is given the same cover the other three get, built from the same parts.
-        Exactly one of the two is ever rendered — see the reduced-motion block
-        in the stylesheet. */}
-    <section
-      class="pf-cover pf-cover--section pf-cover--womenswear pf-cover--still"
-      id="cover-womenswear"
-      data-cover={womenswearChapter.id}
-      style={`--accent:${womenswearChapter.accent};--subject:${womenswearChapter.subject}`}
-      aria-labelledby="cover-womenswear-line"
-    >
-      <div class="pf-cover__frame">
-        <figure class="pf-cover__plate" data-image-source={womenswearChapter.cover.credit.source}>
-          <img
-            src={womenswearChapter.cover.image.src}
-            srcset={womenswearChapter.cover.image.srcset}
-            sizes="(max-width: 767px) 128vw, 100vw"
-            width={womenswearChapter.cover.image.width}
-            height={womenswearChapter.cover.image.height}
-            alt={womenswearChapter.cover.image.alt}
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-        <div class="pf-cover__copy">
-          <p class="pf-cover__eyebrow label">
-            <span>{womenswearChapter.number}</span>{womenswearChapter.title}
-          </p>
-          <h2 class="pf-cover__line display" id="cover-womenswear-line">{womenswearChapter.line}</h2>
-          <p class="pf-cover__descriptor">{womenswearChapter.descriptor}</p>
-          <a class="pf-cover__action label" href="#womenswear" data-nav data-chapter={womenswearChapter.id}>
-            {womenswearChapter.action} <Arrow />
-          </a>
-        </div>
-        <p class="pf-cover__register label" aria-hidden="true">
-          <span>{womenswearChapter.number} / {chapters.length}</span>
-          <span>{womenswearChapter.kind}</span>
-        </p>
-      </div>
-    </section>
-
-    <section
-      class="pf-contents pf-contents--floor"
-      aria-labelledby="contents-womenswear"
-      data-contents={womenswearChapter.id}
-    >
-      <h2 class="pf-contents__head label" id="contents-womenswear">
-        <span>In {womenswearChapter.title}</span>
-        <span>{contentsKind[womenswearChapter.id]}</span>
-      </h2>
-      <ol class="pf-contents__list">
-        {contentsFor(womenswearChapter.id).map((item) => (
-          <li>
-            <a href={item.href} data-nav data-focus={item.focus}>
-              <span class="label">{item.n}</span>{item.label}<i aria-hidden="true"><Arrow /></i>
-            </a>
-          </li>
-        ))}
-      </ol>
-    </section>
-
-    {coverChapters.map((chapter) => (
-      <Fragment>
+    {chapters.map((chapter) => {
+      /* Womenswear's cover is the frame the opening's match cut lands on, so
+         its section is only rendered where that cut cannot happen — motion
+         off, or no script at all. Every cover is built from this one block,
+         so the four cannot drift apart. */
+      const still = chapter.id === womenswearChapter.id;
+      const [before, word, after] = split(chapter.statement, chapter.highlight);
+      const file = chapter.id === 'tech-packs';
+      return (
         <section
-          class={`pf-cover pf-cover--section pf-cover--${chapter.id}`}
+          class={`pf-cover pf-cover--section pf-cover--${chapter.id}${still ? ' pf-cover--still' : ''}`}
           id={`cover-${chapter.id}`}
           data-cover={chapter.id}
           style={`--accent:${chapter.accent};--subject:${chapter.subject}`}
-          aria-labelledby={`cover-${chapter.id}-line`}
+          aria-labelledby={`cover-${chapter.id}-name`}
         >
           <div class="pf-cover__frame">
-            {chapter.id === 'tech-packs' ? (
+            {/* DEVELOPMENT'S CONSTRUCTION AXIS. One line struck across the
+                frame at the garment's own waist, ticked at both ends: the
+                axis a pattern is drafted against. It is the only graphic
+                mark in the sequence, it carries no numbers, and it is drawn
+                as the cover arrives rather than sitting there. Menswear's
+                three hairlines, which were decoration standing in for
+                structure, are gone. */}
+            {chapter.id === '3d-simulation' && (
+              <div class="pf-cover__axis" aria-hidden="true"></div>
+            )}
+
+            {file ? (
               /* A tech pack is a FILE, so the cover stages one: the supplied
                  cover sheet at the front of a small stack of three more,
                  standing in the same zone the photographic plates occupy. */
@@ -303,89 +250,79 @@ const contentsKind: Record<string, string> = {
             )}
 
             <div class="pf-cover__copy">
-              <p class="pf-cover__eyebrow label">
-                <span>{chapter.number}</span>{chapter.title}
-              </p>
-              <h2 class="pf-cover__line display" id={`cover-${chapter.id}-line`}>{chapter.line}</h2>
-              <p class="pf-cover__descriptor">{chapter.descriptor}</p>
+              <p class="pf-cover__rule" aria-hidden="true"></p>
+              {/* DEVELOPMENT'S DIALECT: the name is drawn before it is filled.
+                  `data-echo` renders a second, outlined copy of the word that
+                  starts offset and settles onto the solid one as the cover
+                  arrives — 2D line becoming a dimensional thing, which is the
+                  chapter's whole subject. It is decorative to no one: the
+                  echo is a CSS `content` string, so it never reaches the
+                  accessibility tree or the page's text. */}
+              {/* THE CHAPTER'S NAME, ON THE JOURNEY'S OWN AXIS.
+                  The masthead sets INSTINCT at the wide end of Archivo's
+                  width axis and CONSTRUCTION at the narrow end. The four
+                  chapter titles then travel between those two poles in
+                  order — WOMENSWEAR expanded, MENSWEAR at the middle,
+                  DEVELOPMENT narrowing, TECH PACKS condensed — so the
+                  typography itself moves from instinct toward construction
+                  as the visitor does. One family, four voices, no decoration.
+
+                  DEVELOPMENT also carries `data-echo`: a second, outlined
+                  copy of the word that starts offset and a degree off true
+                  and registers onto the solid one as the cover arrives — a
+                  2D line becoming a dimensional thing. It is a CSS `content`
+                  string, so it never reaches the accessibility tree. */}
+              <h2
+                class="pf-cover__name"
+                id={`cover-${chapter.id}-name`}
+                data-echo={chapter.id === '3d-simulation' ? chapter.title : undefined}
+              >{chapter.title}</h2>
+              <p class="pf-cover__statement">{before}<em>{word}</em>{after}</p>
               <a class="pf-cover__action label" href={`#${chapter.id}`} data-nav data-chapter={chapter.id}>
                 {chapter.action} <Arrow />
               </a>
             </div>
-
-            <p class="pf-cover__register label" aria-hidden="true">
-              <span>{chapter.number} / {chapters.length}</span>
-              <span>{chapter.kind}</span>
-            </p>
           </div>
         </section>
+      );
+    })}
 
-        <section
-          class={`pf-contents${chapter.id === 'tech-packs' ? '' : ' pf-contents--floor'}`}
-          aria-labelledby={`contents-${chapter.id}`}
-          data-contents={chapter.id}
-        >
-          <h2 class="pf-contents__head label" id={`contents-${chapter.id}`}>
-            <span>In {chapter.title}</span>
-            <span>{contentsKind[chapter.id]}</span>
-          </h2>
-          <ol class="pf-contents__list">
-            {contentsFor(chapter.id).map((item) => (
-              <li>
-                <a href={item.href} data-nav data-focus={item.focus}>
-                  <span class="label">{item.n}</span>{item.label}<i aria-hidden="true"><Arrow /></i>
-                </a>
-              </li>
-            ))}
-          </ol>
-          {chapter.stateNote && <p class="pf-contents__state label">{chapter.stateNote}</p>}
-        </section>
-      </Fragment>
-    ))}
-
-    {/* THE ENDING. The sequence closes on its own index — the four chapters
-        listed once, at the end, where a contents page belongs in a book. It is
-        deliberately not the middle of the journey. */}
+    {/* THE ENDING. The visitor has been through all four worlds; repeating
+        them as a directory would explain the journey they just took. One line
+        resolves it, in the site's own voice and with the site's own single
+        coloured word, and one thing to do next. */}
     <section class="pf-outro" id="portfolio-ending" aria-labelledby="pf-outro-title">
-      <p class="pf-outro__eyebrow label"><span>End of the sequence</span><span>01 — 0{chapters.length}</span></p>
-      <h2 class="pf-outro__title display" id="pf-outro-title">Four chapters,<br />one method.</h2>
-      <p class="pf-outro__lead">
-        Product development, the development that resolves it, and the documentation a factory
-        can build from. Read in any order from here.
-      </p>
-      <nav class="pf-living-index" aria-label="Portfolio chapters" data-living-index>
-        <ol>
-          {chapters.map((chapter) => (
-            <li>
-              <a
-                class="pf-index-row"
-                href={`#${chapter.id}`}
-                data-nav
-                data-chapter={chapter.id}
-                data-index-row
-                style={`--accent:${chapter.accent};--subject:${chapter.subject}`}
-              >
-                <span class="pf-index-row__number label">{chapter.number}</span>
-                <strong class="pf-index-row__title display">{chapter.title}</strong>
-                <span class="pf-index-row__note">{chapter.note}</span>
-                <span class="pf-index-row__action label">{chapter.action} <Arrow /></span>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-      <a class="pf-outro__brief button" href="/contact/">Start a brief <span><Arrow /></span></a>
+      <p class="pf-outro__rule" aria-hidden="true"></p>
+      <h2 class="pf-outro__title display" id="pf-outro-title">
+        One practice.<br />From design to <em>production</em>.
+      </h2>
+      <a class="pf-outro__brief button button--signal" href="/contact/">
+        Start a brief <span aria-hidden="true"><Arrow /></span>
+      </a>
     </section>
 
-    {/* The position marker. Secondary by construction: numbers at the edge of
-        the page, the current chapter's name shown and the rest held back. */}
-    <nav class="pf-rail" aria-label="Chapter position" data-rail hidden>
-      <ol>
+    {/* THE ONE PORTFOLIO CONTROL.
+        It replaces four separate systems: the cover register, the edge rail,
+        the per-chapter contents rails and the ending's directory. At rest it
+        says only where you are — `02 / 04 MENSWEAR`. Opened, by pointer or by
+        keyboard, it is the four chapters. It is the only place in the journey
+        that numbers anything. */}
+    <nav class="pf-where" aria-label="Portfolio chapters" data-where hidden>
+      <button type="button" class="pf-where__now label" data-where-toggle aria-expanded="false">
+        <span class="pf-where__count" data-where-count>01 / 0{chapters.length}</span>
+        <span class="pf-where__name" data-where-name>{chapters[0].title}</span>
+        <i class="pf-where__caret" aria-hidden="true"></i>
+      </button>
+      <ol class="pf-where__list" data-where-list>
         {chapters.map((chapter) => (
           <li>
-            <a href={`#${chapter.id}`} data-nav data-rail-link={chapter.id} style={`--accent:${chapter.accent};--subject:${chapter.subject}`}>
-              <span class="pf-rail__n label">{chapter.number}</span>
-              <span class="pf-rail__name label">{chapter.title}</span>
+            <a
+              href={`#cover-${chapter.id}`}
+              data-where-link={chapter.id}
+              style={`--accent:${chapter.accent}`}
+            >
+              <span class="pf-where__n label">{chapter.number}</span>
+              <span class="pf-where__label">{chapter.title}</span>
             </a>
           </li>
         ))}
@@ -457,7 +394,6 @@ const contentsKind: Record<string, string> = {
       const master = cinema.querySelector<HTMLElement>('[data-scene="master"]')!;
       const women = cinema.querySelector<HTMLElement>('[data-scene="women"]')!;
       const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
-      const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
       const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
       const cue = cinema.querySelector<HTMLElement>('[data-cinema-scroll]')!;
       const threshold = cinema.querySelector<HTMLElement>('[data-women-threshold]')!;
@@ -521,12 +457,11 @@ const contentsKind: Record<string, string> = {
         },
       });
 
-      /* 1. The opening gives way: the statement lifts out of the band it was
-            set in, and the folio steps back to a register mark. */
+      /* 1. The opening gives way: the masthead and its standfirst lift out of
+            the band they were set in, and the frame is left to the picture. */
       timeline
         .to([cue, thesis], { autoAlpha: 0, y: -14, duration: 0.09 }, 0.04)
-        .to(title, { autoAlpha: 0, y: -26, duration: 0.13 }, 0.07)
-        .to(folio, { autoAlpha: 0.42, duration: 0.11 }, 0.06);
+        .to(title, { autoAlpha: 0, y: -26, duration: 0.13 }, 0.07);
 
       /* 2. The push in. The master plate scales about the woman in red, so
             the other two figures leave the frame while she stays put. */
@@ -554,10 +489,7 @@ const contentsKind: Record<string, string> = {
         .to(women, { xPercent: 0, x: REST_X, y: REST_Y, scale: REST_SCALE, duration: 0.24, ease: 'power1.out' }, 0.58)
         .fromTo(threshold,
           { autoAlpha: 0, y: () => (isMobile() ? 16 : 22) },
-          { autoAlpha: 1, y: 0, duration: 0.14 }, 0.72)
-        /* The opening's folio belongs to the opening. Once the cover has
-           arrived, the chapter's own register is the only mark on the frame. */
-        .to(folio, { autoAlpha: 0, duration: 0.08 }, 0.74);
+          { autoAlpha: 1, y: 0, duration: 0.14 }, 0.72);
     } else if (cinema) {
       /* Without motion there is no camera move to land, so the opening stays
          on the master scene and the Womenswear cover is the still section
@@ -567,14 +499,27 @@ const contentsKind: Record<string, string> = {
     }
 
     /* ----------------------------------------------------------------------
-       THE CHAPTER COVERS.
+       ONE FILM WHOSE LANGUAGE EVOLVES.
 
-       Three sections, one behaviour. A cover does not fade in: its plate is
-       held shut as a band and the band OPENS — an aperture, scrubbed against
-       the section's own travel through the viewport — while the plate settles
-       out of a slight push. Reading back up closes it again. The copy follows
-       the aperture rather than leading it, so the frame is always what reveals
-       the chapter and never the other way round.
+       Not four animation demos. Each world LEAVES in the direction the next
+       world ARRIVES from, so the sequence reads as one continuous movement
+       whose grammar changes as the work does — from instinct to construction.
+
+         womenswear   FLUID. The frame opens as a band; the type drifts in
+                      along the dress's own direction. It leaves travelling
+                      RIGHT, along the train.
+         menswear     MEASURED. Picks that motion up: the name is wiped in
+                      from the LEFT, continuing the same travel, and then
+                      nothing drifts again — the plate arrives square. It
+                      leaves by closing top and bottom, like a shutter.
+         development  DRAWN. Takes that shutter and turns its axis: the plate
+                      opens from the SIDES, a drawing being squared up, while
+                      an outlined copy of the name registers onto the solid
+                      one and the construction axis is struck. It leaves by
+                      FLATTENING — the side aperture closes to a slit.
+         tech-packs   PAPER. Out of that slit a sheet arrives: no aperture,
+                      because paper has none, and a slight widening as the
+                      file settles. Construction logic has become a document.
        ---------------------------------------------------------------------- */
     const covers = [...document.querySelectorAll<HTMLElement>('[data-cover]:not(.pf-cover--still)')];
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -583,28 +528,85 @@ const contentsKind: Record<string, string> = {
       for (const cover of covers) {
         const plate = cover.querySelector<HTMLElement>('.pf-cover__plate')!;
         const copy = cover.querySelector<HTMLElement>('.pf-cover__copy')!;
-        const register = cover.querySelector<HTMLElement>('.pf-cover__register')!;
-
-        /* ONE timeline across the section's whole passage through the
-           viewport — in, hold, out — rather than two triggers, one keyed to
-           the section's top and one to its bottom. Those two overlapped
-           whenever a section was shorter than the viewport: on a phone the
-           92svh cover's `bottom bottom` came BEFORE its `top top`, so the
-           closing tween started while the opening one was still running and
-           the cover never opened at all. Progress 0.5 is the moment a section
-           is most visible at every section-to-viewport ratio, so the frame is
-           held open either side of it and closes only on the way out. */
-        gsap.timeline({
+        const name = cover.querySelector<HTMLElement>('.pf-cover__name')!;
+        const rule = cover.querySelector<HTMLElement>('.pf-cover__rule')!;
+        const timeline = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: cover, start: 'top bottom', end: 'bottom top',
             scrub: 0.4, invalidateOnRefresh: true,
           },
-        })
-          .fromTo(plate, { '--aperture': 30, scale: 1.075 }, { '--aperture': 0, scale: 1, duration: 0.34 }, 0)
-          .fromTo([copy, register], { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.17, stagger: 0.04 }, 0.2)
-          .to(plate, { '--aperture': 22, scale: 1.04, duration: 0.3 }, 0.68)
-          .to([copy, register], { autoAlpha: 0, y: -22, duration: 0.18 }, 0.72);
+        });
+
+        switch (cover.dataset.cover) {
+          case 'menswear':
+            /* Measured: the plate arrives square — no scale drift, nothing
+               drifting sideways. The rule draws across, then the name is
+               UNCOVERED from the baseline up rather than moved into place,
+               which is how a tailored thing appears: built, not floated. */
+            timeline
+              .fromTo(plate, { '--aperture': 26 }, { '--aperture': 0, duration: 0.3 }, 0)
+              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.12 }, 0.16)
+              /* Wiped in from the LEFT, continuing the travel Womenswear
+                 left on rather than starting a new gesture. */
+              .fromTo(name, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.2)
+              .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
+                { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, stagger: 0.03 }, 0.34)
+              /* Leaves as a shutter: top and bottom close on the picture. */
+              .to(plate, { '--aperture': 22, duration: 0.28 }, 0.7)
+              .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
+            break;
+
+          case '3d-simulation':
+            /* Drawn: the outlined echo of the name is offset and rotated a
+               degree off true, and settles onto the solid word. The plate
+               opens from the sides as well as the top — a drawing being
+               squared up — rather than pushing in. */
+            timeline
+              .fromTo(plate, { '--aperture': 24, '--aperture-x': 14 },
+                { '--aperture': 0, '--aperture-x': 0, duration: 0.32 }, 0)
+              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.1 }, 0.18)
+              .fromTo(name, { '--echo-x': 26, '--echo-y': 16, '--echo-r': -1.1, '--echo-o': 1, autoAlpha: 0 },
+                { '--echo-x': 0, '--echo-y': 0, '--echo-r': 0, '--echo-o': 0, autoAlpha: 1, duration: 0.2 }, 0.2)
+              /* The construction axis is struck across the frame. */
+              .fromTo(cover, { '--axis': 0 }, { '--axis': 1, duration: 0.14 }, 0.28)
+              .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
+                { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.1, stagger: 0.03 }, 0.32)
+              /* And it FLATTENS on the way out: the sides close toward a
+                 slit, which is the shape the next chapter arrives as. */
+              .to(name, { '--echo-x': -18, '--echo-y': -12, '--echo-o': 1, duration: 0.26 }, 0.7)
+              .to(cover, { '--axis': 0, duration: 0.12 }, 0.7)
+              .to(plate, { '--aperture': 14, '--aperture-x': 24, duration: 0.3 }, 0.7)
+              .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
+            break;
+
+          case 'tech-packs':
+            /* Paper: one object, lifting. No aperture — a sheet does not have
+               one — and no scale, because paper does not zoom. */
+            timeline
+              /* Arrives narrow and widens — out of the slit Development
+                 flattened into — and lifts. No aperture: paper has none. */
+              .fromTo(plate, { y: () => window.innerHeight * 0.1, scaleX: 0.93, autoAlpha: 0 },
+                { y: 0, scaleX: 1, autoAlpha: 1, duration: 0.32 }, 0)
+              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.1 }, 0.18)
+              .fromTo(name, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.14 }, 0.2)
+              .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
+                { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, stagger: 0.03 }, 0.32)
+              .to(plate, { y: () => window.innerHeight * -0.07, duration: 0.28 }, 0.7)
+              .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
+            break;
+
+          default:
+            /* Fluid — Womenswear's still cover, and the shape any future
+               chapter inherits: the band opens and the type drifts in along
+               the garment's direction. */
+            timeline
+              .fromTo(plate, { '--aperture': 30, scale: 1.075 }, { '--aperture': 0, scale: 1, duration: 0.34 }, 0)
+              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.12 }, 0.18)
+              .fromTo(copy, { autoAlpha: 0, x: -34, y: 30 }, { autoAlpha: 1, x: 0, y: 0, duration: 0.2 }, 0.2)
+              .to(plate, { '--aperture': 22, scale: 1.04, duration: 0.3 }, 0.68)
+              .to(copy, { autoAlpha: 0, x: 22, y: -20, duration: 0.2 }, 0.72);
+        }
       }
     }
 
@@ -660,36 +662,103 @@ const contentsKind: Record<string, string> = {
     }
 
     /* ----------------------------------------------------------------------
-       THE POSITION MARKER. Not an index: it says where in the sequence the
-       reader is and offers the four names, and it only exists once the
-       opening has been left behind.
+       THE ONE PORTFOLIO CONTROL.
+
+       It replaces four systems: the cover register, the edge rail, the
+       per-chapter contents rails and the ending's directory. At rest it says
+       only where you are. Opened — pointer or keyboard — it is the four
+       chapters. Nothing else in the journey numbers anything.
        ---------------------------------------------------------------------- */
-    const rail = document.querySelector<HTMLElement>('[data-rail]');
-    if (rail && 'IntersectionObserver' in window) {
-      rail.hidden = false;
+    const where = document.querySelector<HTMLElement>('[data-where]');
+    if (where && 'IntersectionObserver' in window) {
+      where.hidden = false;
+      const toggle = where.querySelector<HTMLButtonElement>('[data-where-toggle]')!;
+      const count = where.querySelector<HTMLElement>('[data-where-count]')!;
+      const label = where.querySelector<HTMLElement>('[data-where-name]')!;
       const links = new Map(
-        [...rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]')].map((a) => [a.dataset.railLink!, a]),
+        [...where.querySelectorAll<HTMLAnchorElement>('[data-where-link]')].map((a) => [a.dataset.whereLink!, a]),
       );
+      const total = String(links.size).padStart(2, '0');
+
+      const close = () => { where.removeAttribute('data-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      let byPointer = false;
+      const open = () => { where.setAttribute('data-open', ''); toggle.setAttribute('aria-expanded', 'true'); };
+      /* A click CONFIRMS what hover has already opened rather than undoing it.
+         With a plain toggle, a mouse user whose approach had opened the list
+         closed it again by clicking the control — the one gesture that should
+         never shut it. A click that lands on a pointer-opened list therefore
+         keeps it open and simply takes ownership of it. */
+      toggle.addEventListener('click', () => {
+        if (where.hasAttribute('data-open')) {
+          if (byPointer) { byPointer = false; return; }
+          close();
+          return;
+        }
+        open();
+      });
+      /* A HOVERING pointer opens it on approach and closes it on leaving. On
+         touch it must not: a tap fires pointerenter, then click, then
+         pointerleave, so the control opened and shut again in one gesture and
+         the phone could never reach the list. There, the button is the whole
+         interaction. */
+      if (window.matchMedia('(hover: hover)').matches) {
+        where.addEventListener('pointerenter', () => { byPointer = true; open(); });
+        where.addEventListener('pointerleave', () => { byPointer = false; close(); });
+      }
+      where.addEventListener('focusout', (event) => {
+        if (!where.contains(event.relatedTarget as Node)) close();
+      });
+      where.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') { close(); toggle.focus(); }
+      });
+      /* Its own links jump to a cover; the browser's smooth scrolling is
+         already on, and the covers carry ids for exactly this. */
+      for (const link of links.values()) link.addEventListener('click', close);
+
+      let current: string | null = null;
       const mark = (id: string | null) => {
+        if (id === current) return;
+        current = id;
         for (const [key, link] of links) {
           if (key === id) link.setAttribute('aria-current', 'true');
           else link.removeAttribute('aria-current');
         }
+        const link = id ? links.get(id) : null;
+        where.dataset.live = link ? 'true' : 'false';
+        if (!link) return;
+        const chapter = [...links.keys()].indexOf(id!);
+        count.textContent = `${String(chapter + 1).padStart(2, '0')} / ${total}`;
+        label.textContent = link.querySelector('.pf-where__label')!.textContent ?? '';
+        where.style.setProperty('--accent', getComputedStyle(link).getPropertyValue('--accent'));
       };
-      const zones = [...document.querySelectorAll<HTMLElement>('[data-cover], [data-contents]')];
+
+      /* Which cover owns the screen. The opening is not a chapter, so while it
+         is on screen the control says nothing and stays out of the way. */
+      const zones = [...document.querySelectorAll<HTMLElement>('[data-cover]')]
+        .filter((el) => getComputedStyle(el).display !== 'none');
       const seen = new Map<Element, number>();
       const watcher = new IntersectionObserver((entries) => {
         for (const entry of entries) seen.set(entry.target, entry.intersectionRatio);
         let best: HTMLElement | null = null;
-        let bestRatio = 0.12;
+        let bestRatio = 0.3;
         for (const zone of zones) {
           const ratio = seen.get(zone) ?? 0;
           if (ratio > bestRatio) { bestRatio = ratio; best = zone; }
         }
-        rail.dataset.live = best ? 'true' : 'false';
-        mark(best?.dataset.cover ?? best?.dataset.contents ?? null);
-      }, { threshold: [0, 0.12, 0.35, 0.6, 0.9] });
+        mark(best?.dataset.cover ?? null);
+      }, { threshold: [0, 0.3, 0.55, 0.8] });
       for (const zone of zones) watcher.observe(zone);
+
+      /* The Womenswear cover is the opening's landing frame when there is a
+         cut to land, and that frame is not a section an observer can watch —
+         so the opening's own phase reports it. */
+      const cinemaEl = document.querySelector<HTMLElement>('[data-cinema]');
+      if (cinemaEl && !zones.some((z) => z.dataset.cover === 'womenswear')) {
+        new MutationObserver(() => {
+          if (cinemaEl.dataset.phase === 'womenswear') mark('womenswear');
+          else if (current === 'womenswear') mark(null);
+        }).observe(cinemaEl, { attributes: true, attributeFilter: ['data-phase'] });
+      }
     }
   </script>
 
@@ -748,7 +817,7 @@ const contentsKind: Record<string, string> = {
            so the opening, the four covers, their contents rails, the ending
            and the position marker all leave the focus order behind it. */
         for (const el of root.querySelectorAll<HTMLElement>(
-          '.pf-cinema, .pf-cover--section, .pf-contents, .pf-outro, .pf-rail',
+          '.pf-cinema, .pf-cover--section, .pf-outro, .pf-where',
         )) {
           el.toggleAttribute('inert', on);
         }
@@ -2237,15 +2306,13 @@ const contentsKind: Record<string, string> = {
     }
 
     @media (max-width: 760px) {
-      .pf-covers { gap: 1rem; padding-bottom: 4rem; }
-      .pf-cover,
-      .pf-cover + .pf-cover {
-        min-height: min(78svh, 42rem);
-        margin: 0;
-      }
-      .pf-cover__name { max-width: 9ch; font-size: clamp(2.35rem, 10.2vw, 4rem); }
-      .pf-cover__meter { height: 2.8rem; }
-
+      /* The chapter-cover rules that used to live here belonged to an earlier
+         in-chapter cover list (.pf-covers, .pf-cover__meter, .pf-cover__go)
+         that no longer exists. They outlived their markup and started matching
+         the Portfolio's own chapter covers instead, where `max-width: 9ch` on
+         .pf-cover__name cut MENSWEAR to MENSWEA on a phone once the arrival
+         clip-path made the box clip its own text. The covers are styled in
+         portfolio-cinematic.css and nowhere else. */
       .pf-cats__list { display: block; }
       .pf-cats__list > li,
       .pf-cats__list > li:nth-child(n) { margin: 0 0 1rem; }
