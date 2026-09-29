@@ -44,7 +44,7 @@ const HER = { master: [0.264, 0.4865], women: [0.7585, 0.493] };
 const ORDER = [
   ['womenswear', 'Womenswear', 'silhouettes'],
   ['menswear', 'Menswear', 'proportion'],
-  ['3d-simulation', 'Development', 'patterns'],
+  ['3d-simulation', 'Pattern Development', 'patterns'],
   ['tech-packs', 'Tech Packs', 'specifications'],
 ];
 
@@ -79,7 +79,7 @@ const inkBehindType = async (page, width, height) => {
     }
     const style = document.createElement('style');
     style.id = 'qa-hide-type';
-    style.textContent = '.pf-cinema__title,.pf-cinema__thesis,.pf-cinema__folio,.pf-cinema__scroll,.pf-where{visibility:hidden!important}';
+    style.textContent = '.pf-cinema__title,.pf-cinema__thesis,.pf-cinema__scroll,.pf-where{visibility:hidden!important}';
     document.head.appendChild(style);
     return boxes;
   });
@@ -116,6 +116,44 @@ const inkBehindType = async (page, width, height) => {
   return read;
 };
 
+/* The air between the masthead and the picture, in pixels. */
+const airUnderType = async (page, width, height, inkBottom) => {
+  const band = await page.evaluate(([bottom]) => {
+    const title = document.querySelector('[data-cinema-title]').getBoundingClientRect();
+    const style = document.createElement('style');
+    style.id = 'qa-hide-type';
+    style.textContent = '.pf-cinema__title,.pf-cinema__thesis,.pf-cinema__scroll,.pf-where{visibility:hidden!important}';
+    document.head.appendChild(style);
+    return { x: Math.max(0, title.left), y: Math.ceil(bottom) + 1, width: Math.min(title.width, innerWidth - Math.max(0, title.left)) };
+  }, [inkBottom]);
+  const h = Math.min(420, height - band.y - 1);
+  if (h < 4 || band.width < 4) {
+    await page.evaluate(() => document.getElementById('qa-hide-type')?.remove());
+    return { gap: null };
+  }
+  const shot = await page.screenshot({ clip: { x: band.x, y: band.y, width: band.width, height: h } });
+  const gap = await page.evaluate((url) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      for (let y = 0; y < canvas.height; y += 1) {
+        for (let x = 0; x < canvas.width; x += 1) {
+          const k = (y * canvas.width + x) * 4;
+          if (0.2126 * data[k] + 0.7152 * data[k + 1] + 0.0722 * data[k + 2] < 190) { resolve(y); return; }
+        }
+      }
+      resolve(null);
+    };
+    img.src = url;
+  }), `data:image/png;base64,${shot.toString('base64')}`);
+  await page.evaluate(() => document.getElementById('qa-hide-type')?.remove());
+  return { gap };
+};
+
 const seek = (page, progress) => page.evaluate((p) => {
   const cinema = document.querySelector('.pf-cinema');
   scrollTo(0, cinema.offsetTop + (cinema.offsetHeight - innerHeight) * p);
@@ -140,39 +178,70 @@ try {
 
     const type = await page.evaluate(() => {
       const t = document.querySelector('[data-cinema-title]');
-      const between = t.querySelector('.pf-cinema__between');
-      const solid = t.querySelector('.pf-cinema__word--solid');
-      const drawn = t.querySelector('.pf-cinema__word--drawn');
-      const amp = drawn.querySelector('b');
+      const kicker = t.querySelector('.pf-cinema__kicker');
+      const instinct = t.querySelector('.pf-cinema__instinct');
+      const amp = t.querySelector('.pf-cinema__amp');
+      const construction = t.querySelector('.pf-cinema__construction');
       const cs = (el) => getComputedStyle(el);
+      /* THE INK, not the point size. Two faces at the same point size have
+         different capital heights, and the line only reads as one line when
+         the capitals agree — so this reads the font's own ink metrics and
+         works out where each word's baseline actually falls. */
+      const ctx = document.createElement('canvas').getContext('2d');
+      const metrics = (el) => {
+        const style = cs(el);
+        ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const m = ctx.measureText(el.textContent.trim().toUpperCase());
+        const rect = el.getBoundingClientRect();
+        const box = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent;
+        return {
+          cap: m.actualBoundingBoxAscent,
+          baseline: rect.top + (rect.height - box) / 2 + m.fontBoundingBoxAscent,
+        };
+      };
+      const capOf = (el) => metrics(el).cap;
+      const title = t.getBoundingClientRect();
       return {
         text: t.textContent.replace(/\s+/g, ' ').trim().toUpperCase(),
-        register: { text: between.textContent.trim(), family: cs(between).fontFamily, size: parseFloat(cs(between).fontSize) },
-        solid: { text: solid.textContent.trim(), fill: cs(solid).color, stroke: cs(solid).webkitTextStrokeWidth, size: parseFloat(cs(solid).fontSize) },
-        drawn: { fill: cs(drawn).color, stroke: cs(drawn).webkitTextStrokeWidth, size: parseFloat(cs(drawn).fontSize) },
-        amp: { fill: cs(amp).color, stroke: cs(amp).webkitTextStrokeWidth },
+        kicker: { text: kicker.textContent.trim(), family: cs(kicker).fontFamily, size: parseFloat(cs(kicker).fontSize) },
+        instinct: { text: instinct.textContent.trim(), family: cs(instinct).fontFamily, fill: cs(instinct).color, stroke: cs(instinct).webkitTextStrokeWidth, cap: capOf(instinct) },
+        amp: { fill: cs(amp).color },
+        construction: { text: construction.textContent.trim(), family: cs(construction).fontFamily, fill: cs(construction).color, cap: capOf(construction) },
+        /* One line: every part sits on the same baseline. */
+        baselines: [instinct, amp, construction].map((el) => metrics(el).baseline),
+        measure: { left: title.left, right: title.right, inkRight: construction.getBoundingClientRect().right },
         thesis: document.querySelector('[data-cinema-thesis]').textContent.replace(/\s+/g, ' ').trim(),
       };
     });
     check('the statement is BETWEEN INSTINCT & CONSTRUCTION',
-      type.text.replace(/ /g, ' ') === 'BETWEEN INSTINCT & CONSTRUCTION', type.text);
-    /* BETWEEN is a register, not a word of the headline: it is mono and small,
-       the device the rest of the site frames a statement with. */
-    check('BETWEEN behaves as a register mark, not as headline type',
-      /Mono/i.test(type.register.family) && type.register.size < type.solid.size / 4,
-      `${type.register.family} at ${type.register.size}px against ${type.solid.size}px`);
-    /* The concept, in the type: INSTINCT is filled, CONSTRUCTION is drawn. */
-    check('INSTINCT is solid ink',
-      type.solid.fill === 'rgb(17, 17, 15)' && parseFloat(type.solid.stroke || '0') === 0,
-      `${type.solid.fill} stroke ${type.solid.stroke}`);
-    check('CONSTRUCTION is drawn, not filled',
-      type.drawn.fill === 'rgba(0, 0, 0, 0)' && parseFloat(type.drawn.stroke) > 0,
-      `${type.drawn.fill} stroke ${type.drawn.stroke}`);
-    check('the two halves are set at the same size, so neither outranks the other',
-      Math.abs(type.solid.size - type.drawn.size) < 0.5, `${type.solid.size} vs ${type.drawn.size}`);
+      type.text.replace(/\u00a0/g, ' ') === 'BETWEEN INSTINCT & CONSTRUCTION', type.text);
+    /* BETWEEN is a kicker, not a word of the headline: mono and small, on the
+       same baseline as the words it introduces. */
+    check('BETWEEN behaves as a kicker, not as headline type',
+      /Mono/i.test(type.kicker.family) && type.kicker.size < type.instinct.cap / 3,
+      `${type.kicker.family} at ${type.kicker.size}px against a ${Math.round(type.instinct.cap)}px cap`);
+    /* THE CONCEPT IS CARRIED BY TWO VOICES, NOT BY AN OUTLINE — which is the
+       home page's device and was the one thing the Portfolio must not repeat.
+       INSTINCT is the display face; CONSTRUCTION is the mono. */
+    check('INSTINCT is set in the display face, solid ink',
+      /Archivo/i.test(type.instinct.family) && type.instinct.fill === 'rgb(17, 17, 15)'
+        && parseFloat(type.instinct.stroke || '0') === 0,
+      `${type.instinct.family} ${type.instinct.fill} stroke ${type.instinct.stroke}`);
+    check('CONSTRUCTION is set in the technical face, and is not an outline',
+      /Mono/i.test(type.construction.family) && type.construction.fill === 'rgb(17, 17, 15)',
+      `${type.construction.family} ${type.construction.fill}`);
+    check('the two voices share a cap height, so the line reads as one line',
+      Math.abs(type.instinct.cap - type.construction.cap) <= 3,
+      `${type.instinct.cap.toFixed(1)} vs ${type.construction.cap.toFixed(1)}`);
+    check('and they sit on one baseline',
+      Math.max(...type.baselines) - Math.min(...type.baselines) <= 1.5,
+      type.baselines.map((b) => b.toFixed(1)).join(' / '));
+    /* A FITTED MASTHEAD: the line is measured to meet the gutters. */
+    check('the masthead is fitted to the measure',
+      type.measure.inkRight >= type.measure.left + (type.measure.right - type.measure.left) * 0.94,
+      `${Math.round(type.measure.inkRight)} of ${Math.round(type.measure.right)}`);
     check('the ampersand stays solid, holding the two together',
-      type.amp.fill === 'rgb(17, 17, 15)' && parseFloat(type.amp.stroke || '0') === 0,
-      `${type.amp.fill} stroke ${type.amp.stroke}`);
+      type.amp.fill === 'rgb(17, 17, 15)', type.amp.fill);
     check('the supporting line says fashion AND product, not generic freelancing',
       type.thesis === 'Fashion design, pattern development and technical product work — connected from first idea to production.',
       type.thesis);
@@ -216,24 +285,40 @@ try {
       const scene = document.querySelector('[data-scene="master"]').getBoundingClientRect();
       const thesis = document.querySelector('[data-cinema-thesis]').getBoundingClientRect();
       /* Nothing may be cut by the sticky field's `overflow: clip`. */
-      const painted = [...document.querySelectorAll('.pf-cinema__word')].map((el) => {
+      const painted = [...document.querySelectorAll('.pf-cinema__title > span')].map((el) => {
         const r = el.getBoundingClientRect();
         return Math.round(r.left + Math.max(el.scrollWidth, r.width));
       });
+      /* The masthead's INK bottom, not its box: a box carries descender space
+         no capital ever reaches, and this composition is measured to the
+         capitals. */
+      const ctx = document.createElement('canvas').getContext('2d');
+      const inkBottom = Math.max(...[...document.querySelectorAll('.pf-cinema__title > span')].map((el) => {
+        const cs = getComputedStyle(el);
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const m = ctx.measureText(el.textContent.trim().toUpperCase());
+        const rect = el.getBoundingClientRect();
+        const box = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent;
+        return rect.top + (rect.height - box) / 2 + m.fontBoundingBoxAscent + m.actualBoundingBoxDescent;
+      }));
       return {
         titleBottom: title.bottom, titleLeft: title.left, titleRight: title.right,
-        crowns: scene.top + scene.height * 0.08,
-        feet: scene.top + scene.height * 0.83,
+        titleInkBottom: inkBottom,
         thesisTop: thesis.top, thesisBottom: thesis.bottom,
         painted, overflow: document.documentElement.scrollWidth - innerWidth,
       };
     });
 
-    /* The crown of the tallest figure. The statement's box may not reach it:
-       at 1366x768 the headline used to be set straight across three faces. */
-    const clearance = frame.crowns - frame.titleBottom;
-    check(`${width}x${height}: the statement clears the figures' heads`,
-      clearance > 8, `${clearance > 0 ? '+' : ''}${clearance.toFixed(0)}px of air`);
+    /* HOW MUCH AIR IS THERE, actually, between the last of the type and the
+       first of the photograph? Measured off the rendered page rather than
+       from a fraction of the plate: the type is hidden, the band under the
+       masthead is photographed, and the first row carrying anything darker
+       than the studio ground is found. A box test could not tell air from a
+       descender, and a fraction of the plate is an estimate. */
+    const air = await airUnderType(page, width, height, frame.titleInkBottom);
+    check(`${width}x${height}: the masthead stands clear of the figures`,
+      air.gap === null || air.gap > 10,
+      air.gap === null ? 'nothing below it in the frame' : `${Math.round(air.gap)}px of air`);
     check(`${width}x${height}: no word is cut off by the frame`,
       frame.painted.every((x) => x <= width + 1), `painted to ${frame.painted.join(', ')} of ${width}`);
     check(`${width}x${height}: the statement stays inside the gutters`,
@@ -300,8 +385,9 @@ try {
             return `${cs.backgroundColor} ${cs.backgroundImage}`;
           })(),
           /* The dialects. */
-          grid: el.querySelectorAll('.pf-cover__grid i').length,
-          echo: name.dataset.echo ?? '',
+          nameFace: getComputedStyle(name).fontFamily,
+          echo: [...name.querySelectorAll('[data-echo]')].map((el) => el.dataset.echo).join(' ')
+            || name.dataset.echo || '',
           sheets: el.querySelectorAll('.pf-file__sheet').length,
         };
       }));
@@ -328,11 +414,20 @@ try {
     /* SAME GRAMMAR, DIFFERENT DIALECT: exactly one world carries each device,
        so the covers cannot collapse back into four recolours of one layout. */
     const by = (id) => covers.find((c) => c.id === id);
-    check('Menswear is the one built on a visible grid',
-      by('menswear').grid === 3 && covers.filter((c) => c.grid > 0).length === 1,
-      covers.map((c) => `${c.id}:${c.grid}`).join(' '));
-    check('Development is the one whose name is drawn before it is filled',
-      by('3d-simulation').echo === 'Development' && covers.filter((c) => c.echo).length === 1,
+    /* The three garment worlds speak in the display face and Tech Packs in
+       the mono — the masthead's two voices, carried by the titles as the work
+       moves from design to production. */
+    check('Tech Packs is the one titled in the technical voice',
+      /Mono/i.test(by('tech-packs').nameFace)
+        && covers.filter((c) => /Mono/i.test(c.nameFace)).length === 1,
+      covers.map((c) => `${c.id}:${c.nameFace.split(',')[0]}`).join(' '));
+    /* And no two names are set at the same size, because each is fitted to
+       the field its own photograph leaves. */
+    check('each name is fitted to its own field, so no two are the same size',
+      new Set(covers.map((c) => Math.round(c.nameSize))).size === 4,
+      covers.map((c) => `${c.name} ${Math.round(c.nameSize)}px`).join(' · '));
+    check('Pattern Development is the one whose name is drawn before it is filled',
+      by('3d-simulation').echo === 'Pattern Development' && covers.filter((c) => c.echo).length === 1,
       covers.map((c) => `${c.id}:${c.echo || '-'}`).join(' '));
     check('Tech Packs is the one made of paper — a front sheet and three behind',
       by('tech-packs').sheets === 3 && covers.filter((c) => c.sheets > 0).length === 1,

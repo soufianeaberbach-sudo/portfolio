@@ -209,7 +209,7 @@ try {
         const nameBox = name.getBoundingClientRect();
         return {
           id: el.dataset.cover ?? (el.hasAttribute('data-women-threshold') ? 'womenswear' : ''),
-          name: name.textContent.trim(),
+          name: name.textContent.replace(/\s+/g, " ").trim(),
           nameSize: parseFloat(getComputedStyle(name).fontSize),
           statement: el.querySelector('.pf-cover__statement').textContent.replace(/\s+/g, ' ').trim(),
           word: em?.textContent.trim() ?? '',
@@ -283,13 +283,15 @@ try {
     /* THE HIERARCHY. The chapter's own name is the headline — it used to be a
        number-sized label beside a generic line. */
     check('every cover is headlined by its chapter name',
-      sequence.covers.map((cv) => cv.name).join('|') === 'Womenswear|Menswear|Development|Tech Packs',
+      sequence.covers.map((cv) => cv.name).join('|') === 'Womenswear|Menswear|Pattern Development|Tech Packs',
       sequence.covers.map((cv) => cv.name).join('|'));
     check("the chapter name is the cover's largest type, by a clear margin",
       sequence.covers.every((cv) => cv.nameSize >= cv.statementSize * 3),
       sequence.covers.map((cv) => `${cv.name} ${cv.nameSize}/${cv.statementSize}`).join(' · '));
-    check('Development is named Development on its cover, not after its last step',
-      sequence.covers.find((cv) => cv.id === '3d-simulation').name === 'Development');
+    /* The chapter is named after the craft, not after a tool or a stage: a
+       client looking for a pattern maker scans for PATTERN DEVELOPMENT. */
+    check('chapter 03 is named Pattern Development on its cover',
+      sequence.covers.find((cv) => cv.id === '3d-simulation').name === 'Pattern Development');
     check('no name is cut off by the frame',
       sequence.covers.every((cv) => cv.namePainted <= sequence.width + 1),
       sequence.covers.map((cv) => `${cv.name}:${cv.namePainted}`).join(' '));
@@ -302,8 +304,8 @@ try {
       sequence.covers.map((cv) => cv.statement).join('|') === [
         'Designing silhouettes with identity, movement and purpose.',
         'Building proportion through structure, tailoring and balance.',
-        'Building patterns that resolve fit, balance and construction.',
-        'Translating product decisions into specifications a factory can follow.',
+        'Developing patterns that resolve fit and construction, validated in 3D before anything is cut.',
+        'Turning finished design into the specifications a factory can build from without guessing.',
       ].join('|'), sequence.covers.map((cv) => cv.statement).join(' | '));
     check('exactly one word of each statement is coloured, and it is the capability',
       sequence.covers.map((cv) => cv.word).join(' ') === 'silhouettes proportion patterns specifications',

@@ -621,11 +621,12 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
        simulation, and calling the chapter after its last step undersold the
        work in it. */
     id: '3d-simulation',
-    /* DEVELOPMENT on the cover and in the navigation: it is the capability,
-       and it is what a visitor scans for. The chapter's own heading inside
-       still reads Pattern Development, where the longer name explains what
-       kind of development it is. */
-    title: 'Development',
+    /* PATTERN DEVELOPMENT, in full, on the cover and in the navigation: it
+       names the craft rather than a generic stage, and it is what a client
+       looking for a pattern maker actually scans for. The cover sets it on
+       two lines, which is also what gives that chapter its own typographic
+       shape. */
+    title: 'Pattern Development',
     kind: 'Digital validation',
     descriptor:
       'Recorded development sessions from first pattern lines through 2D construction, CLO3D validation and fit decisions.',
@@ -635,9 +636,9 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
     cover: scene('pattern-scene', 'Chrome mannequin wearing a draped turquoise gown in a bone studio.'),
     accent: 'var(--dev-accent)',
     subject: 0.788,
-    statement: 'Building patterns that resolve fit, balance and construction.',
+    statement: 'Developing patterns that resolve fit and construction, validated in 3D before anything is cut.',
     highlight: 'patterns',
-    action: 'Enter Development',
+    action: 'Enter Pattern Development',
   },
   {
     id: 'tech-packs',
@@ -668,7 +669,7 @@ const chapterSequence: Array<Omit<Chapter, 'number'>> = [
        on aberbach.co. */
     accent: 'var(--signal)',
     subject: 0.5,
-    statement: 'Translating product decisions into specifications a factory can follow.',
+    statement: 'Turning finished design into the specifications a factory can build from without guessing.',
     highlight: 'specifications',
     action: 'Enter Tech Packs',
     stateNote: 'Demo documents for interface review. Selected real technical packs will replace them.',

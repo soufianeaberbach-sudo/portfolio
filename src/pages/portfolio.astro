@@ -71,10 +71,6 @@ const split = (statement: string, word: string) => {
       aria-labelledby="pf-cinema-title"
     >
       <div class="pf-cinema__sticky">
-        <p class="pf-cinema__folio label" data-cinema-folio>
-          <span>Soufiane Aberbach</span><span>Selected work / 2026</span>
-        </p>
-
         {/* ONE IMAGE PLANE. It is the campaign plate, then the index's
             preview field, then the Womenswear entrance. */}
         <div class="pf-cinema__media" data-cinema-media aria-hidden="true">
@@ -105,21 +101,24 @@ const split = (statement: string, word: string) => {
           </figure>
         </div>
 
-        {/* THE STATEMENT, SET AS THE THING IT SAYS.
-            BETWEEN is a register: mono, small, letter-spaced — a framing mark,
-            not a word of the headline. INSTINCT is solid ink: present, felt,
-            there. CONSTRUCTION is drawn, not filled — the same outlined
-            display face the site already uses for ABERBACH on the home page,
-            which here reads as a line drawing of a word: the thing described
-            rather than the thing itself. The ampersand stays solid and holds
-            the two together. The tension is in the type, not in a caption
-            explaining it. */}
+        {/* THE MASTHEAD.
+            A fitted title, set on ONE baseline and measured to meet both
+            gutters — the oldest move in magazine typography and the one the
+            picture asks for: the master scene leaves a wide, shallow band of
+            empty backdrop above the figures, so the type is wide and shallow
+            and fills it.
+
+            The tension is carried by two voices rather than by an outline.
+            INSTINCT is the display face at full weight: felt, immediate.
+            CONSTRUCTION is the mono at a matched cap height, letter-spaced:
+            the technical voice, the thing specified. BETWEEN rides the same
+            baseline as a kicker. Nothing here repeats the home page's hero,
+            which is a stacked block with one word drawn in outline. */}
         <h1 class="pf-cinema__title" id="pf-cinema-title" data-cinema-title>
-          <span class="pf-cinema__between label">Between</span>
-          <span class="pf-cinema__word pf-cinema__word--solid display">Instinct</span>
-          <span class="pf-cinema__word pf-cinema__word--drawn display">
-            <b>&amp;</b> Construction
-          </span>
+          <span class="pf-cinema__kicker">Between</span>
+          <span class="pf-cinema__instinct display">Instinct</span>
+          <span class="pf-cinema__amp display">&amp;</span>
+          <span class="pf-cinema__construction">Construction</span>
         </h1>
 
         <p class="pf-cinema__thesis" data-cinema-thesis>
@@ -199,14 +198,10 @@ const split = (statement: string, word: string) => {
           aria-labelledby={`cover-${chapter.id}-name`}
         >
           <div class="pf-cover__frame">
-            {/* MENSWEAR'S DIALECT: the grid it is built on, made visible.
-                Three hairlines on the measure's thirds — the same discipline a
-                tailored garment is drafted with, and the thing the chapter is
-                selling. Decoration would be a pattern drawing; this is not
-                one, it claims nothing, and it is the layout's own structure. */}
-            {chapter.id === 'menswear' && (
-              <div class="pf-cover__grid" aria-hidden="true"><i></i><i></i><i></i></div>
-            )}
+            {/* Menswear had three hairlines drawn across it here. They were
+                decoration standing in for structure: nothing in the layout
+                answered to them and nothing in the chapter needed them. Its
+                structure is now in the type — see the stylesheet. */}
 
             {file ? (
               /* A tech pack is a FILE, so the cover stages one: the supplied
@@ -257,11 +252,30 @@ const split = (statement: string, word: string) => {
                   chapter's whole subject. It is decorative to no one: the
                   echo is a CSS `content` string, so it never reaches the
                   accessibility tree or the page's text. */}
+              {/* THE CHAPTER'S NAME, IN THE VOICE OF ITS WORK.
+                  The three garment worlds are set in the display face — the
+                  instinct side of the masthead. TECH PACKS is set in the mono
+                  — the construction side — because documentation is what that
+                  voice is for. The journey's two voices, carried by the titles.
+
+                  PATTERN DEVELOPMENT is two words on two lines, each carrying
+                  its own outlined echo: `data-echo` renders a second, drawn
+                  copy that starts offset and settles onto the solid word as
+                  the cover arrives, which is a 2D line becoming a dimensional
+                  thing — the chapter's whole subject. The echo is a CSS
+                  `content` string, so it never reaches the accessibility tree
+                  or the page's text. */}
               <h2
-                class="pf-cover__name display"
+                class={`pf-cover__name ${file ? 'pf-cover__name--spec' : 'display'}${
+                  chapter.id === '3d-simulation' ? ' pf-cover__name--stacked' : ''}`}
                 id={`cover-${chapter.id}-name`}
-                data-echo={chapter.id === '3d-simulation' ? chapter.title : undefined}
-              >{chapter.title}</h2>
+              >{chapter.id === '3d-simulation'
+                /* The space between the two words is a real text node, so the
+                   name still reads as two words to anything reading the page
+                   rather than looking at it; between two block spans it
+                   collapses and costs the setting nothing. */
+                ? chapter.title.split(' ').map((word, i) => <>{i > 0 ? ' ' : ''}<span data-echo={word}>{word}</span></>)
+                : chapter.title}</h2>
               <p class="pf-cover__statement">{before}<em>{word}</em>{after}</p>
               <a class="pf-cover__action label" href={`#${chapter.id}`} data-nav data-chapter={chapter.id}>
                 {chapter.action} <Arrow />
@@ -379,7 +393,6 @@ const split = (statement: string, word: string) => {
       const master = cinema.querySelector<HTMLElement>('[data-scene="master"]')!;
       const women = cinema.querySelector<HTMLElement>('[data-scene="women"]')!;
       const title = cinema.querySelector<HTMLElement>('[data-cinema-title]')!;
-      const folio = cinema.querySelector<HTMLElement>('[data-cinema-folio]')!;
       const thesis = cinema.querySelector<HTMLElement>('[data-cinema-thesis]')!;
       const cue = cinema.querySelector<HTMLElement>('[data-cinema-scroll]')!;
       const threshold = cinema.querySelector<HTMLElement>('[data-women-threshold]')!;
@@ -443,12 +456,11 @@ const split = (statement: string, word: string) => {
         },
       });
 
-      /* 1. The opening gives way: the statement lifts out of the band it was
-            set in, and the folio steps back to a register mark. */
+      /* 1. The opening gives way: the masthead and its standfirst lift out of
+            the band they were set in, and the frame is left to the picture. */
       timeline
         .to([cue, thesis], { autoAlpha: 0, y: -14, duration: 0.09 }, 0.04)
-        .to(title, { autoAlpha: 0, y: -26, duration: 0.13 }, 0.07)
-        .to(folio, { autoAlpha: 0.42, duration: 0.11 }, 0.06);
+        .to(title, { autoAlpha: 0, y: -26, duration: 0.13 }, 0.07);
 
       /* 2. The push in. The master plate scales about the woman in red, so
             the other two figures leave the frame while she stays put. */
@@ -476,10 +488,7 @@ const split = (statement: string, word: string) => {
         .to(women, { xPercent: 0, x: REST_X, y: REST_Y, scale: REST_SCALE, duration: 0.24, ease: 'power1.out' }, 0.58)
         .fromTo(threshold,
           { autoAlpha: 0, y: () => (isMobile() ? 16 : 22) },
-          { autoAlpha: 1, y: 0, duration: 0.14 }, 0.72)
-        /* The opening's folio belongs to the opening. Once the cover has
-           arrived, the chapter's own register is the only mark on the frame. */
-        .to(folio, { autoAlpha: 0, duration: 0.08 }, 0.74);
+          { autoAlpha: 1, y: 0, duration: 0.14 }, 0.72);
     } else if (cinema) {
       /* Without motion there is no camera move to land, so the opening stays
          on the master scene and the Womenswear cover is the still section
@@ -517,7 +526,6 @@ const split = (statement: string, word: string) => {
         const copy = cover.querySelector<HTMLElement>('.pf-cover__copy')!;
         const name = cover.querySelector<HTMLElement>('.pf-cover__name')!;
         const rule = cover.querySelector<HTMLElement>('.pf-cover__rule')!;
-        const grid = [...cover.querySelectorAll<HTMLElement>('.pf-cover__grid i')];
         const timeline = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
@@ -528,17 +536,16 @@ const split = (statement: string, word: string) => {
 
         switch (cover.dataset.cover) {
           case 'menswear':
-            /* Measured: the plate arrives square, no scale drift. The grid
-               draws down, the rule draws across, and the name is uncovered
-               rather than moved. */
+            /* Measured: the plate arrives square — no scale drift, nothing
+               drifting sideways. The rule draws across, then the name is
+               UNCOVERED from the baseline up rather than moved into place,
+               which is how a tailored thing appears: built, not floated. */
             timeline
               .fromTo(plate, { '--aperture': 26 }, { '--aperture': 0, duration: 0.3 }, 0)
-              .fromTo(grid, { scaleY: 0 }, { scaleY: 1, duration: 0.2, stagger: 0.035 }, 0.12)
-              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.1 }, 0.2)
-              .fromTo(name, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.12 }, 0.24)
+              .fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.12 }, 0.16)
+              .fromTo(name, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.16 }, 0.22)
               .fromTo(copy.querySelectorAll('.pf-cover__statement, .pf-cover__action'),
-                { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, stagger: 0.03 }, 0.3)
-              .to(grid, { scaleY: 0, duration: 0.16, stagger: -0.03 }, 0.7)
+                { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, stagger: 0.03 }, 0.34)
               .to(plate, { '--aperture': 20, duration: 0.28 }, 0.7)
               .to(copy, { autoAlpha: 0, duration: 0.16 }, 0.74);
             break;
