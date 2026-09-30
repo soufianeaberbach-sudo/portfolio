@@ -188,17 +188,22 @@ try {
      screen to open: travelling to a territory's range means scrolling its run
      into the middle of the frame. Menswear, Development and Tech Packs still
      have category screens, and openCategory is still how those are entered. */
-  const ACT_RUN = '[data-movement="rtw"]';
-  const openRun = async (p, category) => {
-    await p.evaluate((c) => {
+  /* The deck is ONE of the act's supporting-work mechanisms, and it belongs to
+     Activewear — the territory whose whole scene is the range. Ready-to-Wear
+     hands its depth over as a contact sheet, Occasion as a rail and Swim as a
+     single line, so there is exactly one deck in the chapter and this is where
+     it is. */
+  const ACT_DECK = '[data-territory="activewear"]';
+  const openScene = async (p, selector) => {
+    await p.evaluate((sel) => {
       const world = document.querySelector('[data-world="womenswear"]');
-      const run = world.querySelector(`[data-movement="${c}"] .pf-mv__run`);
-      const box = run.getBoundingClientRect();
+      const el = world.querySelector(sel);
+      const box = el.getBoundingClientRect();
       world.scrollTo({
-        top: Math.round(world.scrollTop + box.top - (window.innerHeight - box.height) / 2),
+        top: Math.round(world.scrollTop + box.top - Math.max(0, (window.innerHeight - box.height) / 2)),
         behavior: 'instant',
       });
-    }, category);
+    }, selector);
     await p.waitForTimeout(900);
   };
 
@@ -511,35 +516,43 @@ try {
     check('focus starts inside the chapter',
       await p.evaluate((sel) => document.querySelector(sel).contains(document.activeElement), world));
 
-    /* WOMENSWEAR IS ONE SCREEN AND FIVE MOVEMENTS.
-       There is no category index to choose from and no second screen to open:
-       the five territories are movements the visitor travels through, each
-       one a look that turns from its front view to its back and then a range.
-       What is checked here is that all five are present in the approved
-       order, that each opens on a complete composition, and that the act's
-       one control is how a territory is reached by name. */
+    /* WOMENSWEAR IS ONE AUTHORED ACT IN FIVE TERRITORIES, told in BEATS.
+       A beat is a scene with its own composition and pacing, and the point of
+       the architecture is that no two territories play the same shape — so
+       what is checked here is the SCORE: the five real category names, in the
+       approved order, each with a different sequence of scenes, one hero
+       scene each, one supporting-work mechanism each, and no repetition of
+       the front-to-back turn as a grammar. */
     const act = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
       const shown = [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
       const visible = (el) => el.getBoundingClientRect().width > 0 && !el.closest('[hidden]');
-      const movements = [...w.querySelectorAll('[data-movement]')];
+      const territories = [...w.querySelectorAll('[data-territory]')];
       return {
         screens: shown.map((e) => e.dataset.screen),
         hash: location.hash,
         isAct: w.hasAttribute('data-act'),
-        movements: movements.map((m) => m.dataset.movement),
-        rhythms: movements.map((m) => m.dataset.rhythm),
-        scales: movements.map((m) => m.dataset.scale),
-        territories: movements.map((m) => m.querySelector('.pf-mv__territory span').textContent.trim()),
-        titles: movements.map((m) => m.querySelector('.pf-mv__act').textContent.trim()),
-        titlePx: movements.map((m) => Math.round(parseFloat(getComputedStyle(m.querySelector('.pf-mv__act')).fontSize))),
-        looks: movements.map((m) => m.querySelectorAll('.pf-mv__look').length),
-        garments: [...w.querySelectorAll('.pf-mv__window img')].filter(visible).length,
-        /* Only the photographs that really hold two views are shown half a
+        ids: territories.map((t) => t.dataset.territory),
+        beats: territories.map((t) => t.dataset.beats),
+        names: territories.map((t) => t.dataset.actTitle),
+        /* The approved full category label is printed with every territory,
+           whether the name arrives on a slate or over the opening picture. */
+        labels: territories.map((t) => (
+          t.querySelector('.pf-tr__meta span') ?? t.querySelector('.pf-ov__meta span')
+        )?.textContent.trim()),
+        scenes: [...w.querySelectorAll('[data-scene]')].map((el) => el.dataset.scene),
+        turns: [...w.querySelectorAll('[data-scene="turn"], [data-scene="overture"]')].length,
+        heroes: territories.map((t) => t.querySelectorAll('[data-hero]').length),
+        support: territories.map((t) => [...t.querySelectorAll('[data-support]')].map((s) => s.dataset.scene).join('+')),
+        garments: [...w.querySelectorAll('[data-hero] img')].filter(visible).length,
+        /* Only photographs that really hold two views are ever shown half a
            frame at a time. */
-        views: movements.map((m) => m.querySelector('.pf-mv__plate').dataset.views),
+        halves: [...w.querySelectorAll('[data-scene="overture"] [data-views], [data-scene="turn"] [data-views]')]
+          .map((el) => el.dataset.views),
         plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
+        evidence: w.querySelectorAll('[data-evidence]').length,
         control: [...w.querySelectorAll('[data-act-link]')].map((a) => a.dataset.actLink),
+        controlNames: [...w.querySelectorAll('[data-act-link] .pf-act__label')].map((e) => e.textContent.trim()),
         controlOpen: !!w.querySelector('[data-act-where][data-open]'),
         disclaimers: [...w.querySelectorAll('[data-reference-notice]')].filter(visible).length,
       };
@@ -547,64 +560,74 @@ try {
     check('the chapter is one screen, not a category index',
       act.isAct && act.screens.join(',') === 'index', `${act.isAct} / ${act.screens.join(',')}`);
     check('the URL names the chapter', act.hash === '#womenswear', act.hash);
-    check('the five approved territories are the five movements',
-      act.movements.join(',') === 'rtw,activewear,streetwear,evening,swimwear', act.movements.join(','));
-    check('the five approved category names are named in order',
-      JSON.stringify(act.territories) === JSON.stringify([
+    check('the five approved territories are there, in order',
+      act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear', act.ids.join(','));
+    check('the five approved category names are printed in order',
+      JSON.stringify(act.labels) === JSON.stringify([
         'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
         'Evening & Occasionwear', 'Swimwear & Resortwear',
-      ]), act.territories.join(' | '));
-    check('each movement is named by one word',
-      act.titles.join(',') === 'Range,Body,Volume,Presence,Line', act.titles.join(','));
-    check('no two movements are the same shape',
-      new Set(act.rhythms).size === 5 && new Set(act.scales).size === 4,
-      `${act.rhythms.join(',')} / ${act.scales.join(',')}`);
-    check('the movement titles are editorial display type, fitted to their measure',
-      act.titlePx.every((px) => px >= 90) && Math.max(...act.titlePx) - Math.min(...act.titlePx) >= 40,
-      act.titlePx.join(','));
+      ]), act.labels.join(' | '));
+    /* The visitor must not have to decode an abstraction before they know what
+       they are looking at: a territory is called what the category is called. */
+    check('every territory is named by its real category, not by an abstraction',
+      act.names.join(',') === 'Ready-to-Wear,Activewear,Streetwear,Occasion,Swim', act.names.join(','));
+    check('and the control uses those same names',
+      act.controlNames.join(',') === act.names.join(','), act.controlNames.join(','));
+    check('NO TWO TERRITORIES PLAY THE SAME SHAPE',
+      new Set(act.beats).size === act.beats.length, act.beats.join(' | '));
+    check('and they are not the same length either',
+      new Set(act.beats.map((b) => b.split(' ').length)).size >= 3, act.beats.join(' | '));
+    check('each territory leads with exactly one hero scene',
+      act.heroes.join(',') === '1,0,1,1,1', act.heroes.join(','));
+    /* Four territories hand their depth over, and each does it differently:
+       a contact sheet, a deck, a rail, a single line. */
+    check('supporting work uses a different mechanism in every territory',
+      act.support.join(',') === 'sheet,deck,,rail,line', act.support.join(','));
+    check('the front-to-back turn is a DEVICE, used twice, not the grammar',
+      act.turns === 2, `${act.turns} scenes turn`);
+    check('and only two-view photographs ever turn',
+      act.halves.every((v) => v === '2'), act.halves.join(','));
     check('the garment is on screen from the first frame', act.garments >= 1, String(act.garments));
-    check('every movement opens on a look', act.looks.every((n) => n >= 1), act.looks.join(','));
-    check('only two-view photographs are shown half a frame at a time',
-      act.views.join(',') === '2,2,2,2,1', act.views.join(','));
-    check('no development panel is anywhere in the act', act.plates === 0, String(act.plates));
+    check('no development demo rail is anywhere in the act', act.plates === 0, String(act.plates));
+    check('but there IS one proof beat', act.evidence === 1, String(act.evidence));
     check('the act carries the reference disclaimer exactly once',
       act.disclaimers === 1, String(act.disclaimers));
-    check('the act has one control, and it names all five movements',
+    check('the act has one control, and it reaches all five territories',
       act.control.join(',') === 'rtw,activewear,streetwear,evening,swimwear', act.control.join(','));
     check('the control is closed until it is asked for', act.controlOpen === false);
 
     // ---- a territory is reached by name, and the URL says where you are
     await p.evaluate((sel) => document.querySelector(`${sel} [data-act-toggle]`).click(), world);
     await p.waitForTimeout(400);
-    check('the control opens the five movements',
+    check('the control opens the five territories',
       await p.evaluate((sel) => !!document.querySelector(`${sel} [data-act-where][data-open]`), world));
     await p.evaluate((sel) => document.querySelector(`${sel} [data-act-link="evening"]`).click(), world);
     await p.waitForTimeout(1400);
     const travelled = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
-      const look = w.querySelector('[data-movement="evening"] .pf-mv__look');
-      const box = look.getBoundingClientRect();
+      /* A territory is arrived at on its SLATE — the band that names it —
+         which is a transition the visitor crosses rather than a menu. */
+      const slate = w.querySelector('[data-territory="evening"] .pf-tr__slate');
+      const box = slate.getBoundingClientRect();
+      const bar = w.querySelector('.pf-act__bar').getBoundingClientRect();
       return {
         hash: location.hash,
         controlOpen: !!w.querySelector('[data-act-where][data-open]'),
-        /* The look is pinned to the top of the frame and fills it, so nothing
-           of the composition is under the fold. */
-        top: Math.round(box.top),
-        height: Math.round(box.height),
-        frame: window.innerHeight,
+        slateTop: Math.round(box.top),
+        clearsBar: box.bottom > bar.bottom,
         naming: w.querySelector('[data-act-name]').textContent.trim(),
         counting: w.querySelector('[data-act-count]').textContent.trim(),
         screens: [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden).map((e) => e.dataset.screen),
       };
     }, world);
-    check('choosing a movement names it in the URL', travelled.hash === '#womenswear/evening', travelled.hash);
-    check('choosing a movement closes the control', travelled.controlOpen === false);
+    check('choosing a territory names it in the URL', travelled.hash === '#womenswear/evening', travelled.hash);
+    check('choosing a territory closes the control', travelled.controlOpen === false);
     check('the act stays one screen', travelled.screens.join(',') === 'index', travelled.screens.join(','));
-    check('the movement arrives as a whole frame, pinned to the top',
-      travelled.top <= 0 && travelled.top > -40 && travelled.height >= travelled.frame - 60,
-      `top ${travelled.top}, ${travelled.height} of ${travelled.frame}`);
-    check('the control reports which movement is being read',
-      /presence/i.test(travelled.naming) && travelled.counting === '04 / 05',
+    check('the territory arrives on its own slate, in the frame',
+      travelled.slateTop >= -2 && travelled.slateTop < 80 && travelled.clearsBar,
+      `slate top ${travelled.slateTop}`);
+    check('the control reports which territory is being read',
+      /occasion/i.test(travelled.naming) && travelled.counting === '04 / 05',
       `${travelled.naming} ${travelled.counting}`);
 
     // ---- Escape steps back one level at a time
@@ -612,7 +635,7 @@ try {
     await p.waitForTimeout(350);
     await p.keyboard.press('Escape');
     await p.waitForTimeout(500);
-    check('Escape closes the movement list and leaves the chapter open',
+    check('Escape closes the territory list and leaves the chapter open',
       await p.evaluate((sel) => {
         const w = document.querySelector(sel);
         return !w.querySelector('[data-act-where][data-open]') && w.hasAttribute('data-open');
@@ -620,7 +643,7 @@ try {
 
     await p.keyboard.press('Escape');
     await p.waitForTimeout(700);
-    check('Escape from a movement steps up to the portfolio index',
+    check('Escape from a territory steps up to the portfolio index',
       await p.evaluate(() => location.hash === '#womenswear'), await p.evaluate(() => location.hash));
 
     await p.keyboard.press('Escape');
@@ -677,7 +700,7 @@ try {
     /* The deck lives inside a movement's RUN now, and the act's Range is the
        longest queue on the site — seventeen — so it is still where the deck's
        depth, occlusion, keyboard, drag and wheel are proved. */
-    await openRun(p, 'rtw');
+    await openScene(p, '[data-scene="deck"]');
 
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
     check('desktop shows four garments at once', state.visibleNow === 4, `visible ${state.visibleNow} of ${state.count}`);
@@ -685,7 +708,7 @@ try {
     check('the garments genuinely overlap', state.overlaps >= 3, `${state.overlaps} overlaps`);
 
     const deck = await p.evaluate(() => {
-      const panel = document.querySelector('[data-movement="rtw"] .pf-panel');
+      const panel = document.querySelector('[data-scene="deck"] .pf-panel');
       const stage = panel.querySelector('.pf-stage').getBoundingClientRect();
       const boxes = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden).map((s) => ({
         r: s.getBoundingClientRect(),
@@ -760,7 +783,7 @@ try {
     /* NO CARD LANGUAGE. */
     const cardish = await p.evaluate(() => {
       const bad = [];
-      for (const el of document.querySelectorAll('[data-movement="rtw"] .pf-slot, [data-movement="rtw"] .pf-slot *')) {
+      for (const el of document.querySelectorAll('[data-scene="deck"] .pf-slot, [data-scene="deck"] .pf-slot *')) {
         const st = getComputedStyle(el);
         if (st.boxShadow !== 'none') bad.push(`${el.className} shadow`);
         if (st.filter.includes('drop-shadow')) bad.push(`${el.className} drop-shadow`);
@@ -778,19 +801,26 @@ try {
        full-width white band is still Menswear's, and is checked there.) */
     const ground = await p.evaluate(() => {
       const act = document.querySelector('[data-world="womenswear"]');
-      const plate = act.querySelector('.pf-mv__plate');
+      const white = (el) => getComputedStyle(el).backgroundColor === 'rgb(255, 255, 255)';
       return {
         act: getComputedStyle(act).backgroundColor,
-        plate: getComputedStyle(plate).backgroundColor,
+        /* Every scene stands its garment on a pure white studio field: the
+           overture's is a layer of its own, because it closes; the other
+           scenes carry it on the plate. */
+        field: white(act.querySelector('.pf-ov__field')),
+        turn: white(act.querySelector('.pf-tn__plate')),
+        pair: white(act.querySelector('.pf-pr__plate')),
+        approach: white(act.querySelector('.pf-ap__plate')),
         bands: act.querySelectorAll('.pf-studio').length,
       };
     });
     check('the act stands the photographs on bone, so their own white reads as a field',
-      ground.plate === 'rgb(255, 255, 255)' && ground.act !== 'rgb(255, 255, 255)' && ground.bands === 0,
+      ground.field && ground.turn && ground.pair && ground.approach
+      && ground.act !== 'rgb(255, 255, 255)' && ground.bands === 0,
       JSON.stringify(ground));
 
     // Keyboard alone must drive the deck.
-    await p.evaluate(() => document.querySelector('[data-movement="rtw"] [data-stage]').focus());
+    await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-stage]').focus());
     const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(650);
@@ -805,10 +835,10 @@ try {
       const count = api.getState().count;
       api.goTo(count + 50);
       const high = api.getState().activeIndex;
-      const nextDisabled = document.querySelector('[data-movement="rtw"] [data-step="1"]').disabled;
+      const nextDisabled = document.querySelector('[data-scene="deck"] [data-step="1"]').disabled;
       api.goTo(-50);
       const low = api.getState().activeIndex;
-      const prevDisabled = document.querySelector('[data-movement="rtw"] [data-step="-1"]').disabled;
+      const prevDisabled = document.querySelector('[data-scene="deck"] [data-step="-1"]').disabled;
       return { count, high, low, nextDisabled, prevDisabled };
     });
     check('out-of-range forward navigation wraps by modulo', bounds.high === (bounds.count + 50) % bounds.count, `${bounds.high} of ${bounds.count}`);
@@ -818,9 +848,9 @@ try {
       const api = window.__portfolioRunway;
       const count = api.getState().count;
       api.goTo(count - 1);
-      document.querySelector('[data-movement="rtw"] [data-step="1"]').click();
+      document.querySelector('[data-scene="deck"] [data-step="1"]').click();
       const forward = api.getState().activeIndex;
-      document.querySelector('[data-movement="rtw"] [data-step="-1"]').click();
+      document.querySelector('[data-scene="deck"] [data-step="-1"]').click();
       const backward = api.getState().activeIndex;
       api.goTo(0);
       return { count, forward, backward };
@@ -829,7 +859,7 @@ try {
     check('previous loops from the first garment to the last', loop.backward === loop.count - 1, JSON.stringify(loop));
     await p.waitForTimeout(600);
     const wheel = await p.evaluate(async () => {
-      const panel = document.querySelector('[data-movement="rtw"]');
+      const panel = document.querySelector('[data-scene="deck"]');
       const nodes = [...panel.querySelectorAll('.pf-slot')];
       panel.querySelector('[data-step="-1"]').click();
       const animated = nodes.filter((node) => node.getAnimations().length > 0).length;
@@ -849,15 +879,15 @@ try {
     // Drag must follow the hand: pointer right -> stack right.
     await p.waitForTimeout(300);
     const box = await p.evaluate(() => {
-      const b = document.querySelector('[data-movement="rtw"] .pf-stage').getBoundingClientRect();
+      const b = document.querySelector('[data-scene="deck"] .pf-stage').getBoundingClientRect();
       return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
     });
     await p.mouse.move(box.x, box.y);
-    const beforeDrag = await p.evaluate(() => document.querySelector('[data-movement="rtw"] [data-depth="1"]').getBoundingClientRect().left);
-    const movingItem = await p.evaluate(() => document.querySelector('[data-movement="rtw"] [data-depth="1"]').dataset.item);
+    const beforeDrag = await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-depth="1"]').getBoundingClientRect().left);
+    const movingItem = await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-depth="1"]').dataset.item);
     await p.mouse.down();
     await p.mouse.move(box.x + 110, box.y, { steps: 8 });
-    const dragRight = await p.evaluate(item => document.querySelector('[data-movement="rtw"] [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
+    const dragRight = await p.evaluate(item => document.querySelector('[data-scene="deck"] [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
     await p.mouse.up();
     await p.waitForTimeout(650);
     check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
@@ -876,7 +906,7 @@ try {
        and must never be presented as authored projects. */
     const integrity = await p.evaluate(() => {
       const w = document.querySelector('[data-world="womenswear"]');
-      const panel = w.querySelector('[data-movement="rtw"] .pf-panel');
+      const panel = w.querySelector('[data-scene="deck"] .pf-panel');
       const notice = w.querySelector('[data-reference-notice]');
       return {
         publication: w.dataset.publication,
@@ -1049,7 +1079,7 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(700);
     await openChapter(p, 'womenswear');
-    await openRun(p, 'rtw');
+    await openScene(p, '[data-scene="deck"]');
 
     const st = await p.evaluate(() => window.__portfolioRunway.getState());
     check(`${width} shows ${want} garments at once`, st.visibleNow === want, `visible ${st.visibleNow}`);
@@ -1064,7 +1094,7 @@ try {
         widths: boxes.map((b) => Math.round(b.width)),
         inside: boxes.every((b) => b.left >= stage.left - 1 && b.right <= stage.right + 1),
       };
-    }, ACT_RUN);
+    }, ACT_DECK);
     check(`${width} keeps every garment inside the stage`, geo.inside, geo.widths.join(','));
     const ratio = geo.widths[0] / geo.widths[geo.widths.length - 1];
     check(`${width} depth is immediately visible`, ratio <= maxRatio, `${Math.round(ratio * 100)}% of the leader`);
@@ -1347,9 +1377,9 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
     await openChapter(p, 'womenswear');
-    await openRun(p, 'rtw');
+    await openScene(p, '[data-scene="deck"]');
 
-    await p.evaluate((sel) => document.querySelector(`${sel} [data-stage]`).focus(), ACT_RUN);
+    await p.evaluate((sel) => document.querySelector(`${sel} [data-stage]`).focus(), ACT_DECK);
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(120);
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
@@ -1358,37 +1388,46 @@ try {
     check('reduced motion keeps four garments visible', state.visibleNow === 4, String(state.visibleNow));
     check('no decorative transition left running',
       await p.evaluate((sel) => getComputedStyle(
-        document.querySelector(`${sel} .pf-slot`)).transitionDuration === '0s', ACT_RUN));
+        document.querySelector(`${sel} .pf-slot`)).transitionDuration === '0s', ACT_DECK));
     check('reveal blocks visible without scrolling',
       await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1')));
-    /* THE TURN IS INFORMATION, NOT DECORATION. Without motion the window
-       opens onto the whole photograph, so both views are simply shown and no
-       scroll distance is reserved for a move that will not happen. */
+    /* EVERY REVEAL IN THIS ACT IS INFORMATION, NOT DECORATION, so without
+       motion it is delivered rather than withheld: the two turn scenes open
+       onto the whole photograph, Swim's approach sits at full size, and no
+       scroll distance is reserved anywhere for a move that will not happen. */
     const still = await p.evaluate(() => {
-      const plate = document.querySelector('[data-movement="rtw"] .pf-mv__plate[data-views="2"]');
-      const win = plate.querySelector('.pf-mv__window');
-      const img = win.querySelector('img');
-      const reveal = plate.closest('[data-reveal]');
+      const read = (scene) => {
+        const host = document.querySelector(`[data-scene="${scene}"]`);
+        const plate = host.querySelector('[data-views]');
+        const win = plate.querySelector('span');
+        const img = win.querySelector('img');
+        const reveal = plate.closest('[data-reveal]');
+        return {
+          half: getComputedStyle(plate).getPropertyValue('--half').trim(),
+          transform: getComputedStyle(img).transform,
+          shows: Math.round(win.getBoundingClientRect().width / img.getBoundingClientRect().width * 100),
+          reserved: Math.round(reveal.getBoundingClientRect().height - window.innerHeight),
+        };
+      };
+      const approach = document.querySelector('[data-approach]');
       return {
-        half: getComputedStyle(plate).getPropertyValue('--half').trim(),
-        transform: getComputedStyle(img).transform,
-        shows: Math.round(win.getBoundingClientRect().width / img.getBoundingClientRect().width * 100),
-        /* Measured against the LOOK, not the window: the opening movement
-           shares its screen with the act's bar, so its look is the frame
-           minus that bar. What matters is that the block reserves no travel
-           beyond the look itself. */
-        reserved: Math.round(
-          reveal.getBoundingClientRect().height
-          - plate.closest('.pf-mv__look').getBoundingClientRect().height,
-        ),
+        overture: read('overture'),
+        turn: read('turn'),
+        approachScale: getComputedStyle(approach).transform,
       };
     });
-    check('without motion the window shows the whole photograph, both views',
-      still.half === '1' && still.shows >= 99, JSON.stringify(still));
-    check('without motion the photograph does not travel',
-      still.transform === 'none' || still.transform === 'matrix(1, 0, 0, 1, 0, 0)', still.transform);
-    check('without motion no scroll is reserved for the turn',
-      Math.abs(still.reserved) <= 2, `${still.reserved}px`);
+    for (const scene of ['overture', 'turn']) {
+      const it = still[scene];
+      check(`without motion the ${scene} shows the whole photograph, both views`,
+        it.half === '1' && it.shows >= 99, JSON.stringify(it));
+      check(`without motion the ${scene}'s photograph does not travel`,
+        it.transform === 'none' || it.transform === 'matrix(1, 0, 0, 1, 0, 0)', it.transform);
+      check(`without motion the ${scene} reserves no scroll for its move`,
+        Math.abs(it.reserved) <= 2, `${it.reserved}px`);
+    }
+    check('without motion Swim arrives at full size rather than growing into it',
+      still.approachScale === 'none' || still.approachScale === 'matrix(1, 0, 0, 1, 0, 0)',
+      still.approachScale);
     await c.close();
   }
 
