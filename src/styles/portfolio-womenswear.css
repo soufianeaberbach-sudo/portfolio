@@ -1,0 +1,462 @@
+/* ===========================================================================
+   WOMENSWEAR — ACT I
+   ---------------------------------------------------------------------------
+   Everything here is scoped under `.pf-act`, which only Womenswear carries.
+   Menswear still runs on the two-screen GarmentWorld and none of this reaches
+   it.
+
+   THE MECHANISM. Every photograph in the archive holds one garment twice: the
+   front and the back, side by side on white. `--front` is the fraction of the
+   frame the front view occupies, measured per image in the data. The look's
+   plate is a window on that photograph, and `--turn` travels it from the
+   front to the back — a camera move inside a single frame rather than a
+   crossfade between two files.
+   ========================================================================= */
+
+.pf-act {
+  --mv-gap: clamp(5rem, 12vh, 11rem);
+  --turn: 0;
+  /* The photographs are shot on a white studio ground. The act takes the
+     brightest paper the palette has so a plate never reads as a white
+     rectangle pasted onto bone. */
+  /* The ground is BONE, not the near-white paper-bright: the plate the
+     garment stands on is pure white, and #fbfaf6 against #ffffff is a
+     four-step difference nobody sees. On bone the studio field is legible,
+     so the window the turn travels reads as a frame rather than an
+     accidental edge. */
+  background: var(--paper);
+}
+
+/* The act is one long scroll, not a stack of screens. */
+/* No tail padding: the payoff block below is a full screen of its own, so
+   anything added here only pushes the ending off centre at the bottom of the
+   scroll. Written at the specificity of the rule it has to beat — the shared
+   `.pf--js .pf-screen` gives every chapter a foot of padding, which is right
+   for a chapter that ends in a list and wrong for one that ends on a line. */
+.pf-act.pf-world .pf-act__screen { padding: 0; }
+.pf-act__sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---- the bar: the way back, and the only thing that numbers ------------- */
+.pf-act__bar {
+  position: sticky; top: 0; z-index: 30;
+  /* A DECLARED height, and then that height GIVEN BACK to the flow.
+     The bar floats over the act — it is translucent and blurred, and every
+     movement after the first already scrolls under it. Left in the flow it
+     pushed the opening movement a bar's height down the page, which either
+     cut the first composition off at the foot or, once the look was shortened
+     to compensate, stood the opening garment on a different floor from the
+     other four. Taken out of the flow, the first look is a whole screen like
+     the rest and its turn starts at exactly zero. */
+  height: var(--bar-h, 3.25rem);
+  margin-bottom: calc(-1 * var(--bar-h, 3.25rem));
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 0 var(--gutter);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* The movement control. Closed it is a mark; opened it is the five movements.
+   It is the act's only index, and it is behind the fashion, not in front. */
+.pf-act__where { position: relative; }
+.pf-act__now {
+  display: flex; align-items: center; gap: .6rem;
+  margin: 0; padding: .35rem .1rem;
+  background: none; border: 0; cursor: pointer;
+  color: var(--muted); font-size: .46rem;
+}
+.pf-act__now:is(:hover, :focus-visible) { color: var(--ink); }
+.pf-act__nowname { color: var(--ink); }
+.pf-act__caret {
+  width: .34rem; height: .34rem;
+  border-right: 1px solid currentcolor; border-bottom: 1px solid currentcolor;
+  transform: rotate(45deg) translateY(-1px);
+  transition: transform 340ms var(--ease);
+}
+.pf-act__where[data-open] .pf-act__caret { transform: rotate(225deg) translateY(-1px); }
+.pf-act__list {
+  list-style: none; margin: 0; padding: 0;
+  position: absolute; right: 0; top: calc(100% + .5rem);
+  display: grid; min-width: 15rem;
+  background: var(--paper-bright); border: 1px solid var(--line);
+  /* The list opens over a white studio plate, so a border alone lets the two
+     whites run into each other. The shadow is what tells them apart. */
+  box-shadow: 0 1.4rem 2.6rem -1.5rem rgba(17, 17, 15, .34);
+  opacity: 0; transform: translateY(-.4rem); pointer-events: none;
+  transition: opacity 260ms ease, transform 340ms var(--ease);
+}
+.pf-act__where[data-open] .pf-act__list { opacity: 1; transform: none; pointer-events: auto; }
+.pf-act__list a {
+  display: grid; grid-template-columns: 2rem 1fr; align-items: baseline;
+  gap: .1rem .6rem; padding: .7rem .9rem;
+  color: var(--ink-soft); border-bottom: 1px solid var(--line);
+}
+.pf-act__list li:last-child a { border-bottom: 0; }
+.pf-act__list a small { grid-column: 2; font-size: .62rem; color: var(--muted); }
+.pf-act__label { font-size: .9rem; color: var(--ink); }
+.pf-act__n { color: var(--muted); font-size: .48rem; }
+.pf-act__list a:is(:hover, :focus-visible) { background: var(--bone, #eee1da); }
+.pf-act__list a[aria-current] .pf-act__n { color: var(--ww-accent, #c7020c); }
+
+/* ---- A MOVEMENT --------------------------------------------------------
+   Five of them, and they are not the same shape. `data-rhythm` is the
+   difference: the long run, the fast one, the silence, the slow drama, the
+   reduction. */
+.pf-mv { position: relative; padding-top: var(--mv-gap); }
+/* THE FIRST FRAME AFTER THE COVER is the one composition seen before anybody
+   has scrolled, so it starts at the very top of the act: no gap between
+   movements above it, and the bar floating over it rather than pushing it
+   down. See .pf-act__bar. */
+.pf-mv:first-of-type { padding-top: 0; }
+
+/* ---- THE LOOK ----------------------------------------------------------
+   One garment, alone, as tall as the frame will let it stand.
+
+   These are two-up photographs: one figure front, one figure back, on white.
+   So the window is HALF the frame — one figure — and the turn slides the
+   photograph by exactly that half. A standing figure at 84svh is about 250px
+   wide whatever is done to it; that is the geometry of a person, not a
+   layout decision, and the answer is not to crop the silhouette away but to
+   give it the height and let the rest of the page be white. The type is
+   set against the figure's own baseline, with the running head at the head
+   of the field: three marks and a lot of air, which is a lookbook page. */
+/* The reveal block: one screen for the look, plus the distance the turn is
+   scrubbed across. `--track` is the rhythm — Evening's turn is the slowest in
+   the act, Swim's the quickest. */
+.pf-mv__reveal {
+  position: relative;
+  height: calc(100svh + var(--track, 95svh));
+}
+.pf-mv__look {
+  position: sticky; top: 0;
+  height: 100svh;
+  display: grid;
+  /* TWO columns inside a centred MEASURE, not three across the whole frame.
+     Flung to opposite edges of a 1366 screen, the title and the figure were
+     not in a composition at all — they were two things with 600px of nothing
+     between them. Held to a measure they are a spread. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  /* `minmax(0, 1fr)` and not `1fr`: a bare `1fr` floors at min-content, so a
+     tall type column would grow the row past the screen and push its own last
+     line under the fold. Capped, anything that will not fit spends the air
+     ABOVE instead, which is the air the composition has. */
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 1rem clamp(1.5rem, 4vw, 4rem);
+  padding-block: clamp(3.4rem, 8vh, 5rem) clamp(1.4rem, 4vh, 3rem);
+  padding-inline: max(var(--gutter), calc((100% - var(--measure, 72rem)) / 2));
+}
+/* The running head: which movement, and which territory. */
+.pf-mv__territory {
+  grid-column: 1 / -1; grid-row: 1; align-self: start;
+  display: flex; align-items: baseline; gap: .7rem;
+  margin: 0 0 clamp(1rem, 4vh, 3rem); color: var(--muted); font-size: .5rem;
+}
+.pf-mv__territory b { color: var(--ww-accent, #c7020c); font-weight: 500; }
+.pf-mv__of { margin-left: auto; font-style: normal; }
+/* A SECOND FRAME IN THE SAME MOVEMENT CARRIES NO TITLE — the territory has
+   already been named. So it is not a spread with an empty half: it is one
+   plate alone, centred and a little larger, which is what the silence in that
+   movement is for. A figure pushed to the right of an otherwise empty screen
+   is not silence, it is a missing column. */
+.pf-mv__type--quiet { display: none; }
+.pf-mv__look:has(.pf-mv__type--quiet) {
+  --look-h: 80svh;
+  grid-template-columns: minmax(0, 1fr);
+}
+.pf-mv__look:has(.pf-mv__type--quiet) .pf-mv__plate {
+  grid-column: 1; justify-self: center;
+}
+
+/* THE FIELD: the studio ground. On a desk it is exactly the window's width;
+   on a phone it bleeds. */
+/* The height is capped by the row it is in, not only by the svh figure, so a
+   grand Evening look cannot push its own title off the bottom of the screen.
+   The width is then derived by `aspect-ratio` from whatever height it really
+   got — half the photograph's frame, which is one figure. */
+.pf-mv__plate {
+  grid-column: 2; grid-row: 2; align-self: end;
+  position: relative; margin: 0; display: flex; justify-content: center;
+  height: min(var(--look-h, 74svh), 100%);
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto;
+  background: #fff;
+}
+/* THE WINDOW: half the frame — one figure — sized from the photograph's own
+   aspect and the height it is shown at. */
+.pf-mv__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%;
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto; flex: none;
+}
+/* A two-up frame: the window is HALF of it, so exactly one figure. */
+.pf-mv__plate[data-views='2'] { --half: .5; }
+/* A single-view frame: the window is the whole photograph, and nothing
+   travels. */
+.pf-mv__plate[data-views='1'] { --half: 1; }
+.pf-mv__plate[data-views='1'] img { transform: none; }
+.pf-mv__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+  /* At --turn 0 the front figure fills the window; at 1 the window has
+     travelled one half-frame and the back figure fills it. */
+  transform: translateX(calc(var(--turn) * -50%));
+  will-change: transform;
+}
+/* The type column is the title's MEASURE, so it is the query container the
+   title is fitted against. */
+.pf-mv__type {
+  grid-column: 1; grid-row: 2; align-self: end;
+  container-type: inline-size;
+  display: grid; justify-items: start; gap: .9rem;
+  padding-bottom: clamp(1rem, 5vh, 3.5rem);
+}
+/* THE MOVEMENT'S NAME, FITTED. Not a size in vw — the column divided by the
+   word's own measured width, so each title runs the share of the measure its
+   movement is directed to take. RANGE and BODY are loud because they are
+   short; PRESENCE is wide because it is long; LINE is deliberately held to
+   under half the column, because reduction is Swim's whole argument. */
+.pf-mv__act {
+  margin: 0; color: var(--ink);
+  font-family: var(--display);
+  font-size: calc(100cqw * var(--fill, .86) / var(--em, 4.42));
+  font-variation-settings: 'wdth' 118;
+  font-weight: 900; letter-spacing: -.03em; line-height: .86;
+  text-transform: uppercase;
+}
+.pf-mv__line {
+  margin: 0; max-width: 26ch;
+  font-size: clamp(.92rem, 1.05vw, 1.12rem); line-height: 1.5; color: var(--ink-soft);
+}
+/* The act's thesis, said once, directly under the first look's line — where
+   it explains the move the visitor is about to watch. */
+.pf-mv__thesis {
+  margin: .4rem 0 0; max-width: 24ch;
+  font-size: .78rem; line-height: 1.55; color: var(--muted);
+}
+.pf-mv__thesis b { display: block; color: var(--ink); font-weight: 500; }
+
+/* The five scales. Evening is the grand one; Swim is the close one. */
+.pf-mv[data-scale='grand'] { --look-h: 78svh; --fill: 1; }
+.pf-mv[data-scale='tall'] { --look-h: 74svh; --fill: .92; }
+.pf-mv[data-scale='full'] { --look-h: 72svh; --fill: .86; }
+.pf-mv[data-scale='close'] { --look-h: 62svh; --fill: .46; }
+
+/* THE FIVE RHYTHMS, as scroll distance. The turn is the same move in each
+   movement and a different speed in each: Evening takes the longest to give
+   up its back, Swim the shortest. */
+.pf-mv[data-rhythm='run'] { --track: 95svh; }
+.pf-mv[data-rhythm='fast'] { --track: 70svh; }
+.pf-mv[data-rhythm='silence'] { --track: 120svh; }
+.pf-mv[data-rhythm='slow'] { --track: 140svh; }
+/* REDUCTION. Swim's frames are single-view, so there is no turn to scrub and
+   no distance to reserve for one — only a HOLD, the shortest in the act, so
+   the one frame that shows everything at once is still given a beat rather
+   than sliding away under the first scroll. */
+.pf-mv[data-rhythm='reduction'] { --track: 36svh; }
+
+/* SILENCE. Streetwear has two looks and no run, so it is given the air the
+   other movements spend on their range — and the longest hold on the turn. */
+.pf-mv[data-rhythm='silence'] { padding-top: calc(var(--mv-gap) * 1.4); }
+
+/* ---- THE RUN -----------------------------------------------------------
+   The rest of the territory. The deck itself is the runway's own markup and
+   its own stylesheet; what changes here is the room around it. */
+/* The run is its own BEAT, not a strip tacked under the look: it is given a
+   screen and centred in it, so arriving at the range is arriving somewhere
+   rather than scrolling into the bottom of the previous composition. */
+.pf-mv__run {
+  min-height: 100svh;
+  display: grid; align-content: center;
+  margin-top: clamp(2rem, 6vh, 5rem); scroll-margin-top: 5rem;
+}
+/* The running head, the deck and the runbar are ONE block, so all three are
+   set to the run's own measure and not to the page's gutters. */
+.pf-mv__runhead {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; width: var(--run-w); margin: 0 auto 1rem;
+  color: var(--muted); font-size: .48rem;
+}
+.pf-mv__runhead i { font-style: normal; }
+/* SCALE CONTRAST IS THE POINT. The look stands at ~85% of the screen; the
+   run's cards are a third of that. The deck solves its own card height from
+   the width it is given, so the run is given a measure rather than the whole
+   frame — which turns a wall of overlapping figures into a strip you read
+   across. Hierarchy, in one number. */
+.pf-act .pf-panel { padding: 0; background: none; border: 0; }
+.pf-act .pf-viewer { display: block; }
+.pf-act .pf-deck { margin: 0; }
+.pf-act .pf-stage { width: var(--run-w); margin: 0 auto; }
+.pf-act .pf-runbar { width: var(--run-w); margin: 1.2rem auto 0; }
+
+/* Each rhythm reads its range at its own measure, which is the one number
+   that decides how big the cards come out — the deck solves card height from
+   the width it is handed. So the measure is also capped by the HEIGHT left
+   under the bar: measured, the block comes out at about 0.7 of the stage's
+   width plus a line of chrome, and at 1366x768 an uncapped Evening ran its
+   own runbar off the bottom of the screen. */
+.pf-act {
+  --run-cap: calc((100svh - var(--bar-h, 3.25rem) - 1rem) * 1.42);
+  --run-w: min(62vw, 54rem, var(--run-cap));
+}
+/* FAST: the run is tighter, and wider — more looks on screen at once. */
+.pf-mv[data-rhythm='fast'] { --run-w: min(72vw, 62rem, var(--run-cap)); }
+.pf-mv[data-rhythm='fast'] .pf-mv__run { margin-top: clamp(1.2rem, 3vh, 2.6rem); }
+/* REDUCTION: the narrowest strip in the act and the least furniture — the
+   category with nowhere to hide gets the most white around it. */
+.pf-mv[data-rhythm='reduction'] { --run-w: min(48vw, 40rem, var(--run-cap)); }
+.pf-mv[data-rhythm='reduction'] .pf-mv__runhead { opacity: .7; }
+/* SLOW: Evening's range is read wide, like a row of gowns on a rail. */
+.pf-mv[data-rhythm='slow'] { --run-w: min(78vw, 68rem, var(--run-cap)); }
+
+/* ---- THE PAYOFF -------------------------------------------------------- */
+/* The last thing said gets its own screen. Sharing one with the tail of the
+   Swim run — a runbar and a strip of picture hanging in at the top — is not
+   an ending, it is where the scroll happened to stop. */
+.pf-act__end {
+  min-height: 100svh;
+  display: grid; align-content: center; justify-items: start; gap: 1.6rem;
+  margin-top: clamp(5rem, 14vh, 12rem);
+  padding-inline: max(var(--gutter), calc((100% - var(--measure, 72rem)) / 2));
+}
+.pf-act__endline {
+  margin: 0; color: var(--ink);
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-variation-settings: 'wdth' 118;
+  font-weight: 900; letter-spacing: -.035em; line-height: .92;
+}
+.pf-act__endline em { font-style: normal; color: var(--ww-accent, #c7020c); }
+.pf-act__prov { max-width: 46ch; }
+.pf-act__next {
+  display: inline-flex; align-items: center; gap: .8rem;
+  padding-bottom: .5rem; border-bottom: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.pf-act__next:is(:hover, :focus-visible) { border-bottom-color: var(--ww-accent, #c7020c); }
+
+/* ---- tablet ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  .pf-mv__look { grid-template-columns: minmax(0, 1fr) auto; }
+  .pf-mv__plate { grid-column: 2; }
+  .pf-mv[data-scale='grand'] { --look-h: 66svh; --fill: 1; }
+  .pf-mv[data-scale='tall'] { --look-h: 63svh; --fill: .94; }
+  .pf-mv[data-scale='full'] { --look-h: 61svh; --fill: .9; }
+  .pf-mv[data-scale='close'] { --look-h: 54svh; --fill: .54; }
+}
+
+/* ---- a phone -----------------------------------------------------------
+   Not the desktop stacked. The plate goes edge to edge and takes the height a
+   phone is good at; the type sits under it, close, like a caption on a
+   lookbook page rather than a header above a card. */
+@media (max-width: 767px) {
+  .pf-act { --mv-gap: clamp(3rem, 8vh, 5rem); }
+  .pf-act { --bar-h: 2.9rem; }
+  .pf-act__bar { padding: 0 1.1rem; }
+  /* A phone is good at one tall picture. The figure takes the screen, the
+     type sits under it like a lookbook caption, and nothing is shrunk to make
+     a desktop composition fit. */
+  /* The picture's row is the one that GIVES, so the running head and the type
+     are never pushed off the foot of the screen: the plate takes what is left
+     after them, up to the scale its movement is directed to take. That is
+     also what keeps the opening movement whole, since it is the one that
+     shares its screen with the bar. */
+  .pf-mv__look {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    /* Clear of the bar that floats over the act, not tucked under it: at
+       3.2rem the running head sat five pixels below the bar's own type. */
+    padding: 4rem 0 0; gap: 1rem;
+  }
+  .pf-mv__territory { grid-column: 1; grid-row: 1; margin: 0 1.1rem 0; }
+  /* The field takes the whole screen so the plate is a full-width lookbook
+     page; the window inside it stays one figure wide, which is the largest a
+     whole standing figure can be at 390px. Nothing is cropped to fake scale. */
+  .pf-mv__plate {
+    grid-column: 1; grid-row: 2; justify-self: stretch; align-self: end;
+    width: 100%; aspect-ratio: auto;
+    /* See the tablet rule: the last term keeps the whole frame inside the
+       screen when there is no motion and the window shows both views. */
+    height: min(
+      var(--look-h, 64svh), 100%,
+      calc(100vw / (var(--aspect, .75) * var(--half, 1)))
+    );
+  }
+  .pf-mv__type {
+    /* A foot margin, so the last line of the caption is not sitting on the
+       edge of the screen. */
+    grid-column: 1; grid-row: 3; padding: 0 1.1rem 1.1rem; gap: .7rem;
+  }
+  /* On a phone the column IS the screen, so the fitted title runs edge to
+     edge and the short movements are the loud ones, as on a desk. */
+  .pf-mv[data-scale='grand'] { --look-h: 72svh; --fill: 1; }
+  .pf-mv[data-scale='tall'] { --look-h: 68svh; --fill: .98; }
+  .pf-mv[data-scale='full'] { --look-h: 64svh; --fill: .96; }
+  .pf-mv[data-scale='close'] { --look-h: 58svh; --fill: .68; }
+  .pf-mv__line { font-size: .88rem; max-width: none; }
+  .pf-mv__runhead { width: auto; margin: 0 1.1rem .8rem; }
+  /* On a phone the strip takes the screen: a swipe across one band of looks
+     is what a phone is for. */
+  .pf-act .pf-stage,
+  .pf-mv[data-rhythm='fast'] .pf-stage,
+  .pf-mv[data-rhythm='slow'] .pf-stage,
+  .pf-mv[data-rhythm='reduction'] .pf-stage { width: auto; margin: 0 1.1rem; }
+  .pf-act .pf-runbar,
+  .pf-mv[data-rhythm='reduction'] .pf-runbar,
+  .pf-mv[data-rhythm='slow'] .pf-runbar { width: auto; margin: 1rem 1.1rem 0; }
+  /* The phone run does not need a whole screen of its own: two cards and a
+     runbar in 844px would leave half the frame empty above and below. */
+  .pf-mv__run { min-height: 78svh; margin-top: clamp(1.4rem, 4vh, 3rem); }
+  .pf-act__end { padding: 0 1.1rem; }
+  .pf-act__list { right: 0; left: auto; min-width: min(17rem, calc(100vw - 2.4rem)); }
+}
+
+/* ---- tablet, held UPRIGHT ----------------------------------------------
+   A two-column look in a tall frame is a column of picture beside a column of
+   nothing: at 768x1024 the void measured two thirds of the screen. Upright,
+   the tablet therefore takes the phone's composition — the field across the
+   frame, the type under it — at its own larger scale. Landscape tablets keep
+   the spread, because a wide frame is what a spread is for. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .pf-mv__look {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding-inline: 0; gap: 1.2rem;
+  }
+  .pf-mv__territory { grid-column: 1; grid-row: 1; margin: 0 var(--gutter) 0; }
+  .pf-mv__plate {
+    grid-column: 1; grid-row: 2; justify-self: stretch; align-self: end;
+    width: 100%; aspect-ratio: auto;
+    /* The third term is the one that matters without motion: the window's
+       width is solved from this height, so the height is also capped at
+       whatever keeps that width inside the screen. */
+    height: min(
+      var(--look-h, 58svh), 100%,
+      calc(100vw / (var(--aspect, .75) * var(--half, 1)))
+    );
+  }
+  .pf-mv__type {
+    grid-column: 1; grid-row: 3;
+    padding: 0 var(--gutter) var(--gutter); gap: .8rem;
+  }
+  .pf-mv[data-scale='grand'] { --look-h: 64svh; --fill: 1; }
+  .pf-mv[data-scale='tall'] { --look-h: 60svh; --fill: .96; }
+  .pf-mv[data-scale='full'] { --look-h: 58svh; --fill: .92; }
+  .pf-mv[data-scale='close'] { --look-h: 52svh; --fill: .6; }
+  .pf-mv__line { max-width: 42ch; }
+}
+
+/* ---- no motion ---------------------------------------------------------
+   The turn is a REVEAL, not decoration, so it is delivered rather than
+   withheld: the window simply opens onto the whole photograph and both views
+   are shown at once. Nothing else about the composition changes — same
+   measure, same fitted title, same ground — and no scroll distance is
+   reserved for a move that will not happen. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-mv[data-rhythm] { --track: 0svh; }
+  .pf-mv__plate[data-views='2'] { --half: 1; }
+  .pf-mv__window img { transform: none; }
+  .pf-act__list, .pf-act__caret { transition: none; }
+}

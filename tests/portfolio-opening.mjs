@@ -650,8 +650,22 @@ try {
     check('the Womenswear cover still opens the existing chapter',
       await page.evaluate(() => location.hash === '#womenswear'
         && !document.querySelector('[data-world="womenswear"]').hasAttribute('hidden')));
-    check('and the chapter still carries its categories',
-      await page.locator('[data-world="womenswear"] .pf-cat').count() >= 5);
+    /* The chapter behind the cover is an ACT now: its five territories are
+       movements on one screen rather than rows in a category index. What the
+       cover has to deliver is still all five of them, in order. */
+    check('and the chapter still carries its five territories',
+      await page.locator('[data-world="womenswear"] [data-movement]').count() === 5);
+    check('and the first of them is on screen with its garment',
+      await page.evaluate(() => {
+        const look = document.querySelector('[data-movement="rtw"] .pf-mv__look');
+        const img = look.querySelector('.pf-mv__window img');
+        const box = look.getBoundingClientRect();
+        /* The act's bar sits in the flow at the head of the chapter, so the
+           opening look runs from under it to the foot of the frame. */
+        const bar = document.querySelector('.pf-act__bar').getBoundingClientRect().height;
+        return box.top <= bar + 2 && box.bottom >= window.innerHeight - 1
+          && img.getBoundingClientRect().height > window.innerHeight * 0.5;
+      }));
     await context.close();
   }
 } finally {

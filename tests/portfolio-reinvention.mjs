@@ -55,7 +55,43 @@ try {
   check(await page.locator('.pf-outro a').count()===1,'the ending offers one way on, not a directory');
   check((await page.locator('.pf-outro__title').innerText()).replace(/\s+/g,' ').trim()==='One practice. From design to production.','the ending states the practice');
   await shot('ending');
-  for(const [world,cat] of [['womenswear','rtw'],['menswear','m-streetwear']]){
+  /* WOMENSWEAR IS AN ACT: one screen, five movements, no category cards and
+     no evidence plates — Development is its own chapter. What it must still
+     deliver is all five territories, a look that turns from front to back,
+     and the range behind each one. */
+  await open('womenswear');await shot('womenswear-act');
+  check(await page.locator('[data-world="womenswear"] [data-movement]').count()===5,'five territories retained');
+  check(await page.locator('[data-world="womenswear"] [data-act-link]').count()===5,'all five reachable by name');
+  for(const id of ['rtw','activewear','streetwear','evening','swimwear']){
+   await open('womenswear/'+id);
+   await page.waitForTimeout(500);
+   check(await page.locator('[data-movement="'+id+'"] .pf-mv__window img').first().evaluate(
+     (img)=>img.getBoundingClientRect().height>window.innerHeight*0.45),'the garment owns the frame in '+id);
+   await shot('womenswear-'+id);
+  }
+  /* THE TURN. Scrubbing the pinned reveal travels the window across the
+     photograph, front view to back view, and then holds. */
+  await open('womenswear/rtw');
+  await page.waitForTimeout(500);
+  {
+   const world=page.locator('[data-world="womenswear"]');
+   const turnAt=async(fraction)=>{
+    await world.evaluate((el,f)=>{
+     const reveal=el.querySelector('[data-movement="rtw"] [data-reveal]');
+     el.scrollTo({top:Math.round(el.scrollTop+reveal.getBoundingClientRect().top+(reveal.offsetHeight-window.innerHeight)*f),behavior:'instant'});
+    },fraction);
+    await page.waitForTimeout(260);
+    return Number(await page.locator('[data-movement="rtw"] [data-turn]').evaluate((el)=>getComputedStyle(el).getPropertyValue('--turn')));
+   };
+   const start=await turnAt(0);
+   const middle=await turnAt(0.5);
+   const end=await turnAt(1);
+   check(start<0.02,'the look opens on its front view');
+   check(middle>start&&middle<end,'the turn is scrubbed, not switched');
+   check(end>0.98,'the back view arrives before the movement is released');
+   await shot('womenswear-turn');
+  }
+  for(const [world,cat] of [['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');
    await open(world+'/'+cat);await shot(world+'-viewer');
@@ -76,9 +112,12 @@ try {
    }
    check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
   }
+  /* The deck itself is unchanged: in the act it lives inside a movement's
+     run, and Range is the longest queue on the site. */
   await open('womenswear/rtw');
-  const stage=page.locator('[data-world="womenswear"] [data-screen="category"]:not([hidden]) [data-stage]');
+  const stage=page.locator('[data-world="womenswear"] [data-movement="rtw"] [data-stage]');
   await stage.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(500);
   const box=await stage.boundingBox();
   for(const dir of [1,-1]){
    const current=await page.evaluate(()=>window.__portfolioRunway.getState());

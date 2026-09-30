@@ -40,7 +40,43 @@ try {
     await page.evaluate(() => scrollTo(0, 0));
     await capture('landing');
     await page.screenshot({ path: `${output}/${width}-landing-full.png`, fullPage: true });
-    for (const [world, category] of [['womenswear', 'rtw'], ['menswear', 'm-streetwear']]) {
+    /* WOMENSWEAR IS AN ACT: one screen, five movements, each a look that
+       turns and then a range. So it is walked movement by movement rather
+       than category card by category card, and the "viewer" to shoot is the
+       movement's run. Menswear still has the category-screen architecture. */
+    await open('womenswear');
+    await capture('womenswear-act');
+    for (const id of ['rtw', 'activewear', 'streetwear', 'evening', 'swimwear']) {
+      await open(`womenswear/${id}`);
+      await page.waitForTimeout(500);
+      await capture(`womenswear-${id}-look`);
+      const look = page.locator(`[data-movement="${id}"] .pf-mv__look`).first();
+      /* The look arrives pinned and filling the frame — no composition under
+         the fold, which is the whole reason the reveal block exists. */
+      assert.equal(await look.evaluate((el) => {
+        const box = el.getBoundingClientRect();
+        return box.top <= 2 && box.bottom >= window.innerHeight - 1;
+      }), true, `${width} womenswear/${id}: the look is not whole in the frame`);
+      checks++;
+      const run = page.locator(`[data-movement="${id}"] .pf-mv__run`);
+      if (await run.count() > 0) {
+        await page.evaluate((mv) => {
+          const world = document.querySelector('[data-world="womenswear"]');
+          const box = world.querySelector(`[data-movement="${mv}"] .pf-mv__run`).getBoundingClientRect();
+          world.scrollTo({ top: Math.round(world.scrollTop + box.top - (innerHeight - box.height) / 2), behavior: 'instant' });
+        }, id);
+        await capture(`womenswear-${id}-run`);
+        assert.equal(await page.locator(`[data-movement="${id}"] .pf-slot[data-depth="0"]`).count(), 1);
+        checks++;
+      }
+    }
+    /* And the ending, which is the last thing the chapter says. */
+    await page.evaluate(() => {
+      const world = document.querySelector('[data-world="womenswear"]');
+      world.scrollTo({ top: world.scrollHeight, behavior: 'instant' });
+    });
+    await capture('womenswear-payoff');
+    for (const [world, category] of [['menswear', 'm-streetwear']]) {
       await open(world);
       await capture(`${world}-categories`);
       if (width === 1440 || width === 390) {
