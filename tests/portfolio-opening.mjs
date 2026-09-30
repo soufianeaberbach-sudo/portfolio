@@ -650,8 +650,36 @@ try {
     check('the Womenswear cover still opens the existing chapter',
       await page.evaluate(() => location.hash === '#womenswear'
         && !document.querySelector('[data-world="womenswear"]').hasAttribute('hidden')));
-    check('and the chapter still carries its categories',
-      await page.locator('[data-world="womenswear"] .pf-cat').count() >= 5);
+    /* The chapter behind the cover is an ACT: five territories on one screen
+       rather than rows in a category index. What the cover has to deliver is
+       still all five of them, in order — and, the moment it lands, FASHION:
+       the first thing after the threshold is a garment at full frame height
+       on a studio field, with no menu and no type in front of it. */
+    check('and the chapter still carries its five territories',
+      await page.locator('[data-world="womenswear"] [data-territory]').count() === 5);
+    check('and the first thing in it is a garment, not an interface',
+      await page.evaluate(() => {
+        const scene = document.querySelector('[data-scene="overture"]');
+        const img = scene.querySelector('.pf-ov__window img');
+        const box = img.getBoundingClientRect();
+        return box.height > window.innerHeight * 0.8 && box.top < window.innerHeight * 0.2;
+      }));
+    /* And whatever type the scene carries, it is BESIDE the garment, never
+       across it: the territory's name is set to clear the picture at every
+       width, and on a tall screen it sits under it in its own band. */
+    check('and no type is set across the garment',
+      await page.evaluate(() => {
+        const img = document.querySelector('.pf-ov__window img').getBoundingClientRect();
+        const win = document.querySelector('.pf-ov__window').getBoundingClientRect();
+        /* The visible part of the photograph is the window, not the whole
+           image: the rest is clipped. */
+        const shown = { left: win.left, right: win.right, top: win.top, bottom: win.bottom };
+        return [...document.querySelectorAll('.pf-ov__name, .pf-sc__pointer')].every((el) => {
+          const b = el.getBoundingClientRect();
+          return b.right <= shown.left + 1 || b.left >= shown.right - 1
+            || b.bottom <= shown.top + 1 || b.top >= shown.bottom - 1;
+        }) && img.height > 0;
+      }));
     await context.close();
   }
 } finally {

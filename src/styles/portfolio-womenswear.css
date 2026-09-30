@@ -1,0 +1,730 @@
+/* WOMENSWEAR — ACT I.
+ *
+ * Everything here is scoped under `.pf-act`, so Menswear, Development and
+ * Tech Packs are untouched by any of it.
+ *
+ * The file is organised the way the act is: the ground and the one control
+ * first, then the territory slate, then ONE BLOCK PER SCENE. A scene is a
+ * composition with its own pacing and its own typographic weight — overture,
+ * turn, pair, approach, evidence, sheet, rail, line, deck — and the reason
+ * they are written separately is that they are meant to look nothing like
+ * each other. There is deliberately no shared "look" rule with five
+ * parameters: that was the previous version of this act and it produced one
+ * composition five times.
+ *
+ * WHAT IS COMMON, AND ALL THAT IS COMMON:
+ *   - bone ground, pure white studio field, ink type
+ *   - garments large, negative space confident
+ *   - one measure, so type and garment are in relationship
+ *   - the Womenswear red used once, at the close
+ */
+
+.pf-act {
+  /* The ground is BONE, not the near-white paper-bright: every studio field
+     in this chapter is pure white, and #fbfaf6 against #ffffff is a
+     four-step difference nobody sees. On bone a white field reads as a
+     field. */
+  background: var(--paper);
+  --measure: 72rem;
+  --bar-h: 3.25rem;
+  --beat: clamp(5rem, 12vh, 11rem);
+  /* Where the measure starts. Scenes that bleed use it to place their type. */
+  --edge: max(var(--gutter), calc((100vw - var(--measure)) / 2));
+}
+
+/* EVERY PLATE IN THIS ACT DERIVES ITS WIDTH FROM ITS HEIGHT — a garment is
+   shown at a height, and the photograph's own aspect decides how wide that
+   makes it. On a narrow screen a tall figure therefore runs off the side, and
+   at 390px Swim's single-view frame did exactly that by 96px. `--fit-h` is
+   the tallest a plate may be and still fit the width it has, so every plate
+   is `min(the height it wants, the row it is in, this)`.
+
+   It is declared on the plates themselves and not once on the act, because a
+   var() inside a custom property is substituted where that property is
+   DECLARED: one shared declaration would bake the act's own fallback aspect
+   into every scene, and at 390px that capped a two-up plate at half the
+   height it could actually have. */
+.pf-act { --ww-accent: #c7020c; }
+.pf-ov__plate, .pf-tn__plate, .pf-ap__plate, .pf-pr__plate {
+  --fit-h: calc((100vw - 2 * var(--edge)) / (var(--aspect, .75) * var(--half, 1)));
+}
+/* HOW MUCH OF A FRAME A SCENE SHOWS, for the whole act in two rules: a two-up
+   photograph is shown one figure at a time, a single-view frame whole — and a
+   scene that wants the whole of a two-up simply says data-views="1". */
+.pf-act [data-views='1'] { --half: 1; }
+.pf-act [data-views='2'] { --half: .5; }
+
+/* The chapter router hides and shows chapters by this element, so it stays.
+   No tail padding: the close below is a full screen of its own, and anything
+   here only pushes the ending off centre at the bottom of the scroll.
+   Written at the specificity of the shared `.pf--js .pf-screen` rule it has
+   to beat. */
+.pf-act.pf-world .pf-act__screen { padding: 0; }
+.pf-act__sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+/* The inner measure every scene is set against. */
+.pf-act .pf-sc,
+.pf-act .pf-tr__slate {
+  padding-inline: max(var(--gutter), calc((100% - var(--measure)) / 2));
+}
+
+/* ---- THE ONE CONTROL ----------------------------------------------------
+   Attraction first, control second. It names where the visitor is and opens
+   the five territories on demand. The bar's height is declared because the
+   overture is sized against it. */
+.pf-act__bar {
+  position: sticky; top: 0; z-index: 30;
+  height: var(--bar-h);
+  /* And that height given back to the flow: the bar is translucent and
+     floats over the act, so the opening scene is a whole screen rather than
+     a screen pushed a bar's height down the page. */
+  margin-bottom: calc(-1 * var(--bar-h));
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 0 var(--gutter);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+}
+.pf-act__where { position: relative; }
+.pf-act__now {
+  display: flex; align-items: center; gap: .6rem;
+  margin: 0; padding: .35rem .1rem;
+  background: none; border: 0; cursor: pointer;
+  color: var(--muted); font-size: .46rem;
+}
+.pf-act__now:is(:hover, :focus-visible) { color: var(--ink); }
+.pf-act__nowname { color: var(--ink); }
+.pf-act__caret {
+  width: .34rem; height: .34rem;
+  border-right: 1px solid currentcolor; border-bottom: 1px solid currentcolor;
+  transform: rotate(45deg) translateY(-1px);
+  transition: transform 340ms var(--ease);
+}
+.pf-act__where[data-open] .pf-act__caret { transform: rotate(225deg) translateY(-1px); }
+.pf-act__list {
+  list-style: none; margin: 0; padding: 0;
+  position: absolute; right: 0; top: calc(100% + .5rem);
+  display: grid; min-width: 16rem;
+  background: var(--paper-bright); border: 1px solid var(--line);
+  /* The list opens over white studio fields, so a border alone lets the two
+     whites run into each other. The shadow is what tells them apart. */
+  box-shadow: 0 1.4rem 2.6rem -1.5rem rgba(17, 17, 15, .34);
+  opacity: 0; transform: translateY(-.4rem); pointer-events: none;
+  transition: opacity 260ms ease, transform 340ms var(--ease);
+}
+.pf-act__where[data-open] .pf-act__list { opacity: 1; transform: none; pointer-events: auto; }
+.pf-act__list a {
+  display: grid; grid-template-columns: 2rem 1fr; align-items: baseline;
+  gap: .1rem .6rem; padding: .7rem .9rem;
+  color: var(--ink-soft); border-bottom: 1px solid var(--line);
+}
+.pf-act__list li:last-child a { border-bottom: 0; }
+.pf-act__list a small { grid-column: 2; font-size: .62rem; color: var(--muted); }
+.pf-act__label { font-size: .9rem; color: var(--ink); }
+.pf-act__n { color: var(--muted); font-size: .48rem; }
+.pf-act__list a:is(:hover, :focus-visible) { background: var(--bone, #eee1da); }
+/* The act's only other red, and it is functional: which territory you are in. */
+.pf-act__list a[aria-current] .pf-act__n { color: var(--ww-accent); }
+
+/* ---- A TERRITORY -------------------------------------------------------- */
+.pf-tr { position: relative; }
+/* The act opens IN the picture, so the first territory takes no lead-in. */
+.pf-tr:first-of-type { margin-top: 0; }
+.pf-tr + .pf-tr { margin-top: var(--beat); }
+
+/* ---- THE SLATE ---------------------------------------------------------
+   A transition, not a title card to stop at: a band the visitor crosses on
+   the way into a territory. Three gestures, because announcing five
+   territories the same way five times is a template. */
+.pf-tr__slate {
+  /* The slate is its own measure, so a name set loud can be FITTED to it
+     rather than guessed at in vw — the same rule the four chapter covers are
+     set by. */
+  container-type: inline-size;
+  display: grid; align-items: end;
+  grid-template-columns: auto 1fr auto;
+  gap: .4rem 1.2rem;
+  padding-block: clamp(2rem, 6vh, 4rem) clamp(1.2rem, 3vh, 2rem);
+  border-bottom: 1px solid var(--line);
+}
+.pf-tr__n { color: var(--muted); font-size: .5rem; }
+.pf-tr__name {
+  margin: 0; color: var(--ink);
+  font-family: var(--display);
+  font-variation-settings: 'wdth' 112;
+  font-weight: 800; letter-spacing: -.02em; line-height: .9;
+  /* The DEFAULT gesture: a name, at the scale of a running head on an
+     editorial page. Not a poster. */
+  font-size: clamp(1.6rem, 3.4vw, 2.9rem);
+}
+.pf-tr__meta { display: flex; gap: 1rem; color: var(--muted); font-size: .5rem; }
+.pf-tr__meta i { font-style: normal; }
+
+/* COUNT-LED. Activewear holds nothing back and stops for nothing, so its
+   slate is read as a number first and a name second. */
+.pf-tr__slate[data-slate-gesture='count'] {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: baseline; row-gap: 0;
+}
+.pf-tr__slate[data-slate-gesture='count'] .pf-tr__n {
+  font-family: var(--display); font-size: clamp(2.4rem, 6vw, 5rem);
+  font-variation-settings: 'wdth' 88; font-weight: 800; line-height: .82;
+  color: var(--ink);
+}
+.pf-tr__slate[data-slate-gesture='count'] .pf-tr__name { font-size: clamp(1.1rem, 2vw, 1.6rem); }
+.pf-tr__slate[data-slate-gesture='count'] .pf-tr__n { grid-row: 1 / 3; }
+.pf-tr__slate[data-slate-gesture='count'] .pf-tr__name { grid-column: 2; grid-row: 1; }
+.pf-tr__slate[data-slate-gesture='count'] .pf-tr__meta { grid-column: 2; grid-row: 2; }
+
+/* LOUD. Streetwear has two frames and no range, so the name is allowed to be
+   the loud thing — the one territory where typography leads, because there is
+   nothing else for it to compete with. */
+.pf-tr__slate[data-slate-gesture='loud'] {
+  grid-template-columns: 1fr; gap: .2rem;
+  border-bottom: 0;
+  padding-block: clamp(3rem, 9vh, 6rem) 0;
+}
+.pf-tr__slate[data-slate-gesture='loud'] .pf-tr__name {
+  /* MEASURED: "Streetwear" is 7.02em wide in Archivo 900 at wdth 125 with
+     this tracking (.work/fitword.mjs), so the column divided by 7.1 is the
+     largest size that cannot overrun it at any width. Re-measure if the face,
+     the weight, the axis or the tracking changes. */
+  font-size: min(clamp(3rem, 11vw, 9.5rem), calc(100cqw / 7.1));
+  font-variation-settings: 'wdth' 125;
+  font-weight: 900; letter-spacing: -.04em;
+}
+
+/* ---- SCENES, IN COMMON -------------------------------------------------
+   The only thing every scene shares: a frame the height of the screen when
+   it is a held moment, and a head when it is supporting work. */
+.pf-sc { position: relative; }
+.pf-sc__frame {
+  position: sticky; top: 0;
+  height: 100svh;
+  display: grid; place-items: center;
+}
+/* A held scene reserves the scroll its move needs; a static one does not. */
+.pf-sc[data-reveal] { height: calc(100svh + var(--track, 90svh)); }
+.pf-sc__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; margin: 0 0 1.1rem; color: var(--muted); font-size: .5rem;
+}
+.pf-sc__head i { font-style: normal; }
+.pf-sc__head--foot { margin: 1.1rem 0 0; }
+/* A verified project's own title. Empty in reference preview, because there is
+   no project to name. */
+.pf-sc__work {
+  position: absolute; left: var(--edge); bottom: clamp(1.2rem, 4vh, 2.4rem);
+  margin: 0; color: var(--muted); font-size: .52rem;
+}
+
+/* ================= SET PIECE 01 — THE OVERTURE ==========================
+   The first thing after the cover, and the whole opening of the act in one
+   pinned block and one photograph.
+
+     phase 1   the garment stands at full frame height on a studio field that
+               runs the entire width of the screen. No type. Fashion first.
+     phase 2   the FIELD closes in around the garment until the composition
+               resolves, and the territory's name and the pointer arrive with
+               it. Discovery happens inside the scene.
+     phase 3   and only then does the window travel to the back.
+
+   `--arrive` drives phase 2 and `--turn` phase 3; both are set from one
+   scroll handler, and neither touches layout. */
+.pf-act .pf-sc--overture {
+  --track: 170svh;
+  /* The overture is the one scene that is NOT held to the measure: its field
+     has to reach both edges of the screen before it closes, or the gesture is
+     a box shrinking inside a box. The type inside it carries the measure
+     instead. */
+  padding-inline: 0;
+}
+.pf-sc--overture .pf-sc__frame { place-items: end center; }
+
+/* THE FIELD. At --arrive 0 it is the width of the screen; at 1 it is exactly
+   the window's width, and from then on it is simply the picture's own ground.
+   Clip rather than width, so nothing reflows. */
+.pf-ov__field {
+  position: absolute; inset: 0;
+  background: #fff;
+  /* It closes to EXACTLY the window's width, so the studio field resolves
+     into the photograph's own white and there is no second white left over.
+     The window's width is solved from the height the plate is shown at and
+     the photograph's own aspect — the same two numbers the plate uses. */
+  --win: calc(var(--look-h, 92svh) * var(--aspect, .75) * var(--half, 1));
+  --in: calc(var(--arrive, 1) * max(0px, (100% - var(--win)) / 2));
+  clip-path: inset(0 var(--in) 0 var(--in));
+}
+.pf-ov__plate {
+  position: relative; margin: 0;
+  /* The overture bleeds, so its width budget is the whole screen. */
+  --fit-h: calc(100vw / (var(--aspect, .75) * var(--half, 1)));
+  height: min(var(--look-h, 92svh), 100%, var(--fit-h));
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto;
+  display: flex; justify-content: center;
+}
+.pf-ov__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto; flex: none;
+}
+.pf-ov__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+  /* At --turn 0 the front figure fills the window; at 1 the window has
+     travelled one half-frame and the back figure fills it. */
+  transform: translateX(calc(var(--turn, 0) * -50%));
+  will-change: transform;
+}
+.pf-ov__plate[data-views='1'] .pf-ov__window img { transform: none; }
+
+/* THE NAME, arriving over the picture as the field closes. */
+.pf-ov__slate {
+  /* The field bleeds, so the type carries the measure on its own. */
+  --win: calc(var(--look-h, 92svh) * var(--aspect, .75) * var(--half, 1));
+  position: absolute; left: var(--edge); top: clamp(4.5rem, 12vh, 8rem);
+  display: grid; gap: .5rem;
+  opacity: var(--arrive, 1);
+  transform: translateY(calc((1 - var(--arrive, 1)) * .7rem));
+  transition: none;
+}
+.pf-ov__name {
+  margin: 0; color: var(--ink);
+  font-family: var(--display);
+  /* Set to CLEAR the closed field, so the territory's name never crosses the
+     model. The garment is the hero of this scene; the name is a running head
+     on a lookbook page, not a poster over the top of the picture. */
+  font-size: clamp(1.8rem, 3.2vw, 2.9rem);
+  max-width: calc((100vw - var(--win, 20rem)) / 2 - var(--edge) - 1.5rem);
+  font-variation-settings: 'wdth' 118;
+  font-weight: 900; letter-spacing: -.035em; line-height: .86;
+}
+.pf-ov__meta { display: flex; align-items: baseline; gap: .8rem; color: var(--muted); font-size: .5rem; }
+.pf-ov__meta b { color: var(--ink); font-weight: 500; }
+.pf-ov__meta i { font-style: normal; }
+.pf-sc__pointer {
+  position: absolute; left: var(--edge); bottom: clamp(3rem, 9vh, 5.5rem);
+  margin: 0; max-width: 24ch;
+  font-size: .8rem; line-height: 1.55; color: var(--muted);
+  opacity: var(--arrive, 1);
+}
+.pf-sc__pointer b { display: block; color: var(--ink); font-weight: 500; }
+
+/* ================= SET PIECE 02 — THE PAIR ==============================
+   Streetwear. No motion whatever: two frames at deliberately unequal scale,
+   off the centre line, sharing one floor. It is the only composition in the
+   act that does not move, which is what makes it an interruption. */
+/* Streetwear is ONE page: the loud name, and the two garments standing under
+   it. So the pair does not take a screen of its own and does not pin — it
+   follows the name directly, which is what makes the territory an
+   interruption rather than a short version of everything else. */
+.pf-sc--pair .pf-sc__frame {
+  position: static; height: auto;
+  align-items: end; justify-items: start;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  column-gap: clamp(1.5rem, 5vw, 5rem);
+  padding-block: clamp(1.5rem, 5vh, 3rem) clamp(3rem, 10vh, 7rem);
+}
+.pf-pr__plate {
+  position: relative; margin: 0; background: #fff;
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto; display: flex; justify-content: center;
+}
+.pf-pr__plate--lead { height: min(70svh, var(--fit-h)); }
+/* The echo is not a thumbnail and not a match: it is half the lead, standing
+   on the same floor, which is the asymmetry. */
+.pf-pr__plate--echo { height: min(36svh, var(--fit-h)); align-self: end; }
+.pf-pr__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto; flex: none;
+}
+.pf-pr__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+}
+
+/* ================= SET PIECE 03 — THE TURN ==============================
+   Occasion, and the second and last use of the device. On a gown the back is
+   not a second view, it is the garment, so it gets the act's largest frame
+   and its slowest travel — and no copy at all. */
+.pf-sc--turn { --track: 140svh; }
+.pf-tn__plate {
+  position: relative; margin: 0; background: #fff;
+  height: min(86svh, 100%, var(--fit-h));
+  aspect-ratio: calc(var(--aspect, .75) * .5);
+  width: auto; display: flex; justify-content: center;
+}
+.pf-tn__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%; aspect-ratio: calc(var(--aspect, .75) * .5);
+  width: auto; flex: none;
+}
+.pf-tn__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+  transform: translateX(calc(var(--turn, 0) * -50%));
+  will-change: transform;
+}
+
+/* ================= SET PIECE 04 — THE APPROACH ==========================
+   Swim. Scale, and nothing else: the figure arrives out of a field of white,
+   far then whole, and is never cropped closer than the complete silhouette —
+   a body crop is not what this territory is about. */
+.pf-sc--approach { --track: 110svh; }
+.pf-ap__plate {
+  position: relative; margin: 0; background: #fff;
+  height: min(88svh, 100%, var(--fit-h));
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto;
+  /* 0.26 to 1 of its resting height, driven by one property. */
+  transform: scale(calc(.26 + var(--approach, 1) * .74));
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.pf-ap__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  width: auto; flex: none;
+}
+.pf-ap__window img { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; }
+
+/* ================= THE PROOF BEAT =======================================
+   One in the whole act, and it is quiet: technical type, no display size, no
+   drama. It answers "is there real thinking here?" and gets out of the way.
+   Development is its own chapter and this is not a copy of it. */
+.pf-sc--ev { padding-block: clamp(4rem, 14vh, 10rem) clamp(3rem, 10vh, 7rem); }
+.pf-ev { display: grid; gap: 1.4rem; max-width: 44rem; }
+.pf-ev__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; margin: 0; padding-bottom: .8rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted); font-size: .5rem;
+}
+.pf-ev__head i { font-style: normal; }
+.pf-ev__stages {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.4rem);
+}
+.pf-ev__slot {
+  position: relative; aspect-ratio: 4 / 3;
+  background: var(--paper-bright); border: 1px solid var(--line);
+  display: grid; place-items: center; overflow: hidden;
+}
+.pf-ev__slot img { width: 100%; height: 100%; object-fit: contain; }
+/* An empty stage is drawn as an empty stage: a hairline cross, no texture, no
+   fake drawing. It is structure, and it looks like structure. */
+.pf-ev__empty {
+  width: 42%; height: 42%;
+  background:
+    linear-gradient(to bottom, var(--line) 0 0) center / 100% 1px no-repeat,
+    linear-gradient(to right, var(--line) 0 0) center / 1px 100% no-repeat;
+}
+.pf-ev__name { margin: .6rem 0 0; color: var(--muted); font-size: .48rem; }
+.pf-ev__name b { color: var(--ink); font-weight: 500; }
+.pf-ev__note { margin: .3rem 0 0; font-size: .74rem; color: var(--ink-soft); }
+.pf-ev__truth {
+  margin: 0; max-width: 46ch;
+  font-size: .82rem; line-height: 1.6; color: var(--muted);
+}
+
+/* ================= SUPPORTING WORK, FOUR WAYS ===========================
+   One mechanism per territory, so breadth reads as breadth rather than as the
+   same gallery four times. */
+
+/* THE PROOF SHEET — Ready-to-Wear. Uniform, small, numbered. The breadth of
+   the territory in one gesture. */
+.pf-sc--sheet { padding-block: clamp(2rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem); }
+.pf-sh {
+  list-style: none; margin: 0; padding: 0;
+  /* EIGHT across. At five the cells came out 560px tall — three quarters of
+     the hero's height — and supporting work that size is not supporting work.
+     Eight puts the whole range on one screen and a bit, at about 45% of the
+     hero, which is the hierarchy stated in one number. */
+  display: grid; grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-auto-rows: clamp(11rem, 32vh, 20rem);
+  gap: clamp(.5rem, 1.2vw, 1rem);
+}
+/* A contact sheet has UNIFORM cells — that is what makes it readable as an
+   index rather than as a ragged gallery. So the row height is fixed and each
+   frame is shown at that height inside it, front view first; a photograph
+   with a different aspect comes out narrower or wider in its cell rather than
+   changing the height of the row it is in. */
+.pf-sh__cell {
+  position: relative;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: start;
+}
+/* The window is cropped to the FRONT VIEW's own measured extent, so no cell
+   carries a sliver of the figure standing behind it. `--front` is the
+   fraction of each photograph that has to stay visible for its front view to
+   read completely — measured per image in the data module, never guessed. */
+.pf-sh__window {
+  position: relative; display: block; overflow: hidden;
+  height: 100%; width: auto;
+  aspect-ratio: calc(var(--aspect, .75) * var(--front, .55));
+  background: #fff;
+}
+.pf-sh__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+}
+.pf-sh__n {
+  align-self: end;
+  margin: .4rem 0 0; color: var(--muted); font-size: .44rem; font-style: normal;
+}
+
+/* THE RAIL — Occasion. Full-length gowns in one horizontal run on one floor,
+   scrolled or dragged. Quiet after the drama, and nothing like a grid. */
+.pf-sc--rail { padding-block: clamp(2rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem); }
+.pf-rl {
+  list-style: none; margin: 0; padding: 0 0 1rem;
+  display: flex; align-items: flex-end; gap: clamp(.8rem, 2vw, 1.8rem);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  /* A run that continues past the edge is cut off there, and a cut-off figure
+     reads as a bad crop rather than as "there is more". The fade says
+     "there is more" without cropping anybody. */
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 4rem), transparent 100%);
+}
+.pf-rl:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 4px; }
+.pf-rl__hanger {
+  flex: none; scroll-snap-align: center;
+  height: clamp(16rem, 42vh, 26rem);
+  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+  background: #fff;
+}
+.pf-rl__window {
+  position: relative; display: block; overflow: hidden; height: 100%; width: 100%;
+}
+.pf-rl__window img {
+  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+}
+
+/* THE LINE — Swim. One row, one baseline, the smallest figures and the most
+   white in the act. No frame, no number, no furniture. */
+.pf-sc--line { padding-block: clamp(3rem, 10vh, 7rem) clamp(3rem, 9vh, 6rem); }
+.pf-ln {
+  list-style: none; margin: 0; padding: 0 0 1rem;
+  display: flex; align-items: flex-end; gap: clamp(1rem, 3vw, 3rem);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 5rem), transparent 100%);
+}
+.pf-ln:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 4px; }
+.pf-ln__fig { flex: none; height: clamp(9rem, 26vh, 16rem); }
+.pf-ln__fig img { height: 100%; width: auto; display: block; }
+
+/* THE DECK — Activewear, and the runway's own component. What changes here is
+   only the room around it: the deck solves its card size from the width it is
+   handed, so the measure is also capped by the height left under the bar. */
+.pf-sc--deck { padding-block: clamp(1.5rem, 5vh, 3.5rem) clamp(3rem, 9vh, 6rem); }
+.pf-sc--deck .pf-sc__frame { position: static; height: auto; }
+.pf-act .pf-panel { padding: 0; background: none; border: 0; }
+.pf-act .pf-viewer { display: block; }
+.pf-act .pf-deck { margin: 0; }
+.pf-act .pf-stage {
+  width: min(72vw, 62rem, calc((100svh - var(--bar-h) - 5rem) * 1.42));
+  margin: 0 auto;
+}
+.pf-act .pf-runbar {
+  width: min(72vw, 62rem, calc((100svh - var(--bar-h) - 5rem) * 1.42));
+  margin: 1.2rem auto 0;
+}
+
+/* ---- THE CLOSE ---------------------------------------------------------
+   The act resolves and hands over. This is the one strong use of red in the
+   chapter, and the last screen is its own. */
+.pf-act__end {
+  container-type: inline-size;
+  min-height: 100svh;
+  display: grid; align-content: center; justify-items: start; gap: 1.6rem;
+  margin-top: clamp(4rem, 12vh, 10rem);
+  padding-inline: max(var(--gutter), calc((100% - var(--measure)) / 2));
+}
+.pf-act__endline {
+  margin: 0; color: var(--ink);
+  font-family: var(--display);
+  /* MEASURED: the longest line, "Act II is proportion.", is 10.41em at these
+     settings, so the measure divided by 10.5 is the largest size that always
+     fits on one line. */
+  font-size: min(clamp(2.2rem, 5.6vw, 4.6rem), calc(100cqw / 10.5));
+  font-variation-settings: 'wdth' 112;
+  font-weight: 900; letter-spacing: -.035em; line-height: .96;
+}
+.pf-act__endline span { font-variation-settings: 'wdth' 125; font-weight: 400; }
+.pf-act__endline em { font-style: normal; color: var(--ww-accent); }
+.pf-act__prov { max-width: 46ch; }
+.pf-act__next {
+  display: inline-flex; align-items: center; gap: .8rem;
+  padding-bottom: .5rem; border-bottom: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.pf-act__next:is(:hover, :focus-visible) { border-bottom-color: var(--ww-accent); }
+
+/* Six across between 1024 and 1279: eight cells on a 960 measure would be
+   120px of garment, which stops being a picture. */
+@media (max-width: 1279px) {
+  .pf-sh { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* ---- tablet ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  /* A LENGTH, never a percentage. `--measure` feeds `--edge`, and `--edge`
+     feeds `--fit-h`, which is used in a HEIGHT — where a percentage resolves
+     against the containing block's height, not its width. At 768x1000 that
+     made the whole calc indefinite, min() invalid, and the pair's lead plate
+     collapse to zero. A measure wider than any screen simply switches the
+     measure off. */
+  .pf-act { --measure: 200rem; }
+  .pf-sh { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pf-ev__stages { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
+  .pf-act .pf-stage, .pf-act .pf-runbar { width: min(84vw, 44rem); }
+}
+
+/* ---- tablet, held UPRIGHT ----------------------------------------------
+   A tall frame wants a tall composition. The held scenes give their type the
+   foot of the screen and the garment everything above it. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .pf-act .pf-sc--overture { --track: 130svh; }
+  /* A tall frame has no side column to put type in, so the overture becomes a
+     COLUMN: the studio field and the garment take everything above, the name
+     and the pointer sit under them on bone. Type across a garment is a
+     collision, not a composition. */
+  .pf-sc--overture .pf-sc__frame {
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
+    align-items: end; justify-items: start;
+    /* The bar floats over the act, and at the top of the act there is a
+       model's head under it. The picture row starts below it. */
+    padding-top: var(--bar-h);
+    padding-bottom: clamp(1.2rem, 4vh, 2rem);
+  }
+  .pf-ov__field { position: relative; inset: auto; grid-area: 1 / 1; width: 100%; height: 100%; }
+  .pf-ov__plate { grid-area: 1 / 1; justify-self: center; height: min(100%, var(--fit-h)); }
+  /* The overture bleeds, so its type carries the gutter itself — and the
+     name is no longer squeezed into a side column that does not exist here,
+     so the desktop's max-width comes off. */
+  .pf-ov__slate { position: static; grid-row: 2; padding: 1.2rem var(--gutter) 0; }
+  .pf-ov__name { max-width: none; font-size: clamp(2.2rem, 6vw, 3.4rem); }
+  .pf-sc--overture .pf-sc__pointer {
+    position: static; grid-row: 3; max-width: 46ch; padding: .8rem var(--gutter) 0;
+  }
+  .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem var(--gutter) 0; }
+  .pf-sc--pair .pf-sc__frame { padding-bottom: clamp(1.5rem, 5vh, 3rem); }
+  .pf-pr__plate--lead { height: min(56svh, var(--fit-h)); }
+  .pf-pr__plate--echo { height: min(25svh, var(--fit-h)); }
+  .pf-tn__plate { height: min(66svh, 100%, var(--fit-h)); }
+  .pf-ap__plate { height: min(68svh, 100%, var(--fit-h)); }
+}
+
+/* ---- phone -------------------------------------------------------------
+   Its own editorial format, not a compressed desktop — and deliberately not a
+   chain of pinned sequences. Each territory holds AT MOST ONE scrubbed scene;
+   the sheet, the rail and the line are plain scroll and swipe, which is what
+   a phone is good at. The tracks are shorter too: a reveal that takes three
+   screens on a desk takes one and a half here. */
+@media (max-width: 767px) {
+  .pf-act { --bar-h: 2.9rem; --beat: clamp(3rem, 8vh, 5rem); }
+  .pf-act__bar { padding: 0 1.1rem; }
+  .pf-act { --edge: 1.1rem; }
+  .pf-act .pf-sc, .pf-act .pf-tr__slate { padding-inline: 1.1rem; }
+  /* re-asserted after the blanket rule above: the overture still bleeds */
+  .pf-act .pf-sc--overture { padding-inline: 0; }
+  .pf-act__list { right: 0; left: auto; min-width: min(17rem, calc(100vw - 2.4rem)); }
+
+  /* THE OVERTURE AS A COLUMN, for the same reason. */
+  .pf-act .pf-sc--overture { --track: 95svh; }
+  .pf-sc--overture .pf-sc__frame {
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
+    align-items: end; justify-items: start;
+    padding-top: var(--bar-h);
+    padding-bottom: 1.1rem;
+  }
+  .pf-ov__field { position: relative; inset: auto; grid-area: 1 / 1; width: 100%; height: 100%; }
+  .pf-ov__plate { grid-area: 1 / 1; justify-self: center; height: min(100%, var(--fit-h)); }
+  .pf-ov__slate { position: static; grid-row: 2; padding: 1rem 1.1rem 0; }
+  .pf-ov__name { font-size: clamp(1.9rem, 9vw, 2.6rem); max-width: none; }
+  .pf-sc--overture .pf-sc__pointer { position: static; grid-row: 3; padding: .7rem 1.1rem 0; }
+  .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem 1.1rem 0; }
+  .pf-sc__pointer { max-width: 34ch; font-size: .78rem; }
+
+  /* THE PAIR ON A PHONE is driven by WIDTH, not height. Two plates whose
+     widths are both solved from svh heights will, at some screen shape, add
+     up to more than the screen — which they did at 390x900 by 18px. So the
+     lead takes the column it is given and the echo keeps its small fixed
+     height beside it; the pair cannot overrun by construction. */
+  .pf-sc--pair .pf-sc__frame {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: .8rem; padding-bottom: clamp(1.4rem, 5vh, 2.4rem);
+  }
+  .pf-pr__plate--lead {
+    width: 100%; height: auto;
+    aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
+    max-height: 56svh;
+  }
+  .pf-pr__plate--lead .pf-pr__window { height: 100%; width: 100%; aspect-ratio: auto; }
+  .pf-pr__plate--echo { height: min(20svh, var(--fit-h)); }
+
+  .pf-sc--turn { --track: 80svh; }
+  .pf-tn__plate { height: min(72svh, 100%, var(--fit-h)); }
+  .pf-sc--approach { --track: 70svh; }
+  .pf-ap__plate { height: min(74svh, 100%, var(--fit-h)); }
+
+  /* Two columns, not five: a proof sheet on a phone is still a proof sheet,
+     and it scrolls rather than pins. */
+  .pf-sh { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 11rem; gap: .5rem; }
+  .pf-ev__stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+  .pf-ev__name { font-size: .42rem; }
+  .pf-rl { padding-inline: 0; }
+  .pf-rl__hanger { height: clamp(13rem, 38svh, 20rem); }
+  .pf-ln__fig { height: clamp(8rem, 24svh, 12rem); }
+  .pf-act .pf-stage, .pf-act .pf-runbar { width: auto; margin-inline: 0; }
+  .pf-act__end { padding-inline: 1.1rem; }
+  .pf-tr__slate[data-slate-gesture='loud'] .pf-tr__name { font-size: calc(100cqw / 7.1); }
+  /* A slate on a phone is TWO LINES, not three columns: the number and the
+     name, then the approved category label and the count under them. At 390
+     the three-column band broke "Evening & Occasionwear" and "11 frames"
+     across lines inside their own cells. */
+  .pf-tr__slate {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    row-gap: .5rem;
+  }
+  .pf-tr__n { grid-row: 1; }
+  .pf-tr__name { grid-column: 2; grid-row: 1; }
+  .pf-tr__meta { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: .3rem .9rem; }
+  .pf-tr__slate[data-slate-gesture='count'] .pf-tr__meta { grid-column: 1 / -1; }
+  .pf-tr__slate[data-slate-gesture='loud'] { grid-template-columns: 1fr; }
+  .pf-tr__slate[data-slate-gesture='loud'] .pf-tr__name { grid-column: 1; }
+}
+
+/* ---- no motion ---------------------------------------------------------
+   Every reveal in this act is INFORMATION — the back of a garment, the
+   composition the field resolves to, the whole silhouette — so it is
+   delivered rather than withheld. Each scrubbed scene renders at its resting
+   state, both views shown where there are two, and no scroll distance is
+   reserved for a move that will not happen. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-sc[data-reveal] { height: auto; }
+  .pf-sc__frame { position: static; }
+  /* The overture resolves to its composition with the whole photograph
+     visible: the field at rest, the name and the pointer present. */
+  .pf-ov__field { clip-path: none; }
+  /* Only the two scenes that WITHHOLD something open up: the overture and the
+     turn. The pair reveals nothing — its small frame is a deliberate crop,
+     not a hidden back view — so it is left exactly as it is. */
+  .pf-sc--overture [data-views='2'],
+  .pf-sc--turn [data-views='2'] { --half: 1; }
+  /* The overture's field and its name are sized against the window's width,
+     so they have to know it has doubled — otherwise the territory's name is
+     set to clear a half-frame and ends up across the garment. */
+  .pf-sc--overture .pf-ov__field,
+  .pf-sc--overture .pf-ov__slate { --half: 1; }
+  .pf-ov__window img, .pf-tn__window img { transform: none; }
+  .pf-tn__plate, .pf-tn__window { aspect-ratio: var(--aspect, .75); }
+  .pf-ap__plate { transform: none; }
+  .pf-act__list, .pf-act__caret { transition: none; }
+}

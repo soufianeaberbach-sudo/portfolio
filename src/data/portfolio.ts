@@ -73,6 +73,15 @@ export interface ImageAsset {
      right, so this is the fraction that must never be covered. Per image, not
      a global guess — see FRONT below. */
   front: number;
+  /* HOW MANY VIEWS OF THE GARMENT ARE IN THE FRAME.
+     2 — the photograph is a two-up: the front view on the left, the back view
+         on the right, one garment, one composition.
+     1 — the photograph holds a single view.
+     Recorded rather than inferred, because anything that treats a frame as a
+     two-up (a half-frame crop, a front-to-back camera move) would cut a
+     single-view model down the centre. Optional: a consumer that has not been
+     told MUST assume 1 and leave the frame whole. */
+  views?: 1 | 2;
 }
 
 export interface ImageCredit {
@@ -114,6 +123,12 @@ export interface Project {
   finalGarmentImage: ImageAsset;
   evidence: ProjectEvidence;
   tags?: string[];
+  /* CURATION, not a quality claim. A spotlit project is the one a territory
+     is led by — it owns a scene of its own rather than sitting in the
+     supporting run. Unset means "place me in order"; a territory with no
+     spotlit project leads with its first. Set by the designer, never
+     inferred. */
+  spotlight?: boolean;
 }
 
 /* A photograph, and nothing claimed about it beyond what is visible in the
@@ -259,6 +274,10 @@ const FRONT: Record<string, number> = {
   'swim/6': 0.704, 'swim/7': 0.771, 'swim/8': 0.713, 'swim/9': 0.762,
 };
 
+/* The nine swimwear photographs are the archive's single-view set — the same
+   fact FRONT's note above records, kept here as the thing a renderer asks. */
+const SINGLE_VIEW = /^swim\//;
+
 const image = (ref: string, alt: string): ImageAsset => {
   const [width, height] = INTRINSIC[ref] ?? [1400, 1868];
   return {
@@ -268,6 +287,7 @@ const image = (ref: string, alt: string): ImageAsset => {
     height,
     alt,
     front: FRONT[ref] ?? 0.55,
+    views: SINGLE_VIEW.test(ref) ? 1 : 2,
   };
 };
 
