@@ -1,0 +1,356 @@
+---
+/* WOMENSWEAR — ACT I.
+ *
+ * THE CONCEPT: THE SECOND LOOK.
+ *
+ * Every photograph in this archive is one garment shot twice in the same
+ * frame — the front and the back, side by side on a white studio ground. That
+ * is a fact about the pictures, not a claim about anyone, and it is the whole
+ * mechanism of this act.
+ *
+ * A front is what a garment sells with. A back is where the decision shows:
+ * the closure, the drop, the strap, the drape, the thing you did not see
+ * coming. So each movement opens on the FRONT alone, at full scale, with the
+ * back withheld outside the frame — and then travels, inside that single
+ * photograph, to the back. Anticipation and reveal, in one camera move,
+ * with no crossfade and no second asset.
+ *
+ * FIVE MOVEMENTS, FIVE RHYTHMS. The categories are not five equal cards; they
+ * are five parts of one act, and their rhythm is set by what is actually in
+ * them. Ready-to-Wear carries seventeen looks and is the long run. Streetwear
+ * carries two, so it is the act's silence. Evening gets the slowest turn and
+ * the largest look; Swim the tightest crop and the most white.
+ *
+ * WHAT IS PRESERVED. The deck underneath each movement's RUN is the same
+ * markup the runway has always driven — `.pf-panel`, `[data-stage]`,
+ * `[data-stack]`, `.pf-slot` — so drag, arrow keys, the counter, the hash,
+ * focus handling and the server-rendered fallback all keep working. Only the
+ * experience around it is new.
+ *
+ * WHAT IS NEVER DONE HERE. Nothing in this file claims authorship of a
+ * photographed garment, names a project that does not exist, or states a
+ * construction fact read off a picture. The editorial lines belong to the
+ * TERRITORY — the design problem a category has to solve — which is a thing
+ * that can be said truthfully whatever is in the frame. The day verified
+ * projects replace the reference set, those projects' own titles and evidence
+ * displace this copy with no change to the composition.
+ */
+import type { GarmentWorld, MarketCategory } from '../../data/portfolio';
+import { REFERENCE_DISCLAIMER, worldPublication } from '../../data/portfolio';
+import Arrow from '../Arrow.astro';
+
+interface Props {
+  world: GarmentWorld;
+}
+
+const { world } = Astro.props;
+const publication = worldPublication(world);
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+
+/* One list drives every movement. In reference-preview the items are
+   photographs with nothing claimed about them; in published they are
+   projects. The noun changes with the state so the interface never calls a
+   reference a project. */
+const slotsFor = (category: MarketCategory) =>
+  publication === 'published'
+    ? category.projects.map((p) => ({ id: p.id, image: p.finalGarmentImage, project: p }))
+    : category.references.map((r) => ({ id: r.id, image: r.image, project: null }));
+
+const noun = publication === 'published' ? 'Project' : 'Reference';
+
+/* THE DIRECTION, per territory.
+ *
+ *   act    the movement's one-word name — what the visitor is being shown
+ *   line   the design problem that territory has to solve, said once. It is
+ *          true of the category, never of a particular photograph.
+ *   rhythm how the movement behaves: the long run, the fast one, the silence,
+ *          the slow drama, the reduction. Read by the stylesheet and by the
+ *          scrubbed timeline; it is the reason the five do not look alike.
+ *   scale  how much of the frame the opening look takes.
+ *   note   the one thing to LOOK at in this movement, where there is something
+ *          true to say about the frames themselves. Two movements have one;
+ *          the other three are silent, which is also the rhythm.
+ *   em     the width of that one word, in ems, MEASURED in Archivo 900 at
+ *          wdth 118 with the act's own tracking (.work/fitword.mjs). The
+ *          stylesheet divides the type column by it, so every movement's
+ *          title is FITTED to its measure rather than set at a size — which
+ *          is the same rule the four chapter covers are set by, and the
+ *          reason a four-letter movement is loud and an eight-letter one is
+ *          wide. Re-measure if the face, the weight, the width axis or the
+ *          tracking ever changes.
+ */
+const direction: Record<string, { act: string; line: string; rhythm: string; scale: string; em: number; note?: [string, string] }> = {
+  rtw: {
+    act: 'Range',
+    em: 4.42,
+    line: 'Everyday clothes are judged standing still. The proportion has to hold there first.',
+    rhythm: 'run',
+    scale: 'full',
+    /* True of this frame and every two-up in the act, and it is the
+       instruction for the move that is about to happen. */
+    note: ['Front, then back, in one frame.', 'The back is where the decision shows.'],
+  },
+  activewear: {
+    act: 'Body',
+    em: 3.53,
+    line: 'Engineered around the stretch rather than imposed on it — the seam has to move before the cloth does.',
+    rhythm: 'fast',
+    scale: 'full',
+  },
+  streetwear: {
+    act: 'Volume',
+    em: 5.27,
+    line: 'Volume only reads as deliberate when the shoulder says so.',
+    rhythm: 'silence',
+    scale: 'tall',
+  },
+  evening: {
+    act: 'Presence',
+    em: 6.665,
+    line: 'Drape, support and the back view are one problem, and they are solved once.',
+    rhythm: 'slow',
+    scale: 'grand',
+  },
+  swimwear: {
+    act: 'Line',
+    em: 2.835,
+    line: 'Nowhere to hide. Balance and tolerance are read straight off the body.',
+    rhythm: 'reduction',
+    scale: 'close',
+    /* The swim frames are the archive's single-view set, so this movement does
+       not turn — and saying so is better than quietly not doing it. */
+    note: ['Photographed from one angle.', 'There is no second view to be saved by.'],
+  },
+};
+
+const movements = world.categories
+  .map((category) => ({ category, slots: slotsFor(category), art: direction[category.id] }))
+  .filter((m) => m.slots.length > 0 && m.art);
+---
+
+<section
+  class="pf-world pf-act"
+  id={world.id}
+  data-world={world.id}
+  data-act
+  data-publication={publication}
+  tabindex="-1"
+  aria-labelledby={`${world.id}-title`}
+>
+  {/* No world switcher rail here. The act's own bar already carries the way
+      back to the Portfolio and the five movements; a second list of chapters
+      above it was two navigation systems arguing over the same corner.
+      Menswear keeps its rail until its own act is written. */}
+
+  {/* The act is ONE screen. There is no category menu in front of it: the
+      visitor has already chosen Womenswear on the cover, and a second index
+      here would be the film stopping for an administrative page. The screen
+      wrapper is kept because the chapter router hides and shows chapters by
+      it, and because Menswear still has two. */}
+  <div class="pf-screen pf-act__screen" data-screen="index">
+    <div class="pf-act__bar">
+      <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
+        <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio
+      </a>
+      {/* The only place in the act that numbers anything. It names the
+          movement being read and opens the five on demand — after the
+          fashion, never in front of it. */}
+      <nav class="pf-act__where" aria-label="Womenswear movements" data-act-where>
+        <button type="button" class="pf-act__now label" data-act-toggle aria-expanded="false">
+          <span data-act-count>01 / {String(movements.length).padStart(2, '0')}</span>
+          <span class="pf-act__nowname" data-act-name>{movements[0]?.art.act}</span>
+          <i class="pf-act__caret" aria-hidden="true"></i>
+        </button>
+        <ol class="pf-act__list" data-act-list>
+          {movements.map((m, i) => (
+            <li>
+              <a href={`#${world.id}/${m.category.id}`} data-nav data-act-link={m.category.id}>
+                <i class="pf-act__n label">{String(i + 1).padStart(2, '0')}</i>
+                <span class="pf-act__label">{m.art.act}</span>
+                <small>{m.category.label}</small>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+
+    <h2 class="pf-act__sr" id={`${world.id}-title`}>{world.title}</h2>
+
+    {movements.map((m, index) => {
+      /* A RUN OF ONE IS NOT A RUN. Streetwear holds two looks, so it gets two
+         LOOKS — both pinned, both turning — and no deck at all. That is the
+         act's silence, and it comes out of what the territory actually has
+         rather than out of a decision to make one section quieter. */
+      const asLooks = m.slots.length < 3;
+      const leads = asLooks ? m.slots : m.slots.slice(0, 1);
+      const deck = asLooks ? [] : m.slots;
+      return (
+        <article
+          class="pf-mv"
+          id={`${world.id}-${m.category.id}`}
+          data-movement={m.category.id}
+          data-rhythm={m.art.rhythm}
+          data-scale={m.art.scale}
+          aria-labelledby={`${world.id}-${m.category.id}-title`}
+        >
+          {/* ---- THE LOOK, AND THE TURN ----------------------------------
+              The look PINS for the length of the turn. The reveal block below
+              is taller than the screen; the look sticks to the top of it, and
+              the distance left over is the scroll the window travels across
+              the photograph on — front figure, then back figure, then a beat
+              of hold before the page is released. A reveal that happens while
+              its subject is leaving the frame is not a reveal, which is what
+              this block exists to prevent. */}
+          {leads.map((lead, look) => (
+            <div class="pf-mv__reveal" data-reveal>
+              <div class="pf-mv__look">
+                <p class="pf-mv__territory label">
+                  <b>{String(index + 1).padStart(2, '0')}</b>
+                  <span>{m.category.label}</span>
+                  {/* FRAME, not "Look": these are photographs, and the site's own rule
+                      is that no reference is ever counted as a look or a
+                      project. Two frames of the same territory is what this
+                      movement actually has. */}
+                  {leads.length > 1 && <i class="pf-mv__of">Frame {String(look + 1).padStart(2, '0')} / {String(leads.length).padStart(2, '0')}</i>}
+                </p>
+
+                {/* THE FIELD and THE WINDOW are two elements on purpose. The
+                    field is the studio ground the garment stands on, and on a
+                    phone it bleeds to both edges so the picture is full width
+                    even though a whole standing figure can only ever be about
+                    250px of it. The window is the crop — one figure wide —
+                    and it is the thing the turn travels. */}
+                <figure
+                  class="pf-mv__plate"
+                  data-views={lead.image.views === 2 ? '2' : '1'}
+                  style={`--front:${lead.image.front};--aspect:${(lead.image.width / lead.image.height).toFixed(4)};`}
+                >
+                  {/* A two-up frame is shown one figure at a time and the turn
+                      travels between them. A SINGLE-VIEW frame is shown whole:
+                      half of it would be half a model. So the turn is not a
+                      decoration applied to every picture — it is the move the
+                      picture can support, and Swim's frames cannot. */}
+                  <span class="pf-mv__window" data-turn={lead.image.views === 2 ? '' : undefined}>
+                    <img
+                      src={lead.image.src}
+                      srcset={lead.image.srcset}
+                      sizes="(max-width: 767px) 60vw, 30vw"
+                      width={lead.image.width}
+                      height={lead.image.height}
+                      alt={lead.image.alt}
+                      loading={index === 0 && look === 0 ? 'eager' : 'lazy'}
+                      fetchpriority={index === 0 && look === 0 ? 'high' : undefined}
+                      decoding="async"
+                    />
+                  </span>
+                </figure>
+
+                {/* The title belongs to the movement, so it is set on the
+                    movement's first look only; a second look is the same
+                    territory seen again, not a new chapter. */}
+                {look === 0 ? (
+                  <div class="pf-mv__type" style={`--em:${m.art.em};`}>
+                    <h3 class="pf-mv__act display" id={`${world.id}-${m.category.id}-title`}>{m.art.act}</h3>
+                    <p class="pf-mv__line">{m.art.line}</p>
+                    {m.art.note && (
+                      /* WHERE TO LOOK. A statement about the frames, which is
+                         the one thing about them that is knowable — never a
+                         claim about who developed the garment. */
+                      <p class="pf-mv__thesis" data-turn-note>
+                        {m.art.note[0]}
+                        <b>{m.art.note[1]}</b>
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div class="pf-mv__type pf-mv__type--quiet"></div>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* ---- THE RUN -------------------------------------------------
+              The rest of the territory, at the rhythm that territory earns.
+              The deck below is the runway's own markup, unchanged, so drag,
+              arrow keys, the counter and the hash keep working exactly as
+              they did. */}
+          {deck.length > 0 && (
+            <div class="pf-mv__run">
+              {/* `data-act-deck` is the one thing the shared runway is told
+                  about this world: on a phone the act's deck carries two cards
+                  rather than three, because the run has a screen to itself
+                  here and a bigger garment is worth more than a third card at
+                  390px. Nothing else on the site reads the attribute. */}
+              <div class="pf-panel" data-panel={m.category.id} data-count={deck.length}
+                   data-act-deck
+                   data-kind={publication === 'published' ? 'project' : 'reference'}>
+                <div class="pf-viewer">
+                  <div class="pf-deck">
+                    <p class="pf-mv__runhead label">
+                      <span>The range</span>
+                      <i>{String(deck.length).padStart(2, '0')} frames</i>
+                    </p>
+                    <div class="pf-stage" data-stage tabindex="0" role="group"
+                         aria-label={`${m.category.label}. Use the left and right arrow keys, or drag, to move through the looks.`}>
+                      <ol class="pf-stack" data-stack>
+                        {deck.map((slot, i) => (
+                          <li class="pf-slot" data-slot={i} data-item={slot.id} data-front={slot.image.front}>
+                            <figure class="pf-slot__figure">
+                              <img
+                                src={slot.image.src}
+                                srcset={slot.image.srcset}
+                                sizes="(max-width: 1359px) 52vw, 34vw"
+                                width={slot.image.width}
+                                height={slot.image.height}
+                                alt={slot.image.alt}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                              <figcaption class="label pf-slot__caption">{noun} {pad(i)}</figcaption>
+                            </figure>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    <div class="pf-runbar">
+                      <button type="button" class="pf-step" data-step="-1" aria-label={`Previous ${noun.toLowerCase()}`}>
+                        <Arrow dir="left" />
+                      </button>
+                      <p class="label pf-runbar__count" aria-live="polite">
+                        <span data-counter-current data-noun={noun}>{noun} 01</span>
+                        <i>/ {String(deck.length).padStart(2, '0')}</i>
+                      </p>
+                      <button type="button" class="pf-step" data-step="1" aria-label={`Next ${noun.toLowerCase()}`}>
+                        <Arrow dir="right" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </article>
+      );
+    })}
+
+    {/* ---- THE PAYOFF ------------------------------------------------
+        The act resolves rather than ending in a directory: one line, the
+        provenance that is owed, and the way on to the next chapter. */}
+    <footer class="pf-act__end">
+      <p class="pf-act__endline display">
+        Five territories.<br />One <em>eye</em>.
+      </p>
+      {publication === 'reference-preview' && (
+        <p class="pf-prov pf-act__prov" data-reference-notice>
+          <b class="label">Reference preview</b>
+          <span>{REFERENCE_DISCLAIMER}</span>
+        </p>
+      )}
+      <a class="pf-act__next label" href="#menswear" data-nav data-chapter="menswear">
+        Next chapter — Menswear <Arrow />
+      </a>
+    </footer>
+  </div>
+</section>

@@ -2,12 +2,14 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
 import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
+import WomenswearAct from '../components/portfolio/WomenswearAct.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
 import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
 import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
+import '../styles/portfolio-womenswear.css';
 
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
@@ -330,7 +332,14 @@ const split = (statement: string, word: string) => {
     </nav>
 
     <div class="pf-worlds" data-worlds>
-      {garmentWorlds.map((world) => <GarmentWorld world={world} />)}
+      {/* ACT I is its own component. Womenswear is no longer a category index
+          in front of a viewer; it is a directed sequence of five movements.
+          Menswear keeps the two-screen GarmentWorld until its own act is
+          written, which is why the two are deliberately separate files rather
+          than one component with a mode flag. */}
+      {garmentWorlds.map((world) => (
+        world.id === 'womenswear' ? <WomenswearAct world={world} /> : <GarmentWorld world={world} />
+      ))}
       <SimulationWorld sessions={simulationSessions} />
       <TechPackWorld packs={techPacks} />
     </div>
@@ -841,6 +850,25 @@ const split = (statement: string, word: string) => {
         if (!shown) {
           for (const screen of screens) screen.hidden = screen.dataset.screen !== 'index';
         }
+        /* ACT I is one screen, so a category in the hash is not a screen to
+           show — it is a movement to travel to. `#womenswear` opens the act
+           at the top; `#womenswear/evening` opens it at that movement. */
+        if (world.hasAttribute('data-act')) {
+          const movement = category && world.querySelector<HTMLElement>(`[data-movement="${category}"]`);
+          if (movement) {
+            /* The destination is the movement's REVEAL, not the movement box:
+               the box begins with the air between movements, so landing on it
+               would drop the pinned look below the fold and cut its own type
+               off the foot of the screen. The reveal's top is where the look
+               pins, front view, title complete. */
+            const mark = movement.querySelector<HTMLElement>('[data-reveal]') ?? movement;
+            const top = world.scrollTop
+              + mark.getBoundingClientRect().top
+              - world.getBoundingClientRect().top;
+            world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced() ? 'auto' : 'smooth' });
+            return;
+          }
+        }
         world.scrollTop = 0;
       };
 
@@ -946,6 +974,10 @@ const split = (statement: string, word: string) => {
       /* Escape steps back one level, the same as the on-screen control. */
       document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape' || !openWorld) return;
+        /* The act's movement list is a layer as much as a reader is, and it
+           closes itself — so this handler stays out of the way rather than
+           swallowing the key and shutting the whole chapter. */
+        if (openWorld.querySelector('[data-act-where][data-open]')) return;
         event.preventDefault();
         event.stopImmediatePropagation();
         if (evidenceReader.open) { closeEvidence(); return; }
@@ -983,9 +1015,19 @@ const split = (statement: string, word: string) => {
          to judge a garment by — so the desktop deck carries FOUR. Four
          readable garments with real distance between them beat five cramped
          ones, and the composition is what is being designed here. */
-      const geometry = () => {
+      const geometry = (panel?: HTMLElement) => {
         const w = window.innerWidth;
         if (w >= 1024) return { visible: 4, scales: [0.52, 0.66, 0.82, 1] };
+        /* A phone's stage can only ever be as wide as the phone, and the
+           leading card is solved from that width divided by the whole
+           staircase — so three cards on a 390px screen come out at 266px of
+           model in an 844px frame. Inside the Womenswear act, where the run
+           is a beat of its own with a screen to itself, the phone deck
+           therefore carries TWO: the depth still reads, and the garment is a
+           quarter bigger. Every other deck on the site is untouched. */
+        if (w < 768 && panel?.hasAttribute('data-act-deck')) {
+          return { visible: 2, scales: [0.7, 1] };
+        }
         return { visible: 3, scales: [0.55, 0.75, 1] };
       };
 
@@ -1030,7 +1072,7 @@ const split = (statement: string, word: string) => {
       }));
 
       const layout = (queue: Queue) => {
-        const { visible, scales } = geometry();
+        const { visible, scales } = geometry(queue.panel);
         const stageWidth = queue.stage.clientWidth;
         if (stageWidth === 0) return;
 
@@ -1146,7 +1188,7 @@ const split = (statement: string, word: string) => {
         layout(queue);
         queue.index = from;
         const stage = queue.stage.getBoundingClientRect();
-        const farDepth = Math.min(geometry().visible, queue.slots.length) - 1;
+        const farDepth = Math.min(geometry(queue.panel).visible, queue.slots.length) - 1;
         const wheel: WheelMotion = { from, to, direction, progress: 0, animations: [], ghosts: [], raf: 0 };
         const animate = (element: HTMLElement, start: string, end: string) => {
           const a = element.animate([{ transform: start }, { transform: end }], { duration: 1000, fill: 'both', easing: 'linear' });
@@ -1369,6 +1411,125 @@ const split = (statement: string, word: string) => {
         }
       }
 
+      /* ----------------------------------------------------------------
+         ACT I — THE TURN.
+
+         Each movement opens on the FRONT of a photograph that also contains
+         the back. As the look travels up through the middle of the screen,
+         the window slides across that photograph until the back is in frame.
+         One camera move inside one frame: no crossfade, no second file, and
+         nothing claimed about the garment.
+
+         Scrubbed off the act's own scroll container rather than the window,
+         because a chapter is an overlay. Plain rAF rather than ScrollTrigger:
+         the overlay is not the page's scroller, and this is one number.
+         ---------------------------------------------------------------- */
+      const act = root.querySelector<HTMLElement>('[data-act]');
+      if (act && !reduced()) {
+        const plates = [...act.querySelectorAll<HTMLElement>('[data-turn]')];
+        const movements = [...act.querySelectorAll<HTMLElement>('[data-movement]')];
+        const where = act.querySelector<HTMLElement>('[data-act-where]');
+        const toggle = act.querySelector<HTMLElement>('[data-act-toggle]');
+        const count = act.querySelector<HTMLElement>('[data-act-count]');
+        const name = act.querySelector<HTMLElement>('[data-act-name]');
+        const links = [...act.querySelectorAll<HTMLElement>('[data-act-link]')];
+        let ticking = false;
+
+        const paint = () => {
+          ticking = false;
+          const h = window.innerHeight;
+          for (const plate of plates) {
+            /* The look is pinned inside its reveal block, so the turn's
+               progress is simply how far that block has travelled past the
+               top of the screen, over the distance it reserved. The last
+               fifth is a HOLD: the back arrives and is allowed to be looked
+               at before the page moves on. */
+            const reveal = plate.closest<HTMLElement>('[data-reveal]');
+            if (!reveal) continue;
+            const box = reveal.getBoundingClientRect();
+            const travel = Math.max(1, box.height - h);
+            const p = Math.min(1, Math.max(0, -box.top / travel) / 0.8);
+            /* Eased, not linear. Halfway through a linear travel the window
+               holds half of one figure beside half of the other, and that
+               state is the only ugly frame in the move — so the curve is slow
+               at the front, quick through the middle and slow again as the
+               back arrives. Both ends are looked at; the seam is passed. */
+            const t = p * p * (3 - 2 * p);
+            plate.style.setProperty('--turn', t.toFixed(4));
+          }
+          /* Which movement is being read, for the one control that names it. */
+          if (name && count) {
+            /* The movement being read is the one the reading line — four
+               tenths down the screen — is actually inside. Distance to a
+               movement's start put the label on the next one all through a
+               long run. */
+            const line = h * 0.4;
+            let best = 0;
+            let bestDistance = Infinity;
+            movements.forEach((movement, index) => {
+              const box = movement.getBoundingClientRect();
+              if (box.top <= line && box.bottom >= line) { bestDistance = -1; best = index; return; }
+              if (bestDistance === -1) return;
+              const distance = Math.min(Math.abs(box.top - line), Math.abs(box.bottom - line));
+              if (distance < bestDistance) { bestDistance = distance; best = index; }
+            });
+            const current = movements[best];
+            const title = current.querySelector<HTMLElement>('.pf-mv__act');
+            name.textContent = title?.textContent ?? '';
+            count.textContent = `${String(best + 1).padStart(2, '0')} / ${String(movements.length).padStart(2, '0')}`;
+            for (const link of links) {
+              const on = link.dataset.actLink === current.dataset.movement;
+              if (on) link.setAttribute('aria-current', 'true');
+              else link.removeAttribute('aria-current');
+            }
+          }
+        };
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(paint);
+        };
+        act.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        paint();
+
+        /* The movement control. Same manners as the chapter control on the
+           journey outside: hover opens it, a click confirms rather than
+           undoes it, Escape and leaving close it. */
+        if (where && toggle) {
+          let byPointer = false;
+          const open = () => { where.setAttribute('data-open', ''); toggle.setAttribute('aria-expanded', 'true'); };
+          const shut = () => { where.removeAttribute('data-open'); toggle.setAttribute('aria-expanded', 'false'); };
+          toggle.addEventListener('click', () => {
+            if (where.hasAttribute('data-open')) {
+              if (byPointer) { byPointer = false; return; }
+              shut();
+              return;
+            }
+            open();
+          });
+          if (window.matchMedia('(hover: hover)').matches) {
+            where.addEventListener('pointerenter', () => { byPointer = true; open(); });
+            where.addEventListener('pointerleave', () => { byPointer = false; shut(); });
+          }
+          where.addEventListener('focusout', (event) => {
+            if (!where.contains(event.relatedTarget as Node)) shut();
+          });
+          /* Escape with the movement list open closes the LIST, and stops
+             there: the same key also closes the chapter, and one press should
+             undo one thing. Bound to the document rather than to the control,
+             because the list can be open while the focus is anywhere — the
+             key still has to close the thing that is open. */
+          document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape' || !where.hasAttribute('data-open')) return;
+            event.stopPropagation();
+            shut();
+            toggle.focus();
+          });
+          for (const link of links) link.addEventListener('click', shut);
+        }
+      }
+
       /* ---- relayout ---------------------------------------------------- */
       let resizeTimer = 0;
       window.addEventListener('resize', () => {
@@ -1388,7 +1549,7 @@ const split = (statement: string, word: string) => {
           const live = queues.filter((q) => !q.panel.hidden && !q.panel.closest('[data-screen]')?.hidden);
           const queue = live.find((q) => q.panel.closest('[data-world]')?.hasAttribute('data-open'))
             ?? live[0] ?? queues[0];
-          const { visible } = geometry();
+          const { visible } = geometry(queue.panel);
           return {
             activeIndex: queue.index,
             position: queue.index,
