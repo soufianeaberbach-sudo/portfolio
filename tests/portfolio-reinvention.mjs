@@ -75,8 +75,15 @@ try {
      (els)=>els.map((e)=>e.dataset.scene));
    check(support.join(',')==='sheet,deck,rail,line','supporting work differs per territory: '+support.join(','));
    check(await page.locator('[data-world="womenswear"] [data-scene="turn"]').count()===1,'the turn is one scene, not the grammar');
-   check(await page.locator('[data-world="womenswear"] [data-evidence]').count()===1,'one proof beat exists');
-   check(await page.locator('[data-world="womenswear"] [data-scene="evidence"] img').count()===0,'and it invents no evidence');
+   /* A CATEGORY IS THE ATMOSPHERE; A PROJECT IS THE STORY. Every garment the
+      chapter shows is a door into its own, and the evidence belongs to the
+      project that produced it rather than to a category. */
+   check(await page.locator('[data-world="womenswear"] [data-open-subject]').count()
+     === await page.locator('[data-world="womenswear"] .pf-rd__subject').count(),'every garment is a door into its own story');
+   check(await page.locator('[data-world="womenswear"] [data-scene="evidence"]').count()===0,'no category carries a generic proof band');
+   check(await page.locator('[data-world="womenswear"] .pf-rd__stage-item').count()===0,'and no stage is invented for a photograph');
+   check(await page.locator('[data-world="womenswear"] [data-subject-pending]').count()
+     === await page.locator('[data-world="womenswear"] .pf-rd__subject').count(),'each unverified garment says what is missing');
   }
   for(const id of ['rtw','activewear','streetwear','evening','swimwear']){
    await open('womenswear/'+id);
@@ -112,6 +119,26 @@ try {
    check(end>0.98,'the back view arrives before the scene is released');
    await shot('womenswear-turn');
   }
+  /* THE GARMENT, ENTERED. The point of a range is that it is a way in, so the
+     thing worth proving is that the garment gets bigger, keeps the chapter's
+     ground, and can be left again from where it was entered. */
+  {
+   await open('womenswear/rtw');
+   await page.waitForTimeout(400);
+   const thumb=await page.locator('[data-scene="sheet"] .pf-sh__door img').first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
+   const id=await page.locator('[data-scene="sheet"] .pf-sh__door').first().getAttribute('data-open-subject');
+   await page.locator('[data-scene="sheet"] .pf-sh__door').first().click();
+   await page.waitForTimeout(700);
+   const big=await page.locator(`[data-subject="${id}"] .pf-rd__window img`).first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
+   check(big>thumb*1.8,'the entered garment is far bigger than its cell: '+thumb+' → '+big);
+   check(await page.evaluate(()=>getComputedStyle([...document.querySelectorAll('.pf-rd__subject')].find(e=>!e.hidden)).backgroundColor)==='rgb(243, 240, 233)','and it stays on the chapter\'s own ground');
+   await shot('womenswear-garment');
+   await page.keyboard.press('Escape');
+   await page.waitForTimeout(600);
+   check(await page.evaluate(()=>location.hash)==='#womenswear/rtw','leaving lands back in the territory');
+   check(await page.evaluate((sid)=>document.activeElement?.dataset?.openSubject===sid,id),'on the frame the visitor chose');
+  }
+
   /* THE OVERTURE: the studio field closes around the garment before anything
      is written, and the territory's name arrives with it. */
   await open('womenswear');

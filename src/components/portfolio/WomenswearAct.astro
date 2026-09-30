@@ -48,8 +48,11 @@
  * `[data-stage]`, `[data-stack]`, `.pf-slot` — so drag, arrow keys, the
  * counter, the hash, focus and the server-rendered fallback keep working.
  */
-import type { GarmentWorld, MarketCategory, ImageAsset, Project } from '../../data/portfolio';
-import { EVIDENCE_STAGES, REFERENCE_DISCLAIMER, worldPublication } from '../../data/portfolio';
+import type { GarmentWorld, MarketCategory, ImageAsset, Reveal, Subject } from '../../data/portfolio';
+import {
+  REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING,
+  projectSubject, referenceSubject, worldPublication,
+} from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
 
 interface Props {
@@ -59,27 +62,21 @@ interface Props {
 const { world } = Astro.props;
 const publication = worldPublication(world);
 
-/* One item, whatever the state of the chapter. In reference-preview it is a
-   photograph with nothing claimed about it; in published it is a project, and
-   then it carries its own title, description and evidence. The interface never
-   calls a reference a project. */
-interface Slot {
-  id: string;
-  image: ImageAsset;
-  project: Project | null;
-}
-
 const noun = publication === 'published' ? 'Project' : 'Reference';
 const unit = publication === 'published' ? 'projects' : 'frames';
 
-const pool = (category: MarketCategory): Slot[] =>
+/* EVERY GARMENT IN THE CHAPTER IS A SUBJECT — one shape whether the territory
+   holds verified projects or, as now, reference photographs. The scenes below
+   never ask which; they render the subject and the subject tells the truth
+   about itself. */
+const pool = (category: MarketCategory, reveal: Reveal): Subject[] =>
   publication === 'published'
     ? [...category.projects]
         /* Spotlit projects lead their territory; everything else keeps the
            order it was given. */
         .sort((a, b) => Number(b.spotlight ?? false) - Number(a.spotlight ?? false))
-        .map((p) => ({ id: p.id, image: p.finalGarmentImage, project: p }))
-    : category.references.map((r) => ({ id: r.id, image: r.image, project: null }));
+        .map((p) => projectSubject(p, world.id))
+    : category.references.map((r) => referenceSubject(r, world.id, category.id, reveal));
 
 /* ---- THE SCORE ---------------------------------------------------------
    `short` is the territory's name as the act says it out loud; the approved
@@ -91,7 +88,6 @@ type Beat =
   | { kind: 'turn'; slot: number }
   | { kind: 'pair'; slots: [number, number] }
   | { kind: 'approach'; slot: number }
-  | { kind: 'evidence'; slot: number }
   | { kind: 'sheet'; from: number }
   | { kind: 'deck'; from: number }
   | { kind: 'rail'; from: number }
@@ -101,6 +97,13 @@ interface Territory {
   id: string;
   short: string;
   slate: 'over' | 'count' | 'name' | 'loud';
+  /* HOW THIS TERRITORY'S GARMENTS GIVE UP THEIR VIEWS when one is entered.
+     The information — front and back — is the same everywhere; the gesture is
+     not, because a front/back switch repeated on every project is a shop
+     control rather than art direction. A verified project may override it
+     with its own. The territory's own character decides the default, which is
+     also how the reader keeps the category's mood. */
+  reveal: Reveal;
   /* One true sentence about what is in these frames, or nothing. Silence is
      the default: a line that cannot be supported is worse than no line. */
   pointer?: [string, string];
@@ -115,6 +118,8 @@ const score: Territory[] = [
     id: 'rtw',
     short: 'Ready-to-Wear',
     slate: 'over',
+    /* The territory that introduced the move keeps it inside its garments. */
+    reveal: 'turn',
     /* True of this photograph and the instruction for the move it is about to
        make. The only design-thinking line in the act, and it is about the
        frame, never about who made the garment. */
@@ -127,6 +132,8 @@ const score: Territory[] = [
     id: 'activewear',
     short: 'Activewear',
     slate: 'count',
+    /* Nothing waits here, so nothing is withheld: both views at once. */
+    reveal: 'together',
     beats: [{ kind: 'deck', from: 0 }],
   },
   {
@@ -135,6 +142,8 @@ const score: Territory[] = [
     id: 'streetwear',
     short: 'Streetwear',
     slate: 'loud',
+    /* Attitude is control: the visitor moves between the views themselves. */
+    reveal: 'drag',
     beats: [{ kind: 'pair', slots: [0, 1] }],
   },
   {
@@ -144,9 +153,10 @@ const score: Territory[] = [
     id: 'evening',
     short: 'Occasion',
     slate: 'name',
+    /* Drama: the back arrives small and then takes the foreground. */
+    reveal: 'foreground',
     beats: [
       { kind: 'turn', slot: 0 },
-      { kind: 'evidence', slot: 0 },
       { kind: 'rail', from: 1 },
     ],
   },
@@ -157,6 +167,8 @@ const score: Territory[] = [
     id: 'swimwear',
     short: 'Swim',
     slate: 'name',
+    /* These frames hold one view. Nothing is invented to make a second. */
+    reveal: 'single',
     beats: [{ kind: 'approach', slot: 0 }, { kind: 'line', from: 1 }],
   },
 ];
@@ -164,9 +176,21 @@ const score: Territory[] = [
 const territories = score
   .map((t) => {
     const category = world.categories.find((c) => c.id === t.id);
-    return category ? { ...t, category, slots: pool(category) } : null;
+    return category ? { ...t, category, slots: pool(category, t.reveal) } : null;
   })
-  .filter((t): t is Territory & { category: MarketCategory; slots: Slot[] } => !!t && t.slots.length > 0);
+  .filter((t): t is Territory & { category: MarketCategory; slots: Subject[] } => !!t && t.slots.length > 0);
+
+/* Every subject in the act, in running order, so the reader can be rendered
+   from the server and so one garment can be stepped to from inside another. */
+const everySubject = territories.flatMap((t) =>
+  t.slots.map((subject, index) => ({ subject, territory: t, index })));
+
+/* THE DOOR. Every garment the chapter shows is one, in every mechanism: the
+   contact sheet's cells, the deck's cards, the pair, the rail's hangers and
+   Swim's line. A real anchor, so a subject is addressable, shareable and
+   reachable with the script gone — and so the range is a way into the work
+   rather than the end of it. */
+const door = (subject: Subject) => `#${world.id}/${subject.category}/${subject.id}`;
 
 /* Geometry every scene needs from a photograph: its aspect, and whether it
    holds two views. A single-view frame is never shown half at a time. */
@@ -273,18 +297,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
               if (!item) return null;
               return (
                 <div class="pf-sc pf-sc--overture" data-scene="overture" data-reveal data-hero
-                     style={plate(item.image)}>
+                     style={plate(item.cover)}>
                   <div class="pf-sc__frame">
                     <div class="pf-ov__field" data-ov-field></div>
-                    <figure class="pf-ov__plate" data-views={views(item.image)} style={geom(item.image)}>
+                    <figure class="pf-ov__plate" data-views={views(item.cover)} style={geom(item.cover)}>
                       <span class="pf-ov__window" data-turn>
                         <img
-                          src={item.image.src}
-                          srcset={item.image.srcset}
+                          src={item.cover.src}
+                          srcset={item.cover.srcset}
                           sizes="(max-width: 767px) 92vw, 46vw"
-                          width={item.image.width}
-                          height={item.image.height}
-                          alt={item.image.alt}
+                          width={item.cover.width}
+                          height={item.cover.height}
+                          alt={item.cover.alt}
                           loading="eager"
                           fetchpriority="high"
                           decoding="async"
@@ -307,9 +331,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
                         {t.pointer[0]} <b>{t.pointer[1]}</b>
                       </p>
                     )}
-                    {item.project && (
-                      <p class="pf-sc__work label">{item.project.title}</p>
+                    {item.title && (
+                      <p class="pf-sc__work label">{item.title}</p>
                     )}
+                    {/* THE AFFORDANCE, TAUGHT ONCE. The hero garment can be
+                        entered, and saying so here — quietly, in label type,
+                        after the composition has resolved — is what tells the
+                        visitor that every garment in the chapter can be. No
+                        button is printed on any other picture. */}
+                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
+                      <span>Enter this garment</span> <Arrow />
+                    </a>
                   </div>
                 </div>
               );
@@ -321,25 +353,33 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 talking and the device has already been explained once. */
             if (beat.kind === 'turn') {
               const item = t.slots[beat.slot];
-              if (!item || item.image.views !== 2) return null;
+              if (!item || item.cover.views !== 2) return null;
               return (
                 <div class="pf-sc pf-sc--turn" data-scene="turn" data-reveal data-hero>
                   <div class="pf-sc__frame">
-                    <figure class="pf-tn__plate" data-views="2" style={geom(item.image)}>
+                    <figure class="pf-tn__plate" data-views="2" style={geom(item.cover)}>
                       <span class="pf-tn__window" data-turn>
                         <img
-                          src={item.image.src}
-                          srcset={item.image.srcset}
+                          src={item.cover.src}
+                          srcset={item.cover.srcset}
                           sizes="(max-width: 767px) 80vw, 34vw"
-                          width={item.image.width}
-                          height={item.image.height}
-                          alt={item.image.alt}
+                          width={item.cover.width}
+                          height={item.cover.height}
+                          alt={item.cover.alt}
                           loading="lazy"
                           decoding="async"
                         />
                       </span>
                     </figure>
-                    {item.project && <p class="pf-sc__work label">{item.project.title}</p>}
+                    {item.title && <p class="pf-sc__work label">{item.title}</p>}
+                    {/* THE AFFORDANCE, TAUGHT ONCE. The hero garment can be
+                        entered, and saying so here — quietly, in label type,
+                        after the composition has resolved — is what tells the
+                        visitor that every garment in the chapter can be. No
+                        button is printed on any other picture. */}
+                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
+                      <span>Enter this garment</span> <Arrow />
+                    </a>
                   </div>
                 </div>
               );
@@ -360,29 +400,33 @@ const pad = (n: number) => String(n).padStart(2, '0');
                         block in the act, and the reason Streetwear reads as an
                         interruption rather than a short version of everything
                         else. Nothing is revealed here; it is simply shown. */}
-                    <figure class="pf-pr__plate pf-pr__plate--lead" data-views="1" style={geom(a.image)}>
-                      <span class="pf-pr__window">
+                    <figure class="pf-pr__plate pf-pr__plate--lead" data-views="1" style={geom(a.cover)}>
+                      <a class="pf-pr__door" href={door(a)} data-nav draggable="false" data-open-subject={a.id}
+                         aria-label={a.title ?? `${noun} — ${a.cover.alt}`}></a>
+                      <span class="pf-pr__window" data-door-source>
                         <img
-                          src={a.image.src} srcset={a.image.srcset}
+                          src={a.cover.src} srcset={a.cover.srcset}
                           sizes="(max-width: 767px) 76vw, 30vw"
-                          width={a.image.width} height={a.image.height} alt={a.image.alt}
+                          width={a.cover.width} height={a.cover.height} alt={a.cover.alt}
                           loading="lazy" decoding="async"
                         />
                       </span>
                     </figure>
                     {b && (
-                      <figure class="pf-pr__plate pf-pr__plate--echo" data-views={views(b.image)} style={geom(b.image)}>
-                        <span class="pf-pr__window">
+                      <figure class="pf-pr__plate pf-pr__plate--echo" data-views={views(b.cover)} style={geom(b.cover)}>
+                        <a class="pf-pr__door" href={door(b)} data-nav draggable="false" data-open-subject={b.id}
+                           aria-label={b.title ?? `${noun} — ${b.cover.alt}`}></a>
+                        <span class="pf-pr__window" data-door-source>
                           <img
-                            src={b.image.src} srcset={b.image.srcset}
+                            src={b.cover.src} srcset={b.cover.srcset}
                             sizes="(max-width: 767px) 40vw, 16vw"
-                            width={b.image.width} height={b.image.height} alt={b.image.alt}
+                            width={b.cover.width} height={b.cover.height} alt={b.cover.alt}
                             loading="lazy" decoding="async"
                           />
                         </span>
                       </figure>
                     )}
-                    {a.project && <p class="pf-sc__work label">{a.project.title}</p>}
+                    {a.title && <p class="pf-sc__work label">{a.title}</p>}
                   </div>
                 </div>
               );
@@ -399,75 +443,20 @@ const pad = (n: number) => String(n).padStart(2, '0');
               return (
                 <div class="pf-sc pf-sc--approach" data-scene="approach" data-reveal data-hero>
                   <div class="pf-sc__frame">
-                    <figure class="pf-ap__plate" data-views={views(item.image)} style={geom(item.image)} data-approach>
+                    <figure class="pf-ap__plate" data-views={views(item.cover)} style={geom(item.cover)} data-approach>
                       <span class="pf-ap__window">
                         <img
-                          src={item.image.src} srcset={item.image.srcset}
+                          src={item.cover.src} srcset={item.cover.srcset}
                           sizes="(max-width: 767px) 88vw, 42vw"
-                          width={item.image.width} height={item.image.height} alt={item.image.alt}
+                          width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
                           loading="lazy" decoding="async"
                         />
                       </span>
                     </figure>
-                    {item.project && <p class="pf-sc__work label">{item.project.title}</p>}
-                  </div>
-                </div>
-              );
-            }
-
-            /* ---- EVIDENCE --------------------------------------------------
-                THE PROOF BEAT. One in the whole act. It answers "is there real
-                design thinking here?" and then gets out of the way.
-
-                With a verified project it shows that project's own sketch,
-                pattern or simulation — only the stages the project actually
-                supplies. With none, it shows the STRUCTURE and says exactly
-                that. Nothing is drawn to look like work that does not exist,
-                and no demo image is borrowed from the Development chapter. */
-            if (beat.kind === 'evidence') {
-              const item = t.slots[beat.slot];
-              const stages = EVIDENCE_STAGES.map((stage) => ({
-                ...stage,
-                asset: item?.project?.evidence?.[stage.key] ?? null,
-              }));
-              const supplied = stages.filter((s) => s.asset).length;
-              return (
-                <div class="pf-sc pf-sc--ev" data-scene="evidence" data-evidence>
-                  <div class="pf-ev">
-                    <p class="pf-ev__head label">
-                      <span>Behind the garment</span>
-                      <i>{supplied > 0 ? `${pad(supplied)} of ${pad(stages.length)} stages` : 'Structure'}</i>
-                    </p>
-                    <ol class="pf-ev__stages">
-                      {stages.map((stage) => (
-                        <li class="pf-ev__stage" data-stage={stage.key} data-supplied={stage.asset ? 'yes' : 'no'}>
-                          <div class="pf-ev__slot">
-                            {stage.asset ? (
-                              <img
-                                src={stage.asset.image.src} srcset={stage.asset.image.srcset}
-                                sizes="(max-width: 767px) 44vw, 18vw"
-                                width={stage.asset.image.width} height={stage.asset.image.height}
-                                alt={stage.asset.image.alt} loading="lazy" decoding="async"
-                              />
-                            ) : (
-                              <span class="pf-ev__empty" aria-hidden="true"></span>
-                            )}
-                          </div>
-                          <p class="pf-ev__name label"><b>{stage.step}</b> {stage.name}</p>
-                          {stage.asset?.note && <p class="pf-ev__note">{stage.asset.note}</p>}
-                        </li>
-                      ))}
-                    </ol>
-                    {supplied === 0 && (
-                      /* The honest sentence. It describes the architecture,
-                         claims nothing, and is replaced by the project's own
-                         evidence the day there is any. */
-                      <p class="pf-ev__truth" data-evidence-empty>
-                        Sketch, pattern and fit sit here, beside the garment they belong to.
-                        No verified Womenswear project is published yet, so these three are
-                        the structure and not the work.
-                      </p>
-                    )}
+                    {item.title && <p class="pf-sc__work label">{item.title}</p>}
+                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
+                      <span>Enter this garment</span> <Arrow />
+                    </a>
                   </div>
                 </div>
               );
@@ -488,16 +477,23 @@ const pad = (n: number) => String(n).padStart(2, '0');
                   </p>
                   <ol class="pf-sh">
                     {items.map((item, i) => (
-                      <li class="pf-sh__cell" data-views={views(item.image)} style={geom(item.image)}>
-                        <span class="pf-sh__window">
-                          <img
-                            src={item.image.src} srcset={item.image.srcset}
-                            sizes="(max-width: 767px) 44vw, 15vw"
-                            width={item.image.width} height={item.image.height} alt={item.image.alt}
-                            loading="lazy" decoding="async"
-                          />
-                        </span>
-                        <i class="pf-sh__n label">{pad(beat.from + i + 1)}</i>
+                      <li class="pf-sh__cell" data-views={views(item.cover)} style={geom(item.cover)}>
+                        {/* A CELL IS A DOOR. A contact sheet is an index of
+                            work, so every frame in it can be entered and seen
+                            properly — a 120px garment nobody can open is
+                            decoration, not portfolio content. */}
+                        <a class="pf-sh__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
+                           aria-label={`${noun} ${pad(beat.from + i + 1)}${item.title ? ` — ${item.title}` : ''}`}>
+                          <span class="pf-sh__window" data-door-source>
+                            <img
+                              src={item.cover.src} srcset={item.cover.srcset}
+                              sizes="(max-width: 767px) 44vw, 15vw"
+                              width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
+                              loading="lazy" decoding="async"
+                            />
+                          </span>
+                          <i class="pf-sh__n label">{pad(beat.from + i + 1)}</i>
+                        </a>
                       </li>
                     ))}
                   </ol>
@@ -521,15 +517,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
                   <ol class="pf-rl" tabindex="0" role="group"
                       aria-label={`${t.category.label}. Scroll sideways for the rest of the rail.`}>
                     {items.map((item) => (
-                      <li class="pf-rl__hanger" data-views={views(item.image)} style={geom(item.image)}>
-                        <span class="pf-rl__window">
-                          <img
-                            src={item.image.src} srcset={item.image.srcset}
-                            sizes="(max-width: 767px) 52vw, 20vw"
-                            width={item.image.width} height={item.image.height} alt={item.image.alt}
-                            loading="lazy" decoding="async"
-                          />
-                        </span>
+                      <li class="pf-rl__hanger" data-views={views(item.cover)} style={geom(item.cover)}>
+                        <a class="pf-rl__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
+                           aria-label={item.title ?? `${noun} — ${item.cover.alt}`}>
+                          <span class="pf-rl__window" data-door-source>
+                            <img
+                              src={item.cover.src} srcset={item.cover.srcset}
+                              sizes="(max-width: 767px) 52vw, 20vw"
+                              width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
+                              loading="lazy" decoding="async"
+                            />
+                          </span>
+                        </a>
                       </li>
                     ))}
                   </ol>
@@ -550,13 +549,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
                   <ol class="pf-ln" tabindex="0" role="group"
                       aria-label={`${t.category.label}. Scroll sideways for the rest.`}>
                     {items.map((item) => (
-                      <li class="pf-ln__fig" data-views={views(item.image)} style={geom(item.image)}>
-                        <img
-                          src={item.image.src} srcset={item.image.srcset}
-                          sizes="(max-width: 767px) 38vw, 13vw"
-                          width={item.image.width} height={item.image.height} alt={item.image.alt}
-                          loading="lazy" decoding="async"
-                        />
+                      <li class="pf-ln__fig" data-views={views(item.cover)} style={geom(item.cover)}>
+                        <a class="pf-ln__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
+                           aria-label={item.title ?? `${noun} — ${item.cover.alt}`}>
+                          <span data-door-source>
+                            <img
+                              src={item.cover.src} srcset={item.cover.srcset}
+                              sizes="(max-width: 767px) 38vw, 13vw"
+                              width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
+                              loading="lazy" decoding="async"
+                            />
+                          </span>
+                        </a>
                       </li>
                     ))}
                   </ol>
@@ -597,16 +601,23 @@ const pad = (n: number) => String(n).padStart(2, '0');
                              aria-label={`${t.category.label}. Use the left and right arrow keys, or drag, to move through the looks.`}>
                           <ol class="pf-stack" data-stack>
                             {items.map((item, i) => (
-                              <li class="pf-slot" data-slot={i} data-item={item.id} data-front={item.image.front}>
-                                <figure class="pf-slot__figure">
+                              <li class="pf-slot" data-slot={i} data-item={item.id} data-front={item.cover.front}>
+                                <figure class="pf-slot__figure" data-door-source>
                                   <img
-                                    src={item.image.src} srcset={item.image.srcset}
+                                    src={item.cover.src} srcset={item.cover.srcset}
                                     sizes="(max-width: 1359px) 52vw, 34vw"
-                                    width={item.image.width} height={item.image.height} alt={item.image.alt}
+                                    width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
                                     loading="lazy" decoding="async"
                                   />
                                   <figcaption class="label pf-slot__caption">{noun} {pad(i + 1)}</figcaption>
                                 </figure>
+                                {/* THE DECK'S DOOR. A card behind the leader
+                                    steps forward when it is chosen; the card in
+                                    front is already chosen, so choosing it
+                                    enters it. One gesture, two meanings, which
+                                    is how a deck is read anyway. */}
+                                <a class="pf-slot__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
+                                   aria-label={item.title ?? `${noun} ${pad(i + 1)} — ${item.cover.alt}`}></a>
                               </li>
                             ))}
                           </ol>
@@ -635,6 +646,215 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
       </article>
     ))}
+
+
+    {/* ================= THE PROJECT ==================================
+        A garment is not one image among many once it has been chosen. It
+        becomes THE SUBJECT, and it gets its own short film — inside the act,
+        not on a page of its own: the chapter's ground, the chapter's bar and
+        the territory's own reveal gesture all stay.
+
+        WHAT A READER CONTAINS is what the subject contains, and nothing else:
+
+          THE VIEWS      the finished garment, in every view that exists. This
+                         is the part that answers the real complaint about a
+                         range of small pictures — here the garment is as large
+                         as the screen allows, and it can be inspected closer.
+          THE ORIGIN     the sketch or illustration, where one was supplied.
+          THE BUILD      flat, pattern, 3D, fit — again, only where supplied.
+          THE RETURN     the final view once more. It only appears when there
+                         was a process to come back FROM: seeing the garment
+                         again after the pattern is the payoff, and a return
+                         with nothing behind it is just a repeat.
+
+        WHAT IT NEVER CONTAINS is a stage nobody supplied. A reference
+        photograph has final views and no history, so its reader shows the
+        views and then says, in one sentence, where the history will go. No
+        sketch, pattern or 3D state is ever drawn, borrowed or implied.
+
+        HOW MUCH ROOM a subject gets is the designer's decision, carried by
+        `role`: a hero runs the whole sequence, a featured one its views and a
+        single moment of thinking, a supporting one its views. The stages are
+        the architecture; the editing is the art direction. */}
+    <div class="pf-rd" data-subject-stack aria-live="off">
+      {everySubject.map(({ subject, territory, index }) => {
+        /* THE EDITING, per role. The stages exist; how many of them this
+           subject is given is not a template decision. */
+        const origin = subject.role === 'supporting' ? [] : subject.origin;
+        const build = subject.role === 'hero'
+          ? subject.build
+          : subject.role === 'featured' ? subject.build.slice(0, 1) : [];
+        const story = [...origin, ...build];
+        const returns = story.length > 0;
+        const front = subject.views[0];
+        /* Do the two views live in the SAME photograph? Then there is one
+           frame to travel rather than two frames to stack — and that is a
+           property of the files, asked rather than assumed, so a project
+           supplying separate front and back files gets the other treatment
+           without anything here changing. */
+        const travel = subject.reveal === 'turn'
+          && subject.views.length > 1
+          && subject.views[0].image.src === subject.views[1].image.src;
+        return (
+          <article
+            class="pf-rd__subject"
+            id={`${world.id}-${subject.category}-${subject.id}`}
+            data-subject={subject.id}
+            data-of={subject.category}
+            data-reveal={subject.reveal}
+            data-travel={travel ? '' : undefined}
+            data-role={subject.role}
+            data-verified={subject.verified ? 'yes' : 'no'}
+            aria-labelledby={`${subject.id}-rd-title`}
+            hidden
+          >
+            {/* ---- THE HEAD. Where you are, and the way out. Deliberately
+                the same furniture as the act's own bar, because entering a
+                garment is not leaving the chapter. */}
+            <header class="pf-rd__head">
+              <a class="pf-rd__back label" href={`#${world.id}/${subject.category}`} data-nav data-subject-close>
+                <i aria-hidden="true"><Arrow dir="left" /></i>
+                <span>{territory.short}</span>
+              </a>
+              <p class="pf-rd__where label">
+                <b>{pad(index + 1)}</b>
+                <span>{territory.category.label}</span>
+              </p>
+            </header>
+
+            {/* ---- THE VIEWS. The garment, at the size a garment has to be
+                looked at, and the territory's own gesture for giving up the
+                second view. */}
+            <section class="pf-rd__views" data-rd-views aria-label="The garment">
+              <div class="pf-rd__type">
+                {/* A verified project is named by its title. A reference is
+                    named by what is actually in the frame — the alt text's own
+                    description, which is a statement about the photograph and
+                    not a claim about its author. Either way the visitor is
+                    told WHICH garment they are looking at, which a territory
+                    name repeated forty-nine times never did. */}
+                <h3 class="pf-rd__title" id={`${subject.id}-rd-title`}>
+                  {subject.title ?? subject.caption ?? territory.short}
+                  {subject.garmentType && <i>{subject.garmentType}</i>}
+                </h3>
+                {subject.title && subject.caption && (
+                  <p class="pf-rd__caption">{subject.caption}</p>
+                )}
+                {subject.decision && (
+                  /* THE ONE PLACE a sentence may be specific about a garment,
+                     and only ever in the designer's own words. */
+                  <p class="pf-rd__decision">{subject.decision}</p>
+                )}
+                {/* INSPECTION. Not a gallery control — one affordance, because
+                    the whole point of entering a garment is being able to look
+                    at it properly. */}
+                <div class="pf-rd__tools">
+                  <button type="button" class="pf-rd__inspect label" data-rd-inspect aria-pressed="false">
+                    Look closer
+                  </button>
+                  {subject.views.length > 1 && (
+                    <p class="pf-rd__views-of label" data-rd-count>
+                      {subject.views.map((v) => v.label).join(' · ')}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div class="pf-rd__stage" data-rd-stage>
+                {travel ? (
+                  /* ONE FRAME, TRAVELLED. Where both views live in the same
+                      photograph, the honest way to move between them is to
+                      move the frame — the same camera move the territory's
+                      own hero scene makes, and here it is the visitor's hand
+                      that makes it. The distance is the photograph's own
+                      measured front fraction, not a flat half. */
+                  <figure class="pf-rd__view pf-rd__view--travel" data-view="both" data-crop="front"
+                          data-rd-travel style={geom(subject.views[0].image)}>
+                    <span class="pf-rd__window" data-rd-window>
+                      <img
+                        src={subject.views[0].image.src} srcset={subject.views[0].image.srcset}
+                        sizes="(max-width: 767px) 92vw, 46vw"
+                        width={subject.views[0].image.width} height={subject.views[0].image.height}
+                        alt={subject.views[0].image.alt}
+                        loading="lazy" decoding="async"
+                      />
+                    </span>
+                    <figcaption class="pf-rd__vname label">
+                      <span data-rd-vfront>Front</span>
+                      <span data-rd-vback>Back</span>
+                    </figcaption>
+                  </figure>
+                ) : (
+                  subject.views.map((v, vi) => (
+                    <figure class="pf-rd__view" data-view={v.key} data-crop={v.crop} data-index={vi}
+                            style={geom(v.image)}>
+                      <span class="pf-rd__window" data-rd-window>
+                        <img
+                          src={v.image.src} srcset={v.image.srcset}
+                          sizes="(max-width: 767px) 92vw, 46vw"
+                          width={v.image.width} height={v.image.height} alt={v.image.alt}
+                          loading="lazy" decoding="async"
+                        />
+                      </span>
+                      <figcaption class="pf-rd__vname label">{v.label}</figcaption>
+                    </figure>
+                  ))
+                )}
+              </div>
+            </section>
+
+            {/* ---- THE STORY. Only the stages this subject actually has. */}
+            {story.length > 0 && (
+              <section class="pf-rd__story" aria-label="How it was made">
+                <ol class="pf-rd__stages">
+                  {story.map((st) => (
+                    <li class="pf-rd__stage-item" data-stage={st.key}>
+                      <figure>
+                        <img
+                          src={st.image.src} srcset={st.image.srcset}
+                          sizes="(max-width: 767px) 88vw, 40vw"
+                          width={st.image.width} height={st.image.height} alt={st.image.alt}
+                          loading="lazy" decoding="async"
+                        />
+                        <figcaption class="label"><b>{st.step}</b> {st.label}</figcaption>
+                      </figure>
+                      {st.note && <p class="pf-rd__note">{st.note}</p>}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+
+            {/* ---- THE RETURN. The same garment, after the process. */}
+            {returns && front && (
+              <section class="pf-rd__return" aria-label="The result">
+                <figure class="pf-rd__view" data-view={front.key} data-crop={front.crop} style={geom(front.image)}>
+                  <span class="pf-rd__window">
+                    <img
+                      src={front.image.src} srcset={front.image.srcset}
+                      sizes="(max-width: 767px) 92vw, 46vw"
+                      width={front.image.width} height={front.image.height} alt={front.image.alt}
+                      loading="lazy" decoding="async"
+                    />
+                  </span>
+                </figure>
+              </section>
+            )}
+
+            {/* ---- WHAT IS NOT HERE, said plainly. */}
+            {!subject.verified && (
+              <p class="pf-rd__pending" data-subject-pending>{SUBJECT_STORY_PENDING}</p>
+            )}
+
+            <footer class="pf-rd__foot">
+              <a class="pf-rd__out label" href={`#${world.id}/${subject.category}`} data-nav data-subject-close>
+                <i aria-hidden="true"><Arrow dir="left" /></i>
+                <span>Back to {territory.short}</span>
+              </a>
+            </footer>
+          </article>
+        );
+      })}
+    </div>
 
     {/* ---- THE CLOSE ------------------------------------------------------
         Act I resolves and hands over. The emotional movement of the whole

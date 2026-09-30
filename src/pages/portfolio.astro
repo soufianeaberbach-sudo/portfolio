@@ -832,6 +832,187 @@ const split = (statement: string, word: string) => {
         }
       };
 
+      /* ----------------------------------------------------------------
+         THE GARMENT LAYER.
+
+         A chapter's ranges are ways INTO the work, so choosing a garment opens
+         that garment's own short film. It is a layer inside the chapter — the
+         same ground, the same furniture, the same territory — and it is the
+         deepest of four levels: portfolio, chapter, territory, garment.
+
+         All of it is server-rendered and simply hidden, so the markup is
+         addressable, the images are real images, and nothing here invents a
+         stage a project did not supply.
+         ---------------------------------------------------------------- */
+      let openSubject: HTMLElement | null = null;
+      let subjectReturnTo: HTMLElement | null = null;
+      /* THE DOOR THE VISITOR USED, so leaving a garment puts them back on the
+         frame they chose rather than at the top of the range. Recorded from
+         the door itself rather than from the focus, because a garment can be
+         opened by a click that never moved the focus — and by a pasted URL,
+         where there is no door at all and nothing to return to. */
+      for (const door of root.querySelectorAll<HTMLElement>('[data-open-subject]')) {
+        door.addEventListener('click', () => { subjectReturnTo = door; });
+      }
+
+      const closeSubject = () => {
+        if (!openSubject) return;
+        openSubject.hidden = true;
+        openSubject.removeAttribute('data-inspect');
+        openSubject.removeAttribute('data-fore');
+        openSubject = null;
+        const back = subjectReturnTo;
+        subjectReturnTo = null;
+        /* Back to the exact frame in the range the visitor came from, so the
+           act continues from where it was left rather than from its top. */
+        if (back && document.contains(back)) back.focus({ preventScroll: true });
+      };
+
+      const showSubject = (world: HTMLElement | null, id: string | null) => {
+        const next = world && id
+          ? world.querySelector<HTMLElement>(`[data-subject="${id}"]`)
+          : null;
+        if (!next) { closeSubject(); return; }
+        if (openSubject === next) return;
+        if (openSubject) { openSubject.hidden = true; openSubject.removeAttribute('data-inspect'); }
+        /* THE ENTRANCE. The layer is clipped to the frame the visitor chose
+           and opens out from it, so the garment grows out of its place in the
+           range instead of a panel appearing over the top of it. Four numbers,
+           handed to CSS; no cloned node and no measuring after the fact. */
+        const source = world!.querySelector<HTMLElement>(`[data-open-subject="${id}"] [data-door-source], [data-open-subject="${id}"]`);
+        if (source && !reduced()) {
+          const box = source.getBoundingClientRect();
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          next.style.setProperty('--from-left', `${Math.max(0, Math.round((box.left / w) * 100))}%`);
+          next.style.setProperty('--from-right', `${Math.max(0, Math.round(((w - box.right) / w) * 100))}%`);
+          next.style.setProperty('--from-top', `${Math.max(0, Math.round((box.top / h) * 100))}%`);
+          next.style.setProperty('--from-bottom', `${Math.max(0, Math.round(((h - box.bottom) / h) * 100))}%`);
+        }
+        const active = document.activeElement as HTMLElement | null;
+        if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')) {
+          subjectReturnTo = active;
+        }
+        openSubject = next;
+        next.hidden = false;
+        next.scrollTop = 0;
+        void next.offsetHeight;
+        const first = next.querySelector<HTMLElement>(FOCUSABLE);
+        (first ?? next).focus({ preventScroll: true });
+      };
+
+      /* A DECK CARD IS READ TWICE: a card behind the leader steps forward
+         when it is chosen, and the card in front — already chosen — is
+         entered. One gesture, two meanings, which is how a deck behaves
+         anyway. Bound here rather than in the act so the runway keeps owning
+         its own cards. */
+      for (const link of root.querySelectorAll<HTMLAnchorElement>('.pf-slot__door')) {
+        /* A DECK IS DRAGGED WITH THE SAME POINTER that chooses a card, so a
+           drag must not end in a navigation. The door remembers where the
+           press began and stands down if the hand moved. */
+        let downAt: { x: number; y: number } | null = null;
+        link.addEventListener('pointerdown', (event) => { downAt = { x: event.clientX, y: event.clientY }; });
+        link.addEventListener('click', (event) => {
+          const moved = downAt
+            ? Math.hypot(event.clientX - downAt.x, event.clientY - downAt.y) > 8
+            : false;
+          downAt = null;
+          if (moved) { event.preventDefault(); event.stopPropagation(); return; }
+          const slot = link.closest<HTMLElement>('.pf-slot');
+          if (!slot || slot.dataset.depth === '0') return;
+          event.preventDefault();
+          event.stopPropagation();
+          const panel = slot.closest<HTMLElement>('.pf-panel');
+          const index = Number(slot.dataset.slot);
+          const queue = queues.find((q) => q.panel === panel);
+          if (queue && Number.isFinite(index)) goTo(queue, index);
+        });
+      }
+
+      /* THE READER'S OWN CONTROLS: look closer, and the two reveals that are
+         the visitor's to drive. Everything else about a reveal is CSS. */
+      for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject')) {
+        const inspect = subject.querySelector<HTMLButtonElement>('[data-rd-inspect]');
+        inspect?.addEventListener('click', () => {
+          const on = !subject.hasAttribute('data-inspect');
+          subject.toggleAttribute('data-inspect', on);
+          inspect.setAttribute('aria-pressed', String(on));
+          if (!on) {
+            for (const win of subject.querySelectorAll<HTMLElement>('[data-rd-window]')) {
+              win.style.removeProperty('--pan-x');
+              win.style.removeProperty('--pan-y');
+            }
+          }
+        });
+        /* Panning, while inspecting: the pointer moves the frame, and the
+           arrow keys do the same for a keyboard. */
+        for (const win of subject.querySelectorAll<HTMLElement>('[data-rd-window]')) {
+          win.addEventListener('pointermove', (event) => {
+            if (!subject.hasAttribute('data-inspect')) return;
+            const box = win.getBoundingClientRect();
+            const x = (0.5 - (event.clientX - box.left) / box.width) * 16;
+            const y = (0.5 - (event.clientY - box.top) / box.height) * 16;
+            win.style.setProperty('--pan-x', `${x.toFixed(2)}%`);
+            win.style.setProperty('--pan-y', `${y.toFixed(2)}%`);
+          });
+        }
+        /* FOREGROUND: the second view is brought to the front when it is
+           chosen — the gesture Occasion's garments are read with. */
+        if (subject.dataset.reveal === 'foreground') {
+          for (const view of subject.querySelectorAll<HTMLElement>('.pf-rd__view')) {
+            view.addEventListener('click', () => {
+              subject.toggleAttribute('data-fore', view.dataset.index === '1');
+            });
+          }
+        }
+        /* TURN: one frame, and the visitor's own hand moves it. The pointer's
+           position across the plate is the position of the frame, so moving
+           across the garment turns it — and a drag does the same on a screen
+           with no pointer. Not bound to the reader's scroll: the scroll is
+           how the story below is reached, and one gesture should do one
+           thing. */
+        const travelPlate = subject.querySelector<HTMLElement>('[data-rd-travel]');
+        if (travelPlate && !reduced()) {
+          const setSecond = (value: number) => {
+            travelPlate.style.setProperty('--second', Math.min(1, Math.max(0, value)).toFixed(4));
+          };
+          const fromPointer = (event: PointerEvent) => {
+            const box = travelPlate.getBoundingClientRect();
+            setSecond((event.clientX - box.left) / Math.max(1, box.width));
+          };
+          if (window.matchMedia('(hover: hover)').matches) {
+            travelPlate.addEventListener('pointermove', (event) => {
+              if (subject.hasAttribute('data-inspect')) return;
+              fromPointer(event);
+            });
+            travelPlate.addEventListener('pointerleave', () => setSecond(0));
+          } else {
+            let dragging = false;
+            travelPlate.addEventListener('pointerdown', (event) => {
+              dragging = true; travelPlate.setPointerCapture(event.pointerId); fromPointer(event);
+            });
+            travelPlate.addEventListener('pointermove', (event) => { if (dragging) fromPointer(event); });
+            travelPlate.addEventListener('pointerup', () => { dragging = false; });
+          }
+          /* And for a keyboard: the two views are reachable without a
+             pointer at all. */
+          const front = subject.querySelector<HTMLElement>('[data-rd-vfront]');
+          const back = subject.querySelector<HTMLElement>('[data-rd-vback]');
+          for (const [el, value] of [[front, 0], [back, 1]] as Array<[HTMLElement | null, number]>) {
+            if (!el) continue;
+            el.setAttribute('tabindex', '0');
+            el.setAttribute('role', 'button');
+            el.addEventListener('focus', () => setSecond(value));
+            el.addEventListener('click', () => setSecond(value));
+            el.addEventListener('keydown', (event) => {
+              if ((event as KeyboardEvent).key === 'Enter' || (event as KeyboardEvent).key === ' ') {
+                event.preventDefault(); setSecond(value);
+              }
+            });
+          }
+        }
+      }
+
       /* Which screen of a chapter is showing. `null` is the chapter's own
          index; a category id is that category's viewer. */
       const showScreen = (world: HTMLElement, category: string | null) => {
@@ -873,6 +1054,7 @@ const split = (statement: string, word: string) => {
 
       const closeWorld = () => {
         if (!openWorld) return;
+        closeSubject();
         openWorld.removeAttribute('data-open');
         openWorld = null;
         document.body.classList.remove('no-scroll');
@@ -922,19 +1104,30 @@ const split = (statement: string, word: string) => {
         layoutAll();
       };
 
+      /* #world / category / subject. The third segment is a GARMENT: the act
+         addresses individual work, so a project can be linked to, shared,
+         reloaded into and stepped back out of like any other level. */
       const parseHash = () => {
         const raw = window.location.hash.replace('#', '');
-        if (!raw) return { world: null as string | null, category: null as string | null };
-        const [world, category] = raw.split('/');
-        return { world, category: category ?? null };
+        if (!raw) return { world: null as string | null, category: null as string | null, subject: null as string | null };
+        const [world, category, subject] = raw.split('/');
+        return { world, category: category ?? null, subject: subject ?? null };
       };
 
       const syncFromHash = () => {
         if (evidenceReader.open) closeEvidence();
         if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
-        const { world, category } = parseHash();
-        if (world && worlds.has(world)) openWorldById(world, category);
-        else closeWorld();
+        const { world, category, subject } = parseHash();
+        if (world && worlds.has(world)) {
+          openWorldById(world, category);
+          /* The garment layer is the deepest level, and it is opened AFTER
+             the chapter and the territory, so leaving it lands the visitor
+             back exactly where they were. */
+          showSubject(worlds.get(world)!, subject);
+        } else {
+          showSubject(null, null);
+          closeWorld();
+        }
       };
 
       const go = (hash: string) => {
@@ -980,6 +1173,18 @@ const split = (statement: string, word: string) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         if (evidenceReader.open) { closeEvidence(); return; }
+        /* A GARMENT IS THE DEEPEST LEVEL, so it is the first thing Escape
+           gives back: inspection, then the garment, then the territory, then
+           the chapter. One press undoes one thing. */
+        if (openSubject) {
+          if (openSubject.hasAttribute('data-inspect')) {
+            openSubject.querySelector<HTMLElement>('[data-rd-inspect]')?.click();
+            return;
+          }
+          const { world, category } = parseHash();
+          go(category ? `#${world}/${category}` : `#${world}`);
+          return;
+        }
         const reader = openWorld.querySelector<HTMLElement>('[data-reader]:not([hidden])');
         if (reader) { event.preventDefault(); closeReader(openWorld); return; }
         event.preventDefault();
@@ -995,7 +1200,10 @@ const split = (statement: string, word: string) => {
       document.addEventListener('keydown', (event) => {
         if (evidenceReader.open || openWorld?.querySelector('[data-reader][open]')) return;
         if (event.key !== 'Tab' || !openWorld) return;
-        const items = [...openWorld.querySelectorAll<HTMLElement>(FOCUSABLE)]
+        /* While a garment is open it IS the layer, so the trap holds inside
+           it rather than in the chapter behind it. */
+        const scope = openSubject ?? openWorld;
+        const items = [...scope.querySelectorAll<HTMLElement>(FOCUSABLE)]
           .filter((el) => el.offsetParent !== null || el === document.activeElement);
         if (items.length === 0) return;
         const first = items[0];
@@ -1259,7 +1467,12 @@ const split = (statement: string, word: string) => {
         let dragging = false, startX = 0, pointerId = -1;
         queue.stage.addEventListener('pointerdown', (event) => {
           if (event.button !== 0 || queue.slots.length < 2) return;
-          if ((event.target as HTMLElement).closest('button,a')) return;
+          /* The deck never starts a drag from its own controls. A GARMENT'S
+             DOOR is the exception: in the act every card is a link into that
+             garment's own story, and the whole deck would stop being
+             draggable if a link over it counted as a control. The door itself
+             stands down when the hand moved — see its click handler. */
+          if ((event.target as HTMLElement).closest('button,a:not([data-open-subject])')) return;
           finishWheel(queue, true);
           dragging = true; startX = event.clientX; pointerId = event.pointerId; queue.drag = 0;
           queue.stage.setPointerCapture(pointerId);

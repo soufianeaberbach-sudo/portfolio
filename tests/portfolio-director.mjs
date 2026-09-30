@@ -88,13 +88,6 @@ try {
       await scene('[data-scene="turn"] [data-turn]', f);
       await capture(`womenswear-10-occasion-turn-${label}`);
     }
-    await scene('[data-scene="evidence"]', null);
-    await capture('womenswear-11-occasion-evidence');
-    /* The proof beat carries no fabricated work: with nothing verified it is
-       three declared stages and a sentence saying so. */
-    assert.equal(await page.locator('[data-scene="evidence"] img').count(), 0);
-    assert.equal(await page.locator('[data-evidence-empty]').count(), 1);
-    checks += 2;
     await scene('[data-scene="rail"]', null);
     await capture('womenswear-12-occasion-rail');
     await scene('[data-territory="swimwear"] .pf-tr__slate', null);
@@ -117,11 +110,56 @@ try {
       checks++;
     }
     /* And the ending, which is the last thing the chapter says. */
+    await open('womenswear');
     await page.evaluate(() => {
       const world = document.querySelector('[data-world="womenswear"]');
       world.scrollTo({ top: world.scrollHeight, behavior: 'instant' });
     });
     await capture('womenswear-16-close-handoff');
+
+    /* ---- THE GARMENT. A category is the atmosphere; a project is the story.
+       Every range is a way into the work, so the reader is shot for each
+       territory — one per reveal gesture — and the proof that it is not a
+       larger JPEG is measured, not assumed. */
+    for (const [cat, reveal] of [
+      ['rtw', 'turn'], ['activewear', 'together'], ['streetwear', 'drag'],
+      ['evening', 'foreground'], ['swimwear', 'single'],
+    ]) {
+      await open(`womenswear/${cat}/${cat}-ref-02`);
+      await page.waitForTimeout(500);
+      await capture(`womenswear-17-${cat}-garment-${reveal}`);
+      const read = await page.evaluate(() => {
+        const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
+        if (!rd) return null;
+        const img = rd.querySelector('.pf-rd__window img');
+        return {
+          reveal: rd.dataset.reveal,
+          garment: Math.round(img.getBoundingClientRect().height),
+          stages: rd.querySelectorAll('.pf-rd__stage-item').length,
+          pending: !!rd.querySelector('[data-subject-pending]'),
+          frame: window.innerHeight,
+        };
+      });
+      assert.equal(read?.reveal, reveal, `${width} ${cat}: wrong reveal gesture`);
+      /* The garment has to be worth entering: at least half the frame tall. */
+      assert.ok(read.garment > read.frame * 0.45,
+        `${width} ${cat}: entered garment is only ${read.garment}px of a ${read.frame}px frame`);
+      /* And nothing is fabricated for a reference. */
+      assert.equal(read.stages, 0, `${width} ${cat}: invented development stages`);
+      assert.equal(read.pending, true, `${width} ${cat}: silent about the missing story`);
+      checks += 4;
+      /* Looking closer, which is the whole reason a garment can be entered. */
+      await page.evaluate(() => {
+        const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
+        rd.querySelector('[data-rd-inspect]').click();
+      });
+      await capture(`womenswear-18-${cat}-garment-inspect`);
+      await page.evaluate(() => {
+        const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
+        rd.querySelector('[data-rd-inspect]').click();
+      });
+    }
+    await open('womenswear');
     for (const [world, category] of [['menswear', 'm-streetwear']]) {
       await open(world);
       await capture(`${world}-categories`);

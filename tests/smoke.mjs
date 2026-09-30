@@ -550,7 +550,21 @@ try {
         halves: [...w.querySelectorAll('[data-scene="overture"] [data-views], [data-scene="turn"] [data-views]')]
           .map((el) => el.dataset.views),
         plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
-        evidence: w.querySelectorAll('[data-evidence]').length,
+        /* THE FOURTH LEVEL: portfolio, chapter, territory, GARMENT. Every
+           garment the chapter shows is a door into its own story, so a range
+           is a way into the work rather than the end of it. */
+        doors: w.querySelectorAll('[data-open-subject]').length,
+        readers: w.querySelectorAll('.pf-rd__subject').length,
+        readersOpen: [...w.querySelectorAll('.pf-rd__subject')].filter((e) => !e.hidden).length,
+        /* Evidence belongs to the PROJECT that produced it, never to a
+           category: there is no category-level proof band anywhere. */
+        categoryEvidence: w.querySelectorAll('[data-scene="evidence"]').length,
+        /* And nothing is invented for a photograph: with no verified project
+           the story stages are absent and the reader says so instead. */
+        inventedStages: w.querySelectorAll('.pf-rd__stage-item').length,
+        pending: w.querySelectorAll('[data-subject-pending]').length,
+        /* Five territories, five gestures for giving up a garment's views. */
+        reveals: [...new Set([...w.querySelectorAll('.pf-rd__subject')].map((e) => e.dataset.reveal))].sort(),
         control: [...w.querySelectorAll('[data-act-link]')].map((a) => a.dataset.actLink),
         controlNames: [...w.querySelectorAll('[data-act-link] .pf-act__label')].map((e) => e.textContent.trim()),
         controlOpen: !!w.querySelector('[data-act-where][data-open]'),
@@ -575,8 +589,14 @@ try {
       act.controlNames.join(',') === act.names.join(','), act.controlNames.join(','));
     check('NO TWO TERRITORIES PLAY THE SAME SHAPE',
       new Set(act.beats).size === act.beats.length, act.beats.join(' | '));
-    check('and they are not the same length either',
-      new Set(act.beats.map((b) => b.split(' ').length)).size >= 3, act.beats.join(' | '));
+    /* Stronger than counting beats: EVERY SCENE KIND in the act belongs to
+       exactly one territory. A mechanism reused across territories is the
+       template problem coming back one level down. */
+    check('and no scene mechanism is used by more than one territory',
+      (() => {
+        const kinds = act.beats.flatMap((b) => b.split(' '));
+        return new Set(kinds).size === kinds.length && kinds.length >= 6;
+      })(), act.beats.join(' | '));
     check('each territory leads with exactly one hero scene',
       act.heroes.join(',') === '1,0,1,1,1', act.heroes.join(','));
     /* Four territories hand their depth over, and each does it differently:
@@ -589,7 +609,21 @@ try {
       act.halves.every((v) => v === '2'), act.halves.join(','));
     check('the garment is on screen from the first frame', act.garments >= 1, String(act.garments));
     check('no development demo rail is anywhere in the act', act.plates === 0, String(act.plates));
-    check('but there IS one proof beat', act.evidence === 1, String(act.evidence));
+    /* ---- THE GARMENT IS THE STORY ------------------------------------
+       A category is the atmosphere; a project is the story. Every garment in
+       every range can be entered, and what it contains when entered is what
+       it actually has — never a stage nobody supplied. */
+    check('every garment in the chapter is a door into its own story',
+      act.doors === act.readers && act.doors > 40, `${act.doors} doors / ${act.readers} readers`);
+    check('and none of them is open until it is chosen', act.readersOpen === 0, String(act.readersOpen));
+    check('evidence belongs to a project, so no category carries a proof band',
+      act.categoryEvidence === 0, String(act.categoryEvidence));
+    check('no sketch, pattern or 3D state is invented for a photograph',
+      act.inventedStages === 0, String(act.inventedStages));
+    check('instead every unverified garment says what is not there yet',
+      act.pending === act.readers, `${act.pending} of ${act.readers}`);
+    check('the five territories give up their views five different ways',
+      act.reveals.length === 5, act.reveals.join(','));
     check('the act carries the reference disclaimer exactly once',
       act.disclaimers === 1, String(act.disclaimers));
     check('the act has one control, and it reaches all five territories',
@@ -953,6 +987,148 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
+    await c.close();
+  }
+
+  /* ---- THE GARMENT: entering one, looking at it, leaving it ------------
+     The concrete complaint this layer answers is that a range of small
+     pictures is not portfolio content. So what is checked is the thing that
+     matters: is the garment BIGGER once it is entered, can it be inspected,
+     does the story show only what exists, and does leaving put the visitor
+     back where they were. */
+  console.log('\nwomenswear — the garment');
+  {
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(600);
+    await openChapter(p, 'womenswear');
+    await openScene(p, '[data-scene="sheet"]');
+
+    const before = await p.evaluate(() => {
+      const door = document.querySelector('[data-scene="sheet"] .pf-sh__door');
+      return {
+        id: door.dataset.openSubject,
+        href: door.getAttribute('href'),
+        thumb: Math.round(door.querySelector('img').getBoundingClientRect().height),
+      };
+    });
+    check('a cell in the range is a real link to that garment',
+      /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
+
+    await p.evaluate(() => document.querySelector('[data-scene="sheet"] .pf-sh__door').click());
+    await p.waitForTimeout(900);
+    const entered = await p.evaluate((id) => {
+      const rd = document.querySelector(`[data-subject="${id}"]`);
+      const view = rd.querySelector('.pf-rd__view');
+      const img = view.querySelector('img');
+      return {
+        open: !rd.hidden,
+        hash: location.hash,
+        focusInside: rd.contains(document.activeElement),
+        /* The chapter is still the chapter: the same ground, and the way back
+           to the territory rather than to a different website. */
+        ground: getComputedStyle(rd).backgroundColor,
+        backTo: rd.querySelector('[data-subject-close]').getAttribute('href'),
+        garment: Math.round(img.getBoundingClientRect().height),
+        views: rd.querySelectorAll('.pf-rd__view, [data-rd-travel]').length,
+        travel: rd.hasAttribute('data-travel'),
+        stages: rd.querySelectorAll('.pf-rd__stage-item').length,
+        pending: !!rd.querySelector('[data-subject-pending]'),
+        verified: rd.dataset.verified,
+      };
+    }, before.id);
+    check('choosing it opens that garment, and the URL says which',
+      entered.open && entered.hash === `#womenswear/rtw/${before.id}`, entered.hash);
+    check('focus moves into the garment', entered.focusInside);
+    check('THE GARMENT IS ACTUALLY BIGGER than the cell it came from',
+      entered.garment > before.thumb * 1.8 && entered.garment > 450,
+      `${before.thumb}px in the range, ${entered.garment}px entered`);
+    check('it is still Womenswear, on the chapter\'s own ground',
+      entered.ground === 'rgb(243, 240, 233)', entered.ground);
+    check('and the way out goes back to the territory, not to the portfolio',
+      entered.backTo === '#womenswear/rtw', entered.backTo);
+    check('a two-view photograph is shown as one frame that travels',
+      entered.travel && entered.views === 1, JSON.stringify({ travel: entered.travel, views: entered.views }));
+    check('no development stage is invented for an unverified frame',
+      entered.verified === 'no' && entered.stages === 0 && entered.pending,
+      JSON.stringify(entered));
+
+    /* THE TURN, inside the garment: the frame travels, and it is the hand
+       that moves it. */
+    const box = await p.evaluate((id) => {
+      const r = document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).getBoundingClientRect();
+      return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+    }, before.id);
+    const secondAt = async (fraction) => {
+      await p.mouse.move(box.x + box.w * fraction, box.y + box.h / 2);
+      await p.waitForTimeout(200);
+      return p.evaluate((id) => Number(getComputedStyle(
+        document.querySelector(`[data-subject="${id}"] [data-rd-travel]`)).getPropertyValue('--second')), before.id);
+    };
+    const atFront = await secondAt(0.02);
+    const atBack = await secondAt(0.98);
+    check('moving across the garment turns it from front to back',
+      atFront < 0.1 && atBack > 0.9, `${atFront} → ${atBack}`);
+
+    /* LOOKING CLOSER: the same pixels, larger. */
+    await p.evaluate((id) => document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).click(), before.id);
+    await p.waitForTimeout(500);
+    const closer = await p.evaluate((id) => {
+      const rd = document.querySelector(`[data-subject="${id}"]`);
+      const img = rd.querySelector('.pf-rd__window img');
+      return {
+        on: rd.hasAttribute('data-inspect'),
+        pressed: rd.querySelector('[data-rd-inspect]').getAttribute('aria-pressed'),
+        scale: new DOMMatrixReadOnly(getComputedStyle(img).transform).a,
+        height: Math.round(rd.querySelector('.pf-rd__view').getBoundingClientRect().height),
+      };
+    }, before.id);
+    check('the garment can be inspected closer than life size',
+      closer.on && closer.pressed === 'true' && closer.scale >= 1.7, JSON.stringify(closer));
+
+    /* ESCAPE GIVES BACK ONE THING AT A TIME: inspection, the garment, the
+       territory, the chapter. */
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(400);
+    check('Escape releases the inspection first',
+      await p.evaluate((id) => !document.querySelector(`[data-subject="${id}"]`).hasAttribute('data-inspect'), before.id));
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(700);
+    const left = await p.evaluate((id) => ({
+      hash: location.hash,
+      readerOpen: !document.querySelector(`[data-subject="${id}"]`).hidden,
+      chapterOpen: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open'),
+      focusBackOnDoor: document.activeElement?.dataset?.openSubject === id,
+    }), before.id);
+    check('then the garment, landing back in the territory it came from',
+      left.hash === '#womenswear/rtw' && !left.readerOpen && left.chapterOpen, JSON.stringify(left));
+    check('and the focus is back on the frame the visitor chose', left.focusBackOnDoor);
+
+    /* EVERY MECHANISM IS A WAY IN, not a dead end. */
+    const everyDoor = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="womenswear"]');
+      const per = {};
+      for (const scene of w.querySelectorAll('[data-support], [data-scene="pair"]')) {
+        per[scene.dataset.scene] = scene.querySelectorAll('[data-open-subject]').length;
+      }
+      return per;
+    });
+    check('the sheet, the deck, the pair, the rail and the line are all ways in',
+      ['sheet', 'deck', 'pair', 'rail', 'line'].every((k) => (everyDoor[k] ?? 0) > 0),
+      JSON.stringify(everyDoor));
+
+    /* A GARMENT IS ADDRESSABLE: reloading its URL opens it. */
+    await p.goto(BASE + `/portfolio/#womenswear/evening/evening-ref-03`, { waitUntil: 'load' });
+    await p.waitForTimeout(1400);
+    const deep = await p.evaluate(() => {
+      const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
+      return { id: rd?.dataset.subject, reveal: rd?.dataset.reveal, chapter: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open') };
+    });
+    check('a garment can be linked to and reloaded straight into',
+      deep.id === 'evening-ref-03' && deep.chapter, JSON.stringify(deep));
+    check('and it keeps its own territory\'s gesture', deep.reveal === 'foreground', String(deep.reveal));
     await c.close();
   }
 
