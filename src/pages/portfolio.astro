@@ -856,14 +856,13 @@ const split = (statement: string, word: string) => {
         if (world.hasAttribute('data-act')) {
           const movement = category && world.querySelector<HTMLElement>(`[data-movement="${category}"]`);
           if (movement) {
-            /* The destination is the movement's REVEAL, not the movement box:
-               the box begins with the air between movements, so landing on it
-               would drop the pinned look below the fold and cut its own type
-               off the foot of the screen. The reveal's top is where the look
-               pins, front view, title complete. */
-            const mark = movement.querySelector<HTMLElement>('[data-reveal]') ?? movement;
+            /* The destination is the TERRITORY's own top — its slate, which
+               is how a territory announces itself — and not the first scene
+               inside it, which would skip the announcement. Ready-to-Wear has
+               no slate: its top is the overture, which is the right place to
+               arrive anyway. */
             const top = world.scrollTop
-              + mark.getBoundingClientRect().top
+              + movement.getBoundingClientRect().top
               - world.getBoundingClientRect().top;
             world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced() ? 'auto' : 'smooth' });
             return;
@@ -1412,21 +1411,33 @@ const split = (statement: string, word: string) => {
       }
 
       /* ----------------------------------------------------------------
-         ACT I — THE TURN.
+         ACT I — THE SCRUBBED SCENES.
 
-         Each movement opens on the FRONT of a photograph that also contains
-         the back. As the look travels up through the middle of the screen,
-         the window slides across that photograph until the back is in frame.
-         One camera move inside one frame: no crossfade, no second file, and
-         nothing claimed about the garment.
+         Three of the act's scenes move, and each moves on exactly one number
+         read off the same scroll position:
 
-         Scrubbed off the act's own scroll container rather than the window,
-         because a chapter is an overlay. Plain rAF rather than ScrollTrigger:
-         the overlay is not the page's scroller, and this is one number.
+           --arrive    the overture's studio field closing in around the
+                       garment, with the territory's name arriving on it
+           --turn      the window travelling across a two-up photograph, from
+                       the front view to the back
+           --approach  Swim's figure growing out of a field of white
+
+         Every other scene in the act is still. Scrubbed off the act's own
+         scroll container rather than the window, because a chapter is an
+         overlay; plain rAF rather than ScrollTrigger, because the overlay is
+         not the page's scroller and these are three numbers.
          ---------------------------------------------------------------- */
       const act = root.querySelector<HTMLElement>('[data-act]');
-      if (act && !reduced()) {
-        const plates = [...act.querySelectorAll<HTMLElement>('[data-turn]')];
+      if (act) {
+        /* The SCRUBS are motion and are skipped when motion is not wanted —
+           each scene then renders at its resting state from CSS alone. The
+           control is not motion: it still has to say which territory is
+           being read, and it still has to open. Wrapping both in one guard
+           left the control dead under reduced motion. */
+        const motion = !reduced();
+        const turns = [...act.querySelectorAll<HTMLElement>('[data-turn]')];
+        const fields = [...act.querySelectorAll<HTMLElement>('[data-ov-field]')];
+        const approaches = [...act.querySelectorAll<HTMLElement>('[data-approach]')];
         const movements = [...act.querySelectorAll<HTMLElement>('[data-movement]')];
         const where = act.querySelector<HTMLElement>('[data-act-where]');
         const toggle = act.querySelector<HTMLElement>('[data-act-toggle]');
@@ -1435,29 +1446,53 @@ const split = (statement: string, word: string) => {
         const links = [...act.querySelectorAll<HTMLElement>('[data-act-link]')];
         let ticking = false;
 
+        /* How far a scene has travelled through its own pinned block, as
+           0..1. `hold` is the share of the block kept back at the end so the
+           arrival is looked at rather than scrolled through, and `from`
+           delays the start so two moves can share one block. */
+        const progress = (el: HTMLElement, h: number, from = 0, hold = 0.2) => {
+          const reveal = el.closest<HTMLElement>('[data-reveal]');
+          if (!reveal) return 1;
+          const box = reveal.getBoundingClientRect();
+          const travel = Math.max(1, box.height - h);
+          const raw = Math.min(1, Math.max(0, -box.top / travel));
+          const span = Math.max(0.0001, 1 - hold - from);
+          return Math.min(1, Math.max(0, (raw - from) / span));
+        };
+        /* Eased, not linear. Halfway through a linear travel the window holds
+           half of one figure beside half of the other, and that state is the
+           only ugly frame in the move — so the curve is slow at the front,
+           quick through the middle and slow again as the back arrives. Both
+           ends are looked at; the seam is passed. */
+        const ease = (p: number) => p * p * (3 - 2 * p);
+
         const paint = () => {
           ticking = false;
           const h = window.innerHeight;
-          for (const plate of plates) {
-            /* The look is pinned inside its reveal block, so the turn's
-               progress is simply how far that block has travelled past the
-               top of the screen, over the distance it reserved. The last
-               fifth is a HOLD: the back arrives and is allowed to be looked
-               at before the page moves on. */
-            const reveal = plate.closest<HTMLElement>('[data-reveal]');
-            if (!reveal) continue;
-            const box = reveal.getBoundingClientRect();
-            const travel = Math.max(1, box.height - h);
-            const p = Math.min(1, Math.max(0, -box.top / travel) / 0.8);
-            /* Eased, not linear. Halfway through a linear travel the window
-               holds half of one figure beside half of the other, and that
-               state is the only ugly frame in the move — so the curve is slow
-               at the front, quick through the middle and slow again as the
-               back arrives. Both ends are looked at; the seam is passed. */
-            const t = p * p * (3 - 2 * p);
-            plate.style.setProperty('--turn', t.toFixed(4));
+          if (!motion) { nameNow(h); return; }
+          /* THE OVERTURE, phase 2: the field closes over the first third of
+             the block, before the turn starts. */
+          for (const field of fields) {
+            const p = progress(field, h, 0, 0.62);
+            field.style.setProperty('--arrive', ease(p).toFixed(4));
+            const scene = field.closest<HTMLElement>('[data-scene]');
+            if (scene) scene.style.setProperty('--arrive', ease(p).toFixed(4));
           }
-          /* Which movement is being read, for the one control that names it. */
+          for (const plate of turns) {
+            /* In the overture the turn waits for the composition to resolve;
+               in Occasion it has the block to itself. */
+            const inOverture = !!plate.closest('[data-scene="overture"]');
+            const p = progress(plate, h, inOverture ? 0.42 : 0, 0.2);
+            plate.style.setProperty('--turn', ease(p).toFixed(4));
+          }
+          for (const plate of approaches) {
+            plate.style.setProperty('--approach', ease(progress(plate, h, 0, 0.26)).toFixed(4));
+          }
+          nameNow(h);
+        };
+
+        /* Which territory is being read, for the one control that names it. */
+        const nameNow = (h: number) => {
           if (name && count) {
             /* The movement being read is the one the reading line — four
                tenths down the screen — is actually inside. Distance to a
@@ -1474,8 +1509,7 @@ const split = (statement: string, word: string) => {
               if (distance < bestDistance) { bestDistance = distance; best = index; }
             });
             const current = movements[best];
-            const title = current.querySelector<HTMLElement>('.pf-mv__act');
-            name.textContent = title?.textContent ?? '';
+            name.textContent = current.dataset.actTitle ?? '';
             count.textContent = `${String(best + 1).padStart(2, '0')} / ${String(movements.length).padStart(2, '0')}`;
             for (const link of links) {
               const on = link.dataset.actLink === current.dataset.movement;
@@ -1493,7 +1527,7 @@ const split = (statement: string, word: string) => {
         window.addEventListener('resize', onScroll);
         paint();
 
-        /* The movement control. Same manners as the chapter control on the
+        /* The territory control. Same manners as the chapter control on the
            journey outside: hover opens it, a click confirms rather than
            undoes it, Escape and leaving close it. */
         if (where && toggle) {

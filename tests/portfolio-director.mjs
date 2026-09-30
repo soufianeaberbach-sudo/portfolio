@@ -40,42 +40,88 @@ try {
     await page.evaluate(() => scrollTo(0, 0));
     await capture('landing');
     await page.screenshot({ path: `${output}/${width}-landing-full.png`, fullPage: true });
-    /* WOMENSWEAR IS AN ACT: one screen, five movements, each a look that
-       turns and then a range. So it is walked movement by movement rather
-       than category card by category card, and the "viewer" to shoot is the
-       movement's run. Menswear still has the category-screen architecture. */
+    /* WOMENSWEAR IS ONE AUTHORED ACT IN FIVE TERRITORIES, told in beats, so
+       it is walked SCENE BY SCENE and every scrubbed scene is shot at three
+       positions — start, midpoint and payoff. A random frame in the middle of
+       a pinned sequence is not evidence of a final design. */
     await open('womenswear');
-    await capture('womenswear-act');
+    await capture('womenswear-01-overture-START');
+    const scene = async (selector, fraction) => page.evaluate(([sel, f]) => {
+      const world = document.querySelector('[data-world="womenswear"]');
+      const el = world.querySelector(sel);
+      if (!el) return false;
+      const reveal = el.closest('[data-reveal]');
+      if (reveal && f !== null) {
+        const rb = reveal.getBoundingClientRect();
+        world.scrollTo({ top: Math.round(world.scrollTop + rb.top + (rb.height - innerHeight) * f), behavior: 'instant' });
+        return true;
+      }
+      const box = el.getBoundingClientRect();
+      world.scrollTo({ top: Math.round(world.scrollTop + box.top - Math.max(0, (innerHeight - box.height) / 2)), behavior: 'instant' });
+      return true;
+    }, [selector, fraction]);
+
+    /* SET PIECE 01 — the studio field closing around the garment, then the
+       back of it. Three frames out of one photograph. */
+    await scene('[data-scene="overture"] [data-ov-field]', 0.34);
+    await capture('womenswear-02-overture-MID-composition');
+    await scene('[data-scene="overture"] [data-turn]', 0.8);
+    await capture('womenswear-03-overture-PAYOFF-back');
+    await scene('[data-scene="sheet"]', null);
+    await capture('womenswear-04-rtw-sheet');
+    /* Every territory's slate, every supporting mechanism, every set piece. */
+    await scene('[data-territory="activewear"] .pf-tr__slate', null);
+    await capture('womenswear-05-activewear-slate');
+    await scene('[data-scene="deck"]', null);
+    await capture('womenswear-06-activewear-deck');
+    assert.equal(await page.locator('[data-scene="deck"] .pf-slot[data-depth="0"]').count(), 1);
+    checks++;
+    /* SET PIECE 02 — no motion at all: two frames, unequal, asymmetric. */
+    await scene('[data-territory="streetwear"] .pf-tr__slate', null);
+    await capture('womenswear-07-streetwear-slate-loud');
+    await scene('[data-scene="pair"]', null);
+    await capture('womenswear-08-streetwear-pair-SETPIECE');
+    await scene('[data-territory="evening"] .pf-tr__slate', null);
+    await capture('womenswear-09-occasion-slate');
+    /* SET PIECE 03 — the turn, used for the second and last time. */
+    for (const [f, label] of [[0.02, 'START'], [0.45, 'MID'], [0.85, 'PAYOFF']]) {
+      await scene('[data-scene="turn"] [data-turn]', f);
+      await capture(`womenswear-10-occasion-turn-${label}`);
+    }
+    await scene('[data-scene="evidence"]', null);
+    await capture('womenswear-11-occasion-evidence');
+    /* The proof beat carries no fabricated work: with nothing verified it is
+       three declared stages and a sentence saying so. */
+    assert.equal(await page.locator('[data-scene="evidence"] img').count(), 0);
+    assert.equal(await page.locator('[data-evidence-empty]').count(), 1);
+    checks += 2;
+    await scene('[data-scene="rail"]', null);
+    await capture('womenswear-12-occasion-rail');
+    await scene('[data-territory="swimwear"] .pf-tr__slate', null);
+    await capture('womenswear-13-swim-slate');
+    /* SET PIECE 04 — scale, and nothing else. */
+    for (const [f, label] of [[0.02, 'START'], [0.45, 'MID'], [0.9, 'PAYOFF']]) {
+      await scene('[data-scene="approach"] [data-approach]', f);
+      await capture(`womenswear-14-swim-approach-${label}`);
+    }
+    await scene('[data-scene="line"]', null);
+    await capture('womenswear-15-swim-line');
+    /* Every territory is arrived at by name, and lands on its own frame. */
     for (const id of ['rtw', 'activewear', 'streetwear', 'evening', 'swimwear']) {
       await open(`womenswear/${id}`);
-      await page.waitForTimeout(500);
-      await capture(`womenswear-${id}-look`);
-      const look = page.locator(`[data-movement="${id}"] .pf-mv__look`).first();
-      /* The look arrives pinned and filling the frame — no composition under
-         the fold, which is the whole reason the reveal block exists. */
-      assert.equal(await look.evaluate((el) => {
+      await page.waitForTimeout(400);
+      assert.equal(await page.locator(`[data-territory="${id}"]`).evaluate((el) => {
         const box = el.getBoundingClientRect();
-        return box.top <= 2 && box.bottom >= window.innerHeight - 1;
-      }), true, `${width} womenswear/${id}: the look is not whole in the frame`);
+        return box.top >= -2 && box.top < 120;
+      }), true, `${width} womenswear/${id}: the territory does not arrive in the frame`);
       checks++;
-      const run = page.locator(`[data-movement="${id}"] .pf-mv__run`);
-      if (await run.count() > 0) {
-        await page.evaluate((mv) => {
-          const world = document.querySelector('[data-world="womenswear"]');
-          const box = world.querySelector(`[data-movement="${mv}"] .pf-mv__run`).getBoundingClientRect();
-          world.scrollTo({ top: Math.round(world.scrollTop + box.top - (innerHeight - box.height) / 2), behavior: 'instant' });
-        }, id);
-        await capture(`womenswear-${id}-run`);
-        assert.equal(await page.locator(`[data-movement="${id}"] .pf-slot[data-depth="0"]`).count(), 1);
-        checks++;
-      }
     }
     /* And the ending, which is the last thing the chapter says. */
     await page.evaluate(() => {
       const world = document.querySelector('[data-world="womenswear"]');
       world.scrollTo({ top: world.scrollHeight, behavior: 'instant' });
     });
-    await capture('womenswear-payoff');
+    await capture('womenswear-16-close-handoff');
     for (const [world, category] of [['menswear', 'm-streetwear']]) {
       await open(world);
       await capture(`${world}-categories`);

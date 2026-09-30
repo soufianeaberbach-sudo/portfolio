@@ -123,6 +123,12 @@ export interface Project {
   finalGarmentImage: ImageAsset;
   evidence: ProjectEvidence;
   tags?: string[];
+  /* CURATION, not a quality claim. A spotlit project is the one a territory
+     is led by — it owns a scene of its own rather than sitting in the
+     supporting run. Unset means "place me in order"; a territory with no
+     spotlit project leads with its first. Set by the designer, never
+     inferred. */
+  spotlight?: boolean;
 }
 
 /* A photograph, and nothing claimed about it beyond what is visible in the
