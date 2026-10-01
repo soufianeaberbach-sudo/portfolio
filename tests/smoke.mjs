@@ -564,7 +564,7 @@ try {
         inventedStages: w.querySelectorAll('.pf-rd__stage-item').length,
         pending: w.querySelectorAll('[data-subject-pending]').length,
         /* Five territories, five gestures for giving up a garment's views. */
-        reveals: [...new Set([...w.querySelectorAll('.pf-rd__subject')].map((e) => e.dataset.reveal))].sort(),
+        reveals: [...new Set([...w.querySelectorAll('.pf-rd__subject')].map((e) => e.dataset.rdReveal))].sort(),
         control: [...w.querySelectorAll('[data-act-link]')].map((a) => a.dataset.actLink),
         controlNames: [...w.querySelectorAll('[data-act-link] .pf-act__label')].map((e) => e.textContent.trim()),
         controlOpen: !!w.querySelector('[data-act-where][data-open]'),
@@ -1056,21 +1056,30 @@ try {
       JSON.stringify(entered));
 
     /* THE TURN, inside the garment: the frame travels, and it is the hand
-       that moves it. */
+       that moves it — and a view, once chosen, is a STATE. It stays turned
+       while the hand goes on to something else, such as looking closer. */
     const box = await p.evaluate((id) => {
       const r = document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).getBoundingClientRect();
       return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
     }, before.id);
-    const secondAt = async (fraction) => {
-      await p.mouse.move(box.x + box.w * fraction, box.y + box.h / 2);
-      await p.waitForTimeout(200);
-      return p.evaluate((id) => Number(getComputedStyle(
-        document.querySelector(`[data-subject="${id}"] [data-rd-travel]`)).getPropertyValue('--second')), before.id);
-    };
-    const atFront = await secondAt(0.02);
-    const atBack = await secondAt(0.98);
-    check('moving across the garment turns it from front to back',
-      atFront < 0.1 && atBack > 0.9, `${atFront} → ${atBack}`);
+    const sideOf = () => p.evaluate((id) =>
+      document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).dataset.side ?? 'front', before.id);
+    const atFront = await sideOf();
+    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
+    await p.waitForTimeout(900);
+    const atBack = await sideOf();
+    const inspectBox = await p.evaluate((id) => {
+      const r = document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }, before.id);
+    await p.mouse.move(inspectBox.x, inspectBox.y, { steps: 8 });
+    await p.waitForTimeout(300);
+    const stillBack = await sideOf();
+    check('choosing the garment turns it from front to back',
+      atFront === 'front' && atBack === 'back', `${atFront} → ${atBack}`);
+    check('and it stays turned when the hand moves on', stillBack === 'back', stillBack);
+    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
+    await p.waitForTimeout(900);
 
     /* LOOKING CLOSER: the same pixels, larger. */
     await p.evaluate((id) => document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).click(), before.id);
@@ -1124,7 +1133,7 @@ try {
     await p.waitForTimeout(1400);
     const deep = await p.evaluate(() => {
       const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
-      return { id: rd?.dataset.subject, reveal: rd?.dataset.reveal, chapter: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open') };
+      return { id: rd?.dataset.subject, reveal: rd?.dataset.rdReveal, chapter: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open') };
     });
     check('a garment can be linked to and reloaded straight into',
       deep.id === 'evening-ref-03' && deep.chapter, JSON.stringify(deep));

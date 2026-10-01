@@ -545,12 +545,20 @@
    The one place it is SAID is under the hero of each territory — taught once,
    in label type, so the ranges are understood without being labelled. */
 .pf-sh__door, .pf-rl__door, .pf-ln__door {
-  display: grid; gap: .4rem;
   color: inherit; text-decoration: none;
+}
+/* Each door takes the shape of the frame it sits in. A contact-sheet cell is
+   a two-row grid (picture, number), so its door IS those two rows. A hanger on
+   the rail is a box with a height and no grid, so its door simply fills it —
+   giving it the sheet's subgrid there left it with no rows to span and a
+   height of nothing, and the whole rail rendered as empty white frames. */
+.pf-sh__door {
+  display: grid; gap: .4rem;
   grid-template-rows: subgrid;
   grid-row: span 2;
 }
-.pf-ln__door { grid-template-rows: none; grid-row: auto; }
+.pf-rl__door { display: block; height: 100%; }
+.pf-ln__door { display: grid; gap: .4rem; }
 .pf-sh__cell, .pf-rl__hanger { position: relative; }
 /* The mark of a door: the studio field lifts a hair and the frame draws a
    hairline. Nothing moves the garment. */
@@ -559,14 +567,32 @@
 .pf-ln__door span {
   transition: box-shadow 220ms ease, transform 320ms var(--ease);
 }
-.pf-sh__door:is(:hover, :focus-visible) .pf-sh__window,
-.pf-rl__door:is(:hover, :focus-visible) .pf-rl__window,
-.pf-ln__door:is(:hover, :focus-visible) span {
+.pf-sh__door:focus-visible .pf-sh__window,
+.pf-rl__door:focus-visible .pf-rl__window,
+.pf-ln__door:focus-visible span {
   box-shadow: 0 0 0 1px var(--line-strong);
   transform: translateY(-2px);
 }
-.pf-sh__door:focus-visible, .pf-rl__door:focus-visible, .pf-ln__door:focus-visible,
+/* Only a pointer that can hover gets the hover mark: on a touch screen the
+   browser fakes a hover on tap and leaves the frame lifted afterwards. */
+@media (hover: hover) and (pointer: fine) {
+  .pf-sh__door:hover .pf-sh__window,
+  .pf-rl__door:hover .pf-rl__window,
+  .pf-ln__door:hover span {
+    box-shadow: 0 0 0 1px var(--line-strong);
+    transform: translateY(-2px);
+  }
+  .pf-pr__door:hover { box-shadow: 0 0 0 1px var(--line-strong); }
+  .pf-sc__enter:hover { border-bottom-color: var(--ww-accent); }
+}
 .pf-pr__door:focus-visible, .pf-slot__door:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
+/* A range door's ring is drawn around the PICTURE it opens, which is the
+   thing the visitor is choosing — the link box itself is a grid item whose
+   width says nothing about the garment. */
+.pf-sh__door:focus-visible, .pf-rl__door:focus-visible, .pf-ln__door:focus-visible { outline: none; }
+.pf-sh__door:focus-visible .pf-sh__window,
+.pf-rl__door:focus-visible .pf-rl__window,
+.pf-ln__door:focus-visible span { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
 /* The pair and the deck carry their door as a layer over the plate, because
    both are compositions that must not gain a box. */
 .pf-pr__door, .pf-slot__door { position: absolute; inset: 0; z-index: 3; }
@@ -575,7 +601,7 @@
 .pf-sh__door, .pf-rl__door, .pf-ln__door, .pf-pr__door, .pf-slot__door {
   -webkit-user-drag: none; user-select: none; touch-action: manipulation;
 }
-.pf-pr__door:is(:hover, :focus-visible) { box-shadow: 0 0 0 1px var(--line-strong); }
+.pf-pr__door:focus-visible { box-shadow: 0 0 0 1px var(--line-strong); }
 .pf-slot__door { border-radius: 0; }
 
 /* TAUGHT ONCE, under each territory's hero. */
@@ -586,7 +612,7 @@
   color: var(--ink); text-decoration: none;
   opacity: var(--arrive, 1);
 }
-.pf-sc__enter:is(:hover, :focus-visible) { border-bottom-color: var(--ww-accent); }
+.pf-sc__enter:focus-visible { border-bottom-color: var(--ww-accent); }
 .pf-sc--overture .pf-sc__enter { bottom: clamp(1.1rem, 3.5vh, 2rem); }
 /* The overture already writes a pointer at its foot, so its affordance sits
    under the picture's own column instead of on top of the sentence. */
@@ -609,21 +635,14 @@
      of the frame. The sections that follow carry their own space instead. */
   gap: 0;
   padding: 0 0 clamp(3rem, 9vh, 6rem);
-  /* The entrance: the layer arrives from the frame the visitor chose. The
-     rect is handed in by the script as four numbers, so the garment appears
-     to grow out of its place in the range rather than a panel appearing over
-     it. Without the script, and without motion, it is simply there. */
-  animation: pf-rd-in 480ms var(--ease) both;
+  /* The entrance and the exit are run by the script, as a clip between the
+     frame the visitor chose and the whole screen, so either can be stopped
+     part-way and reversed. Without the script, and without motion, the layer
+     is simply there. */
 }
-@keyframes pf-rd-in {
-  from {
-    opacity: 0;
-    clip-path: inset(
-      var(--from-top, 40%) var(--from-right, 40%) var(--from-bottom, 40%) var(--from-left, 40%)
-    );
-  }
-  to { opacity: 1; clip-path: inset(0 0 0 0); }
-}
+/* The layer takes the focus when it opens so the visitor is inside it; it is
+   a region, not a control, and draws no ring of its own. */
+.pf-rd__subject:focus { outline: none; }
 .pf-rd__head {
   position: sticky; top: 0; z-index: 3;
   height: var(--bar-h);
@@ -698,7 +717,6 @@
   aspect-ratio: calc(var(--aspect, .75) * var(--crop-w, 1));
   width: auto; flex: none;
   display: flex; justify-content: center;
-  transition: height 420ms var(--ease);
 }
 /* A view that is one half of a two-up frame shows exactly that half. */
 .pf-rd__view[data-crop='front'] { --crop-w: var(--front, .55); }
@@ -711,8 +729,9 @@
 .pf-rd__window img {
   position: absolute; top: 0; height: 100%; width: auto; max-width: none;
   left: 0;
-  transform-origin: 50% 50%;
-  transition: transform 420ms var(--ease);
+  /* Every move of the picture — the turn, looking closer — is written onto
+     this transform by the script, measured from the picture's own corner. */
+  transform-origin: 0 0;
 }
 /* The back half is reached by pulling the frame across by the front's own
    measured width — the same number the ranges use, never a guess. */
@@ -731,63 +750,74 @@
 }
 .pf-rd__inspect[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .pf-rd__views-of { margin: 0; color: var(--muted); }
+/* A travelled frame names its two views under the picture itself, where
+   they are also the controls; saying them again beside "Look closer" is an
+   echo. */
+.pf-rd__subject[data-travel] .pf-rd__views-of { display: none; }
 .pf-rd__decision { margin: 0; max-width: 46ch; font-size: .92rem; line-height: 1.55; color: var(--ink-soft); }
 
 /* ---- THE FIVE REVEALS. Same information, five gestures. ---------------- */
 /* TOGETHER — both views at rest, side by side. Activewear. */
-.pf-rd__subject[data-reveal='together'] .pf-rd__view { --view-h: 58svh; }
-/* TURN — one frame, travelled. The window is the front view's own measured
-   width and the photograph slides behind it until the back is in it. The
-   visitor's hand makes the move: the pointer's position across the plate is
-   the position of the frame. */
-.pf-rd__view--travel { cursor: ew-resize; }
-.pf-rd__subject[data-reveal='turn'] .pf-rd__view { --view-h: 72svh; }
-/* The frame does not only MOVE, it also resizes to the view it is arriving
-   at: the front region of a two-up runs to the measured `--front` boundary
-   and the back region is what is left, so a window sized for one would show a
-   sliver of the other. Both numbers come off the photograph. */
+.pf-rd__subject[data-rd-reveal='together'] .pf-rd__view { --view-h: 58svh; }
+/* TURN — one frame, travelled. Where both views live in one photograph the
+   frame moves across it from the front to the back, and the visitor's hand
+   makes the move: a drag pulls it, a press turns it. Whichever view the
+   garment comes to rest on is the view it stays on.
+
+   The window keeps ONE width — the wider of the two views — and the script
+   clips it down to the view it is showing and slides the photograph behind
+   it, so neither view ever shows a sliver of the other and nothing is laid
+   out again while the frame travels. Both numbers come off the photograph. */
+.pf-rd__subject[data-rd-reveal='turn'] .pf-rd__view { --view-h: 72svh; }
 .pf-rd__view--travel {
-  --crop-w: calc(var(--front, .55) + var(--second, 0) * (1 - 2 * var(--front, .55)));
+  --crop-w: max(var(--front, .55), calc(1 - var(--front, .55)));
+  background: none;
+  cursor: grab;
+  /* Vertical swipes still scroll the reader; sideways ones turn the garment. */
+  touch-action: pan-y;
+  user-select: none; -webkit-user-select: none;
 }
-.pf-rd__view--travel .pf-rd__window img {
-  transform: translateX(calc(var(--second, 0) * var(--front, .55) * -100%));
-}
-.pf-rd__subject[data-inspect] .pf-rd__view--travel .pf-rd__window img {
-  transform:
-    translateX(calc(var(--second, 0) * var(--front, .55) * -100%))
-    scale(1.75) translate(var(--pan-x, 0%), var(--pan-y, 0%));
-}
-.pf-rd__view--travel .pf-rd__vname { display: grid; }
-.pf-rd__view--travel .pf-rd__vname span { grid-area: 1 / 1; }
-.pf-rd__view--travel [data-rd-vfront] { opacity: calc(1 - var(--second, 0)); }
-.pf-rd__view--travel [data-rd-vback] { opacity: var(--second, 0); }
-/* FOREGROUND — the back arrives small and then takes the front. Occasion. */
-.pf-rd__subject[data-reveal='foreground'] .pf-rd__stage { align-items: flex-end; }
-.pf-rd__subject[data-reveal='foreground'] .pf-rd__view[data-index='0'] { --view-h: 74svh; }
-.pf-rd__subject[data-reveal='foreground'] .pf-rd__view[data-index='1'] {
+.pf-rd__view--travel:active { cursor: grabbing; }
+.pf-rd__view--travel .pf-rd__window { background: #fff; }
+/* The two names are the turn's controls as well as its labels: the view the
+   garment is resting on is named in ink, the other waits in grey. One is
+   always the current one, so they never print over each other. */
+.pf-rd__view--travel .pf-rd__vname { display: flex; gap: .9rem; }
+.pf-rd__view--travel .pf-rd__vname span { cursor: pointer; transition: color 160ms ease; }
+.pf-rd__view--travel:not([data-side='back']) [data-rd-vfront],
+.pf-rd__view--travel[data-side='back'] [data-rd-vback] { color: var(--ink); }
+.pf-rd__view--travel .pf-rd__vname span:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
+/* FOREGROUND — the back arrives small and then takes the front. Occasion.
+   Each view is a control (see the script), so the waiting one says so. */
+.pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view { transition: height 420ms var(--ease); cursor: pointer; }
+.pf-rd__subject[data-rd-reveal='foreground'][data-inspect] .pf-rd__view { cursor: auto; }
+.pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 4px; }
+.pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__stage { align-items: flex-end; }
+.pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='0'] { --view-h: 74svh; }
+.pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='1'] {
   --view-h: 34svh; align-self: flex-end;
 }
-.pf-rd__subject[data-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'] { --view-h: 34svh; }
-.pf-rd__subject[data-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: 74svh; }
+.pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'] { --view-h: 34svh; }
+.pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: 74svh; }
 /* DRAG — the visitor moves between the views. Streetwear. */
-.pf-rd__subject[data-reveal='drag'] .pf-rd__stage {
+.pf-rd__subject[data-rd-reveal='drag'] .pf-rd__stage {
   overflow-x: auto; overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory; justify-content: flex-start;
   padding-inline: max(0px, calc((100% - var(--drag-w, 30rem)) / 2));
   cursor: grab;
 }
-.pf-rd__subject[data-reveal='drag'] .pf-rd__view { --view-h: 68svh; scroll-snap-align: center; }
+.pf-rd__subject[data-rd-reveal='drag'] .pf-rd__view { --view-h: 68svh; scroll-snap-align: center; }
 /* SINGLE — one view exists, so nothing is dressed up as a second. Swim. */
-.pf-rd__subject[data-reveal='single'] .pf-rd__view { --view-h: 76svh; }
+.pf-rd__subject[data-rd-reveal='single'] .pf-rd__view { --view-h: 76svh; }
 
 /* INSPECTION. The same pixels, closer — the renditions are 1400px wide, so
    there is real detail to find. Bounded, released by the same control, and
    written AFTER the five reveals because it has to beat whichever one the
    subject is using. */
-.pf-rd__subject[data-inspect][data-reveal] .pf-rd__view { --view-h: 88svh; }
-.pf-rd__subject[data-inspect] .pf-rd__window img {
-  transform: scale(1.75) translate(var(--pan-x, 0%), var(--pan-y, 0%));
-  cursor: grab;
+.pf-rd__subject[data-inspect][data-rd-reveal] .pf-rd__view { --view-h: 88svh; }
+.pf-rd__subject[data-inspect] .pf-rd__window {
+  /* While inspecting, the picture belongs to the hand that is moving it. */
+  touch-action: none;
 }
 
 /* ---- THE STORY, where a project has one. Technical, quiet, small. */
@@ -812,12 +842,45 @@
 
 /* ---- WHAT IS NOT HERE. */
 .pf-rd__pending {
-  margin: clamp(1.6rem, 5vh, 3rem) 0 0; max-width: 54ch;
-  padding: 0 var(--edge);
+  /* The edge is a MARGIN: as padding it was counted inside the 54ch measure
+     and left the sentence about a hundred pixels to set itself in. */
+  margin: clamp(1.6rem, 5vh, 3rem) var(--edge) 0; max-width: 54ch;
+  padding: 0;
   font-size: .84rem; line-height: 1.6; color: var(--muted);
 }
 .pf-rd__foot { padding: 0 var(--edge); margin-top: clamp(1.6rem, 5vh, 3rem); }
 
+
+/* ---- the reader on a landscape screen ----------------------------------
+   THE SCALE OF A GARMENT ONCE ENTERED. Browsing can be small; an entered
+   garment cannot. On a wide screen the garment is the full height the screen
+   has, and its name and the way to look closer stand beside it in a column —
+   an object on display with its label beside the door — instead of taking a
+   band off the top of the only dimension a full-length garment is limited
+   by. Two views of the same garment both get that height; a view that
+   withholds nothing (a single view, or both views in one frame) is as wide as
+   its photograph allows at that height. The width the screen has is still a
+   cap, so nothing is enlarged past its frame or cropped to fit. */
+@media (min-width: 1024px) and (min-aspect-ratio: 5/4) {
+  .pf-rd__views {
+    grid-template-columns: minmax(12rem, 19rem) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+  }
+  .pf-rd__type {
+    grid-column: 1; grid-row: 1; align-self: start;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pf-rd__tools { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .6rem; }
+  .pf-rd__stage { grid-column: 2; grid-row: 1; }
+  .pf-rd__view { --fit-h: calc((100vw - 2 * var(--edge) - 22rem) / (var(--aspect, .75) * var(--crop-w, 1))); }
+  .pf-rd__subject[data-rd-reveal] .pf-rd__view { --view-h: 100%; }
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='0'],
+  .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: 100%; }
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='1'],
+  .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'] { --view-h: 46%; }
+  .pf-rd__subject[data-inspect][data-rd-reveal] .pf-rd__view { --view-h: 100%; }
+}
 
 /* ---- the reader on a phone, and on an upright tablet -------------------
    A phone is the best device this experience has: one garment at a time,
@@ -830,26 +893,30 @@
   .pf-rd__type { grid-row: 2; grid-template-columns: minmax(0, 1fr); }
   .pf-rd__tools { grid-column: 1; grid-row: auto; justify-self: start; }
   .pf-rd__stage { grid-row: 1; }
-  .pf-rd__subject[data-reveal='together'] .pf-rd__stage,
-  .pf-rd__subject[data-reveal='foreground'] .pf-rd__stage {
+  .pf-rd__subject[data-rd-reveal='together'] .pf-rd__stage,
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__stage {
     /* Two views side by side on a narrow screen makes two small garments.
        They become one swipe instead. */
     overflow-x: auto; overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory; justify-content: flex-start;
     gap: .8rem;
   }
-  .pf-rd__subject[data-reveal='together'] .pf-rd__view,
-  .pf-rd__subject[data-reveal='foreground'] .pf-rd__view {
+  .pf-rd__subject[data-rd-reveal='together'] .pf-rd__view,
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view {
     scroll-snap-align: center;
   }
-  .pf-rd__subject[data-reveal='foreground'] .pf-rd__view[data-index='1'],
-  .pf-rd__subject[data-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'] { --view-h: 62svh; }
-  .pf-rd__subject[data-reveal='foreground'] .pf-rd__view[data-index='0'],
-  .pf-rd__subject[data-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: 62svh; }
+  /* The garment fills the frame the screen leaves it above its label,
+     rather than a fixed share of the screen with empty ground over it. The
+     view's own name hangs under the picture, so its line is kept inside the
+     row — a swiping stage clips anything below it. */
+  .pf-rd__subject[data-rd-reveal] .pf-rd__view { --view-h: calc(100% - 1.8rem); align-self: flex-start; }
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='1'],
+  .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'],
+  .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='0'],
+  .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: calc(100% - 1.8rem); align-self: flex-start; }
   .pf-rd__stages { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
 }
 @media (max-width: 767px) {
-  .pf-rd__view { --view-h: 58svh; }
   /* The head is one line at this width: the way back, and the number. The
      category's full name is already printed on the territory's own slate, so
      repeating it here only breaks the bar in half. */
@@ -858,10 +925,6 @@
   .pf-rd__back span { white-space: nowrap; }
   /* Room under the picture for its own label, which sits below the frame. */
   .pf-rd__views { gap: 1.9rem; }
-  .pf-rd__subject[data-reveal='single'] .pf-rd__view,
-  .pf-rd__subject[data-reveal='turn'] .pf-rd__view,
-  .pf-rd__subject[data-reveal='drag'] .pf-rd__view { --view-h: 60svh; }
-  .pf-rd__subject[data-inspect] .pf-rd__view { --view-h: 72svh; }
   .pf-rd__title { font-size: clamp(1.2rem, 6vw, 1.7rem); }
   .pf-rd__vname { bottom: -1.3rem; }
   .pf-rd__tools { margin-top: 1.9rem; }
@@ -873,14 +936,12 @@
 
 /* ---- the reader without motion ---------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .pf-rd__subject { animation: none; }
-  .pf-rd__view, .pf-rd__window img { transition: none; }
+  .pf-rd__subject[data-rd-reveal] .pf-rd__view, .pf-rd__window img { transition: none; }
   /* Nothing is withheld: a travelled frame simply opens onto the whole
-     photograph, both views at once. */
-  .pf-rd__subject[data-travel] .pf-rd__view--travel { --crop-w: 1; --second: 0; }
-  .pf-rd__view--travel .pf-rd__window img { transform: none; }
-  .pf-rd__view--travel [data-rd-vfront], .pf-rd__view--travel [data-rd-vback] { opacity: 1; }
-  .pf-rd__view--travel .pf-rd__vname { display: flex; gap: .6rem; }
+     photograph, both views at once, and there is nothing to turn. */
+  .pf-rd__subject[data-travel] .pf-rd__view--travel { --crop-w: 1; cursor: auto; touch-action: auto; }
+  .pf-rd__view--travel .pf-rd__vname [data-rd-vfront],
+  .pf-rd__view--travel .pf-rd__vname [data-rd-vback] { color: var(--muted); cursor: auto; }
 }
 
 /* ---- THE CLOSE ---------------------------------------------------------
@@ -961,6 +1022,9 @@
     position: static; grid-row: 3; max-width: 46ch; padding: .8rem var(--gutter) 0;
   }
   .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem var(--gutter) 0; }
+  /* The affordance joins the column under the pointer, as on a phone. Left
+     floating at the foot of the frame it landed on the pointer's sentence. */
+  .pf-sc--overture .pf-sc__enter { position: static; grid-row: 5; margin: .8rem var(--gutter) 0; }
   .pf-sc--pair .pf-sc__frame { padding-bottom: clamp(1.5rem, 5vh, 3rem); }
   .pf-pr__plate--lead { height: min(56svh, var(--fit-h)); }
   .pf-pr__plate--echo { height: min(25svh, var(--fit-h)); }

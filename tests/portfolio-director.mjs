@@ -133,7 +133,7 @@ try {
         if (!rd) return null;
         const img = rd.querySelector('.pf-rd__window img');
         return {
-          reveal: rd.dataset.reveal,
+          reveal: rd.dataset.rdReveal,
           garment: Math.round(img.getBoundingClientRect().height),
           stages: rd.querySelectorAll('.pf-rd__stage-item').length,
           pending: !!rd.querySelector('[data-subject-pending]'),

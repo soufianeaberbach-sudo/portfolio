@@ -788,6 +788,12 @@ const split = (statement: string, word: string) => {
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      /* Has the visitor done anything yet? A level opened by the page's own
+         address is the page initialising, not the visitor choosing. */
+      let visitorActed = false;
+      for (const type of ['pointerdown', 'keydown'] as const) {
+        window.addEventListener(type, () => { visitorActed = true; }, { capture: true, once: true });
+      }
       const chapterLinks = [...root.querySelectorAll<HTMLElement>('[data-chapter]')];
 
       /* ---- 1. chapters and screens ------------------------------------ */
@@ -855,17 +861,96 @@ const split = (statement: string, word: string) => {
         door.addEventListener('click', () => { subjectReturnTo = door; });
       }
 
+      /* THE FRAME A DOOR STANDS FOR. A range door wraps its picture; a deck
+         or pair door lies over it as a sibling; a hero's "Enter this garment"
+         is a line of type whose garment is the scene's own plate. The layer
+         opens out of, and closes back into, the picture — never the label. */
+      const frameOf = (door: HTMLElement): HTMLElement =>
+        door.querySelector<HTMLElement>('[data-door-source]')
+        ?? door.parentElement?.querySelector<HTMLElement>('[data-door-source]')
+        ?? door.closest('.pf-sc__frame')?.querySelector<HTMLElement>('figure')
+        ?? door;
+      const shown = (el: HTMLElement) => {
+        const box = el.getBoundingClientRect();
+        return box.width > 0 && box.height > 0;
+      };
+      /* The rect as a clip, in viewport percentages: the four numbers the
+         layer is clipped to while it grows out of, or back into, a frame. */
+      const insetOf = (el: HTMLElement) => {
+        const box = el.getBoundingClientRect();
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const pct = (n: number, of: number) => `${Math.min(100, Math.max(0, (n / of) * 100)).toFixed(2)}%`;
+        return `inset(${pct(box.top, h)} ${pct(w - box.right, w)} ${pct(h - box.bottom, h)} ${pct(box.left, w)})`;
+      };
+      let subjectMotion: Animation | null = null;
+      /* A garment on its way out: still on screen until its exit finishes,
+         and put away at once if anything else needs the screen first. */
+      let exiting: HTMLElement | null = null;
+      const putAway = (subject: HTMLElement) => {
+        subject.hidden = true;
+        subject.removeAttribute('data-inspect');
+        subject.removeAttribute('data-fore');
+        subject.dispatchEvent(new CustomEvent('pf:subject-reset'));
+        if (exiting === subject) exiting = null;
+      };
+
       const closeSubject = () => {
         if (!openSubject) return;
-        openSubject.hidden = true;
-        openSubject.removeAttribute('data-inspect');
-        openSubject.removeAttribute('data-fore');
+        const leaving = openSubject;
         openSubject = null;
-        const back = subjectReturnTo;
+        const world = leaving.closest<HTMLElement>('[data-world]');
+        /* THE WAY BACK IS THE WAY IN. The door the visitor used, or — for a
+           garment that was reached by its address, with no door behind it —
+           the garment's own frame in its territory, so a shared link still
+           ends on the work in its place in the range. */
+        let back = subjectReturnTo && document.contains(subjectReturnTo) ? subjectReturnTo : null;
         subjectReturnTo = null;
-        /* Back to the exact frame in the range the visitor came from, so the
-           act continues from where it was left rather than from its top. */
-        if (back && document.contains(back)) back.focus({ preventScroll: true });
+        if (!back && world) {
+          back = [...world.querySelectorAll<HTMLElement>(`[data-open-subject="${leaving.dataset.subject}"]`)]
+            .find((door) => shown(frameOf(door))) ?? null;
+        }
+        /* The territory behind never moved while the garment was open, so a
+           door that was on screen is still on screen. Only a door that is not
+           — the address case — is brought into view, and instantly, because
+           it happens behind the layer. */
+        if (back) {
+          const frame = frameOf(back);
+          const box = frame.getBoundingClientRect();
+          if (box.bottom < 0 || box.top > window.innerHeight) {
+            frame.scrollIntoView({ block: 'center', inline: 'nearest' });
+          }
+        }
+        subjectMotion?.cancel();
+        /* The garment leaves as it is — turned, or held close — and is put
+           back to rest only once it is out of sight. */
+        const finish = () => {
+          putAway(leaving);
+          subjectMotion = null;
+          if (back && document.contains(back)) back.focus({ preventScroll: true });
+        };
+        /* THE EXIT. The same clip as the entrance, run back into the frame
+           the garment came from, and shorter: the visitor is leaving, the
+           system answers. The layer thins out as it closes, so what is left
+           in the frame at the end is the garment in its range, not an empty
+           piece of the layer's own ground. */
+        if (back && !reduced()) {
+          subjectMotion = leaving.animate(
+            [
+              { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 },
+              { clipPath: insetOf(frameOf(back)), opacity: 0 },
+            ],
+            { duration: 280, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
+          );
+          exiting = leaving;
+          subjectMotion.onfinish = finish;
+          subjectMotion.oncancel = () => { if (exiting === leaving && openSubject !== leaving) putAway(leaving); };
+          /* Focus moves now, not after the clip: a key pressed during the
+             exit belongs to the range the visitor is returning to. */
+          if (document.contains(back)) back.focus({ preventScroll: true });
+        } else {
+          finish();
+        }
       };
 
       const showSubject = (world: HTMLElement | null, id: string | null) => {
@@ -874,21 +959,11 @@ const split = (statement: string, word: string) => {
           : null;
         if (!next) { closeSubject(); return; }
         if (openSubject === next) return;
-        if (openSubject) { openSubject.hidden = true; openSubject.removeAttribute('data-inspect'); }
-        /* THE ENTRANCE. The layer is clipped to the frame the visitor chose
-           and opens out from it, so the garment grows out of its place in the
-           range instead of a panel appearing over the top of it. Four numbers,
-           handed to CSS; no cloned node and no measuring after the fact. */
-        const source = world!.querySelector<HTMLElement>(`[data-open-subject="${id}"] [data-door-source], [data-open-subject="${id}"]`);
-        if (source && !reduced()) {
-          const box = source.getBoundingClientRect();
-          const w = window.innerWidth;
-          const h = window.innerHeight;
-          next.style.setProperty('--from-left', `${Math.max(0, Math.round((box.left / w) * 100))}%`);
-          next.style.setProperty('--from-right', `${Math.max(0, Math.round(((w - box.right) / w) * 100))}%`);
-          next.style.setProperty('--from-top', `${Math.max(0, Math.round((box.top / h) * 100))}%`);
-          next.style.setProperty('--from-bottom', `${Math.max(0, Math.round(((h - box.bottom) / h) * 100))}%`);
-        }
+        if (exiting === next) exiting = null;
+        subjectMotion?.cancel();
+        subjectMotion = null;
+        if (exiting) putAway(exiting);
+        if (openSubject) putAway(openSubject);
         const active = document.activeElement as HTMLElement | null;
         if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')) {
           subjectReturnTo = active;
@@ -896,9 +971,24 @@ const split = (statement: string, word: string) => {
         openSubject = next;
         next.hidden = false;
         next.scrollTop = 0;
-        void next.offsetHeight;
-        const first = next.querySelector<HTMLElement>(FOCUSABLE);
-        (first ?? next).focus({ preventScroll: true });
+        next.dispatchEvent(new CustomEvent('pf:subject-open'));
+        /* THE ENTRANCE. The layer is clipped to the frame the visitor chose
+           and opens out from it, so the garment grows out of its place in the
+           range instead of a panel appearing over the top of it. The layer
+           stays opaque the whole way: fading it in as well had the range, the
+           hero and the garment all showing through each other at the start. */
+        const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
+        if (source && shown(source) && !reduced()) {
+          subjectMotion = next.animate(
+            [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
+            { duration: 420, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
+          );
+          subjectMotion.onfinish = () => { subjectMotion = null; };
+        }
+        /* The layer itself takes the focus: it is labelled by the garment's
+           name, the next Tab reaches its way out, and a garment reached by a
+           pasted address does not light up a control nobody chose. */
+        next.focus({ preventScroll: true });
       };
 
       /* A DECK CARD IS READ TWICE: a card behind the leader steps forward
@@ -929,88 +1019,344 @@ const split = (statement: string, word: string) => {
         });
       }
 
-      /* THE READER'S OWN CONTROLS: look closer, and the two reveals that are
-         the visitor's to drive. Everything else about a reveal is CSS. */
+      /* THE READER'S OWN CONTROLS: the views, and looking closer.
+
+         Two rules hold everything below together.
+
+         A VIEW IS A STATE. Front and back are what the garment IS on screen,
+         not where the pointer happens to be: the visitor turns it, and it
+         stays turned until the visitor turns it again — including while they
+         reach for "Look closer".
+
+         DIRECT MANIPULATION IS DIRECT. Whatever follows a hand (the turn
+         under a drag, the inspection under a pointer or a finger) is written
+         straight onto the picture's own transform and clip, every frame, with
+         nothing eased behind it and no box resized. Easing is only for the
+         moments the system finishes a move on its own: a release settling, a
+         toggle, entering or leaving inspection. */
+      const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
+      const easeInOut = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+
       for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject')) {
         const inspect = subject.querySelector<HTMLButtonElement>('[data-rd-inspect]');
-        inspect?.addEventListener('click', () => {
-          const on = !subject.hasAttribute('data-inspect');
-          subject.toggleAttribute('data-inspect', on);
-          inspect.setAttribute('aria-pressed', String(on));
-          if (!on) {
-            for (const win of subject.querySelectorAll<HTMLElement>('[data-rd-window]')) {
-              win.style.removeProperty('--pan-x');
-              win.style.removeProperty('--pan-y');
+        const windows = [...subject.querySelectorAll<HTMLElement>('[data-rd-window]')];
+        const travelPlate = subject.querySelector<HTMLElement>('[data-rd-travel]');
+        const travelWindow = travelPlate?.querySelector<HTMLElement>('[data-rd-window]') ?? null;
+        const travelImg = travelWindow?.querySelector<HTMLImageElement>('img') ?? null;
+        const travelName = travelPlate?.querySelector<HTMLElement>('.pf-rd__vname') ?? null;
+        /* The turn is drawn by script only where motion is welcome; without
+           it the plate opens onto the whole photograph (see the CSS), which
+           withholds nothing. */
+        const travels = () => !!travelPlate && !reduced();
+        const front = Number(getComputedStyle(travelPlate ?? subject).getPropertyValue('--front')) || 0.55;
+
+        /* ---- THE TURN ------------------------------------------------- */
+        /* `t`: 0 is the front, 1 the back. Between the two only while a hand
+           or a settle is moving it. */
+        let t = 0;
+        let settling = 0;
+        /* Where the visible part of the photograph is, for a given `t`. The
+           window keeps one width — the wider of the two views — and is
+           clipped down to the view it is showing, so the front never shows a
+           sliver of the back, or the back of the front, and no layout runs
+           while the frame travels. */
+        const travelGeometry = (at: number) => {
+          const iw = travelImg!.offsetWidth;
+          const W = travelWindow!.clientWidth;
+          const w = (front + at * (1 - 2 * front)) * iw;
+          const a = at * front * iw;
+          const L = Math.max(0, (W - w) / 2);
+          return { iw, W, w, a, L, H: travelWindow!.clientHeight };
+        };
+        const drawTravel = () => {
+          if (!travels() || !travelImg || !travelWindow) return;
+          const g = travelGeometry(t);
+          travelWindow.style.clipPath = `inset(0px ${g.L.toFixed(2)}px 0px ${g.L.toFixed(2)}px)`;
+          if (!subject.hasAttribute('data-inspect')) {
+            travelImg.style.transform = `translate3d(${(g.L - g.a).toFixed(2)}px, 0, 0)`;
+          }
+          if (travelName) travelName.style.transform = `translate3d(${g.L.toFixed(2)}px, 0, 0)`;
+          /* ONE NAME AT A TIME. The label switches at the half-way point
+             rather than crossfading, so an unfinished turn never prints
+             FRONT and BACK over each other. */
+          const side = t < 0.5 ? 'front' : 'back';
+          if (travelPlate!.dataset.side !== side) {
+            travelPlate!.dataset.side = side;
+            for (const el of travelPlate!.querySelectorAll<HTMLElement>('[data-rd-vfront],[data-rd-vback]')) {
+              el.setAttribute('aria-pressed', String(el.hasAttribute(side === 'front' ? 'data-rd-vfront' : 'data-rd-vback')));
             }
           }
-        });
-        /* Panning, while inspecting: the pointer moves the frame, and the
-           arrow keys do the same for a keyboard. */
-        for (const win of subject.querySelectorAll<HTMLElement>('[data-rd-window]')) {
-          win.addEventListener('pointermove', (event) => {
-            if (!subject.hasAttribute('data-inspect')) return;
-            const box = win.getBoundingClientRect();
-            const x = (0.5 - (event.clientX - box.left) / box.width) * 16;
-            const y = (0.5 - (event.clientY - box.top) / box.height) * 16;
-            win.style.setProperty('--pan-x', `${x.toFixed(2)}%`);
-            win.style.setProperty('--pan-y', `${y.toFixed(2)}%`);
+        };
+        const settleTo = (target: number, duration: number, ease: (x: number) => number) => {
+          cancelAnimationFrame(settling);
+          const from = t;
+          if (reduced() || Math.abs(target - from) < 0.001) { t = target; drawTravel(); return; }
+          const began = performance.now();
+          const span = duration * Math.max(0.35, Math.abs(target - from));
+          const step = (now: number) => {
+            const x = clamp01((now - began) / span);
+            t = from + (target - from) * ease(x);
+            drawTravel();
+            if (x < 1) settling = requestAnimationFrame(step);
+          };
+          settling = requestAnimationFrame(step);
+        };
+        /* A deliberate toggle travels like the camera move it is; a release
+           only finishes what the hand already started. */
+        const turnTo = (target: number) => settleTo(target, 520, easeInOut);
+
+        if (travelPlate && travelWindow && travelImg) {
+          travelPlate.setAttribute('data-js-travel', '');
+          let press: { id: number; x: number; t: number; at: number; moved: boolean } | null = null;
+          let lastX = 0, lastAt = 0, velocity = 0;
+          travelPlate.addEventListener('pointerdown', (event) => {
+            if (!travels() || subject.hasAttribute('data-inspect') || event.button !== 0) return;
+            if ((event.target as HTMLElement).closest('[data-rd-vfront],[data-rd-vback]')) return;
+            cancelAnimationFrame(settling);
+            press = { id: event.pointerId, x: event.clientX, t, at: performance.now(), moved: false };
+            lastX = event.clientX; lastAt = press.at; velocity = 0;
           });
-        }
-        /* FOREGROUND: the second view is brought to the front when it is
-           chosen — the gesture Occasion's garments are read with. */
-        if (subject.dataset.reveal === 'foreground') {
-          for (const view of subject.querySelectorAll<HTMLElement>('.pf-rd__view')) {
-            view.addEventListener('click', () => {
-              subject.toggleAttribute('data-fore', view.dataset.index === '1');
-            });
-          }
-        }
-        /* TURN: one frame, and the visitor's own hand moves it. The pointer's
-           position across the plate is the position of the frame, so moving
-           across the garment turns it — and a drag does the same on a screen
-           with no pointer. Not bound to the reader's scroll: the scroll is
-           how the story below is reached, and one gesture should do one
-           thing. */
-        const travelPlate = subject.querySelector<HTMLElement>('[data-rd-travel]');
-        if (travelPlate && !reduced()) {
-          const setSecond = (value: number) => {
-            travelPlate.style.setProperty('--second', Math.min(1, Math.max(0, value)).toFixed(4));
+          travelPlate.addEventListener('pointermove', (event) => {
+            if (!press || event.pointerId !== press.id) return;
+            const dx = event.clientX - press.x;
+            if (!press.moved) {
+              if (Math.abs(dx) < 6) return;
+              press.moved = true;
+              try { travelPlate.setPointerCapture(press.id); } catch {}
+            }
+            /* Pulling the frame to the left brings the back in, the way a
+               garment turned on a stand would. One frame-width of travel is
+               the whole turn. */
+            const g = travelGeometry(press.t);
+            t = clamp01(press.t - dx / Math.max(1, g.w));
+            const now = performance.now();
+            if (now > lastAt) velocity = (event.clientX - lastX) / (now - lastAt);
+            lastX = event.clientX; lastAt = now;
+            drawTravel();
+          });
+          const release = (event: PointerEvent, cancelled: boolean) => {
+            if (!press || event.pointerId !== press.id) return;
+            const { moved } = press;
+            press = null;
+            try { travelPlate.releasePointerCapture(event.pointerId); } catch {}
+            if (!moved) {
+              /* A press that never travelled is a choice: turn it. */
+              if (!cancelled) turnTo(t < 0.5 ? 1 : 0);
+              return;
+            }
+            /* A flick is enough; otherwise the nearer view wins. Either way
+               the garment comes to rest on a view, never part-way. */
+            const target = !cancelled && Math.abs(velocity) > 0.4 ? (velocity < 0 ? 1 : 0) : (t < 0.5 ? 0 : 1);
+            settleTo(target, 300, easeOut);
           };
-          const fromPointer = (event: PointerEvent) => {
-            const box = travelPlate.getBoundingClientRect();
-            setSecond((event.clientX - box.left) / Math.max(1, box.width));
-          };
-          if (window.matchMedia('(hover: hover)').matches) {
-            travelPlate.addEventListener('pointermove', (event) => {
-              if (subject.hasAttribute('data-inspect')) return;
-              fromPointer(event);
-            });
-            travelPlate.addEventListener('pointerleave', () => setSecond(0));
-          } else {
-            let dragging = false;
-            travelPlate.addEventListener('pointerdown', (event) => {
-              dragging = true; travelPlate.setPointerCapture(event.pointerId); fromPointer(event);
-            });
-            travelPlate.addEventListener('pointermove', (event) => { if (dragging) fromPointer(event); });
-            travelPlate.addEventListener('pointerup', () => { dragging = false; });
-          }
-          /* And for a keyboard: the two views are reachable without a
-             pointer at all. */
-          const front = subject.querySelector<HTMLElement>('[data-rd-vfront]');
-          const back = subject.querySelector<HTMLElement>('[data-rd-vback]');
-          for (const [el, value] of [[front, 0], [back, 1]] as Array<[HTMLElement | null, number]>) {
+          travelPlate.addEventListener('pointerup', (event) => release(event, false));
+          /* Only a real cancel ends a turn early. Losing pointer capture is not
+             one: a touch already captures implicitly to the picture it began
+             on, and the browser hands capture back and forth while the moves
+             keep arriving. */
+          travelPlate.addEventListener('pointercancel', (event) => release(event, true));
+
+          /* The two names under the frame are the turn's keyboard controls
+             as well as its labels. Without motion both views are already on
+             screen, so they stay labels. */
+          if (!reduced()) for (const [el, value] of [
+            [travelPlate.querySelector<HTMLElement>('[data-rd-vfront]'), 0],
+            [travelPlate.querySelector<HTMLElement>('[data-rd-vback]'), 1],
+          ] as Array<[HTMLElement | null, number]>) {
             if (!el) continue;
             el.setAttribute('tabindex', '0');
             el.setAttribute('role', 'button');
-            el.addEventListener('focus', () => setSecond(value));
-            el.addEventListener('click', () => setSecond(value));
+            el.setAttribute('aria-pressed', String(value === 0));
+            const choose = () => {
+              if (subject.hasAttribute('data-inspect')) setInspect(false);
+              turnTo(value);
+            };
+            el.addEventListener('click', choose);
             el.addEventListener('keydown', (event) => {
-              if ((event as KeyboardEvent).key === 'Enter' || (event as KeyboardEvent).key === ' ') {
-                event.preventDefault(); setSecond(value);
-              }
+              if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); }
             });
           }
         }
+
+        /* ---- FOREGROUND ----------------------------------------------- */
+        /* The second view is brought to the front when it is chosen — the
+           gesture Occasion's garments are read with. Each view is a real
+           control, so the swap is the same for a click, a tap and a key. */
+        if (subject.dataset.rdReveal === 'foreground') {
+          for (const view of subject.querySelectorAll<HTMLElement>('.pf-rd__view')) {
+            const second = view.dataset.index === '1';
+            const name = view.querySelector('.pf-rd__vname')?.textContent?.trim() ?? '';
+            const sync = () => {
+              const fore = subject.hasAttribute('data-fore');
+              view.setAttribute('aria-pressed', String(second === fore));
+            };
+            view.setAttribute('role', 'button');
+            view.setAttribute('tabindex', '0');
+            view.setAttribute('aria-label', `${name} view, large`);
+            sync();
+            subject.addEventListener('pf:fore', sync);
+            const choose = () => {
+              if (subject.hasAttribute('data-inspect')) return;
+              subject.toggleAttribute('data-fore', second);
+              subject.dispatchEvent(new CustomEvent('pf:fore'));
+            };
+            view.addEventListener('click', choose);
+            view.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); }
+            });
+          }
+        }
+
+        /* ---- LOOKING CLOSER ------------------------------------------- */
+        /* Where to look is two fractions, shared by every view of the
+           garment: 0 is the left or top edge of the VIEW (not the
+           photograph), 1 its right or bottom edge. */
+        let fx = 0.5, fy = 0.5;
+        /* The bounds come from the picture as it is actually laid out: the
+           part of the photograph this view shows, the window it shows it in,
+           and a magnification that brings the rendition to roughly its own
+           pixel size. Every edge of the view — collar, sleeve, hem — is
+           reachable, and nothing beyond it (the other figure, the studio
+           margin past the frame) ever is. */
+        const inspectGeometry = (win: HTMLElement) => {
+          const img = win.querySelector<HTMLImageElement>('img')!;
+          const iw = img.offsetWidth;
+          const H = win.clientHeight;
+          let L = 0, w = win.clientWidth, a = -img.offsetLeft;
+          if (win === travelWindow && travels()) {
+            const g = travelGeometry(t);
+            L = g.L; w = g.w; a = g.a;
+          }
+          const s = Math.min(2.6, Math.max(1.8, (img.naturalWidth || iw * 2) / Math.max(1, iw)));
+          const left = img.offsetLeft;
+          return {
+            img, s, L, w, H,
+            txMax: L - left - s * a,
+            txMin: L + w - left - s * (a + w),
+            tyMax: 0,
+            tyMin: H - s * H,
+          };
+        };
+        const drawInspect = () => {
+          if (!subject.hasAttribute('data-inspect')) return;
+          for (const win of windows) {
+            const g = inspectGeometry(win);
+            const tx = g.txMax + (g.txMin - g.txMax) * fx;
+            const ty = g.tyMax + (g.tyMin - g.tyMax) * fy;
+            g.img.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${g.s.toFixed(3)})`;
+          }
+        };
+        /* Entering and leaving are the only eased moves here, and they are
+           transitions, so either can be reversed half-way. */
+        const easeImages = (on: boolean) => {
+          for (const win of windows) {
+            const img = win.querySelector<HTMLImageElement>('img')!;
+            img.style.transition = on && !reduced() ? 'transform 300ms cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
+          }
+        };
+        let easing = 0;
+        const setInspect = (on: boolean) => {
+          cancelAnimationFrame(settling);
+          if (travels()) { t = t < 0.5 ? 0 : 1; }
+          subject.toggleAttribute('data-inspect', on);
+          inspect?.setAttribute('aria-pressed', String(on));
+          easeImages(true);
+          window.clearTimeout(easing);
+          easing = window.setTimeout(() => easeImages(false), 320);
+          if (on) {
+            fx = 0.5; fy = 0.5;
+            drawTravel();
+            drawInspect();
+          } else {
+            for (const win of windows) {
+              const img = win.querySelector<HTMLImageElement>('img')!;
+              img.style.transform = '';
+            }
+            drawTravel();
+          }
+        };
+        inspect?.addEventListener('click', () => setInspect(!subject.hasAttribute('data-inspect')));
+
+        for (const win of windows) {
+          /* A mouse looks where it points. */
+          win.addEventListener('pointermove', (event) => {
+            if (!subject.hasAttribute('data-inspect') || event.pointerType !== 'mouse') return;
+            const g = inspectGeometry(win);
+            const box = win.getBoundingClientRect();
+            fx = clamp01((event.clientX - box.left - g.L) / Math.max(1, g.w));
+            fy = clamp01((event.clientY - box.top) / Math.max(1, g.H));
+            drawInspect();
+          });
+          /* A finger moves the picture itself, one-to-one. */
+          let drag: { id: number; x: number; y: number; fx: number; fy: number } | null = null;
+          win.addEventListener('pointerdown', (event) => {
+            if (!subject.hasAttribute('data-inspect') || event.pointerType === 'mouse') return;
+            if (drag) return;
+            drag = { id: event.pointerId, x: event.clientX, y: event.clientY, fx, fy };
+            easeImages(false);
+            try { win.setPointerCapture(event.pointerId); } catch {}
+          });
+          win.addEventListener('pointermove', (event) => {
+            if (!drag || event.pointerId !== drag.id) return;
+            const g = inspectGeometry(win);
+            fx = clamp01(drag.fx - (event.clientX - drag.x) / Math.max(1, g.txMax - g.txMin));
+            fy = clamp01(drag.fy - (event.clientY - drag.y) / Math.max(1, g.tyMax - g.tyMin));
+            drawInspect();
+          });
+          const end = (event: PointerEvent) => { if (drag && event.pointerId === drag.id) drag = null; };
+          win.addEventListener('pointerup', end);
+          win.addEventListener('pointercancel', end);
+        }
+        /* A keyboard moves the view with the arrow keys while inspecting —
+           a tenth of the way per press, the whole way with Home and End. */
+        subject.addEventListener('keydown', (event) => {
+          if (!subject.hasAttribute('data-inspect')) return;
+          const step = 0.1;
+          const keys: Record<string, () => void> = {
+            ArrowLeft: () => { fx = clamp01(fx - step); },
+            ArrowRight: () => { fx = clamp01(fx + step); },
+            ArrowUp: () => { fy = clamp01(fy - step); },
+            ArrowDown: () => { fy = clamp01(fy + step); },
+            Home: () => { fy = 0; },
+            End: () => { fy = 1; },
+          };
+          const move = keys[event.key];
+          if (!move) return;
+          event.preventDefault();
+          move();
+          drawInspect();
+        });
+
+        /* ---- LIFECYCLE ------------------------------------------------ */
+        /* A garment is always entered on its front, at rest. */
+        const reset = () => {
+          cancelAnimationFrame(settling);
+          window.clearTimeout(easing);
+          t = 0; fx = 0.5; fy = 0.5;
+          subject.removeAttribute('data-inspect');
+          inspect?.setAttribute('aria-pressed', 'false');
+          for (const win of windows) {
+            const img = win.querySelector<HTMLImageElement>('img')!;
+            img.style.transform = ''; img.style.transition = 'none';
+          }
+          drawTravel();
+        };
+        subject.addEventListener('pf:subject-reset', reset);
+        subject.addEventListener('pf:subject-open', () => {
+          reset();
+          /* The picture may arrive after the layer: draw again once it has
+             its size. */
+          for (const win of windows) {
+            const img = win.querySelector<HTMLImageElement>('img')!;
+            if (!img.complete) img.addEventListener('load', () => { drawTravel(); drawInspect(); }, { once: true });
+          }
+        });
+        new ResizeObserver(() => {
+          if (subject.hidden) return;
+          drawTravel();
+          drawInspect();
+        }).observe(subject);
       }
 
       /* Which screen of a chapter is showing. `null` is the chapter's own
@@ -1066,10 +1412,15 @@ const split = (statement: string, word: string) => {
         if (target && document.contains(target)) target.focus({ preventScroll: true });
       };
 
-      const openWorldById = (id: string, category: string | null) => {
+      /* `keepPlace`: the chapter is already open and only the GARMENT level is
+         changing. The territory behind a garment is the visitor's place in the
+         range, so opening or closing a garment must not scroll it or move the
+         focus inside it — the garment layer handles both. */
+      const openWorldById = (id: string, category: string | null, keepPlace = false) => {
         const next = worlds.get(id);
         if (!next) { closeWorld(); return; }
         const already = openWorld === next;
+        if (already && keepPlace) return;
         if (!already) {
           if (openWorld) openWorld.removeAttribute('data-open');
           if (!restoreFocusTo) {
@@ -1098,8 +1449,13 @@ const split = (statement: string, word: string) => {
            when a focused element's container becomes inert lands after a focus
            call made on the same tick. */
         void next.offsetHeight;
+        /* A chapter opened by the visitor puts the focus on its first control.
+           A chapter opened by its ADDRESS, before the visitor has done
+           anything, focuses the chapter itself: focusing a control there made
+           the browser draw a keyboard ring around "Portfolio" for the whole
+           visit, on a page nobody had pressed a key on. */
         const first = next.querySelector<HTMLElement>(FOCUSABLE);
-        (first ?? next).focus({ preventScroll: true });
+        (visitorActed ? (first ?? next) : next).focus({ preventScroll: true });
         if (!already) setInert(true);
         layoutAll();
       };
@@ -1119,7 +1475,11 @@ const split = (statement: string, word: string) => {
         if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
         const { world, category, subject } = parseHash();
         if (world && worlds.has(world)) {
-          openWorldById(world, category);
+          /* Entering a garment, or stepping back out of it into the territory
+             it belongs to, is a change at the garment level only. */
+          const garmentOnly = openWorld === worlds.get(world)
+            && (subject !== null || (openSubject !== null && openSubject.dataset.of === category));
+          openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
              the chapter and the territory, so leaving it lands the visitor
              back exactly where they were. */
@@ -1208,7 +1568,10 @@ const split = (statement: string, word: string) => {
         if (items.length === 0) return;
         const first = items[0];
         const last = items[items.length - 1];
-        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        /* The layer itself holds the focus when it opens: Tab enters it from
+           the top, Shift+Tab from the bottom, and neither leaves it. */
+        if (document.activeElement === scope) { event.preventDefault(); (event.shiftKey ? last : first).focus(); }
+        else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
         else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
         else if (!openWorld.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
       });
@@ -1464,7 +1827,14 @@ const split = (statement: string, word: string) => {
           else if (event.key === 'Home') { event.preventDefault(); goTo(queue, 0); }
           else if (event.key === 'End') { event.preventDefault(); goTo(queue, queue.slots.length - 1); }
         });
-        let dragging = false, startX = 0, pointerId = -1;
+        /* A PRESS IS NOT YET A DRAG. Capturing the pointer on the press
+           itself re-targeted the click that follows onto the stage, so a card
+           in the act — every one of which is a door — could never be entered
+           with a mouse. The deck now only takes the pointer once the hand has
+           actually travelled; a press that stays put is left alone and the
+           door underneath receives its click. */
+        let pressed = false, dragging = false, startX = 0, pointerId = -1;
+        const DRAG_START = 6;
         queue.stage.addEventListener('pointerdown', (event) => {
           if (event.button !== 0 || queue.slots.length < 2) return;
           /* The deck never starts a drag from its own controls. A GARMENT'S
@@ -1473,12 +1843,17 @@ const split = (statement: string, word: string) => {
              draggable if a link over it counted as a control. The door itself
              stands down when the hand moved — see its click handler. */
           if ((event.target as HTMLElement).closest('button,a:not([data-open-subject])')) return;
-          finishWheel(queue, true);
-          dragging = true; startX = event.clientX; pointerId = event.pointerId; queue.drag = 0;
-          queue.stage.setPointerCapture(pointerId);
+          pressed = true; dragging = false;
+          startX = event.clientX; pointerId = event.pointerId; queue.drag = 0;
         });
         queue.stage.addEventListener('pointermove', (event) => {
-          if (!dragging || event.pointerId !== pointerId) return;
+          if (!pressed || event.pointerId !== pointerId) return;
+          if (!dragging) {
+            if (Math.abs(event.clientX - startX) < DRAG_START) return;
+            dragging = true;
+            finishWheel(queue, true);
+            try { queue.stage.setPointerCapture(pointerId); } catch {}
+          }
           queue.drag = event.clientX - startX;
           if (Math.abs(queue.drag) < 2) return;
           const direction = Math.sign(queue.drag);
@@ -1488,14 +1863,20 @@ const split = (statement: string, word: string) => {
           if (wheel) seekWheel(wheel, Math.min(.98, Math.abs(queue.drag) / Math.max(150, queue.width * .65)));
         });
         queue.stage.addEventListener('pointerup', (event) => {
-          if (!dragging || event.pointerId !== pointerId) return;
+          if (event.pointerId !== pointerId) return;
+          pressed = false;
+          if (!dragging) return;
           dragging = false;
           try { queue.stage.releasePointerCapture(pointerId); } catch {}
           const commit = Math.abs(queue.drag) >= Math.max(44, queue.width * .18);
           queue.drag = 0;
           settleWheel(queue, commit);
         });
-        queue.stage.addEventListener('pointercancel', () => { dragging = false; queue.drag = 0; settleWheel(queue, false); });
+        queue.stage.addEventListener('pointercancel', () => {
+          pressed = false;
+          if (!dragging) return;
+          dragging = false; queue.drag = 0; settleWheel(queue, false);
+        });
         render(queue);
       }
 

@@ -82,6 +82,12 @@ export interface ImageAsset {
      single-view model down the centre. Optional: a consumer that has not been
      told MUST assume 1 and leave the frame whole. */
   views?: 1 | 2;
+  /* WHETHER THE TWO VIEWS OF A TWO-UP CAN BE CUT APART WITHOUT CUTTING
+     EITHER. `false` where the models touch — there is then no line between
+     them that leaves both garments whole, so anything that would split the
+     frame shows it whole instead. Recorded from the same measurement as
+     `front`; unset means separable. */
+  separable?: boolean;
 }
 
 export interface ImageCredit {
@@ -366,6 +372,10 @@ const FRONT: Record<string, number> = {
    fact FRONT's note above records, kept here as the thing a renderer asks. */
 const SINGLE_VIEW = /^swim\//;
 
+/* The three two-ups FRONT's note records as having no gap: the models touch,
+   so a split anywhere cuts one of the two garments. */
+const TOUCHING = new Set(['evening/1', 'jersey/9', 'sport/10']);
+
 const image = (ref: string, alt: string): ImageAsset => {
   const [width, height] = INTRINSIC[ref] ?? [1400, 1868];
   return {
@@ -376,6 +386,7 @@ const image = (ref: string, alt: string): ImageAsset => {
     alt,
     front: FRONT[ref] ?? 0.55,
     views: SINGLE_VIEW.test(ref) ? 1 : 2,
+    ...(TOUCHING.has(ref) ? { separable: false } : {}),
   };
 };
 
@@ -729,7 +740,7 @@ export const projectSubject = (project: Project, world: string): Subject => {
      view than half of another frame. A composite is used only for the views
      it is not already supplying separately, and then its own measured
      geometry says where the front ends and the back begins. */
-  const twoUp = final.composite?.views === 2 ? final.composite : undefined;
+  const twoUp = final.composite?.views === 2 && final.composite.separable !== false ? final.composite : undefined;
   const views: SubjectView[] = [
     ...(final.front
       ? view('front', final.front, 'whole')
@@ -784,7 +795,10 @@ export const referenceSubject = (
   category: string,
   reveal: Reveal,
 ): Subject => {
-  const twoUp = reference.image.views === 2;
+  /* A two-up whose models touch cannot be split without cutting one of the
+     garments, so it is shown as the one frame it is: both views, whole. */
+  const twoUp = reference.image.views === 2 && reference.image.separable !== false;
+  const whole = reference.image.views === 2 && !twoUp;
   return {
     id: reference.id,
     world,
@@ -795,7 +809,7 @@ export const referenceSubject = (
           { key: 'front', label: VIEW_LABEL.front, image: reference.image, crop: 'front' },
           { key: 'back', label: VIEW_LABEL.back, image: reference.image, crop: 'back' },
         ]
-      : [{ key: 'front', label: VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
+      : [{ key: 'front', label: whole ? 'Front and back' : VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
     origin: [],
     build: [],
     reveal: twoUp ? reveal : 'single',

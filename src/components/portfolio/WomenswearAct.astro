@@ -483,7 +483,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                             properly — a 120px garment nobody can open is
                             decoration, not portfolio content. */}
                         <a class="pf-sh__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
-                           aria-label={`${noun} ${pad(beat.from + i + 1)}${item.title ? ` — ${item.title}` : ''}`}>
+                           aria-label={`${noun} ${pad(beat.from + i + 1)} — ${item.title ?? item.cover.alt}`}>
                           <span class="pf-sh__window" data-door-source>
                             <img
                               src={item.cover.src} srcset={item.cover.srcset}
@@ -695,17 +695,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
         const travel = subject.reveal === 'turn'
           && subject.views.length > 1
           && subject.views[0].image.src === subject.views[1].image.src;
+        /* The gesture is carried as `data-rd-reveal`, never `data-reveal`:
+           that name is the site's scroll-reveal hook, which held every reader
+           at zero opacity and faded it in over the range behind it. */
         return (
           <article
             class="pf-rd__subject"
             id={`${world.id}-${subject.category}-${subject.id}`}
             data-subject={subject.id}
             data-of={subject.category}
-            data-reveal={subject.reveal}
+            data-rd-reveal={subject.reveal}
             data-travel={travel ? '' : undefined}
             data-role={subject.role}
             data-verified={subject.verified ? 'yes' : 'no'}
             aria-labelledby={`${subject.id}-rd-title`}
+            tabindex="-1"
             hidden
           >
             {/* ---- THE HEAD. Where you are, and the way out. Deliberately
