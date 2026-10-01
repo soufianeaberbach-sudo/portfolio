@@ -2103,6 +2103,7 @@ const split = (statement: string, word: string) => {
         const turns = [...act.querySelectorAll<HTMLElement>('[data-turn]')];
         const fields = [...act.querySelectorAll<HTMLElement>('[data-ov-field]')];
         const approaches = [...act.querySelectorAll<HTMLElement>('[data-approach]')];
+        const entrances = [...act.querySelectorAll<HTMLElement>('[data-entrance]')];
         const movements = [...act.querySelectorAll<HTMLElement>('[data-movement]')];
         const where = act.querySelector<HTMLElement>('[data-act-where]');
         const toggle = act.querySelector<HTMLElement>('[data-act-toggle]');
@@ -2153,6 +2154,13 @@ const split = (statement: string, word: string) => {
           for (const plate of approaches) {
             plate.style.setProperty('--approach', ease(progress(plate, h, 0, 0.26)).toFixed(4));
           }
+          /* OCCASION's entrance: out of the back detail to the whole gown.
+             Written on the image itself, not on a parent variable. */
+          for (const win of entrances) {
+            const img = win.querySelector<HTMLElement>('img');
+            const p = ease(progress(win, h, 0, 0.28));
+            if (img) img.style.transform = `scale(${(2.6 - 1.6 * p).toFixed(4)})`;
+          }
           nameNow(h);
         };
 
@@ -2196,6 +2204,28 @@ const split = (statement: string, word: string) => {
            back arrives beside its front, and a group is read left to right,
            each once, as its spread comes into view. A spread that receives
            the focus — a garment being returned to — arrives at once. */
+        /* ACTIVEWEAR's heats run in from the left, and SWIM's phrases settle
+           into the white, each once, as they come into view. */
+        const arrivals = [...act.querySelectorAll<HTMLElement>('[data-scene="sprint"], [data-scene="line"]')];
+        if (motion && arrivals.length) {
+          const land = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.setAttribute('data-in', '');
+              land.unobserve(entry.target);
+            }
+          }, { root: act, threshold: 0.3 });
+          for (const scene of arrivals) {
+            scene.setAttribute('data-armed', '');
+            for (const group of scene.querySelectorAll<HTMLElement>('.pf-sp, .pf-ln__phrase')) {
+              [...group.children].forEach((fig, i) => (fig as HTMLElement).style.setProperty('--i', String(i)));
+              land.observe(group);
+              /* A garment returned to by the keyboard arrives at once. */
+              group.addEventListener('focusin', () => group.setAttribute('data-in', ''));
+            }
+          }
+        }
+
         const range = act.querySelector<HTMLElement>('[data-scene="range"]');
         if (range && motion) {
           range.setAttribute('data-rg-armed', '');

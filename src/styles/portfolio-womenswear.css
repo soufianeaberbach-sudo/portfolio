@@ -45,7 +45,7 @@
    into every scene, and at 390px that capped a two-up plate at half the
    height it could actually have. */
 .pf-act { --ww-accent: #c7020c; }
-.pf-ov__plate, .pf-tn__plate, .pf-ap__plate, .pf-pr__plate {
+.pf-ov__plate, .pf-ap__plate, .pf-en__plate {
   --fit-h: calc((100vw - 2 * var(--edge)) / (var(--aspect, .75) * var(--half, 1)));
 }
 /* HOW MUCH OF A FRAME A SCENE SHOWS, for the whole act in two rules: a two-up
@@ -313,62 +313,6 @@
 }
 .pf-sc__pointer b { display: block; color: var(--ink); font-weight: 500; }
 
-/* ================= SET PIECE 02 — THE PAIR ==============================
-   Streetwear. No motion whatever: two frames at deliberately unequal scale,
-   off the centre line, sharing one floor. It is the only composition in the
-   act that does not move, which is what makes it an interruption. */
-/* Streetwear is ONE page: the loud name, and the two garments standing under
-   it. So the pair does not take a screen of its own and does not pin — it
-   follows the name directly, which is what makes the territory an
-   interruption rather than a short version of everything else. */
-.pf-sc--pair .pf-sc__frame {
-  position: static; height: auto;
-  align-items: end; justify-items: start;
-  grid-template-columns: auto auto;
-  justify-content: start;
-  column-gap: clamp(1.5rem, 5vw, 5rem);
-  padding-block: clamp(1.5rem, 5vh, 3rem) clamp(3rem, 10vh, 7rem);
-}
-.pf-pr__plate {
-  position: relative; margin: 0; background: #fff;
-  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-  width: auto; display: flex; justify-content: center;
-}
-.pf-pr__plate--lead { height: min(70svh, var(--fit-h)); }
-/* The echo is not a thumbnail and not a match: it is half the lead, standing
-   on the same floor, which is the asymmetry. */
-.pf-pr__plate--echo { height: min(36svh, var(--fit-h)); align-self: end; }
-.pf-pr__window {
-  position: relative; display: block; overflow: hidden;
-  height: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-  width: auto; flex: none;
-}
-.pf-pr__window img {
-  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
-}
-
-/* ================= SET PIECE 03 — THE TURN ==============================
-   Occasion, and the second and last use of the device. On a gown the back is
-   not a second view, it is the garment, so it gets the act's largest frame
-   and its slowest travel — and no copy at all. */
-.pf-sc--turn { --track: 140svh; }
-.pf-tn__plate {
-  position: relative; margin: 0; background: #fff;
-  height: min(86svh, 100%, var(--fit-h));
-  aspect-ratio: calc(var(--aspect, .75) * .5);
-  width: auto; display: flex; justify-content: center;
-}
-.pf-tn__window {
-  position: relative; display: block; overflow: hidden;
-  height: 100%; aspect-ratio: calc(var(--aspect, .75) * .5);
-  width: auto; flex: none;
-}
-.pf-tn__window img {
-  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
-  transform: translateX(calc(var(--turn, 0) * -50%));
-  will-change: transform;
-}
-
 /* ================= SET PIECE 04 — THE APPROACH ==========================
    Swim. Scale, and nothing else: the figure arrives out of a field of white,
    far then whole, and is never cropped closer than the complete silhouette —
@@ -519,123 +463,168 @@
 }
 .pf-sc--range[data-rg-armed] .pf-rg--lineup[data-rg-in] .pf-rg__fig { opacity: 1; transform: none; }
 
-/* THE RAIL — Occasion. Full-length gowns in one horizontal run on one floor,
-   scrolled or dragged. Quiet after the drama, and nothing like a grid. */
-.pf-sc--rail { padding-block: clamp(2rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem); }
-.pf-rl {
-  list-style: none; margin: 0; padding: 0 0 1rem;
-  display: flex; align-items: flex-end; gap: clamp(.8rem, 2vw, 1.8rem);
-  overflow-x: auto; overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  scrollbar-width: thin;
-  /* A run that continues past the edge is cut off there, and a cut-off figure
-     reads as a bad crop rather than as "there is more". The fade says
-     "there is more" without cropping anybody. */
-  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 4rem), transparent 100%);
+/* ================= A FIGURE, ANYWHERE IN THE ACT ========================
+   The four worlds after Ready-to-Wear place garments with one shared piece:
+   the photograph cut at its own measured front edge, or shown whole, and a
+   real door around it. A figure is as tall as `--h` and as wide as its own
+   proportion makes it, never wider than the room it is given. */
+.pf-fig {
+  --crop-w: var(--front, .55);
+  margin: 0; min-width: 0; flex: 0 1 calc(var(--h, 50svh) * var(--aspect, .75) * var(--crop-w));
 }
-.pf-rl:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 4px; }
-.pf-rl__hanger {
-  flex: none; scroll-snap-align: center;
-  height: clamp(16rem, 42vh, 26rem);
-  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-  background: #fff;
+.pf-fig[data-crop='whole'] { --crop-w: 1; }
+.pf-fig__door { display: block; color: inherit; text-decoration: none; -webkit-user-drag: none; user-select: none; touch-action: manipulation; }
+.pf-fig__window {
+  position: relative; display: block; overflow: hidden; background: #fff;
+  width: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--crop-w));
+  transition: box-shadow 220ms ease;
 }
-.pf-rl__window {
-  position: relative; display: block; overflow: hidden; height: 100%; width: 100%;
-}
-.pf-rl__window img {
-  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
-}
-
-/* THE LINE — Swim. One row, one baseline, the smallest figures and the most
-   white in the act. No frame, no number, no furniture. */
-.pf-sc--line { padding-block: clamp(3rem, 10vh, 7rem) clamp(3rem, 9vh, 6rem); }
-.pf-ln {
-  list-style: none; margin: 0; padding: 0 0 1rem;
-  display: flex; align-items: flex-end; gap: clamp(1rem, 3vw, 3rem);
-  overflow-x: auto; overscroll-behavior-x: contain;
-  scrollbar-width: thin;
-  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 5rem), transparent 100%);
-}
-.pf-ln:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 4px; }
-.pf-ln__fig { flex: none; height: clamp(9rem, 26vh, 16rem); }
-.pf-ln__fig img { height: 100%; width: auto; display: block; }
-
-/* THE DECK — Activewear, and the runway's own component. What changes here is
-   only the room around it: the deck solves its card size from the width it is
-   handed, so the measure is also capped by the height left under the bar. */
-.pf-sc--deck { padding-block: clamp(1.5rem, 5vh, 3.5rem) clamp(3rem, 9vh, 6rem); }
-.pf-sc--deck .pf-sc__frame { position: static; height: auto; }
-.pf-act .pf-panel { padding: 0; background: none; border: 0; }
-.pf-act .pf-viewer { display: block; }
-.pf-act .pf-deck { margin: 0; }
-.pf-act .pf-stage {
-  width: min(72vw, 62rem, calc((100svh - var(--bar-h) - 5rem) * 1.42));
-  margin: 0 auto;
-}
-.pf-act .pf-runbar {
-  width: min(72vw, 62rem, calc((100svh - var(--bar-h) - 5rem) * 1.42));
-  margin: 1.2rem auto 0;
-}
-
-
-/* ================= THE DOORS ============================================
-   Every garment the chapter shows can be entered. The affordance is NOT
-   printed on the picture: no button, no icon, no overlay at rest. It appears
-   only under a pointer or a focus ring, because fashion comes first and the
-   interface answers when it is asked.
-
-   The one place it is SAID is under the hero of each territory — taught once,
-   in label type, so the ranges are understood without being labelled. */
-.pf-rl__door, .pf-ln__door {
-  color: inherit; text-decoration: none;
-}
-/* Each door takes the shape of the frame it sits in. A hanger on the rail is
-   a box with a height and no grid, so its door simply fills it — a subgrid
-   rule meant for another mechanism once left it a height of nothing, and the
-   whole rail rendered as empty white frames. */
-.pf-rl__door { display: block; height: 100%; }
-.pf-ln__door { display: grid; gap: .4rem; }
-.pf-rl__hanger { position: relative; }
-/* The mark of a door: the studio field lifts a hair and the frame draws a
-   hairline. Nothing moves the garment. */
-.pf-rl__door .pf-rl__window,
-.pf-ln__door span {
-  transition: box-shadow 220ms ease, transform 320ms var(--ease);
-}
-.pf-rl__door:focus-visible .pf-rl__window,
-.pf-ln__door:focus-visible span {
-  box-shadow: 0 0 0 1px var(--line-strong);
-  transform: translateY(-2px);
-}
-/* Only a pointer that can hover gets the hover mark: on a touch screen the
-   browser fakes a hover on tap and leaves the frame lifted afterwards. */
+.pf-fig__window img { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; }
+.pf-fig__door:focus-visible { outline: none; }
+.pf-fig__door:focus-visible .pf-fig__window { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
 @media (hover: hover) and (pointer: fine) {
-  .pf-rl__door:hover .pf-rl__window,
-  .pf-ln__door:hover span {
-    box-shadow: 0 0 0 1px var(--line-strong);
-    transform: translateY(-2px);
-  }
-  .pf-pr__door:hover { box-shadow: 0 0 0 1px var(--line-strong); }
-  .pf-sc__enter:hover { border-bottom-color: var(--ww-accent); }
+  .pf-fig__door:hover .pf-fig__window { box-shadow: 0 0 0 1px var(--line-strong); }
 }
-.pf-pr__door:focus-visible, .pf-slot__door:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
-/* A range door's ring is drawn around the PICTURE it opens, which is the
-   thing the visitor is choosing — the link box itself is a grid item whose
-   width says nothing about the garment. */
-.pf-rl__door:focus-visible, .pf-ln__door:focus-visible { outline: none; }
-.pf-rl__door:focus-visible .pf-rl__window,
-.pf-ln__door:focus-visible span { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
-/* The pair and the deck carry their door as a layer over the plate, because
-   both are compositions that must not gain a box. */
-.pf-pr__door, .pf-slot__door { position: absolute; inset: 0; z-index: 3; }
-/* A door must never start a native link drag: the deck under it is dragged
-   with the same pointer, and the browser's own link-drag swallowed it. */
-.pf-rg__door, .pf-rl__door, .pf-ln__door, .pf-pr__door, .pf-slot__door {
-  -webkit-user-drag: none; user-select: none; touch-action: manipulation;
+/* A world that is not on the bone ground takes its whole width with it. */
+.pf-tr[data-territory='streetwear'], .pf-tr[data-territory='swimwear'] {
+  box-shadow: 0 0 0 100vmax var(--world-ground);
+  clip-path: inset(0 -100vmax);
+  background: var(--world-ground);
 }
-.pf-pr__door:focus-visible { box-shadow: 0 0 0 1px var(--line-strong); }
-.pf-slot__door { border-radius: 0; }
+
+/* ================= ACTIVEWEAR — ACCELERATION ============================
+   Three heats, one direction, the tightest spacing in the act. Figures
+   overlap like frames of a stride and run off the edges: entering the field
+   growing, a band cropped close to the body, leaving the field shrinking. */
+.pf-sc--sprint {
+  display: grid; gap: clamp(1.5rem, 5vh, 3rem);
+  padding-block: clamp(1.5rem, 4vh, 3rem) clamp(3rem, 9vh, 6rem);
+  overflow: clip;
+}
+.pf-sp { display: flex; align-items: flex-end; min-width: 0; }
+.pf-sp__fig { flex: none; width: calc(var(--h) * var(--aspect, .75) * var(--crop-w)); position: relative; }
+/* Each figure laps over the one before it — the later, larger one in front. */
+.pf-sp__fig + .pf-sp__fig { margin-left: calc(var(--h) * var(--aspect, .75) * var(--crop-w) * -.07); }
+.pf-sp__fig { z-index: calc(1 + var(--i)); }
+/* ENTER: rising, from the left edge into the field, the last one the largest
+   and cut by the right edge — it is still arriving. */
+.pf-sp--enter { justify-content: flex-end; margin-right: calc(-1 * var(--edge)); }
+.pf-sp--enter .pf-sp__fig { --h: calc((100svh - var(--bar-h) - 4rem) * (.5 + .5 * var(--i) / max(1, var(--n) - 1))); }
+/* BODY: two figures cropped to the body in motion, edge to edge, full bleed. */
+.pf-sp--body { margin-inline: calc(-1 * var(--edge)); gap: 0; }
+.pf-sp--body .pf-sp__fig { flex: 1 1 0; width: auto; margin: 0; }
+.pf-sp--body .pf-fig__window { aspect-ratio: 16 / 10; }
+.pf-sp--body .pf-fig__window img {
+  height: auto; width: 100%; top: 50%; transform: translateY(-58%);
+}
+/* EXIT: falling, the first one large and cut by the left edge — already
+   leaving — the rest smaller into the distance. */
+.pf-sp--exit { justify-content: flex-start; margin-left: calc(-1 * var(--edge)); }
+.pf-sp--exit .pf-sp__fig { --h: calc((100svh - var(--bar-h) - 4rem) * (1 - .5 * var(--i) / max(1, var(--n) - 1))); z-index: calc(10 - var(--i)); }
+/* Movement as the heat arrives: the figures come in from the left, the way
+   the whole world runs, 50ms apart. Once. */
+.pf-sc--sprint[data-armed] .pf-sp:not(.pf-sp--body) .pf-sp__fig {
+  opacity: 0; transform: translate3d(-48px, 0, 0);
+  transition: opacity 420ms cubic-bezier(0.23, 1, 0.32, 1), transform 420ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-delay: calc(var(--i) * 50ms);
+}
+.pf-sc--sprint[data-armed] .pf-sp[data-in] .pf-sp__fig { opacity: 1; transform: none; }
+
+/* ================= STREETWEAR — THE INTERRUPTION ========================
+   An ink field the act has not used, a look shown whole beside another at a
+   scale nothing else is shown at, cut by the field and colliding with it.
+   Nothing moves. */
+.pf-tr[data-territory='streetwear'] { --world-ground: #141312; color: #f3f0e9; }
+.pf-tr[data-territory='streetwear'] .pf-tr__slate { border-bottom: 0; }
+.pf-tr[data-territory='streetwear'] .pf-tr__name,
+.pf-tr[data-territory='streetwear'] .pf-tr__n { color: #f3f0e9; }
+.pf-tr[data-territory='streetwear'] .pf-tr__meta { color: #9b968c; }
+.pf-sc--clash { overflow: clip; padding-block: clamp(1rem, 3vh, 2rem) 0; }
+.pf-cl {
+  position: relative; display: flex; align-items: flex-end;
+  height: calc(100svh - var(--bar-h) - 2rem);
+  overflow: clip; margin-right: calc(-1 * var(--edge));
+}
+.pf-cl__whole { --h: 100%; flex: none; height: 100%; width: auto; aspect-ratio: calc(var(--aspect, .75)); position: relative; z-index: 2; }
+.pf-cl__whole .pf-fig__door, .pf-cl__whole .pf-fig__window { height: 100%; }
+/* The giant: the front view at twice the height of the field, from the
+   waist up, sliding under the whole look's edge and off the screen. */
+.pf-cl__giant {
+  position: relative; z-index: 1; flex: none; align-self: flex-start;
+  height: 190%; width: auto; aspect-ratio: calc(var(--aspect, .75) * var(--crop-w));
+  /* Not touching: a hard ink gutter, and the giant dropped below the whole
+     look's shoulder line, so the two read as two scales set against each
+     other rather than one white wall. */
+  margin-left: clamp(1rem, 2.4vw, 2.4rem); margin-top: 16svh;
+}
+.pf-cl__giant .pf-fig__door, .pf-cl__giant .pf-fig__window { height: 100%; }
+
+/* ================= OCCASION — DECELERATION ==============================
+   The most space in the act and the fewest moments. The entrance opens on a
+   gown's back and draws out to its whole silhouette; two gowns are each
+   given a room; the rest stand as a procession in depth. */
+.pf-sc--entrance { --track: 150svh; }
+.pf-en__plate {
+  position: relative; margin: 0; background: #fff;
+  height: min(88svh, var(--fit-h)); aspect-ratio: var(--aspect, .75);
+}
+.pf-en__window { position: relative; display: block; overflow: hidden; height: 100%; width: 100%; }
+/* Out of the detail: close on the back figure's shoulders, then the whole. */
+.pf-en__window img {
+  position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover;
+  transform-origin: 74% 30%;
+  transform: scale(calc(2.6 - 1.6 * var(--enter, 1)));
+  will-change: transform;
+}
+.pf-sc--salon {
+  display: grid; gap: clamp(6rem, 20vh, 12rem);
+  padding-block: clamp(5rem, 16vh, 10rem) clamp(4rem, 12vh, 8rem);
+}
+.pf-sa__room { display: flex; }
+.pf-sa__room[data-side='left'] { justify-content: flex-start; padding-left: clamp(0rem, 6vw, 7rem); }
+.pf-sa__room[data-side='right'] { justify-content: flex-end; padding-right: clamp(0rem, 6vw, 7rem); }
+.pf-sa__gown { --h: calc(100svh - var(--bar-h) - 5rem); }
+/* THE PROCESSION: a front rank on the floor, and a rank behind it — smaller,
+   higher, standing in the gaps — so the gowns are seen as a room of figures,
+   not a row of images. */
+.pf-sa__procession { display: grid; justify-items: center; overflow: clip; min-width: 0; }
+/* On a narrower screen the procession closes up rather than widening the page. */
+@media (max-width: 1279px) {
+  .pf-sa__rank--front { gap: clamp(1rem, 3vw, 3rem); }
+  .pf-sa__rank--behind { gap: clamp(3rem, 8vw, 6rem); padding-left: 0; }
+  .pf-sa__rank--front .pf-sa__fig { --h: clamp(16rem, 40svh, 26rem); }
+  .pf-sa__rank--behind .pf-sa__fig { --h: clamp(11rem, 26svh, 18rem); }
+}
+.pf-sa__rank { display: flex; justify-content: center; align-items: flex-end; grid-area: 1 / 1; }
+.pf-sa__rank--front { gap: clamp(4rem, 9vw, 9rem); align-self: end; z-index: 2; }
+.pf-sa__rank--front .pf-sa__fig { --h: clamp(18rem, 54svh, 34rem); }
+.pf-sa__rank--behind {
+  gap: clamp(7rem, 15vw, 15rem); align-self: start;
+  padding-bottom: clamp(9rem, 30svh, 18rem); padding-left: clamp(4rem, 12vw, 12rem);
+}
+.pf-sa__rank--behind .pf-sa__fig { --h: clamp(12rem, 34svh, 22rem); }
+.pf-sa__fig { flex: none; width: calc(var(--h) * var(--aspect, .75) * var(--crop-w)); }
+
+/* ================= SWIM — RELEASE ======================================
+   The ground goes to white, so the photographs' own white disappears and
+   only bodies and line remain. Three phrases, each placed differently on the
+   width, with the most air in the act between them. */
+.pf-tr[data-territory='swimwear'] { --world-ground: #fff; }
+.pf-tr[data-territory='swimwear'] .pf-tr__slate { border-bottom: 0; }
+.pf-sc--line {
+  padding-block: clamp(4rem, 14vh, 9rem) clamp(5rem, 16vh, 10rem);
+}
+.pf-ln { display: grid; gap: clamp(5rem, 16vh, 10rem); }
+.pf-ln__phrase { display: flex; align-items: flex-end; gap: clamp(1.2rem, 3.5vw, 4rem); }
+.pf-ln__phrase[data-phrase='0'] { justify-content: flex-start; }
+.pf-ln__phrase[data-phrase='1'] { justify-content: flex-end; padding-right: clamp(0rem, 8vw, 9rem); }
+.pf-ln__phrase[data-phrase='2'] { justify-content: center; }
+.pf-ln__fig { --h: clamp(16rem, 52svh, 30rem); flex: 0 1 calc(var(--h) * var(--aspect, .75)); min-width: 0; }
+.pf-ln__phrase { min-width: 0; }
+.pf-ln__phrase[data-phrase='0'] .pf-ln__fig { --h: clamp(14rem, 42svh, 24rem); }
+.pf-ln__phrase[data-phrase='1'] .pf-ln__fig { --h: clamp(18rem, 62svh, 36rem); }
+.pf-sc--line[data-armed] .pf-ln__fig { opacity: 0; transition: opacity 700ms ease; transition-delay: calc(var(--i, 0) * 70ms); }
+.pf-sc--line[data-armed] .pf-ln__phrase[data-in] .pf-ln__fig { opacity: 1; }
 
 /* TAUGHT ONCE, under each territory's hero. */
 .pf-sc__enter {
@@ -1163,7 +1152,7 @@
   /* The hero affordance sits under the picture's own column, not over it. */
   .pf-sc--overture .pf-sc__enter { position: static; grid-row: 5; margin: .8rem 1.1rem 0; }
   .pf-sc--overture .pf-sc__pointer { bottom: auto; }
-  .pf-rg__window, .pf-rl__door .pf-rl__window { transition: none; }
+  .pf-rg__window, .pf-fig__window { transition: none; }
 }
 
 /* ---- the reader without motion ---------------------------------------- */
@@ -1216,7 +1205,6 @@
      measure off. */
   .pf-act { --measure: 200rem; }
   .pf-ev__stages { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
-  .pf-act .pf-stage, .pf-act .pf-runbar { width: min(84vw, 44rem); }
 }
 
 /* ---- tablet, held UPRIGHT ----------------------------------------------
@@ -1250,10 +1238,6 @@
   /* The affordance joins the column under the pointer, as on a phone. Left
      floating at the foot of the frame it landed on the pointer's sentence. */
   .pf-sc--overture .pf-sc__enter { position: static; grid-row: 5; margin: .8rem var(--gutter) 0; }
-  .pf-sc--pair .pf-sc__frame { padding-bottom: clamp(1.5rem, 5vh, 3rem); }
-  .pf-pr__plate--lead { height: min(56svh, var(--fit-h)); }
-  .pf-pr__plate--echo { height: min(25svh, var(--fit-h)); }
-  .pf-tn__plate { height: min(66svh, 100%, var(--fit-h)); }
   .pf-ap__plate { height: min(68svh, 100%, var(--fit-h)); }
 }
 
@@ -1288,34 +1272,11 @@
   .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem 1.1rem 0; }
   .pf-sc__pointer { max-width: 34ch; font-size: .78rem; }
 
-  /* THE PAIR ON A PHONE is driven by WIDTH, not height. Two plates whose
-     widths are both solved from svh heights will, at some screen shape, add
-     up to more than the screen — which they did at 390x900 by 18px. So the
-     lead takes the column it is given and the echo keeps its small fixed
-     height beside it; the pair cannot overrun by construction. */
-  .pf-sc--pair .pf-sc__frame {
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: .8rem; padding-bottom: clamp(1.4rem, 5vh, 2.4rem);
-  }
-  .pf-pr__plate--lead {
-    width: 100%; height: auto;
-    aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-    max-height: 56svh;
-  }
-  .pf-pr__plate--lead .pf-pr__window { height: 100%; width: 100%; aspect-ratio: auto; }
-  .pf-pr__plate--echo { height: min(20svh, var(--fit-h)); }
-
-  .pf-sc--turn { --track: 80svh; }
-  .pf-tn__plate { height: min(72svh, 100%, var(--fit-h)); }
   .pf-sc--approach { --track: 70svh; }
   .pf-ap__plate { height: min(74svh, 100%, var(--fit-h)); }
 
   .pf-ev__stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
   .pf-ev__name { font-size: .42rem; }
-  .pf-rl { padding-inline: 0; }
-  .pf-rl__hanger { height: clamp(13rem, 38svh, 20rem); }
-  .pf-ln__fig { height: clamp(8rem, 24svh, 12rem); }
-  .pf-act .pf-stage, .pf-act .pf-runbar { width: auto; margin-inline: 0; }
   .pf-act__end { padding-inline: 1.1rem; }
   .pf-tr__slate[data-slate-gesture='loud'] .pf-tr__name { font-size: calc(100cqw / 7.1); }
   /* A slate on a phone is TWO LINES, not three columns: the number and the
@@ -1350,15 +1311,17 @@
   /* Only the two scenes that WITHHOLD something open up: the overture and the
      turn. The pair reveals nothing — its small frame is a deliberate crop,
      not a hidden back view — so it is left exactly as it is. */
-  .pf-sc--overture [data-views='2'],
-  .pf-sc--turn [data-views='2'] { --half: 1; }
+  .pf-sc--overture [data-views='2'] { --half: 1; }
   /* The overture's field and its name are sized against the window's width,
      so they have to know it has doubled — otherwise the territory's name is
      set to clear a half-frame and ends up across the garment. */
   .pf-sc--overture .pf-ov__field,
   .pf-sc--overture .pf-ov__slate { --half: 1; }
-  .pf-ov__window img, .pf-tn__window img { transform: none; }
-  .pf-tn__plate, .pf-tn__window { aspect-ratio: var(--aspect, .75); }
+  .pf-ov__window img { transform: none; }
+  /* Occasion's entrance opens on the whole gown rather than drawing out of
+     its detail; Activewear's heats and Swim's phrases are simply there. */
+  .pf-en__window img { transform: none; }
+  .pf-sp__fig, .pf-ln__fig { opacity: 1 !important; transform: none !important; transition: none; }
   .pf-ap__plate { transform: none; }
   .pf-act__list, .pf-act__caret { transition: none; }
 }
@@ -1407,4 +1370,71 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .pf-sc--range .pf-rg__window, .pf-sc--range .pf-rg__fig { transition: none; }
+}
+
+/* ---- THE FOUR WORLDS ON A PHONE -----------------------------------------
+   Each keeps its own character in one column rather than becoming a stack
+   of equal cards: Activewear runs DOWN a diagonal, Streetwear still
+   collides, Occasion still gives a gown a room and walks the rest past in a
+   procession, Swim floats bodies down the white in a slow zigzag. */
+@media (max-width: 767px) {
+  .pf-sc--sprint { gap: 1.2rem; }
+  .pf-sp:not(.pf-sp--body) { flex-direction: column; align-items: flex-start; margin: 0; }
+  .pf-sp:not(.pf-sp--body) .pf-sp__fig {
+    --h: min(54svh, 86vw);
+    margin-left: calc(var(--i) * 13vw) !important;
+  }
+  .pf-sp:not(.pf-sp--body) .pf-sp__fig + .pf-sp__fig { margin-top: -20svh; }
+  .pf-sp--exit .pf-sp__fig { margin-left: calc((var(--n) - 1 - var(--i)) * 13vw) !important; }
+  .pf-sp--body { flex-direction: column; }
+  .pf-sp--body .pf-sp__fig { flex: none; width: 100%; }
+  .pf-sc--sprint[data-armed] .pf-sp:not(.pf-sp--body) .pf-sp__fig { transform: translate3d(-24px, 0, 0); }
+
+
+  .pf-sc--entrance { --track: 90svh; }
+  .pf-sc--salon { gap: 4rem; padding-block: 4rem; }
+  .pf-sa__room { padding: 0 !important; }
+  .pf-sa__gown { --h: 62svh; }
+  .pf-sa__procession { display: block; }
+  .pf-sa__rank { display: contents; }
+  .pf-sa__procession {
+    display: flex; align-items: flex-start; gap: .9rem;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
+    margin-inline: calc(-1 * var(--edge)); padding: 0 var(--edge) .4rem;
+    scrollbar-width: none;
+  }
+  .pf-sa__procession::-webkit-scrollbar { display: none; }
+  .pf-sa__rank--front .pf-sa__fig { --h: 54svh; order: 0; margin-top: 0; }
+  .pf-sa__rank--behind .pf-sa__fig { --h: 36svh; margin-top: 9svh; }
+  .pf-sa__fig { scroll-snap-align: start; }
+
+  /* Two columns, the right one dropped half a figure: bodies step down
+     the white in pairs, so nine figures take under two screens and none is
+     small. Each phrase stays a box, because it is what the arrival watches. */
+  .pf-sc--line { padding-block: 2.5rem 3.5rem; }
+  .pf-ln { gap: 1.2rem; }
+  .pf-ln__phrase, .pf-ln__phrase[data-phrase] {
+    display: grid; grid-template-columns: 1fr 1fr; align-items: start;
+    gap: 0 .8rem; padding: 0;
+  }
+  .pf-ln__fig, .pf-ln__phrase[data-phrase] .pf-ln__fig { --h: auto; width: 100%; }
+  .pf-ln__fig:nth-child(even) { margin-top: 14svh; }
+  .pf-ln__fig:nth-child(3) { grid-column: 1; margin-top: -10svh; }
+}
+/* The ranks are stacked boxes: only the gowns in them take a pointer, so a
+   gown standing behind is reachable everywhere it can be seen. */
+.pf-sa__rank { pointer-events: none; }
+.pf-sa__rank .pf-sa__fig { pointer-events: auto; }
+
+/* Streetwear upright (tablet and phone): the whole look across the width,
+   and the giant breaking in under it, off the right edge. */
+@media (max-width: 1023px), (max-aspect-ratio: 5/4) {
+  .pf-cl { display: block; height: auto; padding-bottom: 46svh; margin-right: calc(-1 * var(--edge)); }
+  .pf-cl__whole { width: calc(100vw - 2 * var(--edge)); height: auto; }
+  .pf-cl__whole .pf-fig__door, .pf-cl__whole .pf-fig__window { height: auto; }
+  .pf-cl__giant {
+    position: absolute; right: 0; top: 58%; margin: 0;
+    width: 96vw; height: auto;
+  }
+  .pf-cl__giant .pf-fig__door, .pf-cl__giant .pf-fig__window { height: auto; }
 }

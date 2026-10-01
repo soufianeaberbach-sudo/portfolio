@@ -73,8 +73,8 @@ try {
    check(names.join(',')==='Ready-to-Wear,Activewear,Streetwear,Occasion,Swim','the real categories are the titles');
    const support=await page.locator('[data-world="womenswear"] [data-support]').evaluateAll(
      (els)=>els.map((e)=>e.dataset.scene));
-   check(support.join(',')==='range,deck,rail,line','supporting work differs per territory: '+support.join(','));
-   check(await page.locator('[data-world="womenswear"] [data-scene="turn"]').count()===1,'the turn is one scene, not the grammar');
+   check(support.join(',')==='range,sprint,salon,line','supporting work differs per territory: '+support.join(','));
+   check(await page.locator('[data-world="womenswear"] [data-scene="overture"]').count()===1,'the turn is one scene, not the grammar');
    /* A CATEGORY IS THE ATMOSPHERE; A PROJECT IS THE STORY. Every garment the
       chapter shows is a door into its own, and the evidence belongs to the
       project that produced it rather than to a category. */
@@ -97,27 +97,27 @@ try {
      (img)=>img.offsetHeight>window.innerHeight*0.3),'the garment owns the frame in '+id);
    await shot('womenswear-'+id);
   }
-  /* THE TURN, where it is used: scrubbing the pinned scene travels the window
-     across one photograph, front view to back view, and then holds. */
+  /* OCCASION'S ENTRANCE: scrubbing the pinned scene draws out of the back
+     detail to the whole gown, and then holds. */
   await open('womenswear/evening');
   await page.waitForTimeout(500);
   {
    const world=page.locator('[data-world="womenswear"]');
    const turnAt=async(fraction)=>{
     await world.evaluate((el,f)=>{
-     const reveal=el.querySelector('[data-scene="turn"]');
+     const reveal=el.querySelector('[data-scene="entrance"]');
      el.scrollTo({top:Math.round(el.scrollTop+reveal.getBoundingClientRect().top+(reveal.offsetHeight-window.innerHeight)*f),behavior:'instant'});
     },fraction);
     await page.waitForTimeout(260);
-    return Number(await page.locator('[data-scene="turn"] [data-turn]').evaluate((el)=>getComputedStyle(el).getPropertyValue('--turn')));
+    return await page.locator('[data-scene="entrance"] [data-entrance] img').evaluate((el)=>new DOMMatrixReadOnly(getComputedStyle(el).transform).a);
    };
    const start=await turnAt(0);
    const middle=await turnAt(0.5);
    const end=await turnAt(0.9);
-   check(start<0.02,'the scene opens on its front view');
-   check(middle>start&&middle<end,'the turn is scrubbed, not switched');
-   check(end>0.98,'the back view arrives before the scene is released');
-   await shot('womenswear-turn');
+   check(start>2,'the scene opens close on the detail: '+start);
+   check(middle<start&&middle>end,'the entrance is scrubbed, not switched');
+   check(end<1.02,'the whole gown arrives before the scene is released: '+end);
+   await shot('womenswear-entrance');
   }
   /* THE GARMENT, ENTERED. The point of a range is that it is a way in, so the
      thing worth proving is that the garment gets bigger, keeps the chapter's
@@ -183,10 +183,10 @@ try {
    }
    check(await page.locator('[data-world="'+world+'"]').evaluate(e=>e.scrollTop)===scroll,'world scroll preserved');
   }
-  /* The deck itself is unchanged. In the act it is Activewear's supporting
-     mechanism — the one territory whose whole scene is the range. */
-  await open('womenswear/activewear');
-  const stage=page.locator('[data-world="womenswear"] [data-scene="deck"] [data-stage]');
+  /* The deck itself is unchanged. Womenswear's worlds no longer use it, so
+     it is proved on Menswear, which still does. */
+  await open('menswear/m-rtw');
+  const stage=page.locator('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-stage]');
   await stage.scrollIntoViewIfNeeded();
   await page.waitForTimeout(500);
   const box=await stage.boundingBox();

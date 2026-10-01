@@ -72,24 +72,27 @@ try {
     /* Every territory's slate, every supporting mechanism, every set piece. */
     await scene('[data-territory="activewear"] .pf-tr__slate', null);
     await capture('womenswear-05-activewear-slate');
-    await scene('[data-scene="deck"]', null);
-    await capture('womenswear-06-activewear-deck');
-    assert.equal(await page.locator('[data-scene="deck"] .pf-slot[data-depth="0"]').count(), 1);
-    checks++;
-    /* SET PIECE 02 — no motion at all: two frames, unequal, asymmetric. */
+    /* ACTIVEWEAR — three heats, one direction. */
+    for (const heat of ['enter', 'body', 'exit']) {
+      await scene(`[data-heat="${heat}"]`, null);
+      await capture(`womenswear-06-activewear-${heat}`);
+    }
+    /* STREETWEAR — the interruption: an ink field and a collision of scales. */
     await scene('[data-territory="streetwear"] .pf-tr__slate', null);
     await capture('womenswear-07-streetwear-slate-loud');
-    await scene('[data-scene="pair"]', null);
-    await capture('womenswear-08-streetwear-pair-SETPIECE');
+    await scene('[data-scene="clash"]', null);
+    await capture('womenswear-08-streetwear-clash');
     await scene('[data-territory="evening"] .pf-tr__slate', null);
     await capture('womenswear-09-occasion-slate');
-    /* SET PIECE 03 — the turn, used for the second and last time. */
+    /* OCCASION — the entrance: from the back detail out to the whole gown. */
     for (const [f, label] of [[0.02, 'START'], [0.45, 'MID'], [0.85, 'PAYOFF']]) {
-      await scene('[data-scene="turn"] [data-turn]', f);
-      await capture(`womenswear-10-occasion-turn-${label}`);
+      await scene('[data-scene="entrance"] [data-entrance]', f);
+      await capture(`womenswear-10-occasion-entrance-${label}`);
     }
-    await scene('[data-scene="rail"]', null);
-    await capture('womenswear-12-occasion-rail');
+    await scene('.pf-sa__room', null);
+    await capture('womenswear-11-occasion-room');
+    await scene('.pf-sa__procession', null);
+    await capture('womenswear-12-occasion-procession');
     await scene('[data-territory="swimwear"] .pf-tr__slate', null);
     await capture('womenswear-13-swim-slate');
     /* SET PIECE 04 — scale, and nothing else. */
