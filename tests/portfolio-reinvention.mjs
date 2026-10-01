@@ -73,7 +73,7 @@ try {
    check(names.join(',')==='Ready-to-Wear,Activewear,Streetwear,Occasion,Swim','the real categories are the titles');
    const support=await page.locator('[data-world="womenswear"] [data-support]').evaluateAll(
      (els)=>els.map((e)=>e.dataset.scene));
-   check(support.join(',')==='sheet,deck,rail,line','supporting work differs per territory: '+support.join(','));
+   check(support.join(',')==='range,deck,rail,line','supporting work differs per territory: '+support.join(','));
    check(await page.locator('[data-world="womenswear"] [data-scene="turn"]').count()===1,'the turn is one scene, not the grammar');
    /* A CATEGORY IS THE ATMOSPHERE; A PROJECT IS THE STORY. Every garment the
       chapter shows is a door into its own, and the evidence belongs to the
@@ -125,9 +125,9 @@ try {
   {
    await open('womenswear/rtw');
    await page.waitForTimeout(400);
-   const thumb=await page.locator('[data-scene="sheet"] .pf-sh__door img').first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
-   const id=await page.locator('[data-scene="sheet"] .pf-sh__door').first().getAttribute('data-open-subject');
-   await page.locator('[data-scene="sheet"] .pf-sh__door').first().click();
+   const thumb=await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door img').first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
+   const id=await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').first().getAttribute('data-open-subject');
+   await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').first().click();
    await page.waitForTimeout(700);
    const big=await page.locator(`[data-subject="${id}"] .pf-rd__window img`).first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
    check(big>thumb*1.8,'the entered garment is far bigger than its cell: '+thumb+' → '+big);

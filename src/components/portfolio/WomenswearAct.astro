@@ -92,10 +92,23 @@ type Beat =
   | { kind: 'turn'; slot: number }
   | { kind: 'pair'; slots: [number, number] }
   | { kind: 'approach'; slot: number }
-  | { kind: 'sheet'; from: number }
+  | { kind: 'range'; spreads: Spread[] }
   | { kind: 'deck'; from: number }
   | { kind: 'rail'; from: number }
   | { kind: 'line'; from: number };
+
+/* READY-TO-WEAR'S RANGE is not a sheet of equal frames. It is a run of
+   SPREADS, each a different way of looking — and therefore a different weight
+   for the garments in it:
+     lead     one garment large, one standing quiet and far from it
+     duo      two at exactly one height on one floor, so the difference
+              between them is what is seen
+     open     one garment interrupting the run, its back arriving beside its
+              front across a field of studio white
+     lineup   a group on one floor, the breadth of the territory at a glance
+     close    the lead, mirrored: one garment large again, one quiet
+   Weight is presentation only. Every garment is a door, whatever its size. */
+type Spread = { kind: 'lead' | 'duo' | 'open' | 'lineup' | 'close'; slots: number[] };
 
 interface Territory {
   id: string;
@@ -128,7 +141,24 @@ const score: Territory[] = [
        make. The only design-thinking line in the act, and it is about the
        frame, never about who made the garment. */
     pointer: ['Front and back, in one frame.', 'The back is where the decision shows.'],
-    beats: [{ kind: 'overture', slot: 0 }, { kind: 'sheet', from: 1 }],
+    /* The run reads large, quiet, pair, interruption, group, pair, focus.
+       Slots are the territory's frames in archive order; the pairings are
+       chosen by what is VISIBLE in them (white lace against black leather,
+       two knits) and say nothing about who made them. */
+    beats: [
+      { kind: 'overture', slot: 0 },
+      {
+        kind: 'range',
+        spreads: [
+          { kind: 'lead', slots: [6, 2] },
+          { kind: 'duo', slots: [9, 10] },
+          { kind: 'open', slots: [3] },
+          { kind: 'lineup', slots: [1, 4, 5, 7, 8, 11, 12] },
+          { kind: 'duo', slots: [14, 15] },
+          { kind: 'close', slots: [16, 13] },
+        ],
+      },
+    ],
   },
   {
     /* THE QUICK ONE. No garment is held here at all: the territory arrives and
@@ -468,41 +498,56 @@ const pad = (n: number) => String(n).padStart(2, '0');
               );
             }
 
-            /* ---- SHEET -----------------------------------------------------
-                SUPPORTING WORK, READY-TO-WEAR. A proof sheet: the breadth of
-                the territory in one gesture, uniform and small, numbered like
-                a contact sheet. Depth of work without fifteen hero scenes. */
-            if (beat.kind === 'sheet') {
-              const items = t.slots.slice(beat.from);
-              if (items.length === 0) return null;
+            /* ---- RANGE ----------------------------------------------------
+                SUPPORTING WORK, READY-TO-WEAR, as an editorial run rather than
+                an index: a sequence of spreads, each a different way of
+                looking, so the territory is browsed the way a designer's book
+                is turned — large, quiet, a pair, an interruption, a group, a
+                pair, a last look. Every frame is still a door. Frames the
+                score does not place are never lost: they join the group. */
+            if (beat.kind === 'range') {
+              const placed = new Set(beat.spreads.flatMap((sp) => sp.slots));
+              const leftovers = t.slots.map((_, i) => i).filter((i) => i > 0 && !placed.has(i));
+              const spreads = beat.spreads
+                .map((sp) => ({
+                  ...sp,
+                  slots: sp.kind === 'lineup' ? [...sp.slots, ...leftovers] : sp.slots,
+                }))
+                .map((sp) => ({ ...sp, items: sp.slots.map((i) => t.slots[i]).filter(Boolean) }))
+                .filter((sp) => sp.items.length > 0);
+              /* THE WEIGHT of each place in a spread. Presentation only. */
+              const weightOf = (kind: Spread['kind'], at: number) =>
+                (kind === 'open' || ((kind === 'lead' || kind === 'close') && at === 0)) ? 'featured' : 'supporting';
               return (
-                <div class="pf-sc pf-sc--sheet" data-scene="sheet" data-support>
-                  <p class="pf-sc__head label">
-                    <span>{t.short} — the range</span>
-                    <i>{pad(items.length)} more</i>
-                  </p>
-                  <ol class="pf-sh">
-                    {items.map((item, i) => (
-                      <li class="pf-sh__cell" data-views={views(item.cover)} style={geom(item.cover)}>
-                        {/* A CELL IS A DOOR. A contact sheet is an index of
-                            work, so every frame in it can be entered and seen
-                            properly — a 120px garment nobody can open is
-                            decoration, not portfolio content. */}
-                        <a class="pf-sh__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
-                           aria-label={`${noun} ${pad(beat.from + i + 1)} — ${item.title ?? item.cover.alt}`}>
-                          <span class="pf-sh__window" data-door-source>
-                            <img
-                              src={item.cover.src} srcset={item.cover.srcset}
-                              sizes="(max-width: 767px) 44vw, 15vw"
-                              width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
-                              loading="lazy" decoding="async"
-                            />
-                          </span>
-                          <i class="pf-sh__n label">{pad(beat.from + i + 1)}</i>
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
+                <div class="pf-sc pf-sc--range" data-scene="range" data-support>
+                  {spreads.map((sp) => (
+                    <section class={`pf-rg pf-rg--${sp.kind}`} data-spread={sp.kind}
+                             aria-label={sp.kind === 'lineup' ? `${t.short}, the range` : undefined}>
+                      {sp.items.map((item, at) => {
+                        /* An interruption shows the WHOLE photograph — front
+                           and back — where the frame holds two views; every
+                           other place shows the front, cut at its own
+                           measured edge. */
+                        const whole = sp.kind === 'open' || item.cover.views !== 2;
+                        return (
+                          <figure class="pf-rg__fig" data-weight={weightOf(sp.kind, at)}
+                                  data-crop={whole ? 'whole' : 'front'} style={geom(item.cover)}>
+                            <a class="pf-rg__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
+                               aria-label={`${noun} — ${item.title ?? item.cover.alt}`}>
+                              <span class="pf-rg__window" data-door-source>
+                                <img
+                                  src={item.cover.src} srcset={item.cover.srcset}
+                                  sizes={weightOf(sp.kind, at) === 'featured' ? '(max-width: 767px) 80vw, 40vw' : '(max-width: 767px) 48vw, 18vw'}
+                                  width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
+                                  loading="lazy" decoding="async"
+                                />
+                              </span>
+                            </a>
+                          </figure>
+                        );
+                      })}
+                    </section>
+                  ))}
                 </div>
               );
             }

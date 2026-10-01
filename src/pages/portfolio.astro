@@ -2192,6 +2192,30 @@ const split = (statement: string, word: string) => {
         window.addEventListener('resize', onScroll);
         paint();
 
+        /* READY-TO-WEAR'S RANGE: the two discovery moves. The interruption's
+           back arrives beside its front, and a group is read left to right,
+           each once, as its spread comes into view. A spread that receives
+           the focus — a garment being returned to — arrives at once. */
+        const range = act.querySelector<HTMLElement>('[data-scene="range"]');
+        if (range && motion) {
+          range.setAttribute('data-rg-armed', '');
+          for (const line of range.querySelectorAll<HTMLElement>('.pf-rg--lineup')) {
+            [...line.children].forEach((fig, i) => (fig as HTMLElement).style.setProperty('--i', String(i)));
+          }
+          const spreads = [...range.querySelectorAll<HTMLElement>('.pf-rg--open, .pf-rg--lineup')];
+          const arrive = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.setAttribute('data-rg-in', '');
+              arrive.unobserve(entry.target);
+            }
+          }, { root: act, threshold: 0.45 });
+          for (const spread of spreads) arrive.observe(spread);
+          range.addEventListener('focusin', (event) => {
+            (event.target as HTMLElement).closest('[data-spread]')?.setAttribute('data-rg-in', '');
+          });
+        }
+
         /* The territory control. Same manners as the chapter control on the
            journey outside: hover opens it, a click confirms rather than
            undoes it, Escape and leaving close it. */

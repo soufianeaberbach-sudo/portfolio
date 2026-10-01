@@ -600,9 +600,26 @@ try {
     check('each territory leads with exactly one hero scene',
       act.heroes.join(',') === '1,0,1,1,1', act.heroes.join(','));
     /* Four territories hand their depth over, and each does it differently:
-       a contact sheet, a deck, a rail, a single line. */
+       an editorial range, a deck, a rail, a single line. */
     check('supporting work uses a different mechanism in every territory',
-      act.support.join(',') === 'sheet,deck,,rail,line', act.support.join(','));
+      act.support.join(',') === 'range,deck,,rail,line', act.support.join(','));
+    /* READY-TO-WEAR'S RANGE has rhythm, not a grid: spreads of different
+       kinds, more than one weight, and every one of its garments a door. */
+    const range = await p.evaluate(() => {
+      const r = document.querySelector('[data-scene="range"]');
+      return {
+        kinds: [...r.querySelectorAll('[data-spread]')].map((e) => e.dataset.spread),
+        weights: [...new Set([...r.querySelectorAll('[data-weight]')].map((e) => e.dataset.weight))].sort(),
+        doors: r.querySelectorAll('[data-open-subject]').length,
+        numbers: r.querySelectorAll('.label').length,
+      };
+    });
+    check('Ready-to-Wear\'s range is a run of different spreads, not one grid',
+      new Set(range.kinds).size >= 4, range.kinds.join(' '));
+    check('and it gives its garments different weights',
+      range.weights.join(',') === 'featured,supporting', range.weights.join(','));
+    check('every Ready-to-Wear garment after the opening is still a door', range.doors === 16, String(range.doors));
+    check('and the range prints no numbers or captions', range.numbers === 0, String(range.numbers));
     check('the front-to-back turn is a DEVICE, used twice, not the grammar',
       act.turns === 2, `${act.turns} scenes turn`);
     check('and only two-view photographs ever turn',
@@ -1004,10 +1021,10 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
     await openChapter(p, 'womenswear');
-    await openScene(p, '[data-scene="sheet"]');
+    await openScene(p, '[data-scene="range"]');
 
     const before = await p.evaluate(() => {
-      const door = document.querySelector('[data-scene="sheet"] .pf-sh__door');
+      const door = document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door');
       return {
         id: door.dataset.openSubject,
         href: door.getAttribute('href'),
@@ -1017,7 +1034,7 @@ try {
     check('a cell in the range is a real link to that garment',
       /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
 
-    await p.evaluate(() => document.querySelector('[data-scene="sheet"] .pf-sh__door').click());
+    await p.evaluate(() => document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').click());
     await p.waitForTimeout(900);
     const entered = await p.evaluate((id) => {
       const rd = document.querySelector(`[data-subject="${id}"]`);
@@ -1124,8 +1141,8 @@ try {
       }
       return per;
     });
-    check('the sheet, the deck, the pair, the rail and the line are all ways in',
-      ['sheet', 'deck', 'pair', 'rail', 'line'].every((k) => (everyDoor[k] ?? 0) > 0),
+    check('the range, the deck, the pair, the rail and the line are all ways in',
+      ['range', 'deck', 'pair', 'rail', 'line'].every((k) => (everyDoor[k] ?? 0) > 0),
       JSON.stringify(everyDoor));
 
     /* A GARMENT IS ADDRESSABLE: reloading its URL opens it. */

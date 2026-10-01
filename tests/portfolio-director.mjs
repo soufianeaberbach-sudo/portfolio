@@ -67,8 +67,8 @@ try {
     await capture('womenswear-02-overture-MID-composition');
     await scene('[data-scene="overture"] [data-turn]', 0.8);
     await capture('womenswear-03-overture-PAYOFF-back');
-    await scene('[data-scene="sheet"]', null);
-    await capture('womenswear-04-rtw-sheet');
+    await scene('[data-scene="range"]', null);
+    await capture('womenswear-04-rtw-range');
     /* Every territory's slate, every supporting mechanism, every set piece. */
     await scene('[data-territory="activewear"] .pf-tr__slate', null);
     await capture('womenswear-05-activewear-slate');
