@@ -1,0 +1,40 @@
+---
+/* ONE GARMENT IN A TERRITORY'S RUN, as a door into its own story.
+
+   The worlds differ in how they place and size garments, not in what a
+   garment is: every figure is the photograph cut at its own measured edge
+   (`front`), or shown whole, and every figure is a real link that the reader
+   opens out of and closes back into (`data-door-source`). The sizing is the
+   scene's business — a figure only knows its proportion. */
+import type { Subject } from '../../data/portfolio';
+
+interface Props {
+  item: Subject;
+  href: string;
+  noun: string;
+  /* front: the front view of a two-up; whole: the full photograph. */
+  crop: 'front' | 'whole';
+  sizes: string;
+  class?: string;
+  weight?: 'featured' | 'supporting';
+  style?: string;
+}
+
+const { item, href, noun, crop, sizes, class: className, weight = 'supporting', style = '' } = Astro.props;
+const image = item.cover;
+const whole = crop === 'whole' || image.views !== 2;
+const geom = `--front:${image.front};--aspect:${(image.width / image.height).toFixed(4)};`;
+---
+<figure class:list={['pf-fig', className]} data-weight={weight} data-crop={whole ? 'whole' : 'front'}
+        style={`${geom}${style}`}>
+  <a class="pf-fig__door" href={href} data-nav draggable="false" data-open-subject={item.id}
+     aria-label={`${noun} — ${item.title ?? image.alt}`}>
+    <span class="pf-fig__window" data-door-source>
+      <img
+        src={image.src} srcset={image.srcset} sizes={sizes}
+        width={image.width} height={image.height} alt={image.alt}
+        loading="lazy" decoding="async"
+      />
+    </span>
+  </a>
+</figure>

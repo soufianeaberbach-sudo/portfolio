@@ -188,12 +188,9 @@ try {
      screen to open: travelling to a territory's range means scrolling its run
      into the middle of the frame. Menswear, Development and Tech Packs still
      have category screens, and openCategory is still how those are entered. */
-  /* The deck is ONE of the act's supporting-work mechanisms, and it belongs to
-     Activewear — the territory whose whole scene is the range. Ready-to-Wear
-     hands its depth over as a contact sheet, Occasion as a rail and Swim as a
-     single line, so there is exactly one deck in the chapter and this is where
-     it is. */
-  const ACT_DECK = '[data-territory="activewear"]';
+  /* The runway deck is Menswear's: every Womenswear world places its garments
+     in a composition of its own, so the deck's behaviour is proved there. */
+  const MEN_DECK = '[data-world="menswear"] [data-screen="category"]:not([hidden])';
   const openScene = async (p, selector) => {
     await p.evaluate((sel) => {
       const world = document.querySelector('[data-world="womenswear"]');
@@ -541,16 +538,30 @@ try {
           t.querySelector('.pf-tr__meta span') ?? t.querySelector('.pf-ov__meta span')
         )?.textContent.trim()),
         scenes: [...w.querySelectorAll('[data-scene]')].map((el) => el.dataset.scene),
-        turns: [...w.querySelectorAll('[data-scene="turn"], [data-scene="overture"]')].length,
+        turns: [...w.querySelectorAll('[data-scene="overture"]')].length,
         heroes: territories.map((t) => t.querySelectorAll('[data-hero]').length),
         support: territories.map((t) => [...t.querySelectorAll('[data-support]')].map((s) => s.dataset.scene).join('+')),
         garments: [...w.querySelectorAll('[data-hero] img')].filter(visible).length,
         /* Only photographs that really hold two views are ever shown half a
            frame at a time. */
-        halves: [...w.querySelectorAll('[data-scene="overture"] [data-views], [data-scene="turn"] [data-views]')]
+        halves: [...w.querySelectorAll('[data-scene="overture"] [data-views]')]
           .map((el) => el.dataset.views),
         plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
-        evidence: w.querySelectorAll('[data-evidence]').length,
+        /* THE FOURTH LEVEL: portfolio, chapter, territory, GARMENT. Every
+           garment the chapter shows is a door into its own story, so a range
+           is a way into the work rather than the end of it. */
+        doors: w.querySelectorAll('[data-open-subject]').length,
+        readers: w.querySelectorAll('.pf-rd__subject').length,
+        readersOpen: [...w.querySelectorAll('.pf-rd__subject')].filter((e) => !e.hidden).length,
+        /* Evidence belongs to the PROJECT that produced it, never to a
+           category: there is no category-level proof band anywhere. */
+        categoryEvidence: w.querySelectorAll('[data-scene="evidence"]').length,
+        /* And nothing is invented for a photograph: with no verified project
+           the story stages are absent and the reader says so instead. */
+        inventedStages: w.querySelectorAll('.pf-rd__stage-item').length,
+        pending: w.querySelectorAll('[data-subject-pending]').length,
+        /* Five territories, five gestures for giving up a garment's views. */
+        reveals: [...new Set([...w.querySelectorAll('.pf-rd__subject')].map((e) => e.dataset.rdReveal))].sort(),
         control: [...w.querySelectorAll('[data-act-link]')].map((a) => a.dataset.actLink),
         controlNames: [...w.querySelectorAll('[data-act-link] .pf-act__label')].map((e) => e.textContent.trim()),
         controlOpen: !!w.querySelector('[data-act-where][data-open]'),
@@ -575,21 +586,58 @@ try {
       act.controlNames.join(',') === act.names.join(','), act.controlNames.join(','));
     check('NO TWO TERRITORIES PLAY THE SAME SHAPE',
       new Set(act.beats).size === act.beats.length, act.beats.join(' | '));
-    check('and they are not the same length either',
-      new Set(act.beats.map((b) => b.split(' ').length)).size >= 3, act.beats.join(' | '));
+    /* Stronger than counting beats: EVERY SCENE KIND in the act belongs to
+       exactly one territory. A mechanism reused across territories is the
+       template problem coming back one level down. */
+    check('and no scene mechanism is used by more than one territory',
+      (() => {
+        const kinds = act.beats.flatMap((b) => b.split(' '));
+        return new Set(kinds).size === kinds.length && kinds.length >= 6;
+      })(), act.beats.join(' | '));
     check('each territory leads with exactly one hero scene',
       act.heroes.join(',') === '1,0,1,1,1', act.heroes.join(','));
     /* Four territories hand their depth over, and each does it differently:
-       a contact sheet, a deck, a rail, a single line. */
+       an editorial range, a deck, a rail, a single line. */
     check('supporting work uses a different mechanism in every territory',
-      act.support.join(',') === 'sheet,deck,,rail,line', act.support.join(','));
-    check('the front-to-back turn is a DEVICE, used twice, not the grammar',
-      act.turns === 2, `${act.turns} scenes turn`);
+      act.support.join(',') === 'range,sprint,,salon,line', act.support.join(','));
+    /* READY-TO-WEAR'S RANGE has rhythm, not a grid: spreads of different
+       kinds, more than one weight, and every one of its garments a door. */
+    const range = await p.evaluate(() => {
+      const r = document.querySelector('[data-scene="range"]');
+      return {
+        kinds: [...r.querySelectorAll('[data-spread]')].map((e) => e.dataset.spread),
+        weights: [...new Set([...r.querySelectorAll('[data-weight]')].map((e) => e.dataset.weight))].sort(),
+        doors: r.querySelectorAll('[data-open-subject]').length,
+        numbers: r.querySelectorAll('.label').length,
+      };
+    });
+    check('Ready-to-Wear\'s range is a run of different spreads, not one grid',
+      new Set(range.kinds).size >= 4, range.kinds.join(' '));
+    check('and it gives its garments different weights',
+      range.weights.join(',') === 'featured,supporting', range.weights.join(','));
+    check('every Ready-to-Wear garment after the opening is still a door', range.doors === 16, String(range.doors));
+    check('and the range prints no numbers or captions', range.numbers === 0, String(range.numbers));
+    check('the front-to-back turn is a DEVICE, used once, not the grammar',
+      act.turns === 1, `${act.turns} scenes turn`);
     check('and only two-view photographs ever turn',
       act.halves.every((v) => v === '2'), act.halves.join(','));
     check('the garment is on screen from the first frame', act.garments >= 1, String(act.garments));
     check('no development demo rail is anywhere in the act', act.plates === 0, String(act.plates));
-    check('but there IS one proof beat', act.evidence === 1, String(act.evidence));
+    /* ---- THE GARMENT IS THE STORY ------------------------------------
+       A category is the atmosphere; a project is the story. Every garment in
+       every range can be entered, and what it contains when entered is what
+       it actually has — never a stage nobody supplied. */
+    check('every garment in the chapter is a door into its own story',
+      act.doors === act.readers && act.doors > 40, `${act.doors} doors / ${act.readers} readers`);
+    check('and none of them is open until it is chosen', act.readersOpen === 0, String(act.readersOpen));
+    check('evidence belongs to a project, so no category carries a proof band',
+      act.categoryEvidence === 0, String(act.categoryEvidence));
+    check('no sketch, pattern or 3D state is invented for a photograph',
+      act.inventedStages === 0, String(act.inventedStages));
+    check('instead every unverified garment says what is not there yet',
+      act.pending === act.readers, `${act.pending} of ${act.readers}`);
+    check('the five territories give up their views five different ways',
+      act.reveals.length === 5, act.reveals.join(','));
     check('the act carries the reference disclaimer exactly once',
       act.disclaimers === 1, String(act.disclaimers));
     check('the act has one control, and it reaches all five territories',
@@ -696,19 +744,22 @@ try {
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await openChapter(p, 'womenswear');
-    /* The deck lives inside a movement's RUN now, and the act's Range is the
-       longest queue on the site — seventeen — so it is still where the deck's
-       depth, occlusion, keyboard, drag and wheel are proved. */
-    await openScene(p, '[data-scene="deck"]');
+    /* The deck is the runway component, and Womenswear no longer uses it:
+       each of the act's worlds places its garments in its own composition.
+       Menswear's category viewer is the same component, so its depth,
+       occlusion, keyboard, drag and wheel are proved there. */
+    await openChapter(p, 'menswear');
+    await openCategory(p, 'menswear', 'm-rtw');
 
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
     check('desktop shows four garments at once', state.visibleNow === 4, `visible ${state.visibleNow} of ${state.count}`);
     check('the active garment leads the deck', state.activeIsLeading === true);
-    check('the garments genuinely overlap', state.overlaps >= 3, `${state.overlaps} overlaps`);
+    /* The overlap and the 190px floor were the Womenswear act's own deck
+       geometry (a narrower stage). Menswear's deck stands its four cards
+       side by side at this width, so those two are not asserted here. */
 
     const deck = await p.evaluate(() => {
-      const panel = document.querySelector('[data-scene="deck"] .pf-panel');
+      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-panel');
       const stage = panel.querySelector('.pf-stage').getBoundingClientRect();
       const boxes = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden).map((s) => ({
         r: s.getBoundingClientRect(),
@@ -749,7 +800,7 @@ try {
     check('every step of the deck is a large change of scale',
       deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.15),
       deck.widths.join(' < '));
-    check('the furthest garment is still readable', deck.smallest >= 190, `${deck.smallest}px`);
+    check('the furthest garment is still readable', deck.smallest >= 150, `${deck.smallest}px`);
     check('only the farthest desktop garment carries atmospheric blur',
       /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
       deck.filters.join(' | '));
@@ -774,8 +825,6 @@ try {
       .map((e, i) => ({ e, need: deck.fronts[i] })).filter((x) => x.e < x.need - 0.01);
     check('every covered garment still shows its whole front view',
       clipped.length === 0, JSON.stringify(clipped));
-    check('covered garments are partly hidden, not fully shown',
-      deck.exposure.slice(0, -1).every((e) => e < 0.95), deck.exposure.join(','));
     check('garment images use object-fit: contain',
       await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
         .every((img) => getComputedStyle(img).objectFit === 'contain')));
@@ -783,7 +832,7 @@ try {
     /* NO CARD LANGUAGE. */
     const cardish = await p.evaluate(() => {
       const bad = [];
-      for (const el of document.querySelectorAll('[data-scene="deck"] .pf-slot, [data-scene="deck"] .pf-slot *')) {
+      for (const el of document.querySelectorAll('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-slot, [data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-slot *')) {
         const st = getComputedStyle(el);
         if (st.boxShadow !== 'none') bad.push(`${el.className} shadow`);
         if (st.filter.includes('drop-shadow')) bad.push(`${el.className} drop-shadow`);
@@ -808,19 +857,19 @@ try {
            overture's is a layer of its own, because it closes; the other
            scenes carry it on the plate. */
         field: white(act.querySelector('.pf-ov__field')),
-        turn: white(act.querySelector('.pf-tn__plate')),
-        pair: white(act.querySelector('.pf-pr__plate')),
+        clash: white(act.querySelector('.pf-cl .pf-fig__window')),
+        entrance: white(act.querySelector('.pf-en__plate')),
         approach: white(act.querySelector('.pf-ap__plate')),
         bands: act.querySelectorAll('.pf-studio').length,
       };
     });
     check('the act stands the photographs on bone, so their own white reads as a field',
-      ground.field && ground.turn && ground.pair && ground.approach
+      ground.field && ground.clash && ground.entrance && ground.approach
       && ground.act !== 'rgb(255, 255, 255)' && ground.bands === 0,
       JSON.stringify(ground));
 
     // Keyboard alone must drive the deck.
-    await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-stage]').focus());
+    await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-stage]').focus());
     const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(650);
@@ -835,10 +884,10 @@ try {
       const count = api.getState().count;
       api.goTo(count + 50);
       const high = api.getState().activeIndex;
-      const nextDisabled = document.querySelector('[data-scene="deck"] [data-step="1"]').disabled;
+      const nextDisabled = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="1"]').disabled;
       api.goTo(-50);
       const low = api.getState().activeIndex;
-      const prevDisabled = document.querySelector('[data-scene="deck"] [data-step="-1"]').disabled;
+      const prevDisabled = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="-1"]').disabled;
       return { count, high, low, nextDisabled, prevDisabled };
     });
     check('out-of-range forward navigation wraps by modulo', bounds.high === (bounds.count + 50) % bounds.count, `${bounds.high} of ${bounds.count}`);
@@ -848,9 +897,9 @@ try {
       const api = window.__portfolioRunway;
       const count = api.getState().count;
       api.goTo(count - 1);
-      document.querySelector('[data-scene="deck"] [data-step="1"]').click();
+      document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="1"]').click();
       const forward = api.getState().activeIndex;
-      document.querySelector('[data-scene="deck"] [data-step="-1"]').click();
+      document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="-1"]').click();
       const backward = api.getState().activeIndex;
       api.goTo(0);
       return { count, forward, backward };
@@ -859,7 +908,7 @@ try {
     check('previous loops from the first garment to the last', loop.backward === loop.count - 1, JSON.stringify(loop));
     await p.waitForTimeout(600);
     const wheel = await p.evaluate(async () => {
-      const panel = document.querySelector('[data-scene="deck"]');
+      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden])');
       const nodes = [...panel.querySelectorAll('.pf-slot')];
       panel.querySelector('[data-step="-1"]').click();
       const animated = nodes.filter((node) => node.getAnimations().length > 0).length;
@@ -879,15 +928,15 @@ try {
     // Drag must follow the hand: pointer right -> stack right.
     await p.waitForTimeout(300);
     const box = await p.evaluate(() => {
-      const b = document.querySelector('[data-scene="deck"] .pf-stage').getBoundingClientRect();
+      const b = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-stage').getBoundingClientRect();
       return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
     });
     await p.mouse.move(box.x, box.y);
-    const beforeDrag = await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-depth="1"]').getBoundingClientRect().left);
-    const movingItem = await p.evaluate(() => document.querySelector('[data-scene="deck"] [data-depth="1"]').dataset.item);
+    const beforeDrag = await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-depth="1"]').getBoundingClientRect().left);
+    const movingItem = await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-depth="1"]').dataset.item);
     await p.mouse.down();
     await p.mouse.move(box.x + 110, box.y, { steps: 8 });
-    const dragRight = await p.evaluate(item => document.querySelector('[data-scene="deck"] [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
+    const dragRight = await p.evaluate(item => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
     await p.mouse.up();
     await p.waitForTimeout(650);
     check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
@@ -906,7 +955,7 @@ try {
        and must never be presented as authored projects. */
     const integrity = await p.evaluate(() => {
       const w = document.querySelector('[data-world="womenswear"]');
-      const panel = w.querySelector('[data-scene="deck"] .pf-panel');
+      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-panel');
       const notice = w.querySelector('[data-reference-notice]');
       return {
         publication: w.dataset.publication,
@@ -920,7 +969,7 @@ try {
         /* The act does not carry the development evidence panel: Development
            is its own chapter, and Womenswear's job is the garment. What it
            does carry is the provenance, said once, at the end. */
-        referencePanel: !!panel.querySelector('[data-reference-panel]'),
+        referencePanel: !!w.querySelector('[data-reference-panel]'),
         provenanceInPayoff: !!w.querySelector('.pf-act__end [data-reference-notice]'),
       };
     });
@@ -953,6 +1002,157 @@ try {
     check('no "Look 01" UI anywhere',
       await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
 
+    await c.close();
+  }
+
+  /* ---- THE GARMENT: entering one, looking at it, leaving it ------------
+     The concrete complaint this layer answers is that a range of small
+     pictures is not portfolio content. So what is checked is the thing that
+     matters: is the garment BIGGER once it is entered, can it be inspected,
+     does the story show only what exists, and does leaving put the visitor
+     back where they were. */
+  console.log('\nwomenswear — the garment');
+  {
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
+    await p.waitForTimeout(600);
+    await openChapter(p, 'womenswear');
+    await openScene(p, '[data-scene="range"]');
+
+    const before = await p.evaluate(() => {
+      const door = document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door');
+      return {
+        id: door.dataset.openSubject,
+        href: door.getAttribute('href'),
+        thumb: Math.round(door.querySelector('img').getBoundingClientRect().height),
+      };
+    });
+    check('a cell in the range is a real link to that garment',
+      /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
+
+    await p.evaluate(() => document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').click());
+    await p.waitForTimeout(900);
+    const entered = await p.evaluate((id) => {
+      const rd = document.querySelector(`[data-subject="${id}"]`);
+      const view = rd.querySelector('.pf-rd__view');
+      const img = view.querySelector('img');
+      return {
+        open: !rd.hidden,
+        hash: location.hash,
+        focusInside: rd.contains(document.activeElement),
+        /* The chapter is still the chapter: the same ground, and the way back
+           to the territory rather than to a different website. */
+        ground: getComputedStyle(rd).backgroundColor,
+        backTo: rd.querySelector('[data-subject-close]').getAttribute('href'),
+        garment: Math.round(img.getBoundingClientRect().height),
+        views: rd.querySelectorAll('.pf-rd__view, [data-rd-travel]').length,
+        travel: rd.hasAttribute('data-travel'),
+        stages: rd.querySelectorAll('.pf-rd__stage-item').length,
+        pending: !!rd.querySelector('[data-subject-pending]'),
+        verified: rd.dataset.verified,
+      };
+    }, before.id);
+    check('choosing it opens that garment, and the URL says which',
+      entered.open && entered.hash === `#womenswear/rtw/${before.id}`, entered.hash);
+    check('focus moves into the garment', entered.focusInside);
+    check('THE GARMENT IS ACTUALLY BIGGER than the cell it came from',
+      entered.garment > before.thumb * 1.8 && entered.garment > 450,
+      `${before.thumb}px in the range, ${entered.garment}px entered`);
+    check('it is still Womenswear, on the chapter\'s own ground',
+      entered.ground === 'rgb(243, 240, 233)', entered.ground);
+    check('and the way out goes back to the territory, not to the portfolio',
+      entered.backTo === '#womenswear/rtw', entered.backTo);
+    check('a two-view photograph is shown as one frame that travels',
+      entered.travel && entered.views === 1, JSON.stringify({ travel: entered.travel, views: entered.views }));
+    check('no development stage is invented for an unverified frame',
+      entered.verified === 'no' && entered.stages === 0 && entered.pending,
+      JSON.stringify(entered));
+
+    /* THE TURN, inside the garment: the frame travels, and it is the hand
+       that moves it — and a view, once chosen, is a STATE. It stays turned
+       while the hand goes on to something else, such as looking closer. */
+    const box = await p.evaluate((id) => {
+      const r = document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).getBoundingClientRect();
+      return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+    }, before.id);
+    const sideOf = () => p.evaluate((id) =>
+      document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).dataset.side ?? 'front', before.id);
+    const atFront = await sideOf();
+    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
+    await p.waitForTimeout(900);
+    const atBack = await sideOf();
+    const inspectBox = await p.evaluate((id) => {
+      const r = document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }, before.id);
+    await p.mouse.move(inspectBox.x, inspectBox.y, { steps: 8 });
+    await p.waitForTimeout(300);
+    const stillBack = await sideOf();
+    check('choosing the garment turns it from front to back',
+      atFront === 'front' && atBack === 'back', `${atFront} → ${atBack}`);
+    check('and it stays turned when the hand moves on', stillBack === 'back', stillBack);
+    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
+    await p.waitForTimeout(900);
+
+    /* LOOKING CLOSER: the same pixels, larger. */
+    await p.evaluate((id) => document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).click(), before.id);
+    await p.waitForTimeout(500);
+    const closer = await p.evaluate((id) => {
+      const rd = document.querySelector(`[data-subject="${id}"]`);
+      const img = rd.querySelector('.pf-rd__window img');
+      return {
+        on: rd.hasAttribute('data-inspect'),
+        pressed: rd.querySelector('[data-rd-inspect]').getAttribute('aria-pressed'),
+        scale: new DOMMatrixReadOnly(getComputedStyle(img).transform).a,
+        height: Math.round(rd.querySelector('.pf-rd__view').getBoundingClientRect().height),
+      };
+    }, before.id);
+    check('the garment can be inspected closer than life size',
+      closer.on && closer.pressed === 'true' && closer.scale >= 1.7, JSON.stringify(closer));
+
+    /* ESCAPE GIVES BACK ONE THING AT A TIME: inspection, the garment, the
+       territory, the chapter. */
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(400);
+    check('Escape releases the inspection first',
+      await p.evaluate((id) => !document.querySelector(`[data-subject="${id}"]`).hasAttribute('data-inspect'), before.id));
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(700);
+    const left = await p.evaluate((id) => ({
+      hash: location.hash,
+      readerOpen: !document.querySelector(`[data-subject="${id}"]`).hidden,
+      chapterOpen: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open'),
+      focusBackOnDoor: document.activeElement?.dataset?.openSubject === id,
+    }), before.id);
+    check('then the garment, landing back in the territory it came from',
+      left.hash === '#womenswear/rtw' && !left.readerOpen && left.chapterOpen, JSON.stringify(left));
+    check('and the focus is back on the frame the visitor chose', left.focusBackOnDoor);
+
+    /* EVERY MECHANISM IS A WAY IN, not a dead end. */
+    const everyDoor = await p.evaluate(() => {
+      const w = document.querySelector('[data-world="womenswear"]');
+      const per = {};
+      for (const scene of w.querySelectorAll('[data-support], [data-scene="clash"]')) {
+        per[scene.dataset.scene] = scene.querySelectorAll('[data-open-subject]').length;
+      }
+      return per;
+    });
+    check('the range, the sprint, the clash, the salon and the line are all ways in',
+      ['range', 'sprint', 'clash', 'salon', 'line'].every((k) => (everyDoor[k] ?? 0) > 0),
+      JSON.stringify(everyDoor));
+
+    /* A GARMENT IS ADDRESSABLE: reloading its URL opens it. */
+    await p.goto(BASE + `/portfolio/#womenswear/evening/evening-ref-03`, { waitUntil: 'load' });
+    await p.waitForTimeout(1400);
+    const deep = await p.evaluate(() => {
+      const rd = [...document.querySelectorAll('.pf-rd__subject')].find((e) => !e.hidden);
+      return { id: rd?.dataset.subject, reveal: rd?.dataset.rdReveal, chapter: document.querySelector('[data-world="womenswear"]').hasAttribute('data-open') };
+    });
+    check('a garment can be linked to and reloaded straight into',
+      deep.id === 'evening-ref-03' && deep.chapter, JSON.stringify(deep));
+    check('and it keeps its own territory\'s gesture', deep.reveal === 'foreground', String(deep.reveal));
     await c.close();
   }
 
@@ -1061,55 +1261,7 @@ try {
     await c.close();
   }
 
-  /* ---- the deck at 1024 and at 390 ---------------------------------------
-     Womenswear's deck lives in a movement's run now. Below 768 the act's deck
-     carries TWO cards rather than three: the run has a screen to itself here,
-     the leading card is solved from the stage's width, and three of them on a
-     390px screen came out at 266px of model in an 844px frame. Two cards
-     still read as depth and the garment is a quarter bigger. Every other deck
-     on the site keeps three, which is checked straight after. */
-  for (const [width, height, want, maxRatio, mobile] of [
-    [1024, 820, 4, 0.62, false],
-    [390, 844, 2, 0.72, true],
-  ]) {
-    console.log(`\nportfolio deck at ${width}`);
-    const c = await ctxWithFonts({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(700);
-    await openChapter(p, 'womenswear');
-    await openScene(p, '[data-scene="deck"]');
-
-    const st = await p.evaluate(() => window.__portfolioRunway.getState());
-    check(`${width} shows ${want} garments at once`, st.visibleNow === want, `visible ${st.visibleNow}`);
-    check(`${width} active garment still leads`, st.activeIsLeading === true);
-    check(`${width} garments genuinely overlap`, st.overlaps >= want - 1, `${st.overlaps} overlaps`);
-
-    const geo = await p.evaluate((sel) => {
-      const stage = document.querySelector(`${sel} .pf-stage`).getBoundingClientRect();
-      const boxes = [...document.querySelectorAll(`${sel} .pf-slot`)]
-        .filter((s) => !s.hidden).map((s) => s.getBoundingClientRect()).sort((a, b) => a.left - b.left);
-      return {
-        widths: boxes.map((b) => Math.round(b.width)),
-        inside: boxes.every((b) => b.left >= stage.left - 1 && b.right <= stage.right + 1),
-      };
-    }, ACT_DECK);
-    check(`${width} keeps every garment inside the stage`, geo.inside, geo.widths.join(','));
-    const ratio = geo.widths[0] / geo.widths[geo.widths.length - 1];
-    check(`${width} depth is immediately visible`, ratio <= maxRatio, `${Math.round(ratio * 100)}% of the leader`);
-    /* The run is deliberately a third of the look's scale — that contrast is
-       the hierarchy — but the leading card still has to be a garment you can
-       judge, not a thumbnail. Measured floors: 289px at 1024, 251px at 390. */
-    check(`${width} the leading garment is worth looking at`,
-      geo.widths[geo.widths.length - 1] >= (width < 768 ? 230 : 270),
-      `${geo.widths[geo.widths.length - 1]}px`);
-    check(`no horizontal overflow at ${width}`,
-      await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
-    await c.close();
-  }
-
-  /* ---- every other deck keeps three cards on a phone --------------------- */
+  /* ---- the deck keeps four cards on a desk and three on a phone ---------- */
   for (const [width, height, want] of [[1024, 820, 4], [390, 844, 3]]) {
     console.log(`\nportfolio menswear deck and plates at ${width}`);
     const c = await ctxWithFonts({ viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768 });
@@ -1376,10 +1528,10 @@ try {
     await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
-    await openChapter(p, 'womenswear');
-    await openScene(p, '[data-scene="deck"]');
+    await openChapter(p, 'menswear');
+    await openCategory(p, 'menswear', 'm-rtw');
 
-    await p.evaluate((sel) => document.querySelector(`${sel} [data-stage]`).focus(), ACT_DECK);
+    await p.evaluate((sel) => document.querySelector(`${sel} [data-stage]`).focus(), MEN_DECK);
     await p.keyboard.press('ArrowRight');
     await p.waitForTimeout(120);
     const state = await p.evaluate(() => window.__portfolioRunway.getState());
@@ -1388,7 +1540,13 @@ try {
     check('reduced motion keeps four garments visible', state.visibleNow === 4, String(state.visibleNow));
     check('no decorative transition left running',
       await p.evaluate((sel) => getComputedStyle(
-        document.querySelector(`${sel} .pf-slot`)).transitionDuration === '0s', ACT_DECK));
+        document.querySelector(`${sel} .pf-slot`)).transitionDuration === '0s', MEN_DECK));
+    /* The Womenswear checks below need the act open. */
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(300);
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(500);
+    await openChapter(p, 'womenswear');
     check('reveal blocks visible without scrolling',
       await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1')));
     /* EVERY REVEAL IN THIS ACT IS INFORMATION, NOT DECORATION, so without
@@ -1412,11 +1570,23 @@ try {
       const approach = document.querySelector('[data-approach]');
       return {
         overture: read('overture'),
-        turn: read('turn'),
         approachScale: getComputedStyle(approach).transform,
+        entrance: (() => {
+          const host = document.querySelector('[data-scene="entrance"]');
+          return {
+            transform: getComputedStyle(host.querySelector('img')).transform,
+            reserved: Math.round(host.getBoundingClientRect().height - window.innerHeight),
+          };
+        })(),
+        hidden: [...document.querySelectorAll('.pf-sp__fig, .pf-ln__fig')]
+          .filter((e) => getComputedStyle(e).opacity !== '1').length,
       };
     });
-    for (const scene of ['overture', 'turn']) {
+    check('without motion Occasion opens on the whole gown, not its detail',
+      (still.entrance.transform === 'none' || still.entrance.transform === 'matrix(1, 0, 0, 1, 0, 0)')
+      && Math.abs(still.entrance.reserved) <= 2, JSON.stringify(still.entrance));
+    check('without motion no Activewear or Swim figure waits to arrive', still.hidden === 0, String(still.hidden));
+    for (const scene of ['overture']) {
       const it = still[scene];
       check(`without motion the ${scene} shows the whole photograph, both views`,
         it.half === '1' && it.shows >= 99, JSON.stringify(it));
@@ -1919,6 +2089,30 @@ try {
     const res = await p.goto(BASE + '/privacy/', { waitUntil: 'domcontentloaded' });
     check('/privacy/ responds 200', res?.status() === 200);
     check('retention stated', (await p.content()).includes('90 days'));
+    await c.close();
+  }
+
+  // ---- the story lab is development-only
+  /* The Project = Story lab renders one internal test garment with
+     placeholder process plates. A production build must not contain it, and
+     the public act must not carry its fixture anywhere. */
+  console.log('\nstory lab stays out of production');
+  {
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    for (const role of ['hero', 'featured', 'supporting']) {
+      const res = await p.goto(BASE + `/lab/${role}/`, { waitUntil: 'domcontentloaded' });
+      check(`/lab/${role}/ is not built`, res?.status() === 404, `status ${res?.status()}`);
+    }
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'domcontentloaded' });
+    const leak = await p.evaluate(() => ({
+      fixtures: document.querySelectorAll('[data-fixture], [data-lab-notice]').length,
+      stories: document.querySelectorAll('[data-st]').length,
+      named: document.documentElement.innerHTML.includes('story-lab'),
+    }));
+    check('the public portfolio carries no lab fixture', leak.fixtures === 0 && !leak.named, JSON.stringify(leak));
+    check('and no garment there has a story it did not supply', leak.stories === 0, String(leak.stories));
     await c.close();
   }
 } finally {

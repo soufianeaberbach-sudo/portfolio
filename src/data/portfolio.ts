@@ -82,6 +82,12 @@ export interface ImageAsset {
      single-view model down the centre. Optional: a consumer that has not been
      told MUST assume 1 and leave the frame whole. */
   views?: 1 | 2;
+  /* WHETHER THE TWO VIEWS OF A TWO-UP CAN BE CUT APART WITHOUT CUTTING
+     EITHER. `false` where the models touch — there is then no line between
+     them that leaves both garments whole, so anything that would split the
+     frame shows it whole instead. Recorded from the same measurement as
+     `front`; unset means separable. */
+  separable?: boolean;
 }
 
 export interface ImageCredit {
@@ -108,6 +114,80 @@ export interface EvidenceAsset {
    and a project with none renders no strip at all. */
 export type ProjectEvidence = Partial<Record<EvidenceStage, EvidenceAsset>>;
 
+/* --------------------------------------------------------------------------
+   A GARMENT IS A FASHION OBJECT WITH A HISTORY, NOT A PICTURE WITH
+   ATTACHMENTS.
+
+   These types describe what one project can actually contain: the finished
+   garment in as many views as were shot, where the idea started, and how it
+   was built. EVERY field is optional and independently supplied. A renderer
+   shows what exists and says nothing whatever about what does not — there is
+   no placeholder, no substitution and no inference from an image anywhere in
+   this file.
+
+   Nothing here assumes the shape of the temporary reference archive. A future
+   project may arrive as one two-up photograph, as separate front and back
+   files, as renders, as a photographed sample, or as any mixture of those,
+   and the same structure holds it.
+   -------------------------------------------------------------------------- */
+
+export interface GarmentAsset {
+  image: ImageAsset;
+  /* One short line about this asset, in the designer's own words. Never
+     generated, never inferred from the picture. */
+  note?: string;
+}
+
+/** THE FINISHED GARMENT. Front and back are the information; how they are
+ *  presented is art direction, and the two are kept apart on purpose. */
+export interface FinalViews {
+  front?: ImageAsset;
+  back?: ImageAsset;
+  side?: ImageAsset;
+  editorial?: ImageAsset;
+  details?: GarmentAsset[];
+  /* ONE photograph that already holds more than one view — what the current
+     reference archive happens to use. Optional, and never assumed:
+     `ImageAsset.views` says how many views a single frame contains, and
+     `ImageAsset.front` says where the first one ends. */
+  composite?: ImageAsset;
+}
+
+/** WHERE IT STARTED. */
+export interface ConceptStage {
+  sketch?: ImageAsset;
+  illustration?: ImageAsset;
+  note?: string;
+}
+
+/** HOW IT WAS BUILT. */
+export interface DevelopmentStage {
+  flat?: ImageAsset;
+  pattern?: ImageAsset;
+  clo?: ImageAsset;
+  fit?: ImageAsset;
+  iterations?: GarmentAsset[];
+  note?: string;
+}
+
+/** HOW A PROJECT GIVES UP ITS VIEWS.
+ *  The information is consistent across the portfolio; the presentation is
+ *  deliberately not, because a front/back switch repeated on every project is
+ *  an e-commerce control rather than art direction.
+ *    turn        the frame travels from one view to the other
+ *    together    both views stand side by side, at rest
+ *    foreground  the second view arrives small and then takes the front
+ *    drag        the visitor moves between the views themselves
+ *    single      there is one view, and nothing is invented to pad it */
+export type Reveal = 'turn' | 'together' | 'foreground' | 'drag' | 'single';
+
+/** AN EDITORIAL ROLE, not a quality rating. The designer decides how much
+ *  space a project deserves; the interface obeys.
+ *    hero        a major fashion moment with a story worth close attention
+ *    featured    a real individual presentation, fewer stages
+ *    supporting  part of a territory's range, still enterable and inspectable */
+export type ProjectRole = 'hero' | 'featured' | 'supporting';
+
 /* VERIFIED WORK ONLY. Nothing on this type may be populated by inference from
    an image. If a value is not known from the project itself, the field is left
    unset and the UI omits it. */
@@ -120,8 +200,22 @@ export interface Project {
   fabricFamily?: FabricFamily;
   materials?: string[];
   description?: string;
+  /* The one view a range shows: the project's cover. */
   finalGarmentImage: ImageAsset;
-  evidence: ProjectEvidence;
+  /* THE PROJECT'S OWN STORY. */
+  final?: FinalViews;
+  concept?: ConceptStage;
+  development?: DevelopmentStage;
+  /* ONE real design decision, in the designer's words, or nothing. This is
+     the only place in the chapter where a sentence may be specific about a
+     garment, and it is rendered only when a project supplies it. */
+  decision?: string;
+  role?: ProjectRole;
+  reveal?: Reveal;
+  /* The three-stage shape the Menswear world's evidence strip still reads.
+     New work uses `concept` and `development`, which hold more and say it
+     more precisely; this stays so nothing already built has to change. */
+  evidence?: ProjectEvidence;
   tags?: string[];
   /* CURATION, not a quality claim. A spotlit project is the one a territory
      is led by — it owns a scene of its own rather than sitting in the
@@ -278,6 +372,10 @@ const FRONT: Record<string, number> = {
    fact FRONT's note above records, kept here as the thing a renderer asks. */
 const SINGLE_VIEW = /^swim\//;
 
+/* The three two-ups FRONT's note records as having no gap: the models touch,
+   so a split anywhere cuts one of the two garments. */
+const TOUCHING = new Set(['evening/1', 'jersey/9', 'sport/10']);
+
 const image = (ref: string, alt: string): ImageAsset => {
   const [width, height] = INTRINSIC[ref] ?? [1400, 1868];
   return {
@@ -288,6 +386,7 @@ const image = (ref: string, alt: string): ImageAsset => {
     alt,
     front: FRONT[ref] ?? 0.55,
     views: SINGLE_VIEW.test(ref) ? 1 : 2,
+    ...(TOUCHING.has(ref) ? { separable: false } : {}),
   };
 };
 
@@ -544,6 +643,201 @@ export const worldPublication = (world: GarmentWorld): Publication => {
 
 export const verifiedProjectCount = (world: GarmentWorld): number =>
   world.categories.reduce((total, category) => total + category.projects.length, 0);
+
+/* --------------------------------------------------------------------------
+   THE SUBJECT.
+
+   One shape the interface can render whether a territory holds verified
+   projects or, as now, temporary reference photographs. It exists so the
+   chapter's architecture does not depend on which of the two it is looking
+   at — and so replacing references with real work makes the experience
+   deeper without changing a single composition.
+
+   A subject is deliberately NOT a picture with a caption. It is:
+     cover   the one view a range shows
+     views   every view of the finished garment that actually exists
+     origin  where the idea started, where that is supplied
+     build   how it was made, where that is supplied
+     reveal  how its views are given up — art direction, not a toggle
+     role    how much room the designer gave it
+
+   TRUTH. For a reference, `views` comes only from what is inside the file —
+   a two-up frame genuinely holds a front and a back, and a single-view frame
+   holds one — `origin` and `build` are empty, `title` and `decision` are
+   null, and `verified` is false. Nothing is generated to fill a gap.
+   -------------------------------------------------------------------------- */
+
+export type ViewKey = 'front' | 'back' | 'side' | 'editorial' | 'detail';
+export type StageKey = 'sketch' | 'illustration' | 'flat' | 'pattern' | 'clo' | 'fit';
+
+export interface SubjectView {
+  key: ViewKey;
+  label: string;
+  image: ImageAsset;
+  /* Which part of the file this view is. A two-up frame carries both views in
+     one image, so the renderer is told which half to show; `whole` means the
+     image is this view on its own. */
+  crop: 'front' | 'back' | 'whole';
+}
+
+export interface SubjectStage {
+  key: StageKey;
+  step: string;
+  label: string;
+  image: ImageAsset;
+  note?: string;
+}
+
+export interface Subject {
+  id: string;
+  /* Where it sits, so a subject can be addressed in the URL. */
+  world: string;
+  category: string;
+  cover: ImageAsset;
+  views: SubjectView[];
+  origin: SubjectStage[];
+  build: SubjectStage[];
+  reveal: Reveal;
+  role: ProjectRole;
+  title: string | null;
+  garmentType: string | null;
+  /* WHAT THIS GARMENT IS. For a verified project, the project's own
+     description. For a reference, the description of the photograph that the
+     alt text already carries — which is a statement about the picture and
+     never a claim about who made the garment in it. */
+  caption: string | null;
+  decision: string | null;
+  verified: boolean;
+  /* AN INTERNAL TEST SUBJECT, never public work. Set only by the
+     development-only story lab (src/data/story-lab.ts), and the reader marks
+     every one of its plates as a placeholder when it is set. */
+  fixture?: boolean;
+}
+
+const VIEW_LABEL: Record<ViewKey, string> = {
+  front: 'Front',
+  back: 'Back',
+  side: 'Side',
+  editorial: 'Editorial',
+  detail: 'Detail',
+};
+
+const STAGE_LABEL: Record<StageKey, { step: string; label: string }> = {
+  sketch: { step: '01', label: 'Sketch' },
+  illustration: { step: '01', label: 'Illustration' },
+  flat: { step: '02', label: 'Technical flat' },
+  pattern: { step: '03', label: '2D pattern' },
+  clo: { step: '04', label: '3D development' },
+  fit: { step: '05', label: 'Fit state' },
+};
+
+const stage = (key: StageKey, image?: ImageAsset, note?: string): SubjectStage[] =>
+  image ? [{ key, ...STAGE_LABEL[key], image, note }] : [];
+
+const view = (key: ViewKey, image: ImageAsset | undefined, crop: SubjectView['crop']): SubjectView[] =>
+  image ? [{ key, label: VIEW_LABEL[key], image, crop }] : [];
+
+/** A VERIFIED PROJECT, as the interface sees it. */
+export const projectSubject = (project: Project, world: string): Subject => {
+  const final = project.final ?? {};
+  /* Separate files win over a two-up: a frame shot for one view is a better
+     view than half of another frame. A composite is used only for the views
+     it is not already supplying separately, and then its own measured
+     geometry says where the front ends and the back begins. */
+  const twoUp = final.composite?.views === 2 && final.composite.separable !== false ? final.composite : undefined;
+  const views: SubjectView[] = [
+    ...(final.front
+      ? view('front', final.front, 'whole')
+      : twoUp ? view('front', twoUp, 'front') : view('front', final.composite, 'whole')),
+    ...(final.back
+      ? view('back', final.back, 'whole')
+      : twoUp ? view('back', twoUp, 'back') : []),
+    ...view('side', final.side, 'whole'),
+    ...view('editorial', final.editorial, 'whole'),
+    ...(final.details ?? []).map((d) => ({
+      key: 'detail' as ViewKey, label: VIEW_LABEL.detail, image: d.image, crop: 'whole' as const,
+    })),
+  ];
+  const origin = [
+    ...stage('sketch', project.concept?.sketch, project.concept?.note),
+    ...stage('illustration', project.concept?.illustration),
+  ];
+  const build = [
+    ...stage('flat', project.development?.flat),
+    ...stage('pattern', project.development?.pattern, project.development?.note),
+    ...stage('clo', project.development?.clo),
+    ...stage('fit', project.development?.fit),
+    ...(project.development?.iterations ?? []).map((it, i) => ({
+      key: 'fit' as StageKey, step: `05.${i + 1}`, label: 'Iteration', image: it.image, note: it.note,
+    })),
+  ];
+  return {
+    id: project.id,
+    world,
+    category: project.marketCategory,
+    cover: project.finalGarmentImage,
+    views: views.length > 0 ? views : [{ key: 'front', label: VIEW_LABEL.front, image: project.finalGarmentImage, crop: 'whole' }],
+    origin,
+    build,
+    reveal: project.reveal ?? (views.length > 1 ? 'turn' : 'single'),
+    role: project.role ?? (project.spotlight ? 'hero' : 'supporting'),
+    title: project.title,
+    garmentType: project.garmentType,
+    caption: project.description ?? null,
+    decision: project.decision ?? null,
+    verified: true,
+  };
+};
+
+/** A REFERENCE PHOTOGRAPH, as the interface sees it. Everything here comes
+ *  out of the file itself: how many views it holds and where the first one
+ *  ends. There is no story, and the interface says so rather than filling
+ *  one in. */
+export const referenceSubject = (
+  reference: ReferenceImage,
+  world: string,
+  category: string,
+  reveal: Reveal,
+): Subject => {
+  /* A two-up whose models touch cannot be split without cutting one of the
+     garments, so it is shown as the one frame it is: both views, whole. */
+  const twoUp = reference.image.views === 2 && reference.image.separable !== false;
+  const whole = reference.image.views === 2 && !twoUp;
+  return {
+    id: reference.id,
+    world,
+    category,
+    cover: reference.image,
+    views: twoUp
+      ? [
+          { key: 'front', label: VIEW_LABEL.front, image: reference.image, crop: 'front' },
+          { key: 'back', label: VIEW_LABEL.back, image: reference.image, crop: 'back' },
+        ]
+      : [{ key: 'front', label: whole ? 'Front and back' : VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
+    origin: [],
+    build: [],
+    reveal: twoUp ? reveal : 'single',
+    role: 'supporting',
+    title: null,
+    garmentType: null,
+    /* The photograph's own description, with the boilerplate about the frame
+       trimmed off the front so it reads as what it is: a description of the
+       garment in the picture. */
+    caption: reference.image.alt
+      .replace(/^Front and back views of /i, '')
+      .replace(/, photographed (together )?on a white studio ground\.?$/i, '')
+      .replace(/^(.)/, (m) => m.toUpperCase()),
+    decision: null,
+    verified: false,
+  };
+};
+
+/** WHAT THE INTERFACE SAYS WHEN A SUBJECT HAS NO STORY YET. It describes the
+ *  architecture and claims nothing about the photograph. */
+export const SUBJECT_STORY_PENDING =
+  'Final views only. The idea, the pattern and the 3D development belong to the '
+  + 'project that produced them, and arrive with it — nothing here is reconstructed '
+  + 'from a photograph.';
 
 export interface Chapter {
   id: string;
