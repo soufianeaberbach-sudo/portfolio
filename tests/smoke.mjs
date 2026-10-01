@@ -2106,6 +2106,30 @@ try {
     check('retention stated', (await p.content()).includes('90 days'));
     await c.close();
   }
+
+  // ---- the story lab is development-only
+  /* The Project = Story lab renders one internal test garment with
+     placeholder process plates. A production build must not contain it, and
+     the public act must not carry its fixture anywhere. */
+  console.log('\nstory lab stays out of production');
+  {
+    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
+    const p = await c.newPage();
+    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
+    for (const role of ['hero', 'featured', 'supporting']) {
+      const res = await p.goto(BASE + `/lab/${role}/`, { waitUntil: 'domcontentloaded' });
+      check(`/lab/${role}/ is not built`, res?.status() === 404, `status ${res?.status()}`);
+    }
+    await p.goto(BASE + '/portfolio/', { waitUntil: 'domcontentloaded' });
+    const leak = await p.evaluate(() => ({
+      fixtures: document.querySelectorAll('[data-fixture], [data-lab-notice]').length,
+      stories: document.querySelectorAll('[data-st]').length,
+      named: document.documentElement.innerHTML.includes('story-lab'),
+    }));
+    check('the public portfolio carries no lab fixture', leak.fixtures === 0 && !leak.named, JSON.stringify(leak));
+    check('and no garment there has a story it did not supply', leak.stories === 0, String(leak.stories));
+    await c.close();
+  }
 } finally {
   await browser.close();
   stop();

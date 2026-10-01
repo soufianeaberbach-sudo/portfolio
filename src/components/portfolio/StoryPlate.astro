@@ -1,0 +1,41 @@
+---
+/* ONE PIECE OF PROCESS EVIDENCE inside a garment's story.
+
+   The plate is set at the proportion the evidence arrived in — a pattern is a
+   wide sheet, a sketch an upright page — and the movement that holds it
+   decides its scale. Pressing it opens the evidence at full size, because a
+   pattern or a fitting that cannot be read is decoration, not proof.
+
+   `pf-rd__stage-item` is the hook the suites use to prove that no stage is
+   ever rendered for a garment that did not supply one. */
+import type { SubjectStage } from '../../data/portfolio';
+
+interface Props {
+  stage: SubjectStage;
+  /* The name printed under the plate; the stage's own label by default. */
+  caption?: string;
+  sizes: string;
+  fixture?: boolean;
+  class?: string;
+}
+
+const { stage, caption = stage.label, sizes, fixture = false, class: className } = Astro.props;
+const ratio = (stage.image.width / stage.image.height).toFixed(4);
+---
+<figure class:list={['pf-st__plate', className]} data-stage={stage.key} style={`--ar:${ratio};`}>
+  <button
+    type="button"
+    class="pf-st__open pf-rd__stage-item"
+    data-evidence-open
+    data-evidence-title={caption}
+    data-evidence-demo={fixture ? '' : undefined}
+    aria-label={`${caption}, full size`}
+  >
+    <img
+      src={stage.image.src} srcset={stage.image.srcset} sizes={sizes}
+      width={stage.image.width} height={stage.image.height} alt={stage.image.alt}
+      loading="lazy" decoding="async"
+    />
+  </button>
+  <figcaption class="label">{caption}</figcaption>
+</figure>

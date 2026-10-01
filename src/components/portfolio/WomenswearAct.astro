@@ -54,12 +54,16 @@ import {
   projectSubject, referenceSubject, worldPublication,
 } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
+import StoryPlate from './StoryPlate.astro';
 
 interface Props {
   world: GarmentWorld;
+  /* The development-only story lab's test garment, which leads the named
+     territory. Never passed by the public page. */
+  lab?: { category: string; subject: Subject };
 }
 
-const { world } = Astro.props;
+const { world, lab } = Astro.props;
 const publication = worldPublication(world);
 
 const noun = publication === 'published' ? 'Project' : 'Reference';
@@ -176,7 +180,9 @@ const score: Territory[] = [
 const territories = score
   .map((t) => {
     const category = world.categories.find((c) => c.id === t.id);
-    return category ? { ...t, category, slots: pool(category, t.reveal) } : null;
+    if (!category) return null;
+    const slots = pool(category, t.reveal);
+    return { ...t, category, slots: lab?.category === t.id ? [lab.subject, ...slots] : slots };
   })
   .filter((t): t is Territory & { category: MarketCategory; slots: Subject[] } => !!t && t.slots.length > 0);
 
@@ -673,20 +679,39 @@ const pad = (n: number) => String(n).padStart(2, '0');
         sketch, pattern or 3D state is ever drawn, borrowed or implied.
 
         HOW MUCH ROOM a subject gets is the designer's decision, carried by
-        `role`: a hero runs the whole sequence, a featured one its views and a
-        single moment of thinking, a supporting one its views. The stages are
-        the architecture; the editing is the art direction. */}
+        `role` — and it is presentation weight, never access. Every stage a
+        project supplied is in its reader: a hero tells the story at full
+        scale and returns to the result, a featured one tells it closer
+        together, a supporting one keeps it folded behind one invitation. The
+        stages are the architecture; the weight is the art direction.
+
+        The story is designed against the development-only lab
+        (src/pages/lab/[story].astro), because no verified project in the
+        archive supplies its process yet. */}
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
-        /* THE EDITING, per role. The stages exist; how many of them this
-           subject is given is not a template decision. */
-        const origin = subject.role === 'supporting' ? [] : subject.origin;
-        const build = subject.role === 'hero'
-          ? subject.build
-          : subject.role === 'featured' ? subject.build.slice(0, 1) : [];
-        const story = [...origin, ...build];
-        const returns = story.length > 0;
+        /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
+           supplied is rendered, whatever its role; the role decides how much
+           room the story is given:
+             hero        full — each movement holds the screen
+             featured    compact — the same movements, closer together, no
+                         return to the result
+             supporting  folded — the garment first, and the story one
+                         deliberate press away rather than withheld */
+        const weight = subject.role === 'hero' ? 'full' : subject.role === 'featured' ? 'compact' : 'folded';
+        /* THE THREE MOVEMENTS a story is told in. Each stage has a narrative
+           job, so they are grouped by job rather than listed in file order. */
+        const origin = subject.origin;
+        const iterations = subject.build.filter((st) => st.label === 'Iteration');
+        const construction = subject.build.filter((st) => st.key === 'flat' || st.key === 'pattern');
+        const validation = subject.build.filter((st) => (st.key === 'clo' || st.key === 'fit') && st.label !== 'Iteration');
+        const story = [...origin, ...construction, ...validation, ...iterations];
+        const hasStory = story.length > 0;
+        const returns = hasStory && weight === 'full';
         const front = subject.views[0];
+        const pattern = construction.find((st) => st.key === 'pattern') ?? construction[0];
+        const flat = construction.find((st) => st !== pattern);
+        const storyId = `${subject.id}-story`;
         /* Do the two views live in the SAME photograph? Then there is one
            frame to travel rather than two frames to stack — and that is a
            property of the files, asked rather than assumed, so a project
@@ -708,6 +733,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
             data-travel={travel ? '' : undefined}
             data-role={subject.role}
             data-verified={subject.verified ? 'yes' : 'no'}
+            data-fixture={subject.fixture ? '' : undefined}
+            data-story={hasStory ? weight : undefined}
             aria-labelledby={`${subject.id}-rd-title`}
             tabindex="-1"
             hidden
@@ -723,6 +750,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
               <p class="pf-rd__where label">
                 <b>{pad(index + 1)}</b>
                 <span>{territory.category.label}</span>
+                {/* Where in the garment's story the visitor is, named once in
+                    the bar rather than as a heading over every movement. */}
+                {hasStory && <i class="pf-rd__beat" data-rd-beat aria-hidden="true"></i>}
               </p>
             </header>
 
@@ -744,9 +774,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 {subject.title && subject.caption && (
                   <p class="pf-rd__caption">{subject.caption}</p>
                 )}
-                {subject.decision && (
+                {subject.decision && !hasStory && (
                   /* THE ONE PLACE a sentence may be specific about a garment,
-                     and only ever in the designer's own words. */
+                     and only ever in the designer's own words. A garment with a
+                     story says it where it is proven — at the construction. */
                   <p class="pf-rd__decision">{subject.decision}</p>
                 )}
                 {/* INSPECTION. Not a gallery control — one affordance, because
@@ -762,6 +793,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
                     </p>
                   )}
                 </div>
+                {/* THE WAY DOWN. Desire first: the garment holds the screen,
+                    and the story is offered once, quietly, after it. A folded
+                    story is the same invitation, and the press unfolds it. */}
+                {hasStory && (
+                  <button type="button" class="pf-rd__into label" data-st-into
+                          aria-controls={storyId}
+                          aria-expanded={weight === 'folded' ? 'false' : undefined}>
+                    <span>How it became real</span>
+                    <i aria-hidden="true"><Arrow dir="down" /></i>
+                  </button>
+                )}
               </div>
               <div class="pf-rd__stage" data-rd-stage>
                 {travel ? (
@@ -806,41 +848,127 @@ const pad = (n: number) => String(n).padStart(2, '0');
               </div>
             </section>
 
-            {/* ---- THE STORY. Only the stages this subject actually has. */}
-            {story.length > 0 && (
-              <section class="pf-rd__story" aria-label="How it was made">
-                <ol class="pf-rd__stages">
-                  {story.map((st) => (
-                    <li class="pf-rd__stage-item" data-stage={st.key}>
-                      <figure>
-                        <img
-                          src={st.image.src} srcset={st.image.srcset}
-                          sizes="(max-width: 767px) 88vw, 40vw"
-                          width={st.image.width} height={st.image.height} alt={st.image.alt}
-                          loading="lazy" decoding="async"
-                        />
-                        <figcaption class="label"><b>{st.step}</b> {st.label}</figcaption>
-                      </figure>
-                      {st.note && <p class="pf-rd__note">{st.note}</p>}
-                    </li>
-                  ))}
-                </ol>
-              </section>
+            {/* ---- THE STORY. How the garment became real, told in the
+                movements its own evidence supports — and only those. Nothing
+                is rendered for a stage the project did not supply. */}
+            {hasStory && (
+              <div class="pf-st" id={storyId} data-st data-st-weight={weight}>
+                {/* WHERE IT STARTED. The drawing is the birth of the
+                    silhouette, so it is held large — and the garment it became
+                    stands beside it, small, so the eye makes the connection
+                    rather than a caption. */}
+                {origin.length > 0 && (
+                  <section class="pf-st__mv pf-st__mv--origin" data-st-beat="Where it started" aria-label="Where it started">
+                    <div class="pf-st__idea">
+                      <div class="pf-st__drawn" data-st-item>
+                        {origin.map((st) => (
+                          <StoryPlate stage={st} fixture={subject.fixture}
+                                      sizes="(max-width: 767px) 92vw, 44vw" />
+                        ))}
+                      </div>
+                      {/* What the drawing became, on the same floor as the
+                          drawing — the eye reads from one to the other. */}
+                      {front && (
+                        <figure class="pf-st__became" data-st-item data-crop={travel ? 'front' : front.crop} style={geom(front.image)}>
+                          <span class="pf-st__window">
+                            <img
+                              src={front.image.src} srcset={front.image.srcset}
+                              sizes="(max-width: 767px) 30vw, 12vw"
+                              width={front.image.width} height={front.image.height} alt=""
+                              loading="lazy" decoding="async"
+                            />
+                          </span>
+                          <figcaption class="label">Became</figcaption>
+                        </figure>
+                      )}
+                    </div>
+                    {origin[0].note && (
+                      <div class="pf-st__aside">
+                        <p class="pf-st__words" data-st-item>{origin[0].note}</p>
+                      </div>
+                    )}
+                  </section>
+                )}
+
+                {/* HOW IT WAS BUILT. The construction is one decision made
+                    real, so the decision is said first, in the designer's
+                    words, and the pattern carries it — wide, the way a pattern
+                    is laid out. The flat is its key, not its equal. */}
+                {construction.length > 0 && (
+                  <section class="pf-st__mv pf-st__mv--build" data-st-beat="How it was built" aria-label="How it was built">
+                    {subject.decision && <p class="pf-st__decision" data-st-item>{subject.decision}</p>}
+                    <div class="pf-st__drawing" data-st-item>
+                      {pattern && (
+                        <StoryPlate stage={pattern} class="pf-st__pattern" fixture={subject.fixture}
+                                    sizes="(max-width: 767px) 92vw, 62vw" />
+                      )}
+                      {flat && (
+                        <StoryPlate stage={flat} class="pf-st__flat" fixture={subject.fixture}
+                                    sizes="(max-width: 767px) 60vw, 22vw" />
+                      )}
+                    </div>
+                    {pattern?.note && <p class="pf-st__words pf-st__words--build" data-st-item>{pattern.note}</p>}
+                  </section>
+                )}
+
+                {/* HOW IT WAS PROVEN. The test and the evidence that it held,
+                    side by side at one height — the 3D state against the body —
+                    and the attempts it took, as a quiet run underneath. */}
+                {(validation.length > 0 || iterations.length > 0) && (
+                  <section class="pf-st__mv pf-st__mv--proof" data-st-beat="How it was proven" aria-label="How it was proven">
+                    {validation.length > 0 && (
+                      <div class="pf-st__pair" data-st-item>
+                        {validation.map((st) => (
+                          <StoryPlate stage={st} class="pf-st__proof" fixture={subject.fixture}
+                                      sizes="(max-width: 767px) 78vw, 30vw" />
+                        ))}
+                      </div>
+                    )}
+                    {iterations.length > 0 && (
+                      <ol class="pf-st__runs" data-st-item aria-label="Iterations">
+                        {iterations.map((st, i) => (
+                          <li>
+                            <StoryPlate stage={st} caption={`Iteration ${i + 1}`} class="pf-st__run"
+                                        fixture={subject.fixture} sizes="(max-width: 767px) 30vw, 10vw" />
+                            {st.note && <p class="pf-st__note">{st.note}</p>}
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </section>
+                )}
+              </div>
             )}
 
-            {/* ---- THE RETURN. The same garment, after the process. */}
+            {/* ---- THE RESULT, again. The same garment, now whole — both of
+                its views at once — and now understood. Only after a full
+                story: a return with nothing behind it is just a repeat. */}
             {returns && front && (
-              <section class="pf-rd__return" aria-label="The result">
-                <figure class="pf-rd__view" data-view={front.key} data-crop={front.crop} style={geom(front.image)}>
-                  <span class="pf-rd__window">
-                    <img
-                      src={front.image.src} srcset={front.image.srcset}
-                      sizes="(max-width: 767px) 92vw, 46vw"
-                      width={front.image.width} height={front.image.height} alt={front.image.alt}
-                      loading="lazy" decoding="async"
-                    />
-                  </span>
-                </figure>
+              <section class="pf-st__mv pf-st__mv--return" data-st-beat="The result" aria-label="The result">
+                <div class="pf-st__result" data-st-item>
+                  {(travel
+                    ? [{ ...front, crop: 'whole' as const }]
+                    : subject.views.slice(0, 2)
+                  ).map((v) => (
+                    <figure class="pf-st__final" data-crop={v.crop} style={geom(v.image)}>
+                      <span class="pf-st__window">
+                        <img
+                          src={v.image.src} srcset={v.image.srcset}
+                          sizes="(max-width: 767px) 92vw, 50vw"
+                          width={v.image.width} height={v.image.height} alt={v.image.alt}
+                          loading="lazy" decoding="async"
+                        />
+                      </span>
+                    </figure>
+                  ))}
+                </div>
+                <div class="pf-st__close">
+                  <p class="pf-st__name">{subject.title ?? subject.caption}</p>
+                  <a class="pf-rd__out label" href={`#${world.id}/${subject.category}`} data-nav data-subject-close>
+                    <i aria-hidden="true"><Arrow dir="left" /></i>
+                    <span>Back to {territory.short}</span>
+                  </a>
+                </div>
               </section>
             )}
 
@@ -849,12 +977,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
               <p class="pf-rd__pending" data-subject-pending>{SUBJECT_STORY_PENDING}</p>
             )}
 
-            <footer class="pf-rd__foot">
-              <a class="pf-rd__out label" href={`#${world.id}/${subject.category}`} data-nav data-subject-close>
-                <i aria-hidden="true"><Arrow dir="left" /></i>
-                <span>Back to {territory.short}</span>
-              </a>
-            </footer>
+            {!returns && (
+              <footer class="pf-rd__foot">
+                <a class="pf-rd__out label" href={`#${world.id}/${subject.category}`} data-nav data-subject-close>
+                  <i aria-hidden="true"><Arrow dir="left" /></i>
+                  <span>Back to {territory.short}</span>
+                </a>
+              </footer>
+            )}
           </article>
         );
       })}

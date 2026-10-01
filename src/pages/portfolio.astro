@@ -10,6 +10,15 @@ import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
 import '../styles/portfolio-womenswear.css';
+import type { Subject } from '../data/portfolio';
+
+/* The development-only story lab renders this page with one internal test
+   garment added to a territory (see src/pages/lab/[story].astro). The public
+   route never passes it. */
+interface Props {
+  lab?: { category: string; subject: Subject };
+}
+const { lab } = Astro.props as Props;
 
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
@@ -39,8 +48,21 @@ const split = (statement: string, word: string) => {
   description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
   marker="SA-PORTFOLIO-V8"
   page="portfolio"
+  noindex={!!lab}
 >
   <!-- BUILD-MARKER: SA-PORTFOLIO-V8 -->
+  {lab && (
+    <p class="pf-lab-notice" data-lab-notice>
+      <b>Story lab · internal</b>
+      The garment is a temporary reference photograph. Every process plate is a placeholder; no evidence is shown.
+    </p>
+  )}
+  {lab && (
+    /* The lab opens straight onto its test garment. */
+    <script is:inline define:vars={{ target: `#womenswear/${lab.category}/${lab.subject.id}` }}>
+      if (!location.hash) history.replaceState(null, '', target);
+    </script>
+  )}
   <div class="pf" data-pf-root>
     {/* Set before first paint so the enhanced layout never flashes the
         stacked fallback. parentElement is the .pf root, so the flag cannot
@@ -338,7 +360,7 @@ const split = (statement: string, word: string) => {
           written, which is why the two are deliberately separate files rather
           than one component with a mode flag. */}
       {garmentWorlds.map((world) => (
-        world.id === 'womenswear' ? <WomenswearAct world={world} /> : <GarmentWorld world={world} />
+        world.id === 'womenswear' ? <WomenswearAct world={world} lab={lab} /> : <GarmentWorld world={world} />
       ))}
       <SimulationWorld sessions={simulationSessions} />
       <TechPackWorld packs={techPacks} />
@@ -1327,6 +1349,55 @@ const split = (statement: string, word: string) => {
           move();
           drawInspect();
         });
+
+        /* ---- THE STORY ------------------------------------------------ */
+        /* How the garment became real, below its first screen. Its pieces
+           arrive once per visit as each movement comes into view; the bar
+           names the movement the visitor is in; and a folded story (a
+           supporting project) is opened by the same invitation that leads
+           into an unfolded one. */
+        const story = subject.querySelector<HTMLElement>('[data-st]');
+        const into = subject.querySelector<HTMLButtonElement>('[data-st-into]');
+        const beatLabel = subject.querySelector<HTMLElement>('[data-rd-beat]');
+        const movements = [...subject.querySelectorAll<HTMLElement>('.pf-st__mv')];
+        const folds = story?.dataset.stWeight === 'folded';
+        const fold = (on: boolean) => {
+          if (!story || !folds) return;
+          story.toggleAttribute('data-st-folded', on);
+          into?.setAttribute('aria-expanded', String(!on));
+        };
+        fold(true);
+        into?.addEventListener('click', () => {
+          if (!story) return;
+          fold(false);
+          const bar = subject.querySelector<HTMLElement>('.pf-rd__head')?.offsetHeight ?? 0;
+          const top = story.getBoundingClientRect().top - subject.getBoundingClientRect().top + subject.scrollTop - bar;
+          subject.scrollTo({ top, behavior: reduced() ? 'auto' : 'smooth' });
+        });
+        if (story && movements.length) {
+          if (!reduced()) story.setAttribute('data-st-armed', '');
+          const arrive = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) entry.target.setAttribute('data-st-in', '');
+            }
+          }, { root: subject, threshold: 0.2 });
+          /* The bar's beat: whichever movement holds the middle of the
+             screen. The garment's own first screen names nothing. */
+          const where = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting || !beatLabel) continue;
+              beatLabel.textContent = (entry.target as HTMLElement).dataset.stBeat ?? '';
+            }
+          }, { root: subject, rootMargin: '-48% 0px -48% 0px' });
+          for (const mv of movements) { arrive.observe(mv); where.observe(mv); }
+          const views = subject.querySelector('[data-rd-views]');
+          if (views) where.observe(views);
+          subject.addEventListener('pf:subject-reset', () => {
+            for (const mv of movements) mv.removeAttribute('data-st-in');
+            if (beatLabel) beatLabel.textContent = '';
+            fold(true);
+          });
+        }
 
         /* ---- LIFECYCLE ------------------------------------------------ */
         /* A garment is always entered on its front, at rest. */

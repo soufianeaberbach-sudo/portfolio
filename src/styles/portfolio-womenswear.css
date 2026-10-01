@@ -820,25 +820,225 @@
   touch-action: none;
 }
 
-/* ---- THE STORY, where a project has one. Technical, quiet, small. */
-.pf-rd__story { padding: 0 var(--edge); margin-top: clamp(2rem, 7vh, 5rem); }
-.pf-rd__stages {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-  gap: clamp(1rem, 3vw, 2.4rem);
-}
-.pf-rd__stages figure { margin: 0; display: grid; gap: .5rem; }
-.pf-rd__stages img { width: 100%; height: auto; background: var(--paper-bright); }
-.pf-rd__stages figcaption { color: var(--muted); }
-.pf-rd__stages figcaption b { color: var(--ink); font-weight: 500; }
-.pf-rd__note { margin: .4rem 0 0; font-size: .8rem; color: var(--ink-soft); }
+/* ================= THE STORY ==========================================
+   How a garment became real, inside the same layer as the garment: the same
+   ground, the same bar, the same two columns as its first screen — a word
+   column and a picture column — so going down into the process reads as going
+   deeper into one object, not onto a document page.
 
-/* ---- THE RETURN. */
-.pf-rd__return {
-  display: flex; justify-content: center;
-  padding: 0 var(--edge); margin-top: clamp(2rem, 7vh, 5rem);
+   Every stage has its own job, so none of them is a card in a grid:
+     ORIGIN        the sketch, held at almost the garment's own height, with
+                   what it became standing small beside it
+     CONSTRUCTION  the one decision, said once in large type, carried by the
+                   pattern laid out wide and the flat as its key
+     VALIDATION    the 3D state and the body, a pair at one height, and the
+                   attempts as a short run underneath
+     RESULT        the garment again, whole, and the way out
+   ======================================================================= */
+.pf-st { display: grid; }
+.pf-st__mv {
+  --plate-h: calc(100svh - var(--bar-h) - 9rem);
+  display: grid; align-content: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 3vh, 2rem);
+  padding: clamp(3rem, 10vh, 7rem) var(--edge);
 }
-.pf-rd__return .pf-rd__view { --view-h: 72svh; }
+/* A PLATE: sized by the height its movement gives it and its own proportion,
+   never wider than its column. The paper behind it is lighter than the ground
+   so a sheet reads as a sheet. */
+.pf-st__plate { margin: 0; display: grid; gap: .6rem; justify-items: start; min-width: 0; }
+.pf-st__open {
+  display: block; padding: 0; border: 0; cursor: zoom-in;
+  width: min(100%, calc(var(--h, var(--plate-h)) * var(--ar)));
+  aspect-ratio: var(--ar);
+  background: var(--paper-bright, #fbfaf6);
+}
+.pf-st__open img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.pf-st__open:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
+.pf-st__plate figcaption { color: var(--muted); }
+/* The designer's own words. Never a heading, never a paragraph of claims. */
+.pf-st__words {
+  margin: 0; max-width: 34ch;
+  font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.5; color: var(--ink);
+}
+.pf-st__note { margin: .35rem 0 0; max-width: 24ch; font-size: .78rem; line-height: 1.45; color: var(--ink-soft); }
+/* THE DECISION — the only large type in the story, because it is the one
+   thing the construction exists to carry. */
+.pf-st__decision {
+  margin: 0; max-width: 22ch;
+  font-family: var(--display); font-variation-settings: 'wdth' 104;
+  font-weight: 700; letter-spacing: -.02em;
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem); line-height: 1.08;
+}
+/* A view of the garment set inside the story — the small one beside the
+   sketch, the whole one at the end. Same geometry as the reader's views. */
+.pf-st__became, .pf-st__final { margin: 0; display: grid; gap: .5rem; justify-items: start; min-width: 0; }
+.pf-st__final { flex: 0 1 auto; width: 100%; justify-items: center; }
+.pf-st__window {
+  position: relative; display: block; overflow: hidden; background: #fff;
+  /* As tall as the movement allows, unless the column is the narrower limit:
+     then as wide as the column, never cropped to fit. */
+  width: min(100%, calc(var(--h) * var(--aspect, .75) * var(--crop-w, 1)));
+  aspect-ratio: calc(var(--aspect, .75) * var(--crop-w, 1));
+}
+.pf-st__window img { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; }
+[data-crop='front'] > .pf-st__window { --crop-w: var(--front, .55); }
+[data-crop='back'] > .pf-st__window { --crop-w: calc(1 - var(--front, .55)); }
+[data-crop='back'] > .pf-st__window img { left: auto; right: 0; }
+.pf-st__became figcaption { color: var(--muted); }
+
+/* ---- ORIGIN */
+.pf-st__mv--origin { --h: var(--plate-h); }
+.pf-st__idea {
+  display: flex; align-items: flex-end; gap: clamp(1.2rem, 3vw, 3rem); min-width: 0;
+}
+.pf-st__drawn { min-width: 0; flex: 0 1 auto; }
+.pf-st__aside { display: grid; gap: 1.6rem; align-content: end; }
+.pf-st__became { --h: max(calc(var(--plate-h) * .42), 15rem); flex: none; }
+
+/* ---- CONSTRUCTION */
+.pf-st__drawing {
+  display: grid; gap: clamp(1rem, 2.5vw, 2rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, .34fr);
+  align-items: end;
+}
+.pf-st__pattern { --h: calc(var(--plate-h) * .78); }
+.pf-st__flat { --h: calc(var(--plate-h) * .4); justify-self: end; }
+
+/* ---- VALIDATION */
+.pf-st__pair {
+  display: flex; gap: clamp(1rem, 2.5vw, 2.2rem); align-items: flex-end; min-width: 0;
+}
+/* ONE HEIGHT for the test and the proof. Each piece's width is its height
+   times its own proportion, and when the column is too narrow both shrink by
+   the same factor — so they stay level instead of the wider one dropping. */
+.pf-st__proof { --h: calc(var(--plate-h) * .9); flex: 0 1 calc(var(--h) * var(--ar)); min-width: 0; }
+.pf-st__proof .pf-st__open { width: 100%; }
+.pf-st__runs {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; gap: clamp(.7rem, 1.2vw, 1rem); align-items: start;
+}
+/* A run, not a gallery: small, level, and each note held to its plate. */
+.pf-st__runs li { flex: none; width: 5.6rem; }
+.pf-st__run .pf-st__open { width: 100%; }
+.pf-st__run figcaption { white-space: nowrap; }
+.pf-st__runs .pf-st__note { max-width: none; font-size: .74rem; }
+
+/* ---- RESULT */
+.pf-st__mv--return { --h: calc(100svh - var(--bar-h) - 7rem); }
+.pf-st__result { display: flex; gap: clamp(1rem, 3vw, 2.5rem); align-items: end; justify-content: center; }
+.pf-st__close { display: grid; gap: 1.2rem; align-content: end; justify-items: start; }
+.pf-st__name {
+  margin: 0; max-width: 24ch;
+  font-family: var(--display); font-weight: 600; letter-spacing: -.01em;
+  font-size: clamp(1rem, 1.6vw, 1.3rem); line-height: 1.2;
+}
+
+/* ---- WEIGHT. A featured project tells the same story closer together; a
+   supporting one keeps it folded until it is asked for, then tells it at the
+   featured scale. */
+.pf-st[data-st-weight='compact'] .pf-st__mv,
+.pf-st[data-st-weight='folded'] .pf-st__mv {
+  --plate-h: calc((100svh - var(--bar-h)) * .58);
+  padding-block: clamp(2rem, 6vh, 3.5rem);
+}
+.pf-st[data-st-folded] { display: none; }
+
+/* ---- THE WAY DOWN, on the garment's first screen. */
+.pf-rd__into {
+  display: inline-flex; align-items: center; gap: .55rem; margin-top: .4rem;
+  padding: 0 0 .3rem; border: 0; border-bottom: 1px solid var(--line);
+  background: none; color: var(--ink); cursor: pointer;
+}
+.pf-rd__into:focus-visible { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
+.pf-rd__into i { display: inline-flex; }
+@media (hover: hover) and (pointer: fine) {
+  .pf-rd__into:hover { border-bottom-color: var(--ww-accent); }
+}
+/* Where in the story the visitor is, said once, in the bar. */
+.pf-rd__beat { font-style: normal; color: var(--ink); }
+.pf-rd__beat:not(:empty)::before { content: '·'; margin-right: .7rem; color: var(--muted); }
+
+/* ---- THE STORY'S ARRIVALS. Each movement's pieces arrive in the order of
+   the relationship they explain — the drawing, then the words, then what it
+   became; the decision, then the drawing that carries it — once, as the
+   movement comes into view. Opacity and a short rise only. */
+.pf-st[data-st-armed] [data-st-item] {
+  opacity: 0; transform: translate3d(0, 14px, 0);
+  transition: opacity 560ms cubic-bezier(0.23, 1, 0.32, 1), transform 560ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.pf-st[data-st-armed] .pf-st__mv[data-st-in] [data-st-item] { opacity: 1; transform: none; }
+.pf-st__mv[data-st-in] [data-st-item]:nth-child(2) { transition-delay: 90ms; }
+.pf-st__mv[data-st-in] .pf-st__aside > [data-st-item]:nth-child(1) { transition-delay: 480ms; }
+/* What the sketch BECAME arrives last, and from the drawing's side. */
+.pf-st[data-st-armed] .pf-st__became { transform: translate3d(-18px, 0, 0); }
+.pf-st__mv[data-st-in] .pf-st__idea > .pf-st__became[data-st-item] { transition-delay: 320ms; }
+.pf-st[data-st-armed] .pf-st__mv--return[data-st-in] [data-st-item],
+.pf-st__mv--return[data-st-in] [data-st-item] { opacity: 1; transform: none; }
+
+/* ---- the story on a landscape screen: the reader's own two columns. */
+@media (min-width: 1024px) and (min-aspect-ratio: 5/4) {
+  .pf-st__mv {
+    grid-template-columns: minmax(12rem, 19rem) minmax(0, 1fr);
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+    min-height: calc(100svh - var(--bar-h));
+  }
+  .pf-st[data-st-weight='compact'] .pf-st__mv,
+  .pf-st[data-st-weight='folded'] .pf-st__mv { min-height: 0; }
+  /* ORIGIN: the words and what it became on the left, the drawing large. */
+  .pf-st__mv--origin .pf-st__idea { grid-column: 2; grid-row: 1; }
+  /* The words open the movement, level with the top of the drawing. */
+  .pf-st__mv--origin .pf-st__aside { grid-column: 1; grid-row: 1; align-self: start; padding-top: 1rem; }
+  /* CONSTRUCTION: the decision in the word column, the drawing beside it. */
+  .pf-st__decision { grid-column: 1; grid-row: 1; align-self: start; }
+  .pf-st__drawing { grid-column: 2; grid-row: 1 / span 2; }
+  .pf-st__words--build { grid-column: 1; grid-row: 2; align-self: end; }
+  /* VALIDATION: the pair in the picture column, the attempts in the word
+     column, at its foot. */
+  .pf-st__pair { grid-column: 2; grid-row: 1; }
+  .pf-st__runs { grid-column: 1; grid-row: 1; align-self: end; }
+  .pf-st__mv--proof:not(:has(.pf-st__pair)) .pf-st__runs { grid-column: 2; }
+  /* RESULT: the garment whole in the picture column, its name and the way
+     out in the word column. */
+  .pf-st__result { grid-column: 2; grid-row: 1; justify-content: start; }
+  .pf-st__close { grid-column: 1; grid-row: 1; }
+}
+
+/* ---- the story upright: a tablet held tall and a phone. One column, and
+   each movement still a different shape — a tall drawing, a wide sheet, a
+   pair to swipe, the garment again. */
+@media not all and (min-width: 1024px) and (min-aspect-ratio: 5/4) {
+  .pf-st__mv { --plate-h: calc(100svh - var(--bar-h) - 12rem); }
+  /* ORIGIN: the drawing at full measure; under it the words, with what it
+     became standing beside them. */
+  /* ORIGIN upright: the drawing and what it became still share one floor —
+     the drawing large, the garment a third of its height beside it. */
+  .pf-st__became { --h: max(calc(var(--plate-h) * .36), 11rem); }
+  .pf-st__idea { gap: .9rem; }
+  /* CONSTRUCTION: the sheet runs the full width — a pattern is wide — and
+     the flat sits under it, smaller, to the right. */
+  .pf-st__drawing { grid-template-columns: minmax(0, 1fr); }
+  .pf-st__pattern .pf-st__open { width: 100%; }
+  .pf-st__flat { width: 62%; }
+  .pf-st__flat .pf-st__open { width: 100%; }
+  /* VALIDATION: the pair becomes a swipe, each piece of proof nearly the
+     whole width, the next one showing at the edge. */
+  .pf-st__pair {
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; padding-bottom: .4rem;
+    margin-inline: calc(-1 * var(--edge)); padding-inline: var(--edge);
+    scroll-padding-inline: var(--edge);
+  }
+  /* Level in the swipe too: one height for both, each as wide as its own
+     proportion makes it. */
+  .pf-st__proof { --h: min(calc(var(--plate-h) * .82), 58svh); flex: 0 0 auto; scroll-snap-align: start; }
+  .pf-st__proof .pf-st__open { width: calc(var(--h) * var(--ar)); }
+  .pf-st__runs { flex-wrap: nowrap; }
+  .pf-st__run { --h: clamp(5.5rem, 14svh, 8rem); }
+  /* RESULT: the garment again at full height, then its name and the way out. */
+  .pf-st__mv--return { --h: calc(100svh - var(--bar-h) - 10rem); }
+  .pf-st__result { justify-content: center; }
+}
 
 /* ---- WHAT IS NOT HERE. */
 .pf-rd__pending {
@@ -914,7 +1114,6 @@
   .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='0'],
   .pf-rd__subject[data-rd-reveal='foreground'] .pf-rd__view[data-index='0'],
   .pf-rd__subject[data-rd-reveal='foreground'][data-fore] .pf-rd__view[data-index='1'] { --view-h: calc(100% - 1.8rem); align-self: flex-start; }
-  .pf-rd__stages { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
 }
 @media (max-width: 767px) {
   /* The head is one line at this width: the way back, and the number. The
@@ -1140,3 +1339,14 @@
   .pf-ap__plate { transform: none; }
   .pf-act__list, .pf-act__caret { transition: none; }
 }
+
+/* ---- THE STORY LAB's notice. Development only: the public page never
+   renders it. Fixed, small, and impossible to miss in a screenshot. */
+.pf-lab-notice {
+  /* Above every chapter layer (the act is 150), clear of the dev toolbar. */
+  position: fixed; left: .8rem; bottom: .8rem; z-index: 400;
+  max-width: min(30rem, calc(100vw - 1.6rem)); margin: 0; padding: .55rem .9rem;
+  font: 500 .72rem/1.4 var(--mono, ui-monospace, monospace); letter-spacing: .02em;
+  color: #fff; background: #8a1c1c; pointer-events: none;
+}
+.pf-lab-notice b { font-weight: 600; margin-right: .6rem; text-transform: uppercase; letter-spacing: .08em; }

@@ -1,0 +1,21 @@
+---
+/* THE STORY LAB — development only.
+
+   One test garment carrying every stage a project can have, rendered by the
+   REAL portfolio page and reader so the Project = Story architecture can be
+   designed against it. Outside `astro dev` this route produces no pages at
+   all: a production build emits nothing under /lab/, and the sitemap never
+   lists it. See src/data/story-lab.ts for what the fixture is and is not. */
+import Portfolio from '../portfolio.astro';
+import { LAB_CATEGORY, LAB_ROLES, labSubject } from '../../data/story-lab';
+import type { ProjectRole } from '../../data/portfolio';
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return LAB_ROLES.map((role) => ({ params: { story: role }, props: { role } }));
+}
+
+const { role } = Astro.props as { role: ProjectRole };
+const subject = labSubject(role);
+---
+<Portfolio lab={{ category: LAB_CATEGORY, subject }} />

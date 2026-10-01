@@ -708,6 +708,10 @@ export interface Subject {
   caption: string | null;
   decision: string | null;
   verified: boolean;
+  /* AN INTERNAL TEST SUBJECT, never public work. Set only by the
+     development-only story lab (src/data/story-lab.ts), and the reader marks
+     every one of its plates as a placeholder when it is set. */
+  fixture?: boolean;
 }
 
 const VIEW_LABEL: Record<ViewKey, string> = {
