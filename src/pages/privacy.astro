@@ -1,158 +1,70 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import Arrow from '../components/Arrow.astro';
-
-/* Privacy — deliberately short, plain and specific.
- *
- * Everything here describes what the code actually does. The retention period
- * is RETENTION_DAYS in worker/index.ts; change both together. No compliance
- * claims are made, because a page cannot make them on the implementation's
- * behalf.
- */
-const RETENTION_DAYS = 90;
+import TrustLayout from '../layouts/TrustLayout.astro';
 const email = 'soufianeaberbach@gmail.com';
-
-const collected = [
-  ['Your name', 'So a reply can address you.'],
-  ['Company or brand', 'Optional. Only if you provide it.'],
-  ['Email address', 'The only way a reply can reach you.'],
-  ['Where the product is now', 'One of five stages, so the first answer is useful.'],
-  ['Your message', 'What needs solving.'],
-  ['An uploaded reference file', 'Optional. Only if you attach one — a PDF or an image.'],
-  ['A reference link', 'Optional. Only if you paste one.'],
-];
-
-const processors = [
-  ['Site hosting and storage', 'Cloudflare. The brief is stored there first so nothing is lost in transit. An uploaded file is stored separately in Cloudflare R2, in a private bucket.'],
-  ['Email delivery', 'Resend passes the brief to Soufiane’s inbox.'],
-  ['Spam check', 'Cloudflare Turnstile, when enabled. It loads a script from Cloudflare.'],
-  /* Portfolio V6 added a click-to-load player to the 3D Simulation section.
-     Nothing about it runs before a visitor presses play, and every session
-     published today is hosted on this domain — so no third party is contacted
-     by simply opening the page. The YouTube sentence is written as the
-     conditional it is, rather than as a claim that a YouTube player exists
-     now. It replaces an absolute "the only third-party script on this site",
-     which was true when written but would have quietly stopped being true the
-     first time a YouTube id was added to the portfolio data. */
-  ['Embedded video', 'Nothing loads until you press play on a session in the Portfolio. The sessions published today are served from this domain. If a session is ever hosted on YouTube, pressing play loads a player from youtube-nocookie.com at that moment — and not before.'],
+const contents = [
+  { id: 'information', label: 'Personal information' },
+  { id: 'material', label: 'Your project material' },
+  { id: 'providers', label: 'Service providers' },
+  { id: 'analytics', label: 'Site measurement' },
+  { id: 'retention', label: 'Retention' },
+  { id: 'links', label: 'Shared links' },
+  { id: 'deletion', label: 'Deletion & questions' },
 ];
 ---
-
-<SiteLayout
-  title="Privacy — Soufiane Aberbach"
-  description="What the development brief form collects, why, who processes it, and how long it is kept."
-  marker="SA-PRIVACY-V1"
-  page="contact"
-  footerCallout={false}
+<TrustLayout
+  title="Privacy & Confidentiality — Soufiane Aberbach"
+  description="How personal information and private client project material are handled, including service providers, retention and deletion requests."
+  heading="Privacy & confidentiality."
+  intro="Your enquiry is a private conversation. This page explains what is received, why it is needed and how your project material is handled."
+  marker="SA-PRIVACY-V2"
+  contents={contents}
 >
-  <!-- BUILD-MARKER: SA-PRIVACY-V1 -->
-  <section class="pv section-shell">
-    <div class="pv__head" data-reveal>
-      <p class="eyebrow">Privacy</p>
-      <h1 class="display pv__title">What happens to<br />what you <em>send</em>.</h1>
-      <p class="pv__lede">
-        This page describes what the brief form on the contact page actually does.
-        It makes no compliance claims — only statements the implementation supports.
-      </p>
-    </div>
-
-    <div class="pv__body">
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">What the form collects</h2>
-        <dl class="pv__list">
-          {collected.map(([term, note]) => (
-            <div><dt>{term}</dt><dd>{note}</dd></div>
-          ))}
-        </dl>
-      </section>
-
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">Why it is collected</h2>
-        <p>
-          Only to receive, assess and respond to development enquiries. It is not used
-          for marketing and it is not sold. No advertising trackers or analytics scripts
-          are implemented in the site code.
-        </p>
-      </section>
-
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">Who processes it</h2>
-        <dl class="pv__list">
-          {processors.map(([term, note]) => (
-            <div><dt>{term}</dt><dd>{note}</dd></div>
-          ))}
-        </dl>
-      </section>
-
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">How long it is kept</h2>
-        <p>
-          A submitted brief is kept for <strong>{RETENTION_DAYS} days</strong> and then
-          expires automatically from storage. If a brief could not be emailed on, a short
-          record noting that expires on the same schedule. The stored brief record does not
-          include the sender&rsquo;s IP address, location or browser details. For rate
-          limiting, the Worker keeps a truncated hash derived from the IP address for up to
-          one hour.
-        </p>
-        <p>
-          A file you attach is kept on the same {RETENTION_DAYS}-day schedule and is stored
-          only so the enquiry can be answered. It is held in a private Cloudflare bucket
-          with a random name, is not placed on any public address, and there is no link to
-          it anywhere on this site &mdash; it is reachable only from Soufiane&rsquo;s own
-          Cloudflare account. That is access control, not encryption: Cloudflare operates
-          the storage and can technically reach what is in it.
-        </p>
-      </section>
-
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">Your project material</h2>
-        <p>
-          Sketches, references, patterns and anything else you send are yours. They are not
-          published and not used as portfolio material without your written permission.
-        </p>
-        <p class="pv__note">
-          One limit worth stating plainly: a Google Drive, Dropbox or WeTransfer link you
-          paste is only as private as that link. Anyone holding it can open it, so share
-          links you are comfortable sharing.
-        </p>
-      </section>
-
-      <section class="pv__block" data-reveal>
-        <h2 class="pv__h">Deletion and questions</h2>
-        <p>
-          To have a submitted brief deleted before it expires, or to ask anything about the
-          above, write to <a href={`mailto:${email}`}>{email}</a>.
-        </p>
-        <a class="button pv__back" href="/contact/">Back to contact <span><Arrow /></span></a>
-      </section>
-    </div>
+  <section id="information" aria-labelledby="information-title">
+    <h2 id="information-title">Personal information</h2>
+    <p>The brief form asks for your name, email, product stage and message. A company or brand, reference link and reference file are optional.</p>
+    <p>This information is used to receive, assess and respond to your enquiry. It is not sold or used for marketing.</p>
   </section>
-</SiteLayout>
-
-<style>
-  .pv { padding-block: calc(var(--header-h) + clamp(3rem, 6vw, 6rem)) clamp(4rem, 8vw, 8rem); }
-  .pv__head { max-width: 46rem; }
-  .pv .eyebrow { color: var(--muted); }
-  .pv__title { margin: clamp(1.5rem, 3vw, 2.25rem) 0 0; font-size: clamp(2.3rem, 6vw, 5rem); }
-  .pv__lede { max-width: 34rem; margin: clamp(1.5rem, 3vw, 2.25rem) 0 0; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.75; }
-
-  .pv__body { display: grid; gap: clamp(2.5rem, 4.5vw, 4rem); margin-top: clamp(3rem, 6vw, 5.5rem); max-width: 46rem; }
-  .pv__block { padding-top: clamp(1.5rem, 2.5vw, 2rem); border-top: 1px solid var(--line-strong); }
-  .pv__h { margin: 0 0 1.1rem; font-family: var(--display); font-weight: 850; letter-spacing: -.035em; font-size: clamp(1.15rem, 1.7vw, 1.5rem); line-height: 1.15; }
-  .pv__block p { max-width: 40rem; margin: 0 0 1rem; color: var(--ink-soft); line-height: 1.75; }
-  .pv__block p:last-of-type { margin-bottom: 0; }
-  .pv__note { color: var(--muted) !important; font-size: .95rem; }
-  .pv__block a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
-  .pv__block a:hover { color: var(--ink); text-decoration-color: var(--signal); text-decoration-thickness: 2px; }
-
-  .pv__list { display: grid; gap: 0; margin: 0; }
-  .pv__list > div { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: .35rem 1.5rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
-  .pv__list dt { margin: 0; font-weight: 600; }
-  .pv__list dd { margin: 0; color: var(--muted); line-height: 1.6; }
-  .pv__back { margin-top: 1.75rem; text-decoration: none; }
-  .pv__back:hover { color: var(--paper); }
-
-  @media (max-width: 640px) {
-    .pv__list > div { grid-template-columns: minmax(0, 1fr); }
-  }
-</style>
+  <section id="material" aria-labelledby="material-title">
+    <h2 id="material-title">Your project material stays private</h2>
+    <p>Sketches, garment references, patterns, technical flats, tech packs, fitting photographs and other sample or development material are private by default. They are not published or used in the Portfolio without your written permission.</p>
+    <p>Client-supplied material remains yours or its respective owner’s. Any ownership or licensing arrangement for commissioned work is defined in the project agreement; see <a href="/working-terms/">Working Terms</a>.</p>
+  </section>
+  <section id="providers" aria-labelledby="providers-title">
+    <h2 id="providers-title">Service providers</h2>
+    <dl>
+      <dt>Cloudflare — hosting, security and form storage</dt>
+      <dd>Cloudflare serves and protects the site and processes normal network request information. When form storage is active, the brief is saved before email is attempted. Uploaded references are designed to be held in private Cloudflare R2 storage, with no public download route. If the required storage is unavailable, the form declines the submission rather than discarding it.</dd>
+      <dt>Resend — email transport, when active</dt>
+      <dd>Resend passes accepted briefs to Soufiane’s receiving mailbox when email delivery is configured. An uploaded reference stays in private storage; the email contains its retrieval reference, not a public file link.</dd>
+      <dt>Gmail / Google — receiving mailbox</dt>
+      <dd>Soufiane receives and replies to enquiries through Gmail. Information sent by the form or by direct email may therefore be processed and held by Google as the mailbox provider.</dd>
+      <dt>Cloudflare Turnstile — spam check, when active</dt>
+      <dd>When enabled, Turnstile loads a Cloudflare script to check the submission. The form also uses validation and other spam screens. Visitors who cannot use the form can email directly.</dd>
+      <dt>Google Fonts — site typography</dt>
+      <dd>The site loads fonts from Google. Google receives normal network request information when those fonts are requested.</dd>
+      <dt>Embedded video — when you choose to play</dt>
+      <dd>The current Portfolio sessions are served from this domain. If a session uses YouTube, its player loads from youtube-nocookie.com only after you choose to play it. Loading that player contacts YouTube; the privacy-enhanced address does not mean no data is processed.</dd>
+    </dl>
+  </section>
+  <section id="analytics" aria-labelledby="analytics-title">
+    <h2 id="analytics-title">Site measurement</h2>
+    <p>The application code does not include advertising trackers or an analytics integration. The hosting layer can add its own measurement: a Cloudflare analytics beacon was observed in production on 3 October 2026.</p>
+    <p>Cloudflare documents its Web Analytics / real-user measurement beacon as collecting page-view and browser performance information without accessing cookies or browser storage. This is separate from the information you type into a brief. The hosting settings determine whether and where it runs.</p>
+    <p>Details are available in <a href="https://developers.cloudflare.com/web-analytics/about/">Cloudflare’s analytics documentation</a> and its <a href="https://developers.cloudflare.com/speed/observatory/rum-beacon/">beacon privacy explanation</a>.</p>
+  </section>
+  <section id="retention" aria-labelledby="retention-title">
+    <h2 id="retention-title">Retention</h2>
+    <p>The site’s brief-storage code sets a <strong>90-day expiry</strong> for a saved brief and any record noting failed email delivery. It does not store your raw IP address in the brief. A truncated hash derived from the IP is kept for rate limiting for up to one hour.</p>
+    <p>Uploaded references have the same 90-day retention target. Automatic file expiry depends on a separate storage setting whose production enforcement is still being verified. Please do not rely on a confirmed automatic deletion date for uploads; you can request deletion below.</p>
+    <p>A copy delivered to the receiving mailbox is not automatically deleted when the site’s brief record expires. The site’s 90-day expiry does not apply to Gmail copies or files shared by email.</p>
+  </section>
+  <section id="links" aria-labelledby="links-title">
+    <h2 id="links-title">Shared links</h2>
+    <p>A Drive, Dropbox, Figma or other reference link is only as private as its sharing settings. Check who can open it before sending, and share only the access needed for the enquiry.</p>
+  </section>
+  <section id="deletion" aria-labelledby="deletion-title">
+    <h2 id="deletion-title">Deletion & questions</h2>
+    <p>To request deletion of a submitted brief, uploaded reference or mailbox copy, or to ask how material is handled, email <a href={`mailto:${email}`}>{email}</a>. Include the brief reference if you have it, so the relevant material can be located.</p>
+    <p>For a link hosted in your own account, you can also change its sharing settings or revoke access there.</p>
+  </section>
+</TrustLayout>

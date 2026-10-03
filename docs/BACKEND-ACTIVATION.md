@@ -1,9 +1,15 @@
 # Backend activation — Contact brief pipeline
 
+> **Status:** implementation/runbook, not a production activation record.
+> See [PRODUCTION-STATE.md](PRODUCTION-STATE.md) for the dated audit.
+> Dashboard actions below remain pending and are not authorized by this code pass.
+
+
 The intended path, end to end:
 
 ```
-browser → Turnstile → Worker (POST /api/brief) → BRIEFS KV → Resend → inbox
+browser → Turnstile when enabled → Worker (POST /api/brief)
+  → private BRIEF_FILES R2 when attached → BRIEFS KV → Resend when configured → Gmail
 ```
 
 The site is a static Astro build. The Worker in `worker/index.ts` exists only
@@ -17,7 +23,7 @@ Commands below were checked against the Wrangler pinned in `devDependencies`
 
 ## What "ready" means
 
-The form is **not** production-ready until all six rows are configured *and*
+The form is **not** production-ready until all listed components are configured *and*
 one real brief has arrived end to end. A green build proves none of it.
 
 | Item | Kind | Set with |
@@ -30,6 +36,7 @@ one real brief has arrived end to end. A green build proves none of it.
 | `RESEND_API_KEY` | Worker secret | step 3 |
 | `TURNSTILE_SECRET` | Worker secret | step 4 |
 | `PUBLIC_TURNSTILE_SITEKEY` | **build-time** env var | step 4 |
+| `TURNSTILE_HOSTNAMES` | hostname allowlist | declared in config; verify deployed value and widget hosts |
 
 `PUBLIC_TURNSTILE_SITEKEY` is the odd one out and the usual cause of a broken
 activation: it is not a Worker secret. Astro reads it at build time and inlines
@@ -116,8 +123,10 @@ npx wrangler r2 bucket lifecycle list portfolio-brief-files
 
 Check the flags against `npx wrangler r2 bucket lifecycle add --help` first —
 this is the one step in the runbook whose flag names are most likely to drift.
-**Without this rule, uploaded files outlive the 90-day brief retention that
-`/privacy/` states**, which would make that page untrue.
+**Without a verified lifecycle rule, automatic 90-day upload expiry is not
+established.** Privacy currently states the target and this verification gap.
+Update it only after the external setting is verified. KV expiry never deletes
+Gmail copies; mailbox retention and deletion need their own operational policy.
 
 ### What happens when something fails
 
@@ -165,7 +174,8 @@ Two different addresses, and they are not interchangeable:
 | `BRIEF_FROM` | `brief@aberbach.co` | The **transactional sender**. Nobody writes to it. Resend requires the From domain to be one it has verified, and a `gmail.com` sender cannot be verified by a third-party relay — hence the owned domain. |
 
 So **`aberbach.co` must be a verified sending domain in Resend**, or Resend
-refuses the send. It is **not verified yet**.
+refuses the send. Verification was documented as pending and remained
+**unverified in the 3 Oct 2026 audit**. Inspect the dashboard before changing it.
 
 1. Add `aberbach.co` in the Resend dashboard.
 2. Resend then generates the DNS records for that domain and displays them.
@@ -189,7 +199,7 @@ it. The visitor is still told the brief was received, which is true.
 
 Create a Turnstile widget in the Cloudflare dashboard for the production
 hostname. The canonical host is the apex, `aberbach.co`; `www.aberbach.co`
-only ever 301s to it, so in normal operation a widget is solved on the apex
+is intended to redirect to it after external activation, so then a widget is solved on the apex
 alone. Add `www.aberbach.co` to the widget as well while the redirect is still
 new — if the redirect is mis-set, a visitor could reach the Contact page on
 `www` and a widget bound to the apex only would refuse them. Narrow the widget
@@ -284,10 +294,12 @@ together.
 
 ## Known operational gap
 
-There is **no automated retry** for an `undelivered:` brief. Retrying on a
-schedule needs Cloudflare Queues or a Cron Trigger, which is deliberately out
-of scope here. This is not a launch blocker: the brief itself is durably
-stored, so the record is a prompt to go and read it, not a lost submission.
+The Worker makes **two immediate Resend attempts**, using the same
+idempotency key and identical payload. There is **no scheduled retry** for an
+`undelivered:` brief and no delivery/bounce webhook or automated alert. Resend
+API acceptance is not proof of inbox delivery. Stored failures require a
+named operational owner and a regular manual check until monitoring exists.
+A failed `undelivered:` marker write can also be silent; the brief remains in KV.
 Checking for undelivered records is a manual step:
 
 ```sh
@@ -309,3 +321,20 @@ conveniently prove: Turnstile failing closed, a KV failure never reporting
 success, a Resend failure after persistence preserving the brief, and an
 unexpected exception never turning into a static-asset response. It needs no
 Cloudflare account, no network and no browser, and uses no real credential.
+
+## Code-side request safety
+
+All submission formats reject a supplied foreign Origin/Referer before parsing
+or changing a rate counter. Missing headers remain compatible with existing
+callers; this is not authentication and does not replace Turnstile.
+
+Requests are limited to 11 MiB before JSON/multipart parsing, by both an early
+Content-Length gate and an actual stream-byte limit. One file still has its
+10 MiB validation ceiling. Extra parts and text consume the total limit too.
+An unexpected error reports that receipt could not be confirmed, rather than
+claiming no write could have occurred. Scripted multipart callers retain JSON
+error responses through Accept: application/json. No binding/secret diagnostics
+are exposed publicly.
+
+For public-only post-activation checks, run `npm run verify:production`. See
+[SECURITY-PREPARATION.md](SECURITY-PREPARATION.md) for inactive header preparation.

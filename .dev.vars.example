@@ -10,7 +10,7 @@
 RESEND_API_KEY=
 
 # Cloudflare Turnstile SECRET key. Leave empty to skip verification locally;
-# the honeypot, timing, rate-limit and origin screens still run. Setting it
+# the honeypot, timing, rate-limit and all-format origin screens still run. Setting it
 # means every submission needs a valid token, so the matching site key has to
 # be present at build time too — see below.
 TURNSTILE_SECRET=

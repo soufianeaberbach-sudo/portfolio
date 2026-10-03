@@ -41,6 +41,11 @@ jobs:
       - name: Domain and canonical guard
         run: npm run test:domain
 
+      # Stubbed diagnostics tests only. Never run live production verification
+      # as a CI prerequisite while external activation remains pending.
+      - name: Read-only production checker tests
+        run: npm run test:production
+
       # Uses the Playwright pinned in devDependencies, so the browser build
       # always matches the package the tests import. No temporary npx package.
       - name: Install Chromium for Playwright

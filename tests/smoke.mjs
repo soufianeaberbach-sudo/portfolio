@@ -23,7 +23,7 @@ const { chromium } = require('playwright');
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const HOST = '127.0.0.1';
 const BASE = `http://${HOST}:${PORT}`;
-const ROUTES = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/'];
+const ROUTES = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/', '/privacy/', '/working-terms/', '/before-we-start/'];
 const WIDTHS = [390, 430, 768, 1024, 1440];
 
 let passed = 0;
@@ -2088,7 +2088,7 @@ try {
     check('footer links to /privacy/', await p.evaluate(() => !!document.querySelector('.footer-meta a[href="/privacy/"]')));
     const res = await p.goto(BASE + '/privacy/', { waitUntil: 'domcontentloaded' });
     check('/privacy/ responds 200', res?.status() === 200);
-    check('retention stated', (await p.content()).includes('90 days'));
+    check('KV expiry and upload retention target distinguished', /90-day expiry/.test(await p.content()) && /retention target/.test(await p.content()));
     await c.close();
   }
 

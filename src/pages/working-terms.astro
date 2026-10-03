@@ -1,0 +1,78 @@
+---
+import TrustLayout from '../layouts/TrustLayout.astro';
+const contents = [
+  { id: 'scope', label: 'Written scope' },
+  { id: 'quotation', label: 'Quotation' },
+  { id: 'start', label: 'Starting work' },
+  { id: 'revisions', label: 'Revisions & changes' },
+  { id: 'approvals', label: 'Client approvals' },
+  { id: 'timing', label: 'Delays & pauses' },
+  { id: 'cancellation', label: 'Cancellation' },
+  { id: 'ownership', label: 'Ownership & files' },
+  { id: 'confidentiality', label: 'Confidentiality' },
+  { id: 'production', label: 'Production responsibility' },
+  { id: 'communication', label: 'Communication' },
+];
+---
+<TrustLayout
+  title="Working Terms — Soufiane Aberbach"
+  description="General working principles for scope, quotations, revisions, approvals, confidentiality, source files and production responsibilities."
+  heading="Working terms."
+  intro="Clear expectations protect the work and the people doing it. These are general working principles; your accepted quotation or project agreement defines the terms for your project."
+  marker="SA-WORKING-TERMS-V1"
+  contents={contents}
+>
+  <section id="scope" aria-labelledby="scope-title">
+    <h2 id="scope-title">An agreed written scope</h2>
+    <p>Each project begins with a written scope. The proposal can define the garments and services involved, deliverables, file formats, milestones, expected timing, revision allowance, source-file inclusion and fees or payment schedule.</p>
+    <p>What is included should be clear before work begins. An open question can be resolved in the proposal rather than left to assumption.</p>
+  </section>
+  <section id="quotation" aria-labelledby="quotation-title">
+    <h2 id="quotation-title">Pricing follows the scope</h2>
+    <p>A quotation reflects complexity, the quality and completeness of existing inputs, the development required, the deliverables and urgency where relevant. There is no universal price for every garment or development problem.</p>
+    <p>Fees and the payment schedule are confirmed in the quotation or agreement before work starts.</p>
+  </section>
+  <section id="start" aria-labelledby="start-title">
+    <h2 id="start-title">When work starts</h2>
+    <p>Work begins once the scope is agreed, the required source and reference material is available, and any payment or other start condition stated in the accepted quotation has been satisfied.</p>
+  </section>
+  <section id="revisions" aria-labelledby="revisions-title">
+    <h2 id="revisions-title">Revisions & changes</h2>
+    <p>Included revisions are those stated in the quotation or scope. A new direction, additional garment, changed deliverable or other work outside that scope may need revised timing, a revised fee or a new quotation.</p>
+    <p>The change and its implications are agreed in writing before the additional work proceeds.</p>
+  </section>
+  <section id="approvals" aria-labelledby="approvals-title">
+    <h2 id="approvals-title">Approvals are working checkpoints</h2>
+    <p>Approved stages become the reference for what follows. If an approved decision changes later, patterns, specifications or other downstream work may need to be revisited. The resulting effect on scope and timing is discussed before proceeding.</p>
+  </section>
+  <section id="timing" aria-labelledby="timing-title">
+    <h2 id="timing-title">Delays, pauses & project closure</h2>
+    <p>Timing depends on the agreed inputs and on timely information, feedback and approvals. If these are delayed, dates may move accordingly.</p>
+    <p>If a project pauses, the remaining work and availability are reviewed before restarting. If communication stops, a follow-up can establish whether the project should remain paused or be closed under the accepted agreement.</p>
+  </section>
+  <section id="cancellation" aria-labelledby="cancellation-title">
+    <h2 id="cancellation-title">Cancellation</h2>
+    <p>Cancellation is handled according to the accepted quotation or agreement, taking account of work already completed and commitments already made. Any project-specific cancellation conditions should be settled before work starts.</p>
+  </section>
+  <section id="ownership" aria-labelledby="ownership-title">
+    <h2 id="ownership-title">Ownership, licensing & source files</h2>
+    <p>Ownership and licensing conditions for commissioned work are defined in the project quotation or agreement.</p>
+    <p>Editable or source files are supplied only when included in the agreed deliverables. File formats and the intended handoff should be confirmed as part of the scope.</p>
+    <p>Client-supplied material remains the property of the client or its respective owner. The client is responsible for having the rights and permissions needed to use the material supplied.</p>
+  </section>
+  <section id="confidentiality" aria-labelledby="confidentiality-title">
+    <h2 id="confidentiality-title">Private by default</h2>
+    <p>Client project material remains private. Publishing it or using it in the Portfolio requires written permission. See <a href="/privacy/">Privacy & Confidentiality</a> for how enquiry information and files are handled.</p>
+  </section>
+  <section id="production" aria-labelledby="production-title">
+    <h2 id="production-title">Development & production responsibility</h2>
+    <p>Soufiane can provide technical development, patterns, specifications and production guidance based on the agreed inputs and services. Clear references and approvals help the factory work from the intended product.</p>
+    <p>A third-party factory remains responsible for its workmanship, machinery and execution. Fabric variation and production decisions outside Soufiane’s control cannot be guaranteed by development documentation alone. Any production support or verification to be provided is defined in the scope.</p>
+  </section>
+  <section id="communication" aria-labelledby="communication-title">
+    <h2 id="communication-title">Professional communication & project agreements</h2>
+    <p>Important approvals, scope changes and commitments should be confirmed in writing so both sides share the same reference.</p>
+    <p>An agreed quotation, purchase order, client contract or project agreement may define project-specific terms. These general principles are a starting point for that agreement, rather than a substitute for it.</p>
+    <p>For practical guidance on making the first enquiry, read <a href="/before-we-start/">Before We Start</a>.</p>
+  </section>
+</TrustLayout>

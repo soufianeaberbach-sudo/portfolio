@@ -1,11 +1,11 @@
-const routes = ['/', '/expertise/', '/portfolio/', '/process/', '/experience/', '/contact/', '/privacy/'];
+import { indexableRoutes } from '../data/site-routes.mjs';
 
 export const prerender = true;
 
 export function GET({ site }: { site?: URL }) {
   const origin = site ?? new URL('https://aberbach.co');
-  const urls = routes
-    .map((route) => `  <url><loc>${new URL(route, origin)}</loc></url>`)
+  const urls = indexableRoutes
+    .map(({ path }) => `  <url><loc>${new URL(path, origin)}</loc></url>`)
     .join('\n');
 
   return new Response(

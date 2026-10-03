@@ -1,11 +1,17 @@
 # Domain migration — aberbach.co
 
+> **Status:** implementation/runbook, not a production activation record.
+> See [PRODUCTION-STATE.md](PRODUCTION-STATE.md) for the dated audit.
+> Dashboard actions below remain pending and are not authorized by this code pass.
+
+
 The canonical website origin is **`https://aberbach.co`** — the apex.
-`www.aberbach.co` is a permanent redirect to it and must never be
-independently indexable.
+`www.aberbach.co` is intended to redirect permanently to it and must never be
+independently indexable. On 3 Oct 2026 it returned NXDOMAIN; the redirect was
+not operational. HTTP also served 200 rather than redirecting to HTTPS.
 
 Phase A (this document's subject) is domain and canonical infrastructure only.
-No internationalization, no analytics, no tracking, no design change. The
+No internationalization, no application analytics integration, no design change. The
 sections after the runbook record decisions already taken for later phases so
 they are not re-argued.
 
@@ -139,7 +145,7 @@ has been verified stable in production.
 
 ### 5. Resend — Resend dashboard
 
-`BRIEF_FROM` is now `brief@aberbach.co`. **The domain is not verified.** Add
+`BRIEF_FROM` is now `brief@aberbach.co`. **Verification is pending confirmation in Resend** (3 Oct 2026 audit). Inspect the dashboard, then if needed add
 `aberbach.co` as a sending domain in Resend, then add the DNS records Resend
 itself generates — they are per-domain values and must be copied from the
 dashboard, never guessed — and wait for Resend to report it verified. Full
@@ -165,8 +171,9 @@ Then:
 3. URL-inspect the homepage.
 4. URL-inspect `/expertise/`, `/portfolio/`, `/process/`, `/experience/`,
    `/contact/`.
-5. Leave **international targeting unset** — that is what supports a worldwide
-   audience. Do not set a country.
+5. The site has no geographic targeting restriction in code. Verify current
+   Search Console capabilities rather than relying on a retired international
+   targeting setting; metadata alone does not establish worldwide indexing.
 6. If the previous domain is verified and under your control, use the **Change
    of Address** tool. It only works once its 301s are live.
 
@@ -197,7 +204,7 @@ one real end-to-end brief on the new domain, per the live test in
 Assessed and declined. IndexNow is a push protocol consumed by Bing, Yandex,
 Seznam and Naver; **Google does not use it**, which removes most of the upside
 for a portfolio whose acquisition traffic will be overwhelmingly Google. Its
-value scales with content churn, and this is a stable seven-route site that
+value scales with content churn, and this is a small, stable site that
 Bing will discover from the sitemap well within the window that matters for a
 considered B2B enquiry.
 
@@ -288,7 +295,9 @@ names, URLs, email addresses, numerals, and RTL spacing.
 
 ## Measurement — designed, not installed
 
-**Nothing is installed.** No Google Analytics, no Tag Manager, no Meta Pixel,
+**No analytics integration is included by application code.** The 3 Oct 2026
+audit observed a Cloudflare beacon injected by hosting; its dashboard setting
+is pending review and Privacy discloses it. No Google Analytics, no Tag Manager, no Meta Pixel,
 no LinkedIn Insight Tag, no Clarity, no Hotjar, no advertising cookies, no
 cookie banner. `npm run test:domain` asserts this.
 
@@ -341,7 +350,9 @@ No attribution storage is implemented.
 ### Privacy
 
 `/privacy/` states that no advertising trackers or analytics scripts are
-implemented in the site code. **That is true and must stay true.** Anything
+implemented in the site code. This describes application code, not hosting injection: production was
+observed adding a Cloudflare analytics/RUM beacon. See PRODUCTION-STATE.md.
+Do not interpret a source test as proving no production analytics. Anything
 installed later has to update that page in the same change, in every published
 locale. No cookie banner while no consent-requiring tracker exists. No
 fingerprinting, no invasive visitor identification.

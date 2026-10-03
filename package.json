@@ -11,7 +11,9 @@
     "test:smoke": "node tests/smoke.mjs",
     "test:opening": "node tests/portfolio-opening.mjs",
     "test:worker": "node tests/worker.mjs",
-    "test:domain": "node tests/domain.mjs"
+    "test:domain": "node tests/domain.mjs",
+    "verify:production": "node scripts/verify-production.mjs",
+    "test:production": "node --test tests/production-verification.mjs"
   },
   "devDependencies": {
     "astro": "^5.16.6",
