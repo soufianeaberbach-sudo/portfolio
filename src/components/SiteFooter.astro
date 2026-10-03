@@ -1,6 +1,7 @@
 ---
 import SocialLinks from './SocialLinks.astro';
 import Arrow from './Arrow.astro';
+import { trustRoutes } from '../data/site-routes.mjs';
 
 interface Props {
   page?: string;
@@ -52,8 +53,19 @@ const calloutLines = ['Make the next decision', 'before it becomes', 'a producti
     </div>
     <div class="footer-meta">
       <span>Tangier, Morocco</span>
-      <a href="/privacy/">Privacy</a>
+      <nav class="footer-trust" aria-label="Project information">
+        {trustRoutes.map(({ path, title }) => <a href={path}>{title}</a>)}
+      </nav>
       <span>© 2026</span>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-trust { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; }
+  .footer-trust a { line-height: 1.6; }
+  @media (max-width: 640px) {
+    .footer-trust { flex-basis: 100%; gap: .5rem 1.25rem; }
+    .footer-trust a { display: inline-flex; align-items: center; min-height: 44px; }
+  }
+</style>

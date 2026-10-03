@@ -7,9 +7,10 @@
   },
   // The site is a fully static Astro build. The Worker exists only so the
   // Contact form has a real submission path: Cloudflare serves any request
-  // that matches a built asset before the Worker runs, so effectively only
-  // POST /api/brief reaches it. Anything else it does receive is passed to
-  // the ASSETS binding below, so the site keeps serving either way.
+  // that matches a built asset before the Worker runs, except /api/* below.
+  // Every method on the API prefix reaches the Worker; non-API requests that
+  // reach it are passed to ASSETS. This config is implementation, not proof
+  // of external activation. See docs/PRODUCTION-STATE.md (3 Oct 2026 audit).
   "main": "./worker/index.ts",
   "assets": {
     "directory": "./dist",
@@ -31,7 +32,7 @@
     // Transactional sender identity. NOT a mailbox anyone writes to, and not
     // the public address: Resend requires the From domain to be one it has
     // verified, and a gmail.com sender cannot be verified by a third-party
-    // relay. NOT YET VERIFIED — aberbach.co has to be added as a sending
+    // relay. VERIFICATION PENDING CONFIRMATION — add aberbach.co as a sending
     // domain in Resend and the records Resend itself generates added to DNS
     // before any mail will leave. See docs/DOMAIN-MIGRATION.md.
     "BRIEF_FROM": "brief@aberbach.co",
@@ -45,7 +46,8 @@
     // Contact page to this list, or its visitors cannot submit.
     //
     // www is listed alongside the apex on purpose, as migration insurance.
-    // The canonical host is the apex and www 301s to it, so in normal
+    // The intended canonical host is the apex with an externally configured
+    // www redirect (not verified active on 3 Oct 2026), so in normal
     // operation a widget is only ever solved on aberbach.co and www never
     // appears here. But if the www redirect is mis-set or briefly missing, a
     // visitor could reach the Contact page on www — and with www absent from
@@ -56,7 +58,9 @@
     "TURNSTILE_HOSTNAMES": "aberbach.co,www.aberbach.co"
   }
   // ── ACTIVATION ───────────────────────────────────────────────────────────
-  // The form declines briefs until 1-3 below exist. Verified against the
+  // KV is required for receipt; R2 is required for an attached file. Without
+  // Resend, receipt can still succeed with an undelivered marker. Full
+  // production readiness requires the activation checks below. Checked against the
   // wrangler in devDependencies (4.x); `npx wrangler kv namespace --help` is
   // the authority if the CLI moves on.
   //
@@ -94,7 +98,7 @@
   //    from anything a visitor supplies, and the Worker exposes no read route —
   //    files are reachable only with account access.
   //
-  //    Retention matches the 90-day brief lifecycle. R2 does not expire objects
+  //    The retention TARGET matches the 90-day brief lifecycle. R2 does not expire objects
   //    from this file, so add a lifecycle rule on the bucket:
   //
   //      npx wrangler r2 bucket lifecycle add portfolio-brief-files \
@@ -115,7 +119,8 @@
   //    rejects the send. The brief still survives: it is already in KV and an
   //    undelivered:<reference> record is written alongside it.
   //
-  //    aberbach.co IS NOT VERIFIED YET. Add it as a sending domain in Resend,
+  //    Resend verification is not established by the 3 Oct 2026 audit. Inspect
+  //    the dashboard first; if needed, add aberbach.co as a sending domain,
   //    then add the DNS records Resend generates for it — they are per-domain
   //    values and must be copied from the dashboard, never guessed — and wait
   //    for Resend to report the domain verified. BRIEF_TO is a Gmail mailbox
@@ -126,8 +131,8 @@
   //    TURNSTILE_SECRET is what the Worker verifies against. When it is
   //    ABSENT, Turnstile verification is disabled entirely and submissions are
   //    screened by the honeypot, the submit-timing check, the per-IP rate
-  //    limit, full field validation and — for native form posts — an origin
-  //    check. That is the safe pre-activation state.
+  //    limit, full field validation and an origin check for every format.
+  //    Missing origin headers remain allowed for compatible callers.
   //
   //    When TURNSTILE_SECRET IS CONFIGURED, EVERY submission to /api/brief
   //    requires a valid Turnstile token, whatever its content type. Content
@@ -170,9 +175,9 @@
   //
   // 5. NOT PRODUCTION READY until 1-4 above are done and one real brief has
   //    been received end to end. A successful build proves none of that.
-  //    Submitted briefs are kept for 90 days (RETENTION_DAYS in
-  //    worker/index.ts), which /privacy/ states verbatim — change both
-  //    together. Rate-limit keys hold a truncated SHA-256 of the caller's IP,
+  //    KV brief records have a 90-day TTL (RETENTION_DAYS in worker/index.ts).
+  //    R2 needs the separately verified lifecycle rule; mailbox copies do not
+  //    inherit either expiry. Keep /privacy/ accurate when activation changes. Rate-limit keys hold a truncated SHA-256 of the caller's IP,
   //    never the address itself, and expire after an hour.
   //
   //    docs/BACKEND-ACTIVATION.md is the step-by-step runbook, including how

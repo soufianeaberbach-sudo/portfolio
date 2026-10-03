@@ -3,9 +3,10 @@
  * The site itself stays a fully static Astro build. This Worker exists only to
  * give the Contact form a real submission path: every request that matches a
  * built asset is served by Cloudflare before this code runs, so in practice
- * the only thing that reaches here is POST /api/brief. Anything else that does
- * arrive is handed straight to the ASSETS binding, which keeps the site
- * serving normally even if this file has a problem.
+ * /api/* is explicitly routed through the Worker first, including GET and
+ * other methods. Ordinary matching assets bypass it; other non-API requests
+ * are passed to ASSETS. Storage, Turnstile and email require external setup;
+ * their presence in this source is not proof of production activation.
  *
  * Order of operations is deliberate: validate, screen for spam, PERSIST, then
  * send. The brief is written to KV before the email is attempted, so a mail
@@ -105,6 +106,52 @@ const UPLOAD = {
   maxBytes: 10 * 1024 * 1024,
   maxNameLength: 120,
 };
+
+/* Bound the whole request, including text fields and extra multipart parts.
+   Content-Length is only an early hint, not the authoritative size check. */
+const MAX_REQUEST_BYTES = UPLOAD.maxBytes + 1024 * 1024;
+class BodyTooLarge extends Error {}
+
+function tooLarge(): Response {
+  return json(413, {
+    ok: false,
+    field: 'file',
+    error: 'That submission is too large. Attachments are limited to 10 MB.',
+  });
+}
+
+/* Bound bytes BEFORE JSON/multipart parsing, even without Content-Length.
+   Response uses the platform formData parser; boundaries remain unchanged. */
+async function boundedBody(request: Request): Promise<Response> {
+  const reader = request.body?.getReader();
+  const chunks: Uint8Array[] = [];
+  let length = 0;
+  if (reader) {
+    try {
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        length += value.byteLength;
+        if (length > MAX_REQUEST_BYTES) {
+          await reader.cancel().catch(() => {});
+          throw new BodyTooLarge();
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  }
+  const bytes = new Uint8Array(length);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new Response(bytes, {
+    headers: { 'content-type': request.headers.get('content-type') ?? '' },
+  });
+}
 
 interface FileKind {
   ext: string;
@@ -338,11 +385,12 @@ async function overRateLimit(env: Env, ip: string): Promise<boolean> {
   return false;
 }
 
-/* Native form posts get an origin check: a form POST from this site carries an
+/* All submission formats get an origin check: a form POST from this site carries an
    Origin or Referer pointing back at it. This is an extra screen, never a
    substitute for Turnstile — once the secret is configured a valid token is
    required here too. Absent headers are allowed through, since some privacy
-   tools strip them and the honeypot, timing and rate limit still stand. */
+   tools strip them and the other spam screens still stand. Accept and
+   Content-Type never bypass this check; it does not replace Turnstile. */
 function sameOrigin(request: Request): boolean {
   const target = new URL(request.url).origin;
   const origin = request.headers.get('origin');
@@ -585,14 +633,15 @@ async function readBody(
 ): Promise<{ form: Record<string, unknown>; wantsJson: boolean; file: File | null }> {
   const type = request.headers.get('content-type') ?? '';
   const wantsJsonReply = (request.headers.get('accept') ?? '').includes('application/json');
+  const body = await boundedBody(request);
 
   if (type.includes('application/json')) {
-    const parsed: unknown = await request.json();
+    const parsed: unknown = await body.json();
     if (!isFormObject(parsed)) throw new Error('body is not an object');
     return { form: parsed, wantsJson: true, file: null };
   }
 
-  const data = await request.formData();
+  const data = await body.formData();
   const form: Record<string, unknown> = {};
   let file: File | null = null;
   data.forEach((value, key) => {
@@ -623,7 +672,8 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
     form = parsed.form;
     wantsJson = parsed.wantsJson;
     upload = parsed.file;
-  } catch {
+  } catch (error) {
+    if (error instanceof BodyTooLarge) return tooLarge();
     return json(400, { ok: false, error: 'That submission could not be read.' });
   }
 
@@ -647,13 +697,6 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   const ip = request.headers.get('CF-Connecting-IP') ?? '';
   if (await overRateLimit(env, ip)) {
     return fail(429, 'Several briefs have already been sent from this connection. Please email directly instead.');
-  }
-
-  /* Native form posts get an origin check as well. It is not a substitute for
-     Turnstile — it is an additional, cheap screen on the path that cannot run
-     the page's script. */
-  if (!wantsJson && !sameOrigin(request)) {
-    return fail(400, 'That submission did not come from this site. Please reload the page and try again.');
   }
 
   const token = str(form['cf-turnstile-response']);
@@ -756,8 +799,10 @@ async function handleBrief(request: Request, env: Env): Promise<Response> {
   }
 
   /* Native form posts get a redirect to a real page rather than JSON. Reachable
-     before Turnstile is activated; afterwards such a submission is rejected
-     earlier, and BriefForm hides the form from no-JavaScript visitors. */
+     before Turnstile is activated. The current UI always hides its form when
+     JavaScript is absent and offers direct email; the native endpoint remains
+     supported for compatible callers. With Turnstile configured, a valid token
+     is required for every format. */
   if (!wantsJson) {
     return new Response(null, { status: 303, headers: { location: '/contact/sent/' } });
   }
@@ -778,7 +823,9 @@ const WWW_HOST = `www.${CANONICAL_HOST}`;
  * edge before this Worker is invoked — see docs/DOMAIN-MIGRATION.md. This
  * exists because that rule lives in a dashboard and nothing in the repository
  * can prove it is still there; if it is ever removed or mis-scoped, this
- * catches the request instead of serving the site on a second indexable host.
+ * can catch requests that reach it. Matching static assets bypass the Worker,
+ * so this cannot establish canonical coverage by itself. It preserves the
+ * incoming protocol; HTTPS enforcement belongs at the edge.
  *
  * The match is EXACT. An earlier version redirected any hostname beginning
  * `www.`, which would have rewritten hosts this Worker has no business
@@ -788,9 +835,9 @@ const WWW_HOST = `www.${CANONICAL_HOST}`;
  * /api/* is deliberately NOT redirected, and the Cloudflare rule carries the
  * same carve-out. Browsers downgrade a 301 on a POST to a GET and drop the
  * body, so redirecting the endpoint could silently discard a brief. In
- * practice the form is only ever served from the apex — the page GET is
- * redirected long before the form exists — so an API request on www should not
- * occur; if one does it is handled normally, and the existing origin check
+ * normal operation after edge activation, the page GET redirects before a form
+ * exists. Until then, no production redirect is assumed. An API request on
+ * www is handled normally, and the origin check
  * still applies. */
 function redirectToApex(url: URL): Response | null {
   /* WHATWG URL lowercases the hostname, so this is already case-insensitive. */
@@ -821,6 +868,14 @@ export default {
         if (request.method !== 'POST') {
           return json(405, { ok: false, error: 'Use POST.' });
         }
+        /* Reject foreign supplied headers before parsing or changing even a
+           rate-limit counter. Missing headers retain the compatibility policy. */
+        if (!sameOrigin(request)) {
+          const message = 'That submission did not come from this site. Please reload the page and try again.';
+          const wantsJson = (request.headers.get('content-type') ?? '').includes('application/json') ||
+            (request.headers.get('accept') ?? '').includes('application/json');
+          return wantsJson ? json(400, { ok: false, error: message, field: '' }) : htmlError(message, 400);
+        }
         /* Cheap gate before any parsing. formData() reads the whole body into
            memory, so an oversized upload is refused on its declared length
            rather than after it has already been buffered. The real check still
@@ -828,19 +883,13 @@ export default {
            obvious case costing anything. Generous headroom over the file
            ceiling covers the text fields and the multipart framing. */
         const declaredLength = Number(request.headers.get('content-length') ?? '0');
-        if (Number.isFinite(declaredLength) && declaredLength > UPLOAD.maxBytes + 1024 * 1024) {
-          const mb = (UPLOAD.maxBytes / (1024 * 1024)).toFixed(0);
-          return json(413, {
-            ok: false,
-            field: 'file',
-            error: `That submission is too large. Attachments are limited to ${mb} MB.`,
-          });
-        }
+        if (Number.isFinite(declaredLength) && declaredLength > MAX_REQUEST_BYTES) return tooLarge();
         return await handleBrief(request, env);
       } catch {
-        const wantsJson = (request.headers.get('content-type') ?? '').includes('application/json');
+        const wantsJson = (request.headers.get('content-type') ?? '').includes('application/json') ||
+          (request.headers.get('accept') ?? '').includes('application/json');
         const message =
-          'Something went wrong handling the brief. Nothing was saved — please try again, or email it directly.';
+          'We could not confirm receipt of the brief. Please email directly so we can check it.';
         return wantsJson
           ? json(500, { ok: false, error: message })
           : htmlError(message, 500);

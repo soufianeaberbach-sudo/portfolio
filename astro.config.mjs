@@ -1,10 +1,10 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  /* The canonical website origin. Apex only — www.aberbach.co is a permanent
-     redirect to this host and must never be independently indexable. This one
-     value drives the canonical link, og:url, the sitemap and robots.txt, so it
-     is the only place the website domain is written. */
+  /* Declared canonical origin, used by page metadata, sitemap and robots.txt.
+     The intended www/HTTP redirects require external Cloudflare activation;
+     this value does not configure DNS or enforce HTTPS. See
+     docs/PRODUCTION-STATE.md for dated observations. */
   site: 'https://aberbach.co',
   output: 'static',
   vite: {

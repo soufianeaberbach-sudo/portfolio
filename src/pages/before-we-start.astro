@@ -1,0 +1,69 @@
+---
+import TrustLayout from '../layouts/TrustLayout.astro';
+const contents = [
+  { id: 'send', label: 'What you can send' },
+  { id: 'explain', label: 'What to explain' },
+  { id: 'next', label: 'What happens next' },
+  { id: 'files', label: 'Files & references' },
+  { id: 'collaboration', label: 'Remote collaboration' },
+  { id: 'timing', label: 'Timing, fees & revisions' },
+  { id: 'private', label: 'Confidentiality & terms' },
+];
+---
+<TrustLayout
+  title="Before We Start — Soufiane Aberbach"
+  description="What to send for a fashion development enquiry, how scope and quotations work, and what to expect from remote collaboration."
+  heading="Before we start."
+  intro="You do not need a finished design to make the first enquiry. Bring what you have, explain what needs to move forward, and the next step can be defined together."
+  marker="SA-BEFORE-WE-START-V1"
+  contents={contents}
+>
+  <section id="send" aria-labelledby="send-title">
+    <h2 id="send-title">What can I send?</h2>
+    <p>A rough sketch, garment reference, technical flat, existing pattern, sample or fitting photographs, a tech pack, a production problem or a written idea can all be useful starting points.</p>
+    <p>Send the material that best explains the question. It does not have to be polished or complete.</p>
+  </section>
+  <section id="explain" aria-labelledby="explain-title">
+    <h2 id="explain-title">What should I explain?</h2>
+    <ul>
+      <li>The garment or product category.</li>
+      <li>Its current development stage and the material already available.</li>
+      <li>The problem to solve or objective to reach.</li>
+      <li>The deliverable you expect, if you know it.</li>
+      <li>Target timing and any relevant constraints.</li>
+    </ul>
+    <p>If part of this is still unclear, say so. Defining the missing information can be part of the first conversation.</p>
+  </section>
+  <section id="next" aria-labelledby="next-title">
+    <h2 id="next-title">What happens next?</h2>
+    <ol>
+      <li><strong>Send.</strong> Share a brief and the most useful reference.</li>
+      <li><strong>Review.</strong> The material is reviewed and open questions are clarified.</li>
+      <li><strong>Scope.</strong> Agree what needs doing and what you will receive.</li>
+      <li><strong>Quote.</strong> Confirm fees, timing, revisions and start conditions.</li>
+      <li><strong>Develop.</strong> Work proceeds through the stages the project needs.</li>
+      <li><strong>Approve / handoff.</strong> Confirm the relevant checkpoints and receive the agreed deliverables.</li>
+    </ol>
+    <p>This is a guide, not a fixed sequence for every enquiry. A fit correction, a new pattern and a full product-development project may need different stages.</p>
+  </section>
+  <section id="files" aria-labelledby="files-title">
+    <h2 id="files-title">Files & references</h2>
+    <p>The brief form supports one PDF, JPEG, PNG or WebP reference up to 10 MB when uploads are active. A reference link is also useful; check its sharing permissions before sending.</p>
+    <p>Larger files, editable patterns and other technical formats can be shared after first contact, using an agreed method. If the form is unavailable, email directly from the <a href="/contact/">Contact page</a>.</p>
+  </section>
+  <section id="collaboration" aria-labelledby="collaboration-title">
+    <h2 id="collaboration-title">Remote collaboration</h2>
+    <p>Work is coordinated remotely from Tangier, Morocco. Clear references, annotated photographs and written feedback help keep development aligned across locations and time zones.</p>
+    <p>The communication method and checkpoints can be agreed for your team. Important approvals and scope changes are confirmed in writing.</p>
+  </section>
+  <section id="timing" aria-labelledby="timing-title">
+    <h2 id="timing-title">Timing, fees & revisions</h2>
+    <p>Timing is confirmed after the scope and material are reviewed. If you have a deadline, include it in the enquiry so feasibility can be discussed.</p>
+    <p>Fees are scope-based and confirmed before work begins. Included revisions and any payment or start conditions are defined in the quotation. Additional work or a changed direction may require a revised scope, fee or schedule.</p>
+  </section>
+  <section id="private" aria-labelledby="private-title">
+    <h2 id="private-title">Confidentiality & working terms</h2>
+    <p>Client material is private by default. Portfolio publication requires written permission. Read <a href="/privacy/">Privacy & Confidentiality</a> for providers, retention and deletion requests.</p>
+    <p><a href="/working-terms/">Working Terms</a> explains scope, approvals, ownership, source files and production responsibilities.</p>
+  </section>
+</TrustLayout>

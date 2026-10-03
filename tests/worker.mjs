@@ -223,6 +223,13 @@ function formRequest(fields, { ip = '203.0.113.9', headers = {} } = {}) {
 }
 
 async function call(request, env) {
+  /* Encode synthetic FormData as network bytes first. Node 24's Undici
+     FormData producer can enqueue after cancellation on large bodies. The
+     separate streaming tests below exercise cancellation directly, without
+     changing application code to work around a test producer's bug. */
+  if ((request.headers.get('content-type') ?? '').includes('multipart/form-data')) {
+    request = new Request(request.url, { method: request.method, headers: request.headers, body: await request.arrayBuffer() });
+  }
   const res = await worker.fetch(request, env);
   const text = await res.clone().text();
   let body = null;
@@ -1300,10 +1307,11 @@ group('15. unexpected API exception');
     configurable: true,
     writable: true,
   });
-  let jsonCase, htmlCase;
+  let jsonCase, htmlCase, multipartCase;
   try {
     jsonCase = await call(jsonRequest(goodFields()), env);
     htmlCase = await call(formRequest(goodFields()), env);
+    multipartCase = await call(multipartRequest(goodFields(), null), env);
   } finally {
     Object.defineProperty(globalThis, 'crypto', { value: realCrypto, configurable: true, writable: true });
   }
@@ -1311,9 +1319,10 @@ group('15. unexpected API exception');
   check('JSON caller gets 500', jsonCase.status === 500, `status ${jsonCase.status}`);
   check('500 body is JSON and not ok', jsonCase.body?.ok === false);
   check('500 is no-store', noStore(jsonCase.res));
-  check('500 says nothing was saved', /nothing was saved/i.test(String(jsonCase.body?.error)), String(jsonCase.body?.error));
+  check('500 does not overclaim persistence outcome', /could not confirm receipt/i.test(String(jsonCase.body?.error)), String(jsonCase.body?.error));
   check('native caller gets an HTML 500', htmlCase.status === 500 && htmlCase.text.startsWith('<!doctype html'), `status ${htmlCase.status}`);
   check('HTML 500 is no-store', noStore(htmlCase.res));
+  check('scripted multipart keeps JSON on unexpected errors', multipartCase.status === 500 && multipartCase.body?.ok === false && noStore(multipartCase.res));
   check('exception NEVER becomes a static asset response', assetsCalls === 0, `${assetsCalls} calls`);
   check('nothing persisted by a faulted request', kv.keys('brief:').length === 0);
   check('crypto restored for later assertions', typeof globalThis.crypto.randomUUID === 'function');
@@ -1327,6 +1336,88 @@ group('non-API routes still reach the static site');
   const { status, text } = await call(new Request(`${ORIGIN}/contact/`, { method: 'GET' }), env);
   check('served by ASSETS', assetsCalls === 1 && status === 200, `${assetsCalls} calls, status ${status}`);
   check('asset body returned', text === 'static asset');
+}
+
+/* ----------------------------------------------------- trust foundation */
+
+group('all formats reject supplied foreign origins before any persistence');
+{
+  const cases = [
+    jsonRequest(goodFields(), { headers: { origin: 'https://foreign.example' } }),
+    formRequest(goodFields(), { headers: { origin: 'https://foreign.example', accept: 'application/json' } }),
+    multipartRequest(goodFields(), null, { headers: { origin: 'https://foreign.example' } }),
+    jsonRequest(goodFields(), { headers: { origin: '', referer: 'https://foreign.example/page' } }),
+    jsonRequest(goodFields(), { headers: { origin: '', referer: 'not a URL' } }),
+    jsonRequest(goodFields(), { headers: { origin: 'null' } }),
+  ];
+  for (const [i, request] of cases.entries()) {
+    resetOutbound({});
+    const kv = makeKv();
+    const r2 = makeR2();
+    const result = await call(request, makeEnv({ BRIEFS: kv, BRIEF_FILES: r2, RESEND_API_KEY: FAKE_RESEND_KEY }));
+    check(`foreign-header case ${i + 1} rejects with 400`, result.status === 400);
+    check(`case ${i + 1} retains scripted JSON error`, result.body?.ok === false);
+    check(`case ${i + 1} changes no KV keys, even rate counters`, kv.puts.length === 0);
+    check(`case ${i + 1} stores no upload and sends no email`, r2.puts.length === 0 && outbound.length === 0);
+  }
+  const request = jsonRequest(goodFields());
+  request.headers.delete('origin');
+  const result = await call(request, makeEnv({ BRIEFS: makeKv() }));
+  check('missing Origin/Referer retains existing caller compatibility', result.status === 200);
+}
+
+group('actual stream size is bounded before parsing, regardless of declared length');
+{
+  for (const declared of [null, '20']) {
+    resetOutbound({});
+    let chunks = 0;
+    let cancelled = false;
+    const stream = new ReadableStream({
+      pull(controller) { chunks++; controller.enqueue(new Uint8Array(1024 * 1024)); },
+      cancel() { cancelled = true; },
+    });
+    const headers = { 'content-type': 'application/json', origin: ORIGIN };
+    if (declared !== null) headers['content-length'] = declared;
+    const request = new Request(ENDPOINT, { method: 'POST', headers, body: stream, duplex: 'half' });
+    const kv = makeKv();
+    const r2 = makeR2();
+    const result = await call(request, makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 }));
+    check(`oversized stream (${declared ?? 'no length'}) receives 413`, result.status === 413);
+    check('size error preserves file field and no-store contract', result.body?.field === 'file' && noStore(result.res));
+    check('producer is cancelled without reading the unbounded stream', cancelled && chunks <= 13, `${chunks} chunks`);
+    check('no KV/R2 writes or outbound request', kv.puts.length === 0 && r2.puts.length === 0 && outbound.length === 0);
+  }
+  const kv = makeKv();
+  const request = jsonRequest(goodFields(), { headers: { 'content-length': String(12 * 1024 * 1024) } });
+  const result = await call(request, makeEnv({ BRIEFS: kv }));
+  check('declared oversized request is rejected before reading', result.status === 413 && !request.bodyUsed && kv.puts.length === 0);
+}
+
+group('request boundary and full-size browser multipart remain supported');
+{
+  resetOutbound({});
+  const max = 11 * 1024 * 1024;
+  const fields = goodFields({ padding: '' });
+  fields.padding = 'x'.repeat(max - new TextEncoder().encode(JSON.stringify(fields)).byteLength);
+  const result = await call(jsonRequest(fields), makeEnv({ BRIEFS: makeKv() }));
+  check('exact 11 MiB request is parsed and accepted', result.status === 200, String(result.status));
+  fields.padding += 'x';
+  const oversized = await call(jsonRequest(fields), makeEnv({ BRIEFS: makeKv() }));
+  check('one byte over total ceiling is rejected', oversized.status === 413);
+  const kv = makeKv();
+  const r2 = makeR2();
+  const file = makeFile('full-size.pdf', 'pdf', { bytes: 10 * 1024 * 1024 });
+  const uploaded = await call(multipartRequest(goodFields(), file), makeEnv({ BRIEFS: kv, BRIEF_FILES: r2 }));
+  check('10 MiB file plus browser multipart framing is accepted', uploaded.status === 200, String(uploaded.status));
+  check('full-size file persists privately with matching metadata', r2.puts[0]?.size === 10 * 1024 * 1024 && kv.read(`brief:${uploaded.body?.id}`)?.file?.name === 'full-size.pdf');
+  const form = new FormData();
+  Object.entries(goodFields()).forEach(([key, value]) => form.append(key, value));
+  form.append('file', makeFile('first.pdf', 'pdf', { bytes: 6 * 1024 * 1024 }));
+  form.append('ignored', makeFile('second.pdf', 'pdf', { bytes: 6 * 1024 * 1024 }));
+  const extraKv = makeKv();
+  const extraR2 = makeR2();
+  const extra = await call(new Request(ENDPOINT, { method: 'POST', headers: { origin: ORIGIN, accept: 'application/json' }, body: form }), makeEnv({ BRIEFS: extraKv, BRIEF_FILES: extraR2 }));
+  check('extra multipart parts count toward the total limit', extra.status === 413 && extraKv.puts.length === 0 && extraR2.puts.length === 0);
 }
 
 /* ------------------------------------------------------------------- report */

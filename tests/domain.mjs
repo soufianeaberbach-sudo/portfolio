@@ -18,6 +18,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { indexableRoutes, trustRoutes } from '../src/data/site-routes.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/[\\\/]$/, '');
 /* A line may name the old domain on purpose — this guard has to declare what
@@ -143,7 +144,7 @@ if (!hasDist) {
   console.log('\nNo dist/ — run `npm run build` first to check the built output.');
   failures.push('dist/ missing: the built-output assertions did not run');
 } else {
-  const ROUTES = ['', 'expertise', 'portfolio', 'process', 'experience', 'contact', 'privacy'];
+  const ROUTES = indexableRoutes.map(({ path }) => path.replace(/^\/|\/$/g, ''));
 
   group('built pages canonicalize to the apex');
   for (const route of ROUTES) {
@@ -191,10 +192,15 @@ group('built social image is absolute on the apex');
     check('JSON-LD block present on the home page', Boolean(raw));
     const data = JSON.parse(raw);
     const nodes = data['@graph'] ?? [];
-    check('graph has the Person and ProfessionalService nodes', nodes.length === 2, `${nodes.length} nodes`);
+    check('graph has exactly Person, ProfessionalService and WebSite', nodes.length === 3 &&
+      ['Person', 'ProfessionalService', 'WebSite'].every((type) => nodes.some((node) => node['@type'] === type)), `${nodes.length} nodes`);
 
     const person = nodes.find((n) => n['@type'] === 'Person');
     const service = nodes.find((n) => n['@type'] === 'ProfessionalService');
+    const website = nodes.find((n) => n['@type'] === 'WebSite');
+    check('WebSite @id and url use the apex', website?.['@id'] === `${NEW_ORIGIN}/#website` && website?.url === `${NEW_ORIGIN}/`);
+    check('WebSite publisher references the existing Person', website?.publisher?.['@id'] === person?.['@id']);
+    check('no SearchAction without a search feature', !JSON.stringify(website).includes('SearchAction'));
     check('Person @id is on the apex', person?.['@id'] === `${NEW_ORIGIN}/#soufiane`, String(person?.['@id']));
     check('Person url is the apex', person?.url === `${NEW_ORIGIN}/`, String(person?.url));
     check('Person image is on the apex', String(person?.image).startsWith(`${NEW_ORIGIN}/`), String(person?.image));
@@ -243,6 +249,18 @@ group('built social image is absolute on the apex');
     const html = await readFile(file, 'utf8');
     check(`/${route} is noindex`, /<meta name="robots" content="noindex/.test(html));
     check(`/${route} carries no old domain`, !html.includes(OLD_WEBSITE_DOMAIN));
+  }
+
+  group('trust pages build, remain indexable and share navigation');
+  for (const path of ['/privacy/', '/working-terms/', '/before-we-start/']) {
+    check(`${path} is in the route manifest`, trustRoutes.some((route) => route.path === path));
+    const html = await readFile(join(distPath, path.slice(1), 'index.html'), 'utf8');
+    check(`${path} has one main heading`, (html.match(/<h1\b/g) ?? []).length === 1);
+    check(`${path} is not noindex`, !/<meta name="robots" content="noindex/.test(html));
+    check(`${path} has a description and social metadata`, /<meta name="description" content="[^"<>]+"/.test(html) &&
+      /<meta property="og:title" content="[^"<>]+"/.test(html) && /<meta name="twitter:title" content="[^"<>]+"/.test(html));
+    const footer = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? '';
+    for (const route of trustRoutes) check(`${path} footer links to ${route.path}`, footer.includes(`href="${route.path}"`));
   }
 
   group('Phase A added no multilingual routes and no trackers');

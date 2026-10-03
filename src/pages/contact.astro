@@ -35,11 +35,11 @@ const faqs = [
   },
   {
     q: 'How do I share files?',
-    a: 'Attach one PDF, JPEG, PNG or WebP file up to 10 MB, or paste a Google Drive, Dropbox, Figma or web reference. Larger technical material can follow by email once the first reply has gone back.',
+    a: 'The form supports one PDF, JPEG, PNG or WebP file up to 10 MB when uploads are active, or a reference link. Larger technical material can follow after first contact.',
   },
   {
     q: 'How is project material handled?',
-    a: 'The form collects your name, an optional company or brand, your email, the product stage, your message, an optional uploaded reference file and an optional reference link. Submitted material is processed through this site&rsquo;s hosting and email providers only to receive and respond to the brief — it is stored so nothing is lost in transit, then emailed on. It is not published or used as portfolio material. The spam check is Cloudflare Turnstile, which loads a script from Cloudflare and is the only third-party script on the site. Full detail is on the privacy page.',
+    a: 'Client material is private by default. It is not published or used in the Portfolio without written permission. Cloudflare Turnstile checks submissions when enabled; validation and other spam screens also apply. Provider and retention details are on Privacy & Confidentiality.',
   },
 ];
 ---
@@ -207,11 +207,19 @@ const faqs = [
         <details><summary>{item.q}</summary><p>{item.a}</p></details>
       ))}
     </div>
+    <nav class="ct-faq__guides" aria-label="Project information">
+      <a href="/before-we-start/">Before We Start</a>
+      <a href="/working-terms/">Working Terms</a>
+      <a href="/privacy/">Privacy & Confidentiality</a>
+    </nav>
   </section>
 
 </SiteLayout>
 
 <style>
+  .ct-faq__guides { display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; margin-top: 1.5rem; }
+  .ct-faq__guides a { display: inline-flex; align-items: center; min-height: 44px; font-size: .9375rem; text-decoration: underline; text-underline-offset: 4px; }
+  .ct-faq__guides a:hover { text-decoration-color: var(--signal); }
   /* ---------- Hero: shorter than a viewport, so the form is one short scroll
        away rather than two screens down. ---------- */
   .ct-hero {

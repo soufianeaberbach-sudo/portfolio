@@ -1,0 +1,69 @@
+---
+import SiteLayout from './SiteLayout.astro';
+import Arrow from '../components/Arrow.astro';
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  intro: string;
+  marker: string;
+  contents: { id: string; label: string }[];
+}
+const { title, description, heading, intro, marker, contents } = Astro.props;
+---
+<SiteLayout title={title} description={description} marker={marker} page="trust" footerCallout={false}>
+  <article class="trust section-shell">
+    <header class="trust__head">
+      <p class="eyebrow">Project information</p>
+      <h1 class="display trust__title">{heading}</h1>
+      <p class="trust__intro">{intro}</p>
+    </header>
+    <div class="trust__grid">
+      <nav class="trust__contents" aria-label="On this page">
+        <p class="label">On this page</p>
+        <ol>{contents.map(({ id, label }) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+      </nav>
+      <div class="trust__body">
+        <slot />
+        <div class="trust__next">
+          <p class="label">Your next step</p>
+          <p>A sketch, a reference or a clear question is enough to begin.</p>
+          <a class="button button--signal" href="/contact/#brief">Start a brief <span><Arrow /></span></a>
+        </div>
+      </div>
+    </div>
+  </article>
+</SiteLayout>
+<style>
+  .trust { max-width: 76rem; padding-block: calc(var(--header-h) + clamp(2.5rem, 6vw, 5rem)) clamp(4rem, 8vw, 7rem); }
+  .trust__head { max-width: 54rem; padding-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .trust__head .eyebrow { margin: 0 0 1.5rem; color: var(--muted); }
+  .trust__title { margin: 0; max-width: 14ch; font-size: clamp(2.5rem, 5.8vw, 5rem); line-height: 1.06; }
+  .trust__intro { max-width: 40rem; margin: 1.75rem 0 0; color: var(--ink-soft); font-size: 1.125rem; line-height: 1.8; }
+  .trust__grid { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(0, 3fr); gap: clamp(2rem, 5vw, 5rem); border-top: 1px solid var(--line-strong); padding-top: 2rem; }
+  .trust__contents .label { margin: 0 0 1rem; color: var(--muted); }
+  .trust__contents ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
+  .trust__contents a { display: block; padding-block: .55rem; font-size: .9375rem; line-height: 1.5; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+  .trust__contents a:hover { text-decoration-color: var(--signal); }
+  .trust__body { min-width: 0; max-width: 43rem; }
+  .trust__body :global(section) { scroll-margin-top: calc(var(--header-h) + 2rem); padding-bottom: 2.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--line); }
+  .trust__body :global(h2) { margin: 0 0 1.25rem; font-family: var(--display); font-size: clamp(1.4rem, 2.2vw, 1.8rem); font-weight: 750; letter-spacing: -.025em; line-height: 1.25; }
+  .trust__body :global(p), .trust__body :global(li), .trust__body :global(dd) { color: var(--ink-soft); font-size: 1rem; line-height: 1.85; }
+  .trust__body :global(p) { margin: 0 0 1rem; }
+  .trust__body :global(p:last-child) { margin-bottom: 0; }
+  .trust__body :global(ul), .trust__body :global(ol) { margin: 1rem 0; padding-left: 1.25rem; }
+  .trust__body :global(li) { padding-left: .25rem; margin-bottom: .5rem; }
+  .trust__body :global(dl) { margin: 0; }
+  .trust__body :global(dt) { margin-top: 1.5rem; font-weight: 600; }
+  .trust__body :global(dt:first-child) { margin-top: 0; }
+  .trust__body :global(dd) { margin: .35rem 0 0; }
+  .trust__body :global(a:not(.button)) { text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
+  .trust__body :global(a:not(.button):hover) { text-decoration-color: var(--signal); }
+  .trust__next .label { color: var(--muted); }
+  .trust__next .button { margin-top: 1rem; }
+  @media (max-width: 760px) {
+    .trust__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .trust__contents ol { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem 1.5rem; }
+    .trust__contents a { min-height: 44px; }
+  }
+</style>

@@ -42,6 +42,14 @@ const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'WebSite',
+      '@id': `${origin}/#website`,
+      url: origin + '/',
+      name: 'Soufiane Aberbach',
+      inLanguage: 'en',
+      publisher: { '@id': `${origin}/#soufiane` },
+    },
+    {
       '@type': 'Person',
       '@id': `${origin}/#soufiane`,
       name: 'Soufiane Aberbach',
