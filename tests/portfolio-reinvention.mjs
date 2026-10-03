@@ -55,26 +55,14 @@ try {
   check(await page.locator('.pf-outro a').count()===1,'the ending offers one way on, not a directory');
   check((await page.locator('.pf-outro__title').innerText()).replace(/\s+/g,' ').trim()==='One practice. From design to production.','the ending states the practice');
   await shot('ending');
-  /* WOMENSWEAR IS ONE AUTHORED ACT IN FIVE TERRITORIES, told in beats: no
-     category cards, no evidence rail beside every garment, and no single
-     mechanism repeated five times. What it must deliver is all five
-     territories under their real names, a hero scene in each, a different
-     supporting mechanism in each, and the front-to-back turn used as a device
-     rather than as the grammar. */
+  /* Protect real category names, access and truthful evidence, not a layout score. */
   await open('womenswear');await shot('womenswear-act');
   check(await page.locator('[data-world="womenswear"] [data-territory]').count()===5,'five territories retained');
   check(await page.locator('[data-world="womenswear"] [data-act-link]').count()===5,'all five reachable by name');
   {
-   const beats=await page.locator('[data-world="womenswear"] [data-territory]').evaluateAll(
-     (els)=>els.map((e)=>e.dataset.beats));
-   check(new Set(beats).size===beats.length,'no two territories play the same shape: '+beats.join(' | '));
    const names=await page.locator('[data-world="womenswear"] [data-territory]').evaluateAll(
      (els)=>els.map((e)=>e.dataset.actTitle));
    check(names.join(',')==='Ready-to-Wear,Activewear,Streetwear,Occasion,Swim','the real categories are the titles');
-   const support=await page.locator('[data-world="womenswear"] [data-support]').evaluateAll(
-     (els)=>els.map((e)=>e.dataset.scene));
-   check(support.join(',')==='range,sprint,salon,line','supporting work differs per territory: '+support.join(','));
-   check(await page.locator('[data-world="womenswear"] [data-scene="overture"]').count()===1,'the turn is one scene, not the grammar');
    /* A CATEGORY IS THE ATMOSPHERE; A PROJECT IS THE STORY. Every garment the
       chapter shows is a door into its own, and the evidence belongs to the
       project that produced it rather than to a category. */
@@ -88,36 +76,10 @@ try {
   for(const id of ['rtw','activewear','streetwear','evening','swimwear']){
    await open('womenswear/'+id);
    await page.waitForTimeout(500);
-   /* The garment is the hero everywhere, including where the scene is a range
-      rather than a held look. Measured on the LAYOUT height: Swim's figure
-      arrives out of the white, so at the moment the territory is entered it
-      is deliberately small, and a transformed rect would report the middle of
-      a move rather than the scale it was designed at. */
+   /* The category supplies a visible, inspectable image. */
    check(await page.locator('[data-territory="'+id+'"] img').first().evaluate(
      (img)=>img.offsetHeight>window.innerHeight*0.3),'the garment owns the frame in '+id);
    await shot('womenswear-'+id);
-  }
-  /* OCCASION'S ENTRANCE: scrubbing the pinned scene draws out of the back
-     detail to the whole gown, and then holds. */
-  await open('womenswear/evening');
-  await page.waitForTimeout(500);
-  {
-   const world=page.locator('[data-world="womenswear"]');
-   const turnAt=async(fraction)=>{
-    await world.evaluate((el,f)=>{
-     const reveal=el.querySelector('[data-scene="entrance"]');
-     el.scrollTo({top:Math.round(el.scrollTop+reveal.getBoundingClientRect().top+(reveal.offsetHeight-window.innerHeight)*f),behavior:'instant'});
-    },fraction);
-    await page.waitForTimeout(260);
-    return await page.locator('[data-scene="entrance"] [data-entrance] img').evaluate((el)=>new DOMMatrixReadOnly(getComputedStyle(el).transform).a);
-   };
-   const start=await turnAt(0);
-   const middle=await turnAt(0.5);
-   const end=await turnAt(0.9);
-   check(start>2,'the scene opens close on the detail: '+start);
-   check(middle<start&&middle>end,'the entrance is scrubbed, not switched');
-   check(end<1.02,'the whole gown arrives before the scene is released: '+end);
-   await shot('womenswear-entrance');
   }
   /* THE GARMENT, ENTERED. The point of a range is that it is a way in, so the
      thing worth proving is that the garment gets bigger, keeps the chapter's
@@ -125,9 +87,9 @@ try {
   {
    await open('womenswear/rtw');
    await page.waitForTimeout(400);
-   const thumb=await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door img').first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
-   const id=await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').first().getAttribute('data-open-subject');
-   await page.locator('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').first().click();
+   const thumb=await page.locator('[data-territory="rtw"] [data-weight="supporting"] .pf-fig__door img').first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
+   const id=await page.locator('[data-territory="rtw"] [data-weight="supporting"] .pf-fig__door').first().getAttribute('data-open-subject');
+   await page.locator('[data-territory="rtw"] [data-weight="supporting"] .pf-fig__door').first().click();
    await page.waitForTimeout(700);
    const big=await page.locator(`[data-subject="${id}"] .pf-rd__window img`).first().evaluate((i)=>Math.round(i.getBoundingClientRect().height));
    check(big>thumb*1.8,'the entered garment is far bigger than its cell: '+thumb+' → '+big);
@@ -139,29 +101,6 @@ try {
    check(await page.evaluate((sid)=>document.activeElement?.dataset?.openSubject===sid,id),'on the frame the visitor chose');
   }
 
-  /* THE OVERTURE: the studio field closes around the garment before anything
-     is written, and the territory's name arrives with it. */
-  await open('womenswear');
-  await page.waitForTimeout(500);
-  {
-   const world=page.locator('[data-world="womenswear"]');
-   const arriveAt=async(fraction)=>{
-    await world.evaluate((el,f)=>{
-     const reveal=el.querySelector('[data-scene="overture"]');
-     el.scrollTo({top:Math.round(el.scrollTop+reveal.getBoundingClientRect().top+(reveal.offsetHeight-window.innerHeight)*f),behavior:'instant'});
-    },fraction);
-    await page.waitForTimeout(260);
-    return page.locator('[data-ov-field]').evaluate((el)=>({
-     arrive:Number(getComputedStyle(el).getPropertyValue('--arrive')),
-     nameOpacity:Number(getComputedStyle(el.closest('[data-scene]').querySelector('.pf-ov__slate')).opacity),
-    }));
-   };
-   const a0=await arriveAt(0);
-   const a1=await arriveAt(0.3);
-   check(a0.arrive<0.02&&a0.nameOpacity<0.05,'the act opens on the garment alone, with nothing written on it');
-   check(a1.arrive>a0.arrive&&a1.nameOpacity>a0.nameOpacity,'the field closes and the name arrives with it');
-   await shot('womenswear-overture');
-  }
   for(const [world,cat] of [['menswear','m-streetwear']]){
    await open(world);await shot(world+'-categories');
    check(await page.locator('[data-world="'+world+'"] .pf-cat').count()>=4,'categories retained');

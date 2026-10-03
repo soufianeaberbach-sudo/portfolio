@@ -1,12 +1,8 @@
 ---
-/* ONE GARMENT IN A TERRITORY'S RUN, as a door into its own story.
-
-   The worlds differ in how they place and size garments, not in what a
-   garment is: every figure is the photograph cut at its own measured edge
-   (`front`), or shown whole, and every figure is a real link that the reader
-   opens out of and closes back into (`data-door-source`). The sizing is the
-   scene's business — a figure only knows its proportion. */
+/* One subject, one native link. The subject role sets presentation weight;
+   its image metadata sets the measured crop. Touching figures stay whole. */
 import type { Subject } from '../../data/portfolio';
+import Arrow from '../Arrow.astro';
 
 interface Props {
   item: Subject;
@@ -16,16 +12,17 @@ interface Props {
   crop: 'front' | 'whole';
   sizes: string;
   class?: string;
-  weight?: 'featured' | 'supporting';
+  weight?: 'hero' | 'featured' | 'supporting';
   style?: string;
 }
 
 const { item, href, noun, crop, sizes, class: className, weight = 'supporting', style = '' } = Astro.props;
 const image = item.cover;
-const whole = crop === 'whole' || image.views !== 2;
+const whole = crop === 'whole' || image.views !== 2 || image.separable === false;
 const geom = `--front:${image.front};--aspect:${(image.width / image.height).toFixed(4)};`;
 ---
 <figure class:list={['pf-fig', className]} data-weight={weight} data-crop={whole ? 'whole' : 'front'}
+        data-phone-crop={weight === 'hero' && image.views === 2 && image.separable !== false ? 'front' : undefined}
         style={`${geom}${style}`}>
   <a class="pf-fig__door" href={href} data-nav draggable="false" data-open-subject={item.id}
      aria-label={`${noun} — ${item.title ?? image.alt}`}>
@@ -36,5 +33,8 @@ const geom = `--front:${image.front};--aspect:${(image.width / image.height).toF
         loading="lazy" decoding="async"
       />
     </span>
+    {weight !== 'supporting' && (
+      <span class="pf-fig__entry">{item.title ?? (weight === 'hero' ? 'View garment' : 'View')} <span aria-hidden="true"><Arrow /></span></span>
+    )}
   </a>
 </figure>

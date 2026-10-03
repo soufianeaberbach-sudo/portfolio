@@ -232,6 +232,9 @@ export interface ReferenceImage {
   id: string;
   image: ImageAsset;
   credit?: ImageCredit;
+  /* Editorial presentation only: never authorship, provenance or process
+     evidence. Explicit selection travels with the subject, not its position. */
+  role?: ProjectRole;
 }
 
 export interface MarketCategory {
@@ -390,9 +393,9 @@ const image = (ref: string, alt: string): ImageAsset => {
   };
 };
 
-/* Each photograph is a single composition already containing the front and the
-   back of one garment. It is never split, cropped in two, or paired with a
-   generated back view.
+/* Each two-view photograph contains the front and back of one garment.
+   Its measured split may present either view where the figures are separable;
+   a touching pair stays whole. A back view is never generated.
 
    The alt text describes what is visible in the frame and stops there. That is
    what alt is for, and a description of a picture is not a claim about who
@@ -406,6 +409,7 @@ const buildCategory = (
   label: string,
   blurb: string,
   refs: Array<[string, string]>,
+  roles: Record<string, ProjectRole> = {},
 ): MarketCategory => ({
   id,
   number,
@@ -416,6 +420,7 @@ const buildCategory = (
   references: refs.map(([ref, alt], index) => ({
     id: `${id}-ref-${String(index + 1).padStart(2, '0')}`,
     image: image(ref, alt),
+    ...(roles[ref] ? { role: roles[ref] } : {}),
   })),
 });
 
@@ -446,7 +451,7 @@ const rtw = buildCategory('rtw', '01', 'Ready-to-Wear & Contemporary',
   ['jersey/8', bothViews('a green off-shoulder knit top worn with brown trousers')],
   ['jersey/9', bothViews('a grey belted jacket with a wide sleeve worn with grey trousers')],
   ['jersey/10', bothViews('a white lace high-neck top worn with a navy midi pencil skirt')],
-]);
+], { 'woven/1': 'hero', 'woven/4': 'featured', 'woven/8': 'featured' });
 
 const active = buildCategory('activewear', '02', 'Activewear & Athleisure',
   'Panelled performance product, where the pattern is engineered around stretch and recovery rather than imposed on it.', [
@@ -460,13 +465,13 @@ const active = buildCategory('activewear', '02', 'Activewear & Athleisure',
   ['sport/8', bothViews('a red sports bra and red leggings with a white colourblocked side panel')],
   ['sport/9', bothViews('a sand long-sleeved top and a matching high-cut bodysuit')],
   ['sport/10', bothViews('a black long-sleeved top and cropped black leggings with white side stripes')],
-]);
+], { 'sport/8': 'hero', 'sport/4': 'featured', 'sport/7': 'featured' });
 
 const street = buildCategory('streetwear', '03', 'Streetwear & Casualwear',
   'Relaxed volumes, where the fit has to read as deliberate rather than as ease left in by accident.', [
   ['jersey/5', bothViews('a cream jersey top gathered at one side with a drawcord, worn with brown wide-leg trousers')],
   ['jersey/6', bothViews('a burgundy cropped hooded sweatshirt worn with olive green joggers')],
-]);
+], { 'jersey/6': 'hero', 'jersey/5': 'featured' });
 
 const evening = buildCategory('evening', '04', 'Evening & Occasionwear',
   'Long-line construction, where drape, support and the back view are resolved at the same time.', [
@@ -481,7 +486,7 @@ const evening = buildCategory('evening', '04', 'Evening & Occasionwear',
   ['evening/9', bothViews('a dark brown high-neck long-sleeved gown gathered through the body')],
   ['evening/10', bothViews('a red high-neck long-sleeved top with an open midriff worn with a floor-length skirt')],
   ['woven/7', bothViews('a champagne strapless column gown with ruching across the front and a fishtail hem')],
-]);
+], { 'evening/3': 'hero', 'evening/6': 'featured', 'evening/8': 'featured' });
 
 const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
   'The category with nowhere to hide: balance, recovery and millimetre tolerances are all visible on the body.', [
@@ -494,7 +499,7 @@ const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
   ['swim/7', 'A silver bikini with long ties wrapped around the waist, photographed on a white studio ground.'],
   ['swim/8', 'A black bandeau top with a high-waisted brief, photographed on a white studio ground.'],
   ['swim/9', 'A silver underwired bikini with tie-side briefs, photographed on a white studio ground.'],
-]);
+], { 'swim/4': 'hero', 'swim/6': 'featured', 'swim/9': 'featured' });
 
 /* --------------------------------------------------------------------------
    MENSWEAR — approved category order with temporary reference previews.
@@ -817,7 +822,7 @@ export const referenceSubject = (
     origin: [],
     build: [],
     reveal: twoUp ? reveal : 'single',
-    role: 'supporting',
+    role: reference.role ?? 'supporting',
     title: null,
     garmentType: null,
     /* The photograph's own description, with the boilerplate about the frame

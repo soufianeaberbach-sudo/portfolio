@@ -40,68 +40,24 @@ try {
     await page.evaluate(() => scrollTo(0, 0));
     await capture('landing');
     await page.screenshot({ path: `${output}/${width}-landing-full.png`, fullPage: true });
-    /* WOMENSWEAR IS ONE AUTHORED ACT IN FIVE TERRITORIES, told in beats, so
-       it is walked SCENE BY SCENE and every scrubbed scene is shot at three
-       positions — start, midpoint and payoff. A random frame in the middle of
-       a pinned sequence is not evidence of a final design. */
+    /* Walk the shared exhibition, not an obsolete mechanism-specific score. */
     await open('womenswear');
-    await capture('womenswear-01-overture-START');
-    const scene = async (selector, fraction) => page.evaluate(([sel, f]) => {
+    const scene = async (selector) => page.evaluate((sel) => {
       const world = document.querySelector('[data-world="womenswear"]');
       const el = world.querySelector(sel);
       if (!el) return false;
-      const reveal = el.closest('[data-reveal]');
-      if (reveal && f !== null) {
-        const rb = reveal.getBoundingClientRect();
-        world.scrollTo({ top: Math.round(world.scrollTop + rb.top + (rb.height - innerHeight) * f), behavior: 'instant' });
-        return true;
-      }
-      const box = el.getBoundingClientRect();
-      world.scrollTo({ top: Math.round(world.scrollTop + box.top - Math.max(0, (innerHeight - box.height) / 2)), behavior: 'instant' });
+      world.scrollTo({ top: Math.round(world.scrollTop + el.getBoundingClientRect().top - 52), behavior: 'instant' });
       return true;
-    }, [selector, fraction]);
-
-    /* SET PIECE 01 — the studio field closing around the garment, then the
-       back of it. Three frames out of one photograph. */
-    await scene('[data-scene="overture"] [data-ov-field]', 0.34);
-    await capture('womenswear-02-overture-MID-composition');
-    await scene('[data-scene="overture"] [data-turn]', 0.8);
-    await capture('womenswear-03-overture-PAYOFF-back');
-    await scene('[data-scene="range"]', null);
-    await capture('womenswear-04-rtw-range');
-    /* Every territory's slate, every supporting mechanism, every set piece. */
-    await scene('[data-territory="activewear"] .pf-tr__slate', null);
-    await capture('womenswear-05-activewear-slate');
-    /* ACTIVEWEAR — three heats, one direction. */
-    for (const heat of ['enter', 'body', 'exit']) {
-      await scene(`[data-heat="${heat}"]`, null);
-      await capture(`womenswear-06-activewear-${heat}`);
+    }, selector);
+    for (const id of ['rtw', 'activewear', 'streetwear', 'evening', 'swimwear']) {
+      await scene(`[data-territory="${id}"]`);
+      await capture(`womenswear-${id}-opening`);
+      await scene(`[data-territory="${id}"] [data-selection="featured"]`);
+      await capture(`womenswear-${id}-selected`);
+      if (await scene(`[data-territory="${id}"] [data-support]`)) {
+        await capture(`womenswear-${id}-supporting`);
+      }
     }
-    /* STREETWEAR — the interruption: an ink field and a collision of scales. */
-    await scene('[data-territory="streetwear"] .pf-tr__slate', null);
-    await capture('womenswear-07-streetwear-slate-loud');
-    await scene('[data-scene="clash"]', null);
-    await capture('womenswear-08-streetwear-clash');
-    await scene('[data-territory="evening"] .pf-tr__slate', null);
-    await capture('womenswear-09-occasion-slate');
-    /* OCCASION — the entrance: from the back detail out to the whole gown. */
-    for (const [f, label] of [[0.02, 'START'], [0.45, 'MID'], [0.85, 'PAYOFF']]) {
-      await scene('[data-scene="entrance"] [data-entrance]', f);
-      await capture(`womenswear-10-occasion-entrance-${label}`);
-    }
-    await scene('.pf-sa__room', null);
-    await capture('womenswear-11-occasion-room');
-    await scene('.pf-sa__procession', null);
-    await capture('womenswear-12-occasion-procession');
-    await scene('[data-territory="swimwear"] .pf-tr__slate', null);
-    await capture('womenswear-13-swim-slate');
-    /* SET PIECE 04 — scale, and nothing else. */
-    for (const [f, label] of [[0.02, 'START'], [0.45, 'MID'], [0.9, 'PAYOFF']]) {
-      await scene('[data-scene="approach"] [data-approach]', f);
-      await capture(`womenswear-14-swim-approach-${label}`);
-    }
-    await scene('[data-scene="line"]', null);
-    await capture('womenswear-15-swim-line');
     /* Every territory is arrived at by name, and lands on its own frame. */
     for (const id of ['rtw', 'activewear', 'streetwear', 'evening', 'swimwear']) {
       await open(`womenswear/${id}`);
