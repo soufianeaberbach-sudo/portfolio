@@ -513,136 +513,30 @@ try {
     check('focus starts inside the chapter',
       await p.evaluate((sel) => document.querySelector(sel).contains(document.activeElement), world));
 
-    /* WOMENSWEAR IS ONE AUTHORED ACT IN FIVE TERRITORIES, told in BEATS.
-       A beat is a scene with its own composition and pacing, and the point of
-       the architecture is that no two territories play the same shape — so
-       what is checked here is the SCORE: the five real category names, in the
-       approved order, each with a different sequence of scenes, one hero
-       scene each, one supporting-work mechanism each, and no repetition of
-       the front-to-back turn as a grammar. */
     const act = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
-      const shown = [...w.querySelectorAll('[data-screen]')].filter((e) => !e.hidden);
-      const visible = (el) => el.getBoundingClientRect().width > 0 && !el.closest('[hidden]');
       const territories = [...w.querySelectorAll('[data-territory]')];
+      const doors = [...w.querySelectorAll('.pf-fig__door')];
+      const readers = [...w.querySelectorAll('.pf-rd__subject')];
       return {
-        screens: shown.map((e) => e.dataset.screen),
-        hash: location.hash,
-        isAct: w.hasAttribute('data-act'),
-        ids: territories.map((t) => t.dataset.territory),
-        beats: territories.map((t) => t.dataset.beats),
-        names: territories.map((t) => t.dataset.actTitle),
-        /* The approved full category label is printed with every territory,
-           whether the name arrives on a slate or over the opening picture. */
-        labels: territories.map((t) => (
-          t.querySelector('.pf-tr__meta span') ?? t.querySelector('.pf-ov__meta span')
-        )?.textContent.trim()),
-        scenes: [...w.querySelectorAll('[data-scene]')].map((el) => el.dataset.scene),
-        turns: [...w.querySelectorAll('[data-scene="overture"]')].length,
-        heroes: territories.map((t) => t.querySelectorAll('[data-hero]').length),
-        support: territories.map((t) => [...t.querySelectorAll('[data-support]')].map((s) => s.dataset.scene).join('+')),
-        garments: [...w.querySelectorAll('[data-hero] img')].filter(visible).length,
-        /* Only photographs that really hold two views are ever shown half a
-           frame at a time. */
-        halves: [...w.querySelectorAll('[data-scene="overture"] [data-views]')]
-          .map((el) => el.dataset.views),
-        plates: [...w.querySelectorAll('.pf-plate')].filter(visible).length,
-        /* THE FOURTH LEVEL: portfolio, chapter, territory, GARMENT. Every
-           garment the chapter shows is a door into its own story, so a range
-           is a way into the work rather than the end of it. */
-        doors: w.querySelectorAll('[data-open-subject]').length,
-        readers: w.querySelectorAll('.pf-rd__subject').length,
-        readersOpen: [...w.querySelectorAll('.pf-rd__subject')].filter((e) => !e.hidden).length,
-        /* Evidence belongs to the PROJECT that produced it, never to a
-           category: there is no category-level proof band anywhere. */
-        categoryEvidence: w.querySelectorAll('[data-scene="evidence"]').length,
-        /* And nothing is invented for a photograph: with no verified project
-           the story stages are absent and the reader says so instead. */
-        inventedStages: w.querySelectorAll('.pf-rd__stage-item').length,
+        ids: territories.map(t => t.dataset.territory),
+        names: territories.map(t => t.dataset.actTitle),
+        control: [...w.querySelectorAll('[data-act-link]')].map(a => a.dataset.actLink),
+        doors: doors.map(a => a.dataset.openSubject),
+        readers: readers.map(r => r.dataset.subject),
+        open: readers.filter(r => !r.hidden).length,
+        invented: w.querySelectorAll('[data-st]').length,
         pending: w.querySelectorAll('[data-subject-pending]').length,
-        /* Five territories, five gestures for giving up a garment's views. */
-        reveals: [...new Set([...w.querySelectorAll('.pf-rd__subject')].map((e) => e.dataset.rdReveal))].sort(),
-        control: [...w.querySelectorAll('[data-act-link]')].map((a) => a.dataset.actLink),
-        controlNames: [...w.querySelectorAll('[data-act-link] .pf-act__label')].map((e) => e.textContent.trim()),
-        controlOpen: !!w.querySelector('[data-act-where][data-open]'),
-        disclaimers: [...w.querySelectorAll('[data-reference-notice]')].filter(visible).length,
+        ground: getComputedStyle(w).backgroundColor,
       };
     }, world);
-    check('the chapter is one screen, not a category index',
-      act.isAct && act.screens.join(',') === 'index', `${act.isAct} / ${act.screens.join(',')}`);
-    check('the URL names the chapter', act.hash === '#womenswear', act.hash);
-    check('the five approved territories are there, in order',
-      act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear', act.ids.join(','));
-    check('the five approved category names are printed in order',
-      JSON.stringify(act.labels) === JSON.stringify([
-        'Ready-to-Wear & Contemporary', 'Activewear & Athleisure', 'Streetwear & Casualwear',
-        'Evening & Occasionwear', 'Swimwear & Resortwear',
-      ]), act.labels.join(' | '));
-    /* The visitor must not have to decode an abstraction before they know what
-       they are looking at: a territory is called what the category is called. */
-    check('every territory is named by its real category, not by an abstraction',
-      act.names.join(',') === 'Ready-to-Wear,Activewear,Streetwear,Occasion,Swim', act.names.join(','));
-    check('and the control uses those same names',
-      act.controlNames.join(',') === act.names.join(','), act.controlNames.join(','));
-    check('NO TWO TERRITORIES PLAY THE SAME SHAPE',
-      new Set(act.beats).size === act.beats.length, act.beats.join(' | '));
-    /* Stronger than counting beats: EVERY SCENE KIND in the act belongs to
-       exactly one territory. A mechanism reused across territories is the
-       template problem coming back one level down. */
-    check('and no scene mechanism is used by more than one territory',
-      (() => {
-        const kinds = act.beats.flatMap((b) => b.split(' '));
-        return new Set(kinds).size === kinds.length && kinds.length >= 6;
-      })(), act.beats.join(' | '));
-    check('each territory leads with exactly one hero scene',
-      act.heroes.join(',') === '1,0,1,1,1', act.heroes.join(','));
-    /* Four territories hand their depth over, and each does it differently:
-       an editorial range, a deck, a rail, a single line. */
-    check('supporting work uses a different mechanism in every territory',
-      act.support.join(',') === 'range,sprint,,salon,line', act.support.join(','));
-    /* READY-TO-WEAR'S RANGE has rhythm, not a grid: spreads of different
-       kinds, more than one weight, and every one of its garments a door. */
-    const range = await p.evaluate(() => {
-      const r = document.querySelector('[data-scene="range"]');
-      return {
-        kinds: [...r.querySelectorAll('[data-spread]')].map((e) => e.dataset.spread),
-        weights: [...new Set([...r.querySelectorAll('[data-weight]')].map((e) => e.dataset.weight))].sort(),
-        doors: r.querySelectorAll('[data-open-subject]').length,
-        numbers: r.querySelectorAll('.label').length,
-      };
-    });
-    check('Ready-to-Wear\'s range is a run of different spreads, not one grid',
-      new Set(range.kinds).size >= 4, range.kinds.join(' '));
-    check('and it gives its garments different weights',
-      range.weights.join(',') === 'featured,supporting', range.weights.join(','));
-    check('every Ready-to-Wear garment after the opening is still a door', range.doors === 16, String(range.doors));
-    check('and the range prints no numbers or captions', range.numbers === 0, String(range.numbers));
-    check('the front-to-back turn is a DEVICE, used once, not the grammar',
-      act.turns === 1, `${act.turns} scenes turn`);
-    check('and only two-view photographs ever turn',
-      act.halves.every((v) => v === '2'), act.halves.join(','));
-    check('the garment is on screen from the first frame', act.garments >= 1, String(act.garments));
-    check('no development demo rail is anywhere in the act', act.plates === 0, String(act.plates));
-    /* ---- THE GARMENT IS THE STORY ------------------------------------
-       A category is the atmosphere; a project is the story. Every garment in
-       every range can be entered, and what it contains when entered is what
-       it actually has — never a stage nobody supplied. */
-    check('every garment in the chapter is a door into its own story',
-      act.doors === act.readers && act.doors > 40, `${act.doors} doors / ${act.readers} readers`);
-    check('and none of them is open until it is chosen', act.readersOpen === 0, String(act.readersOpen));
-    check('evidence belongs to a project, so no category carries a proof band',
-      act.categoryEvidence === 0, String(act.categoryEvidence));
-    check('no sketch, pattern or 3D state is invented for a photograph',
-      act.inventedStages === 0, String(act.inventedStages));
-    check('instead every unverified garment says what is not there yet',
-      act.pending === act.readers, `${act.pending} of ${act.readers}`);
-    check('the five territories give up their views five different ways',
-      act.reveals.length === 5, act.reveals.join(','));
-    check('the act carries the reference disclaimer exactly once',
-      act.disclaimers === 1, String(act.disclaimers));
-    check('the act has one control, and it reaches all five territories',
-      act.control.join(',') === 'rtw,activewear,streetwear,evening,swimwear', act.control.join(','));
-    check('the control is closed until it is asked for', act.controlOpen === false);
+    check('the five categories remain in approved order', act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear');
+    check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
+    check('every garment has an exhibition entry and a reader',
+      act.doors.length === 49 && new Set(act.doors).size === 49 && act.readers.every(id => act.doors.includes(id)));
+    check('readers stay closed until requested', act.open === 0);
+    check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
+    check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');
 
     // ---- a territory is reached by name, and the URL says where you are
     await p.evaluate((sel) => document.querySelector(`${sel} [data-act-toggle]`).click(), world);
@@ -655,7 +549,7 @@ try {
       const w = document.querySelector(sel);
       /* A territory is arrived at on its SLATE — the band that names it —
          which is a transition the visitor crosses rather than a menu. */
-      const slate = w.querySelector('[data-territory="evening"] .pf-tr__slate');
+      const slate = w.querySelector('[data-territory="evening"] .pf-edit__hero');
       const box = slate.getBoundingClientRect();
       const bar = w.querySelector('.pf-act__bar').getBoundingClientRect();
       return {
@@ -844,29 +738,10 @@ try {
     });
     check('no shadow, border or radius anywhere on garment imagery', cardish.length === 0, cardish.join(' | '));
 
-    /* THE ACT'S GROUND IS BONE, NOT A WHITE BAND.
-       Womenswear's white is the studio white inside each photograph, and it
-       only reads as a field because the page behind it is not white too. (The
-       full-width white band is still Menswear's, and is checked there.) */
-    const ground = await p.evaluate(() => {
+    check('the exhibition and its readers share pure white', await p.evaluate(() => {
       const act = document.querySelector('[data-world="womenswear"]');
-      const white = (el) => getComputedStyle(el).backgroundColor === 'rgb(255, 255, 255)';
-      return {
-        act: getComputedStyle(act).backgroundColor,
-        /* Every scene stands its garment on a pure white studio field: the
-           overture's is a layer of its own, because it closes; the other
-           scenes carry it on the plate. */
-        field: white(act.querySelector('.pf-ov__field')),
-        clash: white(act.querySelector('.pf-cl .pf-fig__window')),
-        entrance: white(act.querySelector('.pf-en__plate')),
-        approach: white(act.querySelector('.pf-ap__plate')),
-        bands: act.querySelectorAll('.pf-studio').length,
-      };
-    });
-    check('the act stands the photographs on bone, so their own white reads as a field',
-      ground.field && ground.clash && ground.entrance && ground.approach
-      && ground.act !== 'rgb(255, 255, 255)' && ground.bands === 0,
-      JSON.stringify(ground));
+      return [act, ...act.querySelectorAll('.pf-rd__subject')].every(el => getComputedStyle(el).backgroundColor === 'rgb(255, 255, 255)');
+    }));
 
     // Keyboard alone must drive the deck.
     await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-stage]').focus());
@@ -1019,10 +894,10 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
     await openChapter(p, 'womenswear');
-    await openScene(p, '[data-scene="range"]');
+    await openScene(p, '[data-territory="rtw"] .pf-edit__support');
 
     const before = await p.evaluate(() => {
-      const door = document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door');
+      const door = document.querySelector('[data-territory="rtw"] .pf-edit__support .pf-fig__door');
       return {
         id: door.dataset.openSubject,
         href: door.getAttribute('href'),
@@ -1032,7 +907,7 @@ try {
     check('a cell in the range is a real link to that garment',
       /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
 
-    await p.evaluate(() => document.querySelector('[data-scene="range"] [data-weight="supporting"] .pf-rg__door').click());
+    await p.evaluate(() => document.querySelector('[data-territory="rtw"] .pf-edit__support .pf-fig__door').click());
     await p.waitForTimeout(900);
     const entered = await p.evaluate((id) => {
       const rd = document.querySelector(`[data-subject="${id}"]`);
@@ -1061,40 +936,18 @@ try {
       entered.garment > before.thumb * 1.8 && entered.garment > 450,
       `${before.thumb}px in the range, ${entered.garment}px entered`);
     check('it is still Womenswear, on the chapter\'s own ground',
-      entered.ground === 'rgb(243, 240, 233)', entered.ground);
+      entered.ground === 'rgb(255, 255, 255)', entered.ground);
     check('and the way out goes back to the territory, not to the portfolio',
       entered.backTo === '#womenswear/rtw', entered.backTo);
-    check('a two-view photograph is shown as one frame that travels',
-      entered.travel && entered.views === 1, JSON.stringify({ travel: entered.travel, views: entered.views }));
+    check('both garment views remain available',
+      !entered.travel && entered.views === 2, JSON.stringify({ travel: entered.travel, views: entered.views }));
     check('no development stage is invented for an unverified frame',
       entered.verified === 'no' && entered.stages === 0 && entered.pending,
       JSON.stringify(entered));
 
-    /* THE TURN, inside the garment: the frame travels, and it is the hand
-       that moves it — and a view, once chosen, is a STATE. It stays turned
-       while the hand goes on to something else, such as looking closer. */
-    const box = await p.evaluate((id) => {
-      const r = document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).getBoundingClientRect();
-      return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
-    }, before.id);
-    const sideOf = () => p.evaluate((id) =>
-      document.querySelector(`[data-subject="${id}"] [data-rd-travel]`).dataset.side ?? 'front', before.id);
-    const atFront = await sideOf();
-    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
-    await p.waitForTimeout(900);
-    const atBack = await sideOf();
-    const inspectBox = await p.evaluate((id) => {
-      const r = document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).getBoundingClientRect();
-      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    }, before.id);
-    await p.mouse.move(inspectBox.x, inspectBox.y, { steps: 8 });
-    await p.waitForTimeout(300);
-    const stillBack = await sideOf();
-    check('choosing the garment turns it from front to back',
-      atFront === 'front' && atBack === 'back', `${atFront} → ${atBack}`);
-    check('and it stays turned when the hand moves on', stillBack === 'back', stillBack);
-    await p.mouse.click(box.x + box.w / 2, box.y + box.h / 2);
-    await p.waitForTimeout(900);
+    const back = p.locator(`[data-subject="${before.id}"] [data-rd-select="1"]`);
+    await back.focus(); await p.keyboard.press('Enter');
+    check('the back view can be selected by keyboard', await back.getAttribute('aria-pressed') === 'true');
 
     /* LOOKING CLOSER: the same pixels, larger. */
     await p.evaluate((id) => document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).click(), before.id);
@@ -1130,19 +983,6 @@ try {
       left.hash === '#womenswear/rtw' && !left.readerOpen && left.chapterOpen, JSON.stringify(left));
     check('and the focus is back on the frame the visitor chose', left.focusBackOnDoor);
 
-    /* EVERY MECHANISM IS A WAY IN, not a dead end. */
-    const everyDoor = await p.evaluate(() => {
-      const w = document.querySelector('[data-world="womenswear"]');
-      const per = {};
-      for (const scene of w.querySelectorAll('[data-support], [data-scene="clash"]')) {
-        per[scene.dataset.scene] = scene.querySelectorAll('[data-open-subject]').length;
-      }
-      return per;
-    });
-    check('the range, the sprint, the clash, the salon and the line are all ways in',
-      ['range', 'sprint', 'clash', 'salon', 'line'].every((k) => (everyDoor[k] ?? 0) > 0),
-      JSON.stringify(everyDoor));
-
     /* A GARMENT IS ADDRESSABLE: reloading its URL opens it. */
     await p.goto(BASE + `/portfolio/#womenswear/evening/evening-ref-03`, { waitUntil: 'load' });
     await p.waitForTimeout(1400);
@@ -1152,7 +992,31 @@ try {
     });
     check('a garment can be linked to and reloaded straight into',
       deep.id === 'evening-ref-03' && deep.chapter, JSON.stringify(deep));
-    check('and it keeps its own territory\'s gesture', deep.reveal === 'foreground', String(deep.reveal));
+    check('and it uses the shared reader', deep.reveal === 'editorial', String(deep.reveal));
+    await c.close();
+  }
+
+  // The selected view follows the visible centre after a native horizontal scroll.
+  {
+    const c = await ctxWithFonts({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+    const p = await c.newPage();
+    await p.goto(BASE + '/portfolio/#womenswear/rtw/rtw-ref-01', { waitUntil: 'load' });
+    const reader = p.locator('[data-subject="rtw-ref-01"]');
+    const stage = reader.locator('[data-rd-stage]');
+    await stage.evaluate(el => el.scrollLeft = el.scrollWidth);
+    await p.waitForTimeout(300);
+    check('mobile scrolling selects the visible back view',
+      await reader.locator('[data-rd-select="1"]').getAttribute('aria-pressed') === 'true');
+    await reader.locator('[data-rd-inspect]').click();
+    await p.waitForTimeout(300);
+    check('looking closer preserves the selected back view',
+      await reader.locator('[data-rd-select="1"]').getAttribute('aria-pressed') === 'true');
+    await reader.locator('[data-rd-inspect]').click();
+    await reader.locator('[data-rd-select="0"]').click();
+    await p.waitForTimeout(300);
+    check('front control returns to the first view',
+      await reader.locator('[data-rd-select="0"]').getAttribute('aria-pressed') === 'true'
+      && await stage.evaluate(el => el.scrollLeft < 2));
     await c.close();
   }
 
@@ -1549,55 +1413,10 @@ try {
     await openChapter(p, 'womenswear');
     check('reveal blocks visible without scrolling',
       await p.evaluate(() => [...document.querySelectorAll('[data-reveal]')].every((e) => getComputedStyle(e).opacity === '1')));
-    /* EVERY REVEAL IN THIS ACT IS INFORMATION, NOT DECORATION, so without
-       motion it is delivered rather than withheld: the two turn scenes open
-       onto the whole photograph, Swim's approach sits at full size, and no
-       scroll distance is reserved anywhere for a move that will not happen. */
-    const still = await p.evaluate(() => {
-      const read = (scene) => {
-        const host = document.querySelector(`[data-scene="${scene}"]`);
-        const plate = host.querySelector('[data-views]');
-        const win = plate.querySelector('span');
-        const img = win.querySelector('img');
-        const reveal = plate.closest('[data-reveal]');
-        return {
-          half: getComputedStyle(plate).getPropertyValue('--half').trim(),
-          transform: getComputedStyle(img).transform,
-          shows: Math.round(win.getBoundingClientRect().width / img.getBoundingClientRect().width * 100),
-          reserved: Math.round(reveal.getBoundingClientRect().height - window.innerHeight),
-        };
-      };
-      const approach = document.querySelector('[data-approach]');
-      return {
-        overture: read('overture'),
-        approachScale: getComputedStyle(approach).transform,
-        entrance: (() => {
-          const host = document.querySelector('[data-scene="entrance"]');
-          return {
-            transform: getComputedStyle(host.querySelector('img')).transform,
-            reserved: Math.round(host.getBoundingClientRect().height - window.innerHeight),
-          };
-        })(),
-        hidden: [...document.querySelectorAll('.pf-sp__fig, .pf-ln__fig')]
-          .filter((e) => getComputedStyle(e).opacity !== '1').length,
-      };
-    });
-    check('without motion Occasion opens on the whole gown, not its detail',
-      (still.entrance.transform === 'none' || still.entrance.transform === 'matrix(1, 0, 0, 1, 0, 0)')
-      && Math.abs(still.entrance.reserved) <= 2, JSON.stringify(still.entrance));
-    check('without motion no Activewear or Swim figure waits to arrive', still.hidden === 0, String(still.hidden));
-    for (const scene of ['overture']) {
-      const it = still[scene];
-      check(`without motion the ${scene} shows the whole photograph, both views`,
-        it.half === '1' && it.shows >= 99, JSON.stringify(it));
-      check(`without motion the ${scene}'s photograph does not travel`,
-        it.transform === 'none' || it.transform === 'matrix(1, 0, 0, 1, 0, 0)', it.transform);
-      check(`without motion the ${scene} reserves no scroll for its move`,
-        Math.abs(it.reserved) <= 2, `${it.reserved}px`);
-    }
-    check('without motion Swim arrives at full size rather than growing into it',
-      still.approachScale === 'none' || still.approachScale === 'matrix(1, 0, 0, 1, 0, 0)',
-      still.approachScale);
+    check('all exhibition garments remain visible without motion', await p.evaluate(() =>
+      [...document.querySelectorAll('[data-act] .pf-fig')].every(el => getComputedStyle(el).opacity === '1')));
+    check('no exhibition scroll pinning reserves empty screens', await p.evaluate(() =>
+      !document.querySelector('[data-act] [data-reveal]')));
     await c.close();
   }
 

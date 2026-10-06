@@ -22,7 +22,7 @@ interface Props {
 
 const { item, href, noun, crop, sizes, class: className, weight = 'supporting', style = '' } = Astro.props;
 const image = item.cover;
-const whole = crop === 'whole' || image.views !== 2;
+const whole = crop === 'whole' || image.views !== 2 || image.separable === false;
 const geom = `--front:${image.front};--aspect:${(image.width / image.height).toFixed(4)};`;
 ---
 <figure class:list={['pf-fig', className]} data-weight={weight} data-crop={whole ? 'whole' : 'front'}
