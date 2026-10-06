@@ -170,17 +170,6 @@ export interface DevelopmentStage {
   note?: string;
 }
 
-/** HOW A PROJECT GIVES UP ITS VIEWS.
- *  The information is consistent across the portfolio; the presentation is
- *  deliberately not, because a front/back switch repeated on every project is
- *  an e-commerce control rather than art direction.
- *    turn        the frame travels from one view to the other
- *    together    both views stand side by side, at rest
- *    foreground  the second view arrives small and then takes the front
- *    drag        the visitor moves between the views themselves
- *    single      there is one view, and nothing is invented to pad it */
-export type Reveal = 'turn' | 'together' | 'foreground' | 'drag' | 'single';
-
 /** AN EDITORIAL ROLE, not a quality rating. The designer decides how much
  *  space a project deserves; the interface obeys.
  *    hero        a major fashion moment with a story worth close attention
@@ -211,7 +200,6 @@ export interface Project {
      garment, and it is rendered only when a project supplies it. */
   decision?: string;
   role?: ProjectRole;
-  reveal?: Reveal;
   /* The three-stage shape the Menswear world's evidence strip still reads.
      New work uses `concept` and `development`, which hold more and say it
      more precisely; this stays so nothing already built has to change. */
@@ -697,7 +685,6 @@ export interface Subject {
   views: SubjectView[];
   origin: SubjectStage[];
   build: SubjectStage[];
-  reveal: Reveal;
   role: ProjectRole;
   title: string | null;
   garmentType: string | null;
@@ -779,7 +766,6 @@ export const projectSubject = (project: Project, world: string): Subject => {
     views: views.length > 0 ? views : [{ key: 'front', label: VIEW_LABEL.front, image: project.finalGarmentImage, crop: 'whole' }],
     origin,
     build,
-    reveal: project.reveal ?? (views.length > 1 ? 'turn' : 'single'),
     role: project.role ?? (project.spotlight ? 'hero' : 'supporting'),
     title: project.title,
     garmentType: project.garmentType,
@@ -797,7 +783,6 @@ export const referenceSubject = (
   reference: ReferenceImage,
   world: string,
   category: string,
-  reveal: Reveal,
 ): Subject => {
   /* A two-up whose models touch cannot be split without cutting one of the
      garments, so it is shown as the one frame it is: both views, whole. */
@@ -816,7 +801,6 @@ export const referenceSubject = (
       : [{ key: 'front', label: whole ? 'Front and back' : VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
     origin: [],
     build: [],
-    reveal: twoUp ? reveal : 'single',
     role: 'supporting',
     title: null,
     garmentType: null,

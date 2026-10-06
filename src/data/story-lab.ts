@@ -82,7 +82,6 @@ const project = (role: ProjectRole): Project => ({
   },
   decision: 'The one design decision this garment turns on, in the designer’s words, goes here.',
   role,
-  reveal: 'turn',
 });
 
 /** The lab's test subject at a given presentation weight. */

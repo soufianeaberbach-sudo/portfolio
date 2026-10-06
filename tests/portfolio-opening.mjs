@@ -659,8 +659,8 @@ try {
       await page.locator('[data-world="womenswear"] [data-territory]').count() === 5);
     check('and the first thing in it is a garment, not an interface',
       await page.evaluate(() => {
-        const scene = document.querySelector('[data-scene="overture"]');
-        const img = scene.querySelector('.pf-ov__window img');
+        const scene = document.querySelector('[data-territory="rtw"] .pf-edit__hero');
+        const img = scene.querySelector('.pf-edit__lead .pf-fig__window img');
         const box = img.getBoundingClientRect();
         return box.height > window.innerHeight * 0.8 && box.top < window.innerHeight * 0.2;
       }));
@@ -669,12 +669,12 @@ try {
        width, and on a tall screen it sits under it in its own band. */
     check('and no type is set across the garment',
       await page.evaluate(() => {
-        const img = document.querySelector('.pf-ov__window img').getBoundingClientRect();
-        const win = document.querySelector('.pf-ov__window').getBoundingClientRect();
+        const img = document.querySelector('.pf-edit__lead .pf-fig__window img').getBoundingClientRect();
+        const win = document.querySelector('.pf-edit__lead .pf-fig__window').getBoundingClientRect();
         /* The visible part of the photograph is the window, not the whole
            image: the rest is clipped. */
         const shown = { left: win.left, right: win.right, top: win.top, bottom: win.bottom };
-        return [...document.querySelectorAll('.pf-ov__name, .pf-sc__pointer')].every((el) => {
+        return [...document.querySelectorAll('[data-territory="rtw"] .pf-edit__title')].every((el) => {
           const b = el.getBoundingClientRect();
           return b.right <= shown.left + 1 || b.left >= shown.right - 1
             || b.bottom <= shown.top + 1 || b.top >= shown.bottom - 1;

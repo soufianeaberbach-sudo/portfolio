@@ -1,252 +1,41 @@
 ---
-/* WOMENSWEAR — ACT I.
- *
- * WHAT THIS IS
- *
- * One authored act in five territories, told in BEATS. A beat is a scene with
- * its own composition, its own pacing and its own typographic weight. The
- * score below says which beats a territory plays and in what order, and no
- * two territories play the same shape:
- *
- *   01 READY-TO-WEAR   overture ..................... sheet   (15)
- *   02 ACTIVEWEAR      slate ........................ deck    (6)
- *   03 STREETWEAR      pair
- *   04 OCCASION        slate · turn · evidence ...... rail    (8)
- *   05 SWIM            slate · approach ............. line    (8)
- *
- * THE RULE THIS FILE IS BUILT ON: THE WORK DECIDES THE PRESENTATION.
- *
- * An earlier version of this act was organised around a fact about the
- * current placeholder archive — that many of its photographs happen to hold a
- * front and a back view in one file — and turned that into the grammar of the
- * whole chapter. A temporary property of temporary images is not a creative
- * identity. So the front-to-back TURN is now one scene device among several,
- * used twice in the act and only where the back genuinely is the garment.
- *
- * HIERARCHY. Not every frame is worth the same. One frame per territory owns
- * a scene; the rest are supporting work, shown in the mechanism that territory
- * earns — a proof sheet for the broad one, a swipeable deck for the kinetic
- * one, a rack for the dramatic one, a single graphic line for the reduced one.
- * Four different mechanisms, one per territory, so depth of work reads as
- * depth rather than as a file count.
- *
- * COPY. Near-silence, on purpose. The territory's name, a true count, and one
- * pointer about what is actually in the frame. There is no line here that a
- * file cannot support: no project, no client, no construction reasoning read
- * off a photograph. The slots where a real project's own title and description
- * belong are wired and empty — see `lead()` and the hero scenes. When verified
- * work lands, the copy arrives with it and nothing about the composition has
- * to change.
- *
- * EVIDENCE. One proof beat, in Occasion, between the garment and the range —
- * garment, then a glimpse of the thinking, then garments again. It renders a
- * project's own sketch / pattern / simulation when there is one. Until then it
- * renders the STRUCTURE and says so. It is deliberately not a rail beside
- * every garment, and it is not the Development chapter moved in here.
- *
- * PRESERVED. The deck beat is the runway's own markup — `.pf-panel`,
- * `[data-stage]`, `[data-stack]`, `.pf-slot` — so drag, arrow keys, the
- * counter, the hash, focus and the server-rendered fallback keep working.
- */
-import type { GarmentWorld, MarketCategory, ImageAsset, Reveal, Subject } from '../../data/portfolio';
-import {
-  REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING,
-  projectSubject, referenceSubject, worldPublication,
-} from '../../data/portfolio';
+import type { GarmentWorld, MarketCategory, ImageAsset, Subject } from '../../data/portfolio';
+import { REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING, projectSubject, referenceSubject, worldPublication } from '../../data/portfolio';
+import { exhibitionImage } from '../../data/womenswear-exhibition';
 import Arrow from '../Arrow.astro';
 import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
-
-interface Props {
-  world: GarmentWorld;
-  /* The development-only story lab's test garment, which leads the named
-     territory. Never passed by the public page. */
-  lab?: { category: string; subject: Subject };
-}
-
+interface Props { world: GarmentWorld; lab?: { category: string; subject: Subject }; }
 const { world, lab } = Astro.props;
 const publication = worldPublication(world);
-
 const noun = publication === 'published' ? 'Project' : 'Reference';
-const unit = publication === 'published' ? 'projects' : 'frames';
-
-/* EVERY GARMENT IN THE CHAPTER IS A SUBJECT — one shape whether the territory
-   holds verified projects or, as now, reference photographs. The scenes below
-   never ask which; they render the subject and the subject tells the truth
-   about itself. */
-const pool = (category: MarketCategory, reveal: Reveal): Subject[] =>
-  publication === 'published'
-    ? [...category.projects]
-        /* Spotlit projects lead their territory; everything else keeps the
-           order it was given. */
-        .sort((a, b) => Number(b.spotlight ?? false) - Number(a.spotlight ?? false))
-        .map((p) => projectSubject(p, world.id))
-    : category.references.map((r) => referenceSubject(r, world.id, category.id, reveal));
-
-/* ---- THE SCORE ---------------------------------------------------------
-   `short` is the territory's name as the act says it out loud; the approved
-   full category label is always printed with it. `slate` is how the name
-   arrives, and it is not the same gesture twice: over the picture, led by the
-   count, or set as a plain name. */
-type Beat =
-  | { kind: 'overture'; slot: number }
-  | { kind: 'approach'; slot: number }
-  | { kind: 'range'; spreads: Spread[] }
-  | { kind: 'sprint'; from: number }
-  | { kind: 'clash'; slots: [number, number] }
-  | { kind: 'entrance'; slot: number }
-  | { kind: 'salon'; from: number }
-  | { kind: 'line'; from: number };
-
-/* READY-TO-WEAR'S RANGE is not a sheet of equal frames. It is a run of
-   SPREADS, each a different way of looking — and therefore a different weight
-   for the garments in it:
-     lead     one garment large, one standing quiet and far from it
-     duo      two at exactly one height on one floor, so the difference
-              between them is what is seen
-     open     one garment interrupting the run, its back arriving beside its
-              front across a field of studio white
-     lineup   a group on one floor, the breadth of the territory at a glance
-     close    the lead, mirrored: one garment large again, one quiet
-   Weight is presentation only. Every garment is a door, whatever its size. */
-type Spread = { kind: 'lead' | 'duo' | 'open' | 'lineup' | 'close'; slots: number[] };
-
-interface Territory {
-  id: string;
-  short: string;
-  slate: 'over' | 'count' | 'name' | 'loud';
-  /* HOW THIS TERRITORY'S GARMENTS GIVE UP THEIR VIEWS when one is entered.
-     The information — front and back — is the same everywhere; the gesture is
-     not, because a front/back switch repeated on every project is a shop
-     control rather than art direction. A verified project may override it
-     with its own. The territory's own character decides the default, which is
-     also how the reader keeps the category's mood. */
-  reveal: Reveal;
-  /* One true sentence about what is in these frames, or nothing. Silence is
-     the default: a line that cannot be supported is worse than no line. */
-  pointer?: [string, string];
-  beats: Beat[];
-}
-
-const score: Territory[] = [
-  {
-    /* THE BROAD TERRITORY. It leads with one long authored moment and then
-       hands over its depth all at once, because seventeen equal hero scenes
-       would be a file count rather than a body of work. */
-    id: 'rtw',
-    short: 'Ready-to-Wear',
-    slate: 'over',
-    /* The territory that introduced the move keeps it inside its garments. */
-    reveal: 'turn',
-    /* True of this photograph and the instruction for the move it is about to
-       make. The only design-thinking line in the act, and it is about the
-       frame, never about who made the garment. */
-    pointer: ['Front and back, in one frame.', 'The back is where the decision shows.'],
-    /* The run reads large, quiet, pair, interruption, group, pair, focus.
-       Slots are the territory's frames in archive order; the pairings are
-       chosen by what is VISIBLE in them (white lace against black leather,
-       two knits) and say nothing about who made them. */
-    beats: [
-      { kind: 'overture', slot: 0 },
-      {
-        kind: 'range',
-        spreads: [
-          { kind: 'lead', slots: [6, 2] },
-          { kind: 'duo', slots: [9, 10] },
-          { kind: 'open', slots: [3] },
-          { kind: 'lineup', slots: [1, 4, 5, 7, 8, 11, 12] },
-          { kind: 'duo', slots: [14, 15] },
-          { kind: 'close', slots: [16, 13] },
-        ],
-      },
-    ],
-  },
-  {
-    /* ACCELERATION. No garment is held here at all: the territory arrives
-       and the visitor is already moving through it, in one direction. Its
-       pace is the point. */
-    id: 'activewear',
-    short: 'Activewear',
-    slate: 'count',
-    /* Nothing waits here, so nothing is withheld: both views at once. */
-    reveal: 'together',
-    beats: [{ kind: 'sprint', from: 0 }],
-  },
-  {
-    /* THE INTERRUPTION. Two frames exist, so two frames are shown — once, on
-       a ground the act has not used, at scales nothing else is shown at, and
-       then it is over. Scarcity is the art direction. */
-    id: 'streetwear',
-    short: 'Streetwear',
-    slate: 'loud',
-    /* Attitude is control: the visitor moves between the views themselves. */
-    reveal: 'drag',
-    beats: [{ kind: 'clash', slots: [0, 1] }],
-  },
-  {
-    /* DECELERATION. The most space in the act and the fewest moments: on a
-       gown the back is not a second view, it is the garment, so the gowns
-       are shown whole, front and back together. */
-    id: 'evening',
-    short: 'Occasion',
-    slate: 'name',
-    /* Drama: the back arrives small and then takes the foreground. */
-    reveal: 'foreground',
-    beats: [
-      { kind: 'entrance', slot: 0 },
-      { kind: 'salon', from: 1 },
-    ],
-  },
-  {
-    /* RELEASE. These frames hold a single view, so there is nothing to turn
-       and nothing is invented: the movement is scale, the ground turns to
-       white, and the territory ends as a line of bodies in air. */
-    id: 'swimwear',
-    short: 'Swim',
-    slate: 'name',
-    /* These frames hold one view. Nothing is invented to make a second. */
-    reveal: 'single',
-    beats: [{ kind: 'approach', slot: 0 }, { kind: 'line', from: 1 }],
-  },
+const pool = (category: MarketCategory): Subject[] => publication === 'published'
+  ? [...category.projects].sort((a,b) => Number(b.spotlight ?? false)-Number(a.spotlight ?? false)).map(p => projectSubject(p,world.id))
+  : category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id));
+// Editorial selection refers to actual archive IDs, never position-dependent geometry.
+const edit = [
+  { id:'rtw', short:'Ready-to-Wear', hero:'rtw-ref-01', selected:['rtw-ref-07','rtw-ref-10','rtw-ref-11'] },
+  { id:'activewear', short:'Activewear', hero:'activewear-ref-08', selected:['activewear-ref-01','activewear-ref-04'] },
+  { id:'streetwear', short:'Streetwear', hero:'streetwear-ref-02', selected:['streetwear-ref-01'] },
+  { id:'evening', short:'Occasion', hero:'evening-ref-04', selected:['evening-ref-06','evening-ref-11'] },
+  { id:'swimwear', short:'Swim', hero:'swimwear-ref-06', selected:['swimwear-ref-01','swimwear-ref-04'] },
 ];
-
-const territories = score
-  .map((t) => {
-    const category = world.categories.find((c) => c.id === t.id);
-    if (!category) return null;
-    const slots = pool(category, t.reveal);
-    return { ...t, category, slots: lab?.category === t.id ? [lab.subject, ...slots] : slots };
-  })
-  .filter((t): t is Territory & { category: MarketCategory; slots: Subject[] } => !!t && t.slots.length > 0);
-
-/* Every subject in the act, in running order, so the reader can be rendered
-   from the server and so one garment can be stepped to from inside another. */
-const everySubject = territories.flatMap((t) =>
-  t.slots.map((subject, index) => ({ subject, territory: t, index })));
-
-/* THE DOOR. Every garment the chapter shows is one, in every mechanism: the
-   contact sheet's cells, the deck's cards, the pair, the rail's hangers and
-   Swim's line. A real anchor, so a subject is addressable, shareable and
-   reachable with the script gone — and so the range is a way into the work
-   rather than the end of it. */
+const territories = edit.flatMap(t => {
+  const category = world.categories.find(c => c.id === t.id);
+  if (!category) return [];
+  const slots = pool(category);
+  if(lab?.category === t.id) slots.unshift(lab.subject);
+  if(!slots.length) return [];
+  const hero = lab?.category === t.id ? lab.subject : slots.find(s => s.id === t.hero) ?? slots[0];
+  const selected = slots.filter(s => s !== hero && (s.verified ? s.role === 'featured' : t.selected.includes(s.id)));
+  const supporting = slots.filter(s => s !== hero && !selected.includes(s));
+  return [{...t,category,slots,hero,selected,supporting, paired: selected.length === 1 && supporting.length === 0}];
+});
+const everySubject = territories.flatMap(territory => territory.slots.map((subject,index) => ({subject,territory,index})));
 const door = (subject: Subject) => `#${world.id}/${subject.category}/${subject.id}`;
-
-/* Geometry every scene needs from a photograph: its aspect, and whether it
-   holds two views. A single-view frame is never shown half at a time. */
-/* What a FIGURE needs: the photograph's own aspect, and where its front view
-   ends. How much of the frame is shown — one figure or the whole thing — is
-   set by the `data-views` attribute in the stylesheet, so a scene can choose
-   without the markup arguing with it. */
-const geom = (image: ImageAsset) =>
-  `--front:${image.front};--aspect:${(image.width / image.height).toFixed(4)};`;
-/* What a SCENE needs when something outside the figure has to know the
-   figure's width — the overture's studio field, which closes to exactly it. */
-const plate = (image: ImageAsset) =>
-  `${geom(image)}--half:${image.views === 2 ? '.5' : '1'};`;
-const views = (image: ImageAsset) => (image.views === 2 ? '2' : '1');
-const pad = (n: number) => String(n).padStart(2, '0');
+const geom = (image: ImageAsset) => `--front:${image.front};--aspect:${(image.width/image.height).toFixed(4)};`;
+const pad = (n:number) => String(n).padStart(2,'0');
 ---
-
 <section
   class="pf-world pf-act"
   id={world.id}
@@ -289,382 +78,31 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     <h2 class="pf-act__sr" id={`${world.id}-title`}>{world.title}</h2>
 
-    {territories.map((t, index) => (
-        <article
-          class="pf-tr"
-          id={`${world.id}-${t.category.id}`}
-          data-movement={t.category.id}
-          data-territory={t.category.id}
-          data-slate={t.slate}
-          data-act-title={t.short}
-          data-beats={t.beats.map((b) => b.kind).join(' ')}
-          aria-labelledby={`${world.id}-${t.category.id}-title`}
-        >
-          {/* ---- THE SLATE --------------------------------------------------
-              How a territory announces itself. It is a transition the visitor
-              crosses, not a menu they stop at — and the gesture is different
-              each time: led by the count, set as a plain name, or set loud
-              where a territory has almost nothing else to say. Ready-to-Wear
-              has no slate at all: its name arrives over the opening picture,
-              so the act begins in fashion rather than on a title card. */}
-          {t.slate === 'over' ? (
-            <h3 class="pf-act__sr" id={`${world.id}-${t.category.id}-title`}>
-              {t.short} — {t.category.label}
-            </h3>
-          ) : (
-            <header class="pf-tr__slate" data-slate-gesture={t.slate}>
-              <p class="pf-tr__n label">{pad(index + 1)}</p>
-              <h3 class="pf-tr__name display" id={`${world.id}-${t.category.id}-title`}>{t.short}</h3>
-              <p class="pf-tr__meta label">
-                <span>{t.category.label}</span>
-                <i>{pad(t.slots.length)} {unit}</i>
-              </p>
-            </header>
-          )}
-
-          {t.beats.map((beat) => {
-            /* ---- OVERTURE --------------------------------------------------
-                THE FIRST THING AFTER THE COVER, and the act's opening set
-                piece. Three frames out of one photograph and no new asset:
-                the garment stands full height on a studio field that runs the
-                whole width of the screen; the FIELD then closes in around it
-                until the composition resolves and the type arrives; and only
-                then does the window travel to the back. Reward, then
-                composition, then reveal. */
-            if (beat.kind === 'overture') {
-              const item = t.slots[beat.slot];
-              if (!item) return null;
-              return (
-                <div class="pf-sc pf-sc--overture" data-scene="overture" data-reveal data-hero
-                     style={plate(item.cover)}>
-                  <div class="pf-sc__frame">
-                    <div class="pf-ov__field" data-ov-field></div>
-                    <figure class="pf-ov__plate" data-views={views(item.cover)} style={geom(item.cover)}>
-                      <span class="pf-ov__window" data-turn>
-                        <img
-                          src={item.cover.src}
-                          srcset={item.cover.srcset}
-                          sizes="(max-width: 767px) 92vw, 46vw"
-                          width={item.cover.width}
-                          height={item.cover.height}
-                          alt={item.cover.alt}
-                          loading="eager"
-                          fetchpriority="high"
-                          decoding="async"
-                        />
-                      </span>
-                    </figure>
-                    {/* The territory's name arrives OVER the picture as the
-                        field closes, so discovery happens inside the scene
-                        instead of stopping it. */}
-                    <div class="pf-ov__slate" data-ov-slate>
-                      <p class="pf-ov__name display">{t.short}</p>
-                      <p class="pf-ov__meta label">
-                        <b>{pad(index + 1)}</b>
-                        <span>{t.category.label}</span>
-                        <i>{pad(t.slots.length)} {unit}</i>
-                      </p>
-                    </div>
-                    {t.pointer && (
-                      <p class="pf-sc__pointer" data-ov-pointer>
-                        {t.pointer[0]} <b>{t.pointer[1]}</b>
-                      </p>
-                    )}
-                    {item.title && (
-                      <p class="pf-sc__work label">{item.title}</p>
-                    )}
-                    {/* THE AFFORDANCE, TAUGHT ONCE. The hero garment can be
-                        entered, and saying so here — quietly, in label type,
-                        after the composition has resolved — is what tells the
-                        visitor that every garment in the chapter can be. No
-                        button is printed on any other picture. */}
-                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
-                      <span>Enter this garment</span> <Arrow />
-                    </a>
-                  </div>
-                </div>
-              );
-            }
-
-            /* ---- APPROACH --------------------------------------------------
-                Scale, and nothing else. The figure arrives out of a field of
-                white — far, then whole — and is never cropped closer than the
-                complete silhouette, because a body crop is not what this
-                territory is about. */
-            if (beat.kind === 'approach') {
-              const item = t.slots[beat.slot];
-              if (!item) return null;
-              return (
-                <div class="pf-sc pf-sc--approach" data-scene="approach" data-reveal data-hero>
-                  <div class="pf-sc__frame">
-                    <figure class="pf-ap__plate" data-views={views(item.cover)} style={geom(item.cover)} data-approach>
-                      <span class="pf-ap__window">
-                        <img
-                          src={item.cover.src} srcset={item.cover.srcset}
-                          sizes="(max-width: 767px) 88vw, 42vw"
-                          width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
-                          loading="lazy" decoding="async"
-                        />
-                      </span>
-                    </figure>
-                    {item.title && <p class="pf-sc__work label">{item.title}</p>}
-                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
-                      <span>Enter this garment</span> <Arrow />
-                    </a>
-                  </div>
-                </div>
-              );
-            }
-
-            /* ---- RANGE ----------------------------------------------------
-                SUPPORTING WORK, READY-TO-WEAR, as an editorial run rather than
-                an index: a sequence of spreads, each a different way of
-                looking, so the territory is browsed the way a designer's book
-                is turned — large, quiet, a pair, an interruption, a group, a
-                pair, a last look. Every frame is still a door. Frames the
-                score does not place are never lost: they join the group. */
-            if (beat.kind === 'range') {
-              const placed = new Set(beat.spreads.flatMap((sp) => sp.slots));
-              const leftovers = t.slots.map((_, i) => i).filter((i) => i > 0 && !placed.has(i));
-              const spreads = beat.spreads
-                .map((sp) => ({
-                  ...sp,
-                  slots: sp.kind === 'lineup' ? [...sp.slots, ...leftovers] : sp.slots,
-                }))
-                .map((sp) => ({ ...sp, items: sp.slots.map((i) => t.slots[i]).filter(Boolean) }))
-                .filter((sp) => sp.items.length > 0);
-              /* THE WEIGHT of each place in a spread. Presentation only. */
-              const weightOf = (kind: Spread['kind'], at: number) =>
-                (kind === 'open' || ((kind === 'lead' || kind === 'close') && at === 0)) ? 'featured' : 'supporting';
-              return (
-                <div class="pf-sc pf-sc--range" data-scene="range" data-support>
-                  {spreads.map((sp) => (
-                    <section class={`pf-rg pf-rg--${sp.kind}`} data-spread={sp.kind}
-                             aria-label={sp.kind === 'lineup' ? `${t.short}, the range` : undefined}>
-                      {sp.items.map((item, at) => {
-                        /* An interruption shows the WHOLE photograph — front
-                           and back — where the frame holds two views; every
-                           other place shows the front, cut at its own
-                           measured edge. */
-                        const whole = sp.kind === 'open' || item.cover.views !== 2;
-                        return (
-                          <figure class="pf-rg__fig" data-weight={weightOf(sp.kind, at)}
-                                  data-crop={whole ? 'whole' : 'front'} style={geom(item.cover)}>
-                            <a class="pf-rg__door" href={door(item)} data-nav draggable="false" data-open-subject={item.id}
-                               aria-label={`${noun} — ${item.title ?? item.cover.alt}`}>
-                              <span class="pf-rg__window" data-door-source>
-                                <img
-                                  src={item.cover.src} srcset={item.cover.srcset}
-                                  sizes={weightOf(sp.kind, at) === 'featured' ? '(max-width: 767px) 80vw, 40vw' : '(max-width: 767px) 48vw, 18vw'}
-                                  width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
-                                  loading="lazy" decoding="async"
-                                />
-                              </span>
-                            </a>
-                          </figure>
-                        );
-                      })}
-                    </section>
-                  ))}
-                </div>
-              );
-            }
-
-            /* ---- SPRINT ----------------------------------------------------
-                ACTIVEWEAR. Acceleration: the act's quickest world and its
-                only one with a direction. Garments are set in HEATS that run
-                left to right — a field the figures enter growing, a band
-                cropped close to the body in motion, a field they leave
-                shrinking — overlapping, bleeding off the edges, with the
-                tightest spacing in the act. Still, it reads as movement. */
-            if (beat.kind === 'sprint') {
-              const items = t.slots.slice(beat.from);
-              if (items.length === 0) return null;
-              const heats = [
-                { kind: 'enter', items: items.slice(0, 4) },
-                { kind: 'body', items: items.slice(4, 6) },
-                { kind: 'exit', items: items.slice(6) },
-              ].filter((h) => h.items.length > 0);
-              return (
-                <div class="pf-sc pf-sc--sprint" data-scene="sprint" data-support>
-                  {heats.map((heat) => (
-                    <section class={`pf-sp pf-sp--${heat.kind}`} data-heat={heat.kind}>
-                      {heat.items.map((item, i) => (
-                        <ActFigure item={item} href={door(item)} noun={noun} crop="front"
-                                   class="pf-sp__fig"
-                                   weight={(heat.kind === 'enter' && i === heat.items.length - 1) || (heat.kind === 'exit' && i === 0) ? 'featured' : 'supporting'}
-                                   style={`--i:${i};--n:${heat.items.length};`}
-                                   sizes="(max-width: 767px) 50vw, 28vw" />
-                      ))}
-                    </section>
-                  ))}
-                </div>
-              );
-            }
-
-            /* ---- CLASH -----------------------------------------------------
-                STREETWEAR. The interruption, carried by the garments: an ink
-                field the act has not used before, one look shown whole — its
-                front and back together — and the other at a scale nothing
-                else in the act is shown at, cropped by the field, colliding
-                with the first. No motion. It is simply there. */
-            if (beat.kind === 'clash') {
-              const [a, b] = beat.slots.map((i) => t.slots[i]);
-              if (!a) return null;
-              return (
-                <div class="pf-sc pf-sc--clash" data-scene="clash" data-hero>
-                  <div class="pf-cl">
-                    <ActFigure item={a} href={door(a)} noun={noun} crop="whole" weight="featured"
-                               class="pf-cl__whole" sizes="(max-width: 767px) 92vw, 46vw" />
-                    {b && (
-                      <ActFigure item={b} href={door(b)} noun={noun} crop="front" weight="featured"
-                                 class="pf-cl__giant" sizes="(max-width: 767px) 90vw, 50vw" />
-                    )}
-                  </div>
-                </div>
-              );
-            }
-
-            /* ---- ENTRANCE --------------------------------------------------
-                OCCASION. The act slows down. One gown, shown WHOLE — front and
-                back in one frame, sleeves and train intact — and the visitor
-                arrives at it from the detail: the scene opens close on the
-                back and draws out, as the visitor scrolls, until the whole
-                silhouette stands in the room. Look at this. */
-            if (beat.kind === 'entrance') {
-              const item = t.slots[beat.slot];
-              if (!item) return null;
-              return (
-                <div class="pf-sc pf-sc--entrance" data-scene="entrance" data-reveal data-hero>
-                  <div class="pf-sc__frame">
-                    <figure class="pf-en__plate" style={geom(item.cover)}>
-                      <span class="pf-en__window" data-entrance>
-                        <img
-                          src={item.cover.src} srcset={item.cover.srcset}
-                          sizes="(max-width: 767px) 96vw, 60vw"
-                          width={item.cover.width} height={item.cover.height} alt={item.cover.alt}
-                          loading="lazy" decoding="async"
-                        />
-                      </span>
-                    </figure>
-                    {item.title && <p class="pf-sc__work label">{item.title}</p>}
-                    <a class="pf-sc__enter label" href={door(item)} data-nav draggable="false" data-open-subject={item.id}>
-                      <span>Enter this garment</span> <Arrow />
-                    </a>
-                  </div>
-                </div>
-              );
-            }
-
-            /* ---- SALON -----------------------------------------------------
-                OCCASION's other gowns, with ceremony rather than browsing:
-                two gowns each given a whole room — front and back shown
-                together, so the back detail an occasion gown is built around
-                is seen — set on opposite sides, and then the rest standing
-                as a procession in depth: a front rank and a rank behind it,
-                smaller, between. Every gown is still a door. */
-            if (beat.kind === 'salon') {
-              const items = t.slots.slice(beat.from);
-              if (items.length === 0) return null;
-              const rooms = items.slice(0, 2);
-              const rest = items.slice(2);
-              const front = rest.filter((_, i) => i % 2 === 0);
-              const behind = rest.filter((_, i) => i % 2 === 1);
-              return (
-                <div class="pf-sc pf-sc--salon" data-scene="salon" data-support>
-                  {rooms.map((item, i) => (
-                    <section class="pf-sa__room" data-side={i % 2 ? 'right' : 'left'}>
-                      <ActFigure item={item} href={door(item)} noun={noun} crop="whole" weight="featured"
-                                 class="pf-sa__gown" sizes="(max-width: 767px) 96vw, 56vw" />
-                    </section>
-                  ))}
-                  {rest.length > 0 && (
-                    <section class="pf-sa__procession" aria-label={`${t.short}, the procession`}>
-                      <div class="pf-sa__rank pf-sa__rank--behind">
-                        {behind.map((item) => (
-                          <ActFigure item={item} href={door(item)} noun={noun} crop="front"
-                                     class="pf-sa__fig" sizes="(max-width: 767px) 30vw, 12vw" />
-                        ))}
-                      </div>
-                      <div class="pf-sa__rank pf-sa__rank--front">
-                        {front.map((item) => (
-                          <ActFigure item={item} href={door(item)} noun={noun} crop="front"
-                                     class="pf-sa__fig" sizes="(max-width: 767px) 40vw, 16vw" />
-                        ))}
-                      </div>
-                    </section>
-                  )}
-                </div>
-              );
-            }
-
-            /* ---- LINE ------------------------------------------------------
-                SWIM, after the drama: release. The ground goes to white, so
-                the studio white of the photographs disappears into it and
-                only bodies and line remain; the figures stand as three short
-                phrases — three, two, three — each placed differently on the
-                width, with the most air in the act between them. */
-            if (beat.kind === 'line') {
-              const items = t.slots.slice(beat.from);
-              if (items.length === 0) return null;
-              const phrases = [items.slice(0, 3), items.slice(3, 5), items.slice(5)].filter((g) => g.length > 0);
-              return (
-                <div class="pf-sc pf-sc--line" data-scene="line" data-support>
-                  <div class="pf-ln" role="group" aria-label={`${t.short}, the line`}>
-                    {phrases.map((phrase, pi) => (
-                      <div class="pf-ln__phrase" data-phrase={pi}>
-                        {phrase.map((item) => (
-                          <ActFigure item={item} href={door(item)} noun={noun} crop="whole"
-                                     class="pf-ln__fig" sizes="(max-width: 767px) 44vw, 18vw" />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            }
-
-            return null;
-          })}
-
+    {territories.map((t,index) => (
+      <article class="pf-tr" id={`${world.id}-${t.id}`} data-movement={t.id} data-territory={t.id}
+        data-act-title={t.short} aria-labelledby={`${world.id}-${t.id}-title`}>
+        <div class="pf-edit__hero" data-paired={t.paired ? '' : undefined} data-hero>
+          <header class="pf-edit__title">
+            <p class="label pf-edit__chapter">Womenswear <span>{pad(index+1)}</span></p>
+            <h3 class="display" id={`${world.id}-${t.id}-title`}>{t.short}</h3>
+            <a class="pf-edit__enter label" href={door(t.hero)} data-nav data-open-subject={t.hero.id}>Enter the garment <Arrow /></a>
+          </header>
+          <ActFigure item={t.hero} href={door(t.hero)} noun={noun} crop="front" sizes="(max-width: 767px) 92vw, 55vw" class="pf-edit__lead" weight="featured" />
+          {t.paired && <ActFigure item={t.selected[0]} href={door(t.selected[0])} noun={noun} crop="front" sizes="(max-width: 767px) 46vw, 32vw" class="pf-edit__companion" weight="featured" />}
+        </div>
+        {t.selected.length > 0 && !t.paired && (
+          <div class="pf-edit__selected" aria-label={`${t.short} selected work`}>
+            {t.selected.map(item => <ActFigure item={item} href={door(item)} noun={noun} crop="front" sizes="(max-width: 767px) 48vw, 36vw" weight="featured" />)}
+          </div>
+        )}
+        {t.supporting.length > 0 && (
+          <div class="pf-edit__support" role="region" aria-label={`${t.short} further garments`} tabindex="0">
+            {t.supporting.map(item => <ActFigure item={item} href={door(item)} noun={noun} crop="front" sizes="(max-width: 767px) 48vw, 22vw" />)}
+          </div>
+        )}
       </article>
     ))}
 
-
-    {/* ================= THE PROJECT ==================================
-        A garment is not one image among many once it has been chosen. It
-        becomes THE SUBJECT, and it gets its own short film — inside the act,
-        not on a page of its own: the chapter's ground, the chapter's bar and
-        the territory's own reveal gesture all stay.
-
-        WHAT A READER CONTAINS is what the subject contains, and nothing else:
-
-          THE VIEWS      the finished garment, in every view that exists. This
-                         is the part that answers the real complaint about a
-                         range of small pictures — here the garment is as large
-                         as the screen allows, and it can be inspected closer.
-          THE ORIGIN     the sketch or illustration, where one was supplied.
-          THE BUILD      flat, pattern, 3D, fit — again, only where supplied.
-          THE RETURN     the final view once more. It only appears when there
-                         was a process to come back FROM: seeing the garment
-                         again after the pattern is the payoff, and a return
-                         with nothing behind it is just a repeat.
-
-        WHAT IT NEVER CONTAINS is a stage nobody supplied. A reference
-        photograph has final views and no history, so its reader shows the
-        views and then says, in one sentence, where the history will go. No
-        sketch, pattern or 3D state is ever drawn, borrowed or implied.
-
-        HOW MUCH ROOM a subject gets is the designer's decision, carried by
-        `role` — and it is presentation weight, never access. Every stage a
-        project supplied is in its reader: a hero tells the story at full
-        scale and returns to the result, a featured one tells it closer
-        together, a supporting one keeps it folded behind one invitation. The
-        stages are the architecture; the weight is the art direction.
-
-        The story is designed against the development-only lab
-        (src/pages/lab/[story].astro), because no verified project in the
-        archive supplies its process yet. */}
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
         /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
@@ -689,25 +127,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
         const pattern = construction.find((st) => st.key === 'pattern') ?? construction[0];
         const flat = construction.find((st) => st !== pattern);
         const storyId = `${subject.id}-story`;
-        /* Do the two views live in the SAME photograph? Then there is one
-           frame to travel rather than two frames to stack — and that is a
-           property of the files, asked rather than assumed, so a project
-           supplying separate front and back files gets the other treatment
-           without anything here changing. */
-        const travel = subject.reveal === 'turn'
-          && subject.views.length > 1
-          && subject.views[0].image.src === subject.views[1].image.src;
-        /* The gesture is carried as `data-rd-reveal`, never `data-reveal`:
-           that name is the site's scroll-reveal hook, which held every reader
-           at zero opacity and faded it in over the range behind it. */
         return (
           <article
             class="pf-rd__subject"
             id={`${world.id}-${subject.category}-${subject.id}`}
             data-subject={subject.id}
             data-of={subject.category}
-            data-rd-reveal={subject.reveal}
-            data-travel={travel ? '' : undefined}
+            data-rd-reveal="editorial"
             data-role={subject.role}
             data-verified={subject.verified ? 'yes' : 'no'}
             data-fixture={subject.fixture ? '' : undefined}
@@ -734,8 +160,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
             </header>
 
             {/* ---- THE VIEWS. The garment, at the size a garment has to be
-                looked at, and the territory's own gesture for giving up the
-                second view. */}
+                looked at, with the same front/back access in every category. */}
             <section class="pf-rd__views" data-rd-views aria-label="The garment">
               <div class="pf-rd__type">
                 {/* A verified project is named by its title. A reference is
@@ -766,7 +191,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                   </button>
                   {subject.views.length > 1 && (
                     <p class="pf-rd__views-of label" data-rd-count>
-                      {subject.views.map((v) => v.label).join(' · ')}
+                      {subject.views.map((v,vi) => <button type="button" data-rd-select={vi} aria-pressed={vi === 0 ? 'true' : 'false'}>{v.label}</button>)}
                     </p>
                   )}
                 </div>
@@ -783,30 +208,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 )}
               </div>
               <div class="pf-rd__stage" data-rd-stage>
-                {travel ? (
-                  /* ONE FRAME, TRAVELLED. Where both views live in the same
-                      photograph, the honest way to move between them is to
-                      move the frame — the same camera move the territory's
-                      own hero scene makes, and here it is the visitor's hand
-                      that makes it. The distance is the photograph's own
-                      measured front fraction, not a flat half. */
-                  <figure class="pf-rd__view pf-rd__view--travel" data-view="both" data-crop="front"
-                          data-rd-travel style={geom(subject.views[0].image)}>
-                    <span class="pf-rd__window" data-rd-window>
-                      <img
-                        src={subject.views[0].image.src} srcset={subject.views[0].image.srcset}
-                        sizes="(max-width: 767px) 92vw, 46vw"
-                        width={subject.views[0].image.width} height={subject.views[0].image.height}
-                        alt={subject.views[0].image.alt}
-                        loading="lazy" decoding="async"
-                      />
-                    </span>
-                    <figcaption class="pf-rd__vname label">
-                      <span data-rd-vfront>Front</span>
-                      <span data-rd-vback>Back</span>
-                    </figcaption>
-                  </figure>
-                ) : (
+                {
                   subject.views.map((v, vi) => (
                     <figure class="pf-rd__view" data-view={v.key} data-crop={v.crop} data-index={vi}
                             style={geom(v.image)}>
@@ -821,7 +223,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                       <figcaption class="pf-rd__vname label">{v.label}</figcaption>
                     </figure>
                   ))
-                )}
+                }
               </div>
             </section>
 
@@ -846,7 +248,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                       {/* What the drawing became, on the same floor as the
                           drawing — the eye reads from one to the other. */}
                       {front && (
-                        <figure class="pf-st__became" data-st-item data-crop={travel ? 'front' : front.crop} style={geom(front.image)}>
+                        <figure class="pf-st__became" data-st-item data-crop={front.crop} style={geom(front.image)}>
                           <span class="pf-st__window">
                             <img
                               src={front.image.src} srcset={front.image.srcset}
@@ -923,10 +325,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
             {returns && front && (
               <section class="pf-st__mv pf-st__mv--return" data-st-beat="The result" aria-label="The result">
                 <div class="pf-st__result" data-st-item>
-                  {(travel
-                    ? [{ ...front, crop: 'whole' as const }]
-                    : subject.views.slice(0, 2)
-                  ).map((v) => (
+                  {subject.views.slice(0, 2).map((v) => (
                     <figure class="pf-st__final" data-crop={v.crop} style={geom(v.image)}>
                       <span class="pf-st__window">
                         <img
