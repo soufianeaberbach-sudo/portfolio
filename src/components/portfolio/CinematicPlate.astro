@@ -1,0 +1,16 @@
+---
+import type { Subject } from '../../data/portfolio';
+import { rtwSplit, rtwWindows } from '../../data/rtw-direction';
+interface Props { subject: Subject; eager?: boolean; }
+const { subject, eager = false } = Astro.props;
+const image = subject.cover;
+const split = rtwSplit[subject.id] ?? 1;
+const bounds = rtwWindows[subject.id] ?? {front: [0,split], back: [split,1]};
+const window = split === 1 ? 1 : Math.max(bounds.front[1]-bounds.front[0],bounds.back[1]-bounds.back[0]);
+---
+<span class="rtw-photo" data-door-source data-rtw-photo data-split={split} data-front={bounds.front.join(",")} data-back={bounds.back.join(",")}
+      style={`--aspect:${image.width / image.height};--window:${window};--view:0;`}>
+  <img src={image.src} srcset={image.srcset} sizes="(max-width: 767px) 100vw, 72vw"
+       width={image.width} height={image.height} alt={image.alt}
+       loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
+</span>

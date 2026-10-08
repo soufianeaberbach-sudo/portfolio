@@ -1,0 +1,100 @@
+/* White belongs to the RTW floor, never the protected opening or other territories. */
+.pf-tr[data-territory='rtw'] { padding: 0; background: #fff; }
+.pf-act[data-rtw-floor] .pf-act__bar { background: transparent; backdrop-filter: none; }
+.pf-act[data-rtw-floor] .pf-act__where { pointer-events: none; }
+.pf-act[data-rtw-floor] .pf-act__where:focus-within { pointer-events: auto; }
+.pf-act[data-rtw-floor] .pf-act__now { opacity: 0; pointer-events: none; }
+.pf-act[data-rtw-floor] .pf-act__now:focus-visible { opacity: 1; pointer-events: auto; }
+.rtw-prototype { background: #fff; color: var(--ink); }
+.rtw-camera { height: 680svh; }
+.rtw-stage { position: sticky; top: 0; height: 100svh; overflow: clip; isolation: isolate; background: #fff; }
+.rtw-cast { position: absolute; inset: 0; }
+.rtw-actor { position: absolute; top: 0; left: 0; display: block; transform-origin: center bottom; text-decoration: none; --photo-h: 92svh; }
+.rtw-actor:not([data-rtw-actor='anchor']) { opacity: 0; }
+.rtw-actor[data-rtw-actor='anchor'] { left: 62%; top: 5svh; transform: translateX(-50%) scale(.89); }
+.rtw-photo { display: block; position: relative; height: var(--photo-h, 50svh); width: calc(var(--photo-h, 50svh) * var(--aspect) * var(--window)); overflow: hidden; background: #fff; }
+.rtw-photo img { display: block; width: auto; max-width: none; height: 100%; transform-origin: 0 0; }
+.rtw-actor:focus-visible, .rtw-rail a:focus-visible, .rtw-last:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  .rtw-actor:hover { cursor: zoom-in; }
+  .rtw-rail a:hover { transform: translateY(-6px); }
+}
+.rtw-title { position: absolute; z-index: 7; left: 8vw; top: 29svh; pointer-events: none; }
+.rtw-title .display { font-size: clamp(4rem, 8.5vw, 9.5rem); font-variation-settings: 'wdth' 82; letter-spacing: -.055em; line-height: .88; }
+.rtw-title .label { margin: 0 0 2rem; font-size: .58rem; letter-spacing: .15em; }
+.rtw-title b { color: #c7020c; font-weight: 400; }
+.rtw-orientation { position: sticky; top: 0; height: 0; z-index: 35; }
+.rtw-running { position: absolute; top: 1.2rem; right: var(--gutter); z-index: 8; margin: 0; font-size: .52rem; opacity: 0; }
+.rtw-side { position: absolute; left: 8vw; bottom: 5svh; font-size: .55rem; color: #c7020c; opacity: 0; }
+.rtw-payoff { position: absolute; bottom: 3svh; left: var(--gutter); margin: 0; font-size: .52rem; opacity: 0; }
+.rtw-signal { position: absolute; width: 1px; height: 9svh; background: #c7020c; left: 43%; bottom: 8svh; transform-origin: bottom; opacity: 0; }
+.rtw-archive { padding: 4svh var(--gutter) 6svh; background: #fff; }
+.rtw-archive > p { margin: 0 0 3svh; font-size: .53rem; }
+.rtw-rail { display: flex; align-items: flex-end; gap: 1.2rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 1rem .5rem; margin-inline: -.5rem; scrollbar-width: thin; scrollbar-color: #ddd #fff; }
+.rtw-rail a { display: block; flex: 0 0 auto; scroll-snap-align: start; text-decoration: none; transition: transform 180ms ease-out; --photo-h: 38svh; }
+.rtw-rail:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
+.rtw-handoff { position: relative; height: 100svh; overflow: clip; background: #fff; }
+.rtw-last { position: absolute; display: block; left: 50%; top: 15svh; transform: translateX(-50%); --photo-h: 78svh; }
+.rtw-handoff > p[data-rtw-next] { position: absolute; top: 45svh; left: 12vw; font-size: .66rem; margin: 0; opacity: 0; }
+.rtw-handoff-line { position: absolute; top: 42svh; left: 12vw; width: 8vw; height: 1px; background: #c7020c; transform-origin: left; transform: scaleX(0); }
+.rtw-end { position: absolute; bottom: 5svh; left: var(--gutter); font-size: .5rem; color: var(--muted); }
+/* Reader furniture comes after the garment is entered. The image remains the stage. */
+.pf-rd__subject.rtw-reader { display: block; background: #fff; padding: 0; z-index: 42; overflow: auto; }
+.pf-rd__subject.rtw-reader[hidden] { display: none; }
+.rtw-reader-head { position: relative; z-index: 4; height: 3.5rem; display: flex; justify-content: space-between; align-items: center; padding: 0 var(--gutter); background: #fff; }
+.rtw-reader-head .label { font-size: .54rem; margin: 0; }
+.rtw-reader-head a { text-decoration: none; padding-block: 1rem; }
+.rtw-reader-floor { position: relative; height: calc(100svh - 3.5rem); min-height: 400px; overflow: hidden; }
+.rtw-reader-image { position: absolute; top: 0; left: 58%; transform: translateX(-50%); --photo-h: calc(96svh - 3.5rem); }
+.rtw-reader-copy { position: absolute; left: 7vw; top: 40%; width: 25vw; }
+.rtw-reader-copy h3 { font-family: var(--display); font-weight: 500; font-size: clamp(1rem, 1.4vw, 1.35rem); line-height: 1.35; letter-spacing: -.02em; margin: 0 0 1rem; }
+.rtw-reader-copy p { font-size: .48rem; color: var(--muted); }
+.rtw-reader-controls { position: absolute; bottom: 2rem; left: 7vw; z-index: 5; display: flex; gap: 1rem; align-items: center; }
+.rtw-reader-controls button { min-height: 44px; min-width: 44px; padding: .5rem 0; border: 0; background: transparent; font-size: .64rem; cursor: pointer; }
+.rtw-reader-controls button[aria-pressed='true'] { color: #c7020c; }
+.rtw-reader button:focus-visible, .rtw-reader a:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
+.rtw-reader-truth { padding: 2rem 7vw 3rem; max-width: 35rem; color: var(--muted); font-size: .7rem; line-height: 1.6; }
+.rtw-reader[data-inspect] .rtw-reader-image { cursor: move; touch-action: none; }
+.rtw-reader[data-inspect] .rtw-reader-copy { opacity: 0; pointer-events: none; }
+.rtw-match { position: fixed; z-index: 350; pointer-events: none; margin: 0; transform-origin: top left; }
+@media (max-width: 767px) {
+  .rtw-camera { height: 540svh; }
+  .rtw-title { left: 6vw; top: 9svh; }
+  .rtw-title .display { font-size: clamp(3.1rem, 14vw, 6rem); font-variation-settings: 'wdth' 78; }
+  .rtw-title .label { margin-bottom: 1.3rem; font-size: .48rem; }
+  .rtw-running { font-size: .45rem; top: 1.3rem; }
+  .rtw-side { left: 6vw; bottom: 4svh; }
+  .rtw-rail a { --photo-h: 39svh; }
+  .rtw-archive { padding-top: 3svh; padding-bottom: 4svh; }
+  .rtw-handoff { height: 100svh; }
+  .rtw-last { --photo-h: 76svh; top: 13svh; }
+  .rtw-handoff > p[data-rtw-next] { left: 6vw; font-size: .6rem; }
+  .rtw-handoff-line { left: 6vw; width: 18vw; }
+  .rtw-reader-head { height: 3rem; }
+  .rtw-reader-head .label { font-size: .45rem; }
+  .rtw-reader-floor { height: calc(100svh - 3rem); }
+  .rtw-reader-image { --photo-h: 80svh; left: 50%; top: 0; }
+  .rtw-reader-copy { left: 6vw; top: auto; bottom: 2.7rem; width: 88vw; }
+  .rtw-reader-copy h3 { font-size: .67rem; max-width: 32em; margin-bottom: .4rem; }
+  .rtw-reader-copy p { display: none; }
+  .rtw-reader-controls { bottom: .45rem; left: 6vw; gap: 1.4rem; }
+  .rtw-reader-controls button { font-size: .62rem; }
+}
+/* No motion, no hidden cast. Same photographs and reader access in a compact resting exhibition. */
+.rtw-prototype[data-static] .rtw-camera { height: auto; }
+.rtw-prototype[data-static] .rtw-stage { position: relative; height: auto; min-height: 100svh; padding: 15svh var(--gutter) 6svh; overflow: visible; }
+.rtw-prototype[data-static] .rtw-title { position: relative; top: auto; left: auto; margin-bottom: 3rem; }
+.rtw-prototype[data-static] .rtw-cast { position: relative; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-end; gap: 3rem 1rem; }
+.rtw-prototype[data-static] .rtw-actor { position: relative; left: auto; top: auto; transform: none; opacity: 1; --photo-h: 60svh; }
+.rtw-prototype[data-static] .rtw-actor[data-rtw-actor='anchor'] { --photo-h: 80svh; }
+.rtw-prototype[data-static] .rtw-last { left: 70%; }
+.rtw-prototype[data-static] [data-rtw-next] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .rtw-rail a { transition: none; } }
+
+@media (min-width:768px) and (max-width:1023px) and (orientation:portrait) {
+  .rtw-title { top: 10svh; left: 6vw; }
+  .rtw-title .display { font-size: 8vw; }
+  .rtw-camera { height: 580svh; }
+}
+
+.pf-act[data-rtw-floor]:has(.pf-act__where:focus-within) .rtw-running { visibility: hidden; }

@@ -1,0 +1,53 @@
+---
+import type { Subject } from '../../data/portfolio';
+import { rtwCast } from '../../data/rtw-direction';
+import CinematicPlate from './CinematicPlate.astro';
+interface Props { subjects: Subject[]; world: string; }
+const { subjects, world } = Astro.props;
+const cast = rtwCast.map(part => ({ ...part, subject: subjects.find(s => s.id === part.id)! })).filter(p => p.subject);
+const archive = subjects;
+const href = (s: Subject) => `#${world}/rtw/${s.id}`;
+---
+<div class="rtw-prototype" data-rtw-prototype>
+  <div class="rtw-orientation"><p class="rtw-running label" data-rtw-running>01 / READY-TO-WEAR</p></div>
+  <div class="rtw-camera" data-rtw-camera>
+    <div class="rtw-stage" data-rtw-stage aria-label="Selected Ready-to-Wear exhibition">
+      <div class="rtw-title" data-rtw-title>
+        <p class="label">WOMENSWEAR / <b>01</b></p>
+        <p class="display">READY—<br />TO—WEAR</p>
+      </div>
+      <div class="rtw-cast" data-rtw-cast>
+        {cast.map(({role,subject}) => (
+          <a class="rtw-actor" data-rtw-actor={role} href={href(subject)} data-nav data-open-subject={subject.id}
+             aria-label={`Enter reference: ${subject.cover.alt}`} draggable="false">
+            <CinematicPlate subject={subject} eager />
+          </a>
+        ))}
+      </div>
+      <p class="rtw-side label" data-rtw-side aria-hidden="true">FRONT</p>
+      <p class="rtw-payoff label" data-rtw-payoff>SELECTED READY-TO-WEAR / {String(cast.length).padStart(2,'0')}</p>
+      <span class="rtw-signal" data-rtw-signal aria-hidden="true"></span>
+    </div>
+  </div>
+  <section class="rtw-archive" aria-label="Further Ready-to-Wear references">
+    <p class="label">REFERENCE ARCHIVE / {String(archive.length).padStart(2,'0')}</p>
+    <div class="rtw-rail" tabindex="0" aria-label="Ready-to-Wear archive; scroll horizontally for more">
+      {archive.map(subject => (
+        <a href={href(subject)} data-nav data-open-subject={subject.id} draggable="false"
+           aria-label={`Enter reference: ${subject.cover.alt}`}>
+          <CinematicPlate subject={subject} />
+        </a>
+      ))}
+    </div>
+  </section>
+  <div class="rtw-handoff" data-rtw-handoff aria-label="End of the Ready-to-Wear prototype">
+    <a class="rtw-last" href={href(cast[0].subject)} data-nav data-open-subject={cast[0].subject.id}
+       aria-label={`Enter reference: ${cast[0].subject.cover.alt}`}><CinematicPlate subject={cast[0].subject} /></a>
+    <span class="rtw-handoff-line" aria-hidden="true"></span>
+    <p class="label" data-rtw-next>02 / ACTIVEWEAR</p>
+    <p class="rtw-end label">END OF RTW STUDY</p>
+  </div>
+</div>
+<script>
+  import '../../scripts/rtw-cinematic';
+</script>

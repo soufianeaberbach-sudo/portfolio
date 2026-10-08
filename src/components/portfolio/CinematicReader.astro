@@ -1,0 +1,31 @@
+---
+import type { Subject } from '../../data/portfolio';
+import { rtwSplit } from '../../data/rtw-direction';
+import CinematicPlate from './CinematicPlate.astro';
+interface Props { subject: Subject; world: string; }
+const { subject, world } = Astro.props;
+const split = rtwSplit[subject.id];
+---
+<article class="pf-rd__subject rtw-reader" data-rtw-reader data-subject={subject.id} data-of="rtw"
+         data-role={subject.role} data-verified={subject.verified ? 'yes' : 'no'}
+         id={`${world}-rtw-${subject.id}`} aria-labelledby={`${subject.id}-rd-title`} tabindex="-1" hidden>
+  <header class="rtw-reader-head">
+    <a href={`#${world}/rtw`} data-nav data-subject-close class="label">← RETURN</a>
+    <p class="label">01 / READY-TO-WEAR</p>
+  </header>
+  <div class="rtw-reader-floor">
+    <div class="rtw-reader-image" data-rtw-target><CinematicPlate subject={subject} /></div>
+    <div class="rtw-reader-copy">
+      <h3 id={`${subject.id}-rd-title`}>{subject.title ?? subject.caption ?? subject.cover.alt}</h3>
+      <p class="label">REFERENCE PHOTOGRAPHY</p>
+    </div>
+    <div class="rtw-reader-controls" aria-label="Garment views">
+      {split != null && <>
+        <button type="button" class="label" data-rtw-view="0" aria-pressed="true">FRONT</button>
+        <button type="button" class="label" data-rtw-view="1" aria-pressed="false">BACK</button>
+      </>}
+      <button type="button" class="label" data-rd-inspect aria-pressed="false">LOOK CLOSER</button>
+    </div>
+  </div>
+  <p class="rtw-reader-truth" data-subject-pending>Reference photography only. No verified development evidence is published for this garment.</p>
+</article>

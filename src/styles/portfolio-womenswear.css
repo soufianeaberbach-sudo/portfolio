@@ -45,7 +45,7 @@
    into every scene, and at 390px that capped a two-up plate at half the
    height it could actually have. */
 .pf-act { --ww-accent: #c7020c; }
-.pf-ov__plate, .pf-ap__plate, .pf-en__plate {
+.pf-ap__plate, .pf-en__plate {
   --fit-h: calc((100vw - 2 * var(--edge)) / (var(--aspect, .75) * var(--half, 1)));
 }
 /* HOW MUCH OF A FRAME A SCENE SHOWS, for the whole act in two rules: a two-up
@@ -221,98 +221,6 @@
   margin: 0; color: var(--muted); font-size: .52rem;
 }
 
-/* ================= SET PIECE 01 — THE OVERTURE ==========================
-   The first thing after the cover, and the whole opening of the act in one
-   pinned block and one photograph.
-
-     phase 1   the garment stands at full frame height on a studio field that
-               runs the entire width of the screen. No type. Fashion first.
-     phase 2   the FIELD closes in around the garment until the composition
-               resolves, and the territory's name and the pointer arrive with
-               it. Discovery happens inside the scene.
-     phase 3   and only then does the window travel to the back.
-
-   `--arrive` drives phase 2 and `--turn` phase 3; both are set from one
-   scroll handler, and neither touches layout. */
-.pf-act .pf-sc--overture {
-  --track: 170svh;
-  /* The overture is the one scene that is NOT held to the measure: its field
-     has to reach both edges of the screen before it closes, or the gesture is
-     a box shrinking inside a box. The type inside it carries the measure
-     instead. */
-  padding-inline: 0;
-}
-.pf-sc--overture .pf-sc__frame { place-items: end center; }
-
-/* THE FIELD. At --arrive 0 it is the width of the screen; at 1 it is exactly
-   the window's width, and from then on it is simply the picture's own ground.
-   Clip rather than width, so nothing reflows. */
-.pf-ov__field {
-  position: absolute; inset: 0;
-  background: #fff;
-  /* It closes to EXACTLY the window's width, so the studio field resolves
-     into the photograph's own white and there is no second white left over.
-     The window's width is solved from the height the plate is shown at and
-     the photograph's own aspect — the same two numbers the plate uses. */
-  --win: calc(var(--look-h, 92svh) * var(--aspect, .75) * var(--half, 1));
-  --in: calc(var(--arrive, 1) * max(0px, (100% - var(--win)) / 2));
-  clip-path: inset(0 var(--in) 0 var(--in));
-}
-.pf-ov__plate {
-  position: relative; margin: 0;
-  /* The overture bleeds, so its width budget is the whole screen. */
-  --fit-h: calc(100vw / (var(--aspect, .75) * var(--half, 1)));
-  height: min(var(--look-h, 92svh), 100%, var(--fit-h));
-  aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-  width: auto;
-  display: flex; justify-content: center;
-}
-.pf-ov__window {
-  position: relative; display: block; overflow: hidden;
-  height: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--half, 1));
-  width: auto; flex: none;
-}
-.pf-ov__window img {
-  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
-  /* At --turn 0 the front figure fills the window; at 1 the window has
-     travelled one half-frame and the back figure fills it. */
-  transform: translateX(calc(var(--turn, 0) * -50%));
-  will-change: transform;
-}
-.pf-ov__plate[data-views='1'] .pf-ov__window img { transform: none; }
-
-/* THE NAME, arriving over the picture as the field closes. */
-.pf-ov__slate {
-  /* The field bleeds, so the type carries the measure on its own. */
-  --win: calc(var(--look-h, 92svh) * var(--aspect, .75) * var(--half, 1));
-  position: absolute; left: var(--edge); top: clamp(4.5rem, 12vh, 8rem);
-  display: grid; gap: .5rem;
-  opacity: var(--arrive, 1);
-  transform: translateY(calc((1 - var(--arrive, 1)) * .7rem));
-  transition: none;
-}
-.pf-ov__name {
-  margin: 0; color: var(--ink);
-  font-family: var(--display);
-  /* Set to CLEAR the closed field, so the territory's name never crosses the
-     model. The garment is the hero of this scene; the name is a running head
-     on a lookbook page, not a poster over the top of the picture. */
-  font-size: clamp(1.8rem, 3.2vw, 2.9rem);
-  max-width: calc((100vw - var(--win, 20rem)) / 2 - var(--edge) - 1.5rem);
-  font-variation-settings: 'wdth' 118;
-  font-weight: 900; letter-spacing: -.035em; line-height: .86;
-}
-.pf-ov__meta { display: flex; align-items: baseline; gap: .8rem; color: var(--muted); font-size: .5rem; }
-.pf-ov__meta b { color: var(--ink); font-weight: 500; }
-.pf-ov__meta i { font-style: normal; }
-.pf-sc__pointer {
-  position: absolute; left: var(--edge); bottom: clamp(3rem, 9vh, 5.5rem);
-  margin: 0; max-width: 24ch;
-  font-size: .8rem; line-height: 1.55; color: var(--muted);
-  opacity: var(--arrive, 1);
-}
-.pf-sc__pointer b { display: block; color: var(--ink); font-weight: 500; }
-
 /* ================= SET PIECE 04 — THE APPROACH ==========================
    Swim. Scale, and nothing else: the figure arrives out of a field of white,
    far then whole, and is never cropped closer than the complete silhouette —
@@ -378,90 +286,6 @@
 /* ================= SUPPORTING WORK, FOUR WAYS ===========================
    One mechanism per territory, so breadth reads as breadth rather than as the
    same gallery four times. */
-
-/* THE RANGE — Ready-to-Wear. Not an index: a run of SPREADS, the way a
-   designer's book is turned. Each spread is a different way of looking, and
-   so a different weight for the garments in it. Scale, spacing and sequence
-   do the work; there is no number, no caption and no frame around anything.
-
-   A figure is sized by the HEIGHT its place gives it and its own photograph's
-   proportion (front view, or the whole frame for the interruption), never
-   wider than the room it has. */
-.pf-sc--range {
-  --gap: clamp(1.2rem, 3vw, 3rem);
-  display: grid; gap: clamp(4rem, 13vh, 8.5rem);
-  padding-block: clamp(4rem, 12vh, 8rem) clamp(4rem, 12vh, 8rem);
-}
-.pf-rg { display: flex; align-items: flex-end; gap: var(--gap); min-width: 0; }
-.pf-rg__fig {
-  --crop-w: var(--front, .55);
-  margin: 0; flex: 0 1 calc(var(--h) * var(--aspect, .75) * var(--crop-w)); min-width: 0;
-}
-.pf-rg__fig[data-crop='whole'] { --crop-w: 1; }
-.pf-rg__door { display: block; color: inherit; text-decoration: none; }
-.pf-rg__window {
-  position: relative; display: block; overflow: hidden; background: #fff;
-  width: 100%; aspect-ratio: calc(var(--aspect, .75) * var(--crop-w));
-}
-.pf-rg__window img { position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none; }
-
-/* LEAD — one garment large, a second standing quiet and far away on the same
-   floor: the first proper look at the range, and a hint there is more. */
-.pf-rg--lead { padding-left: clamp(0rem, 9vw, 9rem); justify-content: flex-start; gap: clamp(3rem, 14vw, 14rem); }
-.pf-rg--lead .pf-rg__fig[data-weight='featured'] { --h: calc(100svh - var(--bar-h) - 6rem); }
-.pf-rg--lead .pf-rg__fig[data-weight='supporting'] { --h: clamp(12rem, 34svh, 20rem); }
-/* CLOSE — the lead mirrored, to end on one garment again. */
-.pf-rg--close { flex-direction: row-reverse; padding-right: clamp(0rem, 9vw, 9rem); gap: clamp(3rem, 14vw, 14rem); justify-content: flex-start; }
-.pf-rg--close .pf-rg__fig[data-weight='featured'] { --h: calc(100svh - var(--bar-h) - 6rem); }
-.pf-rg--close .pf-rg__fig[data-weight='supporting'] { --h: clamp(12rem, 34svh, 20rem); }
-/* DUO — two at exactly one height, side by side on one floor, so what is
-   seen is the difference between them. */
-.pf-rg--duo { justify-content: center; }
-.pf-rg--duo .pf-rg__fig { --h: clamp(22rem, 66svh, 44rem); }
-/* OPEN — the interruption. The run stops on a field of studio white the width
-   of the screen, and one garment's back arrives beside its front. */
-.pf-rg--open {
-  justify-content: center;
-  margin-inline: calc(-1 * var(--edge)); padding: clamp(2.5rem, 7vh, 5rem) var(--edge);
-  background: #fff;
-  /* The front waits centred before its back arrives; that offset stays
-     inside the field instead of widening the page on a narrow screen. */
-  overflow: clip;
-}
-.pf-rg--open .pf-rg__fig { --h: calc(100svh - var(--bar-h) - 10rem); }
-/* LINEUP — a group on one floor: the territory's breadth at one glance. No
-   gutters between them: the photographs' own studio white joins into one
-   strip, so it reads as one line-up of figures rather than a row of product
-   tiles. They shrink together when the row is too long, so they stay level. */
-.pf-rg--lineup { justify-content: center; gap: 0; }
-.pf-rg--lineup .pf-rg__fig { --h: clamp(14rem, 46svh, 28rem); }
-
-/* THE MARK OF A DOOR, as elsewhere: a hairline and a hair of lift, only for a
-   pointer that can hover, and a ring around the picture for a keyboard. */
-.pf-rg__window { transition: box-shadow 220ms ease, transform 320ms var(--ease); }
-.pf-rg__door:focus-visible { outline: none; }
-.pf-rg__door:focus-visible .pf-rg__window { outline: 2px solid var(--ww-accent); outline-offset: 3px; }
-@media (hover: hover) and (pointer: fine) {
-  .pf-rg__door:hover .pf-rg__window { box-shadow: 0 0 0 1px var(--line-strong); transform: translateY(-2px); }
-}
-
-/* DISCOVERY MOTION, two moves and only where they show something:
-   - the interruption's BACK arrives — the frame opens from the front view to
-     the whole photograph, once, as the spread comes into view;
-   - a lineup is read left to right as it arrives, 45ms apart.
-   Both are set up only when the script runs and motion is welcome. */
-.pf-sc--range[data-rg-armed] .pf-rg--open .pf-rg__window {
-  clip-path: inset(0 calc((1 - var(--front, .55)) * 100%) 0 0);
-  transform: translate3d(calc((1 - var(--front, .55)) * 50%), 0, 0);
-  transition: clip-path 900ms cubic-bezier(0.77, 0, 0.175, 1), transform 900ms cubic-bezier(0.77, 0, 0.175, 1), box-shadow 220ms ease;
-}
-.pf-sc--range[data-rg-armed] .pf-rg--open[data-rg-in] .pf-rg__window { clip-path: inset(0 0 0 0); transform: none; }
-.pf-sc--range[data-rg-armed] .pf-rg--lineup .pf-rg__fig {
-  opacity: 0; transform: translate3d(0, 12px, 0);
-  transition: opacity 520ms cubic-bezier(0.23, 1, 0.32, 1), transform 520ms cubic-bezier(0.23, 1, 0.32, 1);
-  transition-delay: calc(var(--i, 0) * 45ms);
-}
-.pf-sc--range[data-rg-armed] .pf-rg--lineup[data-rg-in] .pf-rg__fig { opacity: 1; transform: none; }
 
 /* ================= A FIGURE, ANYWHERE IN THE ACT ========================
    The four worlds after Ready-to-Wear place garments with one shared piece:
@@ -635,11 +459,6 @@
   opacity: var(--arrive, 1);
 }
 .pf-sc__enter:focus-visible { border-bottom-color: var(--ww-accent); }
-.pf-sc--overture .pf-sc__enter { bottom: clamp(1.1rem, 3.5vh, 2rem); }
-/* The overture already writes a pointer at its foot, so its affordance sits
-   under the picture's own column instead of on top of the sentence. */
-.pf-sc--overture .pf-sc__pointer { bottom: clamp(5rem, 13vh, 8rem); }
-
 /* ================= THE PROJECT READER ==================================
    A garment that has been chosen becomes THE SUBJECT. The reader is a layer
    inside the chapter — same bone ground, same bar, same measure — not a
@@ -1149,10 +968,7 @@
   .pf-rd__title { font-size: clamp(1.2rem, 6vw, 1.7rem); }
   .pf-rd__vname { bottom: -1.3rem; }
   .pf-rd__tools { margin-top: 1.9rem; }
-  /* The hero affordance sits under the picture's own column, not over it. */
-  .pf-sc--overture .pf-sc__enter { position: static; grid-row: 5; margin: .8rem 1.1rem 0; }
-  .pf-sc--overture .pf-sc__pointer { bottom: auto; }
-  .pf-rg__window, .pf-fig__window { transition: none; }
+  .pf-fig__window { transition: none; }
 }
 
 /* ---- the reader without motion ---------------------------------------- */
@@ -1211,33 +1027,6 @@
    A tall frame wants a tall composition. The held scenes give their type the
    foot of the screen and the garment everything above it. */
 @media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
-  .pf-act .pf-sc--overture { --track: 130svh; }
-  /* A tall frame has no side column to put type in, so the overture becomes a
-     COLUMN: the studio field and the garment take everything above, the name
-     and the pointer sit under them on bone. Type across a garment is a
-     collision, not a composition. */
-  .pf-sc--overture .pf-sc__frame {
-    grid-template-rows: minmax(0, 1fr) auto auto auto;
-    align-items: end; justify-items: start;
-    /* The bar floats over the act, and at the top of the act there is a
-       model's head under it. The picture row starts below it. */
-    padding-top: var(--bar-h);
-    padding-bottom: clamp(1.2rem, 4vh, 2rem);
-  }
-  .pf-ov__field { position: relative; inset: auto; grid-area: 1 / 1; width: 100%; height: 100%; }
-  .pf-ov__plate { grid-area: 1 / 1; justify-self: center; height: min(100%, var(--fit-h)); }
-  /* The overture bleeds, so its type carries the gutter itself — and the
-     name is no longer squeezed into a side column that does not exist here,
-     so the desktop's max-width comes off. */
-  .pf-ov__slate { position: static; grid-row: 2; padding: 1.2rem var(--gutter) 0; }
-  .pf-ov__name { max-width: none; font-size: clamp(2.2rem, 6vw, 3.4rem); }
-  .pf-sc--overture .pf-sc__pointer {
-    position: static; grid-row: 3; max-width: 46ch; padding: .8rem var(--gutter) 0;
-  }
-  .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem var(--gutter) 0; }
-  /* The affordance joins the column under the pointer, as on a phone. Left
-     floating at the foot of the frame it landed on the pointer's sentence. */
-  .pf-sc--overture .pf-sc__enter { position: static; grid-row: 5; margin: .8rem var(--gutter) 0; }
   .pf-ap__plate { height: min(68svh, 100%, var(--fit-h)); }
 }
 
@@ -1252,25 +1041,7 @@
   .pf-act__bar { padding: 0 1.1rem; }
   .pf-act { --edge: 1.1rem; }
   .pf-act .pf-sc, .pf-act .pf-tr__slate { padding-inline: 1.1rem; }
-  /* re-asserted after the blanket rule above: the overture still bleeds */
-  .pf-act .pf-sc--overture { padding-inline: 0; }
   .pf-act__list { right: 0; left: auto; min-width: min(17rem, calc(100vw - 2.4rem)); }
-
-  /* THE OVERTURE AS A COLUMN, for the same reason. */
-  .pf-act .pf-sc--overture { --track: 95svh; }
-  .pf-sc--overture .pf-sc__frame {
-    grid-template-rows: minmax(0, 1fr) auto auto auto;
-    align-items: end; justify-items: start;
-    padding-top: var(--bar-h);
-    padding-bottom: 1.1rem;
-  }
-  .pf-ov__field { position: relative; inset: auto; grid-area: 1 / 1; width: 100%; height: 100%; }
-  .pf-ov__plate { grid-area: 1 / 1; justify-self: center; height: min(100%, var(--fit-h)); }
-  .pf-ov__slate { position: static; grid-row: 2; padding: 1rem 1.1rem 0; }
-  .pf-ov__name { font-size: clamp(1.9rem, 9vw, 2.6rem); max-width: none; }
-  .pf-sc--overture .pf-sc__pointer { position: static; grid-row: 3; padding: .7rem 1.1rem 0; }
-  .pf-sc--overture .pf-sc__work { position: static; grid-row: 4; padding: .5rem 1.1rem 0; }
-  .pf-sc__pointer { max-width: 34ch; font-size: .78rem; }
 
   .pf-sc--approach { --track: 70svh; }
   .pf-ap__plate { height: min(74svh, 100%, var(--fit-h)); }
@@ -1305,19 +1076,6 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-sc[data-reveal] { height: auto; }
   .pf-sc__frame { position: static; }
-  /* The overture resolves to its composition with the whole photograph
-     visible: the field at rest, the name and the pointer present. */
-  .pf-ov__field { clip-path: none; }
-  /* Only the two scenes that WITHHOLD something open up: the overture and the
-     turn. The pair reveals nothing — its small frame is a deliberate crop,
-     not a hidden back view — so it is left exactly as it is. */
-  .pf-sc--overture [data-views='2'] { --half: 1; }
-  /* The overture's field and its name are sized against the window's width,
-     so they have to know it has doubled — otherwise the territory's name is
-     set to clear a half-frame and ends up across the garment. */
-  .pf-sc--overture .pf-ov__field,
-  .pf-sc--overture .pf-ov__slate { --half: 1; }
-  .pf-ov__window img { transform: none; }
   /* Occasion's entrance opens on the whole gown rather than drawing out of
      its detail; Activewear's heats and Swim's phrases are simply there. */
   .pf-en__window img { transform: none; }
@@ -1336,41 +1094,6 @@
   color: #fff; background: #8a1c1c; pointer-events: none;
 }
 .pf-lab-notice b { font-weight: 600; margin-right: .6rem; text-transform: uppercase; letter-spacing: .08em; }
-
-/* ---- READY-TO-WEAR'S RANGE, upright and on a phone ----------------------
-   Not the desktop stacked into a column. The spreads keep their different
-   shapes; what changes is the group, which becomes a swipe — seven garments
-   in half a screen instead of three rows of a grid — so the run still moves
-   between large, paired, interrupted and many. */
-@media (max-width: 1023px), (max-aspect-ratio: 5/4) {
-  .pf-rg--lineup {
-    justify-content: flex-start;
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
-    margin-inline: calc(-1 * var(--edge)); padding: 0 var(--edge) .4rem;
-    scroll-padding-inline: var(--edge);
-    scrollbar-width: none;
-  }
-  .pf-rg--lineup::-webkit-scrollbar { display: none; }
-  .pf-rg--lineup .pf-rg__fig { flex: none; width: calc(var(--h) * var(--aspect, .75) * var(--crop-w)); scroll-snap-align: start; }
-  .pf-rg--lead, .pf-rg--close { padding-inline: 0; gap: clamp(1.5rem, 8vw, 5rem); }
-}
-@media (max-width: 767px) {
-  .pf-sc--range { gap: clamp(3.5rem, 9vh, 5rem); padding-block: 3rem 3.5rem; }
-  .pf-rg--lead, .pf-rg--close { gap: 1rem; }
-  .pf-rg--lead .pf-rg__fig[data-weight='featured'],
-  .pf-rg--close .pf-rg__fig[data-weight='featured'] { --h: 66svh; }
-  .pf-rg--lead .pf-rg__fig[data-weight='supporting'],
-  .pf-rg--close .pf-rg__fig[data-weight='supporting'] { --h: 22svh; }
-  .pf-rg--duo { gap: .8rem; }
-  .pf-rg--duo .pf-rg__fig { --h: 52svh; }
-  .pf-rg--open { padding-block: 2rem; }
-  .pf-rg--open .pf-rg__fig { --h: 58svh; }
-  .pf-rg--lineup { gap: 0; }
-  .pf-rg--lineup .pf-rg__fig { --h: 44svh; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pf-sc--range .pf-rg__window, .pf-sc--range .pf-rg__fig { transition: none; }
-}
 
 /* ---- THE FOUR WORLDS ON A PHONE -----------------------------------------
    Each keeps its own character in one column rather than becoming a stack
