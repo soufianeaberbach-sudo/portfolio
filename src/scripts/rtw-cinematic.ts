@@ -13,12 +13,13 @@ if (prototype) {
   const running = prototype.querySelector<HTMLElement>('[data-rtw-running]')!;
   const side = stage.querySelector<HTMLElement>('[data-rtw-side]')!;
   const payoff = stage.querySelector<HTMLElement>('[data-rtw-payoff]')!;
-  const signal = stage.querySelector<HTMLElement>('[data-rtw-signal]')!;
+  const details = Object.fromEntries([...stage.querySelectorAll<HTMLElement>('[data-rtw-detail]')].map(a => [a.dataset.rtwDetail!, a]));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = matchMedia('(max-width: 767px), (max-width: 1023px) and (orientation: portrait)');
   let scene: gsap.core.Timeline | null = null;
   let handoff: gsap.core.Timeline | null = null;
   let frame = 0;
+  let stageSize = '';
 
   // The window travels across the unchanged source. Both complete resting views
   // are centred inside the same aperture; the clip trims only empty studio space.
@@ -26,7 +27,9 @@ if (prototype) {
     for (const photo of scope.querySelectorAll<HTMLElement>('[data-rtw-photo]')) {
       if(photo.closest('[data-rtw-reader][hidden]')) continue;
       const actor=photo.closest<HTMLElement>('[data-rtw-actor]');
-      if(actor && Number(gsap.getProperty(actor,'opacity'))<.01) delete photo.dataset.returnView;
+      if(actor && Number(gsap.getProperty(actor,'opacity'))<.01) { delete photo.dataset.returnView; continue; }
+      const detail=photo.closest<HTMLElement>('[data-rtw-detail]');
+      if(detail && Number(gsap.getProperty(detail,'opacity'))<.01) continue;
       const view=Number(photo.dataset.returnView ?? gsap.getProperty(photo,'--view'))||0;
       if(photo.dataset.returnView) photo.style.setProperty('--view',String(view));
       paintRtwPhoto(photo,view);
@@ -42,27 +45,33 @@ if (prototype) {
   const build = () => {
     scene?.scrollTrigger?.kill(); scene?.kill(); handoff?.scrollTrigger?.kill(); handoff?.kill();
     prototype.toggleAttribute('data-static', reduced.matches);
+    stageSize = `${stage.clientWidth}:${stage.clientHeight}`;
     for(const [role,actor] of Object.entries(actors)) {
       const visible=reduced.matches || role==='anchor';
       actor.tabIndex=visible?0:-1;actor.setAttribute('aria-hidden',String(!visible));actor.style.pointerEvents=visible?'auto':'none';
     }
-    gsap.set(Object.values(actors), { clearProps: 'transform,opacity,visibility,left,top' });
-    gsap.set([title,running,side,payoff,signal], { clearProps: 'transform,opacity' });
+    gsap.set([...Object.values(actors),...Object.values(details)], { clearProps: 'transform,opacity,visibility,left,top' });
+    gsap.set([title,running,side,payoff], { clearProps: 'transform,opacity' });
+    gsap.set(prototype.querySelectorAll('[data-rtw-outgoing],[data-rtw-incoming],[data-rtw-next]'), {clearProps:'transform,opacity'});
     gsap.set([...stage.querySelectorAll('[data-rtw-photo]')], {'--view':0});
     running.textContent='01 / READY-TO-WEAR';
     if (reduced.matches) { paintPhotos(); floorState(); return; }
     const w = () => stage.clientWidth;
     const h = () => stage.clientHeight;
-    const position = (role: string, cx: number, depth: number, floor = .97, opacity = 1) => ({
-      x: () => cx * w() - actors[role].offsetWidth / 2,
-      y: () => floor * h() - actors[role].offsetHeight,
+    const position = (role: string, cx: number, depth: number, floor = .97, opacity = 1, detail = false) => ({
+      x: () => cx * w() - (detail ? details : actors)[role].offsetWidth / 2,
+      y: () => floor * h() - (detail ? details : actors)[role].offsetHeight,
       scale: depth, opacity, left: 0, top: 0, xPercent: 0, yPercent: 0, force3D: true,
     });
     const move = (role: string, cx: number, depth: number, floor: number, at: number, duration: number, opacity = 1) => {
-      scene!.to(actors[role], { ...position(role,cx,depth,floor,opacity), duration, ease: 'power1.inOut' }, at);
+      // Arrival is an opaque photograph entering the frame, not a dissolve.
+      scene!.set(actors[role],{opacity:1},at)
+        .to(actors[role], { ...position(role,cx,depth,floor,1), duration, ease: 'power1.inOut' }, at);
+      if(!opacity) scene!.set(actors[role],{opacity:0},at+duration);
     };
     gsap.set(actors.anchor,position('anchor', mobile.matches ? .60 : .64, mobile.matches ? .80 : .89,.97));
-    for (const role of ['arrival','distance','near','interruption','resolve']) gsap.set(actors[role],position(role,1.4,.6,.97,0));
+    for (const role of ['arrival','near','interruption','resolve']) gsap.set(actors[role],position(role,1.4,.6,.97,0));
+    for (const role of Object.keys(details)) gsap.set(details[role],position(role,1.6,2.8,2.3,0,true));
     scene = gsap.timeline({scrollTrigger:{trigger:camera,scroller:act,start:'top top',end:'bottom bottom',scrub:.18,invalidateOnRefresh:true}, onUpdate:()=>{
       paintPhotos(stage);
       const time = scene!.time();
@@ -70,7 +79,7 @@ if (prototype) {
       stage.dataset.beat = time < .65 ? 'threshold' : time < 1.45 ? 'approach' : time < 2.5 ? 'turn' : time < 4 ? 'arrival' : time < 6.7 ? 'traverse' : time < 8.1 ? 'silence' : 'payoff';
       for (const actor of Object.values(actors)) {
         const rect = actor.getBoundingClientRect();
-        const visible = Number(gsap.getProperty(actor,'opacity')) > .5 && rect.right > 15 && rect.left < w() - 15;
+        const visible = Number(gsap.getProperty(actor,'opacity')) > .5 && Number(gsap.getProperty(actor,'scaleX')) < 1.4 && rect.right > 15 && rect.left < w() - 15;
         actor.tabIndex = visible ? 0 : -1;
         actor.style.pointerEvents = visible ? 'auto' : 'none';
         actor.setAttribute('aria-hidden',String(!visible));
@@ -82,54 +91,90 @@ if (prototype) {
       .to(running,{opacity:1,duration:.45},.9)
       .to(actors.anchor.querySelector('[data-rtw-photo]'),{'--view':1,duration:.8,ease:'power3.inOut'},1.5)
       .to(side,{opacity:1,duration:.15},1.5).to(side,{opacity:0,duration:.2},2.35);
-    // 04: rust is the arrival, pink remains distant, satin is the established anchor.
-    move('anchor',mobile.matches ? -.15 : .17,.64,.94,2.55,.75);
-    move('arrival',mobile.matches ? .56 : .65,.92,.97,2.65,.8);
-    move('distance',mobile.matches ? 1.16 : .90,.48,.84,3.2,.7);
-    // 05: one authored world, traversed by a common camera displacement.
-    if (!mobile.matches) {
-      const world: Record<string,[number,number,number]> = {anchor:[.17,.64,.94],arrival:[.65,.92,.97],distance:[1.14,.48,.83],near:[1.65,1.03,.99],interruption:[2.18,.72,.89],resolve:[2.74,.83,.97]};
-      for (const [role,[cx,depth,floor]] of Object.entries(world)) {
-        if (['near','interruption','resolve'].includes(role)) gsap.set(actors[role],position(role,cx,depth,floor,0));
-        const destination = position(role,cx-2.15,depth,floor);
-        delete (destination as Partial<typeof destination>).opacity;
-        scene.to(actors[role],{...destination,duration:2.65,ease:'power1.inOut'},4);
-      }
-      scene.set([actors.near,actors.interruption,actors.resolve],{opacity:1},4);
-    } else {
-      // A mobile viewpoint replaces the wide world: enter, pass, leave, resolve.
-      move('arrival',-.6,.78,.97,4,.65);
-      move('distance',.5,.93,.97,4,.65);
-      move('distance',-.6,.76,.97,4.85,.65);
-      move('near',.5,1,.97,4.85,.65);
-      move('near',-.6,.78,.97,5.7,.65);
-      move('resolve',.5,.95,.97,5.7,.65);
+    // Each shot has a real close foreground and a complete silhouette. A push
+    // into the full photograph hands it to the decorative detail plane at the
+    // identical transform; this avoids manufacturing tiny "distant" people.
+    const compact = mobile.matches;
+    const phone = w() < 500;
+    const closeScale = compact ? 2 : 2.55;
+    const closeFloor = compact ? 1.55 : 1.94;
+    // Frame the photographed torso against the edge, not a fraction of screen
+    // width: portrait tablets otherwise lose the entire garment to the crop.
+    const leftDetail = phone ? -.20 : .43 - .105 * closeScale * .92 * h() / w();
+    const rightDetail = phone ? 1.08 : 1 - leftDetail;
+    gsap.set(details.anchor,position('anchor',compact ? -1.5 : -.8,closeScale,closeFloor,0,true));
+    const focusRight = .68;
+    const focusLeft = phone ? .23 : .32;
+    const fullScale = compact ? .94 : 1.02;
+    const detailMove = (role: string, cx: number, zoom: number, floor: number, at: number, duration: number, opacity = 1) => {
+      scene!.set(details[role],{opacity:1},at)
+        .to(details[role],{...position(role,cx,zoom,floor,1,true),duration,ease:'power1.inOut'},at);
+      if(!opacity) scene!.set(details[role],{opacity:0},at+duration);
+    };
+    const detailView = (role: string, view: number, at: number) =>
+      scene!.set(details[role].querySelector('[data-rtw-photo]'),{'--view':view},at);
+    const pushToDetail = (role: string, cx: number, view: number, at: number, duration: number) => {
+      move(role,cx,closeScale,closeFloor,at,duration);
+      scene!.to(actors[role].querySelector('[data-rtw-photo]'),{'--view':view,duration:duration*.7,ease:'power3.inOut'},at);
+      detailView(role,view,at);
+      scene!.set(details[role],position(role,cx,closeScale,closeFloor,1,true),at+duration)
+        .set(actors[role],{opacity:0},at+duration);
+    };
+    // 03: low back and satin drape, shown close and whole. The original turn
+    // stays intact; the close view arrives only after the crossover resolves.
+    detailView('anchor',1,0);
+    if(!compact) detailMove('anchor',leftDetail,closeScale,closeFloor,1.95,.3);
+    move('anchor',compact ? .5 : focusRight,compact ? 1.03 : fullScale,.98,1.5,.8);
+    // 04: warm satin in the foreground, a rust halter in the same white world.
+    // Only two looks share a shot; the archive carries the broader discovery.
+    move('anchor',compact ? -1 : 1.35,fullScale,.98,2.6,.55,0);
+    move('arrival',phone ? .53 : focusRight,fullScale,.98,compact ? 2.65 : 3.05,compact ? .75 : .65);
+    // 05 opening → midpoint → destination. Push into the rust tie-back, then
+    // cross the frame toward the cropped shirt's waist; full looks remain legible.
+    if(!compact) detailMove('anchor',-.8,closeScale,closeFloor,4,.65,0);
+    pushToDetail('arrival',rightDetail,phone ? 0 : 1,4,.9);
+    gsap.set(actors.near,position('near',-.45,fullScale,.98,0));
+    move('near',focusLeft,fullScale,.98,4.25,.65);
+    detailMove('arrival',compact ? 2.5 : 1.8,closeScale,closeFloor,5.45,.8,0);
+    pushToDetail('near',leftDetail,0,5.45,.95);
+    move('resolve',focusRight,fullScale,.98,5.7,.7);
+    // 06: one garment, two truthful scales. No decorative red punctuation.
+    detailMove('near',compact ? -1.5 : -.8,closeScale,closeFloor,6.65,.45,0);
+    move('resolve',1.45,fullScale,.98,6.65,.45,0);
+    move('interruption',compact ? .5 : focusLeft,compact ? 1.03 : fullScale,.98,6.8,.45);
+    if(!compact) {
+      detailView('interruption',0,6.8);
+      detailMove('interruption',rightDetail,closeScale,closeFloor,6.9,.45);
     }
-    // 06: movement empties into one large striped silhouette.
-    for (const role of ['anchor','arrival','distance','near','resolve']) scene.to(actors[role],{opacity:0,duration:.3},6.65);
-    move('interruption',mobile.matches ? .5 : .58,1.02,.98,6.65,.55);
-    scene.to(signal,{opacity:1,scaleY:1,duration:.25},7.05)
-      .to(actors.interruption.querySelector('[data-rtw-photo]'),{'--view':1,duration:.55,ease:'power3.inOut'},7.15)
-      .to(signal,{opacity:0,duration:.25},7.8);
-    // 07: reunion. Desktop resolves all six, mobile reads two successive casts of three.
-    scene.to([...stage.querySelectorAll('[data-rtw-photo]')],{'--view':0,duration:.4},8.1);
-    if (!mobile.matches) {
-      const reunion: Record<string,[number,number,number]> = {anchor:[.09,.61,.84],arrival:[.255,.76,.95],distance:[.414,.52,.76],near:[.575,.88,.97],interruption:[.745,.64,.87],resolve:[.91,.69,.93]};
-      for(const [role,[cx,depth,floor]] of Object.entries(reunion)) move(role,cx,depth,floor,8.15,.85);
-    } else {
-      const first: Record<string,[number,number,number]> = {anchor:[.16,w()>500?.58:.44,.80],arrival:[.51,w()>500?.73:.55,.86],distance:[.84,w()>500?.52:.40,.78]};
-      scene.to([actors.near,actors.interruption,actors.resolve],{opacity:0,duration:.2},8.1);
-      for(const [role,[cx,depth,floor]] of Object.entries(first)) move(role,cx,depth,floor,8.15,.55);
-      for(const role of ['anchor','arrival','distance']) move(role,-.6,.45,.90,9.15,.55);
-      const second: Record<string,[number,number,number]> = {near:[.17,w()>500?.58:.44,.81],interruption:[.51,w()>500?.73:.56,.86],resolve:[.85,w()>500?.52:.4,.78]};
-      for(const [role,[cx,depth,floor]] of Object.entries(second)) move(role,cx,depth,floor,9.15,.55);
-    }
-    scene.to(payoff,{opacity:1,duration:.3},8.55).to({}, {duration:.65},9.7);
+    scene.to(actors.interruption.querySelector('[data-rtw-photo]'),{'--view':1,duration:.55,ease:'power3.inOut'},7.15);
+    // 07: two campaign views, not a reunion row. Satin neckline/pink
+    // shirting resolves the neutral passage; rust/print closes the colour arc.
+    move('interruption',compact ? -1 : -.45,fullScale,.98,8.1,.55,0);
+    if(!compact) detailMove('interruption',1.8,closeScale,closeFloor,8.1,.55,0);
+    detailView('anchor',0,8.1);
+    detailMove('anchor',leftDetail,closeScale,closeFloor,8.15,.6);
+    scene.set(actors.near,position('near',1.4,fullScale,.98,0),8.1)
+      .set(actors.near.querySelector('[data-rtw-photo]'),{'--view':0},8.1);
+    move('near',focusRight,fullScale,.98,8.15,.6);
+    detailMove('anchor',compact ? -1.5 : -.8,closeScale,closeFloor,9.15,.65,0);
+    move('near',compact ? -1 : -.45,fullScale,.98,9.15,.65,0);
+    detailView('arrival',phone ? 0 : 1,9.15);
+    gsap.set(details.arrival,position('arrival',compact ? 2.5 : 1.8,closeScale,closeFloor,0,true));
+    detailMove('arrival',rightDetail,closeScale,closeFloor,9.15,.65);
+    move('resolve',focusLeft,fullScale,.98,9.15,.65);
+    scene.to(payoff,{opacity:1,duration:.3},8.55).to({}, {duration:.55},9.8);
+    // 12 is the archive's closing sentence, not another empty stage or look.
     const ending = prototype.querySelector<HTMLElement>('[data-rtw-handoff]')!;
-    handoff = gsap.timeline({scrollTrigger:{trigger:ending,scroller:act,start:'top 65%',end:'bottom bottom',scrub:.15,invalidateOnRefresh:true},onUpdate:()=>{running.textContent=handoff!.progress()>.65?'02 / ACTIVEWEAR':'01 / READY-TO-WEAR';}})
-      .to(ending.querySelector('.rtw-last'),{x:()=>w()*.23,duration:1,ease:'power1.inOut'},0)
-      .to(ending.querySelector('.rtw-handoff-line'),{scaleX:1,duration:.5},.35)
-      .to(ending.querySelector('[data-rtw-next]'),{opacity:1,duration:.4},.65);
+    const outgoing = ending.querySelector('[data-rtw-outgoing]')!;
+    const incoming = ending.querySelector('[data-rtw-incoming]')!;
+    const next = ending.querySelector('[data-rtw-next]')!;
+    gsap.set(outgoing,{yPercent:0,opacity:1});
+    gsap.set(incoming,{yPercent:110,opacity:0});
+    gsap.set(next,{opacity:0});
+    handoff = gsap.timeline({scrollTrigger:{trigger:ending,scroller:act,start:'top 85%',end:'bottom 85%',scrub:.15,invalidateOnRefresh:true},onUpdate:()=>{running.textContent=handoff!.progress()>.65?'02 / ACTIVEWEAR':'01 / READY-TO-WEAR';}})
+      .to(outgoing,{yPercent:-110,opacity:0,duration:1,ease:'power2.inOut'},0)
+      .to(incoming,{yPercent:0,opacity:1,duration:1,ease:'power2.inOut'},0)
+      .to(next,{opacity:1,duration:.3},.7);
     paintPhotos(); floorState(); ScrollTrigger.refresh();
   };
   const floorParts=[...act.querySelector<HTMLElement>('[data-screen="index"]')!.children].filter(e=>!e.classList.contains('pf-rd')) as HTMLElement[];
@@ -168,7 +213,11 @@ if (prototype) {
   }
   new MutationObserver(()=>{if(act.hasAttribute('data-open')) requestAnimationFrame(()=>ScrollTrigger.refresh());}).observe(act,{attributes:true,attributeFilter:['data-open']});
   build(); reduced.addEventListener('change',build); mobile.addEventListener('change',build);
-  const resizeObserver=new ResizeObserver(()=>{schedulePhotos(); ScrollTrigger.refresh();}); resizeObserver.observe(stage);
+  const resizeObserver=new ResizeObserver(()=>{
+    const size=`${stage.clientWidth}:${stage.clientHeight}`;
+    if(size!==stageSize) build();
+    else { schedulePhotos(); ScrollTrigger.refresh(); }
+  }); resizeObserver.observe(stage);
   document.fonts.ready.then(()=>{schedulePhotos();ScrollTrigger.refresh();});
   window.addEventListener('resize',()=>{schedulePhotos();floorState();});
   document.querySelectorAll('[data-rtw-photo] img').forEach(image=>image.addEventListener('load',schedulePhotos));

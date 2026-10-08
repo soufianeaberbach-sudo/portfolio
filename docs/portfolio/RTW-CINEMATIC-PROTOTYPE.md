@@ -1,5 +1,8 @@
 # Ready-to-Wear cinematic prototype
 
+This is the first-pass record. The current revision and visual evidence are in
+[Art-direction pass 2](RTW-CINEMATIC-PASS-2.md).
+
 Prototype awaiting visual approval. Branch starts at
 `fd5d1b33933f2993388a1d8ad5d70ba5fc3638cb`.
 

@@ -16,17 +16,21 @@ const href = (s: Subject) => `#${world}/rtw/${s.id}`;
         <p class="label">WOMENSWEAR / <b>01</b></p>
         <p class="display">READY—<br />TO—WEAR</p>
       </div>
+      <div class="rtw-details" aria-hidden="true">
+        {cast.map(({role,subject}) => (
+          <div class="rtw-detail" data-rtw-detail={role}><CinematicPlate subject={subject} eager sizes="1400px" /></div>
+        ))}
+      </div>
       <div class="rtw-cast" data-rtw-cast>
         {cast.map(({role,subject}) => (
           <a class="rtw-actor" data-rtw-actor={role} href={href(subject)} data-nav data-open-subject={subject.id}
              aria-label={`Enter reference: ${subject.cover.alt}`} draggable="false">
-            <CinematicPlate subject={subject} eager />
+            <CinematicPlate subject={subject} eager sizes="1400px" />
           </a>
         ))}
       </div>
       <p class="rtw-side label" data-rtw-side aria-hidden="true">FRONT</p>
       <p class="rtw-payoff label" data-rtw-payoff>SELECTED READY-TO-WEAR / {String(cast.length).padStart(2,'0')}</p>
-      <span class="rtw-signal" data-rtw-signal aria-hidden="true"></span>
     </div>
   </div>
   <section class="rtw-archive" aria-label="Further Ready-to-Wear references">
@@ -39,14 +43,14 @@ const href = (s: Subject) => `#${world}/rtw/${s.id}`;
         </a>
       ))}
     </div>
+    <div class="rtw-handoff" data-rtw-handoff aria-label="Ready-to-Wear opens toward Activewear">
+      <div class="rtw-chapter-type display" aria-hidden="true">
+        <span data-rtw-outgoing>READY—TO—WEAR</span>
+        <span data-rtw-incoming>ACTIVEWEAR</span>
+      </div>
+      <p class="label" data-rtw-next><b>02</b> / ACTIVEWEAR</p>
+    </div>
   </section>
-  <div class="rtw-handoff" data-rtw-handoff aria-label="End of the Ready-to-Wear prototype">
-    <a class="rtw-last" href={href(cast[0].subject)} data-nav data-open-subject={cast[0].subject.id}
-       aria-label={`Enter reference: ${cast[0].subject.cover.alt}`}><CinematicPlate subject={cast[0].subject} /></a>
-    <span class="rtw-handoff-line" aria-hidden="true"></span>
-    <p class="label" data-rtw-next>02 / ACTIVEWEAR</p>
-    <p class="rtw-end label">END OF RTW STUDY</p>
-  </div>
 </div>
 <script>
   import '../../scripts/rtw-cinematic';

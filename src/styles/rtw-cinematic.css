@@ -8,13 +8,16 @@
 .rtw-prototype { background: #fff; color: var(--ink); }
 .rtw-camera { height: 680svh; }
 .rtw-stage { position: sticky; top: 0; height: 100svh; overflow: clip; isolation: isolate; background: #fff; }
-.rtw-cast { position: absolute; inset: 0; }
+.rtw-actor, .rtw-detail { mix-blend-mode: multiply; }
+.rtw-cast, .rtw-details { position: absolute; inset: 0; }
+.rtw-details { pointer-events: none; }
+.rtw-detail { position: absolute; left: 0; top: 0; transform-origin: center bottom; --photo-h: 92svh; opacity: 0; }
 .rtw-actor { position: absolute; top: 0; left: 0; display: block; transform-origin: center bottom; text-decoration: none; --photo-h: 92svh; }
 .rtw-actor:not([data-rtw-actor='anchor']) { opacity: 0; }
 .rtw-actor[data-rtw-actor='anchor'] { left: 62%; top: 5svh; transform: translateX(-50%) scale(.89); }
 .rtw-photo { display: block; position: relative; height: var(--photo-h, 50svh); width: calc(var(--photo-h, 50svh) * var(--aspect) * var(--window)); overflow: hidden; background: #fff; }
 .rtw-photo img { display: block; width: auto; max-width: none; height: 100%; transform-origin: 0 0; }
-.rtw-actor:focus-visible, .rtw-rail a:focus-visible, .rtw-last:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
+.rtw-actor:focus-visible, .rtw-rail a:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
 @media (hover: hover) and (pointer: fine) {
   .rtw-actor:hover { cursor: zoom-in; }
   .rtw-rail a:hover { transform: translateY(-6px); }
@@ -27,17 +30,17 @@
 .rtw-running { position: absolute; top: 1.2rem; right: var(--gutter); z-index: 8; margin: 0; font-size: .52rem; opacity: 0; }
 .rtw-side { position: absolute; left: 8vw; bottom: 5svh; font-size: .55rem; color: #c7020c; opacity: 0; }
 .rtw-payoff { position: absolute; bottom: 3svh; left: var(--gutter); margin: 0; font-size: .52rem; opacity: 0; }
-.rtw-signal { position: absolute; width: 1px; height: 9svh; background: #c7020c; left: 43%; bottom: 8svh; transform-origin: bottom; opacity: 0; }
-.rtw-archive { padding: 4svh var(--gutter) 6svh; background: #fff; }
+.rtw-archive { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 4svh var(--gutter) 6svh; background: #fff; }
 .rtw-archive > p { margin: 0 0 3svh; font-size: .53rem; }
-.rtw-rail { display: flex; align-items: flex-end; gap: 1.2rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 1rem .5rem; margin-inline: -.5rem; scrollbar-width: thin; scrollbar-color: #ddd #fff; }
+.rtw-rail { flex: 0 0 auto; display: flex; align-items: flex-end; gap: 1.2rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 1rem .5rem; margin-inline: -.5rem; scrollbar-width: thin; scrollbar-color: #ddd #fff; }
 .rtw-rail a { display: block; flex: 0 0 auto; scroll-snap-align: start; text-decoration: none; transition: transform 180ms ease-out; --photo-h: 38svh; }
 .rtw-rail:focus-visible { outline: 1px solid #c7020c; outline-offset: 4px; }
-.rtw-handoff { position: relative; height: 100svh; overflow: clip; background: #fff; }
-.rtw-last { position: absolute; display: block; left: 50%; top: 15svh; transform: translateX(-50%); --photo-h: 78svh; }
-.rtw-handoff > p[data-rtw-next] { position: absolute; top: 45svh; left: 12vw; font-size: .66rem; margin: 0; opacity: 0; }
-.rtw-handoff-line { position: absolute; top: 42svh; left: 12vw; width: 8vw; height: 1px; background: #c7020c; transform-origin: left; transform: scaleX(0); }
-.rtw-end { position: absolute; bottom: 5svh; left: var(--gutter); font-size: .5rem; color: var(--muted); }
+.rtw-handoff { flex: 0 0 auto; position: relative; height: 28svh; margin-top: 3svh; overflow: clip; background: #fff; }
+.rtw-chapter-type { position: relative; height: 13svh; margin-top: 2svh; overflow: hidden; font-size: clamp(3rem, 7.5vw, 8rem); line-height: 1; letter-spacing: -.055em; font-variation-settings: 'wdth' 82; }
+.rtw-chapter-type span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+[data-rtw-incoming] { opacity: 0; }
+.rtw-handoff > p[data-rtw-next] { font-size: .58rem; margin: 1.5rem 0 0; opacity: 0; }
+.rtw-handoff b { color: #c7020c; font-weight: 400; }
 /* Reader furniture comes after the garment is entered. The image remains the stage. */
 .pf-rd__subject.rtw-reader { display: block; background: #fff; padding: 0; z-index: 42; overflow: auto; }
 .pf-rd__subject.rtw-reader[hidden] { display: none; }
@@ -66,10 +69,9 @@
   .rtw-side { left: 6vw; bottom: 4svh; }
   .rtw-rail a { --photo-h: 39svh; }
   .rtw-archive { padding-top: 3svh; padding-bottom: 4svh; }
-  .rtw-handoff { height: 100svh; }
-  .rtw-last { --photo-h: 76svh; top: 13svh; }
-  .rtw-handoff > p[data-rtw-next] { left: 6vw; font-size: .6rem; }
-  .rtw-handoff-line { left: 6vw; width: 18vw; }
+  .rtw-handoff { height: 23svh; margin-top: 2svh; }
+  .rtw-chapter-type { font-size: 10vw; height: 8svh; margin-top: 3svh; }
+  .rtw-handoff > p[data-rtw-next] { font-size: .52rem; margin-top: .75rem; }
   .rtw-reader-head { height: 3rem; }
   .rtw-reader-head .label { font-size: .45rem; }
   .rtw-reader-floor { height: calc(100svh - 3rem); }
@@ -87,7 +89,9 @@
 .rtw-prototype[data-static] .rtw-cast { position: relative; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-end; gap: 3rem 1rem; }
 .rtw-prototype[data-static] .rtw-actor { position: relative; left: auto; top: auto; transform: none; opacity: 1; --photo-h: 60svh; }
 .rtw-prototype[data-static] .rtw-actor[data-rtw-actor='anchor'] { --photo-h: 80svh; }
-.rtw-prototype[data-static] .rtw-last { left: 70%; }
+.rtw-prototype[data-static] .rtw-details { display: none; }
+.rtw-prototype[data-static] [data-rtw-outgoing] { display: none; }
+.rtw-prototype[data-static] [data-rtw-incoming] { opacity: 1; }
 .rtw-prototype[data-static] [data-rtw-next] { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .rtw-rail a { transition: none; } }
 

@@ -4,11 +4,10 @@
  */
 export const rtwCast = [
   { id: 'rtw-ref-01', role: 'anchor', reason: 'Champagne satin gives the threshold a quiet long silhouette; its low back rewards the first turn.' },
-  { id: 'rtw-ref-06', role: 'arrival', reason: 'The rust halter mini introduces colour and a shorter silhouette as the established subject recedes.' },
-  { id: 'rtw-ref-02', role: 'distance', reason: 'Pink shirting and stone wide-leg trousers remain recognisable at the farther camera position.' },
-  { id: 'rtw-ref-12', role: 'near', reason: 'The beige tie-front blouse and chocolate trousers carry the near pass with a fluid, full-length silhouette and a clean studio ground.' },
-  { id: 'rtw-ref-03', role: 'interruption', reason: 'The stone V-neck jumpsuit quiets the palette and joins the silhouette into one long line after the traverse; its back gives real second-view information.' },
-  { id: 'rtw-ref-05', role: 'resolve', reason: 'The floral shirt jacket and rust wide-leg trousers resolve the range, recalling the rust arrival through colour while adding print and layering.' },
+  { id: 'rtw-ref-06', role: 'arrival', reason: 'The rust halter mini introduces colour and a shorter silhouette against the satin low-back close view.' },
+  { id: 'rtw-ref-02', role: 'near', reason: 'The pink cropped shirt and stone wide-leg trousers make a clear, clean-floor destination; the cropped hem and trouser waist answer the preceding satin drape.' },
+  { id: 'rtw-ref-03', role: 'interruption', reason: 'The stone V-neck jumpsuit quiets the palette and joins the silhouette into one long line after the traverse; a V-neck/waist close view and the complete back provide the quiet punctuation.' },
+  { id: 'rtw-ref-05', role: 'resolve', reason: 'The floral shirt jacket and rust wide-leg trousers resolve the final campaign view against the rust halter’s tie-back close view; the colour echo is visible, not a claim of shared provenance.' },
 ] as const;
 
 export const rtwSplit: Record<string, number | null> = {

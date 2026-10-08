@@ -48,6 +48,18 @@ try {
   await page.locator('[data-rtw-actor=anchor]').click();await page.waitForTimeout(40);await page.keyboard.press('Escape');await page.waitForTimeout(40);await page.locator('[data-rtw-actor=anchor]').evaluate(e=>e.click());await page.waitForTimeout(650);
   check(await page.locator('[data-rtw-reader]:not([hidden])').count()===1 && await page.locator('.rtw-match').count()===0,`${width}: interrupted match cut resolves to the latest reader`);
   await page.keyboard.press('Escape');await page.waitForTimeout(620);
+  // The revised resting shots must keep their full subject enterable and return
+  // to that source, including after it changes emphasis in the camera sequence.
+  for(const [time,role,id] of [[3.75,'arrival','rtw-ref-06'],[5.15,'near','rtw-ref-02'],[10.1,'resolve','rtw-ref-05']]) {
+   await page.locator('[data-act]').evaluate((e,t)=>e.scrollTop=(e.querySelector('[data-rtw-camera]').offsetHeight-innerHeight)*t/10.35,time);await page.waitForTimeout(400);
+   const door=page.locator(`[data-rtw-actor="${role}"]`);
+   check(await door.getAttribute('tabindex')==='0',`${width}: ${role} resting subject takes focus`);
+   const place=await page.locator('[data-act]').evaluate(e=>e.scrollTop);
+   await door.click();await page.waitForTimeout(620);
+   check(await page.locator('[data-rtw-reader]:not([hidden])').getAttribute('data-subject')===id,`${width}: ${role} enters real evidence`);
+   await page.keyboard.press('Escape');await page.waitForTimeout(620);
+   check(Math.abs(await page.locator('[data-act]').evaluate(e=>e.scrollTop)-place)<1,`${width}: ${role} exact return`);
+  }
   // Utility swipe and any reference remain reachable without the camera choreography.
   await page.locator('.rtw-archive').evaluate(e=>e.scrollIntoView({behavior:'instant'}));
   await page.locator('.rtw-rail').evaluate(e=>e.scrollTo({left:e.scrollWidth,behavior:'instant'}));
