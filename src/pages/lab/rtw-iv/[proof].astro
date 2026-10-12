@@ -1,0 +1,57 @@
+---
+/* Isolated approval proof. No production paths, public imports or Project data. */
+import CinematicPlate from '../../../components/portfolio/CinematicPlate.astro';
+import { womenswear, referenceSubject } from '../../../data/portfolio';
+import { lineSVG, sheetSVG, volumeSVG } from '../../../lab/rtw-iv/media';
+import css from '../../../lab/rtw-iv/proof.css?raw';
+export function getStaticPaths() { return import.meta.env.DEV ? [{params:{proof:'journey'}}] : []; }
+const ref = womenswear.categories.find(c=>c.id==='rtw')!.references.find(r=>r.id==='rtw-ref-01')!;
+const subject = referenceSubject(ref,womenswear.id,'rtw','turn');
+---
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" />
+  <title>Aberbach — RTW IV / isolated motion proof</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,100..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style is:inline set:html={css}></style>
+</head><body>
+  <main class="iv" data-iv>
+    <header class="iv-head"><span>ABERBACH <span class="iv-muted">/ LAB IV</span></span><span class="iv-truth">UI DEMO / NOT PROJECT EVIDENCE</span></header>
+    <section class="iv-exhibition" aria-label="RTW exhibition excerpt" data-exhibition>
+      <div class="iv-opening"><p>WOMENSWEAR / 01</p><h1>READY—<br />TO—WEAR</h1></div>
+      <button class="iv-source" data-enter aria-label="Enter the champagne satin reference garment"><CinematicPlate subject={subject} eager sizes="1400px" /></button>
+      <p class="iv-entry-note">Select the garment to enter its story study ↗</p>
+      <p class="iv-reference">Reference photography · no verified development evidence</p>
+    </section>
+    <article class="iv-reader" data-reader hidden aria-label="Selected garment story study">
+      <nav class="iv-nav" aria-label="Available story movements">
+        <button data-go="A" aria-current="step">Look</button><button data-go="B">Line</button><button data-go="C">Construction</button><button data-go="D">Volume</button><button data-go="E">Result</button>
+      </nav>
+      <div class="iv-stage" data-stage="A">
+        <div class="iv-photo" data-photo><CinematicPlate subject={subject} eager sizes="1400px" /></div>
+        <div class="iv-line iv-media" data-line set:html={lineSVG}></div>
+        <div class="iv-sheet iv-media" data-sheet set:html={sheetSVG}></div>
+        <div class="iv-volume iv-media" data-volume set:html={volumeSVG}></div>
+        <div class="iv-copy" data-copy>
+          <p class="iv-kicker" data-kicker>A / THE COMPLETE LOOK</p>
+          <h2 data-title>Champagne<br />satin slip.</h2>
+          <p data-note>Cowl neckline.<br />Low open back.</p>
+        </div>
+        <p class="iv-media-caption" data-media-caption></p>
+      </div>
+      <div class="iv-tools" data-tools>
+        <div class="iv-views" data-views><button data-view="0" aria-pressed="true">FRONT</button><button data-view="1" aria-pressed="false">BACK</button><button data-look>LOOK CLOSER</button></div>
+        <div class="iv-doc-tools" data-doc-tools hidden><button data-inspect>INSPECT SOURCE ↗</button><button data-flat hidden>FLAT / SHEET</button></div>
+        <div class="iv-compare" data-compare hidden><label for="iv-comparison">COMPARE</label><input id="iv-comparison" type="range" min="0" max="100" value="0" aria-label="Compare the UI volume specimen with the reference photograph" /></div>
+      </div>
+      <footer class="iv-foot"><button data-return>← EXHIBITION</button><span data-position aria-live="polite">REFERENCE 01 / LOOK</span><button data-next>LINE →</button></footer>
+    </article>
+    <aside class="iv-provenance" data-provenance>Reference photo: woven/1. Process media are UI specimens, not its development history.</aside>
+    <dialog class="iv-inspector" aria-labelledby="iv-inspector-title">
+      <header><h2 id="iv-inspector-title">Inspect source</h2><button data-close>CLOSE ×</button></header>
+      <p data-inspector-truth>UI DEMO / NO PROJECT EVIDENCE</p>
+      <div class="iv-inspector-tools"><button data-zoom="-1">−</button><button data-fit>FIT</button><button data-zoom="1">+</button><span>Drag to inspect · pinch or use + / −</span></div>
+      <div class="iv-inspector-window" tabindex="0" aria-label="Source inspection canvas. Arrow keys pan; plus and minus zoom."><div data-inspector-media></div></div>
+    </dialog>
+  </main>
+  <script>if (import.meta.env.DEV) import('../../../lab/rtw-iv/proof');</script>
+</body></html>
