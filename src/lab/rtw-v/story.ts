@@ -12,3 +12,15 @@ export function storyContent(subject: Subject) {
   if (movements.length > 1 || refinement.length) movements.push('E');
   return { mode: verified ? 'verified' : 'reference', movements, views: subject.views, sketch, construction, dimension, refinement };
 }
+
+/** Source roles for a future supplied Subject. Never falls back to demo media. */
+export function storyAssets(subject: Subject) {
+  const plan=storyContent(subject);
+  return {
+    sketch: plan.sketch[0]?.image,
+    flat: plan.construction.find(s=>s.key==='flat')?.image,
+    pattern: plan.construction.find(s=>s.key==='pattern')?.image,
+    digital: plan.dimension[0]?.image,
+    refinement: plan.refinement,
+  };
+}

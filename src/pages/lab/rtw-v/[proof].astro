@@ -17,8 +17,8 @@ const examples=(Astro.url.searchParams.get('mode')??'examples')==='examples';
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,100..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style is:inline set:html={css}></style>
 </head><body>
-  <main class="v" data-v data-mode={examples?"examples":plan.mode} data-movements={JSON.stringify(plan.movements)}>
-    <header class="v-head"><span>ABERBACH <span class="v-muted">/ LAB V</span></span><span class="v-truth">REVIEW V / INDEPENDENT EXAMPLES</span></header>
+  <main class="v" data-v data-mode={examples?"examples":plan.mode} data-movements={JSON.stringify(plan.movements)} data-content-mode={plan.mode}>
+    <header class="v-head"><span>ABERBACH <span class="v-muted">/ LAB V</span></span><span class="v-truth" data-mode-label>{examples?"REVIEW V / INDEPENDENT EXAMPLES":"REFERENCE ONLY / NO PROCESS EVIDENCE"}</span></header>
     <section class="v-exhibition" aria-label="RTW exhibition excerpt" data-exhibition>
       <div class="v-opening"><p>WOMENSWEAR / 01</p><h1>READY—<br />TO—WEAR</h1></div>
       <button class="v-source" data-enter aria-label="Enter the champagne satin reference garment"><CinematicPlate subject={subject} eager sizes="1400px" /></button>

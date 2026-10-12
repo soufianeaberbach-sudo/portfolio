@@ -35,17 +35,20 @@ if(root) {
  // Availability tests are lab-only. These never populate the public Project.
  // Real reader integration must derive origin/build from projectSubject; refs
  // have no such stages. E is a return only when there was evidence to explore.
- const availability=new URLSearchParams(location.search).get('evidence')??'full';
+ const query=new URLSearchParams(location.search);if(query.has('mode')&&query.get('mode')!=='examples'){root.dataset.mode=root.dataset.contentMode??'reference';get('[data-mode-label]').textContent='REFERENCE ONLY / NO PROCESS EVIDENCE';}
+ if(root.dataset.mode!=='examples')for(const image of root.querySelectorAll('.v-media img'))image.remove();
+ const availability=query.get('evidence')??'full';
  const requestedKeys:Key[]=root.dataset.mode!=='examples'?JSON.parse(root.dataset.movements??'["A"]'):availability==='none'?['A']:availability==='design'?['A','B','E']:availability==='construction'?['A','C','E']:['A','B','C','D','E'];
  let keys:Key[]=['A'];const loaded=new Set<string>();
  const layerKinds={sketch:line,pattern:sheet,flat:flatMedia,digital:volume};
  function refreshAvailability(){keys=requestedKeys.filter(k=>k==='A'||k==='B'&&loaded.has('sketch')||k==='C'&&(loaded.has('flat')||loaded.has('pattern'))||k==='D'&&loaded.has('digital')||k==='E'&&[...loaded].some(s=>s!=='photo'));for(const b of root!.querySelectorAll<HTMLElement>('[data-go]'))b.hidden=!keys.includes(b.dataset.go as Key);if(open)showUI(current);}
  let current:Key='A',open=false,tl:gsap.core.Timeline|null=null,turnTween:gsap.core.Tween|null=null,view=0,alternate=false,entryScroll=0,phase:'exhibition'|'entering'|'reading'|'leaving'='exhibition',continuityEpoch=0,entryHash='';
+ let retreat:Animation|null=null;
  const strings:Record<Key,[string,string,string]>={
   A:['A / THE COMPLETE LOOK','Champagne<br> satin slip.','Cowl neckline. Low open back.'],
   B:['B / FASHION ILLUSTRATION','The first<br>gesture.','Sybil Connolly’s original drawing.<br>Night Drifter / Hunt Museum.'],
   C:['C / PATTERN ENGINEERING','Shape becomes<br>construction.','Dress ST656-1 / MoMu.<br>A documented pattern and its technical drawing.'],
-  D:['D / DIGITAL GARMENT','A digital<br>material study.','CGElves / Marvelous Designer.<br>Independent robe. Not this slip’s development.'],
+  D:['D / DIGITAL GARMENT','A digital <br>material study.','CGElves / Marvelous Designer.<br>Independent robe. Not this slip’s development.'],
   E:['E / THE COMPLETE RESULT','','The original reference. Front and back remain available.']
  };
  const elements={photo,line,sheet,flatMedia,volume};
@@ -96,6 +99,7 @@ if(root) {
   stage.dataset.stage=k;root!.dataset.representation=activeKind();
   const [marker,title,note]=strings[k];get('[data-kicker]').textContent=marker;get('[data-title]').innerHTML=title;get('[data-note]').innerHTML=note;
   const kind=activeKind(),m=kind==='photo'?null:media[kind];
+  if(kind==='photo'&&(k==='B'||k==='D')){get('[data-kicker]').textContent=k+' / PHOTOGRAPHIC REFERENCE';get('[data-title]').innerHTML='Reference <br>photograph.';get('[data-note]').innerHTML='Champagne slip. A separate reference,<br>not the result of this example.';}
   get('[data-media-caption]').textContent=m?m.credit+(kind==='pattern'||kind==='flat'?' / MATCHED ST656-1 SOURCES':' / INDEPENDENT EXAMPLE'):'';
   copy.style.top=compact()?'0':'26%';copy.style.opacity='1';
   get('[data-views]').hidden=k!=='A'&&k!=='E';get('[data-doc-tools]').hidden=k==='A'||k==='E';
@@ -137,9 +141,9 @@ if(root) {
   match(true,reduced.matches||instant,()=>{phase='reading';exhibition.hidden=true;get<HTMLButtonElement>('[data-view="0"]').focus({preventScroll:true});if(key!=='A')go(key,true);});
  }
  function finishReturn(){reader.hidden=true;exhibition.inert=false;open=false;phase='exhibition';scrollTo(0,entryScroll);history.replaceState(null,'',location.pathname+location.search+(['A','B','C','D','E'].includes(entryHash.slice(1))?'':entryHash));get<HTMLButtonElement>('[data-enter]').focus({preventScroll:true});}
- function stopContinuity(){continuityEpoch++;cancelRtwMatchCut();if(phase==='entering'){phase='reading';exhibition.hidden=true;}else if(phase==='leaving')finishReturn();}
+ function stopContinuity(){continuityEpoch++;cancelRtwMatchCut();retreat?.cancel();retreat=null;if(phase==='entering'){phase='reading';exhibition.hidden=true;}else if(phase==='leaving')finishReturn();}
  function leave(instant=false){
-  if(!open||phase==='leaving')return;stopContinuity();phase='leaving';paintRtwPhoto(plate,view);
+  if(!open||phase==='leaving')return;const interrupted=phase==='entering'?document.querySelector('.rtw-match')?.getBoundingClientRect():null;stopContinuity();phase='leaving';paintRtwPhoto(plate,view);if(interrupted&&!instant&&!reduced.matches){const canvas=stage.getBoundingClientRect();gsap.set(photo,{x:interrupted.x-canvas.x,y:interrupted.y-canvas.y,scale:interrupted.height/photo.offsetHeight});}
   tl?.kill();turnTween?.kill();gsap.killTweensOf(Object.values(elements));dialog.close();exhibition.hidden=false;cancelRtwMatchCut();
   const opening=get('.v-opening');gsap.killTweensOf([opening,copy]);
   if(reduced.matches||instant)gsap.set(opening,{opacity:1,y:0});else{gsap.to(copy,{opacity:0,duration:.12});gsap.to(opening,{opacity:1,y:0,delay:.20,duration:.25});}
@@ -150,7 +154,7 @@ if(root) {
    // No invented shared element when the photo is absent from an evidence
    // frame. Return directly, retaining view, position and keyboard focus.
    source.style.setProperty('--view',String(view));paintRtwPhoto(source,view);
-   if(reduced.matches||instant)finished();else{const retreat=reader.animate([{opacity:1},{opacity:0}],{duration:220,easing:'ease-out'});retreat.onfinish=()=>{finished();retreat.cancel();};}
+   if(reduced.matches||instant)finished();else{const epoch=++continuityEpoch;retreat=reader.animate([{opacity:1},{opacity:0}],{duration:220,easing:'ease-out'});retreat.onfinish=()=>{if(epoch!==continuityEpoch||phase!=='leaving')return;finished();retreat?.cancel();retreat=null;};}
   }
  }
  get('[data-enter]').addEventListener('click',e=>enter('A',(e as MouseEvent).detail===0));
@@ -178,6 +182,8 @@ if(root) {
  root.addEventListener('wheel',e=>{if(!open||dialog.open||Math.abs(e.deltaY)<18)return;e.preventDefault();if(performance.now()-wheelGate<850)return;wheelGate=performance.now();const i=keys.indexOf(current)+Math.sign(e.deltaY);if(i>=0&&i<keys.length)go(keys[i]);},{passive:false});
  document.addEventListener('keydown',e=>{if(dialog.open||!open||e.target instanceof HTMLInputElement)return;if(e.key==='Escape'){leave(true);return;}if(['ArrowRight','ArrowLeft','PageDown','PageUp'].includes(e.key)){e.preventDefault();const d=e.key==='ArrowRight'||e.key==='PageDown'?1:-1;const i=keys.indexOf(current)+d;if(i>=0&&i<keys.length)go(keys[i],true);}});
  const iw=get('.v-inspector-window'),im=get('[data-inspector-media]');
+ let borrowed:HTMLImageElement|null=null,borrowedLayer:HTMLElement|null=null;
+ function restoreSource(){if(borrowed&&borrowedLayer)borrowedLayer.append(borrowed);borrowed=null;borrowedLayer=null;}
  let z=1,px=0,py=0,mw=0,mh=0,fitScale=1,drag=false,lastX=0,lastY=0,inspectionToken=0;
  function clampPan(){
   const bound=(pos:number,size:number,windowSize:number)=>size<=windowSize?(windowSize-size)/2:Math.min(16,Math.max(windowSize-size-16,pos));
@@ -186,12 +192,12 @@ if(root) {
  function renderInspect(){
   clampPan();im.style.transform=`translate3d(${px}px,${py}px,0) scale(${z})`;
   const whole=mw*z<=iw.clientWidth&&mh*z<=iw.clientHeight;
-  const col=Math.round(Math.max(0,-px)/Math.max(1,mw*z-iw.clientWidth)*100),row=Math.round(Math.max(0,-py)/Math.max(1,mh*z-iw.clientHeight)*100);
-  get('[data-inspector-position]').textContent=whole?`WHOLE SOURCE / ${Math.round(z*100)}% · ${mw} × ${mh}`:`${Math.round(z*100)}% / horizontal ${col}% · vertical ${row}% / FIT restores overview`;
+  const col=Math.min(100,Math.round(Math.max(0,-px)/Math.max(1,mw*z-iw.clientWidth)*100)),row=Math.min(100,Math.round(Math.max(0,-py)/Math.max(1,mh*z-iw.clientHeight)*100));
+  get('[data-inspector-position]').textContent=whole?`WHOLE SOURCE / ${Math.round(z*100)}% · ${mw} × ${mh} ${['pattern','flat'].includes(dialog.dataset.source??'')?'SVG':'px'}`:`${Math.round(z*100)}% / horizontal ${col}% · vertical ${row}% / FIT restores overview`;
  }
  function fit(){fitScale=Math.min(iw.clientWidth/mw,iw.clientHeight/mh)*.95;z=fitScale;px=(iw.clientWidth-mw*z)/2;py=(iw.clientHeight-mh*z)/2;renderInspect();}
  async function inspect(kind:'photo'|'sketch'|'pattern'|'flat'|'digital'){
-  settleFrame();dialog.showModal();im.replaceChildren();dialog.dataset.source=kind;dialog.dataset.ready='false';const token=++inspectionToken;im.style.width='';im.style.height='';get('[data-inspector-position]').textContent='Loading original source…';
+  settleFrame();restoreSource();dialog.showModal();im.replaceChildren();dialog.dataset.source=kind;dialog.dataset.ready='false';const token=++inspectionToken;im.style.width='';im.style.height='';get('[data-inspector-position]').textContent='Loading original source…';
   const title=kind==='photo'?'Original reference photograph':media[kind].title;
   get('#v-inspector-title').textContent=title;
   get('[data-inspector-truth]').replaceChildren();
@@ -204,16 +210,21 @@ if(root) {
   if(kind==='photo'){
    const clone=plate.cloneNode(true) as HTMLElement;clone.removeAttribute('data-rtw-photo');im.append(clone);clone.style.setProperty('--photo-h','1867px');paintRtwPhoto(clone,view,1867);mw=clone.offsetWidth;mh=1867;
   }else {
-   const original=(kind==='sketch'?line:kind==='pattern'?sheet:kind==='flat'?flatMedia:volume).querySelector('img')!;
-   const image=original.cloneNode(true) as HTMLImageElement;im.append(image);try{await image.decode();}catch{if(token===inspectionToken)get('[data-inspector-position]').textContent='Source unavailable. Close to return; no substitute is shown.';return;}if(token!==inspectionToken||!dialog.open)return;mw=media[kind].width;mh=media[kind].height;
+   const layer=kind==='sketch'?line:kind==='pattern'?sheet:kind==='flat'?flatMedia:volume;
+   const original=layer.querySelector('img')!;
+   if(!original?.complete||!original.naturalWidth){get('[data-inspector-position]').textContent='Source unavailable. Close to return; no substitute is shown.';return;}
+   // Borrow the decoded original rather than decoding a second 38MP copy.
+   borrowed=original;borrowedLayer=layer;im.append(original);mw=media[kind].width;mh=media[kind].height;
+
   }
   Object.assign(im.style,{width:`${mw}px`,height:`${mh}px`});fit();dialog.dataset.ready='true';get<HTMLButtonElement>('[data-close]').focus();
  }
  get('[data-look]').addEventListener('click',()=>inspect('photo'));
  get('[data-inspect]').addEventListener('click',()=>inspect(activeKind()));
  get('[data-close]').addEventListener('click',()=>dialog.close());get('[data-fit]').addEventListener('click',()=>{if(dialog.dataset.ready==='true')fit();});get('[data-reset]').addEventListener('click',()=>{pointers.clear();drag=false;if(dialog.dataset.ready==='true')fit();});
+ const maxZoom=()=>['pattern','flat'].includes(dialog.dataset.source??'')?Math.max(6,fitScale*8):Math.max(1.5,fitScale*2);
  const zoom=(delta:number)=>{
-  if(dialog.dataset.ready!=='true')return;const old=z;z=Math.min(Math.max(6,fitScale*8),Math.max(fitScale,z*Math.pow(1.6,delta)));
+  if(dialog.dataset.ready!=='true')return;const old=z;z=Math.min(maxZoom(),Math.max(fitScale,z*Math.pow(1.6,delta)));
   px=iw.clientWidth/2-(iw.clientWidth/2-px)*z/old;py=iw.clientHeight/2-(iw.clientHeight/2-py)*z/old;renderInspect();
  };
  for(const b of root.querySelectorAll<HTMLButtonElement>('[data-zoom]'))b.addEventListener('click',()=>zoom(Number(b.dataset.zoom)));
@@ -222,13 +233,13 @@ if(root) {
  iw.addEventListener('pointermove',e=>{
   if(!drag)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(pointers.size===2){const [a,b]=[...pointers.values()],distance=Math.hypot(a.x-b.x,a.y-b.y);
-   if(pinchDistance){const old=z;z=Math.min(Math.max(6,fitScale*8),Math.max(fitScale,z*distance/pinchDistance));const box=iw.getBoundingClientRect(),cx=(a.x+b.x)/2-box.x,cy=(a.y+b.y)/2-box.y;px=cx-(cx-px)*z/old;py=cy-(cy-py)*z/old;}pinchDistance=distance;
+   if(pinchDistance){const old=z;z=Math.min(maxZoom(),Math.max(fitScale,z*distance/pinchDistance));const box=iw.getBoundingClientRect(),cx=(a.x+b.x)/2-box.x,cy=(a.y+b.y)/2-box.y;px=cx-(cx-px)*z/old;py=cy-(cy-py)*z/old;}pinchDistance=distance;
   }else{px+=e.clientX-lastX;py+=e.clientY-lastY;}
   lastX=e.clientX;lastY=e.clientY;renderInspect();
  });
  const release=(e:PointerEvent)=>{pointers.delete(e.pointerId);drag=pointers.size>0;pinchDistance=0;const p=[...pointers.values()][0];if(p){lastX=p.x;lastY=p.y;}};
  iw.addEventListener('pointerup',release);iw.addEventListener('pointercancel',release);
- dialog.addEventListener('close',()=>{inspectionToken++;pointers.clear();drag=false;});
+ dialog.addEventListener('close',()=>{restoreSource();inspectionToken++;pointers.clear();drag=false;});
  iw.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1:-1);},{passive:false});
  iw.addEventListener('keydown',e=>{
   if(e.key==='+'||e.key==='=')zoom(1);else if(e.key==='-')zoom(-1);else if(e.key==='0'||e.key==='Home')fit();
@@ -249,9 +260,9 @@ if(root) {
  refreshAvailability();
  Promise.allSettled([photoReady,...mediaReady]).then(()=>{
   ready=true;refreshAvailability();dimensions();if(missing.length){get('[data-load-note]').hidden=false;get('[data-load-note]').textContent='Unavailable source: '+missing.join(', ')+'. Unsupported movements are omitted.';}
-  if(loaded.has('photo')&&keys.includes(deep))enter(deep,true);
+  const target=location.hash.slice(1) as Key;if(loaded.has('photo')&&keys.includes(target))enter(target,true);
  });
  window.addEventListener('hashchange',()=>{const target=location.hash.slice(1) as Key;if(keys.includes(target)){if(open)go(target,true);else enter(target,true);}});
  // Review instrumentation; never imported by public Portfolio.
- (window as unknown as {rtwV:unknown}).rtwV={go:(k:Key)=>go(k,true),get stage(){return current;},get available(){return keys;},get ready(){return ready;}};
+ (window as unknown as {rtwV:unknown}).rtwV={go:(k:Key)=>go(k,true),get stage(){return current;},get available(){return keys;},get ready(){return ready;},get phase(){return phase;}};
 }
