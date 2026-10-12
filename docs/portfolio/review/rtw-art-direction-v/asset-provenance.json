@@ -1,0 +1,256 @@
+{
+  "scope": "Development-only independent illustrative examples. None is Aberbach original work or the champagne reference’s development history.",
+  "licenses_of_contributions": "MoMu encoding adaptations and CGElves-containing adapted visual material are released under CC BY-SA 4.0. CC0 material remains CC0. This is an aggregation: existing Portfolio photography/code retains its original rights; no owner authorship or blanket relicensing is asserted.",
+  "reference_photograph": {
+    "source": "existing repository public/portfolio/woven/1-1400.webp",
+    "dimensions": [
+      1400,
+      1867
+    ],
+    "author": "Not supplied/verified; no authorship claim.",
+    "modifications": "None. Existing front/back windows; original pixels remain untouched.",
+    "relationships": "No verified process evidence supplied."
+  },
+  "chosen_assets": [
+    {
+      "id": "sketch",
+      "creator": "Sybil Connolly; digitisation: Hunt Museum",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Design_Sketch_by_Sybil_Connolly,_Night_Drifter.tif",
+      "collection_record": "https://www.huntmuseum.com/collection/design-sketch-night-drifter/",
+      "direct_original_url": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Design_Sketch_by_Sybil_Connolly%2C_Night_Drifter.tif",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution_requirements": "CC0 requires no attribution; creator and museum credited voluntarily.",
+      "original_dimensions": [
+        4542,
+        8397
+      ],
+      "vector_viewbox": null,
+      "modifications": "Lossless TIFF to WebP at 4542x8397; decoded RGB pixels identical. Gallery viewport trims 9% top and 11% bottom paper margins without editing the source, preserving both complete drawn looks. Inspector shows the entire original image, including pencil title and paper edges.",
+      "depiction": "Night Drifter: authentic sleeveless full-length evening dress sketch with round neckline, clutch, gloves, and a separate drawing of its bow-backed view. HM 1999.13.081.",
+      "relationships": "The front and back drawings are part of this same Connolly sheet. No relationship to the champagne slip, MoMu ST656-1 or CGElves robe is asserted.",
+      "retrieved_utc": "2026-10-12",
+      "upstream_sha256": "23b27b227ecc0f915a58671f7c2eb405ae61602f3b962dfde82e5e602e8d1d02",
+      "repository_original": "Upstream TIFF, linked above; local research copy is not duplicated in this clean branch. Earlier original assets remain on recovery.",
+      "repository_browser_asset": "src/lab/rtw-v/assets/connolly-night-drifter.webp",
+      "repository_browser_sha256": "ee6446d462a6972b38168605eaad5ed2f44772b0a8e82a871d5bada5fa8e77b0"
+    },
+    {
+      "id": "pattern",
+      "creator": "Creative patterndesign training and development VDAB; collection: MoMu Antwerp",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Pattern_of_a_dress_(ST656-1)_-_MoMu_Antwerp_Study_Collection.svg",
+      "collection_record": "http://data.momu.be/ark:34546/mc5b5v",
+      "direct_original_url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Pattern_of_a_dress_%28ST656-1%29_-_MoMu_Antwerp_Study_Collection.svg",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "attribution_requirements": "Credit named author, original source, license link, and indicate modifications. Adapted source material must remain CC BY-SA 4.0. No endorsement claimed.",
+      "original_dimensions": [
+        4840,
+        5421
+      ],
+      "vector_viewbox": [
+        1,
+        0,
+        5378,
+        6024
+      ],
+      "modifications": "UTF-16 XML transcoded to UTF-8 for browser/tool compatibility. XML trees identical, including every path, label and transform. No geometry, stroke or annotation changes.",
+      "depiction": "MoMu dress ST656-1 Pattern-a-thon pattern, 2022: bodice, facings, sleeve and skirt layouts; original grain directions, text and notches.",
+      "relationships": "Same documented ST656-1 study as the technical drawing; no connection to the slip, Connolly drawing or CGElves robe.",
+      "retrieved_utc": "2026-10-12",
+      "upstream_sha256": "38cf44ade931071df786459d76fe23e86e1be64597ad423d53d60c33c546d978",
+      "repository_original": "src/lab/rtw-v/assets/momu-st656-pattern.svg",
+      "repository_browser_asset": "src/lab/rtw-v/assets/momu-st656-pattern.svg",
+      "repository_browser_sha256": "e7f6c3826f571413739439970bb382b94b7e0b6f8eb519dda4c8d0ac58debca6"
+    },
+    {
+      "id": "flat",
+      "creator": "Creative patterndesign training and development VDAB; collection: MoMu Antwerp",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Pattern_drawing_of_a_dress_(ST656-1)_-_MoMu_Antwerp_Study_Collection.svg",
+      "collection_record": "http://data.momu.be/ark:34546/mc5b5v",
+      "direct_original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Pattern_drawing_of_a_dress_%28ST656-1%29_-_MoMu_Antwerp_Study_Collection.svg",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "attribution_requirements": "Credit named author, original source, license link, and indicate modifications. Adapted source material must remain CC BY-SA 4.0. No endorsement claimed.",
+      "original_dimensions": [
+        631,
+        549
+      ],
+      "vector_viewbox": [
+        0,
+        0,
+        701,
+        610
+      ],
+      "modifications": "UTF-16 to UTF-8 only; XML trees identical. Uniform contain rendering. No inferred construction data.",
+      "depiction": "MoMu ST656-1 front/back technical drawing, 2022.",
+      "relationships": "Same ST656-1 study and collection record as the pattern.",
+      "retrieved_utc": "2026-10-12",
+      "upstream_sha256": "47d61f0888889cebb8a218cd19ee1e2a3d0c53d0b594765675585ddaf0d156eb",
+      "repository_original": "src/lab/rtw-v/assets/momu-st656-flat.svg",
+      "repository_browser_asset": "src/lab/rtw-v/assets/momu-st656-flat.svg",
+      "repository_browser_sha256": "2d4e227fd174f567e09e61dc23818393d54d0638d650cc6aab0d7a4f496b37bd"
+    },
+    {
+      "id": "digital",
+      "creator": "CGElves",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Dynamic_3D_Digital_Clothing_Model_by_CG_Elves_Purple.jpg",
+      "collection_record": "https://cgelves.com/free-to-use-images-of-3d-digital-clothing-models/",
+      "direct_original_url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Dynamic_3D_Digital_Clothing_Model_by_CG_Elves_Purple.jpg",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "attribution_requirements": "Credit named author, original source, license link, and indicate modifications. Adapted source material must remain CC BY-SA 4.0. No endorsement claimed.",
+      "original_dimensions": [
+        1000,
+        1000
+      ],
+      "vector_viewbox": null,
+      "modifications": "Original JPEG redistributed byte-for-byte. No cropping, retouching, tracing or grid.",
+      "depiction": "Digital purple robe rendered from Marvelous Designer. Not CLO3D, not a garment scan, not fit validation, not the champagne slip.",
+      "relationships": "Independent digital artwork; no connection to any other selected source.",
+      "retrieved_utc": "2026-10-12",
+      "upstream_sha256": "ab5f3971ee208429e50565c0148b51b2160e552c3f2e871410d4f5f5707127e1",
+      "repository_original": "src/lab/rtw-v/assets/cgelves-purple.jpg",
+      "repository_browser_asset": "src/lab/rtw-v/assets/cgelves-purple.jpg",
+      "repository_browser_sha256": "ab5f3971ee208429e50565c0148b51b2160e552c3f2e871410d4f5f5707127e1"
+    }
+  ],
+  "verification": {
+    "vector_xml_trees_identical": true,
+    "cgelves_original_bytes_identical": true,
+    "lossless_sketch_decoded_rgb_sha256": "9ea7f20958240ebc5578365d139dc4c82d4e719a9d373d904d5fdf17d8fb8719"
+  },
+  "candidates": [
+    {
+      "candidate": "Many Pannelled Dress",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Design_Sketch_by_Sybil_Connolly%2C_Many_Pannelled_Dress.tiff",
+      "bytes": 1774362,
+      "sha256": "f8c530bf85a51713836af0cb6cfb54107cf977fc8a48fb66bbc7555789ce98d1",
+      "license": "CC0 1.0",
+      "source_excerpt": "Source https://www.huntmuseum.com/collection/design-sketch-48/ Permission ( Reusing this file ) Dedicated to the Public Domain with a CC0 label via Hu"
+    },
+    {
+      "candidate": "Carrickmacross Lace Dress",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Design_Sketch_by_Sybil_Connolly%2C_Carrickmacross_Lace_Dress.tiff",
+      "bytes": 2378094,
+      "sha256": "d9b2a10238679bff2532fc52415b8f84254d4979c93b49cfbc36180216cc1d66",
+      "license": "CC0 1.0",
+      "source_excerpt": "Source https://www.huntmuseum.com/collection/design-sketch-black-beauty/ Permission ( Reusing this file ) Dedicated to the Public Domain with a CC0 la"
+    },
+    {
+      "candidate": "ST656-1 front/back flat",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Pattern_drawing_of_a_dress_%28ST656-1%29_-_MoMu_Antwerp_Study_Collection.svg",
+      "bytes": 35232,
+      "sha256": "47d61f0888889cebb8a218cd19ee1e2a3d0c53d0b594765675585ddaf0d156eb",
+      "license": "CC BY-SA 4.0",
+      "source_excerpt": "Source http://data.momu.be/ark:34546/mc5b5v Author Creative patterndesign training and development VDAB Licensing [ edit ] This file is licensed under"
+    },
+    {
+      "candidate": "ST656-1 multi-piece pattern",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Pattern_of_a_dress_%28ST656-1%29_-_MoMu_Antwerp_Study_Collection.svg",
+      "bytes": 195630,
+      "sha256": "38cf44ade931071df786459d76fe23e86e1be64597ad423d53d60c33c546d978",
+      "license": "CC BY-SA 4.0",
+      "source_excerpt": "Source http://data.momu.be/ark:34546/mc5b5v Author Creative patterndesign training and development VDAB Licensing [ edit ] This file is licensed under"
+    },
+    {
+      "candidate": "CGElves purple robe",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Dynamic_3D_Digital_Clothing_Model_by_CG_Elves_Purple.jpg",
+      "bytes": 455541,
+      "sha256": "ab5f3971ee208429e50565c0148b51b2160e552c3f2e871410d4f5f5707127e1",
+      "license": "CC BY-SA 4.0",
+      "source_excerpt": "Source https://cgelves.com/free-to-use-images-of-3d-digital-clothing-models/ Author CGElves Other versions Licensing [ edit ] This file is licensed un"
+    },
+    {
+      "candidate": "Jules David no. 2224",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Fashion_illustration%2C_no._2224_MET_DP809010.jpg",
+      "bytes": 2102654,
+      "sha256": "78b094eebf1402b78b366c1280cbc36cb3d0e165d0d37740af421933060b288a",
+      "license": "CC0 1.0",
+      "source_excerpt": "Source/Photographer https://www.metmuseum.org/art/collection/search/386317 This file was donated to Wikimedia Commons as part of a project by the Metr"
+    },
+    {
+      "candidate": "CGElves floral skirt",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Free_Marvelous_Designer_Garment_by_CG_Elves.png",
+      "bytes": 177934,
+      "sha256": "0c3c3350add32805f26f4bb38364f356cf88d8befd376a0affa64071a446f062",
+      "license": "CC BY-SA 4.0",
+      "source_excerpt": "Source Own work Author Jenny1278 Licensing [ edit ] I, the copyright holder of this work, hereby publish it under the following license: This file is "
+    }
+  ],
+  "download_incident": {
+    "reported_error": "Upstream status code 503",
+    "recoverable_previous_url": null,
+    "workspace_finding": "At resume, no V files, download log or failed URL existed in either available worktree; IV HEAD and prior untracked III work were preserved.",
+    "observed_recovery": "Commons API 403, some encoded file-page requests 403, misspelled slip filename 404, Sketchfab download API 401. Verified canonical Commons pages and direct upload.wikimedia.org file URLs returned 200; no placeholder substitution."
+  },
+  "final_review_base": "7be2db9889a3b23a6b937487e4d974126fbd1370",
+  "recovery_preserved": "320b53754bab1108b9b6982f49634ce749f00ad7",
+  "final_curation": [
+    {
+      "candidate": "Night Drifter",
+      "source": "https://commons.wikimedia.org/wiki/File:Design_Sketch_by_Sybil_Connolly,_Night_Drifter.tif",
+      "license": "CC0 1.0",
+      "dimensions": [
+        4542,
+        8397
+      ],
+      "decision": "Selected: full-length fluid neutral drawing with genuine back study, higher resolution than the former knee-length illustration."
+    },
+    {
+      "candidate": "Pixel Swan Silk dress",
+      "source": "https://sketchfab.com/3d-models/silk-dress-d034c6f2822744bcb58dc508536c59a2",
+      "license": "Model CC BY 4.0 confirmed through API; not automatically attributed to website poster",
+      "decision": "Promising morphology. Official viewer attempted; authentication failure prevented a new licensed model render. No poster copied; no authentication restriction bypassed. Authoring software unspecified, never labelled CLO."
+    },
+    {
+      "candidate": "Digital Dress / Steve Jurvetson",
+      "source": "https://commons.wikimedia.org/wiki/File:Digital_Dress_(5834309383).jpg",
+      "license": "CC BY 2.0",
+      "dimensions": [
+        3146,
+        3757
+      ],
+      "decision": "Downloaded and inspected: photographed projection exhibit, not garment-development render. Rejected; no misleading 3D label."
+    },
+    {
+      "candidate": "CLO Marvelous Designer image / Creative Tools",
+      "source": "https://commons.wikimedia.org/wiki/File:CLO_Marvelous_Designer_image.jpg",
+      "license": "CC BY 2.0",
+      "dimensions": [
+        550,
+        310
+      ],
+      "decision": "Actual MD software view, tiny image and different tailored outfit. Rejected for resolution and fashion compatibility."
+    },
+    {
+      "candidate": "CGElves pattern preset / Jenny1278",
+      "source": "https://commons.wikimedia.org/wiki/File:Free_Marvelous_Designer_Patterns_Preset_CG_Elves.jpg",
+      "license": "CC BY-SA 4.0",
+      "dimensions": [
+        1907,
+        769
+      ],
+      "decision": "Actual pattern UI, no full digital garment. Rejected for D; cannot substitute document for garment."
+    },
+    {
+      "candidate": "CGElves original free-image collection",
+      "source": "https://cgelves.com/free-to-use-images-of-3d-digital-clothing-models/",
+      "decision": "Current creator page returned 404. Existing licensed Commons copy retained without repeated download."
+    },
+    {
+      "candidate": "Neutral AI-stock renders / Meshy, StockCake",
+      "decision": "Rejected: not verified garment-development evidence; generative imagery does not satisfy the brief."
+    },
+    {
+      "candidate": "CGElves purple robe",
+      "source": "https://commons.wikimedia.org/wiki/File:Dynamic_3D_Digital_Clothing_Model_by_CG_Elves_Purple.jpg",
+      "license": "CC BY-SA 4.0",
+      "dimensions": [
+        1000,
+        1000
+      ],
+      "decision": "Retained as permitted fallback, clearly separate independent MD material study. Palette and morphology remain a documented design limitation."
+    }
+  ]
+}
