@@ -1,0 +1,57 @@
+---
+/* Isolated approval proof. No production paths, public imports or Project data. */
+import CinematicPlate from '../../../components/portfolio/CinematicPlate.astro';
+import { womenswear, referenceSubject } from '../../../data/portfolio';
+import { media } from '../../../lab/rtw-v/media';
+import css from '../../../lab/rtw-v/proof.css?raw';
+export function getStaticPaths() { return import.meta.env.DEV ? [{params:{proof:'journey'}}] : []; }
+const ref = womenswear.categories.find(c=>c.id==='rtw')!.references.find(r=>r.id==='rtw-ref-01')!;
+const subject = referenceSubject(ref,womenswear.id,'rtw','turn');
+---
+<!doctype html><html lang="en"><head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" />
+  <title>Aberbach — RTW V / isolated motion proof</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,100..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style is:inline set:html={css}></style>
+</head><body>
+  <main class="v" data-v>
+    <header class="v-head"><span>ABERBACH <span class="v-muted">/ LAB V</span></span><span class="v-truth">REVIEW V / INDEPENDENT EXAMPLES</span></header>
+    <section class="v-exhibition" aria-label="RTW exhibition excerpt" data-exhibition>
+      <div class="v-opening"><p>WOMENSWEAR / 01</p><h1>READY—<br />TO—WEAR</h1></div>
+      <button class="v-source" data-enter aria-label="Enter the champagne satin reference garment"><CinematicPlate subject={subject} eager sizes="1400px" /></button>
+      <p class="v-entry-note">Select the garment to enter its material study ↗</p>
+      <p class="v-reference">Reference photography · no verified development evidence</p>
+    </section>
+    <article class="v-reader" data-reader hidden aria-label="Selected garment material study">
+      <nav class="v-nav" aria-label="Available story movements">
+        <button data-go="A" aria-current="step">Look</button><button data-go="B">Sketch</button><button data-go="C">Pattern</button><button data-go="D">3D</button><button data-go="E">Result</button>
+      </nav>
+      <div class="v-stage" data-stage="A">
+        <div class="v-photo" data-photo><CinematicPlate subject={subject} eager sizes="1400px" /></div>
+        <div class="v-line v-media" data-line><img src={media.sketch.url} alt={media.sketch.title} /></div>
+        <div class="v-sheet v-media" data-sheet><img src={media.pattern.url} alt={media.pattern.title} /></div><div class="v-flat v-media" data-flat-media><img src={media.flat.url} alt={media.flat.title} /></div>
+        <div class="v-volume v-media" data-volume><img src={media.digital.url} alt={media.digital.title} /></div>
+        <div class="v-copy" data-copy>
+          <p class="v-kicker" data-kicker>A / THE COMPLETE LOOK</p>
+          <h2 data-title>Champagne<br />satin slip.</h2>
+          <p data-note>Cowl neckline.<br />Low open back.</p>
+        </div>
+        <p class="v-media-caption" data-media-caption></p>
+      </div>
+      <div class="v-tools" data-tools>
+        <div class="v-views" data-views><button data-view="0" aria-pressed="true">FRONT</button><button data-view="1" aria-pressed="false">BACK</button><button data-look>LOOK CLOSER</button></div>
+        <div class="v-doc-tools" data-doc-tools hidden><button data-inspect>INSPECT SOURCE ↗</button><button data-flat hidden>TECHNICAL FLAT</button></div>
+        
+      </div>
+      <footer class="v-foot"><button data-return>← EXHIBITION</button><span data-position aria-live="polite">REFERENCE 01 / LOOK</span><button data-next>SKETCH →</button></footer>
+    </article>
+    <aside class="v-provenance" data-provenance>Reference photo only. External examples are not this garment’s development history.</aside>
+    <dialog class="v-inspector" aria-labelledby="v-inspector-title">
+      <header><h2 id="v-inspector-title">Inspect source</h2><button data-close>CLOSE ×</button></header>
+      <p data-inspector-truth>INDEPENDENT EXAMPLE / NOT THIS GARMENT’S HISTORY</p>
+      <div class="v-inspector-tools"><button data-zoom="-1" aria-label="Zoom out">−</button><button data-fit>FIT</button><button data-reset>RESET</button><button data-zoom="1" aria-label="Zoom in">+</button><span>Pan / pinch · arrows / + / −</span></div>
+      <p class="v-inspector-position" data-inspector-position aria-live="polite">Whole document</p><div class="v-inspector-window" tabindex="0" aria-label="Source inspection canvas. Arrow keys pan; plus and minus zoom."><div data-inspector-media></div></div>
+    </dialog>
+  </main>
+  <script>if (import.meta.env.DEV) import('../../../lab/rtw-v/proof');</script>
+</body></html>
