@@ -8,7 +8,7 @@ export function initRtwExhibition(root:HTMLElement){
  const actors=Object.fromEntries([...root.querySelectorAll<HTMLElement>('[data-rtw-actor]')].map(a=>[a.dataset.rtwActor!,a]));
  const title=root.querySelector<HTMLElement>('[data-rtw-title]')!,label=root.querySelector<HTMLElement>('[data-rtw-shot]')!;
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
- let timeline:gsap.core.Timeline|null=null,held=false;
+ let timeline:gsap.core.Timeline|null=null,held=false,resizedWhileHeld=false,heldProgress=0,holdShot=false;
  const paint=(scope:ParentNode=root)=>{for(const photo of scope.querySelectorAll<HTMLElement>('[data-rtw-photo]'))paintRtwPhoto(photo);};
  const render=()=>{
   paint(stage);for(const actor of Object.values(actors)){
@@ -55,11 +55,17 @@ export function initRtwExhibition(root:HTMLElement){
   render();
   if(!world.hasAttribute('data-open'))timeline.scrollTrigger?.disable(false);
  };
- const observer=new ResizeObserver(()=>{if(held)return;build();});observer.observe(stage);
+ const observer=new ResizeObserver(()=>{if(held){resizedWhileHeld=true;return;}build();});observer.observe(stage);
  const stateObserver=new MutationObserver(()=>{if(world.hasAttribute('data-open')){timeline?.scrollTrigger?.enable(false);timeline?.scrollTrigger?.refresh();paint();}else timeline?.scrollTrigger?.disable(false);});stateObserver.observe(world,{attributes:true,attributeFilter:['data-open']});
  reduced.addEventListener('change',build);
  root.querySelectorAll('img').forEach(img=>img.addEventListener('load',()=>paint()));
  document.fonts.ready.then(()=>{paint();timeline?.scrollTrigger?.refresh();});
  build();
- return {hold(on:boolean){held=on;if(on)timeline?.pause();else{timeline?.scrollTrigger?.update();paint();}},paint};
+ return {hold(on:boolean){
+  if(on){const trigger=timeline?.scrollTrigger;heldProgress=timeline?.progress()??0;holdShot=!!trigger&&world.scrollTop>=trigger.start-1&&world.scrollTop<=trigger.end+1;held=true;timeline?.pause();return;}
+  held=false;
+  if(resizedWhileHeld){resizedWhileHeld=false;build();const trigger=timeline?.scrollTrigger;if(holdShot&&trigger){trigger.refresh();world.scrollTop=trigger.start+(trigger.end-trigger.start)*heldProgress;trigger.update();render();}}
+  else timeline?.scrollTrigger?.update();
+  paint();
+ },paint};
 }
