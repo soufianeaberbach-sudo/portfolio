@@ -1,0 +1,16 @@
+---
+import {rtwFrames} from '../../data/rtw-direction';
+import type { Subject } from '../../data/portfolio';
+interface Props { subject: Subject; eager?: boolean; sizes?: string; }
+const {subject,eager=false,sizes='(max-width: 767px) 90vw, 48vw'}=Astro.props;
+const image=subject.cover;
+const split=image.views===2 && image.separable!==false && image.front>0 && image.front<1 ? image.front : 1;
+const measured=rtwFrames[subject.id];
+const bounds=split!==1&&measured?.source===image.src?measured:{front:[0,split],back:[split,1]};
+const aperture=split===1?1:Math.max(bounds.front[1]-bounds.front[0],bounds.back[1]-bounds.back[0]);
+---
+<span class="rtw-photo" data-rtw-photo data-door-source data-split={split} data-front={bounds.front.join(",")} data-back={bounds.back.join(",")}
+ style={`--aspect:${image.width/image.height};--window:${aperture};--view:0;`}>
+ <img src={image.src} srcset={image.srcset} sizes={sizes} width={image.width} height={image.height}
+ alt={image.alt} loading={eager?'eager':'lazy'} decoding="async" />
+</span>
