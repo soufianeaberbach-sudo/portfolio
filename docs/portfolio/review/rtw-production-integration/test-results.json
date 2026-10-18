@@ -12,28 +12,33 @@
     "smoke": {
       "passed": 352,
       "failed": 0,
-      "log_finished_utc": "2026-10-18T19:39:50.155282+00:00"
+      "log_finished_utc": "2026-10-18T20:19:51.805794+00:00"
     },
     "opening": {
       "passed": 100,
       "failed": 0,
-      "log_finished_utc": "2026-10-18T19:40:13.735661+00:00"
+      "log_finished_utc": "2026-10-18T20:18:50.528692+00:00"
     },
     "rtw": {
       "passed": 783,
       "failed": 0,
-      "log_finished_utc": "2026-10-18T19:42:23.765754+00:00"
+      "log_finished_utc": "2026-10-18T20:21:05.903066+00:00"
     },
     "reliability": {
       "passed": 74,
       "failed": 0,
-      "log_finished_utc": "2026-10-18T19:48:33.719761+00:00"
+      "log_finished_utc": "2026-10-18T20:20:30.391047+00:00"
+    },
+    "pre_pr_inputs": {
+      "passed": 373,
+      "failed": 0,
+      "log_finished_utc": "2026-10-18T20:18:16.872148+00:00"
     }
   },
   "build_pages": 11,
   "typescript_diagnostics": 0,
   "source_sha256": {
-    "src/components/portfolio/ReadyToWearExhibition.astro": "55202ee21f8b54114fd1279af2411b8d3741e90d35af777e1a31093b7533fea6",
+    "src/components/portfolio/ReadyToWearExhibition.astro": "ffae0e3543d51290af80f26b905e98b2d3b6d0db2f0ca5eaaad1877f8895ebd5",
     "src/components/portfolio/ReadyToWearPhoto.astro": "a002a5951aab6696e835feb069049b487aafe0c2b7265976470cc209b06f3fcc",
     "src/components/portfolio/ReadyToWearReader.astro": "f51ddf9aff5cce2f04fafd9d6f53d1061958c30532315d0b50543922e4487cc8",
     "src/components/portfolio/WomenswearAct.astro": "c19f1cb6da24dfb7bf0ae3b4147ef2c7cc2aed2400f275a289724530d760bf3b",
@@ -43,13 +48,84 @@
     "src/scripts/rtw-match-cut.ts": "2d68e100b53752bbea44d5906a4b75a006d977c18afce53776bd3665d07eac4b",
     "src/scripts/rtw-photo.ts": "9951c77d4b4f6fa212e860a6d9567b39dac6e62bd1b6e3ef7d9f7ee3f44be38c",
     "src/scripts/rtw-reader.ts": "aed95d049150f206f32b17672db7a98df84bcd4c389fd4f7607c985a0e4e8382",
-    "src/styles/rtw-cinematic.css": "a3eae35a776d13bae24b1124c564c5122d792d34f8cd149228d1806f29886017"
+    "src/styles/rtw-cinematic.css": "f175a334d04ec399f25f36fcdd6c393bdb90736e655d2703f0411b7f8abbf56a"
   },
   "limitations": [
     "Physical-device Safari not certified",
     "60fps not measured",
     "Source 17 frontal elbow is already cropped in original",
-    "One parallel cover-focus timing failure; unchanged serial smoke passed",
     "No verified development-story integration"
-  ]
+  ],
+  "focus_investigation": {
+    "control_parallel_failures": [
+      8,
+      2
+    ],
+    "control_runs_each": 12,
+    "instant_4x_cpu": {
+      "passed": 12,
+      "failed": 0
+    },
+    "keyboard_4x_cpu": {
+      "passed": 8,
+      "failed": 0
+    },
+    "test_setup_changed_only": true,
+    "report": "FOCUS.md",
+    "evidence": "focus-evidence.json"
+  },
+  "test_sha256": {
+    "tests/rtw-focus.mjs": "72cb3c98684574dec8fbe4bbbbce15bc673fcda0500c8815beae37197c617827",
+    "tests/rtw-pre-pr.mjs": "d2785ccf7ff97fdeb5b1b0fdd8b2f56e1f3851ac499fae9490c273e2a8b23bec",
+    "tests/rtw-production-integration.mjs": "e6e070e9af25980ea21a7a54dcb656074d35f01ca0133e636b3fb2ae97b266e0",
+    "tests/rtw-production-reliability.mjs": "117c3b041f3fd2d47438473ee164183c97c03921e1f2957d6b9498bab5458640",
+    "tests/smoke.mjs": "3a3869be602ee3349a2df601c0703a882a99322b7b28574a745bbad4806fa880",
+    "tests/portfolio-opening.mjs": "8410978ec044aece88b0d210fcd505a42913141fa020f149c9398fac6ad47cf0"
+  },
+  "archive_viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "cue": false,
+      "overflow": false,
+      "links": 17
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "cue": false,
+      "overflow": false,
+      "links": 17
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "cue": false,
+      "overflow": false,
+      "links": 17
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "cue": true,
+      "overflow": false,
+      "links": 17
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "cue": true,
+      "overflow": false,
+      "links": 17
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "cue": true,
+      "overflow": false,
+      "links": 17
+    }
+  ],
+  "final_build_finished_utc": "2026-10-18T20:16:51.558767+00:00",
+  "pre_pr_hardening_start": "929f24fa487352c8216664d503862df58cbc6d2e"
 }

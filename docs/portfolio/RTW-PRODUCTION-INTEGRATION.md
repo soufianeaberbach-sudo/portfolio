@@ -2,7 +2,8 @@
 
 Branch: `feat/rtw-cinematic-production-integration`.
 Base: `e9793113d29767fdf0a4be1bcb4d1d7918e94d82` (verified main).
-Capability A only. **Independent visual approval, PR preparation, merge and deployment remain pending.**
+Capability A only. **Art direction approved in principle; final hardening verified
+for a Draft PR. Merge and deployment require separate approval.**
 
 ## The integrated experience
 
@@ -144,4 +145,13 @@ conditional verified development-story capability remains a separate future task
 no owner evidence is supplied, no Subject migration is made, and no Connolly,
 MoMu, CGElves, placeholder technical stages or lab media enter this implementation.
 
-No integration PR, merge or deployment is authorized or performed.
+Final pre-PR hardening adds only a restrained compact archive discovery cue and
+focused input tests. The disclosed parallel focus failure was reproduced and
+isolated to animated smoke-fixture positioning; synchronous test positioning
+preserves the original focus assertions. Production focus/router behavior was
+not changed. See the [focus investigation](review/rtw-production-integration/FOCUS.md).
+
+A Draft PR is now authorized after successful verification. No merge or deployment
+is performed. Rollback: close the unmerged PR; if a future merge is authorized,
+revert that integration merge/commit as one unit to restore the production RTW
+markup and generic reader. No data migration or asset rollback is required.

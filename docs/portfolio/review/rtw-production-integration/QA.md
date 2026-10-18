@@ -2,8 +2,9 @@
 
 Date: **2026-10-18 UTC**. Base: `e9793113d29767fdf0a4be1bcb4d1d7918e94d82`.
 Branch: `feat/rtw-cinematic-production-integration`.
-The task implements photographic Capability A only. Passing tests does not grant
-art-direction, PR, merge or deployment approval.
+The task implements photographic Capability A only. Art direction is approved in
+principle; a Draft PR is authorized after hardening. Merge and deployment remain
+separate approval checkpoints. Passing tests does not grant either approval.
 
 ## Production baseline, captured before integration
 
@@ -39,6 +40,8 @@ only Astro dev. Browser commands used
 | `PORTFOLIO_QA_URL=http://127.0.0.1:4371 npm run test:opening` | PASS, **100**, 0 failures. |
 | `PORTFOLIO_QA_URL=http://127.0.0.1:4371 node tests/rtw-production-integration.mjs` | PASS, **783**. Six exact viewports, all 17 mappings/readers at each size, real views, whole-source exceptions, source-occurrence/scroll/focus return, history, inspection, interruptions, camera reframing after resize, protected Activewear access and native no-JavaScript access. |
 | `PORTFOLIO_QA_URL=http://127.0.0.1:4371 node tests/rtw-production-reliability.mjs` | PASS, **74**. All 17 cold deep links and actual decoded sources; genuine front/back travel; real CDP swipe/pinch, inspection resize and persistent image-failure feedback/return. |
+| `node tests/rtw-pre-pr.mjs` on the built preview | PASS, **373**: all 17 archive links through native Tab, real phone swipes, repeated keyboard and interrupted pointer entry/return, exact occurrence/scroll/focus, preference changes. |
+| `FOCUS_CPU=4 node tests/rtw-focus.mjs` | PASS, **12/12** concurrent scenarios; keyboard variant **8/8**. See [controlled investigation](FOCUS.md). |
 | TypeScript `--noEmit` for the four new RTW script modules, ES2022 + DOM, bundler resolution | PASS, no diagnostics. |
 | Production output inspection | PASS: no lab routes, Connolly, CGElves, ST656-1, Night Drifter or V-lab source URLs in emitted HTML/JS/CSS/JSON. |
 | Git scope/integrity | PASS: production images, portfolio data, studio-gap adapter, shared Womenswear/cover styles, backend and configuration unchanged. |
@@ -53,10 +56,12 @@ Interim failures were investigated rather than hidden or waived:
   Dedicated 4380/4381 ports resolved it.
 - Rebuilding output while a browser suite was navigating produced an invalid
   intermediate run. Final output was stabilized before verification.
-- One parallel smoke run reported cover-focus restoration to BODY. A focused
-  reproduction restored the expected opener, and two serial complete smoke runs
-  passed unchanged. No focus assertion was removed; parallel load/timing remains
-  a test sensitivity to monitor.
+- The original parallel BODY failure was investigated during final hardening.
+  Old animated test positioning reproduced failures in two independent parallel
+  controls (8/12 and 2/12); synchronous fixture positioning passed 12/12 under
+  4× CPU throttle and 8/8 keyboard scenarios. The unchanged focus assertion then
+  passed in the complete smoke suite run alongside opening. See [FOCUS.md](FOCUS.md)
+  for traces, causal limits and CI isolation. Production focus code was unchanged.
 - The initial new suite assumed assigning an unchanged hash would re-enter the
   category. It now exercises the real category link, which invokes the router.
 - The all-reference geometry check exposed the portrait-tablet whole-pair width
@@ -118,8 +123,53 @@ and preserve real view, magnification, keyboard, touch, deep-link and focus chec
   No perpetual effect, extra library, WebGL or backend change was introduced.
 - Only reference photography is public. No verified technical story is supplied
   or implemented. Capability B requires separately approved genuine owner evidence.
-- The parallel smoke focus sensitivity above remains disclosed; final serial
-  suites and focused continuity checks pass.
 
 No new visual assets were downloaded. No public source photographs were changed.
-No PR, merge, deployment, Cloudflare change or historical-branch rewrite occurred.
+Draft PR preparation is authorized following these checks. No merge, deployment,
+Cloudflare change or historical-branch rewrite occurred.
+
+
+## Final pre-PR visual review
+
+Only the archive discoverability treatment changed after `929f24f`: a static
+10px mono “SWIPE TO EXPLORE” line with a small red directional mark. It appears
+on phones and portrait tablet; desktop keeps the approved composition. Existing
+rail semantics already announce horizontal exploration to assistive technology,
+so the duplicate visual cue is hidden from the accessibility tree. No carousel
+buttons, cards, snapping changes, new animations or new input handlers were added.
+
+Actual archive views were checked at all six sizes: all contain 17 references,
+none overflow the chapter; the cue appears at 390, 430 and portrait 768 only.
+Full-resolution 390/430/768 archive screenshots and a dedicated
+[before/after](archive-mobile-before-after.jpg) are published. The 390 archive
+and archive-return screenshots and mobile movie were refreshed. Unaffected
+opening/reader/desktop screenshots, desktop movie and protected comparisons are
+retained from the approved render; no redundant capture collection was committed.
+
+Seven-dimension critique of this focused change:
+
+1. Fashion hierarchy: the rail's original complete silhouettes and scale remain.
+2. Image integration: the cue adds no surface behind the white photography.
+3. Composition: it sits under archive context, above the figures, without overlap.
+4. Rhythm: the rail remains utility after the cinematic passage; no new pause.
+5. Typography: the quiet text is readable at 390 and supports discovery.
+6. Interaction: actual swipes move the rail; native Tab brings all 17 doors into
+   view. Direct navigation, early returns and reduced motion remain controllable.
+7. Mobile: 390/430 and portrait 768 retain clear handoff and category controls;
+   the instruction no longer depends on seeing an operating-system scrollbar.
+
+The unchanged desktop movie and updated phone movie were inspected through
+extracted 5fps frames and timestamped 2fps review sheets, including camera start,
+midpoint/payoff, measured entry, reader, inspection and return. No new blank
+frame, ghosted garment, stale clone, image-scale jump or control collision was
+observed. The phone movie includes a real archive swipe and last-reference
+entry/return. Existing opening-layer arrival remains visible at movie start;
+source exits at stage edges and the intentional Look Closer crop remain distinct
+from complete resting garment shots. This is visual review, not a hardware
+frame-time or physical Safari certification.
+
+The 373-input suite additionally repeats keyboard/archive returns and early
+pointer interruption at 1440, 1024, portrait 768, 430 and 390. All six exact
+viewports and every reference are covered by the 783-check integration suite.
+Protected category assertions pass in smoke; their source/styles/photographs and
+published comparison sheets are unchanged from `929f24f`.
