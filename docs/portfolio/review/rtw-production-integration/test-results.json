@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-18",
+  "baseline": "e9793113d29767fdf0a4be1bcb4d1d7918e94d82",
+  "branch": "feat/rtw-cinematic-production-integration",
+  "preview": "http://127.0.0.1:4371",
+  "baseline_results": {
+    "smoke": 352,
+    "opening": 100,
+    "pages": 11
+  },
+  "final_results": {
+    "smoke": {
+      "passed": 352,
+      "failed": 0,
+      "log_finished_utc": "2026-10-18T19:39:50.155282+00:00"
+    },
+    "opening": {
+      "passed": 100,
+      "failed": 0,
+      "log_finished_utc": "2026-10-18T19:40:13.735661+00:00"
+    },
+    "rtw": {
+      "passed": 783,
+      "failed": 0,
+      "log_finished_utc": "2026-10-18T19:42:23.765754+00:00"
+    },
+    "reliability": {
+      "passed": 74,
+      "failed": 0,
+      "log_finished_utc": "2026-10-18T19:48:33.719761+00:00"
+    }
+  },
+  "build_pages": 11,
+  "typescript_diagnostics": 0,
+  "source_sha256": {
+    "src/components/portfolio/ReadyToWearExhibition.astro": "55202ee21f8b54114fd1279af2411b8d3741e90d35af777e1a31093b7533fea6",
+    "src/components/portfolio/ReadyToWearPhoto.astro": "a002a5951aab6696e835feb069049b487aafe0c2b7265976470cc209b06f3fcc",
+    "src/components/portfolio/ReadyToWearReader.astro": "f51ddf9aff5cce2f04fafd9d6f53d1061958c30532315d0b50543922e4487cc8",
+    "src/components/portfolio/WomenswearAct.astro": "c19f1cb6da24dfb7bf0ae3b4147ef2c7cc2aed2400f275a289724530d760bf3b",
+    "src/data/rtw-direction.ts": "357a671d5b05e9c8d1de743753b60c4789f3380516b83569a4c2e7a69dd96884",
+    "src/pages/portfolio.astro": "85b0dfc697dfc202a15f1cbf783fac492d7fa9eea0040445a9c313055243a4c4",
+    "src/scripts/rtw-exhibition.ts": "7489be2abcadb2c16c5c309004521204cd095bffae6177c1fdf16549ac353b61",
+    "src/scripts/rtw-match-cut.ts": "2d68e100b53752bbea44d5906a4b75a006d977c18afce53776bd3665d07eac4b",
+    "src/scripts/rtw-photo.ts": "9951c77d4b4f6fa212e860a6d9567b39dac6e62bd1b6e3ef7d9f7ee3f44be38c",
+    "src/scripts/rtw-reader.ts": "aed95d049150f206f32b17672db7a98df84bcd4c389fd4f7607c985a0e4e8382",
+    "src/styles/rtw-cinematic.css": "a3eae35a776d13bae24b1124c564c5122d792d34f8cd149228d1806f29886017"
+  },
+  "limitations": [
+    "Physical-device Safari not certified",
+    "60fps not measured",
+    "Source 17 frontal elbow is already cropped in original",
+    "One parallel cover-focus timing failure; unchanged serial smoke passed",
+    "No verified development-story integration"
+  ]
+}
