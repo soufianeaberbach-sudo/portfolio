@@ -5,6 +5,8 @@ import { exhibitionImage } from '../../data/womenswear-exhibition';
 import Arrow from '../Arrow.astro';
 import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
+import ReadyToWearExhibition from './ReadyToWearExhibition.astro';
+import ReadyToWearReader from './ReadyToWearReader.astro';
 interface Props { world: GarmentWorld; lab?: { category: string; subject: Subject }; }
 const { world, lab } = Astro.props;
 const publication = worldPublication(world);
@@ -81,6 +83,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
     {territories.map((t,index) => (
       <article class="pf-tr" id={`${world.id}-${t.id}`} data-movement={t.id} data-territory={t.id}
         data-act-title={t.short} aria-labelledby={`${world.id}-${t.id}-title`}>
+        {t.id === 'rtw' && !lab && publication === 'reference-preview' ? <ReadyToWearExhibition subjects={t.slots} world={world.id}/> : <>
         <div class="pf-edit__hero" data-paired={t.paired ? '' : undefined} data-hero>
           <header class="pf-edit__title">
             <p class="label pf-edit__chapter">Womenswear <span>{pad(index+1)}</span></p>
@@ -100,11 +103,13 @@ const pad = (n:number) => String(n).padStart(2,'0');
             {t.supporting.map(item => <ActFigure item={item} href={door(item)} noun={noun} crop="front" sizes="(max-width: 767px) 48vw, 22vw" />)}
           </div>
         )}
+      </>}
       </article>
     ))}
 
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
+        if(territory.id === 'rtw' && !lab && !subject.verified) return <ReadyToWearReader subject={subject} world={world.id}/>;
         /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
            supplied is rendered, whatever its role; the role decides how much
            room the story is given:

@@ -1,0 +1,30 @@
+---
+import type {Subject} from '../../data/portfolio';
+import {rtwCast} from '../../data/rtw-direction';
+import ReadyToWearPhoto from './ReadyToWearPhoto.astro';
+interface Props{subjects:Subject[];world:string;}
+const{subjects,world}=Astro.props;
+const cast=rtwCast.flatMap(part=>{const subject=subjects.find(s=>s.id===part.id);return subject?[{...part,subject}]:[];});
+const door=(s:Subject)=>`#${world}/rtw/${s.id}`;
+---
+<div class="rtw-exhibition" data-rtw-exhibition>
+ <div class="rtw-camera" data-rtw-camera>
+  <div class="rtw-stage" data-rtw-stage aria-label="Selected Ready-to-Wear looks">
+   <header class="rtw-title" data-rtw-title><p class="label">WOMENSWEAR / <b>01</b></p><h3 class="display" id={`${world}-rtw-title`}>READY—<br/>TO—WEAR</h3></header>
+   <div class="rtw-cast">
+    {cast.map(({subject,role})=><a class="rtw-actor" data-rtw-actor={role} href={door(subject)} data-nav data-open-subject={subject.id}
+      aria-label={`Enter reference: ${subject.cover.alt}`} draggable="false"><ReadyToWearPhoto subject={subject}/></a>)}
+   </div>
+   <p class="rtw-shot label" data-rtw-shot aria-hidden="true">THE COMPLETE LOOK</p>
+  </div>
+ </div>
+ <section class="rtw-archive" aria-label="Complete Ready-to-Wear reference archive">
+  <div class="rtw-archive-head"><p class="label">READY-TO-WEAR / ALL {subjects.length} REFERENCES</p><p>Silhouette, proportion, drape.</p></div>
+  <p class="rtw-archive-cue label" aria-hidden="true">SWIPE TO EXPLORE <span>→</span></p>
+  <div class="rtw-rail" tabindex="0" aria-label="Ready-to-Wear archive. Swipe or scroll horizontally for every reference.">
+   {subjects.map(subject=><a href={door(subject)} data-nav data-open-subject={subject.id} draggable="false"
+     aria-label={`Enter reference: ${subject.cover.alt}`}><ReadyToWearPhoto subject={subject} sizes="(max-width:767px) 60vw, 22vw"/></a>)}
+  </div>
+  <a class="rtw-handoff label" href={`#${world}/activewear`} data-nav><span>CONTINUE</span><b>02 / ACTIVEWEAR</b><span aria-hidden="true">↗</span></a>
+ </section>
+</div>

@@ -165,7 +165,11 @@ try {
         trigger = p.locator('.pf-women-threshold__action');
         await p.evaluate(() => {
           const cinema = document.querySelector('.pf-cinema');
-          scrollTo(0, cinema.offsetTop + cinema.offsetHeight - innerHeight);
+          /* This is test positioning, not a visitor scroll. CSS smooth scroll
+             plus Playwright's automatic scroll-into-view can queue a second
+             viewport move under concurrent load, hiding the return target.
+             Set the fixture position synchronously; keep every focus assertion. */
+          scrollTo({ top: cinema.offsetTop + cinema.offsetHeight - innerHeight, behavior: 'instant' });
         });
       }
     } else {
@@ -516,7 +520,7 @@ try {
     const act = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
       const territories = [...w.querySelectorAll('[data-territory]')];
-      const doors = [...w.querySelectorAll('.pf-fig__door')];
+      const doors = [...w.querySelectorAll('[data-open-subject]')];
       const readers = [...w.querySelectorAll('.pf-rd__subject')];
       return {
         ids: territories.map(t => t.dataset.territory),
@@ -533,7 +537,7 @@ try {
     check('the five categories remain in approved order', act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear');
     check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
     check('every garment has an exhibition entry and a reader',
-      act.doors.length === 49 && new Set(act.doors).size === 49 && act.readers.every(id => act.doors.includes(id)));
+      new Set(act.doors).size === 49 && act.readers.every(id => act.doors.includes(id)));
     check('readers stay closed until requested', act.open === 0);
     check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
     check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');
@@ -894,10 +898,10 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
     await openChapter(p, 'womenswear');
-    await openScene(p, '[data-territory="rtw"] .pf-edit__support');
+    await openScene(p, '[data-territory="rtw"] .rtw-archive');
 
     const before = await p.evaluate(() => {
-      const door = document.querySelector('[data-territory="rtw"] .pf-edit__support .pf-fig__door');
+      const door = document.querySelector('[data-territory="rtw"] .rtw-rail a');
       return {
         id: door.dataset.openSubject,
         href: door.getAttribute('href'),
@@ -907,11 +911,11 @@ try {
     check('a cell in the range is a real link to that garment',
       /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
 
-    await p.evaluate(() => document.querySelector('[data-territory="rtw"] .pf-edit__support .pf-fig__door').click());
+    await p.evaluate(() => document.querySelector('[data-territory="rtw"] .rtw-rail a').click());
     await p.waitForTimeout(900);
     const entered = await p.evaluate((id) => {
       const rd = document.querySelector(`[data-subject="${id}"]`);
-      const view = rd.querySelector('.pf-rd__view');
+      const view = rd.querySelector('[data-rtw-photo]');
       const img = view.querySelector('img');
       return {
         open: !rd.hidden,
@@ -922,7 +926,7 @@ try {
         ground: getComputedStyle(rd).backgroundColor,
         backTo: rd.querySelector('[data-subject-close]').getAttribute('href'),
         garment: Math.round(img.getBoundingClientRect().height),
-        views: rd.querySelectorAll('.pf-rd__view, [data-rd-travel]').length,
+        views: rd.querySelectorAll('[data-rtw-view]').length,
         travel: rd.hasAttribute('data-travel'),
         stages: rd.querySelectorAll('.pf-rd__stage-item').length,
         pending: !!rd.querySelector('[data-subject-pending]'),
@@ -945,7 +949,7 @@ try {
       entered.verified === 'no' && entered.stages === 0 && entered.pending,
       JSON.stringify(entered));
 
-    const back = p.locator(`[data-subject="${before.id}"] [data-rd-select="1"]`);
+    const back = p.locator(`[data-subject="${before.id}"] [data-rtw-view="1"]`);
     await back.focus(); await p.keyboard.press('Enter');
     check('the back view can be selected by keyboard', await back.getAttribute('aria-pressed') === 'true');
 
@@ -954,12 +958,12 @@ try {
     await p.waitForTimeout(500);
     const closer = await p.evaluate((id) => {
       const rd = document.querySelector(`[data-subject="${id}"]`);
-      const img = rd.querySelector('.pf-rd__window img');
+      const img = rd.querySelector('[data-rtw-photo]');
       return {
         on: rd.hasAttribute('data-inspect'),
         pressed: rd.querySelector('[data-rd-inspect]').getAttribute('aria-pressed'),
         scale: new DOMMatrixReadOnly(getComputedStyle(img).transform).a,
-        height: Math.round(rd.querySelector('.pf-rd__view').getBoundingClientRect().height),
+        height: Math.round(rd.querySelector('[data-rtw-photo]').getBoundingClientRect().height),
       };
     }, before.id);
     check('the garment can be inspected closer than life size',
@@ -996,27 +1000,28 @@ try {
     await c.close();
   }
 
-  // The selected view follows the visible centre after a native horizontal scroll.
+  // The scoped reader preserves touch access to the genuine back and front.
   {
     const c = await ctxWithFonts({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
     const p = await c.newPage();
     await p.goto(BASE + '/portfolio/#womenswear/rtw/rtw-ref-01', { waitUntil: 'load' });
     const reader = p.locator('[data-subject="rtw-ref-01"]');
-    const stage = reader.locator('[data-rd-stage]');
-    await stage.evaluate(el => el.scrollLeft = el.scrollWidth);
+    const stage = reader.locator('[data-rtw-target]');
+    await stage.dispatchEvent('pointerdown', { pointerId: 1, pointerType: 'touch', clientX: 260, clientY: 300 });
+    await stage.dispatchEvent('pointerup', { pointerId: 1, pointerType: 'touch', clientX: 100, clientY: 300 });
     await p.waitForTimeout(300);
-    check('mobile scrolling selects the visible back view',
-      await reader.locator('[data-rd-select="1"]').getAttribute('aria-pressed') === 'true');
+    check('mobile horizontal gesture selects the back view',
+      await reader.locator('[data-rtw-view="1"]').getAttribute('aria-pressed') === 'true');
     await reader.locator('[data-rd-inspect]').click();
     await p.waitForTimeout(300);
     check('looking closer preserves the selected back view',
-      await reader.locator('[data-rd-select="1"]').getAttribute('aria-pressed') === 'true');
+      await reader.locator('[data-rtw-view="1"]').getAttribute('aria-pressed') === 'true');
     await reader.locator('[data-rd-inspect]').click();
-    await reader.locator('[data-rd-select="0"]').click();
+    await reader.locator('[data-rtw-view="0"]').click();
     await p.waitForTimeout(300);
     check('front control returns to the first view',
-      await reader.locator('[data-rd-select="0"]').getAttribute('aria-pressed') === 'true'
-      && await stage.evaluate(el => el.scrollLeft < 2));
+      await reader.locator('[data-rtw-view="0"]').getAttribute('aria-pressed') === 'true'
+      && await reader.locator('[data-rtw-photo]').getAttribute('data-side') === 'front');
     await c.close();
   }
 

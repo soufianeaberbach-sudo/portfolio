@@ -10,6 +10,7 @@ import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
 import '../styles/portfolio-womenswear.css';
+import '../styles/rtw-cinematic.css';
 import type { Subject } from '../data/portfolio';
 
 /* The development-only story lab renders this page with one internal test
@@ -807,9 +808,11 @@ const split = (statement: string, word: string) => {
        from that one piece of state, so Back always steps back exactly one
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
+      import { initRtw } from '../scripts/rtw-reader';
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const rtw = initRtw(root);
       /* Has the visitor done anything yet? A level opened by the page's own
          address is the page initialising, not the visitor choosing. */
       let visitorActed = false;
@@ -920,6 +923,7 @@ const split = (statement: string, word: string) => {
       };
 
       const closeSubject = () => {
+        rtw?.cancel();
         if (!openSubject) return;
         const leaving = openSubject;
         openSubject = null;
@@ -932,7 +936,7 @@ const split = (statement: string, word: string) => {
         subjectReturnTo = null;
         if (!back && world) {
           back = [...world.querySelectorAll<HTMLElement>(`[data-open-subject="${leaving.dataset.subject}"]`)]
-            .find((door) => shown(frameOf(door))) ?? null;
+            .find((door) => shown(frameOf(door)) && (!rtw?.owns(leaving) || !door.hasAttribute('data-rtw-actor') || door.tabIndex === 0)) ?? null;
         }
         /* The territory behind never moved while the garment was open, so a
            door that was on screen is still on screen. Only a door that is not
@@ -951,14 +955,18 @@ const split = (statement: string, word: string) => {
         const finish = () => {
           putAway(leaving);
           subjectMotion = null;
-          if (back && document.contains(back)) back.focus({ preventScroll: true });
+          if (back && document.contains(back) && (!rtw?.owns(leaving) || location.hash === '#womenswear/rtw')) back.focus({ preventScroll: true });
         };
         /* THE EXIT. The same clip as the entrance, run back into the frame
            the garment came from, and shorter: the visitor is leaving, the
            system answers. The layer thins out as it closes, so what is left
            in the frame at the end is the garment in its range, not an empty
            piece of the layer's own ground. */
-        if (back && !reduced() && !readerKeyboard) {
+        if (rtw?.owns(leaving)) {
+          exiting = leaving;
+          rtw.leave(leaving, back ? frameOf(back) : null, reduced() || readerKeyboard, finish);
+          if (location.hash === '#womenswear/rtw' && back && document.contains(back)) back.focus({ preventScroll: true });
+        } else if (back && !reduced() && !readerKeyboard) {
           subjectMotion = leaving.animate(
             [
               { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 },
@@ -983,6 +991,7 @@ const split = (statement: string, word: string) => {
           : null;
         if (!next) { closeSubject(); return; }
         if (openSubject === next) return;
+        rtw?.cancel();
         if (exiting === next) exiting = null;
         subjectMotion?.cancel();
         subjectMotion = null;
@@ -1002,7 +1011,9 @@ const split = (statement: string, word: string) => {
            stays opaque the whole way: fading it in as well had the range, the
            hero and the garment all showing through each other at the start. */
         const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
-        if (source && shown(source) && !reduced() && !readerKeyboard) {
+        if (rtw?.owns(next)) {
+          rtw.enter(next, source && shown(source) ? source : null, reduced() || readerKeyboard);
+        } else if (source && shown(source) && !reduced() && !readerKeyboard) {
           subjectMotion = next.animate(
             [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
             { duration: 420, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
@@ -1046,7 +1057,7 @@ const split = (statement: string, word: string) => {
       /* Shared view selection and bounded inspection for every garment. */
       const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
-      for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject')) {
+      for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject:not([data-rtw-reader])')) {
         const inspect = subject.querySelector<HTMLButtonElement>('[data-rd-inspect]');
         const windows = [...subject.querySelectorAll<HTMLElement>('[data-rd-window]')];
         const stage = subject.querySelector<HTMLElement>('[data-rd-stage]');
@@ -1438,6 +1449,7 @@ const split = (statement: string, word: string) => {
            gives back: inspection, then the garment, then the territory, then
            the chapter. One press undoes one thing. */
         if (openSubject) {
+          if (rtw?.owns(openSubject)) readerKeyboard = true;
           if (openSubject.hasAttribute('data-inspect')) {
             openSubject.querySelector<HTMLElement>('[data-rd-inspect]')?.click();
             return;
