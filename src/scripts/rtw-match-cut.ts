@@ -1,0 +1,42 @@
+import {paintRtwPhoto} from './rtw-photo';
+let cancelCurrent:(()=>void)|null=null;
+export const cancelRtwMatchCut=()=>{cancelCurrent?.();};
+/** The router owns navigation/focus. This utility owns only one decoded photographic clone. */
+export function rtwMatchCut(reader:HTMLElement,source:HTMLElement,entering:boolean,instant:boolean,finished:()=>void){
+ cancelCurrent?.();
+ const target=reader.querySelector<HTMLElement>('[data-rtw-photo]')!;
+ let canceled=false,clone:HTMLElement|null=null,animations:Animation[]=[];
+ const oldTarget=target.style.visibility,oldSource=source.style.visibility;
+ const cleanup=()=>{canceled=true;clone?.remove();for(const a of animations)a.cancel();target.style.visibility=oldTarget;source.style.visibility=oldSource;if(cancelCurrent===cleanup)cancelCurrent=null;};
+ cancelCurrent=cleanup;
+ const view=Number((entering?source:target).style.getPropertyValue('--view'))||0;
+ for(const photo of [target,source]){photo.style.setProperty('--view',String(view));paintRtwPhoto(photo,view);}
+ reader.querySelectorAll<HTMLElement>('[data-rtw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.rtwView)===Math.round(view))));
+ if(instant){cleanup();finished();return;}
+ const from=entering?source:target,to=entering?target:source;
+ const start=async()=>{
+  const original=from.querySelector<HTMLImageElement>('img')!;
+  original.loading='eager';
+  const destination=to.querySelector<HTMLImageElement>('img')!;destination.loading='eager';
+  try{await Promise.all([original.decode(),destination.decode()]);}catch{if(!canceled){cleanup();finished();}return;}
+  if(canceled)return;
+  const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
+  if(!a.width||!b.width){cleanup();finished();return;}
+  clone=from.cloneNode(true) as HTMLElement;clone.removeAttribute('data-rtw-photo');clone.removeAttribute('data-door-source');clone.setAttribute('aria-hidden','true');clone.classList.add('rtw-match');
+  Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none',visibility:'visible'});
+  const img=clone.querySelector<HTMLImageElement>('img')!;img.src=original.currentSrc||original.src;img.removeAttribute('srcset');img.style.height=`${a.height}px`;img.decoding='sync';
+  document.body.append(clone);paintRtwPhoto(clone,view);
+  try{await img.decode();}catch{if(!canceled){cleanup();finished();}return;}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+   if(canceled||!clone)return;
+   target.style.visibility='hidden';source.style.visibility='hidden';
+   const options={duration:560,easing:'cubic-bezier(.22,.68,.18,1)',fill:'forwards' as FillMode};
+   const garment=clone.animate([{transform:'translate3d(0,0,0) scale(1)'},{transform:`translate3d(${b.left-a.left}px,${b.top-a.top}px,0) scale(${b.height/a.height})`}],options);
+   // One opaque white viewing space: fading the entire reader ghosted other
+   // exhibition figures through the moving garment. Only the measured image moves.
+   animations=[garment];
+   garment.onfinish=()=>{if(canceled)return;cleanup();finished();};
+  }));
+ };
+ void start();
+}

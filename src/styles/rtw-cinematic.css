@@ -89,3 +89,6 @@
  .rtw-exhibition:not([data-enhanced]) .rtw-title{padding:1.5rem var(--rtw-edge) 1rem;}
  .rtw-exhibition:not([data-enhanced]) .rtw-actor[data-rtw-actor='anchor']{--photo-h:calc(100svh - 18rem);}
 }
+.rtw-reader[data-inspect] .rtw-reader-floor::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5.5rem;background:#fff;z-index:2;pointer-events:none;}
+.rtw-source-status{z-index:4;}
+@media(max-width:767px),(max-width:1023px) and (orientation:portrait){.rtw-reader[data-inspect] .rtw-reader-floor::after{height:8.5rem;}}
