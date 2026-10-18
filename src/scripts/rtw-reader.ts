@@ -22,7 +22,7 @@ export function initRtw(root:HTMLElement){
    s.x=Math.max(-x,Math.min(x,s.x));s.y=Math.max(-y,Math.min(y,s.y));
    photo.style.transform=`translate3d(${s.x}px,${s.y}px,0) scale(${s.zoom})`;photo.style.transformOrigin='center center';
    paintRtwPhoto(photo,s.view);
-   status.textContent=reader.hasAttribute('data-inspect')?`${Math.round(s.zoom*100)}% · drag / pinch / arrow keys`:'';
+   status.textContent=image.complete&&!image.naturalWidth?'Original photograph unavailable. Return to the exhibition to continue.':reader.hasAttribute('data-inspect')?`${Math.round(s.zoom*100)}% · drag / pinch / arrow keys`:'';
   };
   const setInspect=(on:boolean)=>{cancelRtwMatchCut();reader.toggleAttribute('data-inspect',on);image.sizes=on?`${image.getAttribute('width')}px`:originalSizes;inspect.setAttribute('aria-pressed',String(on));tools.hidden=!on;s.zoom=on?Math.min(2,limit()):1;s.x=s.y=0;s.draw();};
   s.reset=()=>{gsap.killTweensOf(s);gsap.killTweensOf(photo);pointers.clear();image.sizes=originalSizes;reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;s.zoom=1;s.x=s.y=0;s.draw();};
