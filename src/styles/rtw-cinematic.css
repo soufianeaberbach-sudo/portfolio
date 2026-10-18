@@ -92,3 +92,7 @@
 .rtw-reader[data-inspect] .rtw-reader-floor::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5.5rem;background:#fff;z-index:2;pointer-events:none;}
 .rtw-source-status{z-index:4;}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){.rtw-reader[data-inspect] .rtw-reader-floor::after{height:8.5rem;}}
+
+/* The photograph crosses the copy's field during the measured cut. The return
+   remains available; focusing a control settles entry immediately. */
+.rtw-reader[data-rtw-moving] :is(.rtw-reader-copy,.rtw-reader-controls,.rtw-zoom-tools){opacity:0;pointer-events:none;}

@@ -45,6 +45,7 @@ export function initRtw(root:HTMLElement){
   });
   const release=(e:PointerEvent)=>{const start=pointers.get(e.pointerId);if(start&&!reader.hasAttribute('data-inspect')&&Number(photo.dataset.split)!==1&&Math.abs(e.clientX-lastX)>40)setView(e.clientX<lastX?1:0);pointers.delete(e.pointerId);distance=0;const left=[...pointers.values()][0];if(left){lastX=left.x;lastY=left.y;}};
   viewport.addEventListener('pointerup',release);viewport.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);distance=0;});
+  reader.addEventListener('focusin',e=>{if(e.target!==reader&&reader.hasAttribute('data-rtw-moving')){cancelRtwMatchCut();reader.removeAttribute('data-rtw-moving');entering=false;}});
   reader.addEventListener('keydown',e=>{
    if(!reader.hasAttribute('data-inspect')){if(Number(photo.dataset.split)!==1&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();setView(e.key==='ArrowRight'?1:0,true);}return;}
    if(e.key.startsWith('Arrow')){e.preventDefault();s.x+=e.key==='ArrowLeft'?40:e.key==='ArrowRight'?-40:0;s.y+=e.key==='ArrowUp'?40:e.key==='ArrowDown'?-40:0;s.draw();}
@@ -55,7 +56,7 @@ export function initRtw(root:HTMLElement){
   image.addEventListener('error',()=>{status.textContent='Original photograph unavailable. Return to the exhibition to continue.';});
   image.addEventListener('load',s.draw);
  }
- const cancel=()=>{const finish=returnFinish;returnFinish=null;finish?.();epoch++;cancelRtwMatchCut();};
+ const cancel=()=>{active?.removeAttribute('data-rtw-moving');const finish=returnFinish;returnFinish=null;finish?.();epoch++;cancelRtwMatchCut();};
  const settle=()=>{cancel();if(active){const s=states.get(active)!;gsap.killTweensOf(s);s.view=Math.round(s.view);active.querySelectorAll<HTMLElement>('[data-rtw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.rtwView)===s.view)));active.querySelector<HTMLElement>('[data-rtw-photo]')!.style.setProperty('--view',String(s.view));s.draw();}};
  window.addEventListener('resize',settle);reduced.addEventListener('change',settle);
  return {
@@ -65,14 +66,14 @@ export function initRtw(root:HTMLElement){
    s.view=source?Number(source.style.getPropertyValue('--view'))||0:0;photo.style.setProperty('--view',String(s.view));s.draw();
    reader.querySelectorAll<HTMLElement>('[data-rtw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.rtwView)===Math.round(s.view))));
    const img=photo.querySelector<HTMLImageElement>('img')!;img.loading='eager';if(!img.complete)reader.querySelector<HTMLElement>('[data-rtw-source-status]')!.textContent='Loading original photograph…';const current=epoch;
-   if(source)rtwMatchCut(reader,source,true,instant||reduced.matches,()=>{if(epoch===current){entering=false;s.draw();}});
+   if(source){reader.setAttribute('data-rtw-moving','');rtwMatchCut(reader,source,true,instant||reduced.matches,()=>{if(epoch===current){entering=false;reader.removeAttribute('data-rtw-moving');s.draw();}});}
   },
   leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,finished:()=>void){
    const interrupted=entering;entering=false;cancel();const s=states.get(reader)!;gsap.killTweensOf(s);s.view=Math.round(s.view);const photo=reader.querySelector<HTMLElement>('[data-rtw-photo]')!;photo.style.setProperty('--view',String(s.view));s.draw();
    setInert(false);const current=epoch;
-   const done=()=>{if(current!==epoch)return;returnFinish=null;if(active===reader)active=null;finished();};
+   const done=()=>{if(current!==epoch)return;reader.removeAttribute('data-rtw-moving');returnFinish=null;if(active===reader)active=null;finished();};
    returnFinish=done;
-   if(source&&location.hash===`#${world.id}/rtw`){rtwMatchCut(reader,source,false,interrupted||instant||reduced.matches,done);}
+   if(source&&location.hash===`#${world.id}/rtw`){reader.setAttribute('data-rtw-moving','');rtwMatchCut(reader,source,false,interrupted||instant||reduced.matches,done);}
    else done();
   },
  };
