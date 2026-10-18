@@ -165,7 +165,11 @@ try {
         trigger = p.locator('.pf-women-threshold__action');
         await p.evaluate(() => {
           const cinema = document.querySelector('.pf-cinema');
-          scrollTo(0, cinema.offsetTop + cinema.offsetHeight - innerHeight);
+          /* This is test positioning, not a visitor scroll. CSS smooth scroll
+             plus Playwright's automatic scroll-into-view can queue a second
+             viewport move under concurrent load, hiding the return target.
+             Set the fixture position synchronously; keep every focus assertion. */
+          scrollTo({ top: cinema.offsetTop + cinema.offsetHeight - innerHeight, behavior: 'instant' });
         });
       }
     } else {
