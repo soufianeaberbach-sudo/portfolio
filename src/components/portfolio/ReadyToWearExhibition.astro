@@ -20,6 +20,7 @@ const door=(s:Subject)=>`#${world}/rtw/${s.id}`;
  </div>
  <section class="rtw-archive" aria-label="Complete Ready-to-Wear reference archive">
   <div class="rtw-archive-head"><p class="label">READY-TO-WEAR / ALL {subjects.length} REFERENCES</p><p>Silhouette, proportion, drape.</p></div>
+  <p class="rtw-archive-cue label" aria-hidden="true">SWIPE TO EXPLORE <span>→</span></p>
   <div class="rtw-rail" tabindex="0" aria-label="Ready-to-Wear archive. Swipe or scroll horizontally for every reference.">
    {subjects.map(subject=><a href={door(subject)} data-nav data-open-subject={subject.id} draggable="false"
      aria-label={`Enter reference: ${subject.cover.alt}`}><ReadyToWearPhoto subject={subject} sizes="(max-width:767px) 60vw, 22vw"/></a>)}
