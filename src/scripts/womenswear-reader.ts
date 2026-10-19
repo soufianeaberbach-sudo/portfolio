@@ -51,7 +51,12 @@ export function initWomenswear(root:HTMLElement){
   });
   viewport.addEventListener('pointerup',e=>{const start=pointers.get(e.pointerId);if(start&&!reader.hasAttribute('data-inspect')&&Math.abs(e.clientX-start.x)>40)s.select(requestedView+(e.clientX<start.x?1:-1));pointers.delete(e.pointerId);distance=0;const left=[...pointers.values()][0];if(left){lastX=left.x;lastY=left.y;}});
   viewport.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);distance=0;});
-  reader.addEventListener('focusin',e=>{if(e.target!==reader&&reader.hasAttribute('data-ww-moving')){cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;}});
+  reader.addEventListener('focusin',e=>{if(e.target!==reader&&reader.hasAttribute('data-ww-moving')){
+   cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');
+   // Focusing Return interrupts entry before its click reaches the router.
+   // Preserve that fact so the exit settles immediately, without a second cut.
+   if(active===reader&&returnFinish){const finish=returnFinish;returnFinish=null;finish();}
+  }});
   reader.addEventListener('keydown',e=>{
    if(!reader.hasAttribute('data-inspect')){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();s.select(requestedView+(e.key==='ArrowRight'?1:-1));}return;}
    if(e.key.startsWith('Arrow')){e.preventDefault();s.x+=e.key==='ArrowLeft'?40:e.key==='ArrowRight'?-40:0;s.y+=e.key==='ArrowUp'?40:e.key==='ArrowDown'?-40:0;s.draw();}
