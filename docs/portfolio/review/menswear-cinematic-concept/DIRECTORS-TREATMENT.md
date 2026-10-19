@@ -48,10 +48,12 @@ context or establish a relationship, never to arbitrarily rank look numbers.
 
 ## 01 / STREETWEAR — PRESENCE
 
-Neutral volume against city direction. Three unique references: cream hoodie
-6311316, black tank/loose denim 30599804, white tee/black trousers 8505243.
+Neutral volume against city direction. Four unique references: cream hoodie
+6311316, black tank/loose denim 30599804, white tee/black trousers 8505243, and teal oversized tailoring 17303564.
 The hoodie is the established stillness; the booth's geometry is the disruption;
-the walking city image provides the destination. These are separate sources,
+the oversized teal silhouette is withheld until the finale. Its volume recalls
+the hoodie while its confident styling breaks the neutral palette. The surprise
+comes from an authentic garment, not a decorative color effect. These are separate sources,
 not claimed campaign continuity.
 
 | Beat / emotion | Opening → held composition and focal point | Camera / transition and reason | Mobile / pace |
@@ -60,7 +62,7 @@ not claimed campaign continuity.
 | 2 A second axis / anticipation | Hoodie moves to left; complete urban white-tee figure occupies right. Comparable standing scale, different source architecture. | Re-register photograph edges rather than sliding a strip. A clear visual dialogue between dropped volume and straight trouser line. | One dominant city look; the earlier hoodie leaves completely. One short exchange. |
 | 3 The threshold / surprise | Ink surrounds the intact sunlit booth/denim image. The white architecture seems brighter because the stage changed; pixels unchanged. | A bounded camera-gate wipe reveals the architectural room at the destination. No photograph recolor or generic fade. | Gate opens onto the complete booth look, not an edge-cropped body. Strongest punctuation. |
 | 4 Space between / admiration | Booth and cream hoodie resolve into two separate vertical rooms, equal floor logic and clear central interval. Quiet line of text. | The gate releases laterally, revealing a relationship that was withheld. The screen is not a common studio. | Full hoodie returns at deliberate standing scale; the other complete look belongs to adjacent scene, not a tiny simultaneous comparison. |
-| 5 Presence, held / discovery | Complete city figure resolves the directional thread; a quiet cream-room echo sits lower/left on desktop, not a six-person cast. | Photographic emphasis changes from volume to stride. The ending recalls the opening garment but lets the new environment dominate. Archive remains one action away. | City photograph becomes the single concluding full look, with a short archive invitation. No repeat of midpoint composition. |
+| 5 Presence, held / discovery | A newly revealed complete oversized teal suit owns a single photographic room. No miniature echo or lineup. | The decisive final cut changes cream street volume into sculptural teal tailoring. Same theme, genuinely new silhouette. Archive remains one action away. | The entire new teal look is held below the title; no repetition of the earlier city shot. |
 
 The main proof choreographs this passage. The visual surprise is the light
 photographic architecture inside an ink stage, followed by a composed reopening
@@ -85,8 +87,10 @@ fully authored in Phase C. The contrast must survive a paused projector frame.
 ## 03 / READY-TO-WEAR — EVOLUTION
 
 Refinement can be relaxed. Sources: olive-ground seated knit 16711124; white tee
-on plinth 29727778; white shirt/green trousers 8508752. Two seated compositions
-show genuinely different silhouettes; the standing final opens the posture.
+on plinth 29727778; white shirt/green trousers 8508752; expressive white frill-shirt/black-trouser pose
+6844165 by cottonbro studio. Two seated compositions
+show genuinely different silhouettes; the standing interval opens the posture, and the final real expressive pose
+opens it further. No photographic body is animated to imply dancing.
 
 | Beat | Composition / emotional job | Proposed camera / transition | Mobile |
 | --- | --- | --- | --- |
@@ -94,7 +98,7 @@ show genuinely different silhouettes; the standing final opens the posture.
 | 2 The interval | White-tee/plinth look creates a second, cooler geometry. Anticipation through a contrasting seat/leg relationship. | Align real support edges and preserve photo proportions; no claimed same model/outfit. | Entire plinth pose, one readable frame. |
 | 3 Open field | White/green standing look releases the compressed poses. Surprise through posture and pale atmosphere. | Empty-margin window opens into complete look; no silhouette morph or recoloring. | Measured source window keeps hands/feet; original on demand. |
 | 4 Balance | Olive knit and cool plinth exchange emphasis without sharing an invented floor. Admiration. | Editorial registration of two rooms, deliberately slower than Activewear. | Whole knit then whole plinth through direct scene choices. |
-| 5 Evolution, held | Standing green/white look commands a luminous stage; small seated room is an explicit memory on desktop. Discovery. | Resolve sitting→standing narrative; no repeated horizontal procession. | One large full standing silhouette; quiet route to archive. |
+| 5 Evolution, held | A complete white frill-shirt look opens against its authentic red/dark photographic ground. Discovery through a genuinely new expressive posture. | Resolve seated → standing → expressive posture; the real photographic room supplies the dramatic contrast. | One large full new silhouette, including raised arms and shoes; quiet route to archive. |
 
 ## 04 / TAILORING — AUTHORITY
 
@@ -106,8 +110,8 @@ the old pool are retained historically, not stretched into full-body primaries.
 | --- | --- | --- | --- |
 | 1 The line | Whole steel suit in its real dark studio; pale AUTHORITY type offsets the vertical. Curiosity. | Still architectural establishment. No decorative grid. | Complete source, quiet title in reserved band. |
 | 2 Daylight | Whole dark suit on its original light studio ground. Anticipation through real background contrast. | Clean editorial cut to a different source; no guessed angle or relighting. | Full single look with complete shoes. |
-| 3 The reversal | Ivory suit appears against its original dark studio; surrounding field opens to paper. Surprise through light garment/dark image/bright stage. | Controlled opening of the photographic gate, retaining the dark source intact. | Full seated/leaning silhouette. No head or trouser cut. |
-| 4 Precision | Grey and dark suit plates establish two exact verticals, quiet edge alignment. Admiration. | Proposed held diptych; not a row of product cards or false common photo. | One complete suit at a time. |
+| 3 The reversal | Steel and dark-suit photographs share a bright stage as separate complete rooms. Their opposing original grounds reverse the light/dark reading. | Controlled registration of intact photographic rooms, not simulated garment relighting. | One complete dark suit in its light original studio; no tiny simultaneous comparison. |
+| 4 Precision | The steel suit returns alone for a precise, quiet hold before the new final look. Admiration. | A held photographic punctuation; the ivory garment remains withheld until the payoff. | One complete suit at a time. |
 | 5 Authority, held | Ivory suit owns the final frame; its angular pose/chair and narrow typography establish a different ending from Streetwear's stride. | Long final hold; deliberate forward path to archive / existing Development cover. | Ivory full look; no giant closing slogan. |
 
 ## Navigation and executive presentation
@@ -138,7 +142,7 @@ the previous Explore position. Reduced motion uses direct complete compositions.
 
 This is an isolated proposal and real browser proof, not a public replacement.
 Phase C authors the Streetwear motion vocabulary and tests the other destinations
-as visual/keynote studies. Three unique candidate photos per world are enough to
+as visual/keynote studies. Three or four unique candidate photos per world are enough to
 judge this grammar; **forty sourced display slots and full four-world production
 integration are explicitly not complete**. The ten-slot strategy is in CONTENT.md.
 

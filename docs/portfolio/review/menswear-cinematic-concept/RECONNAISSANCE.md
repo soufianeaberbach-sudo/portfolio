@@ -56,10 +56,11 @@ gated next phase. Existing public category links remain available unchanged.
 
 ## Media selection and constraints
 
-Six existing full-look sources plus six licensed new *review-only* sources give
-12 unique candidate photographs, three per world without cross-world duplicates.
+Six existing full-look sources plus eight licensed new *review-only* sources give
+14 unique candidate photographs without cross-world duplicates: four Streetwear,
+three Activewear, four Ready-to-Wear and three Tailoring candidates.
 All are temporary independent references, not one authored ABERBACH collection.
-Six rejected research downloads remain in /tmp only; cropped-body and weak
+Rejected research downloads remain in /tmp only; cropped-body and weak
 candidates are not committed. See ASSETS.json and ATTRIBUTION.md.
 
 Source atmospheres differ: urban brick, pale concrete, olive, cool white, dark
@@ -73,7 +74,7 @@ original remains inspectable. Original source files are untouched.
 
 Streetwear is the main five-movement motion experiment. The other three worlds
 are five composed storyboard keyframes plus direct destination/keyboard studies,
-not approved full category films. The proof has only three genuine candidate
+not approved full category films. The proof has only three or four genuine candidate
 archive entries per category, clearly disclosed. Ten slots/forty unique garments
 are the future production contract, **not falsely counted as completed here**.
 Full sourcing, historical-ID migration, production history integration and all-

@@ -31,7 +31,7 @@ function placeGeometry(look:Look,p:Pose){
 function paint(){
  const shots=worlds[world].shots,a=Math.min(4,Math.floor(position)),b=Math.min(4,a+1),t=position-a;
  const cut=t<.52?a:b,shot=shots[cut],current=shots[a],next=shots[b],mode=compact.matches?'mobile':'desktop';
- frame.toggleAttribute('data-dark',!!shot.dark);
+ frame.toggleAttribute('data-dark',!!shot.dark);frame.style.background=shot.white?'#fff':'var(--paper)';
  const dark=current.dark?1:0,light=next.dark?1:0,gate=dark+(light-dark)*Math.min(1,Math.max(0,(t-.12)/.72));
  $('[data-gate]').style.clipPath=`inset(0 ${(1-gate)*100}% 0 0)`;
  $('[data-phrase]').textContent=shot.phrase;$('[data-note]').textContent=shot.note;
@@ -64,22 +64,22 @@ function renderCast(){
  $('[data-world-label]').textContent=worlds[world].name;
  for(const b of root.querySelectorAll<HTMLElement>('[data-world-to]'))b.setAttribute('aria-current',String(b.dataset.worldTo===world));
 }
-function goScene(index:number,keyboard=false){
+function goScene(index:number,immediate=false){
  stop();requested=Math.max(0,Math.min(4,index));showControls();
  if(!present){experience.scrollTop=experience.scrollHeight>experience.clientHeight?(experience.scrollHeight-experience.clientHeight)*requested/4:0;}
- if(reduce.matches||keyboard){position=requested;paint();return;}
+ if(reduce.matches||immediate){position=requested;paint();return;}
  const state={at:position};motion=gsap.to(state,{at:requested,duration:world==='m-streetwear'?.7:.42,ease:'power2.inOut',onUpdate:()=>{position=state.at;paint();},onComplete:()=>{motion=null;position=requested;paint();}});
 }
 async function jump(id:World){
  const mine=++token;++readToken;stop();speak('');
- try{await prepare(id);}catch{if(mine===token)speak('That reference could not load. Your current world remains available.');return;}
+ try{await prepare(id);}catch{if(mine===token){if(menu.open)menu.close();speak('That reference could not load. Your current world remains available.');}return;}
  if(mine!==token)return;
  if(menu.open)menu.close();if(archive.open)archive.close();if(reader.open)finishReader();world=id;if(present)explorePosition=0;position=requested=0;renderCast();experience.scrollTop=0;paint();experience.focus({preventScroll:true});showControls();speak(`${worlds[id].name}. Opening composition.`);
 }
 $('[data-world-menu]').addEventListener('click',()=>menu.showModal());$('[data-world-close]').addEventListener('click',()=>menu.close());
 for(const id of worldKeys){const b=document.createElement('button');b.innerHTML=`<span>${worlds[id].number}</span>${worlds[id].name}`;b.dataset.worldTo=id;b.addEventListener('click',()=>void jump(id));$('[data-world-links]').append(b);}
 $('[data-next]').addEventListener('click',e=>goScene(requested+1,(e as PointerEvent).detail===0));$('[data-prev]').addEventListener('click',e=>goScene(requested-1,(e as PointerEvent).detail===0));
-experience.addEventListener('scroll',()=>{if(present||reader.open||motion)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{position=4*experience.scrollTop/Math.max(1,experience.scrollHeight-experience.clientHeight);requested=Math.round(position);if(reduce.matches)position=requested;paint();});},{passive:true});
+experience.addEventListener('scroll',()=>{if(present||reader.open||motion)return;readToken++;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{position=4*experience.scrollTop/Math.max(1,experience.scrollHeight-experience.clientHeight);requested=Math.round(position);if(reduce.matches)position=requested;paint();});},{passive:true});
 function togglePresent(on:boolean){stop();if(on===present)return;if(on){explorePosition=position;position=requested=Math.round(position);}present=on;root.toggleAttribute('data-present',on);$('[data-presentation-tools]').hidden=!on;paint();experience.focus({preventScroll:true});showControls();if(!on){position=explorePosition;experience.scrollTop=(experience.scrollHeight-experience.clientHeight)*position/4;paint();if(document.fullscreenElement===root)void document.exitFullscreen().catch(()=>{});}speak(on?'Presentation. Use arrow keys, Page Up/Down or Space while the stage is focused.':'Explore. Previous scroll position restored.');}
 $('[data-present]').addEventListener('click',()=>togglePresent(true));$('[data-exit]').addEventListener('click',()=>togglePresent(false));
 $('[data-fullscreen]').addEventListener('click',async()=>{try{if(!root.requestFullscreen)throw new Error('unsupported');await root.requestFullscreen();}catch{speak('Fullscreen is unavailable. In-page presentation remains active.');}});
@@ -98,7 +98,7 @@ async function match(sourceNode:HTMLElement,enter:boolean,done:()=>void){
  const rect=sourceNode.getBoundingClientRect(),target=image.getBoundingClientRect(),a=enter?rect:target,b=enter?target:rect;
  if(!a.width||!b.width){done();return;}
  const clone=image.cloneNode() as HTMLImageElement;clone.className='mc-transfer';clone.removeAttribute('data-reader-image');clone.setAttribute('aria-hidden','true');Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none'});reader.append(clone);
- try{await clone.decode();}catch{clone.remove();done();return;}
+ try{await clone.decode();}catch{clone.remove();if(generation===transferToken&&reader.open)done();return;}
  if(!reader.open||generation!==transferToken){clone.remove();return;}image.style.visibility='hidden';const scaleX=b.width/a.width,scaleY=b.height/a.height;
  transfer=clone.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${b.left-a.left}px,${b.top-a.top}px) scale(${scaleX},${scaleY})`}],{duration:540,easing:'cubic-bezier(.22,.68,.18,1)',fill:'forwards'});
  const current=transfer;current.onfinish=()=>{if(transfer!==current)return;clone.remove();image.style.visibility='';transfer=null;done();};
@@ -128,8 +128,8 @@ root.addEventListener('keydown',e=>{
  if(e.altKey||e.metaKey||e.ctrlKey)return;
  if(e.key==='Escape'&&present){e.preventDefault();togglePresent(false);return;}
  const forward=['ArrowRight','ArrowDown','PageDown'].includes(e.key)||(e.key===' '&&!e.shiftKey),back=['ArrowLeft','ArrowUp','PageUp'].includes(e.key)||(e.key===' '&&e.shiftKey);
- if(forward||back){e.preventDefault();goScene(requested+(forward?1:-1),true);}else if(e.key==='Home'||e.key==='End'){e.preventDefault();goScene(e.key==='Home'?0:4,true);}
+ if(forward||back){e.preventDefault();goScene(requested+(forward?1:-1),!present);}else if(e.key==='Home'||e.key==='End'){e.preventDefault();goScene(e.key==='Home'?0:4,true);}
 });
-window.addEventListener('resize',()=>{if(reader.open&&closing)finishReader();else stop();paint();if(reader.open)drawZoom();});reduce.addEventListener('change',()=>{stop();position=requested=Math.round(position);paint();});compact.addEventListener('change',()=>{stop();paint();});
+window.addEventListener('resize',()=>{const held=position;if(reader.open&&closing)finishReader();else stop();if(!present)experience.scrollTop=(experience.scrollHeight-experience.clientHeight)*held/4;paint();if(reader.open)drawZoom();});reduce.addEventListener('change',()=>{stop();position=requested=Math.round(position);paint();});compact.addEventListener('change',()=>{stop();paint();});
 // Lab-only inspection API used to capture actual authored storyboard positions.
-(window as any).menswearConcept={jump,scene:(n:number)=>goScene(n,true),snapshot:()=>({world,position,requested,present,scroll:experience.scrollTop,reader:reader.open,archive:archive.open}),ready:prepare(world).then(()=>{renderCast();paint();root.dataset.ready='true';})};
+(window as any).menswearConcept={jump,scene:(n:number)=>goScene(n,true),snapshot:()=>({world,position,requested,present,scroll:experience.scrollTop,reader:reader.open,archive:archive.open}),ready:prepare(world).then(()=>{renderCast();paint();root.dataset.ready='true';},()=>{renderCast();paint();root.dataset.ready='error';speak('Opening photograph unavailable. Choose another world or return to Portfolio.');})};

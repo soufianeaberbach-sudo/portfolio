@@ -2,7 +2,7 @@ import {editorial} from '../../data/portfolio-editorial';
 import type {ImageAsset,FinalViews} from '../../data/portfolio';
 export type World='m-streetwear'|'m-activewear'|'m-rtw'|'m-tailoring';
 export type Pose={x:number;y:number;h:number;max?:number};
-export type Shot={name:string;phrase:string;note:string;dark?:boolean;desktop:Record<string,Pose>;mobile:Record<string,Pose>};
+export type Shot={name:string;phrase:string;note:string;dark?:boolean;white?:boolean;desktop:Record<string,Pose>;mobile:Record<string,Pose>};
 export type Look={id:string;photo:number;image:ImageAsset;source:string;creator:string;existing:boolean;window?:[number,number,number,number];photography?:FinalViews};
 const path=(id:number)=>`sources/pexels-${id}.webp`;
 const fresh=(photo:number,creator:string,slug:string,alt:string,width:number,height=1800):Look=>({id:`concept-pexels-${photo}`,photo,creator,source:`https://www.pexels.com/photo/${slug}-${photo}/`,existing:false,image:{src:path(photo),srcset:`${path(photo)} ${width}w`,width,height,alt,front:1,views:1}});
@@ -33,14 +33,14 @@ export const worlds:Record<World,{name:string;title:string;number:string;cast:st
  'm-activewear':{name:'Activewear',title:'Momentum',number:'02',cast:['polo','black','ground'],shots:[
   {name:'Poise',phrase:'Momentum.',note:'Precision before movement.',desktop:{polo:p(68,49,86)},mobile:{polo:p(50,54,77)}},
   {name:'Counterweight',phrase:'Held in\nbalance.',note:'Upright. Grounded. Ready.',desktop:{polo:p(29,51,78),black:p(74,51,78)},mobile:{black:p(50,53,79)}},
-  {name:'Compression',phrase:'Stored\nenergy.',note:'A real pose. No invented performance.',desktop:{ground:p(66,56,90)},mobile:{ground:p(50,57,82)}},
+  {name:'Compression',phrase:'Stored\nenergy.',white:true,note:'A real pose. No invented performance.',desktop:{ground:p(66,56,90)},mobile:{ground:p(50,57,82)}},
   {name:'Release',phrase:'Then,\nrelease.',note:'Direction without distortion.',desktop:{polo:p(52,50,87)},mobile:{polo:p(50,53,79)}},
-  {name:'Momentum, held',phrase:'In your\nown time.',note:'A vertical line. A low counterpoint.',desktop:{black:p(28,47,80),ground:p(76,64,61)},mobile:{black:p(50,53,80)}},
+  {name:'Momentum, held',phrase:'In your\nown time.',white:true,note:'A vertical line. A low counterpoint.',desktop:{black:p(28,47,80),ground:p(76,64,61)},mobile:{black:p(50,53,80)}},
  ]},
  'm-rtw':{name:'Ready-to-Wear',title:'Evolution',number:'03',cast:['knit','plinth','green','unbound'],shots:[
   {name:'Ease',phrase:'Evolution.',note:'Refinement can be relaxed.',desktop:{knit:p(68,50,86)},mobile:{knit:p(50,55,75)}},
   {name:'The interval',phrase:'A quieter\nstructure.',note:'Proportion. Support. Ease.',desktop:{plinth:p(62,51,88)},mobile:{plinth:p(50,54,79)}},
-  {name:'Open field',phrase:'Room to\nchange.',note:'A complete silhouette, newly standing.',desktop:{green:p(65,52,85)},mobile:{green:p(50,54,77)}},
+  {name:'Open field',phrase:'Room to\nchange.',white:true,note:'A complete silhouette, newly standing.',desktop:{green:p(65,52,85)},mobile:{green:p(50,54,77)}},
   {name:'Balance',phrase:'In\nbalance.',note:'Different sources. Deliberate relationships.',desktop:{knit:p(28,53,75),plinth:p(73,53,75)},mobile:{plinth:p(50,53,79)}},
   {name:'Evolution, held',phrase:'Ease,\nunbound.',note:'From a compressed pose to a real expressive stance.',dark:true,desktop:{unbound:p(66,49,90)},mobile:{unbound:p(50,54,81)}},
  ]},
