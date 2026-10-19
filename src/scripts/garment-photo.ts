@@ -7,6 +7,6 @@ export function paintPhoto(photo:HTMLElement,view=Number(photo.style.getProperty
  const left=front[0]+view*(back[0]-front[0]);
  const fraction=front[1]-front[0]+view*((back[1]-back[0])-(front[1]-front[0])),aperture=photo.clientWidth;
  const empty=Math.max(0,(aperture-width*fraction)/2);
- image.style.transform=`translate3d(${(aperture-width*fraction)/2-left*width}px,0,0)`;
+ image.style.transform=`translateX(${(aperture-width*fraction)/2-left*width}px)`;
  photo.style.clipPath=`inset(0 ${empty}px 0 ${empty}px)`;photo.dataset.side=view>.5?'back':'front';
 }

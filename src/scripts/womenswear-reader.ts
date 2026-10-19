@@ -18,7 +18,7 @@ export function initWomenswear(root:HTMLElement){
   const limit=()=>Math.max(2,Math.min(4,Number(images[s.view].getAttribute('height'))/Math.max(1,photos[s.view].clientHeight)));
   s.draw=()=>{
    const photo=photos[s.view],image=images[s.view],x=Math.max(0,(s.zoom-1)*photo.clientWidth/2),y=Math.max(0,(s.zoom-1)*photo.clientHeight/2);
-   s.x=Math.max(-x,Math.min(x,s.x));s.y=Math.max(-y,Math.min(y,s.y));photo.style.transform=`translate3d(${s.x}px,${s.y}px,0) scale(${s.zoom})`;photo.style.transformOrigin='center center';paintPhoto(photo);
+   s.x=Math.max(-x,Math.min(x,s.x));s.y=Math.max(-y,Math.min(y,s.y));photo.style.transform=s.zoom===1&&!s.x&&!s.y?'':`translate3d(${s.x}px,${s.y}px,0) scale(${s.zoom})`;photo.style.transformOrigin='center center';paintPhoto(photo);
    status.textContent=image.complete&&!image.naturalWidth?'Original photograph unavailable. Return to the exhibition to continue.':reader.hasAttribute('data-inspect')?`${Math.round(s.zoom*100)}% · drag / pinch / arrow keys`:'';
   };
   const setInspect=(on:boolean)=>{cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;reader.toggleAttribute('data-inspect',on);images[s.view].sizes=on?`${images[s.view].getAttribute('width')}px`:originalSizes[s.view];inspect.setAttribute('aria-pressed',String(on));tools.hidden=!on;s.zoom=on?Math.min(2,limit()):1;s.x=s.y=0;s.draw();};
@@ -26,6 +26,9 @@ export function initWomenswear(root:HTMLElement){
   s.select=(view:number)=>{
    cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;s.reset();s.view=Math.max(0,Math.min(panels.length-1,view));panels.forEach((p,i)=>p.hidden=i!==s.view);images[s.view].loading='eager';original.href=images[s.view].src;
    reader.querySelectorAll<HTMLElement>('[data-ww-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.wwView)===s.view)));s.draw();
+   // Prepare only the next genuine view of the selected reader. Static crop
+   // windows use 2D transforms, avoiding nested compositor layers on reveal.
+   const next=images[s.view+1];if(next){next.loading='eager';void next.decode().catch(()=>{});}
   };
   for(const button of reader.querySelectorAll<HTMLButtonElement>('[data-ww-view]'))button.addEventListener('click',()=>s.select(Number(button.dataset.wwView)));
   inspect.addEventListener('click',()=>setInspect(!reader.hasAttribute('data-inspect')));
