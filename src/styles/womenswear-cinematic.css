@@ -130,3 +130,6 @@
 .ww-reader[data-inspect] [data-ww-view][aria-pressed='false']{display:none;}
 .ww-photo-credit a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px;}
 .ww-reader-copy .ww-photo-credit{font-size:.68rem;line-height:1.4;}
+@media(max-width:767px),(max-width:1023px) and (orientation:portrait){
+ .ww-reader:has(.ww-photo-credit) .ww-reader-copy{bottom:6.5rem;}
+}

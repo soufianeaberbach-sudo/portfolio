@@ -9,7 +9,7 @@ const{subject,world,credit}=Astro.props,photos=finalPhotographs(subject),categor
 <article class="pf-rd__subject ww-reader" data-ww-reader data-subject={subject.id} data-of={subject.category} data-role={subject.role} data-verified={subject.verified?'yes':'no'} id={`${world}/${subject.category}/${subject.id}`} aria-labelledby={`${subject.id}-rd-title`} tabindex="-1" hidden>
  <header class="ww-reader-head"><a class="label" href={`#${world}/${subject.category}`} data-nav data-subject-close>← {category.name.toUpperCase()}</a><p class="label">{subject.verified?'FINAL PHOTOGRAPHY':'REFERENCE PHOTOGRAPHY'}</p></header>
  <section class="ww-reader-floor" aria-label="The complete garment">
-  <div class="ww-reader-copy"><h3 id={`${subject.id}-rd-title`}>{subject.title??subject.caption??subject.cover.alt}</h3>{credit&&<p class="ww-photo-credit">Reference photograph · <a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer??credit.source} / Pexels ↗</a></p>}</div>
+  <div class="ww-reader-copy"><h3 id={`${subject.id}-rd-title`}>{subject.title??subject.caption??subject.cover.alt}</h3>{credit&&<p class="ww-photo-credit">{subject.verified?'Photograph':'Reference photograph'} · {credit.sourcePage?<a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer??credit.source}{credit.sourcePage.startsWith('https://www.pexels.com/')?' / Pexels':''} ↗︎</a>:<span>{credit.photographer??credit.source}</span>}</p>}</div>
   <div class="ww-reader-image" data-ww-target>
    {photos.map((photo,i)=><div data-photo-view={i} hidden={i!==0}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></div>)}
   </div>
