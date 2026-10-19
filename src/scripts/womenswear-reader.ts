@@ -12,7 +12,7 @@ export function initWomenswear(root:HTMLElement){
  for(const reader of readers){
   const panels=[...reader.querySelectorAll<HTMLElement>('[data-photo-view]')],viewport=reader.querySelector<HTMLElement>('[data-ww-target]')!;
   const photos=panels.map(p=>p.querySelector<HTMLElement>('[data-ww-photo]')!),images=photos.map(p=>p.querySelector<HTMLImageElement>('img')!);
-  const originalSizes=images.map(i=>i.sizes),inspect=reader.querySelector<HTMLButtonElement>('[data-rd-inspect]')!,tools=reader.querySelector<HTMLElement>('[data-ww-zoom-tools]')!,original=reader.querySelector<HTMLAnchorElement>('[data-original-source]')!,status=reader.querySelector<HTMLElement>('[data-ww-source-status]')!;
+  const inspect=reader.querySelector<HTMLButtonElement>('[data-rd-inspect]')!,tools=reader.querySelector<HTMLElement>('[data-ww-zoom-tools]')!,original=reader.querySelector<HTMLAnchorElement>('[data-original-source]')!,status=reader.querySelector<HTMLElement>('[data-ww-source-status]')!;
   const pointers=new Map<number,{x:number;y:number}>();let lastX=0,lastY=0,distance=0;
   const s={view:0,zoom:1,x:0,y:0,draw:()=>{},reset:()=>{},select:(_view:number)=>{}};states.set(reader,s);
   const limit=()=>Math.max(2,Math.min(4,Number(images[s.view].getAttribute('height'))/Math.max(1,photos[s.view].clientHeight)));
@@ -21,14 +21,16 @@ export function initWomenswear(root:HTMLElement){
    s.x=Math.max(-x,Math.min(x,s.x));s.y=Math.max(-y,Math.min(y,s.y));photo.style.transform=s.zoom===1&&!s.x&&!s.y?'':`translate3d(${s.x}px,${s.y}px,0) scale(${s.zoom})`;photo.style.transformOrigin='center center';paintPhoto(photo);
    status.textContent=image.complete&&!image.naturalWidth?'Original photograph unavailable. Return to the exhibition to continue.':reader.hasAttribute('data-inspect')?`${Math.round(s.zoom*100)}% · drag / pinch / arrow keys`:'';
   };
-  const setInspect=(on:boolean)=>{cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;reader.toggleAttribute('data-inspect',on);images[s.view].sizes=on?`${images[s.view].getAttribute('width')}px`:originalSizes[s.view];inspect.setAttribute('aria-pressed',String(on));tools.hidden=!on;s.zoom=on?Math.min(2,limit()):1;s.x=s.y=0;s.draw();};
-  s.reset=()=>{pointers.clear();images.forEach((img,i)=>{img.sizes=originalSizes[i];photos[i].style.transform='';});reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;s.zoom=1;s.x=s.y=0;s.draw();};
+  const setInspect=(on:boolean)=>{cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;reader.toggleAttribute('data-inspect',on);inspect.setAttribute('aria-pressed',String(on));tools.hidden=!on;s.zoom=on?Math.min(2,limit()):1;s.x=s.y=0;s.draw();};
+  s.reset=()=>{pointers.clear();photos.forEach(photo=>photo.style.transform='');reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;s.zoom=1;s.x=s.y=0;s.draw();};
   s.select=(view:number)=>{
-   cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;s.reset();s.view=Math.max(0,Math.min(panels.length-1,view));panels.forEach((p,i)=>p.hidden=i!==s.view);images[s.view].loading='eager';original.href=images[s.view].src;
+   cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;s.reset();s.view=Math.max(0,Math.min(panels.length-1,view));panels.forEach((p,i)=>p.hidden=i!==s.view);images[s.view].loading='eager';images[s.view].sizes=`${images[s.view].getAttribute('width')}px`;original.href=images[s.view].src;
    reader.querySelectorAll<HTMLElement>('[data-ww-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.wwView)===s.view)));s.draw();
    // Prepare only the next genuine view of the selected reader. Static crop
    // windows use 2D transforms, avoiding nested compositor layers on reveal.
-   const next=images[s.view+1];if(next){next.loading='eager';void next.decode().catch(()=>{});}
+   // Resolve the native rendition once per selected view, not during zoom:
+   // changing srcset candidates mid-inspection could briefly clear the image.
+   const next=images[s.view+1];if(next){next.loading='eager';next.sizes=`${next.getAttribute('width')}px`;void next.decode().catch(()=>{});}
   };
   for(const button of reader.querySelectorAll<HTMLButtonElement>('[data-ww-view]'))button.addEventListener('click',()=>s.select(Number(button.dataset.wwView)));
   inspect.addEventListener('click',()=>setInspect(!reader.hasAttribute('data-inspect')));
