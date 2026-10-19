@@ -7,7 +7,12 @@ export function initWomenswear(root:HTMLElement){
  const readers=[...world.querySelectorAll<HTMLElement>('[data-ww-reader]')],reduced=matchMedia('(prefers-reduced-motion:reduce)');
  let active:HTMLElement|null=null,entering=false,epoch=0,returnFinish:(()=>void)|null=null;
  const floor=[...world.querySelector<HTMLElement>('[data-screen=index]')!.children].filter(e=>!e.classList.contains('pf-rd')) as HTMLElement[];
- const setInert=(on:boolean)=>{for(const part of floor)part.inert=on;for(const camera of cameras)camera.hold(on);};
+ const setInert=(on:boolean,source:HTMLElement|null=null)=>{
+  for(const part of floor)part.inert=on;let resized=false;for(const camera of cameras)resized=camera.hold(on,source)||resized;
+  // The same archive door must remain visible after all responsive stage
+  // rebuilds. Recompute its position instead of restoring old pixel offsets.
+  if(!on&&resized&&source?.closest('.ww-rail'))source.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+ };
  const states=new Map<HTMLElement,{view:number;zoom:number;x:number;y:number;draw:()=>void;reset:()=>void;select:(view:number,immediate?:boolean)=>void}>();
  for(const reader of readers){
   const panels=[...reader.querySelectorAll<HTMLElement>('[data-photo-view]')],viewport=reader.querySelector<HTMLElement>('[data-ww-target]')!;
@@ -70,14 +75,14 @@ export function initWomenswear(root:HTMLElement){
  return{
   owns:(reader:HTMLElement)=>reader.hasAttribute('data-ww-reader'),returnHash:(reader:HTMLElement)=>`#${world.id}/${reader.dataset.of}`,cancel,
   enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){
-   cancel();active=reader;setInert(true);states.get(reader)!.select(0,true);entering=!!source;const current=epoch;
+   cancel();active=reader;setInert(true,source);states.get(reader)!.select(0,true);entering=!!source;const current=epoch;
    if(source){reader.setAttribute('data-ww-moving','');garmentMatchCut(reader,source,true,instant||reduced.matches,()=>{if(epoch===current){entering=false;reader.removeAttribute('data-ww-moving');states.get(reader)!.draw();}});}
   },
   leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,finished:()=>void){
    const interrupted=entering;entering=false;cancel();
    // Return resolves on the primary photograph. A deliberate Back selection
    // never changes the exhibition or its scrolling primary-view choreography.
-   states.get(reader)!.select(0,true);setInert(false);const current=epoch;
+   states.get(reader)!.select(0,true);setInert(false,source);const current=epoch;
    const done=()=>{if(current!==epoch)return;reader.removeAttribute('data-ww-moving');returnFinish=null;if(active===reader)active=null;finished();};returnFinish=done;
    if(source&&location.hash===`#${world.id}/${reader.dataset.of}`){reader.setAttribute('data-ww-moving','');garmentMatchCut(reader,source,false,interrupted||instant||reduced.matches,done);}else done();
   }
