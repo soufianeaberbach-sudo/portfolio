@@ -1,5 +1,13 @@
 # Domain migration — aberbach.co
 
+> TECHNICAL RUNBOOK with HISTORICAL PLANNING — reconciled 19 October 2026.
+> Domain/canonical code exists; dashboard activation is not certified by this file.
+> The later locale, Arabic-font and measurement sections record future plans, not
+> implemented routes or current Portfolio priorities. Reconfirm scope and approval
+> before executing them. Read [CURRENT-STATE](portfolio/CURRENT-STATE.md),
+> [actual site map](portfolio/SITE-MAP-AND-NAVIGATION.md) and
+> [dated public observations](portfolio/PUBLIC-OBSERVATIONS-2026-10-19.md).
+
 > **Status:** implementation/runbook, not a production activation record.
 > See [PRODUCTION-STATE.md](PRODUCTION-STATE.md) for the dated audit.
 > Dashboard actions below remain pending and are not authorized by this code pass.

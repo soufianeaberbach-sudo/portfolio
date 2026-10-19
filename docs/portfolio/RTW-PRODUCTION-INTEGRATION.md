@@ -1,5 +1,12 @@
 # RTW — controlled photographic integration
 
+> HISTORICAL / SUPERSEDED — PR #41 integration record, classified 19 October
+> 2026. Its RTW-only files, 17-look archive and automatic Back reveal describe that
+> phase. PR #42 replaced them with the five-world, ten-look, front/primary-only
+> system. Do not follow the old PR/rollback instructions as current actions.
+> See [CURRENT-STATE](CURRENT-STATE.md), [photo policy](PHOTO-CONTENT-HANDOFF.md)
+> and [V2.1 review](review/womenswear-v21/README.md). Original report preserved below.
+
 Branch: `feat/rtw-cinematic-production-integration`.
 Base: `e9793113d29767fdf0a4be1bcb4d1d7918e94d82` (verified main).
 Capability A only. **Art direction approved in principle; final hardening verified

@@ -10,10 +10,22 @@ interaction for interaction's sake.
 
 ## Design authority
 
-Use this order: explicit current user direction → user-approved visual/design
-frame → existing approved site language and design system → real project
-data/assets → agent interpretation. Exploratory Figma frames are not approved
-without explicit user approval. Never overwrite an approved area for convenience.
+Start substantial Portfolio work with the current task →
+[CURRENT-STATE.md](docs/portfolio/CURRENT-STATE.md) → relevant active
+[creative direction](docs/portfolio/CREATIVE-DIRECTION.md) and
+[roadmap](docs/portfolio/PORTFOLIO-ROADMAP.md) section → relevant source.
+
+Authority: latest explicit user instructions → latest explicitly approved
+creative/functional decisions → verified implementation for facts about existing
+behavior → maintained documentation → AGENTS/CLAUDE development rules → historical
+documents as background → agent interpretation. Approval, implementation, merge
+and verified deployment are separate states. Exploratory Figma frames need
+explicit approval. Never overwrite an approved area for convenience.
+
+Womenswear currently has five photography-only worlds, ten displayed looks each;
+front/primary-only cinema and genuine optional reader views. Development stories
+inside its garment readers are postponed. Preserve historical IDs and source
+records; see the current-state and photo-handoff documents for the dated contract.
 
 ## Portfolio model and shared grammar
 

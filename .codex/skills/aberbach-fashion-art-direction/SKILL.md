@@ -9,9 +9,12 @@ description: >-
 
 # Aberbach fashion art direction
 
-Apply the [root contract](../../../AGENTS.md) and the current brief. Use this
-workflow for significant visual work; scale it to the task without expanding its
-boundary. Existing approved language takes priority over generic design advice.
+Read the current task and [CURRENT-STATE.md](../../../docs/portfolio/CURRENT-STATE.md),
+then the relevant maintained creative direction, roadmap section and source.
+Apply the [root contract](../../../AGENTS.md) and its authority order. Historical
+studies are background, not active designs; merged code is not deployment proof.
+Use this workflow for significant visual work within the current brief; scale
+it to the task without expanding its boundary. Existing approved language takes priority over generic design advice.
 
 ## A. Inspect
 
@@ -58,8 +61,8 @@ after each meaningful correction. Substantial redesigns require at least one
 genuine visual critique pass. Mobile needs deliberate editing of scale, crop,
 order and pacing, not merely vertically stacked desktop sections.
 
-Review substantial responsive work at **1440×900, 768×1024 and 390×844**; use
-**1024×768 and 430×932** for sanity/regression. Browse during implementation as
+Review substantial responsive work at **1440×900, 1366×768, 1024×768,
+768×1024, 430×932 and 390×844**. Browse during implementation as
 needed, then make one disciplined final screenshot set after composition and
 refinement stabilize. Avoid dozens of repetitive captures. Never judge exact
 typography from known fallback fonts.

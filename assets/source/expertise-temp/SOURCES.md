@@ -1,5 +1,11 @@
 # Expertise page — temporary visual assets
 
+> ACTIVE content handoff · reconciled 19 October 2026. See the
+> [canonical current state](../../../docs/portfolio/CURRENT-STATE.md) for scope.
+> Preserve this provenance record when media is replaced; the older suggestion
+> below to delete this file is superseded by the current history-retention rule.
+> No replacement, generator run or asset overwrite is authorized by this notice.
+
 **TEMPORARY STAND-INS — REPLACE WITH SOUFIANE'S OWN PROJECT IMAGES.**
 
 The four images referenced by `/expertise-temp/` are the active visuals on the

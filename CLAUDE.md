@@ -2,17 +2,25 @@
 
 ## Authority
 
-The approved Aberbach creative direction, existing design system,
-Astro architecture, GSAP motion language, project tokens and explicit
-user decisions always override generic Skill defaults.
+Read the current task → [CURRENT-STATE.md](docs/portfolio/CURRENT-STATE.md)
+→ relevant [creative direction](docs/portfolio/CREATIVE-DIRECTION.md)
+→ relevant [roadmap](docs/portfolio/PORTFOLIO-ROADMAP.md) section → source.
+Follow the single authority order in [AGENTS.md](AGENTS.md); historical research
+and review evidence are not active specifications. Do not confuse approved,
+implemented, merged and deployed. Womenswear is photography-only now; technical
+storytelling inside its readers is postponed, not the separate engineering chapters.
 
-Skills are advisors.
-They are not the creative brief.
-
-Do not migrate frameworks, CSS systems, animation libraries or component
-architecture merely because a Skill recommends another stack.
+Preserve the existing Astro architecture, tokens and GSAP language. Do not migrate
+frameworks, CSS systems, fonts or component architecture because a generic skill
+suggests it. Skills advise; the current authorized brief governs.
 
 ## Design Skills
+
+For Aberbach visual work, the primary workflow is
+[aberbach-fashion-art-direction](.codex/skills/aberbach-fashion-art-direction/SKILL.md).
+Consult the following older skills only where relevant; they do not override
+current project decisions. Documentation-only work needs factual/link/scope checks,
+not a new visual implementation or browser capture campaign.
 
 Use `design-taste-frontend` to critique:
 - generic AI layout patterns

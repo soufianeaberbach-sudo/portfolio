@@ -1,5 +1,12 @@
 # Backend activation — Contact brief pipeline
 
+> TECHNICAL RUNBOOK — reconciled 19 October 2026. Commands below are operational
+> instructions, not authorization or proof they ran. External activation remains
+> unverified by this documentation task. Branch-relative “pending” statements refer
+> to the recorded audit, not a fresh dashboard inventory. Read
+> [CURRENT-STATE](portfolio/CURRENT-STATE.md) and [new public observations](portfolio/PUBLIC-OBSERVATIONS-2026-10-19.md)
+> separately from the unchanged [3 October audit](PRODUCTION-STATE.md).
+
 > **Status:** implementation/runbook, not a production activation record.
 > See [PRODUCTION-STATE.md](PRODUCTION-STATE.md) for the dated audit.
 > Dashboard actions below remain pending and are not authorized by this code pass.

@@ -26,8 +26,9 @@ second browser package, runner or MCP configuration for routine visual work.
 
 ## Screenshots and fonts
 
-Primary sizes: **1440×900, 768×1024, 390×844**.
-Sanity/regression sizes: **1024×768, 430×932**.
+Required substantial visual-review matrix: **1440×900, 1366×768, 1024×768,
+768×1024, 430×932 and 390×844**. Follow the current task and maintained
+[CURRENT-STATE.md](../../../../docs/portfolio/CURRENT-STATE.md) for scope.
 Set both viewport dimensions explicitly; enable touch/mobile context for phone
 interaction checks. Browser emulation does not prove real-device Safari,
 keyboard, safe-area or browser-chrome behavior; state relevant unverified limits.

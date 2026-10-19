@@ -1,462 +1,146 @@
-# Portfolio Roadmap
+# ABERBACH — working roadmap
 
-**Project:** Soufiane Aberbach Portfolio  
-**Document type:** Operating roadmap  
-**Status:** Approved working roadmap  
-**Scope:** Portfolio experience  
-**Creative reference:** `docs/portfolio/CREATIVE-DIRECTION.md`
+**ACTIVE · reconciled 19 October 2026.** Main snapshot:
+`a36ae62af385641f2c4d92c07bcd851d10ee24d7`. [Current state](CURRENT-STATE.md)
+is the entry point; [creative direction](CREATIVE-DIRECTION.md) governs visual
+intent. The September “REFERENCE HARVEST” phase and old baseline are superseded;
+[original roadmap](https://github.com/soufianeaberbach-sudo/portfolio/blob/a36ae62af385641f2c4d92c07bcd851d10ee24d7/docs/portfolio/PORTFOLIO-ROADMAP.md)
+remains in Git history. This roadmap does not authorize work by itself.
 
----
+## Status vocabulary
 
-## 1. Purpose
+- **IMPLEMENTED IN MAIN:** verified source exists at the dated main SHA.
+- **APPROVED DESIGN DECISION:** explicit owner direction; not deployment proof.
+- **FEATURE CANDIDATE / PENDING MERGE:** identifiable unmerged change, not main.
+- **PLANNED:** future work needing scope/evidence/authorization.
+- **POSTPONED:** expressly outside the active workstream.
+- **EXPERIMENTAL:** exploratory, not a production specification.
+- **HISTORICAL / SUPERSEDED:** retained record, no current design authority.
+- **VERIFIED IN PRODUCTION:** dated, specific external observation only; state its limits.
 
-This file is the operating map for the Portfolio.
+A workstream may have different labels for code, design and external operation.
+Tests establish behavior, not creative approval. Merges do not prove deployment,
+and a public page does not prove storage/email/indexing readiness.
 
-`CREATIVE-DIRECTION.md` answers:
+## Immediate sequence
 
-> What are we trying to create, why does it matter, and what should the Portfolio feel like?
+1. Review this documentation reconciliation. No website changes are bundled.
+2. Verify merged V2.1 on actual iPhone Safari and desktop, including touch,
+   safe-area/browser chrome, occurrence return, full-look framing and sustained
+   motion. Public HTML is consistent with V2.1, but exact deployed SHA is unknown.
+3. Inspect production readiness with the owner: HTTP redirect, www reachability,
+   Contact bindings/privacy/delivery and search account state. Diagnose first;
+   external changes and real submissions need their own authorization.
+4. Prepare owner photography with the fifty-slot handoff and provenance. Integrate
+   only supplied assets under a separately authorized content task.
+5. Scope one next chapter refinement with real material and an explicit visual
+   approval checkpoint; do not propagate Womenswear's choreography everywhere.
 
-This file answers:
+No other feature PR was open at the initial GitHub check. PR #42 is **merged**,
+not the next merge task. Retained experiment branches are not unfinished mandates.
 
-> Where are we now, what is approved, what is experimental, what comes next, and how do we work?
+## Workstreams
 
-It should remain concise, current and operational.
+### 1. Identity and visual foundation
 
----
+- **State:** IMPLEMENTED IN MAIN; APPROVED DESIGN DECISIONS in the current owner brief. Premium Fashion Designer / Industrial Patternmaker / Technical Product Developer; BETWEEN INSTINCT & CONSTRUCTION. Existing Archivo/Inter/Mono, ink, paper, bone and restrained chapter accents.
+- **Incomplete / dependency:** no new visual-system redesign requested; preserving source scope matters more than importing generic skill rules.
+- **Next:** use the maintained creative direction for future tasks. Verify actual tokens before any authorized design change; preserve chapter identity.
+- **Gate:** owner approval for substantial visual changes; no automatic font, palette or dependency migration.
 
-## 2. Current Project State
+### 2. Opening and chapter covers
 
-### Stable main
+- **State:** IMPLEMENTED IN MAIN. Bone campaign masthead, red-dress opening handoff, blue-suit Menswear, turquoise Development and technical-sheet Tech Packs covers. Compact chapter control, no large mid-journey index.
+- **Incomplete / dependency:** physical-device opening/cover motion and source-ground limitations need live review; no replacement concept approved by this task.
+- **Next / verification:** baseline-protect opening/cover screenshots at six sizes whenever adjacent transitions change; review start/midpoint/payoff and reduced motion.
+- **Gate:** preserve unless explicitly scoped; reject resurrection of the old Living Chapter Index/cutting-table experiments.
 
-Current stable `main` SHA:
+### 3. Womenswear
 
-`d51cda278909a160c5f489af91ed051052ffc48f`
+- **State:** APPROVED DESIGN DECISIONS and IMPLEMENTED IN MAIN via [PR #42](https://github.com/soufianeaberbach-sudo/portfolio/pull/42). Five distinct worlds, ten displayed looks each, 50 total, 58 routable references. Photographic reader, complete archives and real-view inspection. Latest feature head `34c0286978de846298dbb2a4340979dd4b8887a6` is merged, not a pending candidate.
+- **Incomplete / dependency:** owner project photos, physical Safari and hardware performance. Current independent reference sources are not one verified collection. Source backgrounds remain authentic.
+- **Next / verification:** real-device review of actual merged interface; reproduce concrete defects before proposing code changes. Retain all 58 direct links and ten-per-category archives.
+- **Gate:** no redesign from old experiments; any corrections require scoped review. Public Sketch/Pattern/Flat/CLO development stories are **POSTPONED**; do not implement them as “completion.”
 
-This is the stable project baseline until a new Portfolio direction is both visually and technically approved.
+### 4. Menswear
 
-It is not considered the final Portfolio design.
+- **State:** IMPLEMENTED IN MAIN: independent cover, four category indexes/decks (`m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`), four reference entries each, 16 entries drawn from 11 unique licensed editorial images. No verified Project records.
+- **Approved direction:** structural, proportion-led, masculine editorial precision; not a copy of five-world Womenswear or a darkness cliché.
+- **Next / dependency:** obtain owner photos and scope the actual deficiencies through focused browser review. The next Menswear refinement is PLANNED, not already implemented or authorized.
+- **Verification / gate:** protect existing routing/deck controls, keyboard and fallback; separate storyboard/visual approval before substantial implementation.
 
-### Creative direction
+### 5. Pattern Development
 
-The approved creative north star is:
+- **State:** IMPLEMENTED IN MAIN as Development cover / Pattern Development interior at `#3d-simulation`. Five supplied YouTube session IDs and local posters; intentional-click player. Source publication flag is `published` because sessions are non-demo; this is not a verified relationship to any photographed garment.
+- **Approved purpose:** real industrial pattern engineering, construction intelligence, grading and development. Not canceled by Womenswear's photography-only policy.
+- **Incomplete / dependency:** no linked owner garment-stage evidence set or dedicated pattern-document inspection exhibition. Recording content, permissions and publication wording must be confirmed by owner before expanded claims.
+- **Next / gate:** identify real cleared material, then a separate chapter-specific concept and visual approval; no fabricated pattern lines, validation outcomes or compulsory 2D→3D effects.
 
-`docs/portfolio/CREATIVE-DIRECTION.md`
+### 6. Tech Packs
 
-Documentation branch:
+- **State:** IMPLEMENTED IN MAIN: document-first cover, five six-page PDF demos with first-page previews, on-demand reader and original PDF links. All are stamped DEMO / NOT CLIENT WORK. No verified client packs published.
+- **Approved purpose:** readable professional production documentation, not decorative sheets or dashboard cards.
+- **Next / dependency:** obtain owner-cleared, appropriately redacted real packs. Reconcile permissions/confidentiality before replacing demos; do not infer factory/client approval.
+- **Verification / gate:** inspect page legibility, PDF loading, keyboard/Escape, mobile reading and truthful status; owner content and visual approval before publication.
 
-`docs/portfolio-creative-direction`
+### 7. Ending and navigation
 
-Current documentation commit:
+- **State:** IMPLEMENTED IN MAIN: continuous outer cover journey, layers with internal scroll, single Portfolio router, compact chapter control and ending “One practice. From design to production.” → Contact.
+- **Incomplete / dependency:** exact live-device continuity is not fully verified; fragments are not standalone SEO pages.
+- **Next / verification:** exercise entry, chapter/category movement, Back/Forward, layered Escape, focus and source return; distinguish cover scrolling from chapter-layer navigation.
+- **Gate:** no new mid-journey index or parallel router without explicit approval. Ending/conversion redesign remains PLANNED only if separately scoped.
 
-`ee16c65`
+### 8. Photography replacement
 
-### Latest experimental design branch
+- **State:** APPROVED future owner replacement; IMPLEMENTED slot/FinalViews adapter. [Fifty-slot manifest](review/womenswear-v21/SLOTS.tsv), [handoff](PHOTO-CONTENT-HANDOFF.md) and nine new-source credits are available.
+- **Incomplete / dependency:** real photos, dimensions, splits, alt text, creator permissions, ownership and identity mapping. Existing historical creator metadata is incomplete.
+- **Next:** receive assets, retain stable slot IDs/source history and update content metadata. Reference status must not change by caption alone. A mixed/verified publication migration needs a separate audit because `worldPublication` currently switches at world level.
+- **Verification / gate:** all source views, full silhouettes, six widths, credits, deep links and source return; explicit owner verification before calling a reference an original project.
 
-Branch:
+### 9. Responsive and motion QA
 
-`codex/portfolio-cutting-table-redesign`
+- **State:** REVIEW EVIDENCE: V2.1 has six-size screenshots, real desktop/mobile films and decoded-frame critique; no fresh artistic claim is made by this docs task.
+- **Required matrix:** 1440×900, 1366×768, 1024×768, 768×1024, 430×932, 390×844. Check opening/start, midpoint, payoff, archive, reader, inspection, return and handoff.
+- **Next / dependency:** actual iPhone Safari testing, including dynamic toolbar/safe areas, interrupted input and portrait changes. Capture affected frames only after an authorized correction.
+- **Gate:** meaningful browser critique plus functional tests and owner approval. Emulation/green assertions do not establish final art direction or device performance.
 
-Latest experimental commit:
+### 10. Accessibility and performance
 
-`3de2642ccd65f67d07f8365200e08f73e96694d4`
+- **State:** IMPLEMENTED foundations: semantic links, focus/keyboard handling, lazy media, cancelable decode/continuity, reduced motion and no-JS fallback. V2.1 records 4,682 assertions/14 suites plus four focus-stress cases; not a whole-site certification.
+- **Incomplete / dependency:** assistive-technology/device review, constrained-network measurements and sustained hardware frame pacing; no measured 60fps guarantee.
+- **Next / verification:** targeted keyboard/screen-reader/touch audit and measurement on final assets. Existing tests cover historical URLs, optional views, exceptions, failure/interruptions, resize and return. Run relevant suites serially against immutable builds; run focus-stress separately per QA.
+- **Gate:** preserve meaningful assertions; isolate fixture contention without disguising real focus defects. New dependencies or shared architecture changes need a justified scope.
 
-Status:
+### 11. SEO and discovery
 
-**EXPERIMENTAL — NOT VISUALLY APPROVED**
+- **State:** IMPLEMENTED IN MAIN: HTTPS apex canonical metadata, structured data, nine-route XML sitemap, wildcard robots, domain guard and read-only diagnostics. Public GETs verify current apex HTML/robots/sitemap availability only.
+- **Incomplete / dependency:** Search Console/Bing verification, submission and actual indexing; HTTP→HTTPS not observed in the 19 October probe; www request failed at the environment proxy, so current DNS/TLS remains unknown. Fragment project states lack independent canonical pages.
+- **Next:** owner/dashboard verification following [discovery runbook](../DISCOVERY-ACTIVATION.md) and [domain runbook](../DOMAIN-MIGRATION.md). Dedicated project URLs are a separate PLANNED architecture decision.
+- **Gate:** no speculative DNS records, crawler bypass, sitemap/robots changes or claims of indexed pages. Internationalization, analytics and IndexNow remain future/separately scoped, not the current Portfolio milestone.
 
-This commit must not be treated as the approved design simply because it is the latest implementation or because tests passed.
+### 12. Contact and backend readiness
 
-The old “cutting-table” concept is not part of the current approved creative direction.
+- **State:** IMPLEMENTED IN MAIN: Contact UI, direct email, Worker brief pipeline, code for private R2/KV, optional Turnstile, Resend and fail-closed validation. Public GET `/api/brief` returned 405, proving only GET routing; Contact HTML had no Turnstile widget.
+- **Incomplete / dependency:** actual bindings, secrets, R2 lifecycle/privacy, sender validation, inbox/Reply-To and delivery operations. Their live state is UNKNOWN, not proven absent. Old audit records are not current activation certificates.
+- **Next:** inspect dashboard/resources with owner under separate authorization, then authorize a single controlled end-to-end test; follow [backend runbook](../BACKEND-ACTIVATION.md). Assign delivery/retention operations; no scheduled retry/bounce monitoring currently exists in code.
+- **Gate:** do not claim “production-ready Contact” from build or GET success. No submissions, secrets, resource creation or deployment authorized by this roadmap.
 
----
+### 13. Merge, release and production verification
 
-## 3. Approval Model
+- **State:** PR #41 and #42 merged. This docs branch is the current review candidate. Historical review/backup branches remain untouched. GitHub CI is separate from recorded local QA; PR #42's CI was queued at the initial check.
+- **Incomplete / dependency:** exact deployed version is not exposed by the sampled HTML; operational and physical-device checks remain. Live V2.1-shaped HTML does not prove that an arbitrary future main commit deployed.
+- **Next:** review this Draft documentation PR, then separately scope release verification; refresh CURRENT-STATE when main or confirmed external state changes.
+- **Gate:** explicit review before merge and separate production authorization; no branch implies permission to deploy. Roll back an authorized faulty release through its normal reviewed commit/release process, preserving historical IDs/assets; never reset main or merge an experimental backup wholesale.
 
-No Portfolio experiment becomes the baseline automatically.
+## Verification discipline
 
-The required sequence is:
+Documentation-only work needs scope, link and factual checks, not an expensive
+UI rerun. For application changes, select actual existing tests from `tests/` and
+the recorded [QA commands](review/womenswear-v21/QA.md), build once, keep that build
+immutable through captures, and review decoded motion. Existing CI covers build,
+Worker/domain/diagnostic tests and smoke; it does not automatically run every
+Womenswear focused suite or prove external activation.
 
-**Visual concept → Browser result → Screenshots → Human review → Visual approval → Engineering QA → Baseline / Merge**
-
-Passing build, tests, accessibility checks or Playwright checks does not by itself prove that the design is successful.
-
-Likewise, a strong screenshot is not production-ready until engineering QA is complete.
-
-Creative approval and engineering approval are separate gates.
-
----
-
-## 4. Source of Truth
-
-**GitHub is the project source of truth.**
-
-Do not rely on a design or implementation that exists only in a local Desktop workspace.
-
-Any meaningful candidate should be identifiable through:
-
-- branch
-- commit SHA
-- diff
-- reviewable browser result and/or screenshots
-
-Every new agent task should start from an explicitly identified base commit or branch.
-
----
-
-## 5. Current Phase
-
-# CURRENT PHASE: REFERENCE HARVEST
-
-We are not currently in a new coding phase.
-
-The immediate objective is to gather and analyse strong visual and interaction references before asking an agent to invent another design from a blank prompt.
-
-The first research target is:
-
-**Portfolio Opening + discovery of the four Portfolio worlds**
-
----
-
-## 6. Reference Harvest
-
-Research may draw from:
-
-- Behance
-- Awwwards
-- Codrops
-- developer portfolios
-- fashion websites
-- editorial websites
-- luxury digital experiences
-- interactive web projects
-- film / title-sequence thinking
-- technical and documentation interfaces
-
-The goal is not to find websites that look exactly like this Portfolio.
-
-The goal is to find strong solutions to specific design problems, including:
-
-- powerful openings
-- typography / image relationships
-- cinematic scroll
-- chapter discovery
-- unexpected portfolio navigation
-- image-to-project transitions
-- presentation of large bodies of work
-- document interaction
-- visualising transformation
-- surprising but usable interactions
-
----
-
-## 7. How References Are Used
-
-A reference is not selected because “the whole website is beautiful.”
-
-For each useful reference, identify the exact idea worth learning from.
-
-Examples:
-
-**Reference A**  
-Use: image entrance.
-
-**Reference B**  
-Use: typography / image tension.
-
-**Reference C**  
-Use: chapter navigation.
-
-**Reference D**  
-Use: pacing between scenes.
-
-**Reference E**  
-Use: turning technical content into a visual experience.
-
-The next step is synthesis:
-
-**Study → isolate → combine → adapt → create**
-
-Do not copy one complete reference.
-
----
-
-## 8. Portfolio Phases
-
-| Phase | Status | Purpose |
-|---|---|---|
-| Creative Direction | ✅ Complete | Establish the north star |
-| Documentation Structure | 🟡 Current | Organise durable project references |
-| Reference Harvest | ⏭ Next active work | Build the inspiration and interaction vocabulary |
-| Opening / First Impression | ⬜ | Design the first scene |
-| Portfolio Worlds | ⬜ | Discover Womenswear / Menswear / Tech Packs / Pattern Development |
-| Womenswear & Menswear Discovery | ⬜ | Build the work-discovery experience |
-| Garment Viewer Integration | ⬜ | Improve entry and continuity around the existing Viewer |
-| Evidence / Look → Inspect | ⬜ | Reveal technical depth progressively |
-| Tech Packs | ⬜ | Build the documentation experience |
-| Pattern Development | ⬜ | Build the strongest transformation experience |
-| Ending / Conversion | ⬜ | Close with confidence and a clear next action |
-| Full Integration | ⬜ | Unify scenes and transitions |
-| Engineering QA | ⬜ | Responsive, accessibility, performance, reduced motion, tests |
-| Final Approval | ⬜ | Final design and product review |
-| Merge / Deploy | ⬜ | Only after approval |
-
----
-
-## 9. Working Method for Each Creative Phase
-
-Every major design phase follows the same sequence.
-
-### 1. Research
-Define the problem and gather relevant references.
-
-### 2. Concept
-Define what the visitor should feel, understand or discover.
-
-Do not start with CSS.
-
-### 3. Visual Pass
-The agent implements only the current scene or problem.
-
-Do not redesign the entire Portfolio in the same task.
-
-### 4. Review
-After the visual pass is complete:
-
-- run one focused checklist
-- review the browser result
-- capture only the screenshots needed for the decision
-- compare the result against the creative direction
-- perform one focused refinement pass where necessary
-
-### 5. Human Approval
-The design is reviewed before deeper engineering work.
-
-If the direction is wrong, reject or redirect it early.
-
-Do not spend hours polishing a concept that will not be used.
-
-### 6. Engineering
-Only after visual approval:
-
-- responsive refinement
-- accessibility
-- reduced motion
-- performance
-- tests
-- cleanup
-- Git review
-
----
-
-## 10. Agent Prompting Rule
-
-Future task prompts should remain short.
-
-Agents should first read:
-
-`docs/portfolio/CREATIVE-DIRECTION.md`
-
-and:
-
-`docs/portfolio/ROADMAP.md`
-
-The task prompt should then describe only the current problem.
-
-Example:
-
-> We are working on the Portfolio Opening phase. Read the Creative Direction and Roadmap first. Use the approved references attached to this task. Design only the Opening. Do not continue into later Portfolio phases.
-
-Do not paste the complete Creative Direction into every prompt.
-
-Do not combine design, backend, global QA and unrelated work in one task.
-
----
-
-## 11. Creative Freedom
-
-During a creative task, the agent may explore:
-
-- composition
-- layout
-- motion
-- crop
-- typography placement
-- interaction
-- technical implementation
-- scroll choreography
-- scene structure
-- responsive interpretation
-
-The agent may propose a stronger solution than one previously discussed.
-
-Creative freedom does not include:
-
-- inventing content
-- changing factual claims
-- fabricating evidence
-- breaking proven core functions without reason
-- redesigning areas outside the current task scope
-- declaring its own work visually approved
-
-The agent proposes and implements.
-
-Human review approves or rejects.
-
----
-
-## 12. Protected Core: Garment Viewer
-
-The existing Garment Viewer is a **protected core system**.
-
-It is not permanently frozen, but it should not be rebuilt casually for visual consistency.
-
-Existing useful behaviour should be preserved unless a future task demonstrates that a change materially improves the experience.
-
-Priority areas around the Viewer are:
-
-- entry into the Viewer
-- continuity from garment discovery
-- presentation
-- progressive evidence around the Viewer
-
----
-
-## 13. Content Integrity
-
-Portfolio content must remain truthful.
-
-Do not fabricate:
-
-- sketches
-- patterns
-- technical documents
-- development stages
-- client work
-- authorship
-
-Reference or demo material must not be presented as original authored work.
-
-**Content drives layout.  
-Layout does not fabricate content.**
-
----
-
-## 14. Testing Strategy
-
-During early visual exploration:
-
-Do not run the full repository test suite after every small design change.
-
-Use only the level of verification needed to confirm that the current scene functions and can be reviewed.
-
-After visual approval:
-
-Run the appropriate engineering QA comprehensively.
-
-The purpose is to avoid spending large amounts of time validating a visual direction before we know whether we want to keep it.
-
----
-
-## 15. Screenshot Strategy
-
-Screenshots are decision tools, not a fixed bureaucratic deliverable.
-
-Capture the minimum set needed to judge the current scene.
-
-For example, an Opening task may require:
-
-- desktop opening
-- desktop interaction / transition state
-- mobile opening
-
-Add more only when they help answer a real design question.
-
-Do not request large screenshot matrices automatically.
-
----
-
-## 16. Branch Strategy
-
-Major design experiments should use isolated branches.
-
-Do not experiment directly on `main`.
-
-When two genuinely strong concepts deserve comparison, create them from the same approved base rather than endlessly modifying one experiment.
-
-Prefer:
-
-**Concept A vs Concept B**
-
-over:
-
-**Concept A → patch → patch → patch → lost original direction**
-
----
-
-## 17. Status Definitions
-
-### EXPERIMENTAL
-Implemented, but not approved.
-
-### VISUALLY APPROVED
-Human review accepts the creative result.
-
-### ENGINEERING APPROVED
-Responsive, accessibility, performance and relevant tests are accepted.
-
-### BASELINE
-Both visual and engineering approval are complete. Future work may safely build from this version.
-
-### DONE
-Creative intent, visual approval and engineering stability are all complete.
-
-“Agent completed,” “tests passed,” or “commit pushed” alone do not mean DONE.
-
----
-
-## 18. Rules We Are Retiring
-
-Do not:
-
-- start major creative work from a blank “be creative” prompt when reference research would help
-- assign the entire Portfolio redesign in one task
-- combine Art Direction, Git, backend, accessibility, QA and multiple design scenes in one long prompt
-- treat tests as proof of visual success
-- treat the latest commit as the best commit by default
-- build the next phase on top of a scene that has not been visually approved
-- repeat the same validation instruction after every small implementation detail
-
----
-
-## 19. Immediate Next Action
-
-# REFERENCE HARVEST — ROUND 1
-
-Research focus:
-
-**Portfolio Opening + discovery of the four Portfolio worlds**
-
-The output should be an analytical reference board, not a generic inspiration list.
-
-For each selected reference, capture:
-
-- source / project
-- what is worth learning from it
-- the exact interaction or composition principle
-- why it may fit this Portfolio
-- what should not be copied
-- whether it can combine with another selected idea
-
-The research should then produce a small number of promising design directions for the Opening.
-
-No new Opening implementation should begin before this research is reviewed.
-
----
-
-# Operating Principle
-
-## Research before invention.
-## One creative problem at a time.
-## Visual approval before heavy engineering.
-## GitHub as the source of truth.
-## Agents execute; humans approve.
+Every future task should name its baseline, scope, affected workstream, evidence,
+required verification and approval boundary. Historical research informs ideas;
+it never changes that authorization.

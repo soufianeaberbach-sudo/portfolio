@@ -1,5 +1,11 @@
 # Security preparation — not active
 
+> TECHNICAL RUNBOOK / EXPERIMENTAL POLICY — reconciled 19 October 2026. The
+> CSP below is a candidate, not an approved enforced policy. External security
+> state needs dated verification; do not infer it from the historical title or
+> activate it as part of design work. See [current state](portfolio/CURRENT-STATE.md)
+> and [limited public header observations](portfolio/PUBLIC-OBSERVATIONS-2026-10-19.md).
+
 This branch installs no security response headers, HSTS or CSP. DNS, HTTPS
 redirects, minimum TLS, Browser Integrity Check, WAF/bot settings and Cloudflare
 header rules remain external tasks for Soufiane at home.
