@@ -31,9 +31,12 @@ function hide(button:HTMLButtonElement){button.inert=true;button.tabIndex=-1;but
 export function resetStreet(root:HTMLElement){(root.querySelector('[data-frame]') as HTMLElement).style.color='';for(const n of root.querySelectorAll<HTMLElement>('.dc-wing'))n.style.display='none';}
 export function paintStreet({frame,root,position,compact,reduce,plates}:Context){
  const w=frame.clientWidth,h=frame.clientHeight;
- const p=reduce||Math.abs(position-Math.round(position))<.005?Math.round(position):position;
+ // Short authored holds tolerate real wheel/touch quantization without scroll snapping.
+ const act=Math.floor(position),fraction=position-act;
+ const p=reduce?Math.round(position):Math.min(4,act+clamp((fraction-.08)/.84));
  const cream=plates.get('cream')!,city=plates.get('city')!,booth=plates.get('booth')!,hero=plates.get('statement')!;
- for(const b of plates.values())hide(b);
+ const drawn=new Set<HTMLButtonElement>();
+ const drawPhoto=(b:HTMLButtonElement,box:Box,w:number,h:number,win:Window=whole,interactive=true)=>{drawn.add(b);draw(b,box,w,h,win,interactive);};
  const caption=root.querySelector<HTMLElement>('[data-film-caption]')!;
  caption.style.opacity=p<.65?'1':'0';caption.style.visibility=p<.65?'visible':'hidden';
  const roomWin:Window=compact?[.46,.25,.54,.75]:[0,.20,1,.80];
@@ -45,28 +48,28 @@ export function paintStreet({frame,root,position,compact,reduce,plates}:Context)
  (root.querySelector('[data-gate]') as HTMLElement).style.clipPath='inset(0 100% 0 0)';
  cream.style.zIndex='2';city.style.zIndex='2';booth.style.zIndex='4';hero.style.zIndex='1';
  const leftWing=root.querySelector<HTMLElement>('[data-wing-left]')!,rightWing=root.querySelector<HTMLElement>('[data-wing-right]')!;
- leftWing.style.display=rightWing.style.display='none';
+ leftWing.style.display=rightWing.style.display='none';leftWing.style.visibility=rightWing.style.visibility='hidden';
  // I → II: one held full look, an editorial cut, a growing photographic limit.
  if(p<=1){
   const q=smooth(p),cut=p<.43;
-  if(cut)draw(cream,hoodie,w,h,whole,true);else draw(city,stride,w,h,whole,true);
-  const hint={...wall,x:w*.97};draw(booth,mix(hint,wall,q),w,h,whole,false);
+  if(cut)drawPhoto(cream,hoodie,w,h,whole,true);else drawPhoto(city,stride,w,h,whole,true);
+  const hint={...wall,x:w*.97};drawPhoto(booth,mix(hint,wall,q),w,h,whole,false);
  }
  // II → III: the obstruction takes the field before revealing its actual room.
  else if(p<=2){
   const q=p-1;
-  if(q<.34){draw(city,stride,w,h,whole,q<.1);draw(booth,{...wall,x:lerp(wall.x,-wall.w*.04,smooth(q/.34))},w,h,whole,false);}
+  if(q<.34){drawPhoto(city,stride,w,h,whole,q<.1);drawPhoto(booth,{...wall,x:lerp(wall.x,-wall.w*.04,smooth(q/.34))},w,h,whole,false);}
   else{
    const q2=smooth((q-.34)/.66),expanded={...wall,x:-wall.w*.04};
    // Source coordinates stay continuous; the final window only trims empty margins.
-   draw(booth,mix(expanded,room,q2),w,h,whole,q2>.99);
-   if(q2>.999)draw(booth,room,w,h,roomWin,true);
+   drawPhoto(booth,mix(expanded,room,q2),w,h,whole,q2>.99);
+   if(q2>.999)drawPhoto(booth,room,w,h,roomWin,true);
   }
  }
  // III → V: one photographic seam opens, then its two leaves clear the field.
  else{
   const reveal=clamp(p-2),release=clamp(p-3),q=smooth(reveal),r=smooth(release);
-  draw(hero,mix(revealed,final,r),w,h,heroWindow,p>=3);
+  drawPhoto(hero,mix(revealed,final,r),w,h,heroWindow,p>=3);
   const src=booth.querySelector('img')!.src,seam=.50;
   for(const [wing,isLeft] of [[leftWing,true],[rightWing,false]] as const){
    const startX=isLeft?room.x+room.w*roomWin[0]:room.x+room.w*seam;
@@ -74,10 +77,12 @@ export function paintStreet({frame,root,position,compact,reduce,plates}:Context)
    const width=endX-startX,held=isLeft?-width*.55:w-width*.10;
    const destination=isLeft?-width-2:w+2;
    const x=lerp(lerp(startX,held,q),destination,r),y=room.y+room.h*roomWin[1];
-   Object.assign(wing.style,{display:p<3.999?'block':'none',left:`${x}px`,top:`${y}px`,width:`${Math.max(0,width)}px`,height:`${room.h*roomWin[3]}px`});
+   Object.assign(wing.style,{display:p<3.999?'block':'none',visibility:p<3.999?'visible':'hidden',left:`${x}px`,top:`${y}px`,width:`${Math.max(0,width)}px`,height:`${room.h*roomWin[3]}px`});
    const im=wing.querySelector('img')!;if(im.getAttribute('src')!==src)im.src=src;
    Object.assign(im.style,{left:`${room.x-startX}px`,top:`${-room.h*roomWin[1]}px`,width:`${room.w}px`,height:`${room.h}px`});
   }
  }
+ // Do not make a still-active focused door inert during a resize/repaint.
+ for(const b of plates.values())if(!drawn.has(b))hide(b);
  frame.dataset.filmAct=String(Math.min(4,Math.round(p)));
 }

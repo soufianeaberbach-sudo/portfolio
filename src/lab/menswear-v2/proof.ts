@@ -8,7 +8,7 @@ const $=<T extends HTMLElement=HTMLElement>(selector:string)=>root.querySelector
 const experience=$('[data-experience]'),frame=$('[data-frame]'),cast=$('[data-cast]');
 const menu=$<HTMLDialogElement>('[data-world-dialog]'),archive=$<HTMLDialogElement>('[data-archive-dialog]'),reader=$<HTMLDialogElement>('[data-reader]');
 const reduce=matchMedia('(prefers-reduced-motion:reduce)'),compact=matchMedia('(max-width:767px), (max-width:1023px) and (orientation:portrait)');
-const reviewBase=root.dataset.reviewBase?new URL(root.dataset.reviewBase,location.origin):new URL('./',location.href);
+const reviewBase=root.dataset.reviewBase?new URL(root.dataset.reviewBase,location.href):new URL('./',location.href);
 const resolve=(src:string)=>location.pathname.startsWith('/lab/menswear')&&src.startsWith('../../../../public/')?src.replace('../../../../public',''):new URL(src,reviewBase).href;
 const asset=(look:Look)=>resolve(look.image.src);
 const worldKeys=Object.keys(worlds) as World[];
@@ -97,14 +97,16 @@ async function match(sourceNode:HTMLElement,enter:boolean,done:()=>void){
  const generation=++transferToken;
  if(reduce.matches||!sourceNode.isConnected){done();return;}
  const original=sourceNode.querySelector<HTMLImageElement>('img')!;if(!original){done();return;}
- // The windowed study intentionally opens the complete original; do not fake registration.
- if(readerLook?.window||sourceNode.dataset.fullSource==='false'){done();return;}
- const rect=sourceNode.getBoundingClientRect(),target=image.getBoundingClientRect(),a=enter?rect:target,b=enter?target:rect;
- if(!a.width||!b.width){done();return;}
+ // Same-source crop expansion: measure the full photographed plane as well as
+ // its visible window. Uniform scaling + clip travel preserves body proportions.
+ const sourceRect=original.getBoundingClientRect(),windowRect=sourceNode.getBoundingClientRect(),target=image.getBoundingClientRect();
+ const a=enter?sourceRect:target,b=enter?target:sourceRect;
+ if(!a.width||!b.width||Math.abs(a.width/a.height-b.width/b.height)>.02){done();return;}
+ const crop=`inset(${Math.max(0,(windowRect.top-sourceRect.top)/sourceRect.height*100)}% ${Math.max(0,(sourceRect.right-windowRect.right)/sourceRect.width*100)}% ${Math.max(0,(sourceRect.bottom-windowRect.bottom)/sourceRect.height*100)}% ${Math.max(0,(windowRect.left-sourceRect.left)/sourceRect.width*100)}%)`;
  const clone=image.cloneNode() as HTMLImageElement;clone.className='mc-transfer';clone.removeAttribute('data-reader-image');clone.setAttribute('aria-hidden','true');Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none'});reader.append(clone);
  try{await clone.decode();}catch{clone.remove();if(generation===transferToken&&reader.open)done();return;}
- if(!reader.open||generation!==transferToken){clone.remove();return;}image.style.visibility='hidden';const scaleX=b.width/a.width,scaleY=b.height/a.height;
- transfer=clone.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${b.left-a.left}px,${b.top-a.top}px) scale(${scaleX},${scaleY})`}],{duration:540,easing:'cubic-bezier(.22,.68,.18,1)',fill:'forwards'});
+ if(!reader.open||generation!==transferToken){clone.remove();return;}image.style.visibility='hidden';const scaleX=b.width/a.width;
+ transfer=clone.animate([{transform:'translate(0,0) scale(1)',clipPath:enter?crop:'inset(0%)'},{transform:`translate(${b.left-a.left}px,${b.top-a.top}px) scale(${scaleX})`,clipPath:enter?'inset(0%)':crop}],{duration:540,easing:'cubic-bezier(.22,.68,.18,1)',fill:'forwards'});
  const current=transfer;current.onfinish=()=>{if(transfer!==current)return;clone.remove();image.style.visibility='';transfer=null;done();};
 }
 async function openReader(key:string,door:HTMLElement){

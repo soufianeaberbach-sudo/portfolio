@@ -28,3 +28,6 @@ dialog{border:0;color:var(--ink);background:var(--paper);padding:0;margin:0;max-
 .mc[data-world="m-streetwear"] .mc-plate{transform:none;height:auto;will-change:transform}
 .mc[data-world="m-streetwear"] .mc-plate img{max-width:none;right:auto;bottom:auto}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){.dc-caption{left:18px;top:14px}.dc-caption p{font-size:.625rem}.dc-caption h1{font-size:1.25rem;margin:.3rem 0}.dc-caption span{display:none}.mc[data-world="m-streetwear"] .mc-imprint{font-size:.625rem}.mc[data-world="m-streetwear"] .mc-imprint>span{font-size:.5625rem}}
+
+/* Isolate moving photographic leaves from sticky-stage paint damage. */
+.dc-wing{contain:paint;will-change:transform;transform:translateZ(0)}
