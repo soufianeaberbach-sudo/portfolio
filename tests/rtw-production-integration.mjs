@@ -11,7 +11,7 @@ try{
 for(const[w,h]of sizes){
  const c=await browser.newContext({viewport:{width:w,height:h},hasTouch:w<500,isMobile:w<500});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(base+'/portfolio/#womenswear/rtw');await fontsReady(p);await p.waitForTimeout(500);
- check(await p.locator('[data-ww-exhibition=rtw] .ww-rail a').count()===17,`${w}: all17 archive`);
+ check(await p.locator('[data-ww-exhibition=rtw] .ww-rail a').count()===10,`${w}: ten-look archive, historical 17 deep links retained`);
  check(await p.locator('[data-act-link]').count()===5,`${w}: all categories`);
  check(await p.locator('[data-act-toggle]').isVisible(),`${w}: category control visible`);
  check(await p.locator('[data-act]').evaluate(e=>e.scrollWidth<=e.clientWidth+1),`${w}: world fits`);
@@ -68,7 +68,7 @@ for(const[w,h]of sizes){
 }
 // Native links and the full archive survive without enhancement.
 const staticContext=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});await installFonts(staticContext);const staticPage=await staticContext.newPage();await staticPage.goto(base+'/portfolio/#womenswear/rtw/rtw-ref-01');
-check(await staticPage.locator('[data-ww-exhibition=rtw] .ww-rail a').count()===17,'no JavaScript: complete archive');
+check(await staticPage.locator('[data-ww-exhibition=rtw] .ww-rail a').count()===10,'no JavaScript: complete ten-look archive');
 check(await staticPage.locator('[data-ww-exhibition=rtw]').getAttribute('data-enhanced')===null,'no JavaScript: resting composition');
 check(await staticPage.locator('[data-subject=rtw-ref-01]').isVisible(),'no JavaScript: native garment deep link');await staticContext.close();
 console.log(`${checks} RTW production checks passed`);

@@ -2,7 +2,7 @@
    the real occurrence and reframe that look, never focus an invisible actor. */
 import assert from'node:assert/strict';import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';import{photoReady}from'./fixtures/final-photo.mjs';
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4389',b=await chromium.launch();let checks=0;const results=[],check=(ok,msg)=>{assert(ok,msg);checks++;};
-const cases=[['rtw','stone',1,.60],['activewear','black',.67,.46],['streetwear','burgundy',1,0],['evening','black',.45,.20],['swimwear','black',1,.52]];
+const cases=[['rtw','stone',1,.60],['activewear','black',.67,.46],['streetwear','burgundy',.41,0],['evening','black',.45,.20],['swimwear','black',.55,.52]];
 try{for(const reverse of [false,true]){
  const from=reverse?{width:390,height:844}:{width:1440,height:900},to=reverse?{width:1440,height:900}:{width:390,height:844};
  const c=await b.newContext({viewport:from});await installFonts(c);

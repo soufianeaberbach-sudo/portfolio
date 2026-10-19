@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {installFonts,fontsReady} from './fixtures/fonts.mjs';
+const rtwEdit=[1,2,3,4,5,6,7,10,11,15];
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4339',browser=await chromium.launch();let checks=0;
 const check=(ok,label)=>{assert(ok,label);checks++;};
 try{
@@ -13,12 +14,12 @@ try{
   await p.locator('[data-ww-exhibition=rtw] .ww-archive').evaluate(e=>e.scrollIntoView({behavior:'instant',block:'center'}));
   check(await cue.isVisible()===(width<1024),`${width}: cue belongs to compact composition only`);
   if(width<1024){const r=await cue.boundingBox();check(r.x>=0&&r.x+r.width<=width,`${width}: cue fits viewport`);check(parseFloat(await cue.evaluate(e=>getComputedStyle(e).fontSize))>=10,`${width}: cue readable`);}
-  check(await links.count()===17,`${width}: all 17 original links`);
+  check(await links.count()===10,`${width}: all ten display links`);
   await rail.focus();
-  for(let i=0;i<17;i++){
+  for(let i=0;i<rtwEdit.length;i++){
    await p.keyboard.press('Tab');const link=links.nth(i);
    check(await link.evaluate(e=>e===document.activeElement),`${width}/${i+1}: native keyboard discovery`);
-   check((await link.getAttribute('href'))===`#womenswear/rtw/rtw-ref-${String(i+1).padStart(2,'0')}`,`${width}/${i+1}: stable identity`);
+   check((await link.getAttribute('href'))===`#womenswear/rtw/rtw-ref-${String(rtwEdit[i]).padStart(2,'0')}`,`${width}/${i+1}: stable identity`);
    check(await link.evaluate(e=>{const r=e.getBoundingClientRect(),p=e.parentElement.getBoundingClientRect();return r.right>p.left&&r.left<p.right}),`${width}/${i+1}: focus scrolls garment into rail`);
   }
   // Keyboard opens the actual last occurrence, including exact horizontal return.

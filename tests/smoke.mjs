@@ -537,8 +537,9 @@ try {
     }, world);
     check('the five categories remain in approved order', act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear');
     check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
-    check('every garment has an exhibition entry and a reader',
-      new Set(act.doors).size === 49 && act.readers.every(id => act.doors.includes(id)));
+    check('50 displayed garments have readers; eight excluded historical IDs retain direct readers',
+      new Set(act.doors).size === 50 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58
+        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === ['rtw-ref-08','rtw-ref-09','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','evening-ref-09'].sort().join(','));
     check('readers stay closed until requested', act.open === 0);
     check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
     check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');

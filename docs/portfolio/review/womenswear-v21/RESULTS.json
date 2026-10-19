@@ -1,0 +1,184 @@
+{
+  "sourceCommit": "2e551d7c5c8fdabd7e17bd1dbc8a1ad0fcf9b8c5",
+  "reviewedBaseline": "17b119f8e9e771dc20d0eff0f6878f500f4563bf",
+  "completed": "2026-10-19T14:55:12.531409+00:00",
+  "suites": [
+    {
+      "test": "womenswear-ten-looks",
+      "exitCode": 0,
+      "started": "2026-10-19T14:40:37.843903+00:00",
+      "finished": "2026-10-19T14:40:37.960367+00:00",
+      "checks": 113,
+      "logSummary": "113 ten-look identity, licensing and replacement checks passed\n"
+    },
+    {
+      "test": "womenswear-historical-return",
+      "exitCode": 0,
+      "started": "2026-10-19T14:40:37.960538+00:00",
+      "finished": "2026-10-19T14:40:42.168511+00:00",
+      "checks": 96,
+      "logSummary": "96 historical deep-link and focus-return checks passed\n"
+    },
+    {
+      "test": "final-photography",
+      "exitCode": 0,
+      "started": "2026-10-19T14:40:42.168914+00:00",
+      "finished": "2026-10-19T14:40:42.284081+00:00",
+      "checks": 9,
+      "logSummary": "9 final-photography configuration checks passed\n"
+    },
+    {
+      "test": "womenswear-v2",
+      "exitCode": 0,
+      "started": "2026-10-19T14:40:42.284253+00:00",
+      "finished": "2026-10-19T14:43:38.336820+00:00",
+      "checks": 1925,
+      "logSummary": "1440 reviewed\n1366 reviewed\n1024 reviewed\n768 reviewed\n430 reviewed\n390 reviewed\n1925 Womenswear V2 checks passed\n"
+    },
+    {
+      "test": "womenswear-photography",
+      "exitCode": 0,
+      "started": "2026-10-19T14:43:38.337094+00:00",
+      "finished": "2026-10-19T14:44:04.452918+00:00",
+      "checks": 438,
+      "logSummary": "438 Womenswear photographic reliability checks passed\n"
+    },
+    {
+      "test": "womenswear-reference-reader",
+      "exitCode": 0,
+      "started": "2026-10-19T14:44:04.453172+00:00",
+      "finished": "2026-10-19T14:44:17.045134+00:00",
+      "checks": 270,
+      "logSummary": "270 licensed-reference reader and caption checks passed\n"
+    },
+    {
+      "test": "womenswear-reader-configurations",
+      "exitCode": 0,
+      "started": "2026-10-19T14:44:17.045365+00:00",
+      "finished": "2026-10-19T14:44:23.286099+00:00",
+      "checks": 52,
+      "logSummary": "52 optional-view UI checks passed\n"
+    },
+    {
+      "test": "womenswear-continuity",
+      "exitCode": 0,
+      "started": "2026-10-19T14:44:23.286323+00:00",
+      "finished": "2026-10-19T14:45:22.817376+00:00",
+      "checks": 122,
+      "logSummary": "122 Womenswear continuity checks passed\n"
+    },
+    {
+      "test": "womenswear-responsive-return",
+      "exitCode": 0,
+      "started": "2026-10-19T14:45:22.817643+00:00",
+      "finished": "2026-10-19T14:46:26.838816+00:00",
+      "checks": 80,
+      "logSummary": "    \"x\": 1250.015625,\n      \"y\": 283.203125,\n      \"right\": 1378.21875,\n      \"bottom\": 616.203125,\n      \"opacity\": 1,\n      \"tab\": 0\n    },\n    {\n      \"category\": \"swimwear\",\n      \"kind\": \"camera\",\n      \"from\": {\n        \"width\": 390,\n        \"height\": 844\n      },\n      \"to\": {\n        \"width\": 1440,\n        \"height\": 900\n      },\n      \"id\": \"swimwear-ref-08\",\n      \"focused\": true,\n      \"x\": 112.12969970703125,\n      \"y\": 109.067138671875,\n      \"right\": 416.2099609375,\n      \"bottom\": 874.5862426757812,\n      \"opacity\": 1,\n      \"tab\": 0\n    },\n    {\n      \"category\": \"swimwear\",\n      \"kind\": \"archive\",\n      \"from\": {\n        \"width\": 390,\n        \"height\": 844\n      },\n      \"to\": {\n        \"width\": 1440,\n        \"height\": 900\n      },\n      \"id\": \"swimwear-ref-10\",\n      \"focused\": true,\n      \"x\": 1229.765625,\n      \"y\": 283.453125,\n      \"right\": 1378.5,\n      \"bottom\": 616.453125,\n      \"opacity\": 1,\n      \"tab\": 0\n    }\n  ]\n}\n80 responsive source-return checks passed\n"
+    },
+    {
+      "test": "rtw-production-integration",
+      "exitCode": 0,
+      "started": "2026-10-19T14:46:26.839225+00:00",
+      "finished": "2026-10-19T14:47:29.266059+00:00",
+      "checks": 783,
+      "logSummary": "783 RTW production checks passed\n"
+    },
+    {
+      "test": "rtw-production-reliability",
+      "exitCode": 0,
+      "started": "2026-10-19T14:47:29.266490+00:00",
+      "finished": "2026-10-19T14:47:35.548714+00:00",
+      "checks": 74,
+      "logSummary": "74 RTW reliability checks passed\n"
+    },
+    {
+      "test": "rtw-pre-pr",
+      "exitCode": 0,
+      "started": "2026-10-19T14:47:35.549106+00:00",
+      "finished": "2026-10-19T14:48:01.278351+00:00",
+      "checks": 268,
+      "logSummary": "268 RTW pre-PR input checks passed\n"
+    },
+    {
+      "test": "smoke",
+      "exitCode": 0,
+      "started": "2026-10-19T14:48:01.278632+00:00",
+      "finished": "2026-10-19T14:49:26.879505+00:00",
+      "checks": 352,
+      "logSummary": "ail is a mailto link\n  ok   phone is a tel link\n  ok   WhatsApp is a wa.me link\n  ok   the number is readable text, not icon-only\n  ok   and it is printed once, not as two giant rows\n  ok   direct contact is set larger than the platform links\n  ok   the platform group appears exactly once\n  ok   the old three-equal-column grid is gone\n  ok   the business credential is present\n  ok   B2B invoicing is called out\n  ok   the credential headline outranks the platform links\n  ok   no orange underline sits beneath text at rest\n  ok   Contact follows direct \u2192 brief \u2192 business \u2192 proof \u2192 platforms\n\nprivacy page\n  ok   footer links to /privacy/\n  ok   /privacy/ responds 200\n  ok   KV expiry and upload retention target distinguished\n\nstory lab stays out of production\n  ok   /lab/hero/ is not built\n  ok   /lab/featured/ is not built\n  ok   /lab/supporting/ is not built\n  ok   the public portfolio carries no lab fixture\n  ok   and no garment there has a story it did not supply\n\n352 passed, 0 failed\n"
+    },
+    {
+      "test": "portfolio-opening",
+      "exitCode": 0,
+      "started": "2026-10-19T14:49:26.879879+00:00",
+      "finished": "2026-10-19T14:50:04.279549+00:00",
+      "checks": 100,
+      "logSummary": "k   390x844: and inside the frame\n\none control\n  ok   it is out of the way over the opening, which is not a chapter\n  ok   it says where you are\n  ok   it marks the chapter being read\n  ok   it is closed until it is asked for\n  ok   a keyboard opens it\n  ok   and it lists the four chapters, in order\n  ok   Escape closes it again\n  ok   on a phone a tap opens it and leaves it open\n  ok   and it is a touch target, not a hairline\n\nwithout motion\n  ok   the opening resolves to the master scene with no scroll\n  ok   the landing frame that will never be reached leaves the page\n  ok   all four chapters still have a cover, in order\n  ok   every frame is open: nothing waits for a scrub that will not run\n  ok   and no name is left drawn but unfilled\n  ok   the Womenswear cover still opens the existing chapter\n  ok   and the chapter still carries its five territories\n  ok   and the first thing in it is a garment, not an interface\n  ok   and no type is set across the garment\n\n100 passed, 0 failed\n"
+    }
+  ],
+  "assertionTotal": 4682,
+  "focusStress": {
+    "date": "2026-10-19T14:52:50.570Z",
+    "workers": 2,
+    "runs": 2,
+    "rate": 4,
+    "passed": 4,
+    "failed": 0
+  },
+  "build": {
+    "sourceCommit": "2e551d7c5c8fdabd7e17bd1dbc8a1ad0fcf9b8c5",
+    "astroBuildPageCount": 11,
+    "visibleArchives": {
+      "rtw": 10,
+      "activewear": 10,
+      "streetwear": 10,
+      "evening": 10,
+      "swimwear": 10
+    },
+    "readerCount": 58,
+    "externalTemporaryRenditions": 18,
+    "noLabOrReviewRoutes": true,
+    "noTechnicalDemoMaterialInPortfolio": true,
+    "portfolioHtmlSha256": "d979e3a02c7a5fb74661c91e03066dc7f312015a7bf2b324cdcd90b7e763ad94",
+    "unexpectedSourceChanges": [],
+    "historicalImageChanges": []
+  },
+  "typescript": "tsc --noEmit: exit 0; no diagnostics",
+  "visualReview": {
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "categories": 5,
+    "journeySheets": 30,
+    "individualPrimaryStills": 50,
+    "auditedPrimaryViews": 50,
+    "auditedBackViews": 30,
+    "desktopDecodedFrames": 362,
+    "mobileDecodedFrames": 361,
+    "decodedReviewRate": 4,
+    "referenceStatus": "temporary; no owner authorship claimed"
+  }
+}
