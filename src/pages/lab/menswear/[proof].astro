@@ -1,0 +1,8 @@
+---
+// Isolated creative review only. Produces no production route or imported client bundle.
+import html from '../../../lab/menswear/index.html?raw';
+export function getStaticPaths(){return import.meta.env.DEV?[{params:{proof:'concept'}}]:[];}
+const root=process.cwd();
+const source=html.replace('href="proof.css"','href="/src/lab/menswear/proof.css"').replace('src="proof.js"','src="/src/lab/menswear/proof.ts"').replace('href="../../../../public/../portfolio/"','href="/portfolio/#menswear"').replace('data-concept>',`data-concept data-review-base="/@fs/${root}/docs/portfolio/review/menswear-cinematic-concept/">`);
+---
+<Fragment set:html={source}/>
