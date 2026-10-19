@@ -1,0 +1,23 @@
+---
+import type{Subject,ImageCredit}from'../../data/portfolio';
+import{finalPhotographs}from'../../data/final-photography';
+import{directions}from'../../data/womenswear-direction';
+import FinalPhoto from'./FinalPhoto.astro';
+interface Props{subject:Subject;world:string;credit?:ImageCredit;}
+const{subject,world,credit}=Astro.props,photos=finalPhotographs(subject),category=directions[subject.category];
+---
+<article class="pf-rd__subject ww-reader" data-ww-reader data-subject={subject.id} data-of={subject.category} data-role={subject.role} data-verified={subject.verified?'yes':'no'} id={`${world}/${subject.category}/${subject.id}`} aria-labelledby={`${subject.id}-rd-title`} tabindex="-1" hidden>
+ <header class="ww-reader-head"><a class="label" href={`#${world}/${subject.category}`} data-nav data-subject-close>← {category.name.toUpperCase()}</a><p class="label">{subject.verified?'FINAL PHOTOGRAPHY':'REFERENCE PHOTOGRAPHY'}</p></header>
+ <section class="ww-reader-floor" aria-label="The complete garment">
+  <div class="ww-reader-copy"><h3 id={`${subject.id}-rd-title`}>{subject.title??subject.caption??subject.cover.alt}</h3>{credit&&<p class="ww-photo-credit">{subject.verified?'Photograph':'Reference photograph'} · {credit.sourcePage?<a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer??credit.source}{credit.sourcePage.startsWith('https://www.pexels.com/')?' / Pexels':''} ↗︎</a>:<span>{credit.photographer??credit.source}</span>}</p>}</div>
+  <div class="ww-reader-image" data-ww-target>
+   {photos.map((photo,i)=><div data-photo-view={i} hidden={i!==0}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></div>)}
+  </div>
+  <div class="ww-reader-controls" aria-label="Garment photography">
+   {photos.length>1?photos.map((photo,i)=><button class="label" data-ww-view={i} aria-pressed={i===0?'true':'false'}>{photo.label.toUpperCase()}</button>):<span class="label">{photos[0].label.toUpperCase()}</span>}
+   <button class="label" data-rd-inspect aria-pressed="false">LOOK CLOSER</button>
+  </div>
+  <div class="ww-zoom-tools" data-ww-zoom-tools hidden><button data-ww-zoom="0.714" aria-label="Zoom out">−</button><button data-ww-fit>FIT</button><button data-ww-zoom="1.4" aria-label="Zoom in">+</button><a href={photos[0].image.src} data-original-source target="_blank" rel="noopener">ORIGINAL SOURCE ↗</a></div>
+  <p class="ww-source-status" data-ww-source-status role="status"></p>
+ </section>
+</article>

@@ -1,0 +1,166 @@
+{
+  "dateUTC": "2026-10-19T10:10:57.061806+00:00",
+  "sourceCommit": "3175ac79497a71a32316e8c149ffdbade442b2e7",
+  "baselineCommit": "dfc2f3d5e9d7aee4bb2906bf15c44dcc3a23d180",
+  "build": {
+    "result": "passed",
+    "pages": 11
+  },
+  "typescript": {
+    "result": "passed",
+    "diagnostics": 0
+  },
+  "tests": [
+    {
+      "command": "node tests/womenswear-v2.mjs",
+      "checks": 1769,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:02:22.218699+00:00"
+    },
+    {
+      "command": "node tests/womenswear-continuity.mjs",
+      "checks": 122,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:03:24.271701+00:00"
+    },
+    {
+      "command": "node tests/womenswear-responsive-return.mjs",
+      "checks": 80,
+      "result": "passed",
+      "completedUTC": "2026-10-19T09:59:44.148133+00:00"
+    },
+    {
+      "command": "node tests/womenswear-photography.mjs",
+      "checks": 384,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:01:06.661455+00:00"
+    },
+    {
+      "command": "node tests/final-photography.mjs",
+      "checks": 9,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:01:13.185570+00:00"
+    },
+    {
+      "command": "node tests/womenswear-reader-configurations.mjs",
+      "checks": 52,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:01:13.077568+00:00"
+    },
+    {
+      "command": "node tests/rtw-production-integration.mjs",
+      "checks": 783,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:00:33.748948+00:00"
+    },
+    {
+      "command": "node tests/rtw-production-reliability.mjs",
+      "checks": 74,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:00:39.717044+00:00"
+    },
+    {
+      "command": "node tests/rtw-pre-pr.mjs",
+      "checks": 373,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:03:57.124236+00:00"
+    },
+    {
+      "command": "SMOKE_PORT=4394 node tests/smoke.mjs",
+      "checks": 352,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:02:41.375010+00:00"
+    },
+    {
+      "command": "node tests/portfolio-opening.mjs",
+      "checks": 100,
+      "result": "passed",
+      "completedUTC": "2026-10-19T10:03:18.591609+00:00"
+    }
+  ],
+  "functionalChecks": 4098,
+  "focusStress": {
+    "setup": "instant",
+    "input": "locator",
+    "workers": 2,
+    "runs": 2,
+    "rate": 4,
+    "passed": 4,
+    "failed": 0
+  },
+  "viewports": [
+    [
+      1440,
+      900
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      430,
+      932
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "archives": {
+    "rtw": 17,
+    "activewear": 10,
+    "streetwear": 2,
+    "evening": 11,
+    "swimwear": 9
+  },
+  "bundle": {
+    "baseline": {
+      "portfolioHTMLBytes": 252527,
+      "portfolioHTMLGzipBytes": 20256,
+      "generatedJSBytes": 157752,
+      "generatedJSGzipBytes": 59385
+    },
+    "final": {
+      "portfolioHTMLBytes": 286492,
+      "portfolioHTMLGzipBytes": 22077,
+      "generatedJSBytes": 164340,
+      "generatedJSGzipBytes": 61647
+    }
+  },
+  "productionIsolation": {
+    "protectedPathsUnchanged": [
+      "public",
+      "src/data/portfolio.ts",
+      "src/data/womenswear-exhibition.ts",
+      "src/styles/portfolio-womenswear.css",
+      "src/styles/portfolio-cinematic.css",
+      "src/styles/portfolio-director.css",
+      "src/components/portfolio/CinematicReader.astro",
+      "src/layouts",
+      "src/pages/index.astro",
+      "src/pages/contact.astro",
+      "worker",
+      "wrangler.jsonc",
+      "astro.config.mjs",
+      "package.json",
+      "package-lock.json"
+    ],
+    "labRoutes": 0,
+    "reviewMediaInBuild": 0,
+    "independentTechnicalExamples": 0
+  },
+  "limitations": [
+    "Physical iPhone Safari and hardware frame pacing remain unverified.",
+    "Existing photographic artifacts and source limitations preserved.",
+    "No authenticated isolated preview upload target available.",
+    "Independent visual approval required; no merge, PR or deployment."
+  ]
+}

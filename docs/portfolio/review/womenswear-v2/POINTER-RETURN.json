@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-19T09:32:27.877Z",
+  "note": "Exact earlier source built independently in a temporary directory. Same real pointer action: click camera garment, wait 40ms, click Return. Immediate assertion reads the reader state immediately after the click; no retry.",
+  "passed": true,
+  "results": [
+    {
+      "name": "before",
+      "commit": "e54daa822e80f114d2f593acffdcd94135bd2bce",
+      "width": 1440,
+      "height": 900,
+      "inFlight": true,
+      "immediateClosed": false,
+      "elapsedMs": 961,
+      "sourceFocused": true
+    },
+    {
+      "name": "before",
+      "commit": "e54daa822e80f114d2f593acffdcd94135bd2bce",
+      "width": 390,
+      "height": 844,
+      "inFlight": true,
+      "immediateClosed": false,
+      "elapsedMs": 875,
+      "sourceFocused": true
+    },
+    {
+      "name": "after",
+      "commit": "61d4513a2cd9be69ee820bb870f58c6ff2732047",
+      "width": 1440,
+      "height": 900,
+      "inFlight": true,
+      "immediateClosed": true,
+      "elapsedMs": 106,
+      "sourceFocused": true
+    },
+    {
+      "name": "after",
+      "commit": "61d4513a2cd9be69ee820bb870f58c6ff2732047",
+      "width": 390,
+      "height": 844,
+      "inFlight": true,
+      "immediateClosed": true,
+      "elapsedMs": 149,
+      "sourceFocused": true
+    }
+  ]
+}

@@ -1,0 +1,1253 @@
+{
+  "setup": "instant",
+  "input": "locator",
+  "date": "2026-10-19T14:52:50.570Z",
+  "base": "http://127.0.0.1:4389",
+  "workers": 2,
+  "runs": 2,
+  "rate": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "worker": 1,
+      "iteration": 0,
+      "pass": true,
+      "active": "smoke-trigger",
+      "hash": "",
+      "open": false,
+      "trace": [
+        {
+          "time": 2756,
+          "event": "threshold",
+          "element": {
+            "tag": "DIV",
+            "id": "",
+            "cls": "pf-women-threshold pf-cover",
+            "inert": false,
+            "visibility": "hidden",
+            "display": "block",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 3856,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 3907,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3908,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3909,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3909,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 5428,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 5428,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7205,
+          "event": "focus-call",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7225,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7227,
+          "event": "focusin",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7227,
+          "event": "focus-result",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7738,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7738,
+          "event": "focusout",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7738,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7738,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8447,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": ""
+        },
+        {
+          "time": 8473,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 8474,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 8475,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        }
+      ]
+    },
+    {
+      "worker": 0,
+      "iteration": 0,
+      "pass": true,
+      "active": "smoke-trigger",
+      "hash": "",
+      "open": false,
+      "trace": [
+        {
+          "time": 2699,
+          "event": "threshold",
+          "element": {
+            "tag": "DIV",
+            "id": "",
+            "cls": "pf-women-threshold pf-cover",
+            "inert": false,
+            "visibility": "hidden",
+            "display": "block",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 3786,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 3850,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3850,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3851,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3851,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 5405,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 5405,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7196,
+          "event": "focus-call",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7212,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7212,
+          "event": "focusin",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7212,
+          "event": "focus-result",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7734,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7734,
+          "event": "focusout",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7735,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7735,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8516,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": ""
+        },
+        {
+          "time": 8532,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 8532,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 8532,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        }
+      ]
+    },
+    {
+      "worker": 1,
+      "iteration": 1,
+      "pass": true,
+      "active": "smoke-trigger",
+      "hash": "",
+      "open": false,
+      "trace": [
+        {
+          "time": 2707,
+          "event": "threshold",
+          "element": {
+            "tag": "DIV",
+            "id": "",
+            "cls": "pf-women-threshold pf-cover",
+            "inert": false,
+            "visibility": "hidden",
+            "display": "block",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 3765,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 3812,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3813,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3813,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 3814,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 5436,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 5437,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7220,
+          "event": "focus-call",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7232,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7232,
+          "event": "focusin",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7233,
+          "event": "focus-result",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7758,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7758,
+          "event": "focusout",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7760,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 7760,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8491,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": ""
+        },
+        {
+          "time": 8517,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 8517,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 8517,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        }
+      ]
+    },
+    {
+      "worker": 0,
+      "iteration": 1,
+      "pass": true,
+      "active": "smoke-trigger",
+      "hash": "",
+      "open": false,
+      "trace": [
+        {
+          "time": 2876,
+          "event": "threshold",
+          "element": {
+            "tag": "DIV",
+            "id": "",
+            "cls": "pf-women-threshold pf-cover",
+            "inert": false,
+            "visibility": "hidden",
+            "display": "block",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 3982,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 4031,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 4033,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 4034,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 4034,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 5759,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 5759,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7547,
+          "event": "focus-call",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7559,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7559,
+          "event": "focusin",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 7559,
+          "event": "focus-result",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear/evening"
+        },
+        {
+          "time": 8070,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BUTTON",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8070,
+          "event": "focusout",
+          "element": {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "pf-act__now label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8070,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8070,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": "#womenswear"
+        },
+        {
+          "time": 8783,
+          "event": "focus-call",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "A",
+          "hash": ""
+        },
+        {
+          "time": 8840,
+          "event": "focusout",
+          "element": {
+            "tag": "A",
+            "id": "",
+            "cls": "pf-back",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "BODY",
+          "hash": ""
+        },
+        {
+          "time": 8841,
+          "event": "focusin",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        },
+        {
+          "time": 8841,
+          "event": "focus-result",
+          "element": {
+            "tag": "A",
+            "id": "smoke-trigger",
+            "cls": "pf-cover__action pf-women-threshold__action label",
+            "inert": false,
+            "visibility": "visible",
+            "display": "flex",
+            "scrollY": 1260
+          },
+          "active": "smoke-trigger",
+          "hash": ""
+        }
+      ]
+    }
+  ]
+}
