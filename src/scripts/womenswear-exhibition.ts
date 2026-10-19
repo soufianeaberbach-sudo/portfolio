@@ -38,7 +38,8 @@ export function initWomenswearExhibition(root:HTMLElement){
    }
    timeline.set(label,{textContent:shot.label},shot.at);previous=shot.at;
   }
-  timeline.to(title,{opacity:0,y:-18,duration:.12},.09).to({}, {duration:.001},1);
+  // Clear the title before the approaching silhouette enters its type field.
+  timeline.to(title,{opacity:0,y:-18,duration:.065},.025).to({}, {duration:.001},1);
   render();if(!world.hasAttribute('data-open'))timeline.scrollTrigger?.disable(false);
  };
  const observer=new ResizeObserver(()=>{if(held){resizedWhileHeld=true;return;}build();});observer.observe(stage);
