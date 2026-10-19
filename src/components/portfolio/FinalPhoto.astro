@@ -1,0 +1,16 @@
+---
+import type {ImageAsset,SubjectView} from '../../data/portfolio';
+import {separable} from '../../data/final-photography';
+import {photoFrames} from '../../data/womenswear-direction';
+interface Props {image:ImageAsset;subjectId?:string;crop?:SubjectView['crop'];eager?:boolean;sizes?:string;}
+const{image,subjectId='',crop='front',eager=false,sizes='(max-width:767px) 90vw, 48vw'}=Astro.props;
+const measured=photoFrames[subjectId];
+const single=measured?.source===image.src&&image.views===1&&measured.single;
+const split=single?measured.front[1]-measured.front[0]:crop!=='whole'&&separable(image)?image.front:1;
+const bounds=split!==1&&measured?.source===image.src?measured:{front:[0,split],back:[split,1]};
+const aperture=split===1?1:Math.max(bounds.front[1]-bounds.front[0],bounds.back[1]-bounds.back[0]);
+---
+<span class="ww-photo" data-ww-photo data-door-source data-split={split} data-front={bounds.front.join(',')} data-back={bounds.back.join(',')} data-surface={/\/portfolio\/(evening|swim)\//.test(image.src)?'plate':undefined} data-side={crop==='back'?'back':split===1?'whole':'front'}
+ style={`--aspect:${image.width/image.height};--window:${aperture};--view:${crop==='back'?1:0};`}>
+ <img src={image.src} srcset={image.srcset} sizes={sizes} width={image.width} height={image.height} alt={image.alt} loading={eager?'eager':'lazy'} decoding="async"/>
+</span>

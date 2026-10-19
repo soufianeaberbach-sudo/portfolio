@@ -5,8 +5,8 @@ import { exhibitionImage } from '../../data/womenswear-exhibition';
 import Arrow from '../Arrow.astro';
 import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
-import ReadyToWearExhibition from './ReadyToWearExhibition.astro';
-import ReadyToWearReader from './ReadyToWearReader.astro';
+import WomenswearExhibition from './WomenswearExhibition.astro';
+import FinalPhotoReader from './FinalPhotoReader.astro';
 interface Props { world: GarmentWorld; lab?: { category: string; subject: Subject }; }
 const { world, lab } = Astro.props;
 const publication = worldPublication(world);
@@ -83,7 +83,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
     {territories.map((t,index) => (
       <article class="pf-tr" id={`${world.id}-${t.id}`} data-movement={t.id} data-territory={t.id}
         data-act-title={t.short} aria-labelledby={`${world.id}-${t.id}-title`}>
-        {t.id === 'rtw' && !lab && publication === 'reference-preview' ? <ReadyToWearExhibition subjects={t.slots} world={world.id}/> : <>
+        {!lab ? <WomenswearExhibition subjects={t.slots} world={world.id} category={t.id}/> : <>
         <div class="pf-edit__hero" data-paired={t.paired ? '' : undefined} data-hero>
           <header class="pf-edit__title">
             <p class="label pf-edit__chapter">Womenswear <span>{pad(index+1)}</span></p>
@@ -109,7 +109,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
 
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
-        if(territory.id === 'rtw' && !lab && !subject.verified) return <ReadyToWearReader subject={subject} world={world.id}/>;
+        if(!lab) return <FinalPhotoReader subject={subject} world={world.id}/>;
         /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
            supplied is rendered, whatever its role; the role decides how much
            room the story is given:
@@ -377,9 +377,9 @@ const pad = (n:number) => String(n).padStart(2,'0');
         word Menswear's cover is already built around. This is the act's one
         strong use of red. */}
     <footer class="pf-act__end">
-      <p class="pf-act__endline display">
+      {lab && <p class="pf-act__endline display">
         Act I was <span>fluidity</span>.<br />Act II is <em>proportion</em>.
-      </p>
+      </p>}
       {publication === 'reference-preview' && (
         <p class="pf-prov pf-act__prov" data-reference-notice>
           <b class="label">Reference preview</b>

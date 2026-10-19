@@ -1,17 +1,15 @@
-import {paintRtwPhoto} from './rtw-photo';
+import {paintPhoto} from './garment-photo';
 let cancelCurrent:(()=>void)|null=null;
-export const cancelRtwMatchCut=()=>{cancelCurrent?.();};
+export const cancelGarmentMatchCut=()=>{cancelCurrent?.();};
 /** The router owns navigation/focus. This utility owns only one decoded photographic clone. */
-export function rtwMatchCut(reader:HTMLElement,source:HTMLElement,entering:boolean,instant:boolean,finished:()=>void){
+export function garmentMatchCut(reader:HTMLElement,source:HTMLElement,entering:boolean,instant:boolean,finished:()=>void){
  cancelCurrent?.();
- const target=reader.querySelector<HTMLElement>('[data-rtw-photo]')!;
+ const target=reader.querySelector<HTMLElement>('[data-photo-view]:not([hidden]) [data-ww-photo]')!;
  let canceled=false,clone:HTMLElement|null=null,animations:Animation[]=[];
  const oldTarget=target.style.visibility,oldSource=source.style.visibility;
  const cleanup=()=>{canceled=true;clone?.remove();for(const a of animations)a.cancel();target.style.visibility=oldTarget;source.style.visibility=oldSource;if(cancelCurrent===cleanup)cancelCurrent=null;};
  cancelCurrent=cleanup;
- const view=Number((entering?source:target).style.getPropertyValue('--view'))||0;
- for(const photo of [target,source]){photo.style.setProperty('--view',String(view));paintRtwPhoto(photo,view);}
- reader.querySelectorAll<HTMLElement>('[data-rtw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.rtwView)===Math.round(view))));
+ const view=Number(source.style.getPropertyValue('--view'))||0;
  if(instant){cleanup();finished();return;}
  const from=entering?source:target,to=entering?target:source;
  const start=async()=>{
@@ -22,10 +20,10 @@ export function rtwMatchCut(reader:HTMLElement,source:HTMLElement,entering:boole
   if(canceled)return;
   const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
   if(!a.width||!b.width){cleanup();finished();return;}
-  clone=from.cloneNode(true) as HTMLElement;clone.removeAttribute('data-rtw-photo');clone.removeAttribute('data-door-source');clone.setAttribute('aria-hidden','true');clone.classList.add('rtw-match');
+  clone=from.cloneNode(true) as HTMLElement;clone.removeAttribute('data-ww-photo');clone.removeAttribute('data-door-source');clone.setAttribute('aria-hidden','true');clone.classList.add('ww-match');
   Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none',visibility:'visible'});
   const img=clone.querySelector<HTMLImageElement>('img')!;img.src=original.currentSrc||original.src;img.removeAttribute('srcset');img.style.height=`${a.height}px`;img.decoding='sync';
-  document.body.append(clone);paintRtwPhoto(clone,view);
+  document.body.append(clone);paintPhoto(clone,view);
   try{await img.decode();}catch{if(!canceled){cleanup();finished();}return;}
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
    if(canceled||!clone)return;

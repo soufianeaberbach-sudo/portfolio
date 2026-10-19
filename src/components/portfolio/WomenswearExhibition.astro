@@ -1,0 +1,31 @@
+---
+import type {Subject} from '../../data/portfolio';
+import {directions} from '../../data/womenswear-direction';
+import {finalPhotographs} from '../../data/final-photography';
+import FinalPhoto from './FinalPhoto.astro';
+interface Props{subjects:Subject[];world:string;category:string;}
+const{subjects,world,category}=Astro.props,direction=directions[category];
+const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===part.id);return subject?[{...part,subject,photo:finalPhotographs(subject)[0]}]:[];});
+const door=(s:Subject)=>`#${world}/${category}/${s.id}`;
+const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.next.id}`;
+---
+<div class="ww-exhibition" data-ww-exhibition={category} style={`--journey:${direction.length}svh;--mobile-journey:${direction.mobileLength}svh;`}>
+ <div class="ww-camera" data-ww-camera>
+  <div class="ww-stage" data-ww-stage aria-label={`${direction.name} selected looks`}>
+   <header class="ww-title" data-ww-title><p class="label">WOMENSWEAR / <b>{direction.number}</b></p><h3 class="display" id={`${world}-${category}-title`}>{direction.title.map((line,i)=><>{i>0&&<br/>}{line}</>)}</h3></header>
+   <div class="ww-cast">
+    {cast.map(({subject,role,photo})=><a class="ww-actor" data-ww-actor={role} href={door(subject)} data-nav data-open-subject={subject.id}
+      aria-label={`Enter reference: ${subject.cover.alt}`} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
+   </div>
+   <p class="ww-shot label" data-ww-shot aria-hidden="true">{direction.desktop[0].label}</p>
+  </div>
+ </div>
+ <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
+  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>{category==='streetwear'?'Two looks. Every view.':'Explore the complete edit.'}</p></div>
+  <p class="ww-archive-cue label" aria-hidden="true">{subjects.length>2?'SWIPE TO EXPLORE':'BOTH LOOKS'} <span>{subjects.length>2?'→':''}</span></p>
+  <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name} archive. ${subjects.length>2?'Swipe or scroll horizontally for every reference.':'Both references.'}`}>
+   {subjects.map(subject=>{const photo=finalPhotographs(subject)[0];return <a href={door(subject)} data-nav data-open-subject={subject.id} draggable="false" aria-label={`Enter reference: ${subject.cover.alt}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 60vw, 22vw"/></a>})}
+  </div>
+  <a class="ww-handoff label" href={next} data-nav><span>CONTINUE</span><b>{direction.next.name}</b><span aria-hidden="true">↗</span></a>
+ </section>
+</div>

@@ -1,5 +1,5 @@
 /** A reversible geometric window over the production source. Pixels and metadata are untouched. */
-export function paintRtwPhoto(photo:HTMLElement,view=Number(photo.style.getPropertyValue('--view'))||0){
+export function paintPhoto(photo:HTMLElement,view=Number(photo.style.getPropertyValue('--view'))||0){
  const split=Number(photo.dataset.split),image=photo.querySelector<HTMLImageElement>('img');if(!image)return;
  const width=photo.clientHeight*Number(photo.style.getPropertyValue('--aspect'));
  if(split===1){image.style.transform='';photo.style.clipPath='';return;}

@@ -1,0 +1,48 @@
+/** Five photographic edits. Coordinates describe composed shots, never archive rank. */
+export interface Pose { x:number; floor?:number; scale:number; opacity?:number; }
+export interface Shot { at:number; label:string; poses:Record<string,Pose>; }
+export interface Direction {
+ id:string; name:string; title:string[]; number:string; next:{id:string;name:string}; length:number; mobileLength:number;
+ cast:{id:string;role:string;reason:string}[]; desktop:Shot[]; mobile:Shot[];
+}
+const p=(x:number,scale=1,floor=.97,opacity=1):Pose=>({x,scale,floor,opacity});
+export const directions:Record<string,Direction>={
+ rtw:{id:'rtw',name:'Ready-to-Wear',title:['READY—','TO—WEAR'],number:'01',next:{id:'activewear',name:'ACTIVEWEAR'},length:400,mobileLength:330,
+  cast:[{id:'rtw-ref-01',role:'silk',reason:'Champagne drape establishes one uninterrupted line.'},{id:'rtw-ref-02',role:'shirt',reason:'Cropped pink shirting interrupts the long satin proportion with a clear waist.'},{id:'rtw-ref-03',role:'stone',reason:'The stone jumpsuit answers the cropped shirt with one uninterrupted full-length silhouette.'},{id:'rtw-ref-05',role:'print',reason:'Warm rust trousers and printed shirting resolve the neutral passage in colour.'}],
+  desktop:[{at:0,label:'THE COMPLETE LOOK',poses:{silk:p(.66,.88),shirt:p(1.45,.94,.97,0),stone:p(.32,.96,2.1,0),print:p(.72,.98,2.1,0)}},{at:.16,label:'FLUIDITY',poses:{silk:p(.60,1)}},{at:.38,label:'A CHANGE OF PROPORTION',poses:{silk:p(.27,.88),shirt:p(.70,1)}},{at:.58,label:'THE LONG LINE',poses:{silk:p(-.4,.88,.97,0),shirt:p(.76,.94),stone:p(.32,1)}},{at:.80,label:'SEPARATES / COLOUR',poses:{shirt:p(.76,.94,-.2,0),stone:p(.28,.94),print:p(.70,1)}},{at:1,label:'READY-TO-WEAR',poses:{stone:p(.28,.94),print:p(.70,1)}}],
+  mobile:[{at:0,label:'THE COMPLETE LOOK',poses:{silk:p(.57,.72),shirt:p(1.5,.93,.97,0),stone:p(.51,.97,2.1,0),print:p(1.5,1,.97,0)}},{at:.16,label:'FLUIDITY',poses:{silk:p(.50,1)}},{at:.38,label:'A CHANGE OF PROPORTION',poses:{silk:p(-.65,.95,.97,0),shirt:p(.51,1)}},{at:.60,label:'THE LONG LINE',poses:{shirt:p(.51,.94,-.2,0),stone:p(.51,1)}},{at:.82,label:'SEPARATES / COLOUR',poses:{stone:p(-.65,.96,.97,0),print:p(.51,1)}},{at:1,label:'READY-TO-WEAR',poses:{print:p(.51,1)}}]},
+ activewear:{id:'activewear',name:'Activewear',title:['ACTIVE—','WEAR'],number:'02',next:{id:'streetwear',name:'STREETWEAR'},length:310,mobileLength:270,
+  cast:[{id:'activewear-ref-08',role:'red',reason:'The red colourblocked set and stepping stance establish a precise diagonal.'},{id:'activewear-ref-04',role:'black',reason:'Black cropped leggings and racerback make a sharp length contrast.'},{id:'activewear-ref-01',role:'white',reason:'White separates repeat the red stripe as a visual relay, not a claimed collection.'}],
+  desktop:[{at:0,label:'ENERGY / PRECISION',poses:{red:p(.68,.84),black:p(.28,.97,2.1,0),white:p(.73,.98,2.1,0)}},{at:.19,label:'DIRECTION',poses:{red:p(.63,1)}},{at:.43,label:'THE RELAY',poses:{red:p(.74,.91),black:p(.28,1)}},{at:.67,label:'CONTRAST',poses:{red:p(.74,.9,.20,0),black:p(.30,1),white:p(.72,1)}},{at:.86,label:'PRECISION',poses:{black:p(.28,.94,-.2,0),white:p(.52,1)}},{at:1,label:'ACTIVEWEAR',poses:{white:p(.52,1)}}],
+  mobile:[{at:0,label:'ENERGY / PRECISION',poses:{red:p(.60,.76),black:p(.50,.98,2.1,0),white:p(1.5,.99,.97,0)}},{at:.19,label:'DIRECTION',poses:{red:p(.51,1)}},{at:.46,label:'THE RELAY',poses:{red:p(.51,.96,-.2,0),black:p(.51,1)}},{at:.73,label:'CONTRAST',poses:{black:p(-.6,.97,.97,0),white:p(.51,1)}},{at:1,label:'ACTIVEWEAR',poses:{white:p(.51,1)}}]},
+ streetwear:{id:'streetwear',name:'Streetwear',title:['STREET—','WEAR'],number:'03',next:{id:'evening',name:'OCCASION'},length:190,mobileLength:200,
+  cast:[{id:'streetwear-ref-02',role:'burgundy',reason:'The cropped hoodie and jogger volume provide the planted anchor.'},{id:'streetwear-ref-01',role:'cream',reason:'Cream gathering and long brown trousers counter the compact burgundy volume.'}],
+  desktop:[{at:0,label:'TWO VOLUMES',poses:{burgundy:p(.69,.86),cream:p(-.6,.88,.97,0)}},{at:.38,label:'COUNTERWEIGHT',poses:{burgundy:p(.72,1),cream:p(.29,.96)}},{at:.74,label:'ATTITUDE / PROPORTION',poses:{burgundy:p(.66,1),cream:p(.31,1)}},{at:1,label:'STREETWEAR',poses:{burgundy:p(.66,1),cream:p(.31,1)}}],
+  mobile:[{at:0,label:'TWO VOLUMES',poses:{burgundy:p(.59,.73),cream:p(-.7,.95,.97,0)}},{at:.40,label:'COUNTERWEIGHT',poses:{burgundy:p(1.5,.83,.97,0),cream:p(.51,1)}},{at:.76,label:'ATTITUDE / PROPORTION',poses:{cream:p(.51,1)}},{at:1,label:'STREETWEAR',poses:{cream:p(.51,1)}}]},
+ evening:{id:'evening',name:'Occasion',title:['OCCASION'],number:'04',next:{id:'swimwear',name:'SWIM'},length:420,mobileLength:350,
+  cast:[{id:'evening-ref-04',role:'black',reason:'The black sequinned column establishes ceremony with a complete, narrow silhouette.'},{id:'evening-ref-11',role:'champagne',reason:'The champagne fishtail widens the hem and changes the fall of the line.'},{id:'evening-ref-03',role:'navy',reason:'The navy lace tiering gives the final long silhouette a different fall without repeating the black column.'}],
+  desktop:[{at:0,label:'THE LONG SILHOUETTE',poses:{black:p(.67,.87),champagne:p(1.45,.98,.97,0),navy:p(.72,.99,2.1,0)}},{at:.20,label:'CEREMONY',poses:{black:p(.62,1)}},{at:.45,label:'LINE / FALL',poses:{black:p(.29,.96),champagne:p(.72,1)}},{at:.69,label:'A DIFFERENT FALL',poses:{black:p(-.6,.94,.97,0),champagne:p(1.6,.94,.97,0),navy:p(.52,1)}},{at:.86,label:'OCCASION',poses:{navy:p(.52,1)}},{at:1,label:'OCCASION',poses:{navy:p(.52,1)}}],
+  mobile:[{at:0,label:'THE LONG SILHOUETTE',poses:{black:p(.56,.80),champagne:p(.51,1,2.1,0),navy:p(.51,1,2.1,0)}},{at:.20,label:'CEREMONY',poses:{black:p(.51,1)}},{at:.47,label:'LINE / FALL',poses:{black:p(.51,.97,-.2,0),champagne:p(.51,1)}},{at:.75,label:'A DIFFERENT FALL',poses:{champagne:p(.51,.95,-.2,0),navy:p(.51,1)}},{at:1,label:'OCCASION',poses:{navy:p(.51,1)}}]},
+ swimwear:{id:'swimwear',name:'Swim',title:['SWIM'],number:'05',next:{id:'menswear',name:'MENSWEAR'},length:290,mobileLength:260,
+  cast:[{id:'swimwear-ref-06',role:'blue',reason:'The blue ring-front one-piece gives the release one clear focal point.'},{id:'swimwear-ref-08',role:'black',reason:'The black bandeau and high waist bring a graphic counterpoint.'},{id:'swimwear-ref-05',role:'silver',reason:'The silver halter silhouette and relaxed stance lighten the final interval; all three are genuine single views.'}],
+  desktop:[{at:0,label:'LIGHT / FORM',poses:{blue:p(.68,.84),black:p(-.6,.92,.97,0),silver:p(1.6,.92,.97,0)}},{at:.23,label:'CLARITY',poses:{blue:p(.54,1)}},{at:.55,label:'OPEN INTERVALS',poses:{blue:p(.65,.98),black:p(.25,.98)}},{at:.82,label:'SWIM',poses:{blue:p(.50,1),black:p(.18,.80,.91),silver:p(.82,.86,.94)}},{at:1,label:'SWIM',poses:{blue:p(.50,1),black:p(.18,.80,.91),silver:p(.82,.86,.94)}}],
+  mobile:[{at:0,label:'LIGHT / FORM',poses:{blue:p(.55,.75),black:p(1.6,.98,.97,0),silver:p(1.6,.98,.97,0)}},{at:.22,label:'CLARITY',poses:{blue:p(.51,1)}},{at:.52,label:'CONTRAST',poses:{blue:p(-.8,.96,.97,0),black:p(.51,1)}},{at:.79,label:'LIGHT',poses:{black:p(-.8,.96,.97,0),silver:p(.51,1)}},{at:1,label:'SWIM',poses:{silver:p(.51,1)}}]}
+};
+/** Existing source-qualified empty-gap windows; source metadata remains authoritative. */
+export const photoFrames:Record<string,{source:string;front:[number,number];back:[number,number];single?:boolean}>= {
+ 'swimwear-ref-01':{source:'/portfolio/swim/1-1400.webp',front:[0.2,0.84],back:[0.2,0.84],single:true},
+ 'swimwear-ref-02':{source:'/portfolio/swim/2-1400.webp',front:[0.17,0.86],back:[0.17,0.86],single:true},
+ 'swimwear-ref-03':{source:'/portfolio/swim/3-1400.webp',front:[0.22,0.83],back:[0.22,0.83],single:true},
+ 'swimwear-ref-04':{source:'/portfolio/swim/4-1400.webp',front:[0.23,0.73],back:[0.23,0.73],single:true},
+ 'swimwear-ref-07':{source:'/portfolio/swim/7-1400.webp',front:[0.15,0.82],back:[0.15,0.82],single:true},
+ 'swimwear-ref-09':{source:'/portfolio/swim/9-1400.webp',front:[0.27,0.82],back:[0.27,0.82],single:true},
+ 'swimwear-ref-06':{source:'/portfolio/swim/6-1400.webp',front:[.25,.78],back:[.25,.78],single:true},
+ 'swimwear-ref-08':{source:'/portfolio/swim/8-1400.webp',front:[.25,.78],back:[.25,.78],single:true},
+ 'swimwear-ref-05':{source:'/portfolio/swim/5-1400.webp',front:[.24,.86],back:[.24,.86],single:true},
+ 'activewear-ref-01':{source:'/portfolio/sport/1-1400.webp',front:[0,.538],back:[.54,1]},
+ 'rtw-ref-01':{source:'/portfolio/woven/1-1400.webp',front:[0,.49],back:[.575,1]},
+ 'rtw-ref-02':{source:'/portfolio/woven/2-1400.webp',front:[0,.49],back:[.565,1]},
+ 'rtw-ref-03':{source:'/portfolio/woven/3-1400.webp',front:[0,.50],back:[.585,1]},
+ 'rtw-ref-05':{source:'/portfolio/woven/5-1400.webp',front:[0,.48],back:[.57,1]},
+ 'rtw-ref-06':{source:'/portfolio/woven/6-1400.webp',front:[0,.515],back:[.565,1]},
+};
