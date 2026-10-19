@@ -21,7 +21,7 @@ const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.nex
   </div>
  </div>
  <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
-  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>{category==='streetwear'?'Two looks. Every view.':'Explore the complete edit.'}</p></div>
+  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>Explore the complete edit.</p></div>
   <p class="ww-archive-cue label" aria-hidden="true">{subjects.length>2?'SWIPE TO EXPLORE':'BOTH LOOKS'} <span>{subjects.length>2?'→':''}</span></p>
   <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name} archive. ${subjects.length>2?'Swipe or scroll horizontally for every reference.':'Both references.'}`}>
    {subjects.map(subject=>{const photo=finalPhotographs(subject)[0];return <a href={door(subject)} data-nav data-open-subject={subject.id} draggable="false" aria-label={`Enter reference: ${subject.cover.alt}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 60vw, 22vw"/></a>})}

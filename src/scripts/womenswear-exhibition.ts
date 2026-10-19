@@ -26,7 +26,13 @@ export function initWomenswearExhibition(root:HTMLElement){
   gsap.set(title,{clearProps:'opacity,transform'});if(reduced.matches){paint();return;}
   root.setAttribute('data-enhanced','');
   const shots=shotMap();
-  const pose=(role:string,p:Pose)=>({x:()=>p.x*stage.clientWidth-actors[role].offsetWidth/2,y:()=>stage.clientHeight*(p.floor??.97)-actors[role].offsetHeight,scale:p.scale,force3D:true});
+  const pose=(role:string,p:Pose)=>({x:()=>p.x*stage.clientWidth-actors[role].offsetWidth/2,y:()=>{
+   const height=actors[role].offsetHeight;
+   // A wide original may fit by width on a phone. Keep that full photograph
+   // balanced vertically rather than stranding it beneath an empty screen.
+   const balance=(p.floor??.97)===.97?Math.max(0,stage.clientHeight*.93-height)/2:0;
+   return stage.clientHeight*(p.floor??.97)-height-balance;
+  },scale:p.scale,force3D:true});
   for(const[role,p]of Object.entries(shots[0].poses))if(actors[role])gsap.set(actors[role],{...pose(role,p),opacity:p.opacity??1});
   timeline=gsap.timeline({scrollTrigger:{trigger:camera,scroller:world,start:()=>`top top+=${world.querySelector<HTMLElement>('.pf-act__bar')!.offsetHeight}`,end:'bottom bottom',scrub:direction.id==='activewear'?.12:.22,invalidateOnRefresh:true},onUpdate:render});
   let previous=0;

@@ -956,6 +956,10 @@ const split = (statement: string, word: string) => {
           putAway(leaving);
           subjectMotion = null;
           if (back && document.contains(back) && (!ww?.owns(leaving) || location.hash === ww?.returnHash(leaving))) back.focus({ preventScroll: true });
+          // A historical reference can remain directly addressable after it
+          // leaves the visible edit. With no photographic door to return to,
+          // restore a meaningful visible control instead of dropping to body.
+          if (!back && ww?.owns(leaving) && location.hash === ww.returnHash(leaving)) world?.querySelector<HTMLElement>('[data-act-toggle]')?.focus({ preventScroll: true });
         };
         /* THE EXIT. The same clip as the entrance, run back into the frame
            the garment came from, and shorter: the visitor is leaving, the
@@ -1382,7 +1386,9 @@ const split = (statement: string, word: string) => {
         return { world, category: category ?? null, subject: subject ?? null };
       };
 
+      let lastSyncedHash: string | null = null;
       const syncFromHash = () => {
+        lastSyncedHash = window.location.hash;
         if (evidenceReader.open) closeEvidence();
         if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
         const { world, category, subject } = parseHash();
@@ -1432,8 +1438,16 @@ const split = (statement: string, word: string) => {
         });
       }
 
-      window.addEventListener('popstate', syncFromHash);
-      window.addEventListener('hashchange', syncFromHash);
+      const syncHistory = () => {
+        // Fragment history traversal can emit both events. Reopening the
+        // same Womenswear category twice after a reader return would reset
+        // its scroll and steal focus from the actual return destination.
+        // Explicit navigation through go() still reapplies the requested shot.
+        if (ww && parseHash().world === 'womenswear' && window.location.hash === lastSyncedHash) return;
+        syncFromHash();
+      };
+      window.addEventListener('popstate', syncHistory);
+      window.addEventListener('hashchange', syncHistory);
 
       /* Escape steps back one level, the same as the on-screen control. */
       document.addEventListener('keydown', (event) => {

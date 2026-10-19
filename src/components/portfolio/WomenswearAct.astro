@@ -2,6 +2,7 @@
 import type { GarmentWorld, MarketCategory, ImageAsset, Subject } from '../../data/portfolio';
 import { REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING, projectSubject, referenceSubject, worldPublication } from '../../data/portfolio';
 import { exhibitionImage } from '../../data/womenswear-exhibition';
+import {referenceCollection,displayedCollection,collectionCredit} from '../../data/womenswear-collection';
 import Arrow from '../Arrow.astro';
 import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
@@ -13,7 +14,7 @@ const publication = worldPublication(world);
 const noun = publication === 'published' ? 'Project' : 'Reference';
 const pool = (category: MarketCategory): Subject[] => publication === 'published'
   ? [...category.projects].sort((a,b) => Number(b.spotlight ?? false)-Number(a.spotlight ?? false)).map(p => projectSubject(p,world.id))
-  : category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id));
+  : lab ? category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id)) : referenceCollection(category,world.id);
 // Editorial selection refers to actual archive IDs, never position-dependent geometry.
 const edit = [
   { id:'rtw', short:'Ready-to-Wear', hero:'rtw-ref-01', selected:['rtw-ref-07','rtw-ref-10','rtw-ref-11'] },
@@ -31,7 +32,8 @@ const territories = edit.flatMap(t => {
   const hero = lab?.category === t.id ? lab.subject : slots.find(s => s.id === t.hero) ?? slots[0];
   const selected = slots.filter(s => s !== hero && (s.verified ? s.role === 'featured' : t.selected.includes(s.id)));
   const supporting = slots.filter(s => s !== hero && !selected.includes(s));
-  return [{...t,category,slots,hero,selected,supporting, paired: selected.length === 1 && supporting.length === 0}];
+  const displayed=lab||publication==='published'?slots:displayedCollection(t.id,slots);
+  return [{...t,category,slots,displayed,hero,selected,supporting, paired: selected.length === 1 && supporting.length === 0}];
 });
 const everySubject = territories.flatMap(territory => territory.slots.map((subject,index) => ({subject,territory,index})));
 const door = (subject: Subject) => `#${world.id}/${subject.category}/${subject.id}`;
@@ -83,7 +85,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
     {territories.map((t,index) => (
       <article class="pf-tr" id={`${world.id}-${t.id}`} data-movement={t.id} data-territory={t.id}
         data-act-title={t.short} aria-labelledby={`${world.id}-${t.id}-title`}>
-        {!lab ? <WomenswearExhibition subjects={t.slots} world={world.id} category={t.id}/> : <>
+        {!lab ? <WomenswearExhibition subjects={t.displayed} world={world.id} category={t.id}/> : <>
         <div class="pf-edit__hero" data-paired={t.paired ? '' : undefined} data-hero>
           <header class="pf-edit__title">
             <p class="label pf-edit__chapter">Womenswear <span>{pad(index+1)}</span></p>
@@ -109,7 +111,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
 
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
-        if(!lab) return <FinalPhotoReader subject={subject} world={world.id}/>;
+        if(!lab) return <FinalPhotoReader subject={subject} world={world.id} credit={collectionCredit(territory.category,subject.id)}/>;
         /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
            supplied is rendered, whatever its role; the role decides how much
            room the story is given:
