@@ -1,0 +1,7 @@
+---
+import html from '../../../lab/menswear-v2/index.html?raw';
+export function getStaticPaths(){return import.meta.env.DEV?[{params:{proof:'concept'}}]:[];}
+const root=process.cwd();
+const source=html.replace('href="proof.css"','href="/src/lab/menswear-v2/proof.css"').replace('src="proof.js"','src="/src/lab/menswear-v2/proof.ts"').replace('href="../../../../public/../portfolio/"','href="/portfolio/#menswear"').replace('data-concept data-directors-cut>',`data-concept data-directors-cut data-review-base="/@fs/${root}/docs/portfolio/review/menswear-cinematic-concept/">`);
+---
+<Fragment set:html={source}/>
