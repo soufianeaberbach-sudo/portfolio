@@ -1295,14 +1295,14 @@ const split = (statement: string, word: string) => {
         if (world.hasAttribute('data-act')) {
           const movement = category && world.querySelector<HTMLElement>(`[data-movement="${category}"]`);
           if (movement) {
-            /* The destination is the TERRITORY's own top — its slate, which
-               is how a territory announces itself — and not the first scene
-               inside it, which would skip the announcement. Ready-to-Wear has
-               no slate: its top is the overture, which is the right place to
-               arrive anyway. */
+            /* Photographic worlds arrive at the camera's first frame, below
+               the existing act bar. Landing at the territory's top advanced
+               short timelines enough to fade their opening title. The lab's
+               original slate arrival retains its existing geometry. */
             const top = world.scrollTop
               + movement.getBoundingClientRect().top
-              - world.getBoundingClientRect().top;
+              - world.getBoundingClientRect().top
+              - (movement.querySelector('[data-ww-camera]') ? world.querySelector<HTMLElement>('.pf-act__bar')!.offsetHeight : 0);
             world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced() ? 'auto' : 'smooth' });
             return;
           }
