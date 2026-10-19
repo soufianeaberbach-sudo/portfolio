@@ -1,5 +1,12 @@
 # Reference Harvest 01 — Opening + Portfolio Worlds
 
+> HISTORICAL / SUPERSEDED — 19 October 2026 classification. The research, old
+> baseline and next actions below record an earlier prototype phase, not current
+> instructions. In particular the large Living Chapter Index and old chapter order
+> must not be restored. See [CURRENT-STATE](CURRENT-STATE.md),
+> [creative direction](CREATIVE-DIRECTION.md) and [site map](SITE-MAP-AND-NAVIGATION.md).
+> Original body and source references are preserved below.
+
 **Project:** Soufiane Aberbach Portfolio  
 **Phase:** Reference Harvest — Round 1  
 **Status:** Selected direction  

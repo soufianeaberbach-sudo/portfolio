@@ -1,5 +1,11 @@
 # Process page — temporary visual anchors
 
+> ACTIVE content handoff · reconciled 19 October 2026. See the
+> [canonical current state](../../../docs/portfolio/CURRENT-STATE.md) for scope.
+> Preserve this provenance record when media is replaced; the older suggestion
+> below to delete this file is superseded by the current history-retention rule.
+> No replacement, generator run or asset overwrite is authorized by this notice.
+
 **THESE ARE NOT PHOTOGRAPHS YET.** The six files in `public/process-temp/` are
 neutral holding plates: flat `#F0ECE3` fields with nothing drawn inside them.
 They exist so the Process layout and its responsive behaviour can be validated

@@ -1,5 +1,12 @@
 # Discovery activation — home/dashboard runbook
 
+> TECHNICAL RUNBOOK — reconciled 19 October 2026. Preserve the operational
+> checks below; property verification, indexing and dashboard settings are not
+> established by readable robots/sitemap. “Pending” and “this branch” refer to the
+> audit/implementation context. Current priorities and limited live observations:
+> [CURRENT-STATE](portfolio/CURRENT-STATE.md) and [roadmap](portfolio/PORTFOLIO-ROADMAP.md).
+> No DNS, robots, search-account or analytics changes are authorized here.
+
 **Pending external work.** Nothing below was activated by the trust-foundation
 branch. See [PRODUCTION-STATE.md](PRODUCTION-STATE.md) for 3 Oct 2026 evidence.
 
