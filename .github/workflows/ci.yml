@@ -52,3 +52,19 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - run: npm run test:smoke
+
+      - name: Menswear photographic content contracts
+        run: |
+          node tests/menswear-content.mjs
+          node tests/final-photography.mjs
+
+      - name: Menswear and protected Womenswear continuity
+        shell: bash
+        run: |
+          node node_modules/astro/astro.js preview --host 127.0.0.1 --port 4457 > /tmp/menswear-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --retry 15 --retry-connrefused --retry-delay 1 http://127.0.0.1:4457/portfolio/ > /dev/null
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-navigation.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-resize-return.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/womenswear-continuity.mjs

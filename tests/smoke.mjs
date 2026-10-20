@@ -184,7 +184,7 @@ try {
   };
   const openCategory = async (p, world, category) => {
     await p.evaluate(([w, c]) => {
-      document.querySelector(`[data-world="${w}"] a.pf-cat[data-category="${c}"]`).click();
+      document.querySelector(`[data-world="${w}"] [data-mw-world-link="${c}"]`).click();
     }, [world, category]);
     await p.waitForTimeout(800);
   };
@@ -195,7 +195,7 @@ try {
      have category screens, and openCategory is still how those are entered. */
   /* The runway deck is Menswear's: every Womenswear world places its garments
      in a composition of its own, so the deck's behaviour is proved there. */
-  const MEN_DECK = '[data-world="menswear"] [data-screen="category"]:not([hidden])';
+
   const openScene = async (p, selector) => {
     await p.evaluate((sel) => {
       const world = document.querySelector('[data-world="womenswear"]');
@@ -598,14 +598,17 @@ try {
     await p.waitForTimeout(700);
     check('Escape from the act leaves the chapter',
       await p.evaluate((sel) => !document.querySelector(sel).hasAttribute('data-open'), world));
-    check('background inert released', await p.evaluate(() => !document.querySelector('[inert]')));
+    // Inactive Menswear photographic actors intentionally remain inert. Check
+    // the actual background surfaces owned by the router, not hidden actors.
+    check('background inert released', await p.evaluate(() => [...document.querySelectorAll('.site-header,.site-footer,.pf-cinema,.pf-cover--section,.pf-outro,.pf-where')].every(e => !e.hasAttribute('inert'))));
     check('focus restored to the cover that opened it',
       await p.evaluate(() => document.activeElement?.id === 'smoke-trigger'),
       await p.evaluate(() => document.activeElement?.id || document.activeElement?.tagName || 'none'));
 
     // ---- menswear has the same image-led, working reference-preview interface
     await openChapter(p, 'menswear');
-    await p.locator('[data-world="menswear"] > .pf-continuity a[href="#tech-packs"]').click();
+    await p.locator('[data-mw-worlds-toggle]').click();
+    await p.locator('[data-mw-worlds] a[href="#tech-packs"]').click();
     check('world navigation moves directly to another world',
       await p.locator('[data-world="tech-packs"]').evaluate((el) => el.hasAttribute('data-open')));
     check('all four worlds remain accessible inside a chapter',
@@ -616,273 +619,68 @@ try {
     const men = await p.evaluate(() => {
       const w = document.querySelector('[data-world="menswear"]');
       return {
-        cats: [...w.querySelectorAll('.pf-cat__label')].map((e) => e.textContent.trim()),
-        links: w.querySelectorAll('a.pf-cat').length,
+        cats: [...w.querySelectorAll('[data-mw-world-link] span')].map((e) => e.textContent.trim()),
+        links: w.querySelectorAll('[data-mw-world-link]').length,
         pending: [...w.querySelectorAll('.pf-cat__count')].filter((e) => /pending/i.test(e.textContent)).length,
-        garments: w.querySelectorAll('.pf-slot').length,
+        garments: w.querySelectorAll('[data-mw-archive-door]').length,
         publication: w.dataset.publication,
       };
     });
     check('menswear categories match the approved order',
       JSON.stringify(men.cats) === JSON.stringify([
-        'Streetwear & Casualwear', 'Activewear & Performance',
-        'Contemporary Ready-to-Wear', 'Tailoring & Outerwear',
+        'Streetwear', 'Activewear', 'Ready-to-Wear', 'Tailoring',
       ]), men.cats.join(' | '));
     check('menswear is explicitly a reference preview', men.publication === 'reference-preview', men.publication);
     check('menswear has a working visual gallery behind every category',
-      men.garments >= 8 && men.links === 4, `${men.garments} references / ${men.links} links`);
+      men.garments === 40 && men.links === 4, `${men.garments} references / ${men.links} links`);
     check('no menswear category is left as a dead pending row', men.pending === 0, String(men.pending));
 
     await c.close();
   }
 
-  // ---- the garment deck: depth, occlusion, keyboard, drag, integrity
-  console.log('\nportfolio garment viewer');
+  // ---- Menswear production films replace the retired four-card runway.
+  // The old depth ratios, blur, circular wrapping and demo-plate geometry were
+  // mechanism assertions. Preserve access, keyboard, source integrity and
+  // reference honesty through the actual new film/archive/reader contracts.
+  console.log('\nMenswear cinematic presentation');
   {
     const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
     const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(600);
-    /* The deck is the runway component, and Womenswear no longer uses it:
-       each of the act's worlds places its garments in its own composition.
-       Menswear's category viewer is the same component, so its depth,
-       occlusion, keyboard, drag and wheel are proved there. */
-    await openChapter(p, 'menswear');
-    await openCategory(p, 'menswear', 'm-rtw');
-
-    const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('desktop shows four garments at once', state.visibleNow === 4, `visible ${state.visibleNow} of ${state.count}`);
-    check('the active garment leads the deck', state.activeIsLeading === true);
-    /* The overlap and the 190px floor were the Womenswear act's own deck
-       geometry (a narrower stage). Menswear's deck stands its four cards
-       side by side at this width, so those two are not asserted here. */
-
-    const deck = await p.evaluate(() => {
-      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-panel');
-      const stage = panel.querySelector('.pf-stage').getBoundingClientRect();
-      const boxes = [...panel.querySelectorAll('.pf-slot')].filter((s) => !s.hidden).map((s) => ({
-        r: s.getBoundingClientRect(),
-        front: Number(s.dataset.front) || 0.55,
-        z: Number(s.style.zIndex),
-        filter: getComputedStyle(s.querySelector('img')).filter,
-      })).sort((a, b) => a.r.left - b.r.left);
-      const exposure = boxes.map((b, i) => (i === boxes.length - 1 ? 1 : (boxes[i + 1].r.left - b.r.left) / b.r.width));
-      return {
-        widths: boxes.map((b) => Math.round(b.r.width)),
-        bottoms: boxes.map((b) => Math.round(b.r.bottom)),
-        zOrder: boxes.map((b) => b.z),
-        exposure: exposure.map((e) => +e.toFixed(3)),
-        fronts: boxes.map((b) => b.front),
-        filters: boxes.map((b) => b.filter),
-        insideStage: boxes.every((b) => b.r.left >= stage.left - 1 && b.r.right <= stage.right + 1),
-        smallest: Math.round(Math.min(...boxes.map((b) => b.r.width))),
-        stackDisplay: getComputedStyle(panel.querySelector('[data-stack]')).display,
-        slotPosition: getComputedStyle(panel.querySelector('.pf-slot')).position,
-      };
-    });
-    check('garments grow toward the leading edge',
-      deck.widths.every((w, i) => i === 0 || w > deck.widths[i - 1]), deck.widths.join(' < '));
-    check('stacking order rises toward the leader',
-      deck.zOrder.every((z, i) => i === 0 || z > deck.zOrder[i - 1]), deck.zOrder.join(','));
-    check('every garment is fully inside the stage', deck.insideStage);
-    check('the deck is a positioned stack, not a flex row',
-      deck.stackDisplay !== 'flex' && deck.slotPosition === 'absolute',
-      `${deck.stackDisplay} / ${deck.slotPosition}`);
-
-    /* THE DEPTH MUST BE OBVIOUS.
-       Each garment behind the active one is markedly smaller, not marginally:
-       every step is at least a sixth, and the furthest is around half the
-       leader — while staying large enough to be judged as a garment. */
-    const ratios = deck.widths.map((w) => w / deck.widths[deck.widths.length - 1]);
-    check('the furthest garment is about half the active one',
-      ratios[0] <= 0.60 && ratios[0] >= 0.42, `${Math.round(ratios[0] * 100)}% of the leader`);
-    check('every step of the deck is a large change of scale',
-      deck.widths.every((w, i) => i === 0 || w / deck.widths[i - 1] >= 1.15),
-      deck.widths.join(' < '));
-    check('the furthest garment is still readable', deck.smallest >= 150, `${deck.smallest}px`);
-    check('only the farthest desktop garment carries atmospheric blur',
-      /blur\(/.test(deck.filters[0]) && deck.filters.slice(1).every((value) => !/blur\(/.test(value)),
-      deck.filters.join(' | '));
-    check('far garment blur remains restrained and identifiable',
-      /blur\(0\.55px\)/.test(deck.filters[0]), deck.filters[0]);
-
-    /* ONE RECEDING FLOOR: the garments share a floor plane rather than a flat
-       baseline — each step back stands a little higher, the way objects rise
-       toward a horizon — so four sizes in a row read as one presentation seen
-       from a distance rather than as four unrelated photographs. */
-    const rising = deck.bottoms.every((b, i) => i === 0 || b > deck.bottoms[i - 1]);
-    const lift = deck.bottoms[deck.bottoms.length - 1] - deck.bottoms[0];
-    check('the garments stand on one receding floor plane',
-      rising && lift >= 20 && lift <= deck.widths[deck.widths.length - 1] * 0.25,
-      `${deck.bottoms.join(',')} (rise ${lift}px)`);
-
-    /* Front/back: the leader is whole, everything behind it keeps its complete
-       front model showing. */
-    check('the leading garment is completely revealed',
-      deck.exposure[deck.exposure.length - 1] === 1, String(deck.exposure[deck.exposure.length - 1]));
-    const clipped = deck.exposure.slice(0, -1)
-      .map((e, i) => ({ e, need: deck.fronts[i] })).filter((x) => x.e < x.need - 0.01);
-    check('every covered garment still shows its whole front view',
-      clipped.length === 0, JSON.stringify(clipped));
-    check('garment images use object-fit: contain',
-      await p.evaluate(() => [...document.querySelectorAll('.pf-slot img')]
-        .every((img) => getComputedStyle(img).objectFit === 'contain')));
-
-    /* NO CARD LANGUAGE. */
-    const cardish = await p.evaluate(() => {
-      const bad = [];
-      for (const el of document.querySelectorAll('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-slot, [data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-slot *')) {
-        const st = getComputedStyle(el);
-        if (st.boxShadow !== 'none') bad.push(`${el.className} shadow`);
-        if (st.filter.includes('drop-shadow')) bad.push(`${el.className} drop-shadow`);
-        if (st.borderTopWidth !== '0px' || st.borderLeftWidth !== '0px'
-          || st.borderRightWidth !== '0px' || st.borderBottomWidth !== '0px') bad.push(`${el.className} border`);
-        if (st.borderRadius !== '0px') bad.push(`${el.className} radius`);
-      }
-      return bad.slice(0, 5);
-    });
-    check('no shadow, border or radius anywhere on garment imagery', cardish.length === 0, cardish.join(' | '));
-
-    check('the exhibition and its readers share pure white', await p.evaluate(() => {
-      const act = document.querySelector('[data-world="womenswear"]');
-      return [act, ...act.querySelectorAll('.pf-rd__subject')].every(el => getComputedStyle(el).backgroundColor === 'rgb(255, 255, 255)');
-    }));
-
-    // Keyboard alone must drive the deck.
-    await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-stage]').focus());
-    const before = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    await p.keyboard.press('ArrowRight');
-    await p.waitForTimeout(650);
-    const after = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    check('ArrowRight advances the deck', after === before + 1, `${before} -> ${after}`);
-    await p.keyboard.press('ArrowLeft');
-    await p.waitForTimeout(650);
-    check('ArrowLeft steps back', await p.evaluate(() => window.__portfolioRunway.getState().activeIndex) === before);
-
-    const bounds = await p.evaluate(() => {
-      const api = window.__portfolioRunway;
-      const count = api.getState().count;
-      api.goTo(count + 50);
-      const high = api.getState().activeIndex;
-      const nextDisabled = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="1"]').disabled;
-      api.goTo(-50);
-      const low = api.getState().activeIndex;
-      const prevDisabled = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="-1"]').disabled;
-      return { count, high, low, nextDisabled, prevDisabled };
-    });
-    check('out-of-range forward navigation wraps by modulo', bounds.high === (bounds.count + 50) % bounds.count, `${bounds.high} of ${bounds.count}`);
-    check('out-of-range backward navigation wraps by modulo', bounds.low === ((-50 % bounds.count) + bounds.count) % bounds.count, String(bounds.low));
-    check('circular controls stay available at every item', !bounds.nextDisabled && !bounds.prevDisabled);
-    const loop = await p.evaluate(() => {
-      const api = window.__portfolioRunway;
-      const count = api.getState().count;
-      api.goTo(count - 1);
-      document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="1"]').click();
-      const forward = api.getState().activeIndex;
-      document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-step="-1"]').click();
-      const backward = api.getState().activeIndex;
-      api.goTo(0);
-      return { count, forward, backward };
-    });
-    check('next loops from the last garment to the first', loop.forward === 0, JSON.stringify(loop));
-    check('previous loops from the first garment to the last', loop.backward === loop.count - 1, JSON.stringify(loop));
-    await p.waitForTimeout(600);
-    const wheel = await p.evaluate(async () => {
-      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden])');
-      const nodes = [...panel.querySelectorAll('.pf-slot')];
-      panel.querySelector('[data-step="-1"]').click();
-      const animated = nodes.filter((node) => node.getAnimations().length > 0).length;
-      await new Promise((resolve) => setTimeout(resolve, 750));
-      return {
-        animated,
-        sameNodes: nodes.every((node, i) => panel.querySelectorAll('.pf-slot')[i] === node),
-        visible: nodes.filter((node) => !node.hidden).length,
-        remaining: nodes.flatMap((node) => node.getAnimations()).length,
-      };
-    });
-    check('circular wrap animates existing depth positions', wheel.animated >= 4 && wheel.sameNodes, JSON.stringify(wheel));
-    check('wheel settles with four garments and no abandoned animation', wheel.visible === 4 && wheel.remaining === 0, JSON.stringify(wheel));
-    await p.evaluate(() => window.__portfolioRunway.goTo(0));
-    await p.waitForTimeout(600);
-
-    // Drag must follow the hand: pointer right -> stack right.
-    await p.waitForTimeout(300);
-    const box = await p.evaluate(() => {
-      const b = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-stage').getBoundingClientRect();
-      return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2) };
-    });
-    await p.mouse.move(box.x, box.y);
-    const beforeDrag = await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-depth="1"]').getBoundingClientRect().left);
-    const movingItem = await p.evaluate(() => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-depth="1"]').dataset.item);
-    await p.mouse.down();
-    await p.mouse.move(box.x + 110, box.y, { steps: 8 });
-    const dragRight = await p.evaluate(item => document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) [data-item="'+item+'"]:not([data-wheel-ghost])').getBoundingClientRect().left, movingItem) - beforeDrag;
-    await p.mouse.up();
-    await p.waitForTimeout(650);
-    check('dragging right moves the stack right', dragRight > 0, `translateX ${Math.round(dragRight)}px`);
-
-    await p.mouse.move(box.x, box.y);
-    await p.mouse.down();
-    await p.mouse.move(box.x - 130, box.y, { steps: 8 });
-    const indexBefore = await p.evaluate(() => window.__portfolioRunway.getState().activeIndex);
-    await p.mouse.up();
+    await p.goto(BASE + '/portfolio/#menswear/m-rtw');
     await p.waitForTimeout(700);
-    check('releasing a leftward drag continues left around the wheel',
-      await p.evaluate(() => window.__portfolioRunway.getState().activeIndex)
-        === (indexBefore - 1 + (await p.evaluate(() => window.__portfolioRunway.getState().count))) % (await p.evaluate(() => window.__portfolioRunway.getState().count)));
-
-    /* CONTENT INTEGRITY. The 49 photographs are temporary visual references
-       and must never be presented as authored projects. */
+    check('four Menswear films and forty archive references',
+      await p.locator('[data-mw-film]').count() === 4 && await p.locator('[data-mw-archive-door]').count() === 40);
+    check('all historical Menswear references remain routable', await p.locator('[data-mw-reader]').count() === 50);
+    check('no invented development stages in Menswear', await p.locator('[data-mw-world] .pf-plate,[data-mw-world] [data-reference-panel]').count() === 0);
+    const stage = p.locator('[data-mw-film][data-current] [data-mw-experience]');
+    await stage.focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1100);
+    check('keyboard advances the composed film', await p.locator('[data-mw-scene="1"]').getAttribute('aria-pressed') === 'true');
+    await p.keyboard.press('ArrowLeft'); await p.waitForTimeout(1100);
+    check('keyboard returns to the opening composition', await p.locator('[data-mw-scene="0"]').getAttribute('aria-pressed') === 'true');
+    await p.locator('[data-mw-present]').click(); await p.keyboard.press('End'); await p.waitForTimeout(1100);
+    check('presenter can jump directly to the payoff', await p.locator('[data-mw-scene="4"]').getAttribute('aria-pressed') === 'true');
+    await p.keyboard.press('Escape');
+    check('Escape safely exits presentation before the chapter', await p.locator('[data-mw-world]').evaluate(e => e.hasAttribute('data-open') && !e.hasAttribute('data-present')));
+    await p.locator('[data-mw-archive-open]').click();
+    const source = p.locator('[data-mw-film][data-current] [data-mw-archive-door]').first();
+    const id = await source.getAttribute('data-open-subject');
+    await source.click(); await p.waitForTimeout(800);
+    const reader = p.locator('[data-mw-reader]:not([hidden])');
+    check('an archive photograph opens its own routed reader', await reader.getAttribute('data-subject') === id && (await p.evaluate(() => location.hash)).endsWith('/'+id));
+    await reader.locator('[data-rd-inspect]').click();
+    check('Menswear Look Closer inspects the source', await reader.getAttribute('data-inspect') !== null);
+    await p.keyboard.press('Escape');
+    check('Escape leaves inspection before leaving the garment', await reader.count() === 1 && await reader.getAttribute('data-inspect') === null);
+    await p.keyboard.press('Escape'); await p.waitForTimeout(650);
+    check('closing a garment restores the actual archive occurrence', await source.evaluate(e => e === document.activeElement));
     const integrity = await p.evaluate(() => {
-      const w = document.querySelector('[data-world="womenswear"]');
-      const panel = document.querySelector('[data-world="menswear"] [data-screen="category"]:not([hidden]) .pf-panel');
-      const notice = w.querySelector('[data-reference-notice]');
-      return {
-        publication: w.dataset.publication,
-        panelKind: panel.dataset.kind,
-        noticeText: notice?.textContent.trim() ?? '',
-        noticePx: notice ? Math.round(parseFloat(getComputedStyle(notice.querySelector('span')).fontSize)) : 0,
-        counter: panel.querySelector('[data-counter-current]').textContent.trim(),
-        projectArticles: w.querySelectorAll('.pf-project').length,
-        profileRows: w.querySelectorAll('.pf-project__profile').length,
-        tagRows: w.querySelectorAll('.pf-project__tags').length,
-        /* The act does not carry the development evidence panel: Development
-           is its own chapter, and Womenswear's job is the garment. What it
-           does carry is the provenance, said once, at the end. */
-        referencePanel: !!w.querySelector('[data-reference-panel]'),
-        provenanceInPayoff: !!w.querySelector('.pf-act__end [data-reference-notice]'),
-      };
+      const w = document.querySelector('[data-world="womenswear"]'),notice=w.querySelector('[data-reference-notice]');
+      return {publication:w.dataset.publication,notice:notice.textContent,noticePx:parseFloat(getComputedStyle(notice.querySelector('span')).fontSize),profiles:w.querySelectorAll('.pf-project,.pf-project__profile,.pf-project__tags,[data-reference-panel]').length,ending:!!w.querySelector('.pf-act__end [data-reference-notice]')};
     });
-    check('womenswear is a reference preview, not published work',
-      integrity.publication === 'reference-preview', integrity.publication);
-    check('the deck is marked as references', integrity.panelKind === 'reference', String(integrity.panelKind));
-    check('items are counted as references, not projects',
-      /^Reference \d\d$/.test(integrity.counter), integrity.counter);
-    check('the non-authorship disclaimer is present',
-      /no authorship of photographed garments is claimed/i.test(integrity.noticeText));
-    check('the disclaimer is readable, not fine print', integrity.noticePx >= 14, `${integrity.noticePx}px`);
-    check('no reference is given a project profile', integrity.profileRows === 0, String(integrity.profileRows));
-    check('no reference is given project text', integrity.projectArticles === 0, String(integrity.projectArticles));
-    check('no capability tags on references', integrity.tagRows === 0, String(integrity.tagRows));
-    check('the act carries no development evidence panel', integrity.referencePanel === false);
-    check('the provenance is stated where the act ends', integrity.provenanceInPayoff);
-
-    /* No construction history may be inferred from a photograph. */
-    const claims = await p.evaluate(() => {
-      // Audit the entire visible reference screen, not global chapter names.
-      const text = document.querySelector('.pf-world[data-open] [data-screen]:not([hidden])').innerText;
-      return [
-        /\bbias[- ]cut\b/i, /\bgrading\b/i, /\bfit correction\b/i, /\bpattern development\b/i,
-        /\bnegative ease\b/i, /\bdart\b/i, /\bseam placement\b/i, /\bstitch class\b/i,
-      ].filter((re) => re.test(text)).map((re) => String(re));
-    });
-    check('no construction claim is inferred from the reference photographs', claims.length === 0, claims.join(' '));
-    check('no "N projects" claim while nothing is verified',
-      await p.evaluate(() => /\b\d+\s+projects\b/i.test(document.body.innerText)) === false);
-    check('no "Look 01" UI anywhere',
-      await p.evaluate(() => (document.body.innerText.match(/\bLook\s+\d/gi) ?? []).length) === 0);
-
+    check('Womenswear remains an honest reference preview', integrity.publication === 'reference-preview' && /no authorship of photographed garments is claimed/i.test(integrity.notice));
+    check('Womenswear provenance remains readable and in its ending', integrity.noticePx >= 14 && integrity.ending);
+    check('Womenswear has no invented reference project profile', integrity.profiles === 0);
+    check('Menswear imagery has no card decoration', await p.evaluate(() => [...document.querySelectorAll('[data-mw-actor],.mw-photo')].every(e => {const s=getComputedStyle(e);return s.boxShadow==='none' && s.borderRadius==='0px' && s.borderTopWidth==='0px';})));
     await c.close();
   }
 
@@ -1027,149 +825,9 @@ try {
     await c.close();
   }
 
-  // ---- the development evidence rail, on a chapter that still has one
-  console.log('\nportfolio evidence rail');
-  {
-    const c = await ctxWithFonts({ viewport: { width: 1440, height: 900 } });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(600);
-    /* Womenswear is an act and deliberately carries no evidence rail — the
-       three development stages are Development's chapter. Menswear still has
-       the category-screen architecture, so the rail, the white studio band
-       and the garment-to-evidence balance are proved there. */
-    await openChapter(p, 'menswear');
-    await openCategory(p, 'menswear', 'm-rtw');
-
-    const studio = await p.evaluate(() => {
-      const band = document.querySelector('[data-screen="category"]:not([hidden]) .pf-studio');
-      const r = band.getBoundingClientRect();
-      const st = getComputedStyle(band);
-      return { left: Math.round(r.left), width: Math.round(r.width), vw: document.documentElement.clientWidth, bg: st.backgroundColor };
-    });
-    check('the viewer sits in one full-width white field',
-      studio.left === 0 && studio.width >= studio.vw - 1 && studio.bg === 'rgb(255, 255, 255)',
-      JSON.stringify(studio));
-
-    /* THREE EQUAL DEVELOPMENT PLATES, ONE ABOVE THE OTHER. */
-    const plates = await p.evaluate(() => {
-      const panel = document.querySelector('[data-screen="category"]:not([hidden]) .pf-panel');
-      const list = [...panel.querySelectorAll('.pf-plate')];
-      const boxes = list.map((el) => el.querySelector('.pf-plate__art').getBoundingClientRect());
-      return {
-        stages: list.map((el) => el.dataset.plate),
-        labels: list.map((el) => el.querySelector('.pf-plate__label').textContent.replace(/\s+/g, ' ').trim()),
-        demo: list.filter((el) => el.hasAttribute('data-demo')).length,
-        images: list.reduce((n, el) => n + el.querySelectorAll('img').length, 0),
-        widths: boxes.map((b) => Math.round(b.width)),
-        heights: boxes.map((b) => Math.round(b.height)),
-        lefts: boxes.map((b) => Math.round(b.left)),
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-        links: panel.querySelectorAll('.pf-plate__link').length,
-        note: panel.querySelector('[data-demo-note]')?.textContent.trim() ?? '',
-      };
-    });
-    check('exactly three development stages, in order',
-      plates.stages.join(',') === 'sketch,pattern,simulation', plates.stages.join(','));
-    check('the stages are labelled sketch, 2D pattern, 3D simulation',
-      plates.labels.join(' | ') === 'Step 01 Sketch | Step 02 2D Pattern | Step 03 3D Simulation',
-      plates.labels.join(' | '));
-    check('the three plates are exactly the same size',
-      Math.max(...plates.widths) - Math.min(...plates.widths) <= 1
-      && Math.max(...plates.heights) - Math.min(...plates.heights) <= 1,
-      `${plates.widths.join('/')} x ${plates.heights.join('/')}`);
-    check('the three plates are stacked one above another in one column',
-      plates.stacked && new Set(plates.lefts).size === 1, `${plates.lefts.join(',')} stacked ${plates.stacked}`);
-    check('stage numbering replaces provisional connector arrows', plates.links === 0, String(plates.links));
-
-    /* THE GARMENT IS THE HERO. The result carries the argument; the three
-       development stages are the proof behind it and are sized to say so. */
-    const weight = await p.evaluate(() => {
-      const viewer = document.querySelector('[data-screen="category"]:not([hidden]) .pf-viewer');
-      const deck = viewer.querySelector('.pf-deck').getBoundingClientRect();
-      const rail = viewer.querySelector('.pf-devcol').getBoundingClientRect();
-      const stage = viewer.querySelector('.pf-stage').getBoundingClientRect();
-      const dev = viewer.querySelector('.pf-dev').getBoundingClientRect();
-      const plate = viewer.querySelector('.pf-plate__art').getBoundingClientRect();
-      const total = deck.width + rail.width;
-      return {
-        deckShare: deck.width / total,
-        railShare: rail.width / total,
-        sideBySide: rail.left > deck.right - 2,
-        plateWidth: Math.round(plate.width),
-        stageHeight: Math.round(stage.height),
-        deckHeight: Math.round(deck.height),
-        railHeight: Math.round(dev.height),
-        deckSticky: getComputedStyle(viewer.querySelector('.pf-deck')).position,
-      };
-    });
-    check('the garment remains dominant at 70-74% of the viewer',
-      weight.sideBySide && weight.deckShare >= 0.70 && weight.deckShare <= 0.74,
-      `${Math.round(weight.deckShare * 100)}%`);
-    check('the evidence rail uses 26-30% of the viewer',
-      weight.railShare >= 0.26 && weight.railShare <= 0.30, `${Math.round(weight.railShare * 100)}%`);
-    /* RECALIBRATED, and worth saying why. These proportions used to be read
-       off Womenswear's category screen, whose photographs are two-ups that
-       overlap by about 45% — so four of them solved to a tall stage. Menswear
-       carries single-view editorial frames with nothing to occlude, so the
-       same four cards spread out and the stage comes out at about two thirds
-       of that height. That is the SMALLEST garment stage on the site and so
-       the hardest case for the rail: the plate still has to read as a
-       fraction of the garment, and the three of them still have to stand no
-       taller than the deck they sit beside. */
-    check('a development plate is a fraction of the garment stage',
-      weight.plateWidth >= 220 && weight.plateWidth <= weight.stageHeight * 0.7,
-      `plate ${weight.plateWidth}px against a ${weight.stageHeight}px stage`);
-    check('all three plates fit beside the garments without a sticky deck',
-      weight.railHeight <= weight.deckHeight + 2 && weight.deckSticky !== 'sticky',
-      `rail ${weight.railHeight}px vs deck ${weight.deckHeight}px, deck ${weight.deckSticky}`);
-    check('every plate is marked as a demo and borrows no image',
-      plates.demo === 3 && plates.images === 0, `${plates.demo} demo / ${plates.images} images`);
-    check('the strip says the real assets are pending',
-      /real project assets pending/i.test(plates.note), plates.note || 'none');
-
-    await c.close();
-  }
-
-  /* ---- the deck keeps four cards on a desk and three on a phone ---------- */
-  for (const [width, height, want] of [[1024, 820, 4], [390, 844, 3]]) {
-    console.log(`\nportfolio menswear deck and plates at ${width}`);
-    const c = await ctxWithFonts({ viewport: { width, height }, isMobile: width < 768, hasTouch: width < 768 });
-    const p = await c.newPage();
-    await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-    await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
-    await p.waitForTimeout(700);
-    await openChapter(p, 'menswear');
-    await openCategory(p, 'menswear', 'm-rtw');
-
-    const st = await p.evaluate(() => window.__portfolioRunway.getState());
-    check(`${width} menswear shows ${want} garments at once`, st.visibleNow === want, `visible ${st.visibleNow}`);
-    check(`${width} menswear active garment still leads`, st.activeIsLeading === true);
-
-    /* Plates stay equal-size and stacked on every screen: equal at every
-       width; a column beside the deck on a desktop and a compact row under it
-       on a phone, so three plates never take over a screen the garment should
-       own. */
-    const eq = await p.evaluate(() => {
-      const boxes = [...document.querySelectorAll('[data-screen="category"]:not([hidden]) .pf-plate__art')]
-        .map((el) => el.getBoundingClientRect());
-      return {
-        w: boxes.map((b) => Math.round(b.width)),
-        h: boxes.map((b) => Math.round(b.height)),
-        stacked: boxes.every((b, i) => i === 0 || b.top >= boxes[i - 1].bottom - 2),
-      };
-    });
-    check(`${width} keeps the three plates exactly equal`,
-      eq.w.length === 3 && new Set(eq.w).size === 1 && new Set(eq.h).size === 1,
-      `${eq.w.join('/')} x ${eq.h.join('/')}`);
-    check(`${width} arranges the plates as a ${width >= 1024 ? 'column' : 'compact row'}`,
-      width >= 1024 ? eq.stacked : (!eq.stacked && eq.w[0] <= 160),
-      `stacked ${eq.stacked}, plate ${eq.w[0]}px`);
-    check(`no horizontal overflow at ${width} in menswear`,
-      await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
-    await c.close();
-  }
+  // Menswear is now photography-only. The removed demo-rail sizing checks
+  // are replaced by the negative evidence assertion above; real standalone
+  // Development and Tech Pack interactions remain covered below.
 
   // ---- Tech Packs: five documents in a column, and a reader
   console.log('\nportfolio tech packs');
@@ -1402,16 +1060,10 @@ try {
     await openChapter(p, 'menswear');
     await openCategory(p, 'menswear', 'm-rtw');
 
-    await p.evaluate((sel) => document.querySelector(`${sel} [data-stage]`).focus(), MEN_DECK);
+    await p.locator('[data-mw-film][data-current] [data-mw-experience]').focus();
     await p.keyboard.press('ArrowRight');
-    await p.waitForTimeout(120);
-    const state = await p.evaluate(() => window.__portfolioRunway.getState());
-    check('deck settles instantly under reduced motion', Number.isInteger(state.position), `position ${state.position}`);
-    check('reduced motion still advances the deck', state.activeIndex === 1, String(state.activeIndex));
-    check('reduced motion keeps four garments visible', state.visibleNow === 4, String(state.visibleNow));
-    check('no decorative transition left running',
-      await p.evaluate((sel) => getComputedStyle(
-        document.querySelector(`${sel} .pf-slot`)).transitionDuration === '0s', MEN_DECK));
+    check('reduced motion directly selects a complete Menswear composition', await p.locator('[data-mw-scene="1"]').getAttribute('aria-pressed') === 'true');
+    check('reduced motion leaves no photographic match-cut clone', await p.locator('.mw-match').count() === 0);
     /* The Womenswear checks below need the act open. */
     await p.keyboard.press('Escape');
     await p.waitForTimeout(300);
@@ -1443,14 +1095,14 @@ try {
       html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
     check('the demo documents are declared as demos without the script',
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
-    check('the development plates are declared as demos without the script',
-      html.includes('Demo layout — real project assets pending') || html.includes('Demo layout &#8212; real project assets pending'));
+    check('Menswear exposes forty photographic links without process placeholders',
+      await p.locator('[data-mw-archive-door]').count() === 40 && await p.locator('[data-mw-world] .pf-plate').count() === 0);
     check('all five supplied development recordings are server-rendered without players',
       ['dfbUl82h8Ck', 'iOyhNjVEe_U', 'UToex4DCeZ8', 'TDfFjjnbPq4', 'ure0EK4gq3k']
         .every((id) => html.includes(`data-youtube="${id}"`))
       && !html.includes('youtube-nocookie.com/embed/'));
     const visible = await p.evaluate(() => {
-      const slots = [...document.querySelectorAll('.pf-slot')];
+      const slots = [...document.querySelectorAll('[data-mw-archive-door]')];
       return { total: slots.length, shown: slots.filter((s) => s.getBoundingClientRect().width > 20).length };
     });
     check('garment images are laid out without the script', visible.shown > 5, `${visible.shown} of ${visible.total}`);
