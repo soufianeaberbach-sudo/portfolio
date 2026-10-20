@@ -6,7 +6,7 @@ const ease=(v:number)=>{const t=clamp(v);return t*t*(3-2*t);};
 const lerp=(a:number,b:number,p:number)=>a+(b-a)*p;
 const mix=(a:Box,b:Box,p:number):Box=>({x:lerp(a.x,b.x,p),y:lerp(a.y,b.y,p),w:lerp(a.w,b.w,p),h:lerp(a.h,b.h,p)});
 export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,heldActor?:number){
- const camera=frame.querySelector<HTMLElement>('[data-mw-camera]')!,w=camera.clientWidth,h=camera.clientHeight,compact=w<700;
+ const camera=frame.querySelector<HTMLElement>('[data-mw-camera]')!,w=camera.clientWidth,h=camera.clientHeight,compact=w<700||(w<1024&&matchMedia('(orientation:portrait)').matches);
  if(!w||!h)return;
  let order=2;
  const nodes=[...frame.querySelectorAll<HTMLAnchorElement>('[data-mw-actor]')],drawn=new Set<HTMLElement>();
