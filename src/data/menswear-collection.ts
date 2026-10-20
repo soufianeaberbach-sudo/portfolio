@@ -21,7 +21,7 @@ export function menswearPool(category:MenswearCategory):Subject[]{
  const historical=c.references.map(r=>referenceSubject(r,'menswear',category));
  const additional=edit[category].filter(id=>!historical.some(s=>s.id===`${category}-pexels-${id}`)).map(id=>{
   const r=sources.find(r=>r.photo===id);if(!r)throw new Error(`Missing licensed photograph ${id}`);
-  const image:ImageAsset={src:r.src,srcset:`${r.thumbnail} 360w, ${r.src} ${r.width}w`,width:r.width,height:r.height,alt:r.alt,front:1,views:1};
+  const image:ImageAsset={src:r.src,srcset:r.thumbnail===r.src?`${r.src} ${r.width}w`:`${r.thumbnail} ${r.thumbnailWidth}w, ${r.src} ${r.width}w`,width:r.width,height:r.height,alt:r.alt,front:1,views:1};
   return referenceSubject({id:`${category}-pexels-${id}`,image},'menswear',category);
  });
  return [...historical,...additional].map(subject=>{
