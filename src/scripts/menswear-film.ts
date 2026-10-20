@@ -80,12 +80,12 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    else draw(33443605,jump);
   }
  }else if(world==='m-rtw'){
-  const knit=fit(16711124),plinth=fit(29727778),green=fit(8508752),shirt=fit(7764014),final=fit(6844165);
+  const knit=fit(16711124),plinth=fit(29727778),chair=fit(13128635),green=fit(8508752),final=fit(6844165);
   if(p<=1){if(p<.46)draw(16711124,knit);else draw(29727778,plinth);}
-  else if(p<=2){/* An editorial cut connects the plinth's support to a standing line. */if(p<1.46)draw(29727778,plinth);else draw(8508752,green);}
-  else if(p<=3){const t=ease(p-2);if(compact){if(p<2.46)draw(8508752,green);else draw(7764014,shirt);}else{draw(8508752,mix(green,fit(8508752,.30,.91),t));draw(7764014,fit(7764014,.74,.91),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
-  else if(compact){if(p<3.46)draw(7764014,shirt);else{draw(6844165,final);frame.style.background='#17100f';frame.style.color='var(--paper)';}}
-  else{const t=ease(p-3),opening:[number,number,number,number]=[.5-t*.5,0,t,1];if(t<1){if(!compact)draw(8508752,fit(8508752,.30,.91),undefined,false);draw(7764014,compact?shirt:fit(7764014,.74,.91),whole,false);}draw(6844165,final,whole,t>.98,opening);frame.style.background=t>.98?'#17100f':'#fff';frame.style.color=t>.98?'var(--paper)':'var(--ink)';}
+  else if(p<=2){/* The real support becomes a carried structure; no invented prop or assembly. */if(p<1.46)draw(29727778,plinth);else draw(13128635,chair);}
+  else if(p<=3){const t=ease(p-2);if(compact){if(p<2.46)draw(13128635,chair);else draw(8508752,green);}else{draw(13128635,mix(chair,fit(13128635,.28,.91),t));draw(8508752,fit(8508752,.74,.91),undefined,t>.95,[1-t*.5,0,t*.5,1]);}}
+  else if(compact){if(p<3.46)draw(8508752,green);else{draw(6844165,final);frame.style.background='#17100f';frame.style.color='var(--paper)';}}
+  else{const t=ease(p-3),opening:SourceWindow=[.5-t*.5,0,t,1];if(t<1){draw(13128635,fit(13128635,.28,.91),whole,false);draw(8508752,fit(8508752,.74,.91),undefined,false);}draw(6844165,final,whole,t>.98,opening);frame.style.background=t>.98?'#17100f':'#fff';frame.style.color=t>.98?'var(--paper)':'var(--ink)';}
  }else{
   const daylight=fit(6097464),pale=fit(29242239),steel=fit(16862147),ivory=fit(14348500),coat=fit(6207215);
   if(p<=1){const t=ease(p);if(compact){if(p<.46)draw(6097464,daylight);else draw(29242239,pale);}else{draw(6097464,mix(daylight,fit(6097464,.27,.92),t));draw(29242239,fit(29242239,.74,.92),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
