@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
-import GarmentWorld from '../components/portfolio/GarmentWorld.astro';
+import MenswearAct from '../components/portfolio/MenswearAct.astro';
 import WomenswearAct from '../components/portfolio/WomenswearAct.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
@@ -11,6 +11,7 @@ import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
 import '../styles/portfolio-womenswear.css';
 import '../styles/womenswear-cinematic.css';
+import '../styles/menswear-cinematic.css';
 import type { Subject } from '../data/portfolio';
 
 /* The development-only story lab renders this page with one internal test
@@ -361,7 +362,7 @@ const split = (statement: string, word: string) => {
           written, which is why the two are deliberately separate files rather
           than one component with a mode flag. */}
       {garmentWorlds.map((world) => (
-        world.id === 'womenswear' ? <WomenswearAct world={world} lab={lab} /> : <GarmentWorld world={world} />
+        world.id === 'womenswear' ? <WomenswearAct world={world} lab={lab} /> : <MenswearAct world={world} />
       ))}
       <SimulationWorld sessions={simulationSessions} />
       <TechPackWorld packs={techPacks} />
@@ -809,10 +810,13 @@ const split = (statement: string, word: string) => {
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
       import { initWomenswear } from '../scripts/womenswear-reader';
+      import { initMenswear } from '../scripts/menswear-reader';
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const ww = initWomenswear(root);
+      const mw = initMenswear(root);
+      const photographicReader = (reader: HTMLElement) => mw?.owns(reader) ? mw : ww?.owns(reader) ? ww : null;
       /* Has the visitor done anything yet? A level opened by the page's own
          address is the page initialising, not the visitor choosing. */
       let visitorActed = false;
@@ -924,6 +928,7 @@ const split = (statement: string, word: string) => {
 
       const closeSubject = () => {
         ww?.cancel();
+        mw?.cancel();
         if (!openSubject) return;
         const leaving = openSubject;
         openSubject = null;
@@ -936,7 +941,7 @@ const split = (statement: string, word: string) => {
         subjectReturnTo = null;
         if (!back && world) {
           back = [...world.querySelectorAll<HTMLElement>(`[data-open-subject="${leaving.dataset.subject}"]`)]
-            .find((door) => shown(frameOf(door)) && (!ww?.owns(leaving) || !door.hasAttribute('data-ww-actor') || door.tabIndex === 0)) ?? null;
+            .find((door) => shown(frameOf(door)) && (!photographicReader(leaving) || !door.matches('[data-ww-actor],[data-mw-actor]') || door.tabIndex === 0)) ?? null;
         }
         /* The territory behind never moved while the garment was open, so a
            door that was on screen is still on screen. Only a door that is not
@@ -955,21 +960,21 @@ const split = (statement: string, word: string) => {
         const finish = () => {
           putAway(leaving);
           subjectMotion = null;
-          if (back && document.contains(back) && (!ww?.owns(leaving) || location.hash === ww?.returnHash(leaving))) back.focus({ preventScroll: true });
+          if (back && document.contains(back) && (!photographicReader(leaving) || location.hash === photographicReader(leaving)?.returnHash(leaving))) back.focus({ preventScroll: true });
           // A historical reference can remain directly addressable after it
           // leaves the visible edit. With no photographic door to return to,
           // restore a meaningful visible control instead of dropping to body.
-          if (!back && ww?.owns(leaving) && location.hash === ww.returnHash(leaving)) world?.querySelector<HTMLElement>('[data-act-toggle]')?.focus({ preventScroll: true });
+          if (!back && photographicReader(leaving) && location.hash === photographicReader(leaving)!.returnHash(leaving)) world?.querySelector<HTMLElement>('[data-act-toggle],[data-mw-worlds-toggle]')?.focus({ preventScroll: true });
         };
         /* THE EXIT. The same clip as the entrance, run back into the frame
            the garment came from, and shorter: the visitor is leaving, the
            system answers. The layer thins out as it closes, so what is left
            in the frame at the end is the garment in its range, not an empty
            piece of the layer's own ground. */
-        if (ww?.owns(leaving)) {
+        if (photographicReader(leaving)) {
           exiting = leaving;
-          ww.leave(leaving, back ? frameOf(back) : null, reduced() || readerKeyboard, finish);
-          if (location.hash === ww?.returnHash(leaving) && back && document.contains(back)) back.focus({ preventScroll: true });
+          photographicReader(leaving)!.leave(leaving, back ? frameOf(back) : null, reduced() || readerKeyboard, finish);
+          if (location.hash === photographicReader(leaving)?.returnHash(leaving) && back && document.contains(back)) back.focus({ preventScroll: true });
         } else if (back && !reduced() && !readerKeyboard) {
           subjectMotion = leaving.animate(
             [
@@ -996,13 +1001,18 @@ const split = (statement: string, word: string) => {
         if (!next) { closeSubject(); return; }
         if (openSubject === next) return;
         ww?.cancel();
+        mw?.cancel();
         if (exiting === next) exiting = null;
         subjectMotion?.cancel();
         subjectMotion = null;
         if (exiting) putAway(exiting);
         if (openSubject) putAway(openSubject);
         const active = document.activeElement as HTMLElement | null;
-        if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')) {
+        // A direct/history Menswear route has no door merely because another
+        // garment's archive link still owns focus from a previous visit.
+        if (mw?.owns(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
+        if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')
+          && (!mw?.owns(next) || active.dataset.openSubject === id)) {
           subjectReturnTo = active;
         }
         openSubject = next;
@@ -1015,8 +1025,8 @@ const split = (statement: string, word: string) => {
            stays opaque the whole way: fading it in as well had the range, the
            hero and the garment all showing through each other at the start. */
         const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
-        if (ww?.owns(next)) {
-          ww.enter(next, source && shown(source) ? source : null, reduced() || readerKeyboard);
+        if (photographicReader(next)) {
+          photographicReader(next)!.enter(next, source && shown(source) ? source : null, reduced() || readerKeyboard);
         } else if (source && shown(source) && !reduced() && !readerKeyboard) {
           subjectMotion = next.animate(
             [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
@@ -1061,7 +1071,7 @@ const split = (statement: string, word: string) => {
       /* Shared view selection and bounded inspection for every garment. */
       const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
-      for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject:not([data-ww-reader])')) {
+      for (const subject of root.querySelectorAll<HTMLElement>('.pf-rd__subject:not([data-ww-reader]):not([data-mw-reader])')) {
         const inspect = subject.querySelector<HTMLButtonElement>('[data-rd-inspect]');
         const windows = [...subject.querySelectorAll<HTMLElement>('[data-rd-window]')];
         const stage = subject.querySelector<HTMLElement>('[data-rd-stage]');
@@ -1278,6 +1288,7 @@ const split = (statement: string, word: string) => {
       /* Which screen of a chapter is showing. `null` is the chapter's own
          index; a category id is that category's viewer. */
       const showScreen = (world: HTMLElement, category: string | null) => {
+        if (mw?.ownsWorld(world)) { mw.activate(category); return; }
         const screens = [...world.querySelectorAll<HTMLElement>('[data-screen]')];
         if (screens.length === 0) return;
         let shown: HTMLElement | null = null;
@@ -1396,7 +1407,8 @@ const split = (statement: string, word: string) => {
           /* Entering a garment, or stepping back out of it into the territory
              it belongs to, is a change at the garment level only. */
           const garmentOnly = openWorld === worlds.get(world)
-            && (subject !== null || (openSubject !== null && openSubject.dataset.of === category));
+            && (subject !== null || (openSubject !== null && openSubject.dataset.of === category))
+            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category);
           openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
              the chapter and the territory, so leaving it lands the visitor
@@ -1443,7 +1455,7 @@ const split = (statement: string, word: string) => {
         // same Womenswear category twice after a reader return would reset
         // its scroll and steal focus from the actual return destination.
         // Explicit navigation through go() still reapplies the requested shot.
-        if (ww && parseHash().world === 'womenswear' && window.location.hash === lastSyncedHash) return;
+        if ((parseHash().world === 'womenswear' || parseHash().world === 'menswear') && window.location.hash === lastSyncedHash) return;
         syncFromHash();
       };
       window.addEventListener('popstate', syncHistory);
@@ -1463,7 +1475,7 @@ const split = (statement: string, word: string) => {
            gives back: inspection, then the garment, then the territory, then
            the chapter. One press undoes one thing. */
         if (openSubject) {
-          if (ww?.owns(openSubject)) readerKeyboard = true;
+          if (photographicReader(openSubject)) readerKeyboard = true;
           if (openSubject.hasAttribute('data-inspect')) {
             openSubject.querySelector<HTMLElement>('[data-rd-inspect]')?.click();
             return;

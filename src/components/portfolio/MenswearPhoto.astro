@@ -1,0 +1,11 @@
+---
+import type{ImageAsset,SubjectView}from'../../data/portfolio';
+import{separable}from'../../data/final-photography';
+interface Props{image:ImageAsset;crop?:SubjectView['crop'];eager?:boolean;}
+const{image,crop='whole',eager=false}=Astro.props;
+const split=crop!=='whole'&&separable(image)?image.front:1;
+const portion=split===1?1:crop==='back'?1-split:split;
+---
+<span class="mw-photo" data-mw-photo data-door-source style={`--photo-aspect:${image.width*portion/image.height};--photo-offset:${crop==='back'&&split!==1?-100*split/portion:0}%;--photo-width:${100/portion}%`}>
+ <img src={image.src} srcset={image.srcset} width={image.width} height={image.height} alt={image.alt} loading={eager?'eager':'lazy'} decoding="async" sizes="(max-width:767px) 92vw, 55vw"/>
+</span>
