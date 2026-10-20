@@ -5,7 +5,7 @@ const clamp=(v:number)=>Math.max(0,Math.min(1,v));
 const ease=(v:number)=>{const t=clamp(v);return t*t*(3-2*t);};
 const lerp=(a:number,b:number,p:number)=>a+(b-a)*p;
 const mix=(a:Box,b:Box,p:number):Box=>({x:lerp(a.x,b.x,p),y:lerp(a.y,b.y,p),w:lerp(a.w,b.w,p),h:lerp(a.h,b.h,p)});
-export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean){
+export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,heldActor?:number){
  const camera=frame.querySelector<HTMLElement>('[data-mw-camera]')!,w=camera.clientWidth,h=camera.clientHeight,compact=w<700;
  if(!w||!h)return;
  let order=2;
@@ -29,7 +29,7 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean)
  const act=Math.floor(position),fraction=position-act;
  // Brief holds around all authored compositions; no scroll snapping or forced waiting.
  const p=reduced?Math.round(position):Math.min(4,act+clamp((fraction-.09)/.82));
- const q=ease(p%1),world=frame.closest<HTMLElement>('[data-mw-film]')!.dataset.mwFilm;
+ const world=frame.closest<HTMLElement>('[data-mw-film]')!.dataset.mwFilm;
  frame.style.background='#fff';frame.style.color='var(--ink)';
  const wings=[...frame.querySelectorAll<HTMLElement>('[data-mw-wing]')];for(const n of wings)n.style.display='none';
  if(world==='m-streetwear'){
@@ -58,10 +58,13 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean)
    }
   }else{
    const t=ease(p-3);
+   if(compact){if(p<3.46)draw(17303564,hero);else{draw(26936522,puffer);frame.style.background='#ccc9c6';}}
+   else {
    // A second, genuinely different volume resolves the reveal: angular jacket → quilted outerwear.
    if(t<1)draw(17303564,mix(hero,{...hero,x:hero.x-w*.32},t),undefined,t<.08,[0,0,1-t,1]);
    draw(26936522,puffer,undefined,t>.94,[1-t,0,t,1]);
    frame.style.background=`rgb(${Math.round(lerp(255,204,t))},${Math.round(lerp(255,201,t))},${Math.round(lerp(255,198,t))})`;
+   }
   }
  }else if(world==='m-activewear'){
   const polo=fit(7648388),black=fit(30954220),ground=fit(7116192,.5,.88,.55),red=fit(11000101),white=fit(6974949),jump=fit(33443605);
@@ -80,15 +83,19 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean)
   const knit=fit(16711124),plinth=fit(29727778),green=fit(8508752),shirt=fit(7764014),final=fit(6844165);
   if(p<=1){if(p<.46)draw(16711124,knit);else draw(29727778,plinth);}
   else if(p<=2){/* An editorial cut connects the plinth's support to a standing line. */if(p<1.46)draw(29727778,plinth);else draw(8508752,green);}
-  else if(p<=3){const t=ease(p-2);if(compact){draw(8508752,green,undefined,t<.05,[0,0,1-t,1]);draw(7764014,shirt,whole,t>.95,[1-t,0,t,1]);}else{draw(8508752,mix(green,fit(8508752,.30,.91),t));draw(7764014,fit(7764014,.74,.91),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
+  else if(p<=3){const t=ease(p-2);if(compact){if(p<2.46)draw(8508752,green);else draw(7764014,shirt);}else{draw(8508752,mix(green,fit(8508752,.30,.91),t));draw(7764014,fit(7764014,.74,.91),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
+  else if(compact){if(p<3.46)draw(7764014,shirt);else{draw(6844165,final);frame.style.background='#17100f';frame.style.color='var(--paper)';}}
   else{const t=ease(p-3),opening:[number,number,number,number]=[.5-t*.5,0,t,1];if(t<1){if(!compact)draw(8508752,fit(8508752,.30,.91),undefined,false);draw(7764014,compact?shirt:fit(7764014,.74,.91),whole,false);}draw(6844165,final,whole,t>.98,opening);frame.style.background=t>.98?'#17100f':'#fff';frame.style.color=t>.98?'var(--paper)':'var(--ink)';}
  }else{
   const daylight=fit(6097464),pale=fit(29242239),steel=fit(16862147),ivory=fit(14348500),coat=fit(6207215);
-  if(p<=1){const t=ease(p);if(compact){draw(6097464,daylight,whole,t<.05,[0,0,1-t,1]);draw(29242239,pale,whole,t>.95,[1-t,0,t,1]);}else{draw(6097464,mix(daylight,fit(6097464,.27,.92),t));draw(29242239,fit(29242239,.74,.92),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
+  if(p<=1){const t=ease(p);if(compact){if(p<.46)draw(6097464,daylight);else draw(29242239,pale);}else{draw(6097464,mix(daylight,fit(6097464,.27,.92),t));draw(29242239,fit(29242239,.74,.92),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
   else if(p<=2){if(p<1.46){if(!compact)draw(6097464,fit(6097464,.27,.92));draw(29242239,compact?pale:fit(29242239,.74,.92));}else{draw(16862147,steel);frame.style.background='#161718';frame.style.color='var(--paper)';}}
   else if(p<=3){frame.style.background='#161718';frame.style.color='var(--paper)';if(p<2.46)draw(16862147,steel);else draw(14348500,ivory);}
   else{frame.style.background='#161718';frame.style.color='var(--paper)';if(p<3.46)draw(14348500,ivory);else draw(6207215,coat);}
  }
+ // A reader opened before a breakpoint change keeps its actual photographic
+ // occurrence until the visitor advances, even when that role has a portrait alternative.
+ if(heldActor&&!drawn.has(photo(heldActor))){drawn.clear();for(const wing of wings)wing.style.display='none';draw(heldActor,fit(heldActor));}
  for(const node of nodes)if(!drawn.has(node)){node.inert=true;node.tabIndex=-1;node.style.visibility='hidden';node.setAttribute('aria-hidden','true');}
  frame.querySelector<HTMLElement>('.mw-film-title')!.style.opacity=String(1-clamp(p*2));
  const failed=[...drawn].some(node=>{const im=node.querySelector('img')!;return node.style.visibility==='visible'&&im.complete&&!im.naturalWidth;});

@@ -356,11 +356,8 @@ const split = (statement: string, word: string) => {
     </nav>
 
     <div class="pf-worlds" data-worlds>
-      {/* ACT I is its own component. Womenswear is no longer a category index
-          in front of a viewer; it is a directed sequence of five movements.
-          Menswear keeps the two-screen GarmentWorld until its own act is
-          written, which is why the two are deliberately separate files rather
-          than one component with a mode flag. */}
+      {/* Each fashion chapter owns its art-directed act. The shared router
+          below owns navigation; chapter controllers own photographic motion. */}
       {garmentWorlds.map((world) => (
         world.id === 'womenswear' ? <WomenswearAct world={world} lab={lab} /> : <MenswearAct world={world} />
       ))}

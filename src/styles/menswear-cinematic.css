@@ -103,3 +103,5 @@
 .pf--js .mw-world:not([data-open]) [data-mw-actor]{visibility:hidden!important}
 
 .mw-frame{contain:layout paint}.mw-media-status{position:absolute;left:20px;right:20px;top:45%;z-index:8;text-align:center;font:12px/1.6 var(--body);background:#fff;padding:16px;color:var(--ink)}
+.mw-header-actions button{min-height:44px;min-width:44px;padding:6px 0}
+.mw-header>a,.mw-reader-head>a{display:inline-flex;align-items:center;min-height:44px}
