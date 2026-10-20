@@ -13,7 +13,7 @@ const edit:Record<MenswearCategory,number[]>={
 export const menswearSlots=Object.fromEntries(Object.entries(edit).map(([cat,ids])=>[cat,ids.map(id=>({id:`${cat}-pexels-${id}`}))]))as Record<MenswearCategory,MenswearSlot[]>;
 export const menswearCredit=(id:string):ImageCredit|undefined=>{
  const slot=Object.values(menswearSlots).flat().find(s=>s.id===id);if(slot?.photography||slot?.projectId)return slot.credit;
- const added=sources.find(r=>id.endsWith(`-pexels-${r.photo}`));if(added)return{source:'Pexels · temporary reference',photographer:added.creator,sourcePage:added.source};
+ const added=sources.find(r=>id.endsWith(`-pexels-${r.photo}`));if(added)return{source:'Pexels · temporary reference',photographer:added.creator.startsWith('Creator not recorded')?undefined:added.creator,sourcePage:added.source};
  return menswear.categories.flatMap(c=>c.references).find(r=>r.id===id)?.credit;
 };
 export function menswearPool(category:MenswearCategory):Subject[]{

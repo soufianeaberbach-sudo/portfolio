@@ -1381,7 +1381,7 @@ const split = (statement: string, word: string) => {
            anything, focuses the chapter itself: focusing a control there made
            the browser draw a keyboard ring around "Portfolio" for the whole
            visit, on a page nobody had pressed a key on. */
-        const first = next.querySelector<HTMLElement>(FOCUSABLE);
+        const first = mw?.ownsWorld(next) ? mw.focusTarget() : next.querySelector<HTMLElement>(FOCUSABLE);
         (visitorActed ? (first ?? next) : next).focus({ preventScroll: true });
         if (!already) setInert(true);
         layoutAll();

@@ -93,3 +93,13 @@
 .mw-chapter-links{display:flex;flex-wrap:wrap;gap:18px;padding-top:12px}.mw-chapter-links a{display:inline;padding:8px 0;font:10px var(--mono)}
 
 .mw-reader[data-wide] .mw-reader-caption{position:static;max-width:800px;width:100%;padding:0 12px 12px}.mw-reader[data-wide] .mw-reader-caption h3{max-width:none;font-size:11px;margin:0 0 4px}
+
+/* Opaque chapter entry: a transparent world transition ghosted cover models
+   through the new photograph. The existing cover artwork remains untouched. */
+.pf--js .mw-world,.pf--js .mw-world[data-open]{transition:none}
+/* A camera plane has explicit visibility for its local choreography. Closed
+   chapters must still suppress that descendant visibility and hit testing. */
+.pf--js .mw-world:not([data-open]){pointer-events:none}
+.pf--js .mw-world:not([data-open]) [data-mw-actor]{visibility:hidden!important}
+
+.mw-frame{contain:layout paint}.mw-media-status{position:absolute;left:20px;right:20px;top:45%;z-index:8;text-align:center;font:12px/1.6 var(--body);background:#fff;padding:16px;color:var(--ink)}

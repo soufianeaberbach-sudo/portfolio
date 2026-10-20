@@ -7,6 +7,7 @@ import{gsap}from'gsap';
 export function initMenswear(root:HTMLElement){
  const world=root.querySelector<HTMLElement>('[data-mw-world]');if(!world)return null;
  const exhibition=world.querySelector<HTMLElement>('.mw-exhibition')!,films=[...world.querySelectorAll<HTMLElement>('[data-mw-film]')];
+ for(const f of films)f.removeAttribute('id');
  const reduce=matchMedia('(prefers-reduced-motion:reduce)'),menu=world.querySelector<HTMLElement>('[data-mw-worlds]')!,toggle=world.querySelector<HTMLButtonElement>('[data-mw-worlds-toggle]')!;
  const presentButton=world.querySelector<HTMLButtonElement>('[data-mw-present]')!,fullscreen=world.querySelector<HTMLButtonElement>('[data-mw-fullscreen]')!;
  let category:MenswearCategory='m-streetwear',film=films[0],experience=film.querySelector<HTMLElement>('[data-mw-experience]')!,position=0,requested=0,present=false,active:HTMLElement|null=null;
@@ -45,6 +46,7 @@ export function initMenswear(root:HTMLElement){
  };
  for(const f of films){
   const scroller=f.querySelector<HTMLElement>('[data-mw-experience]')!;
+  for(const im of f.querySelectorAll<HTMLImageElement>('[data-mw-actor] img'))for(const event of ['load','error'])im.addEventListener(event,()=>{if(f===film)paint();});
   scroller.addEventListener('scroll',()=>{if(f!==film||active||motion||present)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{position=clamp(4*experience.scrollTop/range());requested=Math.round(position);paint();});},{passive:true});
   scroller.addEventListener('wheel',()=>{if(!present&&!active)stop();},{passive:true});scroller.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
   scroller.addEventListener('keydown',e=>{
@@ -76,6 +78,8 @@ export function initMenswear(root:HTMLElement){
   cutCancel?.();if(!source||instant||reduce.matches){done();return;}
   const target=reader.querySelector<HTMLElement>('[data-mw-view-panel]:not([hidden]) [data-mw-photo]')!;
   const from=enter?source:target,to=enter?target:source,im=from.querySelector<HTMLImageElement>('img')!,dest=to.querySelector<HTMLImageElement>('img')!;
+  // Different genuine photographs are never morphed into each other on return.
+  if(im.src!==dest.src){done();return;}
   let canceled=false,clone:HTMLElement|null=null,animation:Animation|null=null;
   const oldSource=source.style.visibility,oldTarget=target.style.visibility;
   const cleanup=()=>{canceled=true;animation?.cancel();clone?.remove();source.style.visibility=oldSource;target.style.visibility=oldTarget;if(cutCancel===cleanup)cutCancel=null;};cutCancel=cleanup;
@@ -84,7 +88,7 @@ export function initMenswear(root:HTMLElement){
    const a=from.getBoundingClientRect(),ai=im.getBoundingClientRect(),b=to.getBoundingClientRect(),bi=dest.getBoundingClientRect();
    if(!ai.width||!bi.width||!a.width||!b.width){cleanup();done();return;}
    clone=document.createElement('div');clone.className='mw-match';clone.setAttribute('aria-hidden','true');
-   const pic=new Image();pic.src=im.currentSrc||im.src;pic.alt='';clone.append(pic);
+   const pic=new Image();pic.src=im.src;pic.alt='';clone.append(pic);
    Object.assign(clone.style,{left:`${ai.left}px`,top:`${ai.top}px`,width:`${ai.width}px`,height:`${ai.height}px`,transformOrigin:'0 0'});Object.assign(pic.style,{left:'0',top:'0',width:'100%',height:'100%'});(document.fullscreenElement===world?world:document.body).append(clone);
    try{await pic.decode();}catch{if(!canceled){cleanup();done();}return;}if(canceled)return;
    const clip=(outer:DOMRect,image:DOMRect)=>`inset(${Math.max(0,(outer.top-image.top)/image.height*100)}% ${Math.max(0,(image.right-outer.right)/image.width*100)}% ${Math.max(0,(image.bottom-outer.bottom)/image.height*100)}% ${Math.max(0,(outer.left-image.left)/image.width*100)}%)`;
@@ -96,10 +100,10 @@ export function initMenswear(root:HTMLElement){
   const viewport=reader.querySelector<HTMLElement>('[data-mw-target]')!,tools=reader.querySelector<HTMLElement>('[data-mw-zoom]')!,inspect=reader.querySelector<HTMLButtonElement>('[data-rd-inspect]')!,status=reader.querySelector<HTMLElement>('[data-mw-status]')!;
   let view=0,requestedView=0,selection=0,zoom=1,x=0,y=0,lastX=0,lastY=0,distance=0;
   const pointers=new Map<number,{x:number;y:number}>();
-  const draw=()=>{const photo=photos[view],mx=Math.max(0,(photo.clientWidth*zoom-viewport.clientWidth)/2),my=Math.max(0,(photo.clientHeight*zoom-viewport.clientHeight)/2);x=clamp(x,-mx,mx);y=clamp(y,-my,my);photo.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;status.textContent=reader.hasAttribute('data-inspect')?`${Math.round(zoom*100)}% · drag / pinch / arrow keys`:images[view].complete&&!images[view].naturalWidth?'Photograph unavailable. Return to the exhibition to continue.':'';};
+  const draw=()=>{const photo=photos[view],mx=Math.max(0,(photo.clientWidth*zoom-viewport.clientWidth)/2),my=Math.max(0,(photo.clientHeight*zoom-viewport.clientHeight)/2);x=clamp(x,-mx,mx);y=clamp(y,-my,my);photo.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;status.textContent=reader.hasAttribute('data-inspect')?`${Math.round(zoom*100)}% · drag / pinch / arrow keys`:!images[view].complete?'Loading photograph…':!images[view].naturalWidth?'Photograph unavailable. Return to the exhibition to continue.':'';};
   const reset=()=>{selection++;requestedView=view;pointers.clear();photos.forEach(p=>p.style.transform='');zoom=1;x=y=0;reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;reader.removeAttribute('aria-busy');draw();};
   const select=(n:number)=>{
-   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];image.loading='eager';
+   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];image.loading='eager';image.sizes=`${image.getAttribute('width')}px`;
    const commit=()=>{if(token!==selection)return;reset();view=requestedView=next;reader.toggleAttribute('data-wide',Number(photos[next].style.getPropertyValue('--photo-aspect'))>1.1);panels.forEach((p,i)=>p.hidden=i!==next);reader.querySelectorAll<HTMLElement>('[data-mw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.mwView)===next)));reader.querySelector<HTMLAnchorElement>('[data-mw-original]')!.href=image.src;draw();};
    if(next===view){commit();return;}reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';void image.decode().then(commit,()=>{if(token===selection){reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable; the current view remains available.';}});
   };
@@ -115,14 +119,14 @@ export function initMenswear(root:HTMLElement){
    else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();select(requestedView+(e.key==='ArrowRight'?1:-1));}
   });
   reader.addEventListener('pf:subject-reset',()=>{reset();if(active===reader){active=null;exhibition.inert=false;}});
-  images.forEach(im=>im.addEventListener('error',draw));
+  images.forEach(im=>{im.addEventListener('load',draw);im.addEventListener('error',draw);});
  }
  const cancel=()=>{cutCancel?.();const done=returnFinish;returnFinish=null;done?.();epoch++;};
  const resize=()=>{cancel();if(!active){experience.scrollTop=range()*position/4;paint();}else readerStates.get(active)?.draw();};
  window.addEventListener('resize',resize);reduce.addEventListener('change',()=>{resize();if(!active)scene(Math.round(position),true);});
  new MutationObserver(()=>{if(!world.hasAttribute('data-open')){stop();cancel();setPresent(false);menuState(false);}}).observe(world,{attributes:true,attributeFilter:['data-open']});
  activate(null);
- return{ownsWorld:(el:HTMLElement)=>el===world,get category(){return category;},activate,cancel,owns:(reader:HTMLElement)=>reader.hasAttribute('data-mw-reader'),returnHash:(reader:HTMLElement)=>`#menswear/${reader.dataset.of}`,
+ return{focusTarget:()=>experience,ownsWorld:(el:HTMLElement)=>el===world,get category(){return category;},activate,cancel,owns:(reader:HTMLElement)=>reader.hasAttribute('data-mw-reader'),returnHash:(reader:HTMLElement)=>`#menswear/${reader.dataset.of}`,
   enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){cancel();stop();active=reader;exhibition.inert=true;readerStates.get(reader)!.select(0);match(reader,source,true,instant,()=>{});},
   leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,done:()=>void){cancel();readerStates.get(reader)!.reset();exhibition.inert=false;const token=epoch;const finish=()=>{if(token!==epoch)return;active=null;returnFinish=null;done();};returnFinish=finish;match(reader,source,false,instant,finish);},
  };
