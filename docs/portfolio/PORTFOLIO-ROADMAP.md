@@ -25,7 +25,7 @@ and a public page does not prove storage/email/indexing readiness.
 
 ## Immediate sequence
 
-1. Review the scoped fashion taxonomy/three-panel candidate after its actual browser and regression checks. Documentation reconciliation and Menswear PR #44 are merged; do not reopen their old implementation phases.
+1. Review the corrective four-world Womenswear / continuous Menswear candidate, including actual native motion, all108 source identities and preserved three-panel compatibility. Documentation reconciliation and Menswear PR #44 are merged; do not reopen their old implementation phases.
 2. Verify merged V2.1 and Menswear on actual iPhone Safari and desktop, including touch,
    safe-area/browser chrome, occurrence return, full-look framing and sustained
    motion. Public HTML is consistent with V2.1, but exact deployed SHA is unknown.
@@ -58,16 +58,16 @@ not the next merge task. Retained experiment branches are not unfinished mandate
 
 ### 3. Womenswear
 
-- **State:** APPROVED DESIGN DECISIONS and IMPLEMENTED IN MAIN via [PR #42](https://github.com/soufianeaberbach-sudo/portfolio/pull/42). Five distinct worlds, ten displayed looks each, 50 total, 58 routable references. Photographic reader, complete archives and real-view inspection. Latest feature head `34c0286978de846298dbb2a4340979dd4b8887a6` is merged, not a pending candidate.
+- **State:** APPROVED DESIGN DECISIONS and IMPLEMENTED IN MAIN via [PR #42](https://github.com/soufianeaberbach-sudo/portfolio/pull/42). Main historically has five worlds / 50 displayed / 58 routable. The latest approved target supersedes it: four worlds (Casualwear, Activewear, Occasionwear, Swimwear), ten each / 40 displayed, all 58 routable retained. The corrective feature is pending merge, not production-verified. Photographic reader, complete archives and real-view inspection. Latest feature head `34c0286978de846298dbb2a4340979dd4b8887a6` is merged, not a pending candidate.
 - **Incomplete / dependency:** owner project photos, physical Safari and hardware performance. Current independent reference sources are not one verified collection. Source backgrounds remain authentic.
 - **Next / verification:** real-device review of actual merged interface; reproduce concrete defects before proposing code changes. Retain all 58 direct links and ten-per-category archives.
 - **Gate:** no redesign from old experiments; any corrections require scoped review. Public Sketch/Pattern/Flat/CLO development stories are **POSTPONED**; do not implement them as “completion.”
 
 ### 4. Menswear
 
-- **State:** IMPLEMENTED IN MAIN through PR #44 at `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`, verified 21 October. Independent cover; four photographic films (`m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`), forty unique displayed looks, ten per archive, fifty routable identities. Six selected historical sources and 34 licensed additions; all sixteen historical records preserved. No verified owner Project is implied.
-- **Implemented:** native Explore, direct world/scene/archive access, Presentation Mode, optional fullscreen, photographic reader/inspection and source-occurrence return. [Source review](review/menswear-production/README.md).
-- **Current candidate:** `refine/portfolio-fashion-categories-photo-finalization`: retail category names, three-panel master support and verified defects, without a chapter redesign. [Scope and taxonomy](review/fashion-finalization/TAXONOMY.md).
+- **State:** IMPLEMENTED IN MAIN through PR #44 at `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`, verified 21 October. Independent cover; four photographic films (`m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`), forty unique displayed looks. Main requires manual activation; the corrective candidate makes Explore naturally continuous in one scroller, while preserving manual Presentation Mode. This candidate is not merged. Main has ten per archive, fifty routable identities. Six selected historical sources and 34 licensed additions; all sixteen historical records preserved. No verified owner Project is implied.
+- **Implemented in main:** per-world Explore, direct world/scene/archive access, Presentation Mode, optional fullscreen, photographic reader/inspection and source-occurrence return. [Source review](review/menswear-production/README.md).
+- **Current candidate:** `refine/portfolio-fashion-categories-photo-finalization`: four-world Womenswear consolidation, continuous Menswear Explore, preserved three-panel support and focused cinematic refinements. [Corrective scope](review/fashion-correction/README.md).
 - **Next / dependency:** review that candidate, obtain genuine owner photographs/permissions, then perform physical Safari, remote/projector and hardware-performance verification. Do not restart the old deck/concept workflow.
 - **Gate:** visual approval, merge and deployment are separate. No technical development stories, fabricated views or automatic production release.
 
@@ -146,3 +146,13 @@ Womenswear focused suite or prove external activation.
 Every future task should name its baseline, scope, affected workstream, evidence,
 required verification and approval boundary. Historical research informs ideas;
 it never changes that authorization.
+
+## Corrective candidate acceptance checkpoint
+
+The rejected taxonomy-only delivery at `23ef565` tested nine worlds/90 displayed
+looks. It is historical evidence, not the current acceptance contract. Review
+[fashion-correction](review/fashion-correction/README.md): eight worlds, 40+40
+featured looks, 108 preserved source routes, actual wheel/touch continuity,
+presentation boundaries, exact reader occurrence return, six responsive sizes and
+1920×1080 presentation. No tests confer artistic approval. Owner-supplied genuine
+three-panel photographs and physical Safari/hardware checks remain pending.

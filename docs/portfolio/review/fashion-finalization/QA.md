@@ -1,3 +1,7 @@
+> **HISTORICAL — rejected as incomplete.** This dated nine-world / 90-look audit
+> preserves the previous delivery. It is not the current acceptance contract. See
+> [four-world correction](../fashion-correction/README.md) and [current QA](../fashion-correction/QA.md).
+
 # Final fashion refinement — executed review
 
 21 October 2026, UTC. Base main: `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be` (merged PR #44). Candidate: `refine/portfolio-fashion-categories-photo-finalization`. This report records local verification, not owner creative approval, a GitHub CI result or a deployed release.

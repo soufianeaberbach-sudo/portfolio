@@ -1,0 +1,327 @@
+{
+  "executedDateUTC": "2026-10-21",
+  "finalSourceRevision": "a58d6d2e37250fa5e50d573729162ee6d3bc1201",
+  "main": "a4b0aba1591ac043b11ca9b75b6079b0ed27a9be",
+  "browser": "Pinned Playwright 1.56.1 Chromium; Node 24 local; CI Node 22",
+  "viewports": [
+    "1440x900",
+    "1366x768",
+    "1024x768",
+    "768x1024",
+    "430x932",
+    "390x844",
+    "1920x1080 presentation"
+  ],
+  "results": [
+    {
+      "command": "npm run build",
+      "result": "PASS",
+      "assertions": null,
+      "scope": "Final source build: 11 pages/endpoints; no lab route emitted",
+      "observedLogUTC": "2026-10-21T22:02:47.865047+00:00",
+      "logSHA256": "a69243a8e275f084b4886c5d40be551185a833bd77cee17bcc2ec75e1ffe5a69",
+      "outputTail": [
+        "npm notice",
+        "npm notice New major version of npm available! 11.9.0 -> 12.2.0",
+        "npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0",
+        "npm notice To update run: npm install -g npm@12.2.0",
+        "npm notice"
+      ]
+    },
+    {
+      "command": "tsc --noEmit --target ES2022 --module ESNext --moduleResolution bundler --lib ES2022,DOM,DOM.Iterable --skipLibCheck src/data/portfolio.ts src/data/womenswear-collection.ts src/data/womenswear-direction.ts src/data/menswear-collection.ts src/data/menswear-direction.ts src/data/final-photography.ts src/scripts/garment-photo.ts src/scripts/garment-match-cut.ts src/scripts/womenswear-exhibition.ts src/scripts/womenswear-reader.ts src/scripts/menswear-film.ts src/scripts/menswear-reader.ts",
+      "result": "PASS",
+      "assertions": null,
+      "scope": "Targeted TypeScript 5.9.3; affected TypeScript, not an Astro-wide type certification",
+      "observedLogUTC": "2026-10-21T22:11:36.758374+00:00",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputTail": []
+    },
+    {
+      "command": "node tests/womenswear-ten-looks.mjs; node tests/menswear-content.mjs; node tests/final-photography.mjs",
+      "result": "PASS",
+      "assertions": 301,
+      "scope": "111 + 167 + 23 content/rights/configuration checks",
+      "observedLogUTC": "2026-10-21T21:39:05.230114+00:00",
+      "logSHA256": "15b24fd243d1bcf56c60a2eb7a4bfb8fb0f751d90033fd12bdb7153860c166a5",
+      "outputTail": [
+        "111 ten-look identity, licensing and replacement checks passed",
+        "167 Menswear identity, licensing and replacement checks passed",
+        "23 final-photography configuration checks passed"
+      ]
+    },
+    {
+      "command": "node tests/fashion-source-integrity.mjs",
+      "result": "PASS",
+      "assertions": null,
+      "scope": "108 unchanged source/geometry fingerprints; 224 original file hashes; 80 unique edit slots",
+      "observedLogUTC": "2026-10-21T22:04:49.487830+00:00",
+      "logSHA256": "a1dd0e937d0d971139b89e302dbb6df5691af452d34a3cbf331b90a422288f8f",
+      "outputTail": [
+        "108 original source fingerprints preserved; 8 worlds \u00d7 10 unique looks; no public asset changes"
+      ]
+    },
+    {
+      "command": "node tests/fashion-eight-worlds.mjs",
+      "result": "PASS",
+      "assertions": 376,
+      "scope": "Final source build: actual all-108 identity/image decoding, native wheel/touch and world/presentation navigation",
+      "observedLogUTC": "2026-10-21T22:12:22.712418+00:00",
+      "logSHA256": "6bccdb895f4f7a6ac4ffbf3651e6dfeb6c7fb7fbe0eb46a25ba03a706ed2bcdd",
+      "outputTail": [
+        "womenswear 1440 native continuity recorded",
+        "menswear 1440 native continuity recorded",
+        "womenswear 390 native continuity recorded",
+        "menswear 390 native continuity recorded",
+        "376 owner-contract acceptance checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-production.mjs",
+      "result": "PASS",
+      "assertions": 585,
+      "scope": "Final manual timing and title CSS; before the WW-only source guard; all six viewports",
+      "observedLogUTC": "2026-10-21T22:00:28.167034+00:00",
+      "logSHA256": "b55657e5b7478a0279529b01aac98ff9c00308eb4db16151ab5e44c1301a375d",
+      "outputTail": [
+        "390 m-streetwear presentation Home / PageDown",
+        "390 m-activewear presentation Home / PageDown",
+        "390 m-rtw presentation Home / PageDown",
+        "390 m-tailoring presentation Home / PageDown",
+        "585 Menswear production checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-navigation.mjs",
+      "result": "PASS",
+      "assertions": 49,
+      "scope": "History, interruption, touch, no-JS; stabilized interaction build",
+      "observedLogUTC": "2026-10-21T21:37:40.949731+00:00",
+      "logSHA256": "076f1b714451f17139f1cad74251baf0e74915901801cc952c34abba0f7610e3",
+      "outputTail": [
+        "49 Menswear history, interruption, touch and fallback checks passed"
+      ]
+    },
+    {
+      "command": "node tests/womenswear-continuity.mjs",
+      "result": "PASS",
+      "assertions": 98,
+      "scope": "Four-world continuity; stabilized interaction build",
+      "observedLogUTC": "2026-10-21T21:38:32.871502+00:00",
+      "logSHA256": "7f8be8651384078573e540a2a2aeb61b3c08ad9a2ca0226a705649dcc5b76390",
+      "outputTail": [
+        "98 Womenswear continuity checks passed"
+      ]
+    },
+    {
+      "command": "node tests/garment-match-cut.mjs",
+      "result": "PASS",
+      "assertions": 48,
+      "scope": "Actual measured WAAPI midpoints; stabilized interaction build",
+      "observedLogUTC": "2026-10-21T21:38:58.434406+00:00",
+      "logSHA256": "8661077d319499ade9645dc66da070570042d1878c75c313cad19c40a3e612a9",
+      "outputTail": [
+        "48 measured WAAPI return-midpoint checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-resize-return.mjs",
+      "result": "PASS",
+      "assertions": 12,
+      "scope": "Cross-breakpoint source occurrence",
+      "observedLogUTC": "2026-10-21T21:20:58.036727+00:00",
+      "logSHA256": "15a1a83fca6cd1a25eec9f2d69b4189dbaf83a5422b023647b6be55e83fbc67f",
+      "outputTail": [
+        "12 cross-breakpoint source-return checks passed"
+      ]
+    },
+    {
+      "command": "node tests/three-panel-photography.mjs",
+      "result": "PASS",
+      "assertions": 270,
+      "scope": "Actual Portfolio components; six sizes; exact thirds, alpha, both adapters and actual legacy images",
+      "observedLogUTC": "2026-10-21T21:25:17.833601+00:00",
+      "logSHA256": "daf2ab52ee8c4a7841147bd481eb2aeef0c3944eb550a25849e2e8374673acc7",
+      "outputTail": [
+        "270 real-Portfolio three-panel/alpha browser checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-archive-keyboard.mjs",
+      "result": "PASS",
+      "assertions": 10,
+      "scope": "Final source build",
+      "observedLogUTC": "2026-10-21T22:03:01.156477+00:00",
+      "logSHA256": "d15ada2d4e0cc740b69defdb1a3b3b6fd7c1829ef86d59011b6cc877b6252395",
+      "outputTail": [
+        "1440 {\"hash\":\"#menswear/m-streetwear\",\"world\":\"m-streetwear\",\"scroll\":2663,\"rail\":928}",
+        "390 {\"hash\":\"#menswear/m-streetwear\",\"world\":\"m-streetwear\",\"scroll\":2528,\"rail\":245}",
+        "10 archive keyboard propagation checks passed"
+      ]
+    },
+    {
+      "command": "node tests/fashion-chapter-history.mjs",
+      "result": "PASS",
+      "assertions": 20,
+      "scope": "Final source build",
+      "observedLogUTC": "2026-10-21T22:02:57.848619+00:00",
+      "logSHA256": "6a99b4cb6bc28d19dd420dbf1fd425fd43899b92f9e932940adb0cc1d2515829",
+      "outputTail": [
+        "20 bare-chapter Back/Forward/Escape checks passed"
+      ]
+    },
+    {
+      "command": "node tests/womenswear-route-origin.mjs",
+      "result": "PASS",
+      "assertions": 8,
+      "scope": "Final source build; explicit reproduced cross-subject source guard",
+      "observedLogUTC": "2026-10-21T22:02:52.552846+00:00",
+      "logSHA256": "7a014583bcd7f42783a53665d3548621ccd39d1c71df6bdefefc86e56d370ad7",
+      "outputTail": [
+        "8 direct-route source identity checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-historical-access.mjs",
+      "result": "PASS",
+      "assertions": 32,
+      "scope": "Historical list occurrence/context/history",
+      "observedLogUTC": "2026-10-21T20:47:28.974801+00:00",
+      "logSHA256": "1e24f19cf59eda7efdd0af44a10f2b7bd2be71fc48f655775fe9e7b40904761c",
+      "outputTail": [
+        "32 historical-list identity/context/history checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-presentation-seeks.mjs",
+      "result": "PASS",
+      "assertions": 264,
+      "scope": "Direct endpoints, interruption and focus, four worlds \u00d7 six sizes",
+      "observedLogUTC": "2026-10-21T20:31:57.314850+00:00",
+      "logSHA256": "054a85fafc82136b1ce12f400bf8801cd2f9ee7e4e6992d040212973d55c55a1",
+      "outputTail": [
+        "264 endpoint/interruption/focus checks passed"
+      ]
+    },
+    {
+      "command": "npm run test:opening",
+      "result": "PASS",
+      "assertions": 100,
+      "scope": "Actual rerun with current four-world selectors",
+      "observedLogUTC": "2026-10-21T20:36:56.833942+00:00",
+      "logSHA256": "32a71c41fe2c0ea954c8d8af2ecef6102495ea3f3eca93c61dfb48e114feb5b2",
+      "outputTail": [
+        "  ok   and the chapter still carries its four worlds",
+        "  ok   and the first thing in it is a garment, not an interface",
+        "  ok   and no type is set across the garment",
+        "",
+        "100 passed, 0 failed"
+      ]
+    },
+    {
+      "command": "npm run test:smoke",
+      "result": "PASS",
+      "assertions": 302,
+      "scope": "Final source build",
+      "observedLogUTC": "2026-10-21T22:10:30.717196+00:00",
+      "logSHA256": "3d69209a3fdce4db1b7e2b02b038b48fb2de81263e4c1f487dc16fe174fcbb78",
+      "outputTail": [
+        "npm notice",
+        "npm notice New major version of npm available! 11.9.0 -> 12.2.0",
+        "npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0",
+        "npm notice To update run: npm install -g npm@12.2.0",
+        "npm notice"
+      ]
+    },
+    {
+      "command": "npm run test:domain",
+      "result": "PASS",
+      "assertions": 138,
+      "scope": "Current built domain/canonical regression",
+      "observedLogUTC": "2026-10-21T20:41:59.356928+00:00",
+      "logSHA256": "ceb5e5e5dc462cce7a97bf0040cabbddd2098eba9df7d024e31757ed931a04b3",
+      "outputTail": [
+        "npm notice",
+        "npm notice New major version of npm available! 11.9.0 -> 12.2.0",
+        "npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0",
+        "npm notice To update run: npm install -g npm@12.2.0",
+        "npm notice"
+      ]
+    },
+    {
+      "command": "node tests/womenswear-v2.mjs",
+      "result": "PASS",
+      "assertions": 1751,
+      "scope": "Earlier correction run this session; not claimed as rerun after final source guard",
+      "observedLogUTC": "2026-10-21T20:17:04.601165+00:00",
+      "logSHA256": "a042ab00b8b8ca9ea57bd052029917c00d69ec890b9005b16759c985382386b1",
+      "outputTail": [
+        "1024 reviewed",
+        "768 reviewed",
+        "430 reviewed",
+        "390 reviewed",
+        "1751 Womenswear V2 checks passed"
+      ]
+    },
+    {
+      "command": "node tests/womenswear-photography.mjs",
+      "result": "PASS",
+      "assertions": 438,
+      "scope": "Earlier correction run this session, all 58 source readers and touch/photo failure behavior",
+      "observedLogUTC": "2026-10-21T20:17:52.879094+00:00",
+      "logSHA256": "691f35f3f8372cb81aed5bf071c6d3f6fe0598c40e1a6530a51320e11deda06d",
+      "outputTail": [
+        "438 Womenswear photographic reliability checks passed"
+      ]
+    },
+    {
+      "command": "node tests/menswear-media-loading.mjs",
+      "result": "PASS",
+      "assertions": 16,
+      "scope": "Earlier correction run this session, preserved loading behavior",
+      "observedLogUTC": "2026-10-21T20:22:50.646305+00:00",
+      "logSHA256": "39854db0d192a1c160b37e6c8dff96b18a2e8c076b781142c9de589e8cdddf82",
+      "outputTail": [
+        "16 Menswear delayed/failed-media checks passed"
+      ]
+    },
+    {
+      "command": "node tests/fashion-presentation-review.mjs",
+      "result": "PASS",
+      "assertions": 20,
+      "scope": "Actual 1920\u00d71080 holds and Chromium fullscreen",
+      "observedLogUTC": "2026-10-21T21:37:06.327217+00:00",
+      "logSHA256": "ca1091aafde53256b5c51e1f6cee0f4f546635cf02d88e4d63db40cee455a891",
+      "outputTail": [
+        "20 real 1920\u00d71080 composed holds; fullscreen supported: true"
+      ]
+    }
+  ],
+  "initialFailures": [
+    {
+      "case": "Presentation Home timeout",
+      "cause": "Original cause not established. Animated endpoint path replaced with immediate seeks; separate 264 stress and 585 production checks passed."
+    },
+    {
+      "case": "Protected opening/smoke old selectors",
+      "cause": "Expected old first slip and five worlds. Only obsolete selectors/counts replaced; meaningful cover, geometry, history and focus assertions retained."
+    },
+    {
+      "case": "Archive arrow propagation",
+      "cause": "Actual controller defect. Rail handled ArrowRight but film handler also advanced world; fixed defaultPrevented/interactive guard."
+    },
+    {
+      "case": "Bare chapter Back focus and Escape",
+      "cause": "Actual browser fragment focus ordering and passive route replacement defects; source restoration guarded after native focus phase, bare root preserved."
+    },
+    {
+      "case": "Direct WW subject replacement",
+      "cause": "Prior clicked source could be reused for different subject. Source identity guarded in both readers; reproduced 8-check pass."
+    }
+  ],
+  "limits": [
+    "No physical iPhone Safari, real projector/remotes or hardware performance certification.",
+    "Owner three-panel master media not yet supplied; fixture proves geometry, not original garment content.",
+    "All temporary photography remains reference content; no owner artistic approval claimed."
+  ]
+}

@@ -71,30 +71,37 @@ through verified material, currently supplied recordings. Tech Packs is
 **document-first**, currently clearly labelled interface-demo PDFs. Do not invent
 new transformations, WebGL effects or professional evidence to fill those gaps.
 
-## Womenswear: five worlds, one photographic system
+## Womenswear: four public worlds, one photographic system
 
-**APPROVED DESIGN DECISIONS · IMPLEMENTED IN MAIN via PR #42.**
-Photography-only, full garments in primary resting compositions, ten displayed
-looks per category, all historical identities retained. These are binding
-content/interaction decisions, not optional inspiration.
+**APPROVED PRODUCT DECISION · CORRECTIVE FEATURE CANDIDATE, NOT MERGED.**
+The latest owner instruction supersedes the five-world / fifty-look public edit
+in main. Casualwear → Activewear → Occasionwear → Swimwear: exactly ten unique
+primary looks each, forty total. Menswear has forty more: eighty across eight worlds.
 
-| World | Character | Latest photographic progression |
+| World | Character | Candidate photographic progression |
 | --- | --- | --- |
-| Ready-to-Wear | Fluidity and proportion | Champagne slip through shirting/jumpsuit to the print/rust relationship. Preserve successful opening. |
-| Activewear | Energy, direction and precision | Red/black/white progression resolving into the brown flared silhouette; no repeated white ending. |
-| Streetwear | Volume, attitude and contrast | Burgundy volume, brown oversized hoodie, olive/white lift and black utility resolution; full ten-look archive. |
-| Occasion | Ceremony, elegance and fabric fall | Long silhouettes with space for hems, drape and train; black/champagne/navy passage. |
-| Swim | Clarity, lightness and restraint | Blue/black/silver passage resolving into white cut-out swim photography; no fabricated back views. |
+| Casualwear | Everyday proportion, soft structure, street-oriented volume | Pink shirting → burgundy hoodie → relaxed olive shirt → black utility silhouette. One coherent edit drawn from both historical source pools. |
+| Activewear | Energy, direction and precision | Red/black/white progression resolving into brown flared athleisure. |
+| Occasionwear | Ceremony, elegance and fabric fall | Black/champagne/navy passage with complete lengths. |
+| Swimwear | Clarity, lightness and restraint | Blue/black/silver passage resolving into white cut-out swim photography. |
 
-Detailed shot selection and desktop/mobile edits:
-[merged V2.1 storyboards](review/womenswear-v21/STORYBOARDS.md).
-Shared access does not mean five identical timelines; category differentiation
-comes from actual photography, composition, emphasis and rhythm. No arbitrary
-array-index layouts, random scattering, catalogue lineups or generic moving grids.
+`rtw` and `streetwear` remain immutable **source categories**, not two public
+worlds. Their category hashes arrive in Casualwear; their subject routes still
+open the exact original references. All 58 Womenswear and 50 Menswear identities
+remain. A discreet full-reference list is separate from the forty-look public edit.
+Use [current slots](review/fashion-correction/SLOTS.tsv) and the
+[corrective review](review/fashion-correction/README.md). Older V2.1 storyboards
+are historical evidence, not a direction to restore a fifth world.
 
-Every category has ten archive entries. The cinematic cast may be a subset.
-Historical/excluded garments retain valid deep links without expanding the
-visible edit beyond ten. Source attribution is part of the experience.
+Menswear Explore traverses Streetwear → Activewear → Casualwear → Tailoring &
+Outerwear in one native scroller. Active-world state follows the viewport; direct
+jumps skip intermediate films. Presentation Mode still holds scenes and advances
+across worlds. No mandatory Next World click. The router alone owns history.
+
+Shared access does not mean identical choreography. Photography, silhouette,
+proportion, composition and rhythm govern differences; more motion is not an
+artistic improvement. Every primary resting photograph must remain complete.
+Source attribution and original-source access remain part of the experience.
 
 The exhibition shows **front/primary only**. Back, Side, Editorial and Detail
 are deliberate reader choices only when real media exists. Complete Original

@@ -22,8 +22,9 @@ documents as background → agent interpretation. Approval, implementation, merg
 and verified deployment are separate states. Exploratory Figma frames need
 explicit approval. Never overwrite an approved area for convenience.
 
-Womenswear currently has five photography-only worlds, ten displayed looks each;
-front/primary-only cinema and genuine optional reader views. Development stories
+The current approved target is four photography-only Womenswear worlds (Casualwear,
+Activewear, Occasionwear, Swimwear), ten displayed looks each; main still has the
+older five-world implementation until the corrective candidate is merged. Preserve front/primary-only cinema and genuine optional reader views. Development stories
 inside its garment readers are postponed. Preserve historical IDs and source
 records; see the current-state and photo-handoff documents for the dated contract.
 

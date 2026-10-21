@@ -25,7 +25,7 @@ Rules still govern execution unless the current authorized task changes them.
 | --- | --- |
 | IMPLEMENTED IN MAIN | `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`, merge of [PR #44](https://github.com/soufianeaberbach-sudo/portfolio/pull/44); contains Womenswear V2.1 and the four-world Menswear implementation. This is GitHub source verification, not deployment verification. |
 | Latest Womenswear V2.1 review | `feat/womenswear-cinematic-experience-v2` at `34c0286978de846298dbb2a4340979dd4b8887a6`; independently reviewed per owner instructions, now merged, **not pending merge**. [Immutable review](https://github.com/soufianeaberbach-sudo/portfolio/tree/34c0286978de846298dbb2a4340979dd4b8887a6/docs/portfolio/review/womenswear-v21). |
-| Active refinement candidate | `refine/portfolio-fashion-categories-photo-finalization`, based on the main SHA above. Retail category aliases, explicit three-panel masters and verified navigation/motion corrections are under review; see [candidate taxonomy](review/fashion-finalization/TAXONOMY.md). Not merged/deployed. |
+| Active refinement candidate | `refine/portfolio-fashion-categories-photo-finalization`, based on the main SHA above. The corrective candidate replaces the rejected five-world edit with four public Womenswear worlds and continuous Menswear Explore. Three-panel masters and valid reader/motion corrections are retained; see [corrective review](review/fashion-correction/README.md). Not merged/deployed. |
 | Other open feature PRs | GitHub returned none at the initial 21 October check. Retained branches are not an active queue or authorization. See [inventory](DOCUMENTATION-INVENTORY.md). |
 | VERIFIED IN PRODUCTION, limited observation dated 19 October only | Read-only apex GETs returned nine public pages; Portfolio HTML contained five ten-entry archives and 58 reader articles. This is consistent with V2.1, **not proof of an exact deployed SHA or tested live interactions**. [Dated observations](PUBLIC-OBSERVATIONS-2026-10-19.md). |
 | External services | Exact deployment version, dashboard settings, storage/email delivery and search account activation remain unverified. The [3 October audit](../PRODUCTION-STATE.md) remains dated evidence. |
@@ -69,46 +69,48 @@ Womenswear uses `WomenswearExhibition`, `FinalPhoto`, `FinalPhotoReader`,
 over the intact sixteen-entry historical pool. The old RTW-only
 components are historical, not files to restore. [Full navigation map](SITE-MAP-AND-NAVIGATION.md).
 
-## Womenswear content contract
+## Current approved content and navigation contract
 
-- Five worlds: `rtw`, `activewear`, `streetwear`, `evening` (Occasion), `swimwear` (Swim).
-- Exactly ten displayed unique looks per world: **50**. All **58** current/historical
-  references remain routable. Eight new Streetwear and one Swim photo supplement
-  the intact original 49-reference pool. Excluded looks retain their IDs/URLs.
-- `portfolio.ts` holds historical content, `womenswear-collection.ts` the explicit
-  ten-slot edit and photographic overrides, `womenswear-references.json` the new
-  sources/credits. `final-photography.ts` adapts existing Subject/FinalViews.
-- Photography-only. Exhibition uses front/primary; no automatic Back, Side or
-  Editorial turn. Readers expose only supplied genuine views, including complete
-  originals and Look Closer. A two-angle composite is one look, not two.
-- All current Womenswear photographs are temporary references, not verified
-  owner projects. Existing verified project lists are empty. New stock credits
-  do not establish authorship; legacy provenance remains unknown where absent.
-- Sketch / Pattern / Flat / CLO / fit-development stories in Womenswear are
-  **POSTPONED**, despite types and a DEV-only story lab still existing. Separate
-  Pattern Development and Tech Packs chapters remain in scope as independent chapters.
+**Candidate, pending merge:** four public Womenswear worlds: `casualwear`,
+`activewear`, `evening` (Occasionwear), `swimwear`. Ten unique looks each = **40**.
+The historical `rtw` and `streetwear` source pools remain separate and unchanged;
+both category hashes resolve to Casualwear. All 58 subject URLs remain exact.
+The public ten-look edit is independent of source identity; a full-reference list
+provides discreet access to the eighteen excluded photographs.
 
-Use the [photo handoff](PHOTO-CONTENT-HANDOFF.md), [50-slot manifest](review/womenswear-v21/SLOTS.tsv)
-and [latest storyboards](review/womenswear-v21/STORYBOARDS.md); do not resurrect
-RTW I–V demos or earlier hero/selected/supporting schemes as current direction.
+Menswear: `m-streetwear`, `m-activewear`, `m-rtw` (Casualwear), `m-tailoring`;
+**40 displayed / 50 routable**. The candidate renders four films in one native
+scroll flow. Direct world jumps, Presentation Mode and exact reader return remain.
+Explore scrolling updates orientation without creating excessive history entries.
 
-## Remaining work and next task
+Total candidate: **eight worlds / eighty featured / 108 routable subjects**.
+Main at `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be` still has five Womenswear worlds,
+fifty displayed Womenswear looks and manual Menswear activation. Do not describe
+the corrective branch as merged or deployed. No exact deployed SHA is verified.
 
-Next: review the scoped taxonomy/three-panel refinement, then verify both fashion
-chapters on physical iPhone Safari and desktop. Current main has fifty displayed
-Womenswear looks and forty displayed Menswear looks; all 108 historical/current
-reference routes remain. No owner-supplied three-panel master is published yet.
-The candidate extends existing `ImageAsset`/`FinalViews`: one 5400×2700 master,
-equal Front/Back/Fashion-or-Detail panels; front-only cinema and deliberate reader
-inspection. Existing photo geometry is unchanged. [Photo handoff](PHOTO-CONTENT-HANDOFF.md).
+All fashion images remain temporary references. No owner development evidence is
+linked. Main films show Front/primary only; additional supplied views are reader
+choices. Existing single, inseparable/two-up and explicit three-panel masters
+remain supported. Owner three-panel source acceptance is **pending actual media**.
+Sketch/Pattern/Flat/CLO stories in fashion readers remain **POSTPONED**; separate
+Development and Tech Packs chapters remain intact.
 
-Owner photography/provenance, hardware performance, backend end-to-end readiness,
-HTTPS redirect behavior, www reachability and search-account status remain gaps.
-Menswear's four films, direct world jumps, ten-look archives, Presentation Mode
-and photographic readers are implemented through PR #44, not the former decks.
-Development's recordings and Tech Pack demo documents remain separate, unchanged
-chapters. Sketch/Pattern/CLO stories inside either fashion reader remain outside
-the photography-only scope. No new deployment state is inferred.
+Use [photo handoff](PHOTO-CONTENT-HANDOFF.md),
+[current slots](review/fashion-correction/SLOTS.tsv),
+[source audit](review/fashion-correction/SOURCE-INTEGRITY.json) and
+[current QA](review/fashion-correction/QA.md). Earlier nine-world/90-look audits
+in `review/fashion-finalization` are historical and document the rejected structure.
+
+## Next action and limits
+
+Review the corrective candidate's actual Portfolio motion, native continuity,
+legacy-route identity audit and reader regression evidence. Owner artistic approval
+remains separate from technical verification. Then physical iPhone Safari and
+projector/hardware performance checks, PR approval, explicit merge authorization,
+separate deployment authorization and verification. No automatic merge/deployment.
+
+Owner photography/rights, hardware performance, backend end-to-end readiness,
+HTTPS/www and search-service activation remain separate unresolved workstreams.
 
 ## Maintained index
 

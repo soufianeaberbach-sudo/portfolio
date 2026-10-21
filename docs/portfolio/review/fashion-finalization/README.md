@@ -1,3 +1,7 @@
+> **HISTORICAL — rejected as incomplete.** This dated nine-world / 90-look audit
+> preserves the previous delivery. It is not the current acceptance contract. See
+> [four-world correction](../fashion-correction/README.md) and [current QA](../fashion-correction/QA.md).
+
 # Final fashion refinement review
 
 21 October 2026 · branch `refine/portfolio-fashion-categories-photo-finalization`.
