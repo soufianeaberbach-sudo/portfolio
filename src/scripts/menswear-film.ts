@@ -66,7 +66,8 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    // The open jacket and compact quilted volume occupy the same floor, then
    // the camera leaves the first volume behind. No wiping through a body.
    const t=ease(p-3),teal=fit(17303564,compact?.34:.27,compact?.70:.85),quilt=fit(26936522,compact?.66:.73,compact?.88:1);
-   if(t<.30){draw(17303564,mix(hero,teal,t/.30));}
+   if(compact){if(t<.58)draw(17303564,hero);else draw(26936522,puffer);}
+   else if(t<.30){draw(17303564,mix(hero,teal,t/.30));}
    else if(t<.64){draw(17303564,teal);draw(26936522,quilt);}
    else{const q=ease((t-.64)/.36);draw(26936522,mix(quilt,puffer,q));if(q<.01)draw(17303564,teal);}
    frame.style.background=original(26936522)&&t>=.64?'#ccc9c6':'#fff';
@@ -85,9 +86,8 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    // A diagonal editorial cut follows the existing lifted stance. The people
    // never move within their photographs, and the full jump is held at payoff.
    const t=ease(p-3);
-   if(t<1){if(compact)draw(6974949,white);else{draw(11000101,fit(11000101,.27,.91));draw(6974949,fit(6974949,.74,.91));}}
-   draw(33443605,jump,undefined,t>.98);
-   photo(33443605).style.clipPath=`polygon(0 0, ${t*220}% 0, ${t*220-120}% 100%, 0 100%)`;
+   if(t<.26){if(!compact&&t<.01)draw(11000101,fit(11000101,.27,.91));draw(6974949,compact?white:mix(fit(6974949,.74,.91),white,ease(t/.26)));}
+   else{const q=ease((t-.26)/.74);if(q<1)draw(6974949,white);draw(33443605,jump,undefined,q>.98);photo(33443605).style.clipPath=`polygon(0 0, ${q*220}% 0, ${q*220-120}% 100%, 0 100%)`;}
   }
  }else if(world==='m-rtw'){
   const knit=fit(16711124),plinth=fit(29727778),chair=fit(13128635),green=fit(8508752),final=fit(7764014);
@@ -103,7 +103,7 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
   }
   else if(p<=3){const t=ease(p-2);if(compact){if(p<2.46)draw(13128635,chair);else draw(8508752,green);}else{draw(13128635,mix(chair,fit(13128635,.28,.91),t));draw(8508752,fit(8508752,.74,.91),undefined,t>.95,[1-t*.5,0,t*.5,1]);}}
   else if(compact){if(p<3.46)draw(8508752,green);else{draw(7764014,final);}}
-  else{const t=ease(p-3),opening:SourceWindow=[.5-t*.5,0,t,1];if(t<1){draw(13128635,fit(13128635,.28,.91),whole,false);draw(8508752,fit(8508752,.74,.91),undefined,false);}draw(7764014,final,whole,t>.98,opening);}
+  else{const t=ease(p-3);if(t<.5){draw(13128635,fit(13128635,.28,.91));draw(8508752,fit(8508752,.74,.91));}else draw(7764014,final);}
  }else{
   const daylight=fit(6097464),pale=fit(29242239),steel=fit(16862147),ivory=fit(14348500),coat=fit(6207215);
   if(p<=1){const t=ease(p);if(compact){if(p<.46)draw(6097464,daylight);else draw(29242239,pale);}else{draw(6097464,mix(daylight,fit(6097464,.27,.92),t));draw(29242239,fit(29242239,.74,.92),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
@@ -112,7 +112,7 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    // Light suit in a dark room answers the dark suit. Stable axes and full
    // proportions make the reversal readable without invented relighting.
    const t=ease(p-2);backdrop(16862147,'#161718');
-   if(compact){if(t<1)draw(16862147,steel);draw(14348500,ivory,undefined,t>.98);photo(14348500).style.clipPath=`inset(${(1-t)*50}% 0 ${(1-t)*50}% 0)`;}
+   if(compact){if(t<.5)draw(16862147,steel);else draw(14348500,ivory);}
    else if(t<.27)draw(16862147,mix(steel,fit(16862147,.28,.92),t/.27));
    else if(t<.72){draw(16862147,fit(16862147,.28,.92));draw(14348500,fit(14348500,.73,.96));}
    else draw(14348500,mix(fit(14348500,.73,.96),ivory,ease((t-.72)/.28)));

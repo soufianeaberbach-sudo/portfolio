@@ -57,6 +57,8 @@ jobs:
         run: |
           node tests/menswear-content.mjs
           node tests/final-photography.mjs
+          node tests/womenswear-ten-looks.mjs
+          node tests/fashion-source-integrity.mjs
 
       - name: Menswear and protected Womenswear continuity
         shell: bash
@@ -70,5 +72,6 @@ jobs:
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/womenswear-continuity.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/garment-match-cut.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/fashion-navigation.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/fashion-eight-worlds.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-media-loading.mjs
           node tests/three-panel-photography.mjs

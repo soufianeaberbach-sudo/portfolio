@@ -189,7 +189,7 @@ try {
     await p.waitForTimeout(800);
   };
   /* WOMENSWEAR IS AN ACT, NOT A CATEGORY INDEX.
-     Its five territories are movements on one screen, so there is no category
+     Its four worlds are movements on one screen, so there is no category
      screen to open: travelling to a territory's range means scrolling its run
      into the middle of the frame. Menswear, Development and Tech Packs still
      have category screens, and openCategory is still how those are entered. */
@@ -521,7 +521,7 @@ try {
     const act = await p.evaluate((sel) => {
       const w = document.querySelector(sel);
       const territories = [...w.querySelectorAll('[data-territory]')];
-      const doors = [...w.querySelectorAll('[data-open-subject]')];
+      const doors = [...w.querySelectorAll('[data-ww-archive] .ww-rail [data-open-subject]')];
       const readers = [...w.querySelectorAll('.pf-rd__subject')];
       return {
         ids: territories.map(t => t.dataset.territory),
@@ -535,11 +535,11 @@ try {
         ground: getComputedStyle(w).backgroundColor,
       };
     }, world);
-    check('the five categories remain in approved order', act.ids.join(',') === 'rtw,activewear,streetwear,evening,swimwear');
+    check('the four public worlds have the required order', act.ids.join(',') === 'casualwear,activewear,evening,swimwear');
     check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
-    check('50 displayed garments have readers; eight excluded historical IDs retain direct readers',
-      new Set(act.doors).size === 50 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58
-        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === ['rtw-ref-08','rtw-ref-09','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','evening-ref-09'].sort().join(','));
+    check('40 displayed garments have readers; eighteen excluded historical IDs retain direct readers',
+      new Set(act.doors).size === 40 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58
+        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === ['rtw-ref-01','rtw-ref-06','rtw-ref-07','rtw-ref-08','rtw-ref-09','rtw-ref-10','rtw-ref-11','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','streetwear-ref-03','streetwear-ref-06','streetwear-ref-07','streetwear-ref-08','streetwear-ref-09','evening-ref-09'].sort().join(','));
     check('readers stay closed until requested', act.open === 0);
     check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
     check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');
@@ -698,10 +698,10 @@ try {
     await p.goto(BASE + '/portfolio/', { waitUntil: 'load' });
     await p.waitForTimeout(600);
     await openChapter(p, 'womenswear');
-    await openScene(p, '[data-territory="rtw"] .ww-archive');
+    await openScene(p, '[data-territory="casualwear"] .ww-archive');
 
     const before = await p.evaluate(() => {
-      const door = document.querySelector('[data-territory="rtw"] .ww-rail a');
+      const door = document.querySelector('[data-territory="casualwear"] .ww-rail a');
       return {
         id: door.dataset.openSubject,
         href: door.getAttribute('href'),
@@ -711,7 +711,7 @@ try {
     check('a cell in the range is a real link to that garment',
       /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
 
-    await p.evaluate(() => document.querySelector('[data-territory="rtw"] .ww-rail a').click());
+    await p.evaluate(() => document.querySelector('[data-territory="casualwear"] .ww-rail a').click());
     await p.waitForTimeout(900);
     const entered = await p.evaluate((id) => {
       const rd = document.querySelector(`[data-subject="${id}"]`);
@@ -742,7 +742,7 @@ try {
     check('it is still Womenswear, on the chapter\'s own ground',
       entered.ground === 'rgb(255, 255, 255)', entered.ground);
     check('and the way out goes back to the territory, not to the portfolio',
-      entered.backTo === '#womenswear/rtw', entered.backTo);
+      entered.backTo === '#womenswear/casualwear', entered.backTo);
     check('both garment views remain available',
       !entered.travel && entered.views === 3, JSON.stringify({ travel: entered.travel, views: entered.views }));
     check('no development stage is invented for an unverified frame',
@@ -784,7 +784,7 @@ try {
       focusBackOnDoor: document.activeElement?.dataset?.openSubject === id,
     }), before.id);
     check('then the garment, landing back in the territory it came from',
-      left.hash === '#womenswear/rtw' && !left.readerOpen && left.chapterOpen, JSON.stringify(left));
+      left.hash === '#womenswear/casualwear' && !left.readerOpen && left.chapterOpen, JSON.stringify(left));
     check('and the focus is back on the frame the visitor chose', left.focusBackOnDoor);
 
     /* A GARMENT IS ADDRESSABLE: reloading its URL opens it. */
@@ -1091,8 +1091,8 @@ try {
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
     check('the non-authorship disclaimer is server-rendered',
       html.includes('No authorship of photographed garments is claimed'));
-    check('all five current Womenswear categories are server-rendered',
-      JSON.stringify(await p.locator('[data-act-link] .pf-act__label').allTextContents()) === JSON.stringify(['Dresses, Tops & Jumpsuits', 'Activewear', 'Streetwear', 'Occasionwear', 'Swimwear']));
+    check('all four current Womenswear worlds are server-rendered',
+      JSON.stringify(await p.locator('[data-act-link] .pf-act__label').allTextContents()) === JSON.stringify(['Casualwear', 'Activewear', 'Occasionwear', 'Swimwear']));
     check('the demo documents are declared as demos without the script',
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
     check('Menswear exposes forty photographic links without process placeholders',

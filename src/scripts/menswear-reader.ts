@@ -38,10 +38,12 @@ export function initMenswear(root:HTMLElement){
  };
  // All films remain in one native flow. Selection follows the viewport, not hidden panels.
  const selectWorld=(next:HTMLElement)=>{
+  if(film===next&&next.hasAttribute('data-current')&&(!world.hasAttribute('data-open')||next.hasAttribute('data-prepared')))return;
 
   film=next;category=film.dataset.mwFilm as MenswearCategory;
   films.forEach(f=>{f.toggleAttribute('data-current',f===film);f.querySelector<HTMLElement>('[data-mw-frame]')!.inert=f!==film;});
   world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===category)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  if(world.hasAttribute('data-open'))film.setAttribute('data-prepared','');
   if(world.hasAttribute('data-open'))for(const[at,image]of [...film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img')].entries()){
    if(at===0)image.fetchPriority='high';image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});
   }
@@ -54,7 +56,7 @@ export function initMenswear(root:HTMLElement){
   position=clamp(4*(experience.scrollTop-start())/range());requested=Math.round(position);paint();
   // Scroll changes orientation without generating Back-button entries. Reader routes stay router-owned.
   if(world.hasAttribute('data-open')&&location.hash.startsWith('#menswear')&&location.hash.split('/').length<3){
-   const hash=`#menswear/${category}`;if(location.hash!==hash)history.replaceState(history.state,'',hash);
+   const hash=`#menswear/${category}`;if(location.hash!==hash)world.dispatchEvent(new CustomEvent('pf:menswear-orientation',{bubbles:true,detail:hash}));
   }
  };
  const activate=(next:string|null)=>{
@@ -68,15 +70,16 @@ export function initMenswear(root:HTMLElement){
  experience.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
  const step=(delta:number)=>{
   const n=requested+delta,index=films.indexOf(film);
-  if(n<0&&index>0){activate(films[index-1].dataset.mwFilm!);scene(4,true);}
-  else if(n>4&&index<films.length-1){activate(films[index+1].dataset.mwFilm!);scene(0,true);}
+  if(n<0&&index>0){world.querySelector<HTMLAnchorElement>(`[data-mw-world-link="${films[index-1].dataset.mwFilm}"]`)!.click();scene(4,true);}
+  else if(n>4&&index<films.length-1){world.querySelector<HTMLAnchorElement>(`[data-mw-world-link="${films[index+1].dataset.mwFilm}"]`)!.click();scene(0,true);}
   else scene(n);
  };
  experience.addEventListener('keydown',e=>{
   if(active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,[contenteditable=true]'))return;
   // In Explore, vertical keys retain native scrolling. Presentation remotes use arrows/Page/Space.
   const forward=present?['ArrowRight','ArrowDown','PageDown',' ']:['ArrowRight'],back=present?['ArrowLeft','ArrowUp','PageUp']:['ArrowLeft'];
-  if(present&&(e.key==='Home'||e.key==='End')){e.preventDefault();scene(e.key==='Home'?0:4);}
+  // Endpoints are direct seeks, not playback through every skipped composition.
+  if(present&&(e.key==='Home'||e.key==='End')){e.preventDefault();scene(e.key==='Home'?0:4,true);}
   else if(forward.includes(e.key)||back.includes(e.key)){e.preventDefault();step((back.includes(e.key)||(e.key===' '&&e.shiftKey))?-1:1);}
  });
  // A deliberate continued native gesture after the final archive hands off to Development.

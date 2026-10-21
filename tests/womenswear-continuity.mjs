@@ -2,7 +2,7 @@ import assert from'node:assert/strict';import{chromium}from'playwright';import{i
 const b=await chromium.launch(),base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4389';let checks=0;const check=(ok,msg)=>{assert(ok,msg);checks++;};
 try{for(const[width,height]of [[1440,900],[390,844]]){
  const c=await b.newContext({viewport:{width,height},isMobile:width<500,hasTouch:width<500});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'/portfolio/#womenswear/rtw');await fontsReady(p);
- for(const cat of ['rtw','activewear','streetwear','evening','swimwear']){
+ for(const cat of ['casualwear','activewear','evening','swimwear']){
   await p.locator(`[data-act-link=${cat}]`).evaluate(e=>e.click());await p.waitForTimeout(950);const root=p.locator(`[data-ww-exhibition=${cat}]`),source=root.locator('[data-ww-actor]').first();
   for(let n=0;n<2;n++){
    await source.click();await p.waitForTimeout(40);await p.keyboard.press('Escape');await p.waitForTimeout(30);await source.evaluate(e=>e.click());await p.waitForTimeout(750);

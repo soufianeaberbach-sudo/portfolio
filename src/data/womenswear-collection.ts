@@ -25,7 +25,7 @@ export const collectionSlots:Record<string,CollectionSlot[]>={
 };
 // Four public edits, independent of the five immutable source pools.
 export const editorialSlots:Record<string,CollectionSlot[]>={
- casualwear:[...slots('rtw',[2,3,4,5,15]),...slots('streetwear',[1,2,4,5,10])],
+ casualwear:[...slots('rtw',[2,3,4,5,15]),...slots('streetwear',[1,2,4,5,10])].map(slot=>Object.values(collectionSlots).flat().find(source=>source.id===slot.id)!),
  activewear:collectionSlots.activewear,evening:collectionSlots.evening,swimwear:collectionSlots.swimwear,
 };
 export function collectionCredit(category:MarketCategory,id:string):ImageCredit|undefined {
