@@ -21,10 +21,12 @@ export function initWomenswearExhibition(root:HTMLElement){
   }
  };
  const build=()=>{
-  timeline?.scrollTrigger?.kill();timeline?.kill();timeline=null;root.removeAttribute('data-enhanced');
+  timeline?.scrollTrigger?.kill();timeline?.kill();timeline=null;
+  // Keep the enhanced camera's height during rebuilds. Temporarily reverting
+  // a long world to fallback layout clamped late-category deep-link scroll.
+  root.toggleAttribute('data-enhanced',!reduced.matches);
   for(const actor of Object.values(actors)){gsap.set(actor,{clearProps:'transform,opacity,left,top'});actor.removeAttribute('aria-hidden');actor.tabIndex=0;actor.style.pointerEvents='';}
   gsap.set(title,{clearProps:'opacity,transform'});if(reduced.matches){paint();return;}
-  root.setAttribute('data-enhanced','');
   const shots=shotMap();
   const pose=(role:string,p:Pose)=>({x:()=>p.x*stage.clientWidth-actors[role].offsetWidth/2,y:()=>{
    const height=actors[role].offsetHeight;
