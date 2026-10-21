@@ -56,7 +56,7 @@ export function initMenswear(root:HTMLElement){
   position=clamp(4*(experience.scrollTop-start())/range());requested=Math.round(position);paint();
   // Scroll changes orientation without generating Back-button entries. Reader routes stay router-owned.
   if(world.hasAttribute('data-open')&&location.hash.startsWith('#menswear')&&location.hash.split('/').length<3){
-   const hash=`#menswear/${category}`;if(location.hash!==hash)world.dispatchEvent(new CustomEvent('pf:menswear-orientation',{bubbles:true,detail:hash}));
+   const hash=`#menswear/${category}`;if(location.hash!==hash&&!(location.hash==='#menswear'&&category==='m-streetwear'))world.dispatchEvent(new CustomEvent('pf:menswear-orientation',{bubbles:true,detail:hash}));
   }
  };
  const activate=(next:string|null)=>{
@@ -75,7 +75,7 @@ export function initMenswear(root:HTMLElement){
   else scene(n);
  };
  experience.addEventListener('keydown',e=>{
-  if(active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,[contenteditable=true]'))return;
+  if(e.defaultPrevented||active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,summary,.mw-rail,[contenteditable=true]'))return;
   // In Explore, vertical keys retain native scrolling. Presentation remotes use arrows/Page/Space.
   const forward=present?['ArrowRight','ArrowDown','PageDown',' ']:['ArrowRight'],back=present?['ArrowLeft','ArrowUp','PageUp']:['ArrowLeft'];
   // Endpoints are direct seeks, not playback through every skipped composition.

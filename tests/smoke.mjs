@@ -575,7 +575,7 @@ try {
       travelled.slateTop >= -2 && travelled.slateTop < 80 && travelled.clearsBar,
       `slate top ${travelled.slateTop}`);
     check('the control reports which territory is being read',
-      /occasion/i.test(travelled.naming) && travelled.counting === '04 / 05',
+      /occasion/i.test(travelled.naming) && travelled.counting === '03 / 04',
       `${travelled.naming} ${travelled.counting}`);
 
     // ---- Escape steps back one level at a time

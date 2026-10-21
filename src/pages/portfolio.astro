@@ -931,6 +931,17 @@ const split = (statement: string, word: string) => {
         const leaving = openSubject;
         openSubject = null;
         const world = leaving.closest<HTMLElement>('[data-world]');
+        const returningToSource=()=>location.hash===photographicReader(leaving)?.returnHash(leaving)||location.hash===`#${world?.dataset.world}`;
+        // History traversal to the real #chapter anchor applies native focus
+        // after popstate. Reconcile it after that phase, without stealing a
+        // subsequent deliberate focus or a newly opened reader/world.
+        const settleNativeFocus=(target:HTMLElement)=>{
+          if(location.hash!==`#${world?.dataset.world}`)return;
+          requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            if(!openSubject&&openWorld===world&&returningToSource()
+              &&[world,document.body,target].includes(document.activeElement as HTMLElement))target.focus({preventScroll:true});
+          }));
+        };
         /* THE WAY BACK IS THE WAY IN. The door the visitor used, or — for a
            garment that was reached by its address, with no door behind it —
            the garment's own frame in its territory, so a shared link still
@@ -958,11 +969,11 @@ const split = (statement: string, word: string) => {
         const finish = () => {
           putAway(leaving);
           subjectMotion = null;
-          if (back && document.contains(back) && (!photographicReader(leaving) || location.hash === photographicReader(leaving)?.returnHash(leaving))) back.focus({ preventScroll: true });
+          if (back && document.contains(back) && (!photographicReader(leaving) || returningToSource())) {back.focus({ preventScroll: true });settleNativeFocus(back);}
           // A historical reference can remain directly addressable after it
           // leaves the visible edit. With no photographic door to return to,
           // restore a meaningful visible control instead of dropping to body.
-          if (!back && photographicReader(leaving) && location.hash === photographicReader(leaving)!.returnHash(leaving)) world?.querySelector<HTMLElement>('[data-act-toggle],[data-mw-worlds-toggle]')?.focus({ preventScroll: true });
+          if (!back && photographicReader(leaving) && returningToSource()) {const target=world?.querySelector<HTMLElement>('[data-act-toggle],[data-mw-worlds-toggle]');target?.focus({preventScroll:true});if(target)settleNativeFocus(target);}
         };
         /* THE EXIT. The same clip as the entrance, run back into the frame
            the garment came from, and shorter: the visitor is leaving, the
@@ -972,7 +983,7 @@ const split = (statement: string, word: string) => {
         if (photographicReader(leaving)) {
           exiting = leaving;
           photographicReader(leaving)!.leave(leaving, back && frameOf(back).querySelector('img') ? frameOf(back) : null, reduced() || readerKeyboard, finish);
-          if (location.hash === photographicReader(leaving)?.returnHash(leaving) && back && document.contains(back)) back.focus({ preventScroll: true });
+          if (returningToSource() && back && document.contains(back)) back.focus({ preventScroll: true });
         } else if (back && !reduced() && !readerKeyboard) {
           subjectMotion = leaving.animate(
             [
@@ -1411,7 +1422,7 @@ const split = (statement: string, word: string) => {
              it belongs to, is a change at the garment level only. */
           const garmentOnly = openWorld === worlds.get(world)
             && (subject !== null || (openSubject !== null && (category===null || photographicReader(openSubject)?.returnHash(openSubject)===`#${world}/${category}` || openSubject.dataset.of === category || (world==='womenswear' && openSubject.dataset.editorial===editorialWorld(category??'')))))
-            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category || fromOccurrence || (openSubject!==null && mw.returnHash(openSubject)===`#${world}/${category}`));
+            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category || (category===null&&openSubject!==null) || fromOccurrence || (openSubject!==null && mw.returnHash(openSubject)===`#${world}/${category}`));
           openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
              the chapter and the territory, so leaving it lands the visitor
