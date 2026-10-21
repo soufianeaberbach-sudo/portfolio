@@ -110,13 +110,19 @@ closer**. The three-panel board is never the default cinematic composition.
 Existing keyboard/swipe, inspection and source return remain in use.
 
 For efficient loading, supply proportional whole-master renditions, e.g.
-1800×900 and 2700×1350, retaining the same thirds and transparency. Actual `srcset`
+1800×900, 2700×1350 and 3600×1800, retaining the same thirds and transparency. These
+are display derivatives of the one master, not additional views. Actual `srcset`
 widths must match the files. The extension accounts for the full source width
 behind a one-third aperture; it does not request a tiny one-third thumbnail as
 though it covered the whole image. The selected reader prepares the full source.
 The 5400px file remains available for original inspection. PNG or alpha-preserving
 renditions must never be flattened merely to fit a layout. Measure memory and
 frame pacing again with the real final masters on physical devices.
+
+A 5400×2700 image contains 14.58 million pixels, about 56 MiB as decoded RGBA
+before browser overhead. Use the existing responsive-source metadata; do not
+publish every display thumbnail as a full-size master. Keep the original for
+inspection and verify actual phone memory and loading with the supplied files.
 
 ## Menswear uses the same photography contract
 

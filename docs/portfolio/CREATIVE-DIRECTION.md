@@ -63,7 +63,9 @@ No separate large mid-journey index is approved. The compact chapter control
 already provides orientation; old “Living Chapter Index” studies are historical.
 
 Chapter interiors need not imitate Womenswear. Menswear's intended direction is
-structural, proportion-led and precise; its current deck is an earlier system.
+structural, proportion-led and precise. Main PR #44 now implements four distinct
+films with direct world access, Presentation Mode and photographic readers; its
+[dated review](review/menswear-production/README.md) records the actual treatment.
 Development can communicate genuine pattern engineering, grading and validation
 through verified material, currently supplied recordings. Tech Packs is
 **document-first**, currently clearly labelled interface-demo PDFs. Do not invent
@@ -101,6 +103,17 @@ preserves composite-source integrity. An inseparable pair stays whole.
 **POSTPONED:** Sketch, Pattern, Flat, CLO and development stories inside individual
 Womenswear readers. Their earlier isolated studies are not production templates.
 This does not postpone the separate Development or Tech Packs chapters.
+
+## Current category and photography refinement
+
+The 21 October candidate preserves both chapters' resting compositions, identities
+and selections. [Retail taxonomy audit](review/fashion-finalization/TAXONOMY.md)
+records proposed public labels over unchanged IDs; Ready-to-Wear is not a separate
+product family alongside other ready-to-wear markets. The owner's standard future
+photography is one 5400×2700 master with three equal Front/Back/Fashion-or-Detail
+panels. This extends existing readers, not the cinematic layout or a technical
+story platform. [Handoff](PHOTO-CONTENT-HANDOFF.md). Candidate work is distinct
+from merged source and separately verified production.
 
 ## Motion and interaction
 

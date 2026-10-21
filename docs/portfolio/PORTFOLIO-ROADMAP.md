@@ -1,7 +1,8 @@
 # ABERBACH — working roadmap
 
-**ACTIVE · reconciled 19 October 2026.** Main snapshot:
-`a36ae62af385641f2c4d92c07bcd851d10ee24d7`. [Current state](CURRENT-STATE.md)
+**ACTIVE · fashion workstreams updated 21 October 2026.** Verified main:
+`a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`. Other operational observations retain
+their explicitly dated 19 October limits. [Current state](CURRENT-STATE.md)
 is the entry point; [creative direction](CREATIVE-DIRECTION.md) governs visual
 intent. The September “REFERENCE HARVEST” phase and old baseline are superseded;
 [original roadmap](https://github.com/soufianeaberbach-sudo/portfolio/blob/a36ae62af385641f2c4d92c07bcd851d10ee24d7/docs/portfolio/PORTFOLIO-ROADMAP.md)
@@ -24,8 +25,8 @@ and a public page does not prove storage/email/indexing readiness.
 
 ## Immediate sequence
 
-1. Review this documentation reconciliation. No website changes are bundled.
-2. Verify merged V2.1 on actual iPhone Safari and desktop, including touch,
+1. Review the scoped fashion taxonomy/three-panel candidate after its actual browser and regression checks. Documentation reconciliation and Menswear PR #44 are merged; do not reopen their old implementation phases.
+2. Verify merged V2.1 and Menswear on actual iPhone Safari and desktop, including touch,
    safe-area/browser chrome, occurrence return, full-look framing and sustained
    motion. Public HTML is consistent with V2.1, but exact deployed SHA is unknown.
 3. Inspect production readiness with the owner: HTTP redirect, www reachability,
@@ -36,7 +37,7 @@ and a public page does not prove storage/email/indexing readiness.
 5. Scope one next chapter refinement with real material and an explicit visual
    approval checkpoint; do not propagate Womenswear's choreography everywhere.
 
-No other feature PR was open at the initial GitHub check. PR #42 is **merged**,
+No feature PR was open at the 21 October task-start check. PR #44 and PR #42 are **merged**,
 not the next merge task. Retained experiment branches are not unfinished mandates.
 
 ## Workstreams
@@ -64,10 +65,11 @@ not the next merge task. Retained experiment branches are not unfinished mandate
 
 ### 4. Menswear
 
-- **State:** IMPLEMENTED IN MAIN: independent cover, four category indexes/decks (`m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`), four reference entries each, 16 entries drawn from 11 unique licensed editorial images. No verified Project records.
-- **Approved direction:** structural, proportion-led, masculine editorial precision; not a copy of five-world Womenswear or a darkness cliché.
-- **Next / dependency:** obtain owner photos and scope the actual deficiencies through focused browser review. The next Menswear refinement is PLANNED, not already implemented or authorized.
-- **Verification / gate:** protect existing routing/deck controls, keyboard and fallback; separate storyboard/visual approval before substantial implementation.
+- **State:** IMPLEMENTED IN MAIN through PR #44 at `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`, verified 21 October. Independent cover; four photographic films (`m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`), forty unique displayed looks, ten per archive, fifty routable identities. Six selected historical sources and 34 licensed additions; all sixteen historical records preserved. No verified owner Project is implied.
+- **Implemented:** native Explore, direct world/scene/archive access, Presentation Mode, optional fullscreen, photographic reader/inspection and source-occurrence return. [Source review](review/menswear-production/README.md).
+- **Current candidate:** `refine/portfolio-fashion-categories-photo-finalization`: retail category names, three-panel master support and verified defects, without a chapter redesign. [Scope and taxonomy](review/fashion-finalization/TAXONOMY.md).
+- **Next / dependency:** review that candidate, obtain genuine owner photographs/permissions, then perform physical Safari, remote/projector and hardware-performance verification. Do not restart the old deck/concept workflow.
+- **Gate:** visual approval, merge and deployment are separate. No technical development stories, fabricated views or automatic production release.
 
 ### 5. Pattern Development
 
@@ -127,9 +129,9 @@ not the next merge task. Retained experiment branches are not unfinished mandate
 
 ### 13. Merge, release and production verification
 
-- **State:** PR #41 and #42 merged. This docs branch is the current review candidate. Historical review/backup branches remain untouched. GitHub CI is separate from recorded local QA; PR #42's CI was queued at the initial check.
+- **State:** PR #41, #42 and #44 merged. The 21 October fashion refinement branch is the current review candidate. Historical review/backup branches remain untouched. GitHub CI is separate from recorded local QA; PR #42's CI was queued at the initial check.
 - **Incomplete / dependency:** exact deployed version is not exposed by the sampled HTML; operational and physical-device checks remain. Live V2.1-shaped HTML does not prove that an arbitrary future main commit deployed.
-- **Next:** review this Draft documentation PR, then separately scope release verification; refresh CURRENT-STATE when main or confirmed external state changes.
+- **Next:** review the scoped fashion refinement, then separately scope release verification; refresh CURRENT-STATE when main or confirmed external state changes.
 - **Gate:** explicit review before merge and separate production authorization; no branch implies permission to deploy. Roll back an authorized faulty release through its normal reviewed commit/release process, preserving historical IDs/assets; never reset main or merge an experimental backup wholesale.
 
 ## Verification discipline

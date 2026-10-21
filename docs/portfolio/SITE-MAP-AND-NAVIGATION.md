@@ -1,7 +1,8 @@
 # Site map and navigation
 
-**ACTIVE · source verified 19 October 2026 at main
+**ACTIVE · page map originally verified 19 October; Menswear source updated 21 October 2026. Earlier page verification baseline: main
 `a36ae62af385641f2c4d92c07bcd851d10ee24d7`.**
+Menswear implementation baseline: `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`.
 Public GET results are [separate dated evidence](PUBLIC-OBSERVATIONS-2026-10-19.md).
 Astro is a static build; fragments are client-side states, not separate pages.
 
@@ -51,7 +52,7 @@ flowchart TD
   Reader --> Inspect[Look Closer and original source]
   Reader --> Return[Return to exact originating occurrence]
   Return --> WW
-  MC --> MW[Four Menswear category decks]
+  MC --> MW[Four Menswear films and ten-look archives]
   DC --> Dev[Five supplied development recordings]
   TC --> Docs[Five demo PDF packs and document reader]
   End --> Contact[Contact - Start a brief]
@@ -69,14 +70,15 @@ the Womenswear cover. No intermediate large index/splash is present.
 | Womenswear | `#womenswear`; opens the act, category toggle and photographic territories. |
 | Womenswear category | `#womenswear/rtw`, `#womenswear/activewear`, `#womenswear/streetwear`, `#womenswear/evening`, `#womenswear/swimwear`. |
 | Womenswear reference | `#womenswear/<category-id>/<reference-id>`, e.g. `#womenswear/rtw/rtw-ref-01`. All 58 resolve, including excluded historical looks. |
-| Menswear | `#menswear`; category index. |
-| Menswear category | `#menswear/m-streetwear`, `#menswear/m-activewear`, `#menswear/m-rtw`, `#menswear/m-tailoring`. Existing deck interaction; no claim of Womenswear-style per-reference readers/routes. |
+| Menswear | `#menswear`; first film, with direct four-world navigation. Implemented in main PR #44. |
+| Menswear category | `#menswear/m-streetwear`, `#menswear/m-activewear`, `#menswear/m-rtw`, `#menswear/m-tailoring`. Direct film/scene/archive controls, Presentation Mode and photographic readers. Scene positions are UI state, not a second hash router. |
+| Menswear reference | `#menswear/<category>/<reference-id>`; forty displayed looks, fifty routable historical/current identities. Example: `#menswear/m-streetwear/m-streetwear-pexels-6311316`. Router history and actual source-occurrence return remain authoritative. |
 | Pattern Development | `#3d-simulation`; cover/navigation title Development, internal heading Pattern Development. Keep legacy ID. |
 | Tech Packs | `#tech-packs`; PDF links open the existing document reader/direct PDF, not invented pack URL routes. |
 | Ending | `#portfolio-ending` native section; “One practice. From design to production.” → `/contact/`. |
 
 The original `#womenswear-entry` is an opening anchor, not another public chapter.
-Womenswear archive handoffs progress RTW → Activewear → Streetwear → Occasion →
+Womenswear archive handoffs retain the stable sequence `rtw` → Activewear → Streetwear → Occasion →
 Swim → Menswear; chapter continuity links allow other deliberate moves.
 
 ## Routing, history and return
