@@ -652,7 +652,7 @@ try {
       await p.locator('[data-mw-film]').count() === 4 && await p.locator('[data-mw-archive-door]').count() === 40);
     check('all historical Menswear references remain routable', await p.locator('[data-mw-reader]').count() === 50);
     check('no invented development stages in Menswear', await p.locator('[data-mw-world] .pf-plate,[data-mw-world] [data-reference-panel]').count() === 0);
-    const stage = p.locator('[data-mw-film][data-current] [data-mw-experience]');
+    const stage = p.locator('[data-mw-scroll]');
     await stage.focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1100);
     check('keyboard advances the composed film', await p.locator('[data-mw-scene="1"]').getAttribute('aria-pressed') === 'true');
     await p.keyboard.press('ArrowLeft'); await p.waitForTimeout(1100);
@@ -1060,7 +1060,7 @@ try {
     await openChapter(p, 'menswear');
     await openCategory(p, 'menswear', 'm-rtw');
 
-    await p.locator('[data-mw-film][data-current] [data-mw-experience]').focus();
+    await p.locator('[data-mw-scroll]').focus();
     await p.keyboard.press('ArrowRight');
     check('reduced motion directly selects a complete Menswear composition', await p.locator('[data-mw-scene="1"]').getAttribute('aria-pressed') === 'true');
     check('reduced motion leaves no photographic match-cut clone', await p.locator('.mw-match').count() === 0);

@@ -4,7 +4,7 @@ const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',out=process.env
 const names={casualwear:'Casualwear',activewear:'Activewear',evening:'Occasionwear',swimwear:'Swimwear','m-streetwear':'Streetwear','m-activewear':'Activewear','m-rtw':'Casualwear','m-tailoring':'Tailoring & Outerwear'};
 try{for(const[width,height]of[[1440,900],[390,844],[1366,768],[1024,768],[768,1024],[430,932]].filter(v=>!process.env.PHOTO_REVIEW_WIDTH||String(v[0])===process.env.PHOTO_REVIEW_WIDTH)){
  const video=false,c=await b.newContext({viewport:{width,height},isMobile:width<500,hasTouch:width<500,...(video?{recordVideo:{dir:out,size:{width,height}}}:{})});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
- for(const[cat,name]of Object.entries(names)){
+ for(const[cat,name]of Object.entries(names).filter(([id])=>!process.env.PHOTO_REVIEW_CATEGORY||id===process.env.PHOTO_REVIEW_CATEGORY)){
  const ww=!cat.startsWith('m-'),world=ww?'womenswear':'menswear';await p.goto(`${base}/portfolio/#${world}/${cat}`);await fontsReady(p);await p.waitForTimeout(450);
  const root=p.locator(ww?`[data-ww-exhibition=${cat}]`:`[data-mw-film=${cat}]`),doors=root.locator(ww?'.ww-rail a':'[data-mw-archive-door]');assert.equal(await doors.count(),10,cat+' ten archive links');
  if(ww){assert.equal(await p.locator('[data-act-name]').textContent(),name,'cold category arrival');assert(await root.locator('[data-ww-title]').isVisible());}

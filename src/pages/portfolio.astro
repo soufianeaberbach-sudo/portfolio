@@ -1404,12 +1404,14 @@ const split = (statement: string, word: string) => {
         if (evidenceReader.open) closeEvidence();
         if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
         const { world, category, subject } = parseHash();
+        const focusedDoor=document.activeElement instanceof HTMLElement?document.activeElement:null;
+        const fromOccurrence=!!subject&&[subjectReturnTo,focusedDoor].some(door=>door?.dataset.openSubject===subject&&!!world&&!!worlds.get(world)?.contains(door));
         if (world && worlds.has(world)) {
           /* Entering a garment, or stepping back out of it into the territory
              it belongs to, is a change at the garment level only. */
           const garmentOnly = openWorld === worlds.get(world)
-            && (subject !== null || (openSubject !== null && (category===null || openSubject.dataset.of === category || (world==='womenswear' && openSubject.dataset.editorial===editorialWorld(category??'')))))
-            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category);
+            && (subject !== null || (openSubject !== null && (category===null || photographicReader(openSubject)?.returnHash(openSubject)===`#${world}/${category}` || openSubject.dataset.of === category || (world==='womenswear' && openSubject.dataset.editorial===editorialWorld(category??'')))))
+            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category || fromOccurrence || (openSubject!==null && mw.returnHash(openSubject)===`#${world}/${category}`));
           openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
              the chapter and the territory, so leaving it lands the visitor

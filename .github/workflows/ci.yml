@@ -73,5 +73,7 @@ jobs:
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/garment-match-cut.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/fashion-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/fashion-eight-worlds.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-presentation-seeks.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-historical-access.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-media-loading.mjs
           node tests/three-panel-photography.mjs

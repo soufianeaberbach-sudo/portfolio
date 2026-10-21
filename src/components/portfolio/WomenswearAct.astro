@@ -109,7 +109,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
       </article>
     ))}
 
-    <details class="ww-all-references" data-all-references><summary class="label">Full reference collection / {everySubject.length} preserved photographs</summary><p>Temporary reference photography. Original identities and source credits are preserved.</p><ul>{everySubject.map(({subject})=><li><a href={door(subject)} data-nav data-open-subject={subject.id} data-reference-link>{subject.id} — {subject.cover.alt}</a></li>)}</ul></details>
+    <details class="ww-all-references" data-all-references><summary class="label">Full reference collection / {everySubject.length} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved.</p><ul>{everySubject.map(({subject})=><li><a href={door(subject)} data-nav data-open-subject={subject.id} data-reference-link>{subject.id} — {subject.cover.alt}</a></li>)}</ul></details>
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
         if(!lab) return <FinalPhotoReader subject={subject} world={world.id} credit={collectionCredit(world.categories.find(c=>c.id===subject.category)!,subject.id)}/>;
