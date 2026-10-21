@@ -1,6 +1,6 @@
 /** Real Portfolio components in a disposable build. No fixture route/media enters production. */
 import assert from'node:assert/strict';
-import{mkdtempSync,mkdirSync,writeFileSync,symlinkSync,readFileSync}from'node:fs';
+import{mkdtempSync,mkdirSync,writeFileSync,symlinkSync}from'node:fs';
 import{resolve,join}from'node:path';import{spawnSync,spawn}from'node:child_process';import{deflateSync}from'node:zlib';
 import{createServer}from'node:net';
 import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';
@@ -24,6 +24,8 @@ for(let n=0;n<4;n++){await r.locator(`[${view}="${n}"]`).click();const selected=
 const alpha=await r.locator('img').first().evaluate(async im=>{await im.decode();const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);return x.getImageData(0,0,1,1).data[3];});check(alpha===(ww?0:255),'original PNG alpha/white background preserved');
 check(await r.locator('button').evaluateAll(bs=>bs.filter(b=>b.getBoundingClientRect().width>0).every(b=>{const r=b.getBoundingClientRect();return r.width>=43.9&&r.height>=43.9;})),'view controls retain touch targets');
 await r.locator(`[${view}="2"]`).click();await r.locator('[data-rd-inspect]').click();await p.keyboard.press('+');check(await r.evaluate(e=>e.hasAttribute('data-inspect')),'third panel supports existing inspection');await p.keyboard.press('Escape');await p.keyboard.press('Escape');await p.waitForTimeout(650);check(await r.count()===0,'Escape exits inspection and reader');
+// Reader inspection must never change the film/archive to Back or third view.
+for(const selector of [ww?'[data-ww-exhibition=rtw] [data-ww-actor] [data-door-source]':'[data-mw-film=m-streetwear] [data-mw-actor="6311316"] [data-door-source]',ww?'[data-ww-exhibition=rtw] .ww-rail [data-door-source]':'[data-mw-film=m-streetwear] .mw-rail [data-door-source]']){const bounds=await p.locator(selector).first().evaluate(e=>{const r=e.getBoundingClientRect(),im=e.querySelector('img').getBoundingClientRect();return{left:(r.left-im.left)/im.width,right:(r.right-im.left)/im.width};});check(Math.abs(bounds.left)<.002&&Math.abs(bounds.right-1/3)<.002,`${world}/${width}: film/archive remain on the complete Front panel ${JSON.stringify(bounds)}`);}
 check(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),'no document overflow');
 }check(errors.length===0,'no fixture runtime errors');await c.close();}
 console.log(`${checks} real-Portfolio three-panel/alpha browser checks passed`);

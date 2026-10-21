@@ -626,9 +626,9 @@ try {
         publication: w.dataset.publication,
       };
     });
-    check('menswear categories match the approved order',
+    check('menswear categories match the current retail-label order',
       JSON.stringify(men.cats) === JSON.stringify([
-        'Streetwear', 'Activewear', 'Ready-to-Wear', 'Tailoring',
+        'Streetwear', 'Activewear', 'Casualwear', 'Tailoring & Outerwear',
       ]), men.cats.join(' | '));
     check('menswear is explicitly a reference preview', men.publication === 'reference-preview', men.publication);
     check('menswear has a working visual gallery behind every category',
@@ -1091,8 +1091,8 @@ try {
       ['womenswear', 'menswear', 'tech-packs', '3d-simulation'].every((id) => html.includes(`data-world="${id}"`)));
     check('the non-authorship disclaimer is server-rendered',
       html.includes('No authorship of photographed garments is claimed'));
-    check('the approved categories are server-rendered',
-      html.includes('Evening &#38; Occasionwear') || html.includes('Evening &amp; Occasionwear') || html.includes('Evening & Occasionwear'));
+    check('all five current Womenswear categories are server-rendered',
+      JSON.stringify(await p.locator('[data-act-link] .pf-act__label').allTextContents()) === JSON.stringify(['Dresses, Tops & Jumpsuits', 'Activewear', 'Streetwear', 'Occasionwear', 'Swimwear']));
     check('the demo documents are declared as demos without the script',
       html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
     check('Menswear exposes forty photographic links without process placeholders',
