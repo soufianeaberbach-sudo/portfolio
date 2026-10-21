@@ -1017,9 +1017,9 @@ const split = (statement: string, word: string) => {
         if (exiting) putAway(exiting);
         if (openSubject) putAway(openSubject);
         const active = document.activeElement as HTMLElement | null;
-        // A direct/history Menswear route has no door merely because another
+        // A direct/history photographic route has no door merely because another
         // garment's archive link still owns focus from a previous visit.
-        if (mw?.owns(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
+        if (photographicReader(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
         if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')
           && (!mw?.owns(next) || active.dataset.openSubject === id)) {
           subjectReturnTo = active;

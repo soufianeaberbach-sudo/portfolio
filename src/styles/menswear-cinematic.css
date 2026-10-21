@@ -118,3 +118,6 @@
 .mw-all-references summary{cursor:pointer;min-height:44px;font-size:10px}.mw-all-references p{font-size:12px;line-height:1.6}
 .mw-all-references ul{list-style:none;columns:2;column-gap:40px;padding:0}.mw-all-references li{break-inside:avoid;font-size:12px;line-height:1.6;padding:6px 0}.mw-all-references a{display:inline-block;min-height:44px}
 @media(max-width:767px){.mw-all-references ul{columns:1}}
+/* The wide seated portrait needs breathing room beside its title on compact
+   landscape displays; photography and all camera coordinates stay intact. */
+@media(min-width:1000px) and (max-width:1199px){.mw-film[data-mw-film=m-rtw] .mw-film-title h3{font-size:clamp(38px,5vw,58px)}}

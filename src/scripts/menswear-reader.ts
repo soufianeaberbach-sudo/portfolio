@@ -29,7 +29,8 @@ export function initMenswear(root:HTMLElement){
   stop();archive=false;heldActor=undefined;requested=clamp(n);const target=requested;
   const done=()=>{motion=null;world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=`${menswearDirections[category].name}. ${menswearDirections[category].scenes[target]}`;};
   if(immediate||reduce.matches){position=target;experience.scrollTop=start()+range()*target/4;paint();done();return;}
-  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'power2.inOut',onUpdate:()=>{position=state.p;experience.scrollTop=start()+range()*position/4;paint();},onComplete:done});
+  // The film renderer owns shot easing/holds. A second ease rushed its central comparisons.
+  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'none',onUpdate:()=>{position=state.p;experience.scrollTop=start()+range()*position/4;paint();},onComplete:done});
  };
  const setPresent=(on:boolean)=>{
   present=on;world.toggleAttribute('data-present',on);presentButton.setAttribute('aria-pressed',String(on));presentButton.textContent=on?'Exit presentation':'Present';fullscreen.hidden=!on;
