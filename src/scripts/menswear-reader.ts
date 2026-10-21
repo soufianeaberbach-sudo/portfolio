@@ -43,7 +43,8 @@ export function initMenswear(root:HTMLElement){
   world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===id)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   position=requested=0;experience.scrollTop=0;paint();
   // Only the small active film cast is prepared; hidden archives/readers remain lazy.
-  for(const image of world.hasAttribute('data-open')?film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img'):[]){image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});}
+  const cast=world.hasAttribute('data-open')?[...film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img')]:[];
+  for(const[at,image]of cast.entries()){if(at===0)image.fetchPriority='high';image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});}
  };
  for(const f of films){
   const scroller=f.querySelector<HTMLElement>('[data-mw-experience]')!;

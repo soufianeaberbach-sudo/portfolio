@@ -105,7 +105,12 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
  if(heldActor&&!drawn.has(photo(heldActor))){drawn.clear();for(const wing of wings)wing.style.display='none';draw(heldActor,fit(heldActor));}
  for(const node of nodes)if(!drawn.has(node)){node.inert=true;node.tabIndex=-1;node.style.visibility='hidden';node.setAttribute('aria-hidden','true');}
  frame.querySelector<HTMLElement>('.mw-film-title')!.style.opacity=String(1-clamp(p*2));
- const failed=[...drawn].some(node=>{const im=node.querySelector('img')!;return node.style.visibility==='visible'&&im.complete&&!im.naturalWidth;});
- frame.querySelector<HTMLElement>('[data-mw-media-status]')!.hidden=!failed;
+ const visibleImages=[...drawn].filter(node=>node.style.visibility==='visible').map(node=>node.querySelector('img')!);
+ const failed=visibleImages.some(im=>im.complete&&!im.naturalWidth);
+ const loading=visibleImages.length>0&&visibleImages.every(im=>!im.complete||!im.naturalWidth)&&!failed;
+ const status=frame.querySelector<HTMLElement>('[data-mw-media-status]')!,message=failed?'Photograph unavailable. Open the ten-look edit to continue.':'Loading photograph…';
+ if(status.textContent!==message)status.textContent=message;
+ status.hidden=!failed&&!loading;
+ if(loading)frame.setAttribute('aria-busy','true');else frame.removeAttribute('aria-busy');
  frame.dataset.composition=String(Math.round(p));
 }
