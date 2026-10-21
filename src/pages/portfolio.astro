@@ -806,6 +806,7 @@ const split = (statement: string, word: string) => {
        from that one piece of state, so Back always steps back exactly one
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
+      import{editorialWorld}from'../data/womenswear-collection';
       import { initWomenswear } from '../scripts/womenswear-reader';
       import { initMenswear } from '../scripts/menswear-reader';
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
@@ -970,7 +971,7 @@ const split = (statement: string, word: string) => {
            piece of the layer's own ground. */
         if (photographicReader(leaving)) {
           exiting = leaving;
-          photographicReader(leaving)!.leave(leaving, back ? frameOf(back) : null, reduced() || readerKeyboard, finish);
+          photographicReader(leaving)!.leave(leaving, back && frameOf(back).querySelector('img') ? frameOf(back) : null, reduced() || readerKeyboard, finish);
           if (location.hash === photographicReader(leaving)?.returnHash(leaving) && back && document.contains(back)) back.focus({ preventScroll: true });
         } else if (back && !reduced() && !readerKeyboard) {
           subjectMotion = leaving.animate(
@@ -1023,7 +1024,7 @@ const split = (statement: string, word: string) => {
            hero and the garment all showing through each other at the start. */
         const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
         if (photographicReader(next)) {
-          photographicReader(next)!.enter(next, source && shown(source) ? source : null, reduced() || readerKeyboard);
+          photographicReader(next)!.enter(next, source && shown(source) && source.querySelector('img') ? source : null, reduced() || readerKeyboard);
         } else if (source && shown(source) && !reduced() && !readerKeyboard) {
           subjectMotion = next.animate(
             [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
@@ -1305,7 +1306,8 @@ const split = (statement: string, word: string) => {
            show — it is a movement to travel to. `#womenswear` opens the act
            at the top; `#womenswear/evening` opens it at that movement. */
         if (world.hasAttribute('data-act')) {
-          const movement = category && world.querySelector<HTMLElement>(`[data-movement="${category}"]`);
+          const movementId=world.dataset.world==='womenswear'&&category?editorialWorld(category):category;
+          const movement = movementId && world.querySelector<HTMLElement>(`[data-movement="${movementId}"]`);
           if (movement) {
             /* Photographic worlds arrive at the camera's first frame, below
                the existing act bar. Landing at the territory's top advanced
@@ -1406,7 +1408,7 @@ const split = (statement: string, word: string) => {
           /* Entering a garment, or stepping back out of it into the territory
              it belongs to, is a change at the garment level only. */
           const garmentOnly = openWorld === worlds.get(world)
-            && (subject !== null || (openSubject !== null && openSubject.dataset.of === category))
+            && (subject !== null || (openSubject !== null && (openSubject.dataset.of === category || (world==='womenswear' && openSubject.dataset.editorial===editorialWorld(category??'')))))
             && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category);
           openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
@@ -1423,6 +1425,8 @@ const split = (statement: string, word: string) => {
         if (window.location.hash !== hash) window.history.pushState({}, '', hash || window.location.pathname);
         syncFromHash();
       };
+
+      root.addEventListener('pf:world-handoff',event=>{if(openWorld?.dataset.world==='menswear'&&!openSubject)go((event as CustomEvent<string>).detail);});
 
       /* The covers and the category links are real anchors so every level is
          reachable with the script gone. With the script running we take the

@@ -16,8 +16,9 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
  <div class="mw-exhibition">
   <header class="mw-header"><a href="#portfolio-index" data-nav data-world-close>← Portfolio</a><h2 id="menswear-title" class="label">02 / Menswear</h2><div class="mw-header-actions"><button data-mw-worlds-toggle aria-expanded="false">Worlds <span aria-hidden="true">+</span></button><button data-mw-present aria-pressed="false">Present</button><button data-mw-archive-open>10 looks</button></div></header>
   <nav class="mw-worlds" data-mw-worlds hidden aria-label="Menswear worlds">{ranges.map(r=><a href={`#menswear/${r.id}`} data-nav data-mw-world-link={r.id}><small>{r.number}</small><span>{r.direction.name}</span><i>{r.direction.title}</i></a>)}<div class="mw-chapter-links"><a href="#womenswear" data-nav>Womenswear</a><a href="#3d-simulation" data-nav>Development</a><a href="#tech-packs" data-nav>Tech Packs</a></div></nav>
+  <div class="mw-scroll" data-mw-scroll data-mw-experience tabindex="0" aria-label="Menswear continuous exhibition. Scroll through four worlds; scene controls and Presentation Mode are optional.">
   {ranges.map((r,index)=><article class="mw-film" id={`menswear/${r.id}`} data-mw-film={r.id} aria-labelledby={`${r.id}-heading`}>
-   <div class="mw-experience" data-mw-experience tabindex="0" aria-label={`${r.direction.name} film. Scroll, or use scene controls. Presentation keys: arrows, Page Up and Down, Space, Home and End.`}>
+   <div class="mw-experience">
     <div class="mw-walkway"><div class="mw-frame" data-mw-frame>
      <header class="mw-film-title"><p class="label">{r.number} / {r.direction.name}</p><h3 id={`${r.id}-heading`}>{r.direction.title}</h3></header>
      <div class="mw-camera" data-mw-camera>
@@ -39,6 +40,8 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
     </section>
    </div>
   </article>)}
+  <p class="mw-flow-exit label" data-mw-flow-exit>Continue scrolling / Pattern Development ↓</p>
+  </div>
   <footer class="mw-controls"><button data-mw-prev aria-label="Previous composed scene">←</button><ol aria-label="Composed scenes">{[0,1,2,3,4].map(n=><li><button data-mw-scene={n} aria-label={`Scene ${n+1}`} aria-pressed={n===0?'true':'false'}>{String(n+1).padStart(2,'0')}</button></li>)}</ol><button data-mw-next aria-label="Next composed scene">→</button><p class="mw-mode label" data-mw-mode>Scroll to explore</p><button data-mw-fullscreen hidden aria-label="Toggle fullscreen">Fullscreen ↗</button></footer>
   <p class="mw-live sr-only" data-mw-live aria-live="polite"></p>
  </div>

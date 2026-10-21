@@ -421,7 +421,7 @@ const buildCategory = (
    statement about the picture, not about who made the garment.
    -------------------------------------------------------------------------- */
 
-const rtw = buildCategory('rtw', '01', 'Dresses, Tops & Jumpsuits',
+const rtw = buildCategory('rtw', '01', 'Casualwear',
   'Dresses, jumpsuits and top-led outfits, including one matching lace set and independent separates.', [
   ['woven/1', bothViews('a champagne slip dress with a gathered V neckline and an open back')],
   ['woven/2', bothViews('a pink cropped shirt worn with stone wide-leg trousers')],

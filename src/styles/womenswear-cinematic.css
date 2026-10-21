@@ -133,3 +133,12 @@
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){
  .ww-reader:has(.ww-photo-credit) .ww-reader-copy{bottom:6.5rem;}
 }
+
+/* Secondary historical access is separate from the four ten-look exhibitions. */
+.ww-all-references{padding:32px clamp(20px,4vw,64px);background:#fff;color:var(--ink)}
+.ww-all-references summary{cursor:pointer;min-height:44px;display:list-item;font-size:10px}
+.ww-all-references p{font-size:12px;max-width:600px;line-height:1.6}
+.ww-all-references ul{list-style:none;padding:0;columns:2;column-gap:40px}
+.ww-all-references li{break-inside:avoid;padding:6px 0;font-size:12px;line-height:1.6}
+.ww-all-references a{display:inline-block;min-height:44px;color:inherit}
+@media(max-width:767px){.ww-all-references ul{columns:1}}

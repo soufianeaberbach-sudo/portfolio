@@ -12,6 +12,9 @@ export interface CollectionSlot {
  photography?:FinalViews;
  credit?:ImageCredit;
 }
+export const womenswearWorlds=[{id:'casualwear',label:'Casualwear'},{id:'activewear',label:'Activewear'},{id:'evening',label:'Occasionwear'},{id:'swimwear',label:'Swimwear'}] as const;
+/** Routing aliases preserve source-category URLs; subjects never change identity. */
+export const editorialWorld=(id:string)=>id==='rtw'||id==='streetwear'?'casualwear':id;
 const slots=(category:string,numbers:number[]):CollectionSlot[]=>numbers.map(n=>({id:`${category}-ref-${String(n).padStart(2,'0')}`}));
 export const collectionSlots:Record<string,CollectionSlot[]>={
  rtw:slots('rtw',[1,2,3,4,5,6,7,10,11,15]),
@@ -19,6 +22,11 @@ export const collectionSlots:Record<string,CollectionSlot[]>={
  streetwear:slots('streetwear',[1,2,3,4,5,6,7,8,9,10]),
  evening:slots('evening',[1,2,3,4,5,6,7,8,10,11]),
  swimwear:slots('swimwear',[1,2,3,4,5,6,7,8,9,10]),
+};
+// Four public edits, independent of the five immutable source pools.
+export const editorialSlots:Record<string,CollectionSlot[]>={
+ casualwear:[...slots('rtw',[2,3,4,5,15]),...slots('streetwear',[1,2,4,5,10])],
+ activewear:collectionSlots.activewear,evening:collectionSlots.evening,swimwear:collectionSlots.swimwear,
 };
 export function collectionCredit(category:MarketCategory,id:string):ImageCredit|undefined {
  const slot=collectionSlots[category.id]?.find(s=>s.id===id);
@@ -46,7 +54,7 @@ export function referenceCollection(category:MarketCategory,world:string):Subjec
  });
 }
 export function displayedCollection(category:string,pool:Subject[]):Subject[] {
- const selection=collectionSlots[category];
+ const selection=editorialSlots[editorialWorld(category)];
  if(!selection)return pool;
  const edit=selection.map(slot=>pool.find(s=>s.id===slot.id));
  if(edit.some(s=>!s)||new Set(selection.map(s=>s.id)).size!==10||selection.length!==10)

@@ -17,11 +17,11 @@
 .mw-worlds a{display:grid;grid-template-columns:24px 1fr auto;gap:16px;align-items:baseline;padding:17px 0}
 .mw-worlds small,.mw-worlds i{font:10px var(--mono);font-style:normal}.mw-worlds span{font:500 22px var(--display);letter-spacing:-.04em}
 .mw-worlds [aria-current=page] small{color:var(--mw-blue)}
-.mw-film{flex:1;min-height:0;display:none}
-.mw-film[data-current]{display:block}
-.mw-experience{height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:none;outline-offset:-4px!important}
-.mw-experience::-webkit-scrollbar{display:none}
-.mw-walkway{height:355%;position:relative}
+.mw-film{position:relative;display:block;min-height:0;flex:none}
+.mw-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:none;outline-offset:-4px!important}
+.mw-scroll::-webkit-scrollbar{display:none}
+.mw-experience{height:auto;overflow:visible}
+.mw-walkway{height:calc((100dvh - 150px)*3.55);position:relative}
 .mw-frame{position:sticky;top:0;height:calc(100dvh - 150px);overflow:hidden;isolation:isolate}
 .mw-camera{position:absolute;inset:0;overflow:hidden}
 .mw-camera [data-mw-actor]{position:absolute;display:block;overflow:hidden;visibility:hidden;z-index:2}
@@ -41,7 +41,7 @@
 .mw-controls [aria-pressed=true]{color:var(--mw-blue)}
 .mw-controls>button:first-child,.mw-controls>button:nth-of-type(2){font:20px var(--body)}
 .mw-mode{position:absolute;right:3.2%;font-size:9px!important}.mw-controls [data-mw-fullscreen]{position:absolute;left:3.2%;font:10px var(--mono)}
-.mw-world[data-present] .mw-experience{overflow:hidden}.mw-world[data-present] .mw-mode{display:none}
+.mw-world[data-present] .mw-scroll{overflow:hidden}.mw-world[data-present] .mw-mode{display:none}
 .mw-archive{padding:clamp(32px,5vw,80px) clamp(20px,4vw,64px) 30px;background:#fff;min-height:calc(100dvh - 150px)}
 .mw-archive>header{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:24px}
 .mw-archive h3{font:500 clamp(28px,3.8vw,58px)/1 var(--display);letter-spacing:-.055em;margin:0}
@@ -80,7 +80,7 @@
 @media(max-width:699px),(max-width:1023px) and (orientation:portrait){
  .mw-header{height:68px;min-height:68px;padding:0 20px;gap:12px}.mw-header a,.mw-header button{font-size:11px}.mw-header-actions{gap:18px}
  .mw-worlds{top:62px}.mw-worlds a{padding:14px 0;min-height:48px}
- .mw-frame{height:calc(100dvh - 132px)}.mw-controls{height:64px;min-height:64px;gap:6px;padding:0 12px}.mw-controls ol{gap:5px}.mw-controls button{min-width:36px}.mw-controls [data-mw-fullscreen]{font-size:9px;min-width:0;margin-left:8px}
+ .mw-walkway{height:calc((100dvh - 132px)*3.55)}.mw-frame{height:calc(100dvh - 132px)}.mw-controls{height:64px;min-height:64px;gap:6px;padding:0 12px}.mw-controls ol{gap:5px}.mw-controls button{min-width:36px}.mw-controls [data-mw-fullscreen]{font-size:9px;min-width:0;margin-left:8px}
  .mw-film-title,.mw-film[data-mw-film=m-activewear] .mw-film-title{top:14px;left:20px!important;bottom:auto!important;max-width:80%}.mw-film-title p{font-size:9px;margin:0 0 8px}.mw-film-title h3{font-size:39px;letter-spacing:-.055em}
  .mw-camera{inset:90px 0 24px}.mw-scene-caption{bottom:7px;font-size:9px;right:20px}
  .mw-archive{padding:30px 20px;min-height:calc(100dvh - 132px)}.mw-archive>header{display:block}.mw-archive h3{font-size:34px}.mw-archive header p{margin-top:14px;font-size:10px}.mw-rail{gap:18px}.mw-rail li{flex-basis:52vw}.mw-rail .mw-photo{height:34vh;max-width:52vw}.mw-provenance{font-size:11px;margin:18px 0}.mw-handoff{margin-top:20px}.mw-handoff .label{font-size:9px}
@@ -110,3 +110,6 @@
 .pf--js .mw-world:not([data-open]){content-visibility:hidden}
 
 @media(min-width:700px) and (max-width:1023px) and (orientation:portrait){.mw-film-title h3{font-size:52px}.mw-film-title p,.mw-scene-caption{font-size:10px}}
+
+.mw-flow-exit{padding:60px 24px 100px;text-align:center;font-size:10px;margin:0}.mw-world[data-present] .mw-flow-exit{visibility:hidden}
+.pf:not(.pf--js) .mw-scroll{height:auto;overflow:visible}.pf:not(.pf--js) .mw-flow-exit{display:none}

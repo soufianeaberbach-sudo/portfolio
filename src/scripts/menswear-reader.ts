@@ -10,11 +10,12 @@ export function initMenswear(root:HTMLElement){
  for(const f of films)f.removeAttribute('id');
  const reduce=matchMedia('(prefers-reduced-motion:reduce)'),menu=world.querySelector<HTMLElement>('[data-mw-worlds]')!,toggle=world.querySelector<HTMLButtonElement>('[data-mw-worlds-toggle]')!;
  const presentButton=world.querySelector<HTMLButtonElement>('[data-mw-present]')!,fullscreen=world.querySelector<HTMLButtonElement>('[data-mw-fullscreen]')!;
- let category:MenswearCategory='m-streetwear',film=films[0],experience=film.querySelector<HTMLElement>('[data-mw-experience]')!,position=0,requested=0,present=false,active:HTMLElement|null=null;
+ let category:MenswearCategory='m-streetwear',film=films[0],experience=world.querySelector<HTMLElement>('[data-mw-scroll]')!,position=0,requested=0,present=false,active:HTMLElement|null=null;
  let archive=false,heldActor:number|undefined;
  let motion:gsap.core.Tween|null=null,raf=0,epoch=0,cutCancel:(()=>void)|null=null,returnFinish:(()=>void)|null=null;
  const readerStates=new Map<HTMLElement,{select:(n:number,immediate?:boolean)=>void;reset:()=>void;draw:()=>void;view:()=>number}>();
  const clamp=(n:number,a=0,b=4)=>Math.max(a,Math.min(b,n));
+ const start=(f=film)=>experience.scrollTop+f.getBoundingClientRect().top-experience.getBoundingClientRect().top;
  const range=()=>Math.max(1,film.querySelector<HTMLElement>('.mw-walkway')!.offsetHeight-film.querySelector<HTMLElement>('[data-mw-frame]')!.offsetHeight);
  const menuState=(on:boolean,focus=false)=>{menu.hidden=!on;toggle.setAttribute('aria-expanded',String(on));if(focus)(on?menu.querySelector<HTMLElement>('[aria-current=page]')??menu.querySelector<HTMLElement>('a'):toggle)?.focus({preventScroll:true});};
  const paint=()=>{
@@ -27,37 +28,66 @@ export function initMenswear(root:HTMLElement){
  const scene=(n:number,immediate=false)=>{
   stop();archive=false;heldActor=undefined;requested=clamp(n);const target=requested;
   const done=()=>{motion=null;world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=`${menswearDirections[category].name}. ${menswearDirections[category].scenes[target]}`;};
-  if(immediate||reduce.matches){position=target;experience.scrollTop=range()*target/4;paint();done();return;}
-  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'power2.inOut',onUpdate:()=>{position=state.p;experience.scrollTop=range()*position/4;paint();},onComplete:done});
+  if(immediate||reduce.matches){position=target;experience.scrollTop=start()+range()*target/4;paint();done();return;}
+  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'power2.inOut',onUpdate:()=>{position=state.p;experience.scrollTop=start()+range()*position/4;paint();},onComplete:done});
  };
  const setPresent=(on:boolean)=>{
   present=on;world.toggleAttribute('data-present',on);presentButton.setAttribute('aria-pressed',String(on));presentButton.textContent=on?'Exit presentation':'Present';fullscreen.hidden=!on;
   if(on){scene(Math.round(position),true);experience.focus({preventScroll:true});}
   else if(document.fullscreenElement===world)void document.exitFullscreen().catch(()=>{});
  };
- const activate=(next:string|null)=>{
-  stop();cancel();archive=false;heldActor=undefined;menuState(false);const id=next&&next in menswearDirections?next as MenswearCategory:'m-streetwear';
-  category=id;film=films.find(f=>f.dataset.mwFilm===id)!;
-  films.forEach(f=>{f.toggleAttribute('data-current',f===film);f.hidden=f!==film;});
-  experience=film.querySelector<HTMLElement>('[data-mw-experience]')!;
-  world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===id)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  position=requested=0;experience.scrollTop=0;paint();
-  // Only the small active film cast is prepared; hidden archives/readers remain lazy.
-  const cast=world.hasAttribute('data-open')?[...film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img')]:[];
-  for(const[at,image]of cast.entries()){if(at===0)image.fetchPriority='high';image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});}
+ // All films remain in one native flow. Selection follows the viewport, not hidden panels.
+ const selectWorld=(next:HTMLElement)=>{
+
+  film=next;category=film.dataset.mwFilm as MenswearCategory;
+  films.forEach(f=>{f.toggleAttribute('data-current',f===film);f.querySelector<HTMLElement>('[data-mw-frame]')!.inert=f!==film;});
+  world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===category)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  if(world.hasAttribute('data-open'))for(const[at,image]of [...film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img')].entries()){
+   if(at===0)image.fetchPriority='high';image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});
+  }
  };
+ const follow=()=>{
+  if(active||motion||present)return;
+  const line=experience.getBoundingClientRect().top+Math.min(90,experience.clientHeight*.16);
+  const next=films.find(f=>{const b=f.getBoundingClientRect();return b.top<=line&&b.bottom>line;})??(experience.scrollTop<1?films[0]:films.at(-1)!);
+  selectWorld(next);heldActor=undefined;archive=experience.scrollTop>start()+range()+1;
+  position=clamp(4*(experience.scrollTop-start())/range());requested=Math.round(position);paint();
+  // Scroll changes orientation without generating Back-button entries. Reader routes stay router-owned.
+  if(world.hasAttribute('data-open')&&location.hash.startsWith('#menswear')&&location.hash.split('/').length<3){
+   const hash=`#menswear/${category}`;if(location.hash!==hash)history.replaceState(history.state,'',hash);
+  }
+ };
+ const activate=(next:string|null)=>{
+  stop();cancel();archive=false;heldActor=undefined;menuState(false);
+  const id=next&&next in menswearDirections?next as MenswearCategory:'m-streetwear';
+  selectWorld(films.find(f=>f.dataset.mwFilm===id)!);position=requested=0;
+  experience.scrollTop=start();paint();
+ };
+ experience.addEventListener('scroll',()=>{if(active||motion||present)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(follow);},{passive:true});
+ experience.addEventListener('wheel',()=>{if(!present&&!active)stop();},{passive:true});
+ experience.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
+ const step=(delta:number)=>{
+  const n=requested+delta,index=films.indexOf(film);
+  if(n<0&&index>0){activate(films[index-1].dataset.mwFilm!);scene(4,true);}
+  else if(n>4&&index<films.length-1){activate(films[index+1].dataset.mwFilm!);scene(0,true);}
+  else scene(n);
+ };
+ experience.addEventListener('keydown',e=>{
+  if(active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,[contenteditable=true]'))return;
+  // In Explore, vertical keys retain native scrolling. Presentation remotes use arrows/Page/Space.
+  const forward=present?['ArrowRight','ArrowDown','PageDown',' ']:['ArrowRight'],back=present?['ArrowLeft','ArrowUp','PageUp']:['ArrowLeft'];
+  if(present&&(e.key==='Home'||e.key==='End')){e.preventDefault();scene(e.key==='Home'?0:4);}
+  else if(forward.includes(e.key)||back.includes(e.key)){e.preventDefault();step((back.includes(e.key)||(e.key===' '&&e.shiftKey))?-1:1);}
+ });
+ // A deliberate continued native gesture after the final archive hands off to Development.
+ let endDelta=0,touchEndY:number|null=null;
+ const atEnd=()=>experience.scrollTop+experience.clientHeight>=experience.scrollHeight-3;
+ const handoff=()=>{endDelta=0;world.dispatchEvent(new CustomEvent('pf:world-handoff',{bubbles:true,detail:'#3d-simulation'}));};
+ experience.addEventListener('wheel',e=>{if(!active&&!present&&world.hasAttribute('data-open')&&atEnd()&&e.deltaY>0){endDelta+=e.deltaY;if(endDelta>380)handoff();}else endDelta=0;},{passive:true});
+ experience.addEventListener('touchstart',e=>{touchEndY=atEnd()?e.touches[0]?.clientY??null:null;},{passive:true});
+ experience.addEventListener('touchmove',e=>{if(touchEndY!==null&&!active&&!present&&touchEndY-(e.touches[0]?.clientY??touchEndY)>85){touchEndY=null;handoff();}},{passive:true});
  for(const f of films){
-  const scroller=f.querySelector<HTMLElement>('[data-mw-experience]')!;
   for(const im of f.querySelectorAll<HTMLImageElement>('[data-mw-actor] img'))for(const event of ['load','error'])im.addEventListener(event,()=>{if(f===film)paint();});
-  scroller.addEventListener('scroll',()=>{if(f!==film||active||motion||present)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{archive=experience.scrollTop>range()+1;heldActor=undefined;position=clamp(4*experience.scrollTop/range());requested=Math.round(position);paint();});},{passive:true});
-  scroller.addEventListener('wheel',()=>{if(!present&&!active)stop();},{passive:true});scroller.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
-  scroller.addEventListener('keydown',e=>{
-   if(active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,[contenteditable=true]'))return;
-   const forward=['ArrowRight','ArrowDown','PageDown',' '],back=['ArrowLeft','ArrowUp','PageUp'];
-   if(e.key==='Home'||e.key==='End'||forward.includes(e.key)||back.includes(e.key)){
-    e.preventDefault();scene(e.key==='Home'?0:e.key==='End'?4:requested+((back.includes(e.key)||(e.key===' '&&e.shiftKey))?-1:1));
-   }
-  });
   const rail=f.querySelector<HTMLElement>('.mw-rail')!;
   rail.addEventListener('keydown',e=>{if(e.target!==rail||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();rail.scrollTo({left:e.key==='Home'?0:e.key==='End'?rail.scrollWidth:rail.scrollLeft+(e.key==='ArrowRight'?1:-1)*rail.clientWidth*.7,behavior:reduce.matches?'instant':'smooth'});});
   rail.addEventListener('scroll',()=>{const hint=f.querySelector<HTMLElement>('[data-mw-rail-hint]')!;hint.textContent=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-3?'End of edit':'Explore →';},{passive:true});
@@ -67,8 +97,8 @@ export function initMenswear(root:HTMLElement){
  presentButton.addEventListener('click',()=>setPresent(!present));
  fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement===world)await document.exitFullscreen();else await world.requestFullscreen();}catch{world.querySelector<HTMLElement>('[data-mw-live]')!.textContent='Fullscreen is unavailable. In-page presentation remains available.';} });
  world.querySelectorAll<HTMLButtonElement>('[data-mw-scene]').forEach(b=>b.addEventListener('click',()=>scene(Number(b.dataset.mwScene))));
- world.querySelector('[data-mw-prev]')!.addEventListener('click',()=>scene(requested-1));world.querySelector('[data-mw-next]')!.addEventListener('click',()=>scene(requested+1));
- world.querySelector('[data-mw-archive-open]')!.addEventListener('click',()=>{stop();archive=true;heldActor=undefined;if(present)setPresent(false);menuState(false);experience.scrollTo({top:range()+experience.clientHeight,behavior:'instant'});film.querySelector<HTMLElement>('.mw-rail')!.focus({preventScroll:true});});
+ world.querySelector('[data-mw-prev]')!.addEventListener('click',()=>step(-1));world.querySelector('[data-mw-next]')!.addEventListener('click',()=>step(1));
+ world.querySelector('[data-mw-archive-open]')!.addEventListener('click',()=>{stop();archive=true;heldActor=undefined;if(present)setPresent(false);menuState(false);experience.scrollTo({top:start()+range()+experience.clientHeight,behavior:'instant'});film.querySelector<HTMLElement>('.mw-rail')!.focus({preventScroll:true});});
  document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!(e.target as HTMLElement).closest('[data-mw-worlds],[data-mw-worlds-toggle]'))menuState(false);});
  document.addEventListener('keydown',e=>{
   if(e.key!=='Escape'||!world.hasAttribute('data-open')||active)return;
@@ -125,7 +155,7 @@ export function initMenswear(root:HTMLElement){
   images.forEach(im=>{im.addEventListener('load',draw);im.addEventListener('error',draw);});
  }
  const cancel=()=>{cutCancel?.();const done=returnFinish;returnFinish=null;done?.();epoch++;};
- const resize=()=>{cancel();if(!archive)experience.scrollTop=range()*position/4;paint();if(active)readerStates.get(active)?.draw();};
+ const resize=()=>{cancel();if(!archive)experience.scrollTop=start()+range()*position/4;paint();if(active)readerStates.get(active)?.draw();};
  window.addEventListener('resize',resize);reduce.addEventListener('change',()=>{resize();if(!active)scene(Math.round(position),true);});
  new MutationObserver(()=>{if(!world.hasAttribute('data-open')){stop();cancel();setPresent(false);menuState(false);}}).observe(world,{attributes:true,attributeFilter:['data-open']});
  activate(null);
