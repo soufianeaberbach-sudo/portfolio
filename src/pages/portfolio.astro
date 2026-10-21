@@ -1315,7 +1315,9 @@ const split = (statement: string, word: string) => {
               + movement.getBoundingClientRect().top
               - world.getBoundingClientRect().top
               - (movement.querySelector('[data-ww-camera]') ? world.querySelector<HTMLElement>('.pf-act__bar')!.offsetHeight : 0);
-            world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced() ? 'auto' : 'smooth' });
+            // Initial deep links settle before ScrollTrigger snapshots the scroll.
+            // A smooth cold arrival was cancelled by its startup refresh.
+            world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: !visitorActed || reduced() ? 'instant' : 'smooth' });
             return;
           }
         }

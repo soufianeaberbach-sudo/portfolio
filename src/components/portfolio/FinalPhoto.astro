@@ -1,19 +1,20 @@
 ---
 import type {ImageAsset,SubjectView} from '../../data/portfolio';
-import {separable} from '../../data/final-photography';
+import {separable,threePanel,photoSizes} from '../../data/final-photography';
 import {photoFrames} from '../../data/womenswear-direction';
 interface Props {image:ImageAsset;subjectId?:string;crop?:SubjectView['crop'];eager?:boolean;sizes?:string;}
 const{image,subjectId='',crop='front',eager=false,sizes='(max-width:767px) 90vw, 48vw'}=Astro.props;
 const measured=photoFrames[subjectId];
 const single=measured?.source===image.src&&image.views===1&&measured.single;
-const split=single?measured.front[1]-measured.front[0]:crop!=='whole'&&separable(image)?image.front:1;
-const bounds=split!==1&&measured?.source===image.src?measured:{front:[0,split],back:[split,1]};
+const triple=threePanel(image)&&crop!=='whole';
+const split=triple?1/3:single?measured.front[1]-measured.front[0]:crop!=='whole'&&separable(image)?image.front:1;
+const bounds:{front:number[];back:number[];third?:number[]}=triple?{front:[0,1/3],back:[1/3,2/3],third:[2/3,1]}:split!==1&&measured?.source===image.src?measured:{front:[0,split],back:[split,1]};
 const aperture=split===1?1:Math.max(bounds.front[1]-bounds.front[0],bounds.back[1]-bounds.back[0]);
-const view= crop==='back'?bounds.back:bounds.front;
+const view=crop==='third'&&bounds.third?bounds.third:crop==='back'?bounds.back:bounds.front;
 const offset=(aperture-(view[1]-view[0]))/2-view[0];
 const inset=Math.max(0,(aperture-(view[1]-view[0]))/2/aperture)*100;
 ---
-<span class="ww-photo" data-ww-photo data-door-source data-split={split} data-front={bounds.front.join(',')} data-back={bounds.back.join(',')} data-surface={/\/portfolio\/(evening|swim|temporary-v21)\//.test(image.src)?'plate':undefined} data-side={crop==='back'?'back':split===1?'whole':'front'}
- style={`--aspect:${image.width/image.height};--window:${aperture};--view:${crop==='back'?1:0};clip-path:inset(0 ${inset}%);`}>
- <img src={image.src} srcset={image.srcset} sizes={sizes} width={image.width} height={image.height} alt={image.alt} style={`transform:translateX(${offset*100}%)`} loading={eager?'eager':'lazy'} decoding="async"/>
+<span class="ww-photo" data-ww-photo data-door-source data-split={split} data-front={bounds.front.join(',')} data-back={bounds.back.join(',')} data-third={bounds.third?.join(',')} data-surface={/\/portfolio\/(evening|swim|temporary-v21)\//.test(image.src)?'plate':undefined} data-side={crop==='third'&&triple?'third':crop==='back'?'back':split===1?'whole':'front'}
+ style={`--aspect:${image.width/image.height};--window:${aperture};--view:${crop==='third'&&triple?2:crop==='back'?1:0};clip-path:inset(0 ${inset}%);`}>
+ <img src={image.src} srcset={image.srcset} sizes={photoSizes(image,crop,sizes)} width={image.width} height={image.height} alt={image.alt} style={`transform:translateX(${offset*100}%)`} loading={eager?'eager':'lazy'} decoding="async"/>
 </span>

@@ -68,3 +68,4 @@ jobs:
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-resize-return.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/womenswear-continuity.mjs
+          node tests/three-panel-photography.mjs

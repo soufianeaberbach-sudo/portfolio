@@ -1,3 +1,4 @@
+import {separable} from './final-photography';
 /* Portfolio V6 — the whole taxonomy, in one typed place.
  *
  * TWO KINDS OF CONTENT, AND THE LINE BETWEEN THEM
@@ -76,12 +77,17 @@ export interface ImageAsset {
   /* HOW MANY VIEWS OF THE GARMENT ARE IN THE FRAME.
      2 — the photograph is a two-up: the front view on the left, the back view
          on the right, one garment, one composition.
+     3 — the explicit 2:1 master holds equal Front / Back / Fashion-or-Detail panels.
      1 — the photograph holds a single view.
      Recorded rather than inferred, because anything that treats a frame as a
      two-up (a half-frame crop, a front-to-back camera move) would cut a
      single-view model down the centre. Optional: a consumer that has not been
      told MUST assume 1 and leave the frame whole. */
-  views?: 1 | 2;
+  views?: 1 | 2 | 3;
+  /* Explicit standard three-panel master: equal Front / Back / Fashion or
+     Detail regions, exported at 5400 × 2700 (or the same 2:1 ratio).
+     This never guesses thirds from historical two-up photographs. */
+  thirdView?: 'editorial' | 'detail';
   /* WHETHER THE TWO VIEWS OF A TWO-UP CAN BE CUT APART WITHOUT CUTTING
      EITHER. `false` where the models touch — there is then no line between
      them that leaves both garments whole, so anything that would split the
@@ -415,9 +421,9 @@ const buildCategory = (
    statement about the picture, not about who made the garment.
    -------------------------------------------------------------------------- */
 
-const rtw = buildCategory('rtw', '01', 'Ready-to-Wear & Contemporary',
-  'Day dresses, separates and jumpsuits, where the commercial decision and the construction decision are the same decision.', [
-  ['woven/1', bothViews('a champagne satin slip dress with a cowl neckline and a low open back')],
+const rtw = buildCategory('rtw', '01', 'Dresses, Tops & Jumpsuits',
+  'Dresses, jumpsuits and top-led outfits, including one matching lace set and independent separates.', [
+  ['woven/1', bothViews('a champagne slip dress with a gathered V neckline and an open back')],
   ['woven/2', bothViews('a pink cropped shirt worn with stone wide-leg trousers')],
   ['woven/3', bothViews('a stone wide-leg jumpsuit with a V neckline and a high back')],
   ['woven/4', bothViews('a blue and white diagonally striped sleeveless midi dress with an open back')],
@@ -436,8 +442,8 @@ const rtw = buildCategory('rtw', '01', 'Ready-to-Wear & Contemporary',
   ['jersey/10', bothViews('a white lace high-neck top worn with a navy midi pencil skirt')],
 ]);
 
-const active = buildCategory('activewear', '02', 'Activewear & Athleisure',
-  'Panelled performance product, where the pattern is engineered around stretch and recovery rather than imposed on it.', [
+const active = buildCategory('activewear', '02', 'Activewear',
+  'Sports sets, leggings and athleisure looks. Reference photography does not verify material performance.', [
   ['sport/1', bothViews('a white bandeau top and white leggings with a red side stripe')],
   ['sport/2', bothViews('a red bandeau top and black leggings with white piping down the leg')],
   ['sport/3', bothViews('a white tank top and white leggings with a black side stripe')],
@@ -446,18 +452,18 @@ const active = buildCategory('activewear', '02', 'Activewear & Athleisure',
   ['sport/6', bothViews('a black short-sleeved training top and cropped black leggings')],
   ['sport/7', bothViews('a brown ribbed tank top and matching brown wide flared trousers')],
   ['sport/8', bothViews('a red sports bra and red leggings with a white colourblocked side panel')],
-  ['sport/9', bothViews('a sand long-sleeved top and a matching high-cut bodysuit')],
+  ['sport/9', bothViews('a sand long-sleeved mesh look with opaque bust and brief panels')],
   ['sport/10', bothViews('a black long-sleeved top and cropped black leggings with white side stripes')],
 ]);
 
-const street = buildCategory('streetwear', '03', 'Streetwear & Casualwear',
-  'Relaxed volumes, where the fit has to read as deliberate rather than as ease left in by accident.', [
+const street = buildCategory('streetwear', '03', 'Streetwear',
+  'Hoodies, loose layers, denim and utility-inspired outfits.', [
   ['jersey/5', bothViews('a cream jersey top gathered at one side with a drawcord, worn with brown wide-leg trousers')],
   ['jersey/6', bothViews('a burgundy cropped hooded sweatshirt worn with olive green joggers')],
 ]);
 
-const evening = buildCategory('evening', '04', 'Evening & Occasionwear',
-  'Long-line construction, where drape, support and the back view are resolved at the same time.', [
+const evening = buildCategory('evening', '04', 'Occasionwear',
+  'Occasion dresses, gowns and coordinated evening outfits in varied lengths.', [
   ['evening/1', bothViews('a grey printed column gown with wide flared sleeves falling from the elbow')],
   ['evening/2', bothViews('a nude off-shoulder column gown with a low open back')],
   ['evening/3', bothViews('a navy halter gown with a fitted bodice and a tiered lace ruffle skirt')],
@@ -468,11 +474,11 @@ const evening = buildCategory('evening', '04', 'Evening & Occasionwear',
   ['evening/8', bothViews('a brown column gown with an open cut-out waist and a tie at the back')],
   ['evening/9', bothViews('a dark brown high-neck long-sleeved gown gathered through the body')],
   ['evening/10', bothViews('a red high-neck long-sleeved top with an open midriff worn with a floor-length skirt')],
-  ['woven/7', bothViews('a champagne strapless column gown with ruching across the front and a fishtail hem')],
+  ['woven/7', bothViews('a champagne strapless calf-length dress with a gathered front')],
 ]);
 
-const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
-  'The category with nowhere to hide: balance, recovery and millimetre tolerances are all visible on the body.', [
+const swim = buildCategory('swimwear', '05', 'Swimwear',
+  'Bikinis and one-piece swim silhouettes. Reference imagery does not verify fabric performance.', [
   ['swim/1', 'A bandeau bikini with contrast binding and long tie sides, photographed on a white studio ground.'],
   ['swim/2', 'A silver triangle bikini with tie sides, photographed on a white studio ground.'],
   ['swim/3', 'A printed bikini with contrast red trim and thin straps, photographed on a white studio ground.'],
@@ -480,8 +486,8 @@ const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
   ['swim/5', 'A silver halter bikini with high-cut briefs, photographed on a white studio ground.'],
   ['swim/6', 'A blue one-piece swimsuit with a front ring detail and high-cut legs, photographed on a white studio ground.'],
   ['swim/7', 'A silver bikini with long ties wrapped around the waist, photographed on a white studio ground.'],
-  ['swim/8', 'A black bandeau top with a high-waisted brief, photographed on a white studio ground.'],
-  ['swim/9', 'A silver underwired bikini with tie-side briefs, photographed on a white studio ground.'],
+  ['swim/8', 'A black cut-out one-piece swimsuit with a bandeau neckline, photographed on a white studio ground.'],
+  ['swim/9', 'A silver bikini with a ruched top and tie-side briefs, photographed on a white studio ground.'],
 ]);
 
 /* --------------------------------------------------------------------------
@@ -494,25 +500,25 @@ const swim = buildCategory('swimwear', '05', 'Swimwear & Resortwear',
    -------------------------------------------------------------------------- */
 
 const menswearCategories: MarketCategory[] = [
-  buildCategory('m-streetwear', '01', 'Streetwear & Casualwear',
-    'Relaxed volume, dropped shoulders, and the construction that keeps a loose garment from reading as an oversized one.', [
+  buildCategory('m-streetwear', '01', 'Streetwear',
+    'Hoodies, oversized layers, loose denim and street-styled outfits.', [
       ['jersey/6', bothViews('a cropped hooded sweatshirt worn with relaxed joggers')],
       ['jersey/5', bothViews('a gathered jersey top worn with wide-leg trousers')],
     ]),
-  buildCategory('m-activewear', '02', 'Activewear & Performance',
-    'Panelled performance product engineered around movement, stretch and recovery.', [
+  buildCategory('m-activewear', '02', 'Activewear',
+    'Sports kits, training looks and athleisure. Technical performance is not inferred from a photograph.', [
       ['sport/5', bothViews('a long-sleeved performance top with full-length leggings')],
       ['sport/6', bothViews('a short-sleeved performance top with cropped leggings')],
       ['sport/10', bothViews('a long-sleeved performance set with contrast side stripes')],
     ]),
-  buildCategory('m-rtw', '03', 'Contemporary Ready-to-Wear',
-    'Shirting, knitwear and trousers, where the commercial and construction decisions meet.', [
+  buildCategory('m-rtw', '03', 'Casualwear',
+    'T-shirts, shirts, knitwear and informal outfits, with a small number of dressier references.', [
       ['woven/2', bothViews('a cropped shirt worn with wide-leg trousers')],
       ['woven/5', bothViews('a printed shirt-jacket worn with wide-leg trousers')],
       ['jersey/8', bothViews('an off-shoulder knit top worn with tailored trousers')],
     ]),
   buildCategory('m-tailoring', '04', 'Tailoring & Outerwear',
-    'Internal construction, canvas and balance — the work that is invisible once the garment is finished.', [
+    'Suits, jackets, waistcoats and an overcoat. Photographs show appearance, not internal construction.', [
       ['jersey/9', bothViews('a belted jacket with a wide sleeve worn with tailored trousers')],
       ['jersey/4', bothViews('a funnel-neck peplum jacket worn with slim trousers')],
     ]),
@@ -662,10 +668,9 @@ export interface SubjectView {
   key: ViewKey;
   label: string;
   image: ImageAsset;
-  /* Which part of the file this view is. A two-up frame carries both views in
-     one image, so the renderer is told which half to show; `whole` means the
-     image is this view on its own. */
-  crop: 'front' | 'back' | 'whole';
+  /* Source region: measured Front/Back or an explicit standard third panel.
+     `whole` preserves the complete original, including unsafe geometry. */
+  crop: 'front' | 'back' | 'third' | 'whole';
 }
 
 export interface SubjectStage {
@@ -727,18 +732,21 @@ const view = (key: ViewKey, image: ImageAsset | undefined, crop: SubjectView['cr
 /** A VERIFIED PROJECT, as the interface sees it. */
 export const projectSubject = (project: Project, world: string): Subject => {
   const final = project.final ?? {};
-  /* Separate files win over a two-up: a frame shot for one view is a better
+  /* Separate files win over a composite: a frame shot for one view is a better
      view than half of another frame. A composite is used only for the views
      it is not already supplying separately, and then its own measured
      geometry says where the front ends and the back begins. */
-  const twoUp = final.composite?.views === 2 && final.composite.separable !== false ? final.composite : undefined;
+  const splitComposite = final.composite && separable(final.composite) ? final.composite : undefined;
+  const thirdKey = splitComposite?.thirdView ?? 'editorial';
   const views: SubjectView[] = [
     ...(final.front
       ? view('front', final.front, 'whole')
-      : twoUp ? view('front', twoUp, 'front') : view('front', final.composite, 'whole')),
+      : splitComposite ? view('front', splitComposite, 'front') : view('front', final.composite, 'whole')),
     ...(final.back
       ? view('back', final.back, 'whole')
-      : twoUp ? view('back', twoUp, 'back') : []),
+      : splitComposite ? view('back', splitComposite, 'back') : []),
+    ...(splitComposite?.views === 3 && !(thirdKey === 'editorial' ? final.editorial : final.details?.length)
+      ? [{...view(thirdKey, splitComposite, 'third')[0], label: splitComposite.thirdView === 'detail' ? 'Detail' : splitComposite.thirdView === 'editorial' ? 'Fashion pose' : 'Third view'}] : []),
     ...view('side', final.side, 'whole'),
     ...view('editorial', final.editorial, 'whole'),
     ...(final.details ?? []).map((d) => ({
@@ -786,19 +794,20 @@ export const referenceSubject = (
 ): Subject => {
   /* A two-up whose models touch cannot be split without cutting one of the
      garments, so it is shown as the one frame it is: both views, whole. */
-  const twoUp = reference.image.views === 2 && reference.image.separable !== false;
-  const whole = reference.image.views === 2 && !twoUp;
+  const canSplit = separable(reference.image);
+  const whole = (reference.image.views ?? 1) > 1 && !canSplit;
   return {
     id: reference.id,
     world,
     category,
     cover: reference.image,
-    views: twoUp
+    views: canSplit
       ? [
           { key: 'front', label: VIEW_LABEL.front, image: reference.image, crop: 'front' },
           { key: 'back', label: VIEW_LABEL.back, image: reference.image, crop: 'back' },
+          ...(reference.image.views === 3 ? [{key: reference.image.thirdView ?? 'editorial', label: reference.image.thirdView === 'detail' ? 'Detail' : reference.image.thirdView === 'editorial' ? 'Fashion pose' : 'Third view', image: reference.image, crop: 'third' as const}] : []),
         ]
-      : [{ key: 'front', label: whole ? 'Front and back' : VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
+      : [{ key: 'front', label: whole ? (reference.image.views === 2 ? 'Front and back' : 'Complete original') : VIEW_LABEL.front, image: reference.image, crop: 'whole' }],
     origin: [],
     build: [],
     role: 'supporting',

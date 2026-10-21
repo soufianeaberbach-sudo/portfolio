@@ -36,15 +36,23 @@ export function initWomenswearExhibition(root:HTMLElement){
   for(const[role,p]of Object.entries(shots[0].poses))if(actors[role])gsap.set(actors[role],{...pose(role,p),opacity:p.opacity??1});
   timeline=gsap.timeline({scrollTrigger:{trigger:camera,scroller:world,start:()=>`top top+=${world.querySelector<HTMLElement>('.pf-act__bar')!.offsetHeight}`,end:'bottom bottom',scrub:direction.id==='activewear'?.12:.22,invalidateOnRefresh:true},onUpdate:render});
   let previous=0;
+  const settled:Record<string,Pose>={...shots[0].poses};
   for(const shot of shots.slice(1)){
    const duration=Math.min(direction.id==='evening'?.19:.15,shot.at-previous-.035),start=shot.at-duration;
+   // A complete photograph rising through the floor produced floating heads
+   // and feet. Hold the prior composition, then cut to the whole next look.
+   // Anchored horizontal camera relationships keep their existing movement.
+   const verticalArrival=Object.entries(shot.poses).some(([role,p])=>p.opacity!==0&&settled[role]?.opacity===0&&(settled[role].floor??.97)>1);
    for(const[role,p]of Object.entries(shot.poses))if(actors[role]){
+    if(verticalArrival){timeline.set(actors[role],{...pose(role,p),opacity:p.opacity??1},shot.at);continue;}
     // Opaque photographs travel in separated lanes; no ghosted model crossfades.
     if(p.opacity!==0)timeline.set(actors[role],{opacity:1},start);
     timeline.to(actors[role],{...pose(role,p),duration,ease:direction.id==='activewear'?'power3.inOut':'power1.inOut'},start);
-    if(p.opacity===0)timeline.set(actors[role],{opacity:0},shot.at);
+    if(p.opacity===0)timeline.set(actors[role],{opacity:0},(p.floor??.97)<0?start:shot.at);
    }
-   timeline.set(label,{textContent:shot.label},shot.at);previous=shot.at;
+   timeline.set(label,{textContent:shot.label},shot.at);
+   for(const[role,p]of Object.entries(shot.poses))settled[role]={...p,opacity:p.opacity??1};
+   previous=shot.at;
   }
   // Clear the title before the approaching silhouette enters its type field.
   timeline.to(title,{opacity:0,y:-18,duration:.065},.025).to({}, {duration:.001},1);

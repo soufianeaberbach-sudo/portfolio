@@ -1,8 +1,10 @@
 # Photography content handoff
 
-**ACTIVE · 19 October 2026.** Use the implemented V2.1 content adapter, not a new
-image system. Source baseline: main `a36ae62af385641f2c4d92c07bcd851d10ee24d7`;
-review head `34c0286978de846298dbb2a4340979dd4b8887a6`.
+**ACTIVE · 21 October 2026.** Main baseline `a4b0aba1591ac043b11ca9b75b6079b0ed27a9be`
+contains Womenswear V2.1 and Menswear PR #44. The three-panel extension and final
+category names below are a review candidate on
+`refine/portfolio-fashion-categories-photo-finalization`; merge and deployment
+remain separate approvals. Reuse the existing slot/FinalViews adapters.
 [Authoritative fifty-slot snapshot](review/womenswear-v21/SLOTS.tsv) ·
 [Geometry/views snapshot](review/womenswear-v21/SLOTS.json) ·
 [Source licensing](review/womenswear-v21/ATTRIBUTION.md).
@@ -21,7 +23,7 @@ the exhibition/archive edit renders 50 unique entries.
 In the table each number is the suffix of `<category>-ref-NN`; preserve both
 category and reference identity. A slot is an editorial position, not an angle.
 
-| Display slot | rtw | activewear | streetwear | evening (Occasion) | swimwear (Swim) |
+| Display slot | rtw | activewear | streetwear | evening (Occasionwear) | swimwear (Swimwear) |
 | --- | --- | --- | --- | --- | --- |
 | 01 | 01 | 01 | 01 | 01 | 01 |
 | 02 | 02 | 02 | 02 | 02 | 02 |
@@ -50,22 +52,97 @@ source mapping; confirm with the owner whether an existing reference URL should
 now resolve to the replacement or a separately preserved project identity.
 
 `ImageAsset` records `src`, responsive `srcset`, intrinsic `width`/`height`, `alt`,
-`front`, optional `views: 1 | 2` and `separable`. Dimensions refer to the actual
+`front`, optional `views: 1 | 2 | 3`, `thirdView` and `separable`. Dimensions refer to the actual
 largest rendition; responsive widths must match actual files. Measure, never
 guess. Preserve original proportions, garment appearance and available pixels.
 Prepare adequate-resolution renditions for the actual full-look/inspection use;
-no universal aspect ratio or new mandatory resolution is imposed. Current new
-reference renditions are 900/1800 pixels high, not a required future schema.
+existing historical/separate photos retain their own aspect ratios. New owner
+three-panel masters use the explicit standard below. Current reference renditions
+are not re-exported or resized by this refinement.
 
 Use `CollectionSlot.photography` for final-photo replacement. It is parsed through
 existing `projectSubject` view handling **without** promoting the reference to a
 verified project. `collectionCredit` uses the replacement's own credit, never the
 former Pexels creator. Update source permissions and dimensions with every asset.
 
+## Owner standard: one file, three views
+
+Export **5400 × 2700 px**, a horizontal master with **three equal 1800 × 2700 px**
+2:3 portrait panels of the **same garment**:
+
+| View | Normalized source interval | Crop |
+| --- | --- | --- |
+| Front | `0 … 1/3` | First complete silhouette |
+| Back | `1/3 … 2/3` | Complete back silhouette |
+| Fashion pose or Detail | `2/3 … 1` | Genuine third view, deliberately chosen |
+
+Use white `#FFFFFF` or a genuine transparent PNG. Preserve alpha, garment colour,
+light fabrics, hair, hands, hems and footwear. Keep the complete front/back inside
+their own panels, with consistent scale and ground. Do not construct a third view
+from unrelated photographs. A detail is a secondary inspection view, not the
+primary full look.
+
+Attach the following metadata to the **existing stable slot's**
+`photography.composite` (illustrative schema, no owner file is published yet):
+
+```ts
+{
+  src: '/portfolio/owner/garment-master.png',
+  srcset: '', // or real 2:1 renditions with accurate width descriptors
+  width: 5400,
+  height: 2700,
+  alt: 'Literal description of the supplied front, back and third view',
+  views: 3,
+  front: 1 / 3,
+  thirdView: 'editorial', // Fashion pose; use 'detail' for a real detail panel
+  separable: true
+}
+```
+
+The explicit `views:3` plus 2:1 geometry enables thirds. Incorrect ratios or
+`separable:false` safely retain the complete original. A single wide source never
+becomes three views by inference. Historical two-up splits remain measured as
+before; **do not change their dimensions, `views` or split metadata**.
+
+The film and archive use **Front only**. Reader choices are **Front**, **Back**,
+**Fashion pose** or **Detail**, plus deliberate **Complete Original** and **Look
+closer**. The three-panel board is never the default cinematic composition.
+Existing keyboard/swipe, inspection and source return remain in use.
+
+For efficient loading, supply proportional whole-master renditions, e.g.
+1800×900 and 2700×1350, retaining the same thirds and transparency. Actual `srcset`
+widths must match the files. The extension accounts for the full source width
+behind a one-third aperture; it does not request a tiny one-third thumbnail as
+though it covered the whole image. The selected reader prepares the full source.
+The 5400px file remains available for original inspection. PNG or alpha-preserving
+renditions must never be flattened merely to fit a layout. Measure memory and
+frame pacing again with the real final masters on physical devices.
+
+## Menswear uses the same photography contract
+
+[menswear-collection.ts](../../src/data/menswear-collection.ts) keeps ten stable
+slots each in `m-streetwear`, `m-activewear`, `m-rtw`, `m-tailoring`. The
+[forty-slot snapshot](review/menswear-production/SLOTS.tsv) identifies their
+Pexels-based stable IDs. Six historical sources plus 34 additions provide forty
+unique displayed looks; all sixteen historical records remain and the pool has
+fifty routable identities. Do not delete or reorder them.
+
+Attach the same `photography: FinalViews` and replacement `credit` to an existing
+`MenswearSlot`. No additional angle platform or reader is needed. Its verified
+source-specific architectural/crop effects are not applied to unrelated owner
+files. The primary/front region fits the existing stage. Preserve route identity
+and add new asset paths; do not overwrite historical production photographs.
+
+Category names are display metadata, not new URL paths. See the
+[ninety-look taxonomy audit](review/fashion-finalization/TAXONOMY.md) for current
+candidate names and content-fit exceptions. No garment is moved to make a label
+fit. Menswear remains photography-only too.
+
 ## Supported configurations
 
 | Supplied media | Existing metadata | Rendering rule |
 | --- | --- | --- |
+| Standard three-panel master | `composite`, `views:3`, `thirdView:editorial` or `detail`, 2:1 source | Equal complete Front / Back / third windows, plus Complete Original. |
 | One separable two-up Front/Back | `photography.composite`, `views:2`, measured `front` split, `separable:true` | Complete Front / Back windows and Complete Original. Keep every head, hand, hem and shoe inside its window. |
 | One inseparable composite | `composite`, `views:2`, `separable:false` | Whole original; do not invent independent Front/Back windows. |
 | One genuine primary photo | `front` or the genuine supplied final-view field, `views:1`, `front:1` | Whole photo; no guessed alternate angle. |
@@ -117,7 +194,7 @@ Womenswear; technical stages remain postponed.
 ## Replacement acceptance checklist
 
 - Original files and old IDs preserved; category/slot mapping remains exactly ten
-  unique visible looks each, fifty overall; historical deep links still resolve.
+  unique visible looks each, fifty Womenswear and forty Menswear overall; historical deep links still resolve.
 - Actual dimensions/srcset/angle labels verified, meaningful literal alt text,
   appropriate creator/source/license disclosure; no inferred material or history.
 - Full primary looks, actual Front/Back and whole-source access checked; missing
