@@ -4257,6 +4257,34 @@
           "assetProduced": false,
           "recordedUTC": "2026-10-22T16:27:48.190940+00:00",
           "note": "Source-based adult commercial gown request rejected by the native tool. No generated file exists, no altered-prompt retry; original source and slot preserved."
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "d1dd11d2-39f1-4a7a-87cb-35b7f44010f1",
+          "attempt": "primary-commercial",
+          "generationPrompt": "One professional commercial occasionwear photograph of the supplied formal gown, preserving the reference design. Show one adult professional fashion model in a full-length FRONT studio view, straight-on poised standing posture, neutral refined expression and relaxed arms. Retain the sand-beige honeycomb textile, broad off-shoulder folded neckline, fitted column silhouette gently widening to the floor, original hem and drape, source tonal foundation and styling. Same brunette adult appearance with neat swept-back updo. Faithful garment color, cut, texture and proportions; no redesigned parts or accessories. Photorealistic luxury catalogue clarity, soft even studio lighting, natural anatomy and subtle realistic floor contact shadow. Full head, hands and entire gown hem visible within generous portrait margins. Genuine transparent background preserving beige textile and fine edges. One figure only, no text, logo, graphic, border or watermark. Request 1800x2700 if supported, otherwise actual native portrait size. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:40:52.239851+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "bea01abc-3980-4a65-a291-0aa3460d0d73",
+          "attempt": "single-neutral-revision",
+          "generationPrompt": "Professional studio catalogue study of the formal beige gown in the supplied reference. Accurately preserve its original design, fabric, color, neckline, hem and styling. One adult model only, shown standing straight on from the front, full length, arms relaxed, neutral expression. Keep the source hairstyle. Even studio lighting, realistic garment detail, natural posture, soft contact shadow, generous clear margins around the whole figure and hem. Transparent background, no typography or graphics. Provisional AI presentation of the supplied garment; preserve actual native portrait dimensions.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:40:52.239865+00:00"
         }
       ]
     },
