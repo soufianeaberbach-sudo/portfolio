@@ -6338,7 +6338,21 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "e5a96740-7dbc-49b1-b755-e4b13e9eaf82",
+          "assetProduced": false,
+          "generationPrompt": "One full-length FRONT commercial swimwear catalogue studio portrait preserving the exact magenta swim set and adult woman in the supplied original reference. One model only, calm neutral straight-on stance with arms relaxed slightly apart. Preserve opaque rich magenta gathered/ruched bandeau top with slim halter neck straps, matching magenta briefs with original side bow ties and long hanging ends, same source coverage and material. Same adult medium-brown model, sleek center-part hair tied back, small hoop earrings and barefoot styling. No new cutouts, logos, accessories or redesign. Full head, hands, all ties/garment edges and both feet safely within portrait margins. Natural realistic adult anatomy/skin and textile detail, undistorted limbs, fingers and toes. Soft even neutral studio light and subtle credible floor contact shadows. Genuine transparent alpha preserving magenta fabric/hair/ties/shadows. Request 1800x2700 portrait if supported; otherwise true native dimensions. One figure/shadow only, no text, graphic, border, pair or collage. Provisional AI preservation of supplied design, unseen rear/construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:10:00.112614+00:00"
+        }
+      ]
     },
     {
       "sourceIdentity": "swimwear-ref-05",

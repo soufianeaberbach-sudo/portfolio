@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:07:45.152866+00:00",
+  "updatedUTC": "2026-10-22T19:10:05.520398+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -17,12 +17,12 @@
     "PENDING": 11
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-03",
+  "currentSourceIdentity": "swimwear-ref-04",
   "currentMilestone": "blocked",
-  "lastSuccessfullyPushedCommit": "129404db249c3fe15f7ba318f512186f0ad0184f",
+  "lastSuccessfullyPushedCommit": "9e8ebe263f6f0ea1bf0a697391611caf1cb0fc84",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-04",
+  "nextActionableSourceIdentity": "swimwear-ref-07",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -152,9 +152,26 @@
           "recordedUTC": "2026-10-22T19:07:39.929414+00:00"
         }
       ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "e5a96740-7dbc-49b1-b755-e4b13e9eaf82",
+          "assetProduced": false,
+          "generationPrompt": "One full-length FRONT commercial swimwear catalogue studio portrait preserving the exact magenta swim set and adult woman in the supplied original reference. One model only, calm neutral straight-on stance with arms relaxed slightly apart. Preserve opaque rich magenta gathered/ruched bandeau top with slim halter neck straps, matching magenta briefs with original side bow ties and long hanging ends, same source coverage and material. Same adult medium-brown model, sleek center-part hair tied back, small hoop earrings and barefoot styling. No new cutouts, logos, accessories or redesign. Full head, hands, all ties/garment edges and both feet safely within portrait margins. Natural realistic adult anatomy/skin and textile detail, undistorted limbs, fingers and toes. Soft even neutral studio light and subtle credible floor contact shadows. Genuine transparent alpha preserving magenta fabric/hair/ties/shadows. Request 1800x2700 portrait if supported; otherwise true native dimensions. One figure/shadow only, no text, graphic, border, pair or collage. Provisional AI preservation of supplied design, unseen rear/construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:10:00.112614+00:00"
+        }
+      ]
     }
   ],
-  "nextAction": "Generate and validate front for swimwear-ref-04; checkpoint before the following view",
+  "nextAction": "Generate and validate front for swimwear-ref-07; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -213,7 +230,7 @@
       ]
     }
   ],
-  "notes": "No file produced. Eight blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-04 Front.",
+  "notes": "No file produced. Nine blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-07 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
