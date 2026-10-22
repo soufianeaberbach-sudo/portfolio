@@ -4704,7 +4704,11 @@
           "/portfolio/evening/5-1400.webp"
         ],
         "nativeResampled": false,
-        "reviewNote": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive."
+        "reviewNote": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-05-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "back": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-05-v1/back-native.png",
@@ -4721,7 +4725,11 @@
           "/portfolio/generated/ww-ai-evening-ref-05-v1/front-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional."
+        "reviewNote": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-05-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "editorial": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-05-v1/editorial-native.png",
@@ -4739,33 +4747,129 @@
           "/portfolio/generated/ww-ai-evening-ref-05-v1/back-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Inspected native over white. Quiet three-quarter weight shift, same brunette updo/model and rust chiffon look. Correct right thin strap/cold shoulder, left cape, loose upper layer, pale-reverse flounce and whole floor hem. No obvious anatomy, crop or background defect; textile translucency remains intact."
+        "reviewNote": "Inspected native over white. Quiet three-quarter weight shift, same brunette updo/model and rust chiffon look. Correct right thin strap/cold shoulder, left cape, loose upper layer, pale-reverse flounce and whole floor hem. No obvious anatomy, crop or background defect; textile translucency remains intact.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-05-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
-      "master": null,
-      "status": "GENERATED",
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-evening-ref-05-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-evening-ref-05-v1/master-900.webp 900w, /portfolio/generated/ww-ai-evening-ref-05-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-evening-ref-05-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-evening-ref-05-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-evening-ref-05-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
+      },
+      "status": "READY",
       "qualityResult": {
         "frontVisual": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; requested exports will be explicitly resampled.",
         "ownerArtisticApproval": false,
         "backVisual": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional.",
         "editorialVisual": "Inspected native over white. Quiet three-quarter weight shift, same brunette updo/model and rust chiffon look. Correct right thin strap/cold shoulder, left cape, loose upper layer, pale-reverse flounce and whole floor hem. No obvious anatomy, crop or background defect; textile translucency remains intact.",
-        "setVisualReview": "Compared original source and all three real native portraits over white. Same adult brunette updo and muted rust tonal-print chiffon; asymmetric right thin strap/cold shoulder and left cape, ruffled front neckline, deep rear V, loose upper layer, pale-reverse cascading flounce and full floor hem remain consistent. True rear, one model per image, complete hands/head/cloth and natural anatomy. Fine motif placement and hidden construction remain provisional."
+        "setVisualReview": "Compared original source and all three real native portraits over white. Same adult brunette updo and muted rust tonal-print chiffon; asymmetric right thin strap/cold shoulder and left cape, ruffled front neckline, deep rear V, loose upper layer, pale-reverse cascading flounce and full floor hem remain consistent. True rear, one model per image, complete hands/head/cloth and natural anatomy. Fine motif placement and hidden construction remain provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              204,
+              21,
+              817,
+              1504
+            ],
+            "uniformScale": 1.6021577882670264,
+            "exportOpaqueBox": [
+              409,
+              162,
+              1391,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              177,
+              15,
+              880,
+              1510
+            ],
+            "uniformScale": 1.5892976588628762,
+            "exportOpaqueBox": [
+              341,
+              162,
+              1459,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              187,
+              26,
+              888,
+              1500
+            ],
+            "uniformScale": 1.6119402985074627,
+            "exportOpaqueBox": [
+              335,
+              162,
+              1465,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "masterVisualReview": "Inspected actual white 5400x2700 master: equal undistorted thirds, intact head/hands/sleeves/cascade/hem, consistent model/rust color and safe margins. Figure floor aligned with uniform scaling only; no dark ground or halo. Native limitation and provisional construction remain explicit."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Fine tonal motif placement, hidden fastenings and exact pattern/construction remain interpretation from the supplied photographs."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1875
       },
       "sourceMetadataMatchesPixels": false,
       "lastVerifiedCheckpoint": {
-        "commit": "fd0882983ee4fdc8bea6d22000954f81171a16ae",
+        "commit": "f4e43a063590c29fd1ed3adc8b0b1d487fc4bd37",
         "views": [
           "front",
-          "back"
+          "back",
+          "editorial"
         ],
         "master": false
       },
