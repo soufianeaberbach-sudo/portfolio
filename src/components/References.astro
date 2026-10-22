@@ -1,4 +1,8 @@
 ---
+import { getLocale } from '../i18n/locales';
+import { contact } from '../i18n/pages/contact';
+import { ui } from '../i18n/ui';
+import { fill } from '../i18n/dict';
 /* Three references, three source treatments.
  *
  * Katharine and Khalid are PERSONAL professional references. They are not
@@ -49,12 +53,17 @@ interface Props {
   mode: 'list' | 'full';
 }
 const { mode } = Astro.props;
-const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} review` : 'Professional reference');
+/* Outside English a quote is shown as a faithful translation and says so;
+   the original wording above remains the source. */
+const locale = getLocale(Astro.url);
+const t = ui[locale].references;
+const quotes = contact[locale].quotes;
+const sourceLabel = (r: Reference) => (r.kind === 'platform' ? fill(t.platformReview, { platform: r.platform }) : t.personal);
 ---
 
 {mode === 'list' && (
-  <aside class="vouch" aria-label="References">
-    <p class="label vouch__head">References</p>
+  <aside class="vouch" aria-label={t.list}>
+    <p class="label vouch__head">{t.list}</p>
     <ul>
       {REFERENCES.map((r) => (
         <li>
@@ -68,17 +77,17 @@ const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} re
 
 {mode === 'full' && (
   <div class="refs">
-    {REFERENCES.map((r) => (
+    {REFERENCES.map((r, i) => (
       <figure class:list={['ref', `ref--${r.kind}`]} data-reveal>
-        <blockquote class="ref__quote"><p>{r.quote}</p></blockquote>
+        <blockquote class="ref__quote"><p>{quotes[i]}</p></blockquote>
         <figcaption class="ref__source">
           <span class="ref__name">{r.name}</span>
           {r.kind === 'personal' ? (
-            <span class="label ref__meta">Professional reference</span>
+            <span class="label ref__meta">{t.personal}</span>
           ) : (
             <span class="ref__platform">
-              <span class="label ref__meta">Freelance client &middot; {r.platform}</span>
-              <span class="ref__stars" aria-label={`${r.rating} out of 5`}>
+              <span class="label ref__meta">{fill(t.freelance, { platform: r.platform })}</span>
+              <span class="ref__stars" aria-label={fill(t.stars, { rating: r.rating })}>
                 <span aria-hidden="true">
                   {Array.from({ length: r.rating }).map(() => (
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -87,9 +96,10 @@ const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} re
                   ))}
                 </span>
               </span>
-              <span class="label ref__privacy">{r.privacyNote}</span>
+              <span class="label ref__privacy">{t.privacy}</span>
             </span>
           )}
+          {t.translated && <span class="label ref__translated">{t.translated}</span>}
         </figcaption>
       </figure>
     ))}
@@ -139,6 +149,7 @@ const sourceLabel = (r: Reference) => (r.kind === 'platform' ? `${r.platform} re
   .ref__stars { display: inline-flex; gap: .12rem; }
   .ref__stars svg { width: .8rem; height: .8rem; fill: var(--signal); }
   .ref__privacy { flex-basis: 100%; color: var(--muted); }
+  .ref__translated { color: var(--muted); opacity: .8; }
 
   @media (max-width: 1080px) {
     .refs { grid-template-columns: repeat(2, minmax(0, 1fr)); }

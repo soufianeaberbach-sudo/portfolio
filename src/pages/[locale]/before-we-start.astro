@@ -1,0 +1,8 @@
+---
+/* The before-we-start page in French, Spanish or Arabic. One implementation serves
+   every language: the page reads its locale from the URL. */
+import Page from '../before-we-start.astro';
+import { localeStaticPaths } from '../../i18n/locales';
+export const getStaticPaths = localeStaticPaths;
+---
+<Page />

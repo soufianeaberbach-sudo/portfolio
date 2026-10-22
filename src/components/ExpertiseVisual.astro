@@ -14,6 +14,8 @@
  * mode="stage"  — all four stacked, crossfaded by data-active (desktop rail)
  * mode="single" — one stage rendered inline (tablet, mobile, reduced motion)
  */
+import { getLocale } from '../i18n/locales';
+import { expertise } from '../i18n/pages/expertise';
 export interface Stage {
   key: string;
   n: string;
@@ -65,7 +67,11 @@ interface Props {
 }
 
 const { mode = 'single', stage = 1 } = Astro.props;
-const shown = mode === 'stage' ? STAGES : [STAGES[stage - 1]];
+/* Names and descriptions in the page's language; files and focal points are
+   shared by every language. */
+const t = expertise[getLocale(Astro.url)];
+const localized = STAGES.map((s, i) => ({ ...s, name: t.systems[i], alt: t.visualAlts[i] }));
+const shown = mode === 'stage' ? localized : [localized[stage - 1]];
 const src = (file: string, w: 800 | 1400) => `/expertise-temp/${file}-${w}.webp`;
 ---
 

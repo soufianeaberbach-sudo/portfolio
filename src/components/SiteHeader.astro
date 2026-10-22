@@ -1,47 +1,99 @@
 ---
 import Arrow from './Arrow.astro';
+import { getLocale, localeMeta, localizePath, locales, stripLocale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+const locale = getLocale(Astro.url);
+const t = ui[locale];
+const l = (href: string) => localizePath(href, locale);
 const navItems = [
-  { href: '/', label: 'Home', index: '00' },
-  { href: '/expertise/', label: 'Expertise', index: '01' },
-  { href: '/portfolio/', label: 'Portfolio', index: '02' },
-  { href: '/process/', label: 'Process', index: '03' },
-  { href: '/experience/', label: 'Experience', index: '04' },
-  { href: '/contact/', label: 'Contact', index: '05' },
+  { href: '/', label: t.nav.home, index: '00' },
+  { href: '/expertise/', label: t.nav.expertise, index: '01' },
+  { href: '/portfolio/', label: t.nav.portfolio, index: '02' },
+  { href: '/process/', label: t.nav.process, index: '03' },
+  { href: '/experience/', label: t.nav.experience, index: '04' },
+  { href: '/contact/', label: t.nav.contact, index: '05' },
 ];
 
-const path = Astro.url.pathname;
+const path = stripLocale(Astro.url.pathname);
 const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+
+/* THE LANGUAGE SWITCHER. Four words, set in the navigation's own mono label
+   register: EN · FR · ES · عربي. Each is a real link to the equivalent page,
+   written in its own language and tagged with that language, so it is read
+   correctly by a screen reader whatever the page language is. Direction is
+   set on the label only, so the separators follow the page's own direction.
+   No flags (a
+   language is not a country), no dropdown, nothing stored. */
+const languages = locales.map((code) => ({
+  code,
+  label: localeMeta[code].label,
+  name: localeMeta[code].name,
+  dir: localeMeta[code].dir,
+  href: localizePath(path, code),
+  current: code === locale,
+}));
 ---
 
 <header class="site-header" data-site-header>
-  <a class="brand" href="/" aria-label="Soufiane Aberbach — Home">
+  <a class="brand" href={l('/')} aria-label={t.homeLabel}>
     <span>SA</span><i aria-hidden="true"></i>
   </a>
 
-  <nav class="desktop-nav" aria-label="Primary navigation">
+  <nav class="desktop-nav" aria-label={t.primaryNav}>
     {navItems.map((item) => (
-      <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+      <a href={l(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
         <span>{item.index}</span>{item.label}
       </a>
     ))}
   </nav>
 
-  <a class="header-brief" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
+  <nav class="lang-switch lang-switch--header" aria-label={t.language}>
+    {languages.map((language) => (
+      <a
+        href={language.href}
+        hreflang={language.code}
+        lang={language.code}
+        aria-current={language.current ? 'true' : undefined}
+        data-lang-link={language.code}
+      >
+        <span aria-hidden="true" dir={language.dir}>{language.label}</span>
+        <span class="sr-only">{language.current ? `${language.name} — ${t.languageCurrent}` : language.name}</span>
+      </a>
+    ))}
+  </nav>
 
-  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
-    <span class="sr-only">Open menu</span>
+  <a class="header-brief" href={l('/contact/')}>{t.startBrief} <span aria-hidden="true"><Arrow /></span></a>
+
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle
+          data-open-label={t.openMenu} data-close-label={t.closeMenu}>
+    <span class="sr-only">{t.openMenu}</span>
     <i></i><i></i>
   </button>
 
   <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true">
-    <div class="mobile-menu__meta label">Tangier, Morocco <span>Remote collaboration</span></div>
-    <nav aria-label="Mobile navigation">
+    <div class="mobile-menu__meta label">{t.place} <span>{t.remote}</span></div>
+    <nav aria-label={t.mobileNav}>
       {navItems.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+        <a href={l(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
           <span>{item.index}</span><strong>{item.label}</strong><i aria-hidden="true"><Arrow /></i>
         </a>
       ))}
     </nav>
-    <p>Fashion design, product development and production intelligence.</p>
+    <nav class="lang-switch lang-switch--menu" aria-label={t.language}>
+      {languages.map((language) => (
+        <a
+          href={language.href}
+          hreflang={language.code}
+          lang={language.code}
+          aria-current={language.current ? 'true' : undefined}
+          data-lang-link={language.code}
+        >
+          <span aria-hidden="true" dir={language.dir}>{language.label}</span>
+          <span class="sr-only">{language.current ? `${language.name} — ${t.languageCurrent}` : language.name}</span>
+        </a>
+      ))}
+    </nav>
+    <p>{t.menuLine}</p>
   </div>
 </header>

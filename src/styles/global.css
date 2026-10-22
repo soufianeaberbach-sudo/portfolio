@@ -64,7 +64,7 @@ button { color: inherit; }
 .skip-link {
   position: fixed;
   z-index: 1000;
-  left: 1rem;
+  inset-inline-start: 1rem;
   top: 1rem;
   padding: .75rem 1rem;
   background: var(--ink);
@@ -206,7 +206,7 @@ button { color: inherit; }
   width: 100%;
   height: var(--header-h);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   align-items: center;
   gap: 2rem;
   padding-inline: var(--gutter);
@@ -255,7 +255,7 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   letter-spacing: .12em;
   text-transform: uppercase;
 }
-.desktop-nav a span { color: var(--muted); margin-right: .4rem; font-size: .55rem; }
+.desktop-nav a span { color: var(--muted); margin-inline-end: .4rem; font-size: .55rem; }
 .desktop-nav a::after {
   content: '';
   position: absolute;
@@ -277,7 +277,45 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   letter-spacing: .1em;
   text-transform: uppercase;
 }
-.header-brief span { color: var(--signal); margin-left: .35rem; }
+.header-brief span { color: var(--signal); margin-inline-start: .35rem; }
+
+/* LANGUAGE SWITCHER. The navigation's own mono register, one step quieter:
+   muted until hovered, the current language in ink with the same signal
+   underline the active page carries. Separators are drawn, not typed, so a
+   screen reader hears four languages and nothing else. */
+.lang-switch { display: flex; align-items: center; }
+.lang-switch a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .25s var(--ease);
+}
+.lang-switch a[lang='ar'] { font-family: 'IBM Plex Sans Arabic', var(--body); font-size: .72rem; letter-spacing: 0; text-transform: none; }
+.lang-switch a + a::before {
+  content: '';
+  width: 1px;
+  height: .7em;
+  margin-inline: .55rem;
+  background: var(--line-strong);
+}
+.lang-switch a:hover, .lang-switch a[aria-current='true'] { color: inherit; }
+.lang-switch a[aria-current='true'] > span:first-child {
+  text-decoration: underline;
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .45em;
+}
+.lang-switch--header a { padding-block: .6rem; }
+.lang-switch--menu { display: none; }
+/* The menu's own nav rules (grid rows, rules between items) are for the page
+   list; the language row is a single quiet line beneath it. */
+.mobile-menu nav.lang-switch--menu { margin-top: 2rem; border-top: 0; }
+.mobile-menu nav.lang-switch--menu a { display: inline-flex; grid-template-columns: none; padding: 0; border-bottom: 0; }
 
 .menu-toggle {
   display: none;
@@ -426,8 +464,15 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 }
 
 @media (max-width: 1080px) {
-  .desktop-nav, .header-brief { display: none; }
+  .desktop-nav, .header-brief, .lang-switch--header { display: none; }
   .site-header { grid-template-columns: 1fr auto; }
+  /* On a phone the languages live in the menu, beside the place line, with
+     real touch targets — the bar keeps only the mark and the toggle. */
+  .lang-switch--menu { display: flex; }
+  .lang-switch--menu a { min-height: 44px; min-width: 2.75rem; justify-content: center; font-size: .72rem; color: #aaa89f; }
+  .lang-switch--menu a[lang='ar'] { font-size: .86rem; }
+  .lang-switch--menu a + a::before { position: absolute; inset-inline-start: 0; margin: 0; background: #393933; }
+  .lang-switch--menu a:hover, .lang-switch--menu a[aria-current='true'] { color: var(--paper); }
   .menu-toggle, .mobile-menu { display: block; }
   .page-intro { grid-template-columns: minmax(0, 1fr); min-height: 74vh; gap: 2rem; }
   .page-intro > * { min-width: 0; }
@@ -470,4 +515,16 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* LOCALIZED CHAPTER NAMES. The Portfolio covers fit ONE word (WOMENSWEAR,
+   TECH PACKS) and let it run into the plate's negative space without ever
+   breaking. Translated names are often two words — DOSSIERS TECHNIQUES,
+   FICHAS TÉCNICAS, الأزياء الرجالية — which would run across the photograph
+   or off the canvas. Outside English they break at their spaces only:
+   min-content keeps the box exactly as wide as the longest word, so the
+   reveal clip still never cuts a word, and a single-word name is unchanged. */
+html:not([lang='en']) .pf-cover__name {
+  white-space: normal;
+  width: min-content;
 }

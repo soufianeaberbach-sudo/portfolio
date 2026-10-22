@@ -4,17 +4,21 @@ import{finalPhotographs}from'../../data/final-photography';
 import{menswearCredit}from'../../data/menswear-collection';
 import{menswearDirections}from'../../data/menswear-direction';
 import MenswearPhoto from'./MenswearPhoto.astro';
+import{getLocale}from'../../i18n/locales';
+import{pf,viewLabel}from'../../i18n/portfolio';
+import{categoryName,terms}from'../../i18n/portfolio-terms';
 interface Props{subject:Subject;}
 const{subject}=Astro.props,photos=finalPhotographs(subject),credit=menswearCredit(subject.id),direction=menswearDirections[subject.category as keyof typeof menswearDirections];
+const locale=getLocale(Astro.url),t=pf[locale].men,back=terms[locale].runtime.backTo.replace('{name}',categoryName(locale,subject.category));
 ---
 <article class="pf-rd__subject mw-reader" data-mw-reader data-subject={subject.id} data-of={subject.category} id={`menswear/${subject.category}/${subject.id}`} data-verified={subject.verified?'yes':'no'} hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby={`${subject.id}-title`}>
- <header class="mw-reader-head"><a href={`#menswear/${subject.category}`} data-nav data-subject-close>← {direction.name}</a><span class="label">{subject.verified?'Final photography':'Reference photograph'}</span></header>
+ <header class="mw-reader-head"><a href={`#menswear/${subject.category}`} data-nav data-subject-close>{back}</a><span class="label">{subject.verified?t.readerFinal:t.readerReference}</span></header>
  <div class="mw-reader-floor">
-  <div class="mw-reader-caption"><h3 id={`${subject.id}-title`}>{subject.title??subject.caption}</h3>{credit&&<a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer??(credit.sourcePage?.startsWith('https://www.pexels.com/')?'Reference source':credit.source)}{credit.sourcePage?.startsWith('https://www.pexels.com/')?' / Pexels':''} ↗</a>}</div>
+  <div class="mw-reader-caption"><h3 id={`${subject.id}-title`}>{subject.title??subject.caption}</h3>{credit&&<a href={credit.sourcePage} target="_blank" rel="noopener"><bdi>{credit.photographer??(credit.sourcePage?.startsWith('https://www.pexels.com/')?t.referenceSource:credit.source)}{credit.sourcePage?.startsWith('https://www.pexels.com/')?' / Pexels':''}</bdi> {locale==='ar'?'↖':'↗'}</a>}</div>
   <div class="mw-reader-target" data-mw-target>{photos.map((photo,i)=><div data-mw-view-panel={i} hidden={i!==0}><MenswearPhoto image={photo.image} crop={photo.crop}/></div>)}</div>
-  <nav class="mw-reader-views" aria-label="Photographic views">{photos.length>1?photos.map((p,i)=><button data-mw-view={i} aria-pressed={i===0?'true':'false'}>{p.label}</button>):<span>{photos[0].label}</span>}<button data-rd-inspect aria-pressed="false">Look closer</button></nav>
-  <div class="mw-zoom" data-mw-zoom hidden><button data-mw-zoom-by="0.714" aria-label="Zoom out">−</button><button data-mw-fit>Fit / reset</button><button data-mw-zoom-by="1.4" aria-label="Zoom in">+</button><a href={photos[0].image.src} data-mw-original target="_blank" rel="noopener">Original source ↗</a></div>
-  <noscript><p>Available source photographs: {photos.map(p=><a href={p.image.src}>{p.label} ↗ </a>)}</p></noscript>
+  <nav class="mw-reader-views" aria-label={t.views}>{photos.length>1?photos.map((p,i)=><button data-mw-view={i} aria-pressed={i===0?'true':'false'}>{viewLabel(p.label,locale)}</button>):<span>{viewLabel(photos[0].label,locale)}</span>}<button data-rd-inspect aria-pressed="false">{t.lookCloser}</button></nav>
+  <div class="mw-zoom" data-mw-zoom hidden><button data-mw-zoom-by="0.714" aria-label={pf[locale].reader.zoomOut}>−</button><button data-mw-fit>{t.fitReset}</button><button data-mw-zoom-by="1.4" aria-label={pf[locale].reader.zoomIn}>+</button><a href={photos[0].image.src} data-mw-original target="_blank" rel="noopener">{t.original}</a></div>
+  <noscript><p>{t.available} {photos.map(p=><a href={p.image.src}>{viewLabel(p.label,locale)} {locale==='ar'?'↖':'↗'} </a>)}</p></noscript>
   <p class="mw-reader-status" data-mw-status role="status"></p>
  </div>
 </article>

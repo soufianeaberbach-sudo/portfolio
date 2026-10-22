@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { verifyProduction } from '../scripts/verify-production.mjs';
-import { indexableRoutes } from '../src/data/site-routes.mjs';
+import { localizedRoutes as indexableRoutes } from '../src/data/site-routes.mjs';
 
 const ORIGIN = 'https://aberbach.co';
 function fixtures(override = () => undefined) {
