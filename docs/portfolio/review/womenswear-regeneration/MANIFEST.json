@@ -4723,14 +4723,33 @@
         "nativeResampled": false,
         "reviewNote": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-05-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "92ee5be204387e969cbb3fe9e01ee6a0461e73553f87d56a8b7551118e8c61bf",
+        "toolOutputPath": "/workspace/generated_images/exec-fa56ac03-2fb3-48f6-871f-9a62699d8465.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial native edit using original evidence plus accepted Front and Back",
+        "generationPrompt": "Produce exactly ONE single adult woman in a full-length EDITORIAL studio portrait of the identical rust asymmetric chiffon gown and brunette updo model established in the references. Original two-view source is garment evidence; accepted single Front and true Back establish the exact model, color, tonal curved organic print, drape, proportions and light. Keep the original design: wearer's RIGHT thin strap, open shoulder and long wide dropped sleeve; wearer's LEFT broad chiffon cape/shoulder and cascading long pale-reverse flounce; ruffled front neckline, loose layered upper section over hips, floor-length flowing skirt with soft lower hem. Source-supported deep V rear remains unchanged. Pose a quiet front three-quarter angle and slight weight shift, one relaxed hand slightly outward to reveal a sleeve, never lifting or throwing fabric. Do not add symmetry, a belt, slit, accessories or change the silhouette. Same adult woman, neat swept-back bun, natural makeup. One person only, no diptych, montage or second body. All of head, hands, sleeves, flounce and complete skirt hem inside canvas with generous safe margins, natural anatomy. Soft neutral premium fashion lighting, realistic fine textile and skin, subtle credible floor-contact shadow. Genuine transparent alpha background retaining all chiffon translucency and warm rust colors. Request 1800x2700 portrait if supported, otherwise actual native portrait resolution. No text, border or labels. Provisional AI presentation of supplied photography, not verified production or authorship.",
+        "referenceAssets": [
+          "/portfolio/evening/5-1400.webp",
+          "/portfolio/generated/ww-ai-evening-ref-05-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-05-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Inspected native over white. Quiet three-quarter weight shift, same brunette updo/model and rust chiffon look. Correct right thin strap/cold shoulder, left cape, loose upper layer, pale-reverse flounce and whole floor hem. No obvious anatomy, crop or background defect; textile translucency remains intact."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; requested exports will be explicitly resampled.",
         "ownerArtisticApproval": false,
-        "backVisual": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional."
+        "backVisual": "Inspected native over white. One straight rear figure, face away; same brunette updo and rust patterned chiffon. Deep V rear, right thin strap/cold shoulder, left cape, loose upper layer and left cascading pale-reverse flounce retained. Entire hands, sleeve edges and soft floor hem visible. No obvious anatomy/alpha-ground failure. Exact hidden seams remain provisional.",
+        "editorialVisual": "Inspected native over white. Quiet three-quarter weight shift, same brunette updo/model and rust chiffon look. Correct right thin strap/cold shoulder, left cape, loose upper layer, pale-reverse flounce and whole floor hem. No obvious anatomy, crop or background defect; textile translucency remains intact.",
+        "setVisualReview": "Compared original source and all three real native portraits over white. Same adult brunette updo and muted rust tonal-print chiffon; asymmetric right thin strap/cold shoulder and left cape, ruffled front neckline, deep rear V, loose upper layer, pale-reverse cascading flounce and full floor hem remain consistent. True rear, one model per image, complete hands/head/cloth and natural anatomy. Fine motif placement and hidden construction remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -4743,12 +4762,15 @@
       },
       "sourceMetadataMatchesPixels": false,
       "lastVerifiedCheckpoint": {
-        "commit": "ac59d85d8f5d46e809084ba271d52380579ce45c",
+        "commit": "fd0882983ee4fdc8bea6d22000954f81171a16ae",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied rust tonal-print chiffon gown, with asymmetric cold shoulder and cape, loose upper layer, pale-reverse cascading ruffle and full floor-length skirt.",
+      "generatedCaption": "Rust chiffon gown with asymmetric cape and cascading flounce."
     },
     {
       "sourceIdentity": "evening-ref-06",
