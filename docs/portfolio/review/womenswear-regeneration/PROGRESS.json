@@ -4,26 +4,25 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "evening-ref-10",
+  "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:57:54.808486+00:00",
+  "updatedUTC": "2026-10-22T18:59:43.534344+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 28,
+  "completedLooks": 29,
   "pendingLooks": 11,
-  "partiallyGeneratedLooks": 1,
+  "partiallyGeneratedLooks": 0,
   "statusCounts": {
     "INTEGRATED": 9,
-    "READY": 19,
-    "PENDING": 11,
-    "GENERATED": 1
+    "READY": 20,
+    "PENDING": 11
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-10",
-  "currentMilestone": "editorial",
-  "lastSuccessfullyPushedCommit": "079b713854be9a54b354a6eef48b484b83b285b1",
+  "currentMilestone": "set",
+  "lastSuccessfullyPushedCommit": "5299f75a5c42652c4a09b00f2d3e02a59b202d24",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-10",
+  "nextActionableSourceIdentity": "swimwear-ref-01",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -104,7 +103,7 @@
       ]
     }
   ],
-  "nextAction": "Review three views and assemble master",
+  "nextAction": "Generate and validate front for swimwear-ref-01; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -163,7 +162,7 @@
       ]
     }
   ],
-  "notes": "Three original-concept native portraits accepted, all actual 1024x1536. Rear remains provisional; master assembly next.",
+  "notes": "29 complete, no partial, 11 pending including five tool blocks. Original concept master reviewed; actual files/registry and 198 slot checks pass. Next swimwear-ref-01 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
