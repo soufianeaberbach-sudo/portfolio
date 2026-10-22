@@ -1,4 +1,4 @@
-import {paintPhoto} from './garment-photo';
+import {paintPhoto,preparePhotograph,sameLoadedPhotograph} from './garment-photo';
 import {garmentMatchCut,cancelGarmentMatchCut} from './garment-match-cut';
 import {initWomenswearExhibition} from './womenswear-exhibition';
 export function initWomenswear(root:HTMLElement){
@@ -31,19 +31,19 @@ export function initWomenswear(root:HTMLElement){
   s.select=(view:number,immediate=false)=>{
    cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;
    const chosen=Math.max(0,Math.min(panels.length-1,view)),request=++selection,image=images[chosen];requestedView=chosen;
-   image.loading='eager';image.sizes=`${image.getAttribute('width')}px`;
+   preparePhotograph(image);
    const commit=()=>{
     if(request!==selection)return;s.reset();s.view=requestedView=chosen;panels.forEach((p,i)=>p.hidden=i!==chosen);original.href=image.src;
     reader.querySelectorAll<HTMLElement>('[data-ww-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.wwView)===chosen)));s.draw();
     // Only the selected reader's next genuine view is prepared. Zoom never
     // swaps responsive candidates. Static crop windows avoid extra 3D layers.
-    const next=images[chosen+1];if(next){next.loading='eager';next.sizes=`${next.getAttribute('width')}px`;void next.decode().catch(()=>{});}
+    const next=images[chosen+1];if(next){preparePhotograph(next);void next.decode().catch(()=>{});}
    };
-   if(immediate||chosen===s.view){commit();return;}
+   if(immediate||chosen===s.view||sameLoadedPhotograph(image,images[s.view])){commit();return;}
    // Keep the current photograph visible until its replacement is decoded.
    // An interrupted request cannot overwrite a later selection or return.
    reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';
-   void image.decode().then(commit,()=>{if(request!==selection)return;reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable. The current view remains available.';});
+   void image.decode().then(commit,()=>{if(request!==selection)return;if(sameLoadedPhotograph(image,images[s.view])){commit();return;}requestedView=s.view;reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable. The current view remains available.';});
   };
   for(const button of reader.querySelectorAll<HTMLButtonElement>('[data-ww-view]'))button.addEventListener('click',()=>s.select(Number(button.dataset.wwView)));
   inspect.addEventListener('click',()=>setInspect(!reader.hasAttribute('data-inspect')));

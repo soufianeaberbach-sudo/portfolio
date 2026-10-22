@@ -1,4 +1,5 @@
 import{paintMenswear}from'./menswear-film';
+import{preparePhotograph,sameLoadedPhotograph}from'./garment-photo';
 import{menswearDirections}from'../data/menswear-direction';
 import type{MenswearCategory}from'../data/menswear-collection';
 import{gsap}from'gsap';
@@ -140,9 +141,9 @@ export function initMenswear(root:HTMLElement){
   const draw=()=>{const photo=photos[view],mx=Math.max(0,(photo.clientWidth*zoom-viewport.clientWidth)/2),my=Math.max(0,(photo.clientHeight*zoom-viewport.clientHeight)/2);x=clamp(x,-mx,mx);y=clamp(y,-my,my);photo.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;status.textContent=reader.hasAttribute('data-inspect')?`${Math.round(zoom*100)}% · drag / pinch / arrow keys`:!images[view].complete?'Loading photograph…':!images[view].naturalWidth?'Photograph unavailable. Return to the exhibition to continue.':'';};
   const reset=()=>{selection++;requestedView=view;pointers.clear();photos.forEach(p=>p.style.transform='');zoom=1;x=y=0;reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;reader.removeAttribute('aria-busy');draw();};
   const select=(n:number,immediate=false)=>{
-   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];image.loading='eager';image.sizes=`${image.getAttribute('width')}px`;
+   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];preparePhotograph(image);
    const commit=()=>{if(token!==selection)return;reset();view=requestedView=next;reader.toggleAttribute('data-wide',Number(photos[next].style.getPropertyValue('--photo-aspect'))>1.1);panels.forEach((p,i)=>p.hidden=i!==next);reader.querySelectorAll<HTMLElement>('[data-mw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.mwView)===next)));reader.querySelector<HTMLAnchorElement>('[data-mw-original]')!.href=image.src;draw();};
-   if(next===view||immediate){commit();return;}reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';void image.decode().then(commit,()=>{if(token===selection){reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable; the current view remains available.';}});
+   if(next===view||immediate||sameLoadedPhotograph(image,images[view])){commit();return;}reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';void image.decode().then(commit,()=>{if(token===selection){if(sameLoadedPhotograph(image,images[view])){commit();return;}requestedView=view;reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable; the current view remains available.';}});
   };
   readerStates.set(reader,{select,reset,draw,view:()=>view});
   reader.querySelectorAll<HTMLButtonElement>('[data-mw-view]').forEach(b=>b.addEventListener('click',()=>select(Number(b.dataset.mwView))));
