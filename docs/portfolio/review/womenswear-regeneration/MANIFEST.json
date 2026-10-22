@@ -3998,14 +3998,33 @@
         "nativeResampled": false,
         "reviewNote": "Native inspected over white: one true rear figure with face away, same updo and grey botanical chiffon gown. Source-supported deep V rear and nape tie, gathered fitted hips, elbow tiers/bell cuffs, full flounced train retained. Complete hands and cloth edges; no obvious anatomy or background defect."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-01-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "0f4d25ae56509e862aaf62bc1d27919778605896eb9491a166fa9ecd4ba2d243",
+        "toolOutputPath": "/workspace/generated_images/exec-5394cb6a-56e5-4d34-a6c0-f3dd1c5b17a9.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial native edit using original source and accepted Front/Back identity views",
+        "generationPrompt": "Create exactly ONE single-person full-length EDITORIAL fashion portrait of the same adult brunette woman wearing the identical dove-grey botanical occasion gown from the attached evidence. First image is original front/back source; second and third are accepted single Front and true Back and establish exact model identity, hair updo, proportions, dress, black flower/leaf print, fabric and neutral studio light. Preserve the supplied design: boat neckline, gently blouson bodice, fitted waist/hips, elaborate two-tier elbow flounces and long sheer bell cuffs, grey floral flared skirt with cascading vertical ruffles and full pooling train; source-supported deep rear V/tie remains part of the garment. Pose the woman at a quiet front three-quarter angle, a very small controlled shift in weight and gentle turn of head toward the camera. Show the full gown naturally at rest, not flying or shortened. Arms slightly relaxed away from sides so flounces remain readable. Same woman, same garment, no new slit, accessory, hairstyle, shoes or new styling. Exactly one model, never a Front/Back diptych or collage. Full head, hands, all sleeve edges and entire train must remain on canvas with generous safe margins. Premium restrained commercial fashion photograph, realistic skin/textile, anatomically natural limbs and fingers, soft even light and credible subtle floor contact. Genuine transparent alpha background that preserves all grey and translucent textile edges. Requested portrait 1800x2700 if supported; retain actual native dimensions if lower. No labels, text, border or extra person. Provisional AI source-based photography, no production/authorship claim.",
+        "referenceAssets": [
+          "/portfolio/evening/1-1400.webp",
+          "/portfolio/generated/ww-ai-evening-ref-01-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-01-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white. Quiet front-three-quarter weight shift, same brunette updo/model and grey botanical gown; full head, hands, bell sleeves, vertical flounces and train on canvas. No obvious anatomy failure, halo or cropped cloth. Editorial variation is deliberately restrained."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Inspected native RGBA over white. One adult model, frontal torso, full head/hands and complete grey botanical gown/train; boat neck, blouson waist, tiered elbow flounces, transparent bell cuffs and vertical skirt flounces retained. No obvious anatomy failure; no dark background/halo over white. Fine print placement remains interpretive.",
         "nativeResolutionLimitation": "Actual native Front is 1024x1536 RGBA; requested 1800x2700 delivery will be an explicit resampled export.",
         "ownerArtisticApproval": false,
-        "backVisual": "Native inspected over white: one true rear figure with face away, same updo and grey botanical chiffon gown. Source-supported deep V rear and nape tie, gathered fitted hips, elbow tiers/bell cuffs, full flounced train retained. Complete hands and cloth edges; no obvious anatomy or background defect."
+        "backVisual": "Native inspected over white: one true rear figure with face away, same updo and grey botanical chiffon gown. Source-supported deep V rear and nape tie, gathered fitted hips, elbow tiers/bell cuffs, full flounced train retained. Complete hands and cloth edges; no obvious anatomy or background defect.",
+        "editorialVisual": "Native inspected over white. Quiet front-three-quarter weight shift, same brunette updo/model and grey botanical gown; full head, hands, bell sleeves, vertical flounces and train on canvas. No obvious anatomy failure, halo or cropped cloth. Editorial variation is deliberately restrained.",
+        "setVisualReview": "Compared original Front/Back and all three actual native portraits over white. Same adult brunette updo, grey/black botanical chiffon, boat-front/deep-V rear with nape tie, blouson waist, gathered rear hips, elbow flounces, sheer bell cuffs, cascading skirt flounces and complete train. One person each, genuine rear, restrained Editorial; no obvious anatomy/crop failure. Fine print placement and unseen construction remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -4018,12 +4037,15 @@
       },
       "sourceMetadataMatchesPixels": false,
       "lastVerifiedCheckpoint": {
-        "commit": "dc1aab6bebf2acd2a9956e437191fe57a8ca1e56",
+        "commit": "1bac2c21c2a1ab1a5a61268554b9f52510cce118",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied dove-grey botanical-print chiffon gown with boat neckline, deep tied rear opening, layered bell sleeves, cascading skirt flounces and full train.",
+      "generatedCaption": "Grey botanical chiffon gown, tiered bell sleeves and flounced train."
     },
     {
       "sourceIdentity": "evening-ref-02",
