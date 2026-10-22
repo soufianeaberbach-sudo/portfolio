@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:04:17.989603+00:00",
+  "updatedUTC": "2026-10-22T20:06:27.129943+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 8,
@@ -19,11 +19,11 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-08",
-  "currentMilestone": "back",
-  "lastSuccessfullyPushedCommit": "9bfb20e4f9d56897db4fd6963ae796415b8364c2",
+  "currentMilestone": "editorial-blocked-commercial-retry",
+  "lastSuccessfullyPushedCommit": "67439a799067e85faa75341a20f37fbf457bb48b",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-08",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -217,6 +217,57 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:58:51.667521+00:00"
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "7a320bad-c1ec-4d25-a696-68b10e32c9a6",
+          "assetProduced": false,
+          "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        },
+        {
+          "view": "editorial",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "00446695-0326-43c7-8c9f-bed7cbcf523a",
+          "attempt": "primary-commercial",
+          "generationPrompt": "One professional commercial studio catalogue photograph of the identical adult model and black halter garment in the accepted Front and Back references. Full-length EDITORIAL view in a calm front three-quarter standing posture, arms relaxed, neutral expression. Preserve exactly the same black textile, halter straps, gathered bandeau and twisted center connection, original lower section and provisional rear arrangement. Same brunette model, tied-back bun, small hoop earrings, barefoot. Clean garment visibility, photorealistic material and natural proportions, soft even studio lighting with a gentle realistic floor contact shadow. Entire head, hands, outfit and feet within generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Provisional AI garment presentation; retain actual native portrait dimensions.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+          ],
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
+          "recordedUTC": "2026-10-22T20:06:21.797380+00:00"
+        },
+        {
+          "view": "editorial",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "e536128d-0c56-49d7-b908-e1f55b8b0de2",
+          "attempt": "single-neutral-revision",
+          "generationPrompt": "One neutral professional studio catalogue study of the same adult model and black outfit in the two accepted references. Full-length calm three-quarter standing view, arms relaxed, neutral expression. Preserve the identical garment design, material, color, model identity, hairstyle and original styling. Accurate outfit visibility, photorealistic detail, even lighting, natural proportions and soft floor contact shadow. Whole figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+          ],
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
+          "recordedUTC": "2026-10-22T20:06:21.797408+00:00"
         }
       ]
     },
@@ -483,7 +534,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate editorial for swimwear-ref-08; checkpoint before the following view",
+  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -551,14 +602,11 @@
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
   "remainingLooks": 11,
-  "nextImage": {
-    "sourceIdentity": "swimwear-ref-08",
-    "view": "editorial"
-  },
+  "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "IN_PROGRESS"
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
 }
