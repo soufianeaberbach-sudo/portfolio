@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:55:04.766585+00:00",
+  "updatedUTC": "2026-10-22T19:57:00.832687+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 9,
@@ -19,11 +19,11 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-05",
-  "currentMilestone": "front",
-  "lastSuccessfullyPushedCommit": "92401e0c0cd9e3bf44dc8e4a3ac7ac0fb15d4c83",
+  "currentMilestone": "back-blocked-commercial-retry",
+  "lastSuccessfullyPushedCommit": "5105085332fc2e280f8a8e6e0c2ca0817822a59b",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-05",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -109,6 +109,71 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:40:52.239865+00:00"
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "input",
+          "category": "sexual",
+          "requestId": "0dc58e01-19c7-4c0c-93cb-36a3e21709c1",
+          "assetProduced": false,
+          "recordedUTC": "2026-10-22T18:49:15.729278+00:00",
+          "generationPrompt": "ONE full-length FRONT professional swimwear catalogue studio photograph of the exact outfit in the attached original reference. Exactly one adult female fashion model, calm neutral straight-on stance, arms naturally relaxed slightly away; no pair or collage. Preserve this supplied opaque silver-grey swim set and styling: grey scoop bralette with thin shoulder straps over visible white halter bikini triangles/white neck straps, matching grey high-waisted briefs with the original slim V-shaped crossing waist straps, exact source coverage/material proportions, large black square sunglasses with gold hinges, small gold hoop earrings, slicked-back brown hair in low bun, barefoot. No new cutouts, logos, accessories or garment redesign. Same adult appearance and styling as source; realistic skin and garment texture, anatomically natural limbs, hands and toes. Entire head, sunglasses, hands, full silhouette and both feet in frame with generous safe margins. Neutral commercial catalogue treatment, soft even studio lighting and realistic subtle floor contact shadows. Genuine transparent alpha background preserving grey/white fabric, hair and shadow. Request portrait 1800x2700 if supported; otherwise actual native portrait dimensions, without stretching proportions. Empty canvas outside figure/shadow; no graphic, text, label or border. Provisional AI presentation preserving supplied design; no construction/authorship claim.",
+          "note": "Source-preserving adult swimwear catalogue request rejected at input. No image exists; original source preserved. No altered-prompt retry."
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "c0bf41cc-e030-49f5-9299-680f7016a4e2",
+          "attempt": "primary-commercial",
+          "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey and white swim outfit in the attached reference. One adult model, straight-on full-length FRONT standing view, relaxed arms and neutral expression. Preserve the grey scoop top with thin straps layered over the visible white halter top, matching grey high-waisted bottom with original narrow crossed waist straps, source fabric, coverage, proportions and colors. Retain the original dark square sunglasses with gold hinges, small hoop earrings, neat tied-back brown hair and barefoot styling. Clear garment visibility and natural posture, photorealistic textile, soft even studio lighting and realistic floor contact shadow. Whole head, hands, outfit and feet inside generous portrait margins. Genuine transparent background; no text, logo, graphics or border. Retain actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Primary source-preserving catalogue request rejected. Second neutral attempt produced a valid Front; original failure retained as history.",
+          "recordedUTC": "2026-10-22T19:54:58.830750+00:00"
+        },
+        {
+          "view": "back",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "028a7a38-bd88-4cb0-93a1-04b0fdaa4f57",
+          "attempt": "primary-commercial",
+          "generationPrompt": "One neutral professional studio catalogue photograph of the same adult model and grey-and-white swim outfit in the accepted Front reference, full-length TRUE BACK standing view. Back directly toward camera, face away, arms relaxed and natural posture. Preserve identical model, tied-back brown hair, dark square sunglasses, small hoop earrings, bare feet, grey outer scoop top over white halter layer and grey high-waisted bottom with original narrow waist straps. Provisional rear construction consistent with the supplied Front: simple grey back band/straps, white halter neck ties, matching plain grey rear and same waist-strap arrangement. No added decoration or styling. Photorealistic textile and natural proportions, even studio light, soft realistic floor contact shadow, entire head/hands/feet inside generous portrait margins. Genuine transparent background, no text or graphics. Provisional AI presentation; retain actual native size.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+          "recordedUTC": "2026-10-22T19:56:55.570834+00:00"
+        },
+        {
+          "view": "back",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "63071c6d-7d16-4476-8e87-7ae59d9e93f1",
+          "attempt": "single-neutral-revision",
+          "generationPrompt": "Professional studio catalogue study of the same adult model and grey-and-white outfit in the attached accepted image, viewed directly from behind. One full-length standing figure, neutral posture, relaxed arms, face away. Preserve the exact outfit, colors, fabric, original accessories, hairstyle and bare feet. Rear design remains a provisional interpretation consistent with the supplied Front. Clear garment visibility, soft even lighting, photorealistic detail, natural proportions and gentle floor contact shadow. Whole figure safely inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+          "recordedUTC": "2026-10-22T19:56:55.570848+00:00"
         }
       ]
     },
@@ -377,7 +442,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate back for swimwear-ref-05; checkpoint before the following view",
+  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -445,14 +510,11 @@
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
   "remainingLooks": 11,
-  "nextImage": {
-    "sourceIdentity": "swimwear-ref-05",
-    "view": "back"
-  },
+  "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "IN_PROGRESS"
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
 }
