@@ -1,6 +1,10 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import { getLocale, localizePath } from '../i18n/locales';
+import { experience } from '../i18n/pages/experience';
+const locale = getLocale(Astro.url);
+const t = experience[locale];
 
 /* Experience — six positions, one expanding view.
  *
@@ -37,60 +41,32 @@ interface Role {
   lens: string;
 }
 
-const roles: Role[] = [
-  {
-    n: '01',
-    company: 'Loratex',
-    title: 'Operations & Warehouse Coordinator',
-    dates: 'Feb 2014 – Jan 2016',
-    lens: 'Movement / coordination / production flow',
-  },
-  {
-    n: '02',
-    company: 'Roadtex',
-    title: 'Quality Control & Production Specialist',
-    dates: 'Feb 2016 – Aug 2017',
-    lens: 'Quality / standards / deviation',
-  },
-  {
-    n: '03',
-    company: 'Loratex',
-    title: 'Production Planning Coordinator',
-    dates: 'Sep 2017 – Sep 2018',
-    note: 'Return to Loratex',
-    lens: 'Planning / sequence / dependencies',
-  },
-  {
-    n: '04',
-    company: 'Loratex',
-    title: 'CAD Development Supervisor',
-    dates: 'Sep 2018 – May 2021',
-    note: 'Internal progression',
-    lens: 'Geometry / technical development systems',
-  },
-  {
-    n: '05',
-    company: 'Lariconf',
-    title: 'CAD Fashion Developer',
-    dates: 'Jun 2021 – May 2022',
-    lens: 'Technical product translation',
-  },
-  {
-    n: '06',
-    company: 'Ava Marie',
-    title: 'Senior Fashion Designer & Product Developer',
-    dates: 'May 2022 – Present',
-    lens: 'Integration of design, development and production understanding',
-  },
+/* Employer and period are facts, shared by every language; the title, note
+   and lens come from the page's language. Months are 1-based. */
+const facts: Array<{ company: string; from: [number, number]; to?: [number, number] }> = [
+  { company: 'Loratex', from: [2, 2014], to: [1, 2016] },
+  { company: 'Roadtex', from: [2, 2016], to: [8, 2017] },
+  { company: 'Loratex', from: [9, 2017], to: [9, 2018] },
+  { company: 'Loratex', from: [9, 2018], to: [5, 2021] },
+  { company: 'Lariconf', from: [6, 2021], to: [5, 2022] },
+  { company: 'Ava Marie', from: [5, 2022] },
 ];
-
+const month = ([m, y]: [number, number]) => `${t.months[m - 1]} ${y}`;
+const roles: Role[] = facts.map((fact, i) => ({
+  n: String(i + 1).padStart(2, '0'),
+  company: fact.company,
+  title: t.roles[i].title,
+  dates: `${month(fact.from)} – ${fact.to ? month(fact.to) : t.present}`,
+  note: t.roles[i].note || undefined,
+  lens: t.roles[i].lens,
+}));
 /* Career-wide, deliberately attached to no single employer or role. */
 const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', 'Adobe Illustrator'];
 ---
 
 <SiteLayout
-  title="Experience — Soufiane Aberbach"
-  description="Six positions across operations, quality control, production planning, CAD and product development — the experience behind how Soufiane Aberbach makes design and production decisions today."
+  title={t.title}
+  description={t.description}
   marker="SA-EXPERIENCE-V5"
   page="experience"
   footerCallout={false}
@@ -99,16 +75,14 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
 
   <section class="experience-hero">
     <div class="experience-hero__title" data-reveal>
-      <p class="eyebrow">Experience / 04</p>
+      <p class="eyebrow">{t.eyebrow}</p>
       {/* The two mid-sentence breaks are a desktop composition only: they are
           hidden once the hero stacks, so the headline reflows naturally rather
           than forcing fragments into a narrow column. Each one is preceded by a
           real space — display:none removes the break but would not supply a
           word boundary, so without it the stacked hero reads "expandingview".
           At desktop that space sits at end-of-line and collapses. */}
-      <h1 class="display">
-        Six positions.<br />One <em>expanding</em> <br class="hero-br" />view of the <br class="hero-br" />product.
-      </h1>
+      <h1 class="display" set:html={t.heroTitle} />
     </div>
 
     <figure class="experience-hero__portrait" data-reveal>
@@ -118,30 +92,25 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
         sizes="(max-width: 900px) 78vw, 42vw"
         width="754"
         height="1517"
-        alt="Soufiane Aberbach in a black suit holding an open laptop"
+        alt={t.portraitAlt}
         fetchpriority="high"
         decoding="async"
       />
-      <figcaption class="label">Tangier / Product Development</figcaption>
+      <figcaption class="label">{t.figcaption}</figcaption>
     </figure>
 
     <div class="experience-hero__intro" data-reveal>
-      <p class="label">Senior Fashion Designer &amp; Product Developer</p>
-      <p>
-        Operations, quality control, production planning, CAD development,
-        fashion development, and now senior fashion design and product
-        development. Each position added another layer of product-development
-        and production understanding to the judgment behind the work today.
-      </p>
+      <p class="label">{t.introLabel}</p>
+      <p>{t.intro}</p>
     </div>
 
-    <div class="experience-hero__measure"><i aria-hidden="true"></i><span>2014 — present / six positions</span></div>
+    <div class="experience-hero__measure"><i aria-hidden="true"></i><span>{t.measure}</span></div>
   </section>
 
   <section class="trajectory section-shell" aria-labelledby="trajectory-title">
     <div class="trajectory__head" data-reveal>
-      <p class="eyebrow">Professional trajectory</p>
-      <h2 class="display" id="trajectory-title">One position at a time.</h2>
+      <p class="eyebrow">{t.trajectoryEyebrow}</p>
+      <h2 class="display" id="trajectory-title">{t.trajectoryTitle}</h2>
     </div>
 
     <ol class="trajectory__list">
@@ -159,15 +128,15 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
 
           <div class="tr__body">
             <p class="label tr__meta">
-              {role.company} <span>·</span> {role.dates}
+              <bdi>{role.company}</bdi> <span>·</span> <bdi>{role.dates}</bdi>
               {role.note && <span class="tr__note">{role.note}</span>}
             </p>
             <h3 class="tr__pos">{role.title}</h3>
-            {i === roles.length - 1 && <p class="label tr__badge">Current position</p>}
+            {i === roles.length - 1 && <p class="label tr__badge">{t.current}</p>}
           </div>
 
           <div class="tr__lens">
-            <p class="label tr__lens-label">Perspective added</p>
+            <p class="label tr__lens-label">{t.lensLabel}</p>
             <p class="tr__lens-text">{role.lens}</p>
           </div>
         </li>
@@ -177,15 +146,9 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
 
   <section class="synthesis" aria-labelledby="synthesis-title">
     <div class="section-shell synthesis__grid">
-      <p class="eyebrow" data-reveal>Synthesis</p>
-      <h2 class="display synthesis__title" id="synthesis-title" data-reveal>
-        The current role<br />is built on all <em>six</em>.
-      </h2>
-      <p class="synthesis__line" data-reveal>
-        Operations, quality, planning, CAD and product development now meet in
-        one working perspective — design decisions made with production reality
-        already in view.
-      </p>
+      <p class="eyebrow" data-reveal>{t.synthesisEyebrow}</p>
+      <h2 class="display synthesis__title" id="synthesis-title" data-reveal set:html={t.synthesisTitle} />
+      <p class="synthesis__line" data-reveal>{t.synthesisLine}</p>
 
       {/* Editorial, not administrative. The previous version put every system
           and every language on its own ruled row with its own orange dash —
@@ -196,28 +159,23 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
       <div class="ex-capability" data-reveal>
         <div class="ex-capability__col">
           <p class="label ex-capability__tag">
-            <span class="ex-capability__mark" aria-hidden="true"></span>Systems worked in
+            <span class="ex-capability__mark" aria-hidden="true"></span>{t.systemsLabel}
           </p>
           <ul class="ex-systems">
             {systems.map((system) => (
-              <li>{system}</li>
+              <li lang="en">{system}</li>
             ))}
           </ul>
         </div>
 
         <div class="ex-capability__col">
           <p class="label ex-capability__tag">
-            <span class="ex-capability__mark" aria-hidden="true"></span>Working languages
+            <span class="ex-capability__mark" aria-hidden="true"></span>{t.languagesLabel}
           </p>
           <ul class="ex-langs">
-            <li>Arabic</li>
-            <li>French</li>
-            <li>English</li>
+            {t.languages.map((language) => <li>{language}</li>)}
           </ul>
-          <p class="ex-capability__note">
-            Three languages across a European&ndash;North African supply chain, and remote
-            collaboration with teams in other time zones.
-          </p>
+          <p class="ex-capability__note">{t.languagesNote}</p>
         </div>
       </div>
       </div>
@@ -226,16 +184,12 @@ const systems = ['Gerber AccuMark', 'Lectra', 'Optitex', 'Vetigraph', 'CLO3D', '
 
   <section class="ex-bridge" aria-labelledby="ex-bridge-title">
     <div class="section-shell ex-bridge__grid">
-      <p class="eyebrow" data-reveal>Next / Contact</p>
-      <h2 class="display ex-bridge__title" id="ex-bridge-title" data-reveal>
-        You've seen<br />how the judgment<br />was <em>built</em>.
-      </h2>
+      <p class="eyebrow" data-reveal>{t.bridge.eyebrow}</p>
+      <h2 class="display ex-bridge__title" id="ex-bridge-title" data-reveal set:html={t.bridge.title} />
       <div class="ex-bridge__side">
-        <p class="ex-bridge__line" data-reveal>
-          The next conversation can be about your product.
-        </p>
-        <a class="button button--signal" href="/contact/" data-reveal>
-          Discuss your product <span><Arrow /></span>
+        <p class="ex-bridge__line" data-reveal>{t.bridge.line}</p>
+        <a class="button button--signal" href={localizePath('/contact/', locale)} data-reveal>
+          {t.bridge.cta} <span><Arrow /></span>
         </a>
       </div>
     </div>

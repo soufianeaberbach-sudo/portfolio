@@ -26,8 +26,20 @@ export type Widen<T> = T extends string
 
 export type Dict<T> = Record<Locale, Widen<T>>;
 
+/* French typography: a narrow no-break space before : ; ? ! so the mark never
+   wraps onto a line of its own. Applied here once instead of trusting every
+   string to carry an invisible character. */
+const frenchSpacing = (value: unknown): unknown => {
+  if (typeof value === 'string') return value.replace(/ ([:;?!])/g, '\u202f$1');
+  if (Array.isArray(value)) return value.map(frenchSpacing);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, frenchSpacing(entry)]));
+  }
+  return value;
+};
+
 export function defineDict<const T>(en: T, others: Record<Exclude<Locale, 'en'>, Widen<T>>): Dict<T> {
-  return { en: en as Widen<T>, ...others };
+  return { en: en as Widen<T>, ...others, fr: frenchSpacing(others.fr) as Widen<T> };
 }
 
 /** Replaces {name} placeholders. */

@@ -1,6 +1,11 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import { getLocale, localizePath } from '../i18n/locales';
+import { process as copy } from '../i18n/pages/process';
+import { fill } from '../i18n/dict';
+const locale = getLocale(Astro.url);
+const t = copy[locale];
 
 /* Process — the decision spine.
  *
@@ -57,26 +62,13 @@ interface Stage {
   visual?: Visual;
 }
 
-const stages: Stage[] = [
+/* Structure and visuals only; every word comes from src/i18n/pages/process.ts
+   in the page's language. */
+const structure: Array<Pick<Stage, 'n' | 'slug' | 'inputLead' | 'visual'>> = [
   {
     n: '01',
     slug: 'brief',
-    name: 'Brief / Intent lock',
-    tag: 'Where the project starts',
-    inputLabel: 'What enters — from you',
     inputLead: true,
-    input: [
-      'A sketch, or reference imagery',
-      'Measurements, if they exist',
-      'Fabric information',
-      'The target product and market',
-      'Commercial constraints',
-    ],
-    note: 'None of this has to be complete. Closing the gap is what this stage is for.',
-    resolved:
-      'Unclear design intent, missing information, open feasibility questions and development priorities are settled here, in writing, before anything is cut. Two people can describe the same garment and mean two different products; this stage removes that distance before it becomes expensive to correct.',
-    gate: 'Are we developing the same product?',
-    output: 'Development direction',
     visual: {
       file: '01-brief',
       widths: [900, 1500],
@@ -85,30 +77,10 @@ const stages: Stage[] = [
       position: '50% 50%',
     },
   },
-  {
-    n: '02',
-    slug: 'technical-build',
-    name: 'Technical build',
-    tag: 'Structure before opinion',
-    inputLabel: 'What enters',
-    input: ['The agreed development direction'],
-    resolved:
-      'Pattern architecture, construction logic, initial measurements and the seam and assembly implications of the design are built and tested against each other. Whether a product can be built is a separate question from whether it is wanted, and it gets answered before fit is discussed.',
-    terms: ['Pattern architecture', 'Construction logic', 'Seam & assembly implication'],
-    gate: 'Is the product technically buildable?',
-    output: 'First technical build',
-  },
+  { n: '02', slug: 'technical-build' },
   {
     n: '03',
     slug: 'fit-validation',
-    name: 'Fit / Validation',
-    tag: 'Evaluated before it is locked',
-    inputLabel: 'What enters',
-    input: ['The first technical build', 'Physical fit information'],
-    resolved:
-      'Proportion, balance, drape and construction corrections are worked through against physical fit information, with 3D simulation supporting that reading rather than standing in for it. Simulation is where proportion and drape can be examined and a correction tested before it goes back onto the stand; every correction is recorded against the build it changes, so nothing is carried forward on memory.',
-    gate: 'Is the product ready to be locked?',
-    output: 'Validated fit direction',
     visual: {
       file: '03-validation',
       widths: [720, 1120],
@@ -118,42 +90,10 @@ const stages: Stage[] = [
       position: '50% 50%',
     },
   },
-  {
-    n: '04',
-    slug: 'specification-lock',
-    name: 'Size / Specification lock',
-    tag: 'Repeatable, or not finished',
-    inputLabel: 'What enters',
-    input: ['The validated fit direction', 'The required size range'],
-    resolved:
-      'Grading, size relationships, points of measure, tolerances and construction specification are fixed into technical documentation. A garment that works in one size is not yet a product; this stage is where it becomes something a line can repeat.',
-    spec: [
-      'Grade rules and size relationships',
-      'Points of measure',
-      'Tolerances',
-      'Construction specification',
-      'Trim and material references',
-    ],
-    gate: 'Can the approved product be repeated across the required range?',
-    output: 'Production specification',
-  },
+  { n: '04', slug: 'specification-lock' },
   {
     n: '05',
     slug: 'handoff',
-    name: 'Pre-production / Handoff',
-    tag: 'The line works from the reference',
-    inputLabel: 'What enters',
-    input: ['The production specification', 'The approved reference'],
-    resolved:
-      'Handoff, critical-risk clarification and first-piece and pre-production verification happen against the specification rather than against an interpretation of it. Production questions and corrective decisions are resolved at the point they appear, not after the run.',
-    receive: [
-      'The reference the line works from',
-      'Complete technical documentation',
-      'Verification at first piece and pre-production',
-      'Named milestones, with visibility at each one',
-    ],
-    gate: 'Is production working from the approved reference?',
-    output: 'Controlled production handoff',
     visual: {
       file: '05-handoff',
       widths: [900, 1500],
@@ -163,13 +103,23 @@ const stages: Stage[] = [
     },
   },
 ];
-
+const stages: Stage[] = structure.map((stage, i) => {
+  const words = t.stages[i];
+  return {
+    ...stage,
+    ...words,
+    note: words.note || undefined,
+    terms: words.terms.length ? words.terms : undefined,
+    spec: words.spec.length ? words.spec : undefined,
+    receive: words.receive.length ? words.receive : undefined,
+  };
+});
 const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 ---
 
 <SiteLayout
-  title="Process — Soufiane Aberbach"
-  description="How a development project actually moves: five stages — brief and intent lock, technical build, fit validation, specification lock and pre-production handoff — each one ending with a decision."
+  title={t.title}
+  description={t.description}
   marker="SA-PROCESS-V2"
   page="process"
   footerCallout={false}
@@ -178,19 +128,14 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 
   <section class="pr-hero" aria-labelledby="pr-hero-title">
     <div class="pr-hero__grid section-shell">
-      <p class="eyebrow" data-reveal>Process / 03</p>
-      <h1 class="display pr-hero__title" id="pr-hero-title" data-reveal>
-        Every stage<br />ends with<br />a <em>decision</em>.
-      </h1>
-      <p class="pr-hero__thought" data-reveal>
-        Development moves forward only when the current question is resolved
-        and the next person knows exactly what they are receiving.
-      </p>
+      <p class="eyebrow" data-reveal>{t.eyebrow}</p>
+      <h1 class="display pr-hero__title" id="pr-hero-title" data-reveal set:html={t.heroTitle} />
+      <p class="pr-hero__thought" data-reveal>{t.thought}</p>
     </div>
 
     <div class="pr-ledger section-shell" data-reveal>
-      <p class="label pr-ledger__head">The five decisions</p>
-      <nav aria-label="The five decisions">
+      <p class="label pr-ledger__head">{t.ledgerHead}</p>
+      <nav aria-label={t.ledgerHead}>
         <ol>
           {stages.map((s) => (
             <li>
@@ -203,7 +148,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
           ))}
         </ol>
       </nav>
-      <p class="pr-ledger__rule">No stage advances with an unresolved decision.</p>
+      <p class="pr-ledger__rule">{t.ledgerRule}</p>
     </div>
   </section>
 
@@ -226,7 +171,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
             </div>
 
             <div class="pr-res">
-              <p class="label pr-res__label">What gets resolved</p>
+              <p class="label pr-res__label">{t.resolvedLabel}</p>
               <p>{s.resolved}</p>
             </div>
 
@@ -238,7 +183,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 
             {s.spec && (
               <div class="pr-spec">
-                <p class="label">What the specification fixes</p>
+                <p class="label">{t.specLabel}</p>
                 <ul>
                   {s.spec.map((x) => <li>{x}</li>)}
                 </ul>
@@ -272,7 +217,7 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 
             {s.receive && (
               <div class="pr-receive">
-                <p class="label">What you get back</p>
+                <p class="label">{t.receiveLabel}</p>
                 <ul>
                   {s.receive.map((x) => <li>{x}</li>)}
                 </ul>
@@ -281,17 +226,17 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
           </div>
 
           <div class="pr-gate">
-            <p class="label pr-gate__label">Gate {s.n} / 05 &middot; Decision required</p>
+            <p class="label pr-gate__label">{fill(t.gateLabel, { n: s.n })}</p>
             <p class="display pr-gate__q">{s.gate}</p>
           </div>
 
           <div class="pr-file">
-            <p class="label pr-file__label">What leaves / {s.n}</p>
+            <p class="label pr-file__label">{fill(t.leavesLabel, { n: s.n })}</p>
             <p class="pr-file__out">{s.output}</p>
             <i class="pr-file__mark" aria-hidden="true"></i>
             {i > 0 && (
               <div class="pr-file__prior">
-                <p class="label">Already in the file</p>
+                <p class="label">{t.priorLabel}</p>
                 <ul>
                   {stages.slice(0, i).map((p) => (
                     <li><span aria-hidden="true">{p.n}</span>{p.output}</li>
@@ -309,16 +254,12 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
 
   <section class="pr-bridge" aria-labelledby="pr-bridge-title">
     <div class="section-shell pr-bridge__grid">
-      <p class="eyebrow" data-reveal>Next / Experience</p>
-      <h2 class="display pr-bridge__title" id="pr-bridge-title" data-reveal>
-        A process is only<br />as strong as the person<br />making the <em>decisions</em>.
-      </h2>
+      <p class="eyebrow" data-reveal>{t.bridge.eyebrow}</p>
+      <h2 class="display pr-bridge__title" id="pr-bridge-title" data-reveal set:html={t.bridge.title} />
       <div class="pr-bridge__side">
-        <p class="pr-bridge__line" data-reveal>
-          Six positions shaped how those decisions are made.
-        </p>
-        <a class="button button--signal pr-bridge__cta" href="/experience/" data-reveal>
-          See the experience <span><Arrow /></span>
+        <p class="pr-bridge__line" data-reveal>{t.bridge.line}</p>
+        <a class="button button--signal pr-bridge__cta" href={localizePath('/experience/', locale)} data-reveal>
+          {t.bridge.cta} <span><Arrow /></span>
         </a>
       </div>
     </div>

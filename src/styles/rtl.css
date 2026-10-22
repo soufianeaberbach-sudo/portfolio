@@ -4,9 +4,10 @@
  * exactly as before. The page is genuinely dir="rtl" (set on <html>); this
  * file only adjusts what the Latin design system assumed:
  *
- *   TYPE. Arabic is set in IBM Plex Sans Arabic. JetBrains Mono stays first in
- *   the mono stack so digits and Latin codes keep the technical register, and
- *   Arabic letters fall through to Plex Arabic glyph by glyph.
+ *   TYPE. Arabic is set in IBM Plex Sans Arabic. The Latin faces (Archivo,
+ *   Inter, JetBrains Mono) stay first in every stack, so names, numbers and
+ *   technical terms keep their typography and Arabic letters fall through to
+ *   Plex Arabic glyph by glyph.
  *
  *   NO TRACKING, NO CAPITALS. Arabic is a joined script: letter-spacing
  *   breaks the joins and uppercase does not exist. The Latin system's tracked
@@ -21,8 +22,11 @@
  */
 
 html[lang='ar'] {
-  --display: 'IBM Plex Sans Arabic', 'Archivo', sans-serif;
-  --body: 'IBM Plex Sans Arabic', 'Inter', Arial, sans-serif;
+  /* Latin faces stay first: neither Archivo nor Inter carries Arabic glyphs,
+     so Arabic letters fall through to Plex Arabic one by one while names,
+     numbers and technical terms keep the site's own Latin typography. */
+  --display: 'Archivo', 'IBM Plex Sans Arabic', sans-serif;
+  --body: 'Inter', 'IBM Plex Sans Arabic', Arial, sans-serif;
   --mono: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
 }
 
