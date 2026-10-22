@@ -1,13 +1,18 @@
 ---
 /* The running order is read from the chapter sequence, never re-typed here,
    so this navigation cannot disagree with the covers about what 03 is. */
-import { chapters } from '../../data/portfolio';
+import { chapters as sourceChapters } from '../../data/portfolio';
+import { getLocale } from '../../i18n/locales';
+import { pf, localizeChapter } from '../../i18n/portfolio';
 
 interface Props { current?: string }
 const { current } = Astro.props;
+const locale = getLocale(Astro.url);
+const t = pf[locale];
+const chapters = sourceChapters.map((chapter) => localizeChapter(chapter, locale));
 ---
-<nav class="pf-continuity" aria-label="Portfolio worlds">
-  <a class="pf-continuity__index" href="#portfolio-index" data-nav aria-label="Return to Portfolio index">Index <span aria-hidden="true">↗</span></a>
+<nav class="pf-continuity" aria-label={t.worldsLabel}>
+  <a class="pf-continuity__index" href="#portfolio-index" data-nav aria-label={t.indexLabel}>{t.index} <span aria-hidden="true">{locale === 'ar' ? '↖' : '↗'}</span></a>
   {chapters.map((chapter) => (
     <a href={`#${chapter.id}`} data-nav aria-current={current === chapter.id ? 'page' : undefined}>
       <span aria-hidden="true">{chapter.number}</span>{chapter.title}

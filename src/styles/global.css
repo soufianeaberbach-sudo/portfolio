@@ -64,7 +64,7 @@ button { color: inherit; }
 .skip-link {
   position: fixed;
   z-index: 1000;
-  left: 1rem;
+  inset-inline-start: 1rem;
   top: 1rem;
   padding: .75rem 1rem;
   background: var(--ink);
@@ -255,7 +255,7 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   letter-spacing: .12em;
   text-transform: uppercase;
 }
-.desktop-nav a span { color: var(--muted); margin-right: .4rem; font-size: .55rem; }
+.desktop-nav a span { color: var(--muted); margin-inline-end: .4rem; font-size: .55rem; }
 .desktop-nav a::after {
   content: '';
   position: absolute;
@@ -277,7 +277,7 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   letter-spacing: .1em;
   text-transform: uppercase;
 }
-.header-brief span { color: var(--signal); margin-left: .35rem; }
+.header-brief span { color: var(--signal); margin-inline-start: .35rem; }
 
 /* LANGUAGE SWITCHER. The navigation's own mono register, one step quieter:
    muted until hovered, the current language in ink with the same signal
@@ -312,6 +312,10 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
 }
 .lang-switch--header a { padding-block: .6rem; }
 .lang-switch--menu { display: none; }
+/* The menu's own nav rules (grid rows, rules between items) are for the page
+   list; the language row is a single quiet line beneath it. */
+.mobile-menu nav.lang-switch--menu { margin-top: 2rem; border-top: 0; }
+.mobile-menu nav.lang-switch--menu a { display: inline-flex; grid-template-columns: none; padding: 0; border-bottom: 0; }
 
 .menu-toggle {
   display: none;
@@ -464,7 +468,7 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   .site-header { grid-template-columns: 1fr auto; }
   /* On a phone the languages live in the menu, beside the place line, with
      real touch targets — the bar keeps only the mark and the toggle. */
-  .lang-switch--menu { display: flex; margin-top: 2rem; }
+  .lang-switch--menu { display: flex; }
   .lang-switch--menu a { min-height: 44px; min-width: 2.75rem; justify-content: center; font-size: .72rem; color: #aaa89f; }
   .lang-switch--menu a[lang='ar'] { font-size: .86rem; }
   .lang-switch--menu a + a::before { position: absolute; inset-inline-start: 0; margin: 0; background: #393933; }

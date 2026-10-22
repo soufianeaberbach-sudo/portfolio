@@ -1,4 +1,7 @@
 import type{SourceWindow}from'../data/menswear-direction';
+import{clientLocale,terms,term,categoryName}from'../i18n/portfolio-terms';
+/* Runtime words in the page language (<html lang>). */
+const say=terms[clientLocale()].runtime;
 type Box={x:number;y:number;w:number;h:number};
 const whole:SourceWindow=[0,0,1,1];
 const clamp=(v:number)=>Math.max(0,Math.min(1,v));
@@ -127,7 +130,7 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
  const visibleImages=[...drawn].filter(node=>node.style.visibility==='visible').map(node=>node.querySelector('img')!);
  const failed=visibleImages.some(im=>im.complete&&!im.naturalWidth);
  const loading=visibleImages.length>0&&visibleImages.every(im=>!im.complete||!im.naturalWidth)&&!failed;
- const status=frame.querySelector<HTMLElement>('[data-mw-media-status]')!,message=failed?'Photograph unavailable. Open the ten-look edit to continue.':'Loading photograph…';
+ const status=frame.querySelector<HTMLElement>('[data-mw-media-status]')!,message=failed?say.filmUnavailable:say.loading;
  if(status.textContent!==message)status.textContent=message;
  status.hidden=!failed&&!loading;
  if(loading)frame.setAttribute('aria-busy','true');else frame.removeAttribute('aria-busy');

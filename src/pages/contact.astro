@@ -352,7 +352,7 @@ const faqs = t.faqs.map(([q, a]) => ({ q, a }));
   /* ---------- Platforms: one quiet fallback line, after every direct route ---------- */
   .ct-platforms { padding-block: 1.25rem; border-top: 1px solid var(--line); background: var(--paper-bright); }
   .ct-platforms__line { margin: 0; color: var(--muted); font-family: var(--mono); font-size: .65rem; letter-spacing: .06em; line-height: 1.65; }
-  .ct-platforms__line > span:first-child { margin-right: .55rem; text-transform: uppercase; }
+  .ct-platforms__line > span:first-child { margin-inline-end: .55rem; text-transform: uppercase; }
   .ct-platforms__line a {
     color: var(--ink-soft);
     text-decoration: none;
@@ -385,7 +385,7 @@ const faqs = t.faqs.map(([q, a]) => ({ q, a }));
     .ct-faq { grid-template-columns: minmax(0, 1fr); }
     .ct-hero__aside { max-width: 38rem; }
     .ct-brief__intro, .ct-brief__form { grid-column: 1; }
-    .ct-workspace__figure { width: calc(100% + var(--gutter)); margin-left: 0; }
+    .ct-workspace__figure { width: calc(100% + var(--gutter)); margin-inline-start: 0; }
     .ct-workspace__figure figcaption { position: static; width: min(100%, 34rem); margin: 1.5rem 0 0; }
     .ct-workspace__figure figcaption > span:nth-child(2) { color: var(--ink-soft); }
     .ct-workspace__figure figcaption strong { border-top-color: var(--line); color: var(--muted); }

@@ -12,6 +12,7 @@
     "test:opening": "node tests/portfolio-opening.mjs",
     "test:worker": "node tests/worker.mjs",
     "test:domain": "node tests/domain.mjs",
+    "test:i18n": "node tests/i18n.mjs",
     "verify:production": "node scripts/verify-production.mjs",
     "test:production": "node --test tests/production-verification.mjs"
   },

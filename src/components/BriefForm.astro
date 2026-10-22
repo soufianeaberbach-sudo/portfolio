@@ -245,7 +245,10 @@ const email = 'soufianeaberbach@gmail.com';
 
   .bf { display: grid; gap: clamp(1.75rem, 3vw, 2.5rem); }
   /* Off-screen rather than display:none so automated fills still reach it. */
-  .bf__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  /* inline-start, not left: in a right-to-left page a negative LEFT offset is
+     scrollable overflow, so the honeypot would add ten thousand pixels of
+     sideways scroll to Arabic. Off the start edge is off-canvas in both. */
+  .bf__trap { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   .bf__group { min-width: 0; margin: 0; padding: 0; border: 0; }
   .bf__group legend { padding: 0 0 1rem; color: var(--muted); }

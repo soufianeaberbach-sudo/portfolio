@@ -1,6 +1,9 @@
 import {paintPhoto,preparePhotograph,sameLoadedPhotograph} from './garment-photo';
 import {garmentMatchCut,cancelGarmentMatchCut} from './garment-match-cut';
 import {initWomenswearExhibition} from './womenswear-exhibition';
+import{clientLocale,terms,term,categoryName}from'../i18n/portfolio-terms';
+/* Runtime words in the page language (<html lang>). */
+const say=terms[clientLocale()].runtime;
 export function initWomenswear(root:HTMLElement){
  const exhibitions=[...root.querySelectorAll<HTMLElement>('[data-ww-exhibition]')];if(!exhibitions.length)return null;
  const world=exhibitions[0].closest<HTMLElement>('[data-world]')!,cameras=exhibitions.map(initWomenswearExhibition);
@@ -24,7 +27,7 @@ export function initWomenswear(root:HTMLElement){
   s.draw=()=>{
    const photo=photos[s.view],image=images[s.view],x=Math.max(0,(s.zoom-1)*photo.clientWidth/2),y=Math.max(0,(s.zoom-1)*photo.clientHeight/2);
    s.x=Math.max(-x,Math.min(x,s.x));s.y=Math.max(-y,Math.min(y,s.y));photo.style.transform=s.zoom===1&&!s.x&&!s.y?'':`translate3d(${s.x}px,${s.y}px,0) scale(${s.zoom})`;photo.style.transformOrigin='center center';paintPhoto(photo);
-   status.textContent=image.complete&&!image.naturalWidth?'Original photograph unavailable. Return to the exhibition to continue.':reader.hasAttribute('data-inspect')?`${Math.round(s.zoom*100)}% · drag / pinch / arrow keys`:'';
+   status.textContent=image.complete&&!image.naturalWidth?say.wwUnavailable:reader.hasAttribute('data-inspect')?say.zoom.replace('{n}',String(Math.round(s.zoom*100))):'';
   };
   const setInspect=(on:boolean)=>{selection++;requestedView=s.view;reader.removeAttribute('aria-busy');cancelGarmentMatchCut();reader.removeAttribute('data-ww-moving');entering=false;reader.toggleAttribute('data-inspect',on);inspect.setAttribute('aria-pressed',String(on));tools.hidden=!on;s.zoom=on?Math.min(2,limit()):1;s.x=s.y=0;s.draw();};
   s.reset=()=>{selection++;requestedView=s.view;pointers.clear();photos.forEach(photo=>photo.style.transform='');reader.removeAttribute('aria-busy');reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;s.zoom=1;s.x=s.y=0;s.draw();};
@@ -42,8 +45,8 @@ export function initWomenswear(root:HTMLElement){
    if(immediate||chosen===s.view||sameLoadedPhotograph(image,images[s.view])){commit();return;}
    // Keep the current photograph visible until its replacement is decoded.
    // An interrupted request cannot overwrite a later selection or return.
-   reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';
-   void image.decode().then(commit,()=>{if(request!==selection)return;if(sameLoadedPhotograph(image,images[s.view])){commit();return;}requestedView=s.view;reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable. The current view remains available.';});
+   reader.setAttribute('aria-busy','true');status.textContent=say.loading;
+   void image.decode().then(commit,()=>{if(request!==selection)return;if(sameLoadedPhotograph(image,images[s.view])){commit();return;}requestedView=s.view;reader.removeAttribute('aria-busy');status.textContent=say.wwRequested;});
   };
   for(const button of reader.querySelectorAll<HTMLButtonElement>('[data-ww-view]'))button.addEventListener('click',()=>s.select(Number(button.dataset.wwView)));
   inspect.addEventListener('click',()=>setInspect(!reader.hasAttribute('data-inspect')));

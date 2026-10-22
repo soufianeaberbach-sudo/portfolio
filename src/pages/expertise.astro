@@ -169,14 +169,14 @@ const systems = [
     align-items: baseline;
     gap: .8rem;
     padding: 1.15rem 1.25rem 1.15rem 0;
-    border-right: 1px solid var(--line);
+    border-inline-end: 1px solid var(--line);
     font-family: var(--mono);
     font-size: .7rem;
     letter-spacing: .1em;
     text-transform: uppercase;
     transition: color .25s var(--ease);
   }
-  .ex-index a:last-child { border-right: 0; }
+  .ex-index a:last-child { border-inline-end: 0; }
   /* Small mono on paper fails 4.5:1 in signal; orange stays on the rules,
      indicators and large accent words. */
   .ex-index a span { color: var(--muted); }
@@ -213,11 +213,11 @@ const systems = [
     letter-spacing: .14em;
     text-transform: uppercase;
   }
-  .ch__terms li { position: relative; padding-left: 1.15rem; }
+  .ch__terms li { position: relative; padding-inline-start: 1.15rem; }
   .ch__terms li::before {
     content: '';
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     top: .45em;
     width: .55rem;
     height: 1px;
@@ -266,7 +266,7 @@ const systems = [
   .ch__states { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
   .ch__states li { padding: 1.1rem 1.5rem 1.1rem 0; border-top: 1px solid var(--ink); }
   .ch__states li:nth-child(2) { border-top-color: var(--signal); }
-  .ch__states li:nth-child(3) { border-top-color: var(--signal); padding-right: 0; }
+  .ch__states li:nth-child(3) { border-top-color: var(--signal); padding-inline-end: 0; }
   .ch__states b { display: block; font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
   .ch__states span { display: block; margin-top: .7rem; color: var(--muted); font-size: .88rem; line-height: 1.5; }
   .ch__risk { max-width: 36rem; margin: clamp(1.5rem, 2.5vw, 2.25rem) 0 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.7; }
@@ -329,17 +329,17 @@ const systems = [
 
   @media (max-width: 860px) {
     .ex-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .ex-index a:nth-child(2) { border-right: 0; }
+    .ex-index a:nth-child(2) { border-inline-end: 0; }
     .ex-index a:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
     .ch__spec li { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
     .ch__states { grid-template-columns: minmax(0, 1fr); }
-    .ch__states li { padding-right: 0; }
+    .ch__states li { padding-inline-end: 0; }
   }
 
   @media (max-width: 600px) {
     .ex-hero__grid { padding-top: calc(var(--header-h) + 3.5rem); }
     .ex-index { grid-template-columns: minmax(0, 1fr); }
-    .ex-index a { border-right: 0; border-bottom: 1px solid var(--line); }
+    .ex-index a { border-inline-end: 0; border-bottom: 1px solid var(--line); }
     .ex-index a:last-child { border-bottom: 0; }
     .ch__geometry { grid-template-columns: minmax(0, 1fr); }
     .ch__geometry > div { grid-template-columns: minmax(0, 1fr); gap: .3rem; }

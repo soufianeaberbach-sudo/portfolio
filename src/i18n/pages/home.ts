@@ -134,7 +134,7 @@ export const home = defineDict(
       },
       simulation: {
         label: 'Simulation CLO3D / travaux choisis',
-        title: '<em>Voir</em> le mouvement.<br />Avant de produire.',
+        title: '<em>Voyez</em>-le bouger.<br />Avant de le coudre.',
         lede: 'CLO3D transforme le patron, les proportions et le comportement du tissu en prototype animé : silhouette, proportions et tombé s’explorent avant et pendant le prototypage physique.',
         cta: 'Voir le portfolio',
         videoLabel: 'Mannequins numériques, femme et homme, défilant dans CLO3D',
@@ -160,7 +160,7 @@ export const home = defineDict(
       portraitAlt: 'Soufiane Aberbach, sentado, dibujando en una tableta',
       positioning: {
         eyebrow: 'Enfoque',
-        title: 'El error caro ocurre <em>antes</em> de llegar a confección.',
+        title: 'El error caro se comete <em>antes</em> de la costura.',
         body: [
           'Muchas pruebas de ajuste interminables, pérdidas de tejido y retrasos en las muestras nacen de decisiones tomadas antes de cortar el primer metro.',
           'Esa decisión es el trabajo: definir el patrón, validar el ajuste y convertir una intención en instrucciones que una fábrica pueda repetir.',
@@ -202,7 +202,7 @@ export const home = defineDict(
       },
       simulation: {
         label: 'Simulación CLO3D / trabajos seleccionados',
-        title: '<em>Verlo</em> en movimiento.<br />Antes de fabricarlo.',
+        title: '<em>Míralo</em> moverse.<br />Antes de hacerlo.',
         lede: 'CLO3D convierte el patrón, las proporciones y el comportamiento del tejido en un prototipo en movimiento: silueta, proporciones y caída se exploran antes y a la par que las muestras físicas.',
         cta: 'Ver el portfolio',
         videoLabel: 'Modelos digitales, mujer y hombre, caminando en CLO3D',

@@ -4,10 +4,10 @@
  * exactly as before. The page is genuinely dir="rtl" (set on <html>); this
  * file only adjusts what the Latin design system assumed:
  *
- *   TYPE. Arabic is set in IBM Plex Sans Arabic. The Latin faces (Archivo,
- *   Inter, JetBrains Mono) stay first in every stack, so names, numbers and
- *   technical terms keep their typography and Arabic letters fall through to
- *   Plex Arabic glyph by glyph.
+ *   TYPE. Arabic is set in IBM Plex Sans Arabic. Archivo and Inter stay first
+ *   in the display and body stacks, so names and technical terms keep their
+ *   typography and Arabic letters fall through to Plex Arabic glyph by glyph.
+ *   Labels lead with Plex Arabic (see --mono).
  *
  *   NO TRACKING, NO CAPITALS. Arabic is a joined script: letter-spacing
  *   breaks the joins and uppercase does not exist. The Latin system's tracked
@@ -27,7 +27,9 @@ html[lang='ar'] {
      numbers and technical terms keep the site's own Latin typography. */
   --display: 'Archivo', 'IBM Plex Sans Arabic', sans-serif;
   --body: 'Inter', 'IBM Plex Sans Arabic', Arial, sans-serif;
-  --mono: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
+  /* Labels are mostly Arabic words here, and JetBrains Mono's wide space
+     opens gaps between them; Plex Arabic leads the label stack instead. */
+  --mono: 'IBM Plex Sans Arabic', 'JetBrains Mono', monospace;
 }
 
 html[lang='ar'] body :where(*) {
@@ -39,7 +41,7 @@ html[lang='ar'] body :where(*) {
 html[lang='ar'] :where(h1, h2, h3, .display) {
   font-variation-settings: normal;
   font-weight: 700;
-  line-height: 1.22;
+  line-height: 1.32;
 }
 html[lang='ar'] .display em { font-style: normal; }
 html[lang='ar'] :where(.label, .eyebrow) { font-size: max(.78rem, 1em); line-height: 1.6; }
@@ -55,3 +57,36 @@ html[dir='rtl'] :is(.arrow--ne, .arrow--left, .arrow--right) path {
   transform-box: view-box;
   transform-origin: 50% 50%;
 }
+
+/* MARKS NEVER MIRROR. The SA monogram and its dot are a logo. */
+html[dir='rtl'] :is(.brand, .footer-signature) { direction: ltr; }
+
+/* Interface motion that has a direction follows the reader: the active-page
+   underline draws in from the reading start, the scroll bar fills from the
+   right. */
+html[dir='rtl'] .desktop-nav a::after { transform-origin: left; }
+html[dir='rtl'] .desktop-nav a:hover::after,
+html[dir='rtl'] .desktop-nav a[aria-current='page']::after { transform-origin: right; }
+html[dir='rtl'] .scroll-progress i { transform-origin: right; }
+
+/* The Latin system sets navigation in a 0.66rem tracked mono; Arabic at that
+   size loses its dots and joins, so the Arabic labels step up a size. */
+html[lang='ar'] :is(.desktop-nav a, .header-brief) { font-size: .82rem; }
+html[lang='ar'] .desktop-nav a span { font-size: .6rem; }
+html[lang='ar'] .button { font-size: .92rem; }
+
+/* HOME. The page rule at 68% and the rings belong behind the portrait, which
+   the grid moves to the left in a right-to-left page; the decoration follows
+   the composition. The portrait itself is never mirrored. */
+html[dir='rtl'] .home-hero {
+  background:
+    linear-gradient(270deg, transparent 0 68%, var(--line) 68% calc(68% + 1px), transparent calc(68% + 1px)),
+    var(--paper);
+}
+@media (max-width: 900px) {
+  html[dir='rtl'] .home-hero { background: var(--paper); }
+}
+
+/* Lines that grow (statistic bars, the process spine, career strata) grow
+   from the reading start. transform-origin has no logical keyword. */
+html[dir='rtl'] :is(.home-stat::after, .tr__strata i) { transform-origin: right; }

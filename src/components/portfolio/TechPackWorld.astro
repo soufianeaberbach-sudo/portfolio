@@ -22,6 +22,9 @@
 import type { TechPack } from '../../data/portfolio';
 import { chapterNumber } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
+import { getLocale, localizePath } from '../../i18n/locales';
+import { pf } from '../../i18n/portfolio';
+import { fill } from '../../i18n/dict';
 import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
@@ -30,6 +33,10 @@ interface Props {
 
 const { packs } = Astro.props;
 const anyDemo = packs.some((pack) => pack.demo);
+const locale = getLocale(Astro.url);
+const t = pf[locale];
+const k = t.packs;
+const techPacksTitle = t.chapters['tech-packs'].title;
 ---
 
 <section class="pf-world pf-world--docs" id="tech-packs" data-world="tech-packs" tabindex="-1" aria-labelledby="tech-packs-title">
@@ -37,23 +44,18 @@ const anyDemo = packs.some((pack) => pack.demo);
   <div class="pf-screen" data-screen="index">
     <div class="pf-bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
-        <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+        <i aria-hidden="true"><Arrow dir="left" /></i> {t.portfolioIndex}
       </a>
-      <p class="label pf-bar__tag"><b>{chapterNumber('tech-packs')}</b> Tech Packs</p>
+      <p class="label pf-bar__tag"><b>{chapterNumber('tech-packs')}</b> {techPacksTitle}</p>
     </div>
 
     <header class="pf-head">
-      <h2 class="display" id="tech-packs-title">Tech Packs</h2>
-      <p class="pf-head__descriptor">
-        Production-ready technical documentation — the document a factory can build from without calling to ask what was meant.
-      </p>
+      <h2 class="display" id="tech-packs-title">{techPacksTitle}</h2>
+      <p class="pf-head__descriptor">{k.descriptor}</p>
       {anyDemo && (
         <p class="pf-prov" data-demo-notice>
-          <b class="label">Interface prototype</b>
-          <span>
-            These are demo packs, marked DEMO on every page and carrying no client name, measurement,
-            grading or bill-of-materials value. Selected real technical packs will replace them.
-          </span>
+          <b class="label">{k.prototype}</b>
+          <span>{k.notice}</span>
         </p>
       )}
     </header>
@@ -70,7 +72,7 @@ const anyDemo = packs.some((pack) => pack.demo);
               rel="noopener"
               data-open-pdf={pack.pdfUrl ? '' : undefined}
               data-doc-title={pack.title}
-              aria-label={`Open ${pack.title} PDF reader`}
+              aria-label={fill(k.open, { title: pack.title })}
             >
               {pack.coverImage ? (
                 <img
@@ -92,31 +94,31 @@ const anyDemo = packs.some((pack) => pack.demo);
               <p class="label pf-doc__num">{String(index + 1).padStart(2, '0')}</p>
               <h3 class="pf-doc__title">{pack.title}</h3>
               <p class="pf-doc__line">
-                {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${pack.pageCount} pages` : ''}
+                {pack.category} / {pack.garmentType}{pack.pageCount ? ` / ${fill(k.pages, { n: pack.pageCount })}` : ''}
               </p>
-              {pack.demo && <p class="label pf-doc__stamp">Demo — interface prototype</p>}
-              <p class="label pf-doc__instruction">Select the document to read</p>
+              {pack.demo && <p class="label pf-doc__stamp">{k.stamp}</p>}
+              <p class="label pf-doc__instruction">{k.instruction}</p>
             </div>
           </li>
         ))}
       </ol>
     ) : (
       <div class="pf-empty">
-        <p class="pf-empty__lead">Selected technical pack examples will appear here.</p>
-        <a class="button" href="/contact/">Ask about technical documentation <span><Arrow /></span></a>
+        <p class="pf-empty__lead">{k.empty}</p>
+        <a class="button" href={localizePath('/contact/', locale)}>{k.ask} <span><Arrow /></span></a>
       </div>
     )}
   </div>
 
   {/* The reader. Empty on load; the runtime builds the frame on the click that
       asks for a document and tears it down again on close. */}
-  <dialog class="pf-reader" data-reader aria-label="Technical document reader" hidden>
+  <dialog class="pf-reader" data-reader aria-label={k.readerLabel} hidden>
     <div class="pf-reader__bar">
       <p class="label pf-reader__title" data-reader-title></p>
       <span class="pf-reader__tools">
-        <a class="label pf-reader__tab" href="#" target="_blank" rel="noopener" data-reader-tab>Open in a new tab</a>
+        <a class="label pf-reader__tab" href="#" target="_blank" rel="noopener" data-reader-tab>{k.newTab}</a>
         <button type="button" class="pf-reader__close" data-reader-close>
-          Close <span aria-hidden="true">&#215;</span>
+          {t.close} <span aria-hidden="true">&#215;</span>
         </button>
       </span>
     </div>

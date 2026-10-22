@@ -21,7 +21,9 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
 /* THE LANGUAGE SWITCHER. Four words, set in the navigation's own mono label
    register: EN · FR · ES · عربي. Each is a real link to the equivalent page,
    written in its own language and tagged with that language, so it is read
-   correctly by a screen reader whatever the page language is. No flags (a
+   correctly by a screen reader whatever the page language is. Direction is
+   set on the label only, so the separators follow the page's own direction.
+   No flags (a
    language is not a country), no dropdown, nothing stored. */
 const languages = locales.map((code) => ({
   code,
@@ -52,11 +54,10 @@ const languages = locales.map((code) => ({
         href={language.href}
         hreflang={language.code}
         lang={language.code}
-        dir={language.dir}
         aria-current={language.current ? 'true' : undefined}
         data-lang-link={language.code}
       >
-        <span aria-hidden="true">{language.label}</span>
+        <span aria-hidden="true" dir={language.dir}>{language.label}</span>
         <span class="sr-only">{language.current ? `${language.name} — ${t.languageCurrent}` : language.name}</span>
       </a>
     ))}
@@ -85,11 +86,10 @@ const languages = locales.map((code) => ({
           href={language.href}
           hreflang={language.code}
           lang={language.code}
-          dir={language.dir}
           aria-current={language.current ? 'true' : undefined}
           data-lang-link={language.code}
         >
-          <span aria-hidden="true">{language.label}</span>
+          <span aria-hidden="true" dir={language.dir}>{language.label}</span>
           <span class="sr-only">{language.current ? `${language.name} — ${t.languageCurrent}` : language.name}</span>
         </a>
       ))}
