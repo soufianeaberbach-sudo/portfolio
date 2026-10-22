@@ -710,7 +710,7 @@ try {
       };
     });
     check('a cell in the range is a real link to that garment',
-      /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
+      before.href===`#womenswear/rtw/${generatedPresentations.find(r=>r.sourceIdentity==='rtw-ref-02')?.id??'rtw-ref-02'}` && before.href.endsWith('/'+before.id), before.href);
 
     await p.evaluate(() => document.querySelector('[data-territory="casualwear"] .ww-rail a').click());
     await p.waitForTimeout(900);
@@ -730,7 +730,7 @@ try {
         views: rd.querySelectorAll('[data-ww-view]').length,
         travel: rd.hasAttribute('data-travel'),
         stages: rd.querySelectorAll('.pf-rd__stage-item').length,
-        pending: rd.querySelector('.ww-reader-head p')?.textContent.includes('REFERENCE PHOTOGRAPHY'),
+        pending: ['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL'].includes(rd.querySelector('.ww-reader-head p')?.textContent),
         verified: rd.dataset.verified,
       };
     }, before.id);
@@ -745,7 +745,7 @@ try {
     check('and the way out goes back to the territory, not to the portfolio',
       entered.backTo === '#womenswear/casualwear', entered.backTo);
     check('both garment views remain available',
-      !entered.travel && entered.views === 3, JSON.stringify({ travel: entered.travel, views: entered.views }));
+      !entered.travel && entered.views === (generatedPresentations.some(r=>r.id===before.id)?4:3), JSON.stringify({ travel: entered.travel, views: entered.views }));
     check('no development stage is invented for an unverified frame',
       entered.verified === 'no' && entered.stages === 0 && entered.pending,
       JSON.stringify(entered));

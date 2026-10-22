@@ -108,7 +108,7 @@ def assemble(source_id):
     master_url = f'/portfolio/generated/{look["generatedIdentity"]}/master.png'
     srcset.append(f'{master_url} 5400w')
     look['master'] = {'asset': master_url, 'width': 5400, 'height': 2700, 'panelWidth': 1800, 'panelHeight': 2700,
-                      'srcset': ', '.join(srcset), 'nativePanelDimensions': [look[v]['width'] for v in ('front', 'back', 'editorial')],
+                      'srcset': ', '.join(srcset), 'nativePanelDimensions': [[look[v]['width'], look[v]['height']] for v in ('front', 'back', 'editorial')],
                       'resamplingDisclosure': 'Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail.'}
     look['qualityResult'].update({'exportGeometryPass': True, 'nativeResolutionPass': False,
                                  'reviewStatus': 'PROVISIONAL_REVIEW_ONLY', 'panelMetrics': metrics,

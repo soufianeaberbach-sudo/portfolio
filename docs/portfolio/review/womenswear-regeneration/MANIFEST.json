@@ -1474,12 +1474,23 @@
         "black"
       ],
       "priority": 1,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-04-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "0c30c6ad580dfc63d1d5d8a70bf4ac657c2ecc3cfd3e1a08a842f9c780b4bdc5",
+        "toolOutputPath": "/workspace/generated_images/exec-3511f700-2ccd-4783-81f6-31e98291604b.png",
+        "qualityStatus": "AWAITING_SET_QA"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Stripe treatment must be corrected before Back/Editorial or integration.",
+        "nativeResolutionLimitation": "1024\u00d71536 native; no native1800 detail claim."
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
@@ -1488,7 +1499,18 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "rejections": [
+        {
+          "view": "front",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-04-v1/rejected/front-stripe-count-v1.png",
+          "reason": "The visible outer-leg stripe group does not clearly retain all three source stripes; not approved for integration.",
+          "nativeDimensions": [
+            1024,
+            1536
+          ]
+        }
+      ]
     },
     {
       "sourceIdentity": "activewear-ref-05",
@@ -1746,21 +1768,144 @@
         "red"
       ],
       "priority": 1,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "dd00e98a904f2224972eb44dda4a98f96be95e9b04dc3be6f2fcc7b94e4fd9f1",
+        "toolOutputPath": "/workspace/generated_images/exec-e6a71ba6-bce9-4cce-ac41-2ecfe199507b.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "0a422fc645e190ea43644158a55fd070bebbe4cab54ff9f4197a09a3938f69a0",
+        "toolOutputPath": "/workspace/generated_images/exec-905113eb-ec7e-489d-9de7-7ef00d581ae4.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "20353233de53464010aa77afd779a54d73a22c22e8e1f01bb652fee73e3e6eaa",
+        "toolOutputPath": "/workspace/generated_images/exec-884b45a0-658e-4c17-9573-569ba15d8f76.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-08-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-08-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-08-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-08-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-08-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          1024,
+          1024,
+          1024
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Front / genuine U-scoop Back / controlled walking Editorial retain the same adult model, white sports watch, red/white bra bindings, red compression leggings with broad white outer panels, supplied rear yoke shape, and white/red trainers. Full anatomy and outfit remain inside native frame.",
+        "nativeResolutionLimitation": "Native1024\u00d71536 per separately generated view; resampled review exports are not native1800 detail.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              228,
+              13,
+              811,
+              1478
+            ],
+            "uniformScale": 1.6218430034129694,
+            "exportOpaqueBox": [
+              427,
+              162,
+              1372,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              280,
+              16,
+              795,
+              1433
+            ],
+            "uniformScale": 1.6767819336626677,
+            "exportOpaqueBox": [
+              468,
+              162,
+              1332,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              203,
+              13,
+              795,
+              1480
+            ],
+            "uniformScale": 1.6196319018404908,
+            "exportOpaqueBox": [
+              421,
+              162,
+              1380,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1400
       },
-      "sourceMetadataMatchesPixels": true
+      "sourceMetadataMatchesPixels": true,
+      "generatedDescription": "AI-generated provisional Front, Back and Editorial rephotography of the supplied red performance bra and leggings with white bindings and broad white side panels, white sports watch and white/red trainers.",
+      "generatedCaption": "Red performance set with white binding, side panels and white/red trainers."
     },
     {
       "sourceIdentity": "activewear-ref-09",
