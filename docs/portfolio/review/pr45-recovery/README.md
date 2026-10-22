@@ -8,6 +8,9 @@ Continuation of `6abe79a443153c6a6839780cd4e348e6245d60bb`; main remains
 owner approval. No production choreography was redesigned in this task.**
 The final review commit must also pass CI; use the exact final run linked in PR #45.
 
+[Resumed-session recovery verification and complete six-size motion coverage](CONTINUATION.md)
+records what was already pushed, the fresh local checks and the additional recordings.
+
 - [Technical investigation, root cause and narrow correction](TECHNICAL.md)
 - [Independent four-world critique and proposed edits](ART-DIRECTION.md)
 - [Executed QA / limitations](QA.md) · [machine results](RESULTS.json)
@@ -56,14 +59,14 @@ GitHub's source viewer does not host an interactive Portfolio preview.
 
 ## Responsive visual review
 
-| Viewport | Opening / midpoint / payoff | Archive / reader / inspection / return / handoff |
-| --- | --- | --- |
-| 1440×900 | [Compositions](compositions-1440.jpg) | [Access](access-1440.jpg) |
-| 1366×768 | [Compositions](compositions-1366.jpg) | [Access](access-1366.jpg) |
-| 1024×768 | [Compositions](compositions-1024.jpg) | [Access](access-1024.jpg) |
-| 768×1024 | [Compositions](compositions-768.jpg) | [Access](access-768.jpg) |
-| 430×932 | [Compositions](compositions-430.jpg) | [Access](access-430.jpg) |
-| 390×844 | [Compositions](compositions-390.jpg) | [Access](access-390.jpg) |
+| Viewport | Opening / midpoint / payoff | Archive / reader / inspection / return / handoff | Actual browser motion |
+| --- | --- | --- | --- |
+| 1440×900 | [Compositions](compositions-1440.jpg) | [Access](access-1440.jpg) | [Recording](current-desktop.mp4) |
+| 1366×768 | [Compositions](compositions-1366.jpg) | [Access](access-1366.jpg) | [Recording](current-1366.mp4) |
+| 1024×768 | [Compositions](compositions-1024.jpg) | [Access](access-1024.jpg) | [Recording](current-1024.mp4) |
+| 768×1024 | [Compositions](compositions-768.jpg) | [Access](access-768.jpg) | [Recording](current-768.mp4) |
+| 430×932 | [Compositions](compositions-430.jpg) | [Access](access-430.jpg) | [Recording](current-430.mp4) |
+| 390×844 | [Compositions](compositions-390.jpg) | [Access](access-390.jpg) | [Recording](current-mobile.mp4) |
 
 [Selected native screenshots](screens/) · [1920×1080 Presentation Mode](presentation-1920.jpg).
 The six-size cinematic screenshots are this session's independent baseline audit
