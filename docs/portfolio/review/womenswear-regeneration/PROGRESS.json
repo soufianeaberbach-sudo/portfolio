@@ -6,20 +6,21 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-05",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T16:35:55.792480+00:00",
+  "updatedUTC": "2026-10-22T16:38:31.243363+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 24,
-  "pendingLooks": 16,
-  "partiallyGeneratedLooks": 0,
+  "pendingLooks": 15,
+  "partiallyGeneratedLooks": 1,
   "statusCounts": {
     "INTEGRATED": 4,
     "READY": 20,
-    "PENDING": 16
+    "PENDING": 15,
+    "GENERATED": 1
   },
   "currentCategory": "evening",
-  "currentSourceIdentity": "evening-ref-05",
-  "currentMilestone": "set",
-  "lastSuccessfullyPushedCommit": "f4e43a063590c29fd1ed3adc8b0b1d487fc4bd37",
+  "currentSourceIdentity": "evening-ref-06",
+  "currentMilestone": "front",
+  "lastSuccessfullyPushedCommit": "0fa8c8362b0ec9212c8df19c076f2b089cf6f0e1",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "evening-ref-06",
@@ -86,7 +87,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate front for evening-ref-06; checkpoint before the following view",
+  "nextAction": "Generate and validate back for evening-ref-06; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -128,7 +129,7 @@
       ]
     }
   ],
-  "notes": "24 complete sets; rust gown master visually reviewed; actual file/dimension/source and 183 slot checks passed.",
+  "notes": "Blue gathered jersey gown Front accepted; Back and Editorial remain ungenerated.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
