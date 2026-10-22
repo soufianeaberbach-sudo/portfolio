@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-08",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:38:13.329847+00:00",
+  "updatedUTC": "2026-10-22T18:41:00.393308+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 27,
   "pendingLooks": 12,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-10",
-  "currentMilestone": "back",
-  "lastSuccessfullyPushedCommit": "d97c2021af4a891eebd7143347d735c65f72cb94",
+  "currentMilestone": "rejected-editorial",
+  "lastSuccessfullyPushedCommit": "9155563869a048dfdfb3676a7065b90e99b3ce58",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "evening-ref-10",
@@ -127,9 +127,25 @@
           "reason": "Two people/diptych instead of one independently generated rear panel. Rejected; not used or cropped into master."
         }
       ]
+    },
+    {
+      "sourceIdentity": "evening-ref-10",
+      "rejections": [
+        {
+          "view": "editorial",
+          "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/rejected/editorial-graphic-v1.png",
+          "nativeDimensions": [
+            1024,
+            1536
+          ],
+          "sha256": "acd60d2fa5cd9fcda41651e0bc5315b68f65b5b51137e6b1dfde9280fb808d8b",
+          "reason": "Visible stray four-point graphic at lower right, confirmed over white; not approved and not used in master. Front and Back remain accepted.",
+          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration."
+        }
+      ]
     }
   ],
-  "notes": "True rear accepted with source-supported mid-back opening and single sleeve; Editorial next.",
+  "notes": "Editorial rejected for stray graphic; actual native evidence retained. Front/Back protected. Exact next image remains evening-ref-10 Editorial.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
