@@ -6746,14 +6746,32 @@
         "nativeResampled": false,
         "reviewNote": "Native inspected over white: one rear-facing adult matching medium-brown/low-bun model, opaque ivory suit, same broad straps and left oval opening, straight mid-back edge and moderate V-shaped rear coverage. Whole head/hands/feet, natural anatomy and contact shadow, no obvious crop/halo failure. Rear is provisional original-concept design, not verified from stock evidence or a full-coverage claim."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-10-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "f8aee1c7592800d988c90311e499bd8b320b60da6e1c9d31e628cb652fc805b7",
+        "toolOutputPath": "/workspace/generated_images/exec-7e396409-6cdd-4c07-9810-a9a608bd282d.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial edit of original concept using accepted Front/Back only; no stock reference attached",
+        "generationPrompt": "ONE adult woman in one full-length EDITORIAL commercial swimwear studio photograph of the identical original ivory concept and adult medium-brown low-bun model in the two accepted Front/Back references. Keep the exact opaque matte ivory one-piece, square front neckline, same parallel straps, LEFT oval waist opening, same leg line and provisional rear arrangement. Same skin tone, natural proportions, hair, barefoot/no accessories. Quiet front three-quarter angle with slight natural weight shift, relaxed arms slightly away, neutral catalogue expression. No new cutout, hardware, logo, change of styling or new suit. Exactly one body, no pair, diptych or collage. Full head, both hands, all silhouette edges and feet safely in frame with generous margins, anatomically natural limbs/fingers/toes. Soft even neutral studio light, realistic fabric/skin and subtle floor contact shadows. Genuine transparent alpha preserving opaque ivory textile, hair and shadow; empty canvas beyond figure/shadow, no graphic/text/label/frame. Request portrait 1800x2700 if supported, otherwise actual native size with undistorted proportions. Original provisional AI fashion concept, not a verified production project or construction record.",
+        "referenceAssets": [
+          "/portfolio/generated/ww-ai-swimwear-ref-10-v1/front-native.png",
+          "/portfolio/generated/ww-ai-swimwear-ref-10-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white: same adult medium-brown low-bun model and ivory square-neck concept with left oval opening, barefoot. Restrained three-quarter weight shift, complete head/hands/feet, realistic contact shadows, no obvious anatomy/crop/halo failure. Original provisional design, unrelated to the old stock garment."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Native inspected over white: one adult medium-brown model with neat low bun, original opaque ivory square-neck one-piece, broad straps and left oval waist opening, barefoot. Entire head/hands/feet visible, natural anatomy and contact shadows; pale textile intact without halo. This is a new concept, not a re-creation of the historical Pexels design.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; review exports explicitly resampled.",
         "ownerArtisticApproval": false,
-        "backVisual": "Native inspected over white: one rear-facing adult matching medium-brown/low-bun model, opaque ivory suit, same broad straps and left oval opening, straight mid-back edge and moderate V-shaped rear coverage. Whole head/hands/feet, natural anatomy and contact shadow, no obvious crop/halo failure. Rear is provisional original-concept design, not verified from stock evidence or a full-coverage claim."
+        "backVisual": "Native inspected over white: one rear-facing adult matching medium-brown/low-bun model, opaque ivory suit, same broad straps and left oval opening, straight mid-back edge and moderate V-shaped rear coverage. Whole head/hands/feet, natural anatomy and contact shadow, no obvious crop/halo failure. Rear is provisional original-concept design, not verified from stock evidence or a full-coverage claim.",
+        "editorialVisual": "Native inspected over white: same adult medium-brown low-bun model and ivory square-neck concept with left oval opening, barefoot. Restrained three-quarter weight shift, complete head/hands/feet, realistic contact shadows, no obvious anatomy/crop/halo failure. Original provisional design, unrelated to the old stock garment.",
+        "setVisualReview": "Inspected all three actual native portraits over white. Same adult medium-brown low-bun model, opaque ivory square-neck one-piece, parallel straps, left oval waist opening and barefoot styling. True rear has straight mid-back edge and moderate V-shaped coverage; construction is provisional original concept design, not historical evidence. Quiet Editorial; complete head/hands/feet, natural anatomy and contact shadows, no graphic/crop/halo defect. Former stock photo was never attached and is a different design."
       },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional.",
@@ -6768,12 +6786,15 @@
       "conceptBrief": "Original temporary ivory matte one-piece: square neckline, two broad parallel straps, tonal binding, small left oval waist opening, moderate leg line and conventional covered rear; adult medium-brown model with low bun, barefoot and no accessories. The former stock photograph is a different design and was not attached.",
       "generatedRearDescription": "Provisional straight mid-back edge, two parallel straps, same left side opening and moderate V-shaped seat coverage; no technical or full-coverage verification.",
       "lastVerifiedCheckpoint": {
-        "commit": "d1f8507da968a78be4a967e0181b6bc90426427f",
+        "commit": "079b713854be9a54b354a6eef48b484b83b285b1",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "Original provisional AI Front, true Back and Editorial concept: ivory matte square-neck one-piece swimsuit with parallel straps and left oval waist opening. Rear shape and construction are provisional, not a verified ABERBACH production project.",
+      "generatedCaption": "Original ivory square-neck swimsuit concept with side opening."
     }
   ],
   "additionalPlaceholderPool": [
