@@ -20,7 +20,7 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
   return{x:w*cx-sh*a*(win[0]+win[2]/2),y:h*cy-sh*(win[1]+win[3]/2),w:sh*a,h:sh};
  };
  const draw=(id:number,b:Box,win=viewWindow(id),interactive=true,gate:SourceWindow=whole)=>{
-  const node=photo(id);drawn.add(node);node.style.zIndex=String(++order);
+  const node=photo(id);drawn.add(node);node.style.zIndex=String(++order);node.style.clipPath='';
   const l=Math.max(0,b.x+b.w*win[0],w*gate[0]),t=Math.max(0,b.y+b.h*win[1],h*gate[1]);
   const r=Math.min(w,b.x+b.w*(win[0]+win[2]),w*(gate[0]+gate[2])),d=Math.min(h,b.y+b.h*(win[1]+win[3]),h*(gate[1]+gate[3]));
   const visible=r-l>1&&d-t>1;
@@ -63,19 +63,19 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    });
    }
   }else{
-   const t=ease(p-3);
-   if(compact){if(p<3.46)draw(17303564,hero);else{draw(26936522,puffer);frame.style.background=original(26936522)?'#ccc9c6':'#fff';}}
-   else {
-   // A second, genuinely different volume resolves the reveal: angular jacket → quilted outerwear.
-   if(t<1)draw(17303564,mix(hero,{...hero,x:hero.x-w*.32},t),undefined,t<.08,[0,0,1-t,1]);
-   draw(26936522,puffer,undefined,t>.94,[1-t,0,t,1]);
-   frame.style.background=original(26936522)?`rgb(${Math.round(lerp(255,204,t))},${Math.round(lerp(255,201,t))},${Math.round(lerp(255,198,t))})`:'#fff';
-   }
+   // The open jacket and compact quilted volume occupy the same floor, then
+   // the camera leaves the first volume behind. No wiping through a body.
+   const t=ease(p-3),teal=fit(17303564,compact?.34:.27,compact?.70:.85),quilt=fit(26936522,compact?.66:.73,compact?.88:1);
+   if(compact){if(t<.58)draw(17303564,hero);else draw(26936522,puffer);}
+   else if(t<.30){draw(17303564,mix(hero,teal,t/.30));}
+   else if(t<.64){draw(17303564,teal);draw(26936522,quilt);}
+   else{const q=ease((t-.64)/.36);draw(26936522,mix(quilt,puffer,q));if(q<.01)draw(17303564,teal);}
+   frame.style.background=original(26936522)&&t>=.64?'#ccc9c6':'#fff';
   }
   }
  }else if(world==='m-activewear'){
   const polo=fit(7648388),black=fit(30954220),ground=fit(7116192,.5,.88,.55),red=fit(11000101),white=fit(6974949),jump=fit(33443605);
-  const compression=()=>{if(compact)draw(30954220,black);else draw(7116192,ground);};
+  const compression=()=>{draw(7116192,ground);};
   if(p<=1){if(p<.43)draw(7648388,polo);else compression();}
   else if(p<=2){if(p<1.46)compression();else draw(11000101,red);}
   else if(p<=3){
@@ -83,21 +83,40 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
    if(compact){if(p<2.46)draw(11000101,red);else draw(6974949,white);}
    else{draw(11000101,mix(red,fit(11000101,.27,.91),t));draw(6974949,fit(6974949,.74,.91),whole,t>.95,[1-t*.5,0,t*.5,1]);}
   }else{
-   if(p<3.46){if(compact)draw(6974949,white);else{draw(11000101,fit(11000101,.27,.91));draw(6974949,fit(6974949,.74,.91));}}
-   else draw(33443605,jump);
+   // A diagonal editorial cut follows the existing lifted stance. The people
+   // never move within their photographs, and the full jump is held at payoff.
+   const t=ease(p-3);
+   if(t<.26){if(!compact&&t<.01)draw(11000101,fit(11000101,.27,.91));draw(6974949,compact?white:mix(fit(6974949,.74,.91),white,ease(t/.26)));}
+   else{const q=ease((t-.26)/.74);if(q<1)draw(6974949,white);draw(33443605,jump,undefined,q>.98);photo(33443605).style.clipPath=`polygon(0 0, ${q*220}% 0, ${q*220-120}% 100%, 0 100%)`;}
   }
  }else if(world==='m-rtw'){
-  const knit=fit(16711124),plinth=fit(29727778),chair=fit(13128635),green=fit(8508752),final=fit(6844165);
+  const knit=fit(16711124),plinth=fit(29727778),chair=fit(13128635),green=fit(8508752),final=fit(7764014);
   if(p<=1){if(p<.46)draw(16711124,knit);else draw(29727778,plinth);}
-  else if(p<=2){/* The real support becomes a carried structure; no invented prop or assembly. */if(p<1.46)draw(29727778,plinth);else draw(13128635,chair);}
+  else if(p<=2){
+   // Resting on a block → carrying a chair: two independent photographs,
+   // connected by the visible support, never a fabricated prop transformation.
+   const t=ease(p-1),left=fit(29727778,.27,.90),right=fit(13128635,.73,.94);
+   if(compact){if(t<.5)draw(29727778,plinth);else draw(13128635,chair);}
+   else if(t<.30)draw(29727778,mix(plinth,left,t/.30));
+   else if(t<.70){draw(29727778,left);draw(13128635,right);}
+   else draw(13128635,mix(right,chair,ease((t-.70)/.30)));
+  }
   else if(p<=3){const t=ease(p-2);if(compact){if(p<2.46)draw(13128635,chair);else draw(8508752,green);}else{draw(13128635,mix(chair,fit(13128635,.28,.91),t));draw(8508752,fit(8508752,.74,.91),undefined,t>.95,[1-t*.5,0,t*.5,1]);}}
-  else if(compact){if(p<3.46)draw(8508752,green);else{draw(6844165,final);backdrop(6844165,'#17100f');}}
-  else{const t=ease(p-3),opening:SourceWindow=[.5-t*.5,0,t,1];if(t<1){draw(13128635,fit(13128635,.28,.91),whole,false);draw(8508752,fit(8508752,.74,.91),undefined,false);}draw(6844165,final,whole,t>.98,opening);if(t>.98)backdrop(6844165,'#17100f');}
+  else if(compact){if(p<3.46)draw(8508752,green);else{draw(7764014,final);}}
+  else{const t=ease(p-3);if(t<.5){draw(13128635,fit(13128635,.28,.91));draw(8508752,fit(8508752,.74,.91));}else draw(7764014,final);}
  }else{
   const daylight=fit(6097464),pale=fit(29242239),steel=fit(16862147),ivory=fit(14348500),coat=fit(6207215);
   if(p<=1){const t=ease(p);if(compact){if(p<.46)draw(6097464,daylight);else draw(29242239,pale);}else{draw(6097464,mix(daylight,fit(6097464,.27,.92),t));draw(29242239,fit(29242239,.74,.92),whole,t>.95,[1-t*.5,0,t*.5,1]);}}
   else if(p<=2){if(p<1.46){if(!compact)draw(6097464,fit(6097464,.27,.92));draw(29242239,compact?pale:fit(29242239,.74,.92));}else{draw(16862147,steel);backdrop(16862147,'#161718');}}
-  else if(p<=3){if(p<2.46){draw(16862147,steel);backdrop(16862147,'#161718');}else{draw(14348500,ivory);backdrop(14348500,'#161718');}}
+  else if(p<=3){
+   // Light suit in a dark room answers the dark suit. Stable axes and full
+   // proportions make the reversal readable without invented relighting.
+   const t=ease(p-2);backdrop(16862147,'#161718');
+   if(compact){if(t<.5)draw(16862147,steel);else draw(14348500,ivory);}
+   else if(t<.27)draw(16862147,mix(steel,fit(16862147,.28,.92),t/.27));
+   else if(t<.72){draw(16862147,fit(16862147,.28,.92));draw(14348500,fit(14348500,.73,.96));}
+   else draw(14348500,mix(fit(14348500,.73,.96),ivory,ease((t-.72)/.28)));
+  }
   else{if(p<3.46){draw(14348500,ivory);backdrop(14348500,'#161718');}else{draw(6207215,coat);backdrop(6207215,'#161718');}}
  }
  // A reader opened before a breakpoint change keeps its actual photographic
@@ -105,7 +124,12 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
  if(heldActor&&!drawn.has(photo(heldActor))){drawn.clear();for(const wing of wings)wing.style.display='none';draw(heldActor,fit(heldActor));}
  for(const node of nodes)if(!drawn.has(node)){node.inert=true;node.tabIndex=-1;node.style.visibility='hidden';node.setAttribute('aria-hidden','true');}
  frame.querySelector<HTMLElement>('.mw-film-title')!.style.opacity=String(1-clamp(p*2));
- const failed=[...drawn].some(node=>{const im=node.querySelector('img')!;return node.style.visibility==='visible'&&im.complete&&!im.naturalWidth;});
- frame.querySelector<HTMLElement>('[data-mw-media-status]')!.hidden=!failed;
+ const visibleImages=[...drawn].filter(node=>node.style.visibility==='visible').map(node=>node.querySelector('img')!);
+ const failed=visibleImages.some(im=>im.complete&&!im.naturalWidth);
+ const loading=visibleImages.length>0&&visibleImages.every(im=>!im.complete||!im.naturalWidth)&&!failed;
+ const status=frame.querySelector<HTMLElement>('[data-mw-media-status]')!,message=failed?'Photograph unavailable. Open the ten-look edit to continue.':'Loading photograph…';
+ if(status.textContent!==message)status.textContent=message;
+ status.hidden=!failed&&!loading;
+ if(loading)frame.setAttribute('aria-busy','true');else frame.removeAttribute('aria-busy');
  frame.dataset.composition=String(Math.round(p));
 }

@@ -2,7 +2,7 @@
 import type { GarmentWorld, MarketCategory, ImageAsset, Subject } from '../../data/portfolio';
 import { REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING, projectSubject, referenceSubject, worldPublication } from '../../data/portfolio';
 import { exhibitionImage } from '../../data/womenswear-exhibition';
-import {referenceCollection,displayedCollection,collectionCredit} from '../../data/womenswear-collection';
+import {referenceCollection,displayedCollection,collectionCredit,womenswearWorlds} from '../../data/womenswear-collection';
 import Arrow from '../Arrow.astro';
 import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
@@ -17,23 +17,24 @@ const pool = (category: MarketCategory): Subject[] => publication === 'published
   : lab ? category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id)) : referenceCollection(category,world.id);
 // Editorial selection refers to actual archive IDs, never position-dependent geometry.
 const edit = [
-  { id:'rtw', short:'Ready-to-Wear', hero:'rtw-ref-01', selected:['rtw-ref-07','rtw-ref-10','rtw-ref-11'] },
-  { id:'activewear', short:'Activewear', hero:'activewear-ref-08', selected:['activewear-ref-01','activewear-ref-04'] },
-  { id:'streetwear', short:'Streetwear', hero:'streetwear-ref-02', selected:['streetwear-ref-01'] },
-  { id:'evening', short:'Occasion', hero:'evening-ref-04', selected:['evening-ref-06','evening-ref-11'] },
-  { id:'swimwear', short:'Swim', hero:'swimwear-ref-06', selected:['swimwear-ref-01','swimwear-ref-04'] },
+  { id:'casualwear', hero:'rtw-ref-02', selected:['streetwear-ref-02','streetwear-ref-04'] },
+  { id:'activewear', hero:'activewear-ref-08', selected:['activewear-ref-01','activewear-ref-04'] },
+  { id:'evening', hero:'evening-ref-04', selected:['evening-ref-06','evening-ref-11'] },
+  { id:'swimwear', hero:'swimwear-ref-06', selected:['swimwear-ref-01','swimwear-ref-04'] },
 ];
 const territories = edit.flatMap(t => {
-  const category = world.categories.find(c => c.id === t.id);
+  const sourceCategories=world.categories.filter(c=>t.id==='casualwear'?['rtw','streetwear'].includes(c.id):c.id===t.id);
+  const original=sourceCategories[0];
+  const category=original?{...original,id:t.id,label:womenswearWorlds.find(w=>w.id===t.id)!.label}:null;
   if (!category) return [];
-  const slots = pool(category);
+  const slots = sourceCategories.flatMap(pool);
   if(lab?.category === t.id) slots.unshift(lab.subject);
   if(!slots.length) return [];
   const hero = lab?.category === t.id ? lab.subject : slots.find(s => s.id === t.hero) ?? slots[0];
   const selected = slots.filter(s => s !== hero && (s.verified ? s.role === 'featured' : t.selected.includes(s.id)));
   const supporting = slots.filter(s => s !== hero && !selected.includes(s));
   const displayed=lab||publication==='published'?slots:displayedCollection(t.id,slots);
-  return [{...t,category,slots,displayed,hero,selected,supporting, paired: selected.length === 1 && supporting.length === 0}];
+  return [{...t,short:category.label,category,slots,displayed,hero,selected,supporting, paired: selected.length === 1 && supporting.length === 0}];
 });
 const everySubject = territories.flatMap(territory => territory.slots.map((subject,index) => ({subject,territory,index})));
 const door = (subject: Subject) => `#${world.id}/${subject.category}/${subject.id}`;
@@ -50,11 +51,11 @@ const pad = (n:number) => String(n).padStart(2,'0');
   aria-labelledby={`${world.id}-title`}
 >
   {/* No world switcher rail: the act's own bar carries the way back and the
-      five territories. Menswear keeps its rail until its own act is written. */}
+      four worlds. Menswear keeps its rail until its own act is written. */}
   <div class="pf-screen pf-act__screen" data-screen="index">
     {/* ---- THE ONE CONTROL ------------------------------------------------
         Attraction first, control second. The bar names where the visitor is
-        and opens the five territories on demand — by their real names, not by
+        and opens the four worlds on demand — by their real names, not by
         an abstraction anybody has to decode. */}
     <div class="pf-act__bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
@@ -72,7 +73,6 @@ const pad = (n:number) => String(n).padStart(2,'0');
               <a href={`#${world.id}/${t.category.id}`} data-nav data-act-link={t.category.id}>
                 <i class="pf-act__n label">{pad(i + 1)}</i>
                 <span class="pf-act__label">{t.short}</span>
-                <small>{t.category.label}</small>
               </a>
             </li>
           ))}
@@ -109,9 +109,10 @@ const pad = (n:number) => String(n).padStart(2,'0');
       </article>
     ))}
 
+    <details class="ww-all-references" data-all-references><summary class="label">Full reference collection / {everySubject.length} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved.</p><ul>{everySubject.map(({subject})=><li><a href={door(subject)} data-nav data-open-subject={subject.id} data-reference-link>{subject.id} — {subject.cover.alt}</a></li>)}</ul></details>
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
-        if(!lab) return <FinalPhotoReader subject={subject} world={world.id} credit={collectionCredit(territory.category,subject.id)}/>;
+        if(!lab) return <FinalPhotoReader subject={subject} world={world.id} credit={collectionCredit(world.categories.find(c=>c.id===subject.category)!,subject.id)}/>;
         /* ROLE IS PRESENTATION WEIGHT, NEVER ACCESS. Every stage a project
            supplied is rendered, whatever its role; the role decides how much
            room the story is given:

@@ -1,4 +1,5 @@
 import{paintMenswear}from'./menswear-film';
+import{preparePhotograph,sameLoadedPhotograph}from'./garment-photo';
 import{menswearDirections}from'../data/menswear-direction';
 import type{MenswearCategory}from'../data/menswear-collection';
 import{gsap}from'gsap';
@@ -10,11 +11,12 @@ export function initMenswear(root:HTMLElement){
  for(const f of films)f.removeAttribute('id');
  const reduce=matchMedia('(prefers-reduced-motion:reduce)'),menu=world.querySelector<HTMLElement>('[data-mw-worlds]')!,toggle=world.querySelector<HTMLButtonElement>('[data-mw-worlds-toggle]')!;
  const presentButton=world.querySelector<HTMLButtonElement>('[data-mw-present]')!,fullscreen=world.querySelector<HTMLButtonElement>('[data-mw-fullscreen]')!;
- let category:MenswearCategory='m-streetwear',film=films[0],experience=film.querySelector<HTMLElement>('[data-mw-experience]')!,position=0,requested=0,present=false,active:HTMLElement|null=null;
+ let category:MenswearCategory='m-streetwear',film=films[0],experience=world.querySelector<HTMLElement>('[data-mw-scroll]')!,position=0,requested=0,present=false,active:HTMLElement|null=null;
  let archive=false,heldActor:number|undefined;
  let motion:gsap.core.Tween|null=null,raf=0,epoch=0,cutCancel:(()=>void)|null=null,returnFinish:(()=>void)|null=null;
  const readerStates=new Map<HTMLElement,{select:(n:number,immediate?:boolean)=>void;reset:()=>void;draw:()=>void;view:()=>number}>();
  const clamp=(n:number,a=0,b=4)=>Math.max(a,Math.min(b,n));
+ const start=(f=film)=>experience.scrollTop+f.getBoundingClientRect().top-experience.getBoundingClientRect().top;
  const range=()=>Math.max(1,film.querySelector<HTMLElement>('.mw-walkway')!.offsetHeight-film.querySelector<HTMLElement>('[data-mw-frame]')!.offsetHeight);
  const menuState=(on:boolean,focus=false)=>{menu.hidden=!on;toggle.setAttribute('aria-expanded',String(on));if(focus)(on?menu.querySelector<HTMLElement>('[aria-current=page]')??menu.querySelector<HTMLElement>('a'):toggle)?.focus({preventScroll:true});};
  const paint=()=>{
@@ -27,36 +29,70 @@ export function initMenswear(root:HTMLElement){
  const scene=(n:number,immediate=false)=>{
   stop();archive=false;heldActor=undefined;requested=clamp(n);const target=requested;
   const done=()=>{motion=null;world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=`${menswearDirections[category].name}. ${menswearDirections[category].scenes[target]}`;};
-  if(immediate||reduce.matches){position=target;experience.scrollTop=range()*target/4;paint();done();return;}
-  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'power2.inOut',onUpdate:()=>{position=state.p;experience.scrollTop=range()*position/4;paint();},onComplete:done});
+  if(immediate||reduce.matches){position=target;experience.scrollTop=start()+range()*target/4;paint();done();return;}
+  // The film renderer owns shot easing/holds. A second ease rushed its central comparisons.
+  const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'none',onUpdate:()=>{position=state.p;experience.scrollTop=start()+range()*position/4;paint();},onComplete:done});
  };
  const setPresent=(on:boolean)=>{
   present=on;world.toggleAttribute('data-present',on);presentButton.setAttribute('aria-pressed',String(on));presentButton.textContent=on?'Exit presentation':'Present';fullscreen.hidden=!on;
   if(on){scene(Math.round(position),true);experience.focus({preventScroll:true});}
   else if(document.fullscreenElement===world)void document.exitFullscreen().catch(()=>{});
  };
- const activate=(next:string|null)=>{
-  stop();cancel();archive=false;heldActor=undefined;menuState(false);const id=next&&next in menswearDirections?next as MenswearCategory:'m-streetwear';
-  category=id;film=films.find(f=>f.dataset.mwFilm===id)!;
-  films.forEach(f=>{f.toggleAttribute('data-current',f===film);f.hidden=f!==film;});
-  experience=film.querySelector<HTMLElement>('[data-mw-experience]')!;
-  world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===id)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  position=requested=0;experience.scrollTop=0;paint();
-  // Only the small active film cast is prepared; hidden archives/readers remain lazy.
-  for(const image of world.hasAttribute('data-open')?film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img'):[]){image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});}
+ // All films remain in one native flow. Selection follows the viewport, not hidden panels.
+ const selectWorld=(next:HTMLElement)=>{
+  if(film===next&&next.hasAttribute('data-current')&&(!world.hasAttribute('data-open')||next.hasAttribute('data-prepared')))return;
+
+  film=next;category=film.dataset.mwFilm as MenswearCategory;
+  films.forEach(f=>{f.toggleAttribute('data-current',f===film);f.querySelector<HTMLElement>('[data-mw-frame]')!.inert=f!==film;});
+  world.querySelectorAll<HTMLElement>('[data-mw-world-link]').forEach(a=>{if(a.dataset.mwWorldLink===category)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  if(world.hasAttribute('data-open'))film.setAttribute('data-prepared','');
+  if(world.hasAttribute('data-open'))for(const[at,image]of [...film.querySelectorAll<HTMLImageElement>('[data-mw-actor] img')].entries()){
+   if(at===0)image.fetchPriority='high';image.loading='eager';void image.decode().catch(()=>{image.closest('a')?.setAttribute('data-unavailable','');});
+  }
  };
+ const follow=()=>{
+  if(active||motion||present)return;
+  const line=experience.getBoundingClientRect().top+Math.min(90,experience.clientHeight*.16);
+  const next=films.find(f=>{const b=f.getBoundingClientRect();return b.top<=line&&b.bottom>line;})??(experience.scrollTop<1?films[0]:films.at(-1)!);
+  selectWorld(next);heldActor=undefined;archive=experience.scrollTop>start()+range()+1;
+  position=clamp(4*(experience.scrollTop-start())/range());requested=Math.round(position);paint();
+  // Scroll changes orientation without generating Back-button entries. Reader routes stay router-owned.
+  if(world.hasAttribute('data-open')&&location.hash.startsWith('#menswear')&&location.hash.split('/').length<3){
+   const hash=`#menswear/${category}`;if(location.hash!==hash&&!(location.hash==='#menswear'&&category==='m-streetwear'))world.dispatchEvent(new CustomEvent('pf:menswear-orientation',{bubbles:true,detail:hash}));
+  }
+ };
+ const activate=(next:string|null)=>{
+  stop();cancel();archive=false;heldActor=undefined;menuState(false);
+  const id=next&&next in menswearDirections?next as MenswearCategory:'m-streetwear';
+  selectWorld(films.find(f=>f.dataset.mwFilm===id)!);position=requested=0;
+  experience.scrollTop=start();paint();
+ };
+ experience.addEventListener('scroll',()=>{if(active||motion||present)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(follow);},{passive:true});
+ experience.addEventListener('wheel',()=>{if(!present&&!active)stop();},{passive:true});
+ experience.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
+ const step=(delta:number)=>{
+  const n=requested+delta,index=films.indexOf(film);
+  if(n<0&&index>0){world.querySelector<HTMLAnchorElement>(`[data-mw-world-link="${films[index-1].dataset.mwFilm}"]`)!.click();scene(4,true);}
+  else if(n>4&&index<films.length-1){world.querySelector<HTMLAnchorElement>(`[data-mw-world-link="${films[index+1].dataset.mwFilm}"]`)!.click();scene(0,true);}
+  else scene(n);
+ };
+ experience.addEventListener('keydown',e=>{
+  if(e.defaultPrevented||active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,summary,.mw-rail,[contenteditable=true]'))return;
+  // In Explore, vertical keys retain native scrolling. Presentation remotes use arrows/Page/Space.
+  const forward=present?['ArrowRight','ArrowDown','PageDown',' ']:['ArrowRight'],back=present?['ArrowLeft','ArrowUp','PageUp']:['ArrowLeft'];
+  // Endpoints are direct seeks, not playback through every skipped composition.
+  if(present&&(e.key==='Home'||e.key==='End')){e.preventDefault();scene(e.key==='Home'?0:4,true);}
+  else if(forward.includes(e.key)||back.includes(e.key)){e.preventDefault();step((back.includes(e.key)||(e.key===' '&&e.shiftKey))?-1:1);}
+ });
+ // A deliberate continued native gesture after the final archive hands off to Development.
+ let endDelta=0,touchEndY:number|null=null;
+ const atEnd=()=>experience.scrollTop+experience.clientHeight>=experience.scrollHeight-3;
+ const handoff=()=>{endDelta=0;world.dispatchEvent(new CustomEvent('pf:world-handoff',{bubbles:true,detail:'#3d-simulation'}));};
+ experience.addEventListener('wheel',e=>{if(!active&&!present&&world.hasAttribute('data-open')&&atEnd()&&e.deltaY>0){endDelta+=e.deltaY;if(endDelta>380)handoff();}else endDelta=0;},{passive:true});
+ experience.addEventListener('touchstart',e=>{touchEndY=atEnd()?e.touches[0]?.clientY??null:null;},{passive:true});
+ experience.addEventListener('touchmove',e=>{if(touchEndY!==null&&!active&&!present&&touchEndY-(e.touches[0]?.clientY??touchEndY)>85){touchEndY=null;handoff();}},{passive:true});
  for(const f of films){
-  const scroller=f.querySelector<HTMLElement>('[data-mw-experience]')!;
   for(const im of f.querySelectorAll<HTMLImageElement>('[data-mw-actor] img'))for(const event of ['load','error'])im.addEventListener(event,()=>{if(f===film)paint();});
-  scroller.addEventListener('scroll',()=>{if(f!==film||active||motion||present)return;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{archive=experience.scrollTop>range()+1;heldActor=undefined;position=clamp(4*experience.scrollTop/range());requested=Math.round(position);paint();});},{passive:true});
-  scroller.addEventListener('wheel',()=>{if(!present&&!active)stop();},{passive:true});scroller.addEventListener('touchstart',()=>{if(!present&&!active)stop();},{passive:true});
-  scroller.addEventListener('keydown',e=>{
-   if(active||!menu.hidden||(e.target as HTMLElement).closest('a,button,input,select,textarea,[contenteditable=true]'))return;
-   const forward=['ArrowRight','ArrowDown','PageDown',' '],back=['ArrowLeft','ArrowUp','PageUp'];
-   if(e.key==='Home'||e.key==='End'||forward.includes(e.key)||back.includes(e.key)){
-    e.preventDefault();scene(e.key==='Home'?0:e.key==='End'?4:requested+((back.includes(e.key)||(e.key===' '&&e.shiftKey))?-1:1));
-   }
-  });
   const rail=f.querySelector<HTMLElement>('.mw-rail')!;
   rail.addEventListener('keydown',e=>{if(e.target!==rail||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();rail.scrollTo({left:e.key==='Home'?0:e.key==='End'?rail.scrollWidth:rail.scrollLeft+(e.key==='ArrowRight'?1:-1)*rail.clientWidth*.7,behavior:reduce.matches?'instant':'smooth'});});
   rail.addEventListener('scroll',()=>{const hint=f.querySelector<HTMLElement>('[data-mw-rail-hint]')!;hint.textContent=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-3?'End of edit':'Explore →';},{passive:true});
@@ -66,8 +102,8 @@ export function initMenswear(root:HTMLElement){
  presentButton.addEventListener('click',()=>setPresent(!present));
  fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement===world)await document.exitFullscreen();else await world.requestFullscreen();}catch{world.querySelector<HTMLElement>('[data-mw-live]')!.textContent='Fullscreen is unavailable. In-page presentation remains available.';} });
  world.querySelectorAll<HTMLButtonElement>('[data-mw-scene]').forEach(b=>b.addEventListener('click',()=>scene(Number(b.dataset.mwScene))));
- world.querySelector('[data-mw-prev]')!.addEventListener('click',()=>scene(requested-1));world.querySelector('[data-mw-next]')!.addEventListener('click',()=>scene(requested+1));
- world.querySelector('[data-mw-archive-open]')!.addEventListener('click',()=>{stop();archive=true;heldActor=undefined;if(present)setPresent(false);menuState(false);experience.scrollTo({top:range()+experience.clientHeight,behavior:'instant'});film.querySelector<HTMLElement>('.mw-rail')!.focus({preventScroll:true});});
+ world.querySelector('[data-mw-prev]')!.addEventListener('click',()=>step(-1));world.querySelector('[data-mw-next]')!.addEventListener('click',()=>step(1));
+ world.querySelector('[data-mw-archive-open]')!.addEventListener('click',()=>{stop();archive=true;heldActor=undefined;if(present)setPresent(false);menuState(false);experience.scrollTo({top:start()+range()+experience.clientHeight,behavior:'instant'});film.querySelector<HTMLElement>('.mw-rail')!.focus({preventScroll:true});});
  document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!(e.target as HTMLElement).closest('[data-mw-worlds],[data-mw-worlds-toggle]'))menuState(false);});
  document.addEventListener('keydown',e=>{
   if(e.key!=='Escape'||!world.hasAttribute('data-open')||active)return;
@@ -105,9 +141,9 @@ export function initMenswear(root:HTMLElement){
   const draw=()=>{const photo=photos[view],mx=Math.max(0,(photo.clientWidth*zoom-viewport.clientWidth)/2),my=Math.max(0,(photo.clientHeight*zoom-viewport.clientHeight)/2);x=clamp(x,-mx,mx);y=clamp(y,-my,my);photo.style.transform=`translate(${x}px,${y}px) scale(${zoom})`;status.textContent=reader.hasAttribute('data-inspect')?`${Math.round(zoom*100)}% · drag / pinch / arrow keys`:!images[view].complete?'Loading photograph…':!images[view].naturalWidth?'Photograph unavailable. Return to the exhibition to continue.':'';};
   const reset=()=>{selection++;requestedView=view;pointers.clear();photos.forEach(p=>p.style.transform='');zoom=1;x=y=0;reader.removeAttribute('data-inspect');inspect.setAttribute('aria-pressed','false');tools.hidden=true;reader.removeAttribute('aria-busy');draw();};
   const select=(n:number,immediate=false)=>{
-   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];image.loading='eager';image.sizes=`${image.getAttribute('width')}px`;
+   cutCancel?.();const next=clamp(n,0,panels.length-1),token=++selection;requestedView=next;const image=images[next];preparePhotograph(image);
    const commit=()=>{if(token!==selection)return;reset();view=requestedView=next;reader.toggleAttribute('data-wide',Number(photos[next].style.getPropertyValue('--photo-aspect'))>1.1);panels.forEach((p,i)=>p.hidden=i!==next);reader.querySelectorAll<HTMLElement>('[data-mw-view]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.mwView)===next)));reader.querySelector<HTMLAnchorElement>('[data-mw-original]')!.href=image.src;draw();};
-   if(next===view||immediate){commit();return;}reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';void image.decode().then(commit,()=>{if(token===selection){reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable; the current view remains available.';}});
+   if(next===view||immediate||sameLoadedPhotograph(image,images[view])){commit();return;}reader.setAttribute('aria-busy','true');status.textContent='Loading photograph…';void image.decode().then(commit,()=>{if(token===selection){if(sameLoadedPhotograph(image,images[view])){commit();return;}requestedView=view;reader.removeAttribute('aria-busy');status.textContent='Requested photograph unavailable; the current view remains available.';}});
   };
   readerStates.set(reader,{select,reset,draw,view:()=>view});
   reader.querySelectorAll<HTMLButtonElement>('[data-mw-view]').forEach(b=>b.addEventListener('click',()=>select(Number(b.dataset.mwView))));
@@ -124,12 +160,12 @@ export function initMenswear(root:HTMLElement){
   images.forEach(im=>{im.addEventListener('load',draw);im.addEventListener('error',draw);});
  }
  const cancel=()=>{cutCancel?.();const done=returnFinish;returnFinish=null;done?.();epoch++;};
- const resize=()=>{cancel();if(!archive)experience.scrollTop=range()*position/4;paint();if(active)readerStates.get(active)?.draw();};
+ const resize=()=>{cancel();if(!archive)experience.scrollTop=start()+range()*position/4;paint();if(active)readerStates.get(active)?.draw();};
  window.addEventListener('resize',resize);reduce.addEventListener('change',()=>{resize();if(!active)scene(Math.round(position),true);});
  new MutationObserver(()=>{if(!world.hasAttribute('data-open')){stop();cancel();setPresent(false);menuState(false);}}).observe(world,{attributes:true,attributeFilter:['data-open']});
  activate(null);
- return{focusTarget:()=>experience,ownsWorld:(el:HTMLElement)=>el===world,get category(){return category;},activate,cancel,owns:(reader:HTMLElement)=>reader.hasAttribute('data-mw-reader'),returnHash:(reader:HTMLElement)=>`#menswear/${reader.dataset.of}`,
-  enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){cancel();stop();heldActor=Number(source?.closest<HTMLElement>('[data-mw-actor]')?.dataset.mwActor)||undefined;archive=!!source?.closest('.mw-rail');active=reader;exhibition.inert=true;readerStates.get(reader)!.select(0,true);match(reader,source,true,instant,()=>{});},
-  leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,done:()=>void){cancel();exhibition.inert=false;const token=epoch;const finish=()=>{if(token!==epoch)return;active=null;returnFinish=null;done();};returnFinish=finish;match(reader,location.hash===`#menswear/${reader.dataset.of}`?source:null,false,instant,finish);},
+ return{focusTarget:()=>experience,ownsWorld:(el:HTMLElement)=>el===world,get category(){return category;},activate,cancel,owns:(reader:HTMLElement)=>reader.hasAttribute('data-mw-reader'),returnHash:(reader:HTMLElement)=>`#menswear/${reader.dataset.returnWorld??reader.dataset.of}`,
+  enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){cancel();stop();reader.dataset.returnWorld=category;const back=reader.querySelector<HTMLAnchorElement>('[data-subject-close]')!;back.href=`#menswear/${category}`;back.textContent=reader.dataset.of===category?`← ${menswearDirections[category].name}`:'← Full reference collection';heldActor=Number(source?.closest<HTMLElement>('[data-mw-actor]')?.dataset.mwActor)||undefined;archive=experience.scrollTop>start()+range()+1||!!source?.closest('.mw-rail');active=reader;exhibition.inert=true;readerStates.get(reader)!.select(0,true);match(reader,source,true,instant,()=>{});},
+  leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,done:()=>void){cancel();exhibition.inert=false;const token=epoch;const finish=()=>{if(token!==epoch)return;active=null;returnFinish=null;done();};returnFinish=finish;match(reader,location.hash===`#menswear/${reader.dataset.returnWorld??reader.dataset.of}`?source:null,false,instant,finish);},
  };
 }

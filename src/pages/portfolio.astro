@@ -806,6 +806,7 @@ const split = (statement: string, word: string) => {
        from that one piece of state, so Back always steps back exactly one
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
+      import{editorialWorld}from'../data/womenswear-collection';
       import { initWomenswear } from '../scripts/womenswear-reader';
       import { initMenswear } from '../scripts/menswear-reader';
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
@@ -901,7 +902,7 @@ const split = (statement: string, word: string) => {
         ?? door;
       const shown = (el: HTMLElement) => {
         const box = el.getBoundingClientRect();
-        return box.width > 0 && box.height > 0;
+        return box.width > 0 && box.height > 0 && !el.closest('details:not([open])');
       };
       /* The rect as a clip, in viewport percentages: the four numbers the
          layer is clipped to while it grows out of, or back into, a frame. */
@@ -930,6 +931,17 @@ const split = (statement: string, word: string) => {
         const leaving = openSubject;
         openSubject = null;
         const world = leaving.closest<HTMLElement>('[data-world]');
+        const returningToSource=()=>location.hash===photographicReader(leaving)?.returnHash(leaving)||location.hash===`#${world?.dataset.world}`;
+        // History traversal to the real #chapter anchor applies native focus
+        // after popstate. Reconcile it after that phase, without stealing a
+        // subsequent deliberate focus or a newly opened reader/world.
+        const settleNativeFocus=(target:HTMLElement)=>{
+          if(location.hash!==`#${world?.dataset.world}`)return;
+          requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            if(!openSubject&&openWorld===world&&returningToSource()
+              &&[world,document.body,target].includes(document.activeElement as HTMLElement))target.focus({preventScroll:true});
+          }));
+        };
         /* THE WAY BACK IS THE WAY IN. The door the visitor used, or — for a
            garment that was reached by its address, with no door behind it —
            the garment's own frame in its territory, so a shared link still
@@ -957,11 +969,11 @@ const split = (statement: string, word: string) => {
         const finish = () => {
           putAway(leaving);
           subjectMotion = null;
-          if (back && document.contains(back) && (!photographicReader(leaving) || location.hash === photographicReader(leaving)?.returnHash(leaving))) back.focus({ preventScroll: true });
+          if (back && document.contains(back) && (!photographicReader(leaving) || returningToSource())) {back.focus({ preventScroll: true });settleNativeFocus(back);}
           // A historical reference can remain directly addressable after it
           // leaves the visible edit. With no photographic door to return to,
           // restore a meaningful visible control instead of dropping to body.
-          if (!back && photographicReader(leaving) && location.hash === photographicReader(leaving)!.returnHash(leaving)) world?.querySelector<HTMLElement>('[data-act-toggle],[data-mw-worlds-toggle]')?.focus({ preventScroll: true });
+          if (!back && photographicReader(leaving) && returningToSource()) {const target=world?.querySelector<HTMLElement>('[data-act-toggle],[data-mw-worlds-toggle]');target?.focus({preventScroll:true});if(target)settleNativeFocus(target);}
         };
         /* THE EXIT. The same clip as the entrance, run back into the frame
            the garment came from, and shorter: the visitor is leaving, the
@@ -970,8 +982,8 @@ const split = (statement: string, word: string) => {
            piece of the layer's own ground. */
         if (photographicReader(leaving)) {
           exiting = leaving;
-          photographicReader(leaving)!.leave(leaving, back ? frameOf(back) : null, reduced() || readerKeyboard, finish);
-          if (location.hash === photographicReader(leaving)?.returnHash(leaving) && back && document.contains(back)) back.focus({ preventScroll: true });
+          photographicReader(leaving)!.leave(leaving, back && frameOf(back).querySelector('img') ? frameOf(back) : null, reduced() || readerKeyboard, finish);
+          if (returningToSource() && back && document.contains(back)) back.focus({ preventScroll: true });
         } else if (back && !reduced() && !readerKeyboard) {
           subjectMotion = leaving.animate(
             [
@@ -1005,9 +1017,9 @@ const split = (statement: string, word: string) => {
         if (exiting) putAway(exiting);
         if (openSubject) putAway(openSubject);
         const active = document.activeElement as HTMLElement | null;
-        // A direct/history Menswear route has no door merely because another
+        // A direct/history photographic route has no door merely because another
         // garment's archive link still owns focus from a previous visit.
-        if (mw?.owns(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
+        if (photographicReader(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
         if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')
           && (!mw?.owns(next) || active.dataset.openSubject === id)) {
           subjectReturnTo = active;
@@ -1023,7 +1035,7 @@ const split = (statement: string, word: string) => {
            hero and the garment all showing through each other at the start. */
         const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
         if (photographicReader(next)) {
-          photographicReader(next)!.enter(next, source && shown(source) ? source : null, reduced() || readerKeyboard);
+          photographicReader(next)!.enter(next, source && shown(source) && source.querySelector('img') ? source : null, reduced() || readerKeyboard);
         } else if (source && shown(source) && !reduced() && !readerKeyboard) {
           subjectMotion = next.animate(
             [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
@@ -1305,7 +1317,8 @@ const split = (statement: string, word: string) => {
            show — it is a movement to travel to. `#womenswear` opens the act
            at the top; `#womenswear/evening` opens it at that movement. */
         if (world.hasAttribute('data-act')) {
-          const movement = category && world.querySelector<HTMLElement>(`[data-movement="${category}"]`);
+          const movementId=world.dataset.world==='womenswear'&&category?editorialWorld(category):category;
+          const movement = movementId && world.querySelector<HTMLElement>(`[data-movement="${movementId}"]`);
           if (movement) {
             /* Photographic worlds arrive at the camera's first frame, below
                the existing act bar. Landing at the territory's top advanced
@@ -1315,7 +1328,9 @@ const split = (statement: string, word: string) => {
               + movement.getBoundingClientRect().top
               - world.getBoundingClientRect().top
               - (movement.querySelector('[data-ww-camera]') ? world.querySelector<HTMLElement>('.pf-act__bar')!.offsetHeight : 0);
-            world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced() ? 'auto' : 'smooth' });
+            // Initial deep links settle before ScrollTrigger snapshots the scroll.
+            // A smooth cold arrival was cancelled by its startup refresh.
+            world.scrollTo({ top: Math.max(0, Math.round(top)), behavior: !visitorActed || reduced() ? 'instant' : 'smooth' });
             return;
           }
         }
@@ -1400,12 +1415,14 @@ const split = (statement: string, word: string) => {
         if (evidenceReader.open) closeEvidence();
         if (openWorld?.querySelector('[data-reader][open]')) closeReader(openWorld);
         const { world, category, subject } = parseHash();
+        const focusedDoor=document.activeElement instanceof HTMLElement?document.activeElement:null;
+        const fromOccurrence=!!subject&&[subjectReturnTo,focusedDoor].some(door=>door?.dataset.openSubject===subject&&!!world&&!!worlds.get(world)?.contains(door));
         if (world && worlds.has(world)) {
           /* Entering a garment, or stepping back out of it into the territory
              it belongs to, is a change at the garment level only. */
           const garmentOnly = openWorld === worlds.get(world)
-            && (subject !== null || (openSubject !== null && openSubject.dataset.of === category))
-            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category);
+            && (subject !== null || (openSubject !== null && (category===null || photographicReader(openSubject)?.returnHash(openSubject)===`#${world}/${category}` || openSubject.dataset.of === category || (world==='womenswear' && openSubject.dataset.editorial===editorialWorld(category??'')))))
+            && (!mw?.ownsWorld(worlds.get(world)!) || mw.category === category || (category===null&&openSubject!==null) || fromOccurrence || (openSubject!==null && mw.returnHash(openSubject)===`#${world}/${category}`));
           openWorldById(world, category, garmentOnly);
           /* The garment layer is the deepest level, and it is opened AFTER
              the chapter and the territory, so leaving it lands the visitor
@@ -1421,6 +1438,9 @@ const split = (statement: string, word: string) => {
         if (window.location.hash !== hash) window.history.pushState({}, '', hash || window.location.pathname);
         syncFromHash();
       };
+
+      root.addEventListener('pf:menswear-orientation',event=>{if(openWorld?.dataset.world==='menswear'&&!openSubject){window.history.replaceState(history.state,'',(event as CustomEvent<string>).detail);lastSyncedHash=window.location.hash;}});
+      root.addEventListener('pf:world-handoff',event=>{if(openWorld?.dataset.world==='menswear'&&!openSubject)go((event as CustomEvent<string>).detail);});
 
       /* The covers and the category links are real anchors so every level is
          reachable with the script gone. With the script running we take the
@@ -1478,7 +1498,7 @@ const split = (statement: string, word: string) => {
             return;
           }
           const { world, category } = parseHash();
-          go(category ? `#${world}/${category}` : `#${world}`);
+          go(photographicReader(openSubject)?.returnHash(openSubject) ?? (category ? `#${world}/${category}` : `#${world}`));
           return;
         }
         const reader = openWorld.querySelector<HTMLElement>('[data-reader]:not([hidden])');

@@ -21,7 +21,8 @@ export function garmentMatchCut(reader:HTMLElement,source:HTMLElement,entering:b
   const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
   if(!a.width||!b.width){cleanup();finished();return;}
   clone=from.cloneNode(true) as HTMLElement;clone.removeAttribute('data-ww-photo');clone.removeAttribute('data-door-source');clone.setAttribute('aria-hidden','true');clone.classList.add('ww-match');
-  Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none',visibility:'visible'});
+  // Inspection uses a centre origin; the measured clone's coordinates use top-left.
+  Object.assign(clone.style,{left:`${a.left}px`,top:`${a.top}px`,width:`${a.width}px`,height:`${a.height}px`,transform:'none',transformOrigin:'top left',visibility:'visible'});
   const img=clone.querySelector<HTMLImageElement>('img')!;img.src=original.currentSrc||original.src;img.removeAttribute('srcset');img.style.height=`${a.height}px`;img.decoding='sync';
   document.body.append(clone);paintPhoto(clone,view);
   try{await img.decode();}catch{if(!canceled){cleanup();finished();}return;}

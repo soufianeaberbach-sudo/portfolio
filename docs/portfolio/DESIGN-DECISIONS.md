@@ -13,8 +13,8 @@ merge history is separately identified as implementation evidence.
 | Chapter identities remain independent | APPROVED DESIGN DECISION | Womenswear does not dictate Menswear, Development or Tech Packs choreography. Shared typography/access do not require identical presentation. | Womenswear V2 and current owner brief; source cover system. |
 | Bone opening/covers, white Womenswear interiors | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Protect opening identity and integrate studio photography; intentional source framing is preferable to destructive image editing. | Owner RTW/Womenswear briefs; current CSS; [creative direction](CREATIVE-DIRECTION.md). |
 | Full garments in primary resting frames | APPROVED DESIGN DECISION | Primary cropped bodies concealed the design in earlier cinematic studies. Specific detail inspection remains optional. | RTW Art Direction III onward, reaffirmed V2.1; final QA source audit. |
-| Five photography-led Womenswear worlds | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Fluidity / precision / attitude / ceremony / clarity, one reader/access system. Supersedes RTW-only cinema plus four legacy editorial category systems. | Owner V2 brief; [PR #42](https://github.com/soufianeaberbach-sudo/portfolio/pull/42); [storyboards](review/womenswear-v21/STORYBOARDS.md). |
-| Exactly ten displayed references per category, 50 total | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Stable explicit presentation slots; not a destructive historical-pool edit or counting angles as looks. Supersedes 17/10/2/11/9 visible counts (49 total). | Owner V2.1 brief; collectionSlots; [SLOTS.tsv](review/womenswear-v21/SLOTS.tsv). |
+| Earlier five photography-led Womenswear worlds | HISTORICAL MAIN IMPLEMENTATION; SUPERSEDED PRODUCT TARGET | Fluidity / precision / attitude / ceremony / clarity, one reader/access system. Supersedes RTW-only cinema plus four legacy editorial category systems. | Owner V2 brief; [PR #42](https://github.com/soufianeaberbach-sudo/portfolio/pull/42); [storyboards](review/womenswear-v21/STORYBOARDS.md). |
+| Earlier five-world edit: ten each, 50 total | HISTORICAL MAIN IMPLEMENTATION; SUPERSEDED PRODUCT TARGET | Stable explicit presentation slots; not a destructive historical-pool edit or counting angles as looks. Supersedes 17/10/2/11/9 visible counts (49 total). | Owner V2.1 brief; collectionSlots; [SLOTS.tsv](review/womenswear-v21/SLOTS.tsv). |
 | Preserve 58 reference routes and source identity | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Original 49 plus eight Streetwear/one Swim. Excluded references retain old URLs and sources. No array reorder to renumber IDs. | Owner V2.1 continuation; historical-return tests and slot manifest. |
 | Front/primary-only cinematic exhibition | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Additional viewpoints require deliberate visitor action. Supersedes automatic front→back travel/turn in RTW prototypes and PR #41. Inseparable sources remain whole. | Owner V2 explicit correction; final-photography and direction adapter; QA. |
 | Genuine optional multi-view reader | APPROVED DESIGN DECISION; IMPLEMENTED IN MAIN | Composite or separate Front/Back, optional Side/Editorial/Detail, Complete Original and Look Closer; missing media produces no control. No guessed angles. | Owner V2/V2.1 briefs; Subject.views / FinalViews; [photo handoff](PHOTO-CONTENT-HANDOFF.md). |
@@ -43,3 +43,14 @@ merge history is separately identified as implementation evidence.
 No approval is asserted for a speculative Menswear redesign, new pattern viewer,
 locale rollout, analytics implementation or infrastructure activation. These
 remain separately scoped decisions in the [roadmap](PORTFOLIO-ROADMAP.md).
+
+## Latest corrective decisions — 21 October 2026
+
+| Decision | Scope/status | Rationale / supersedes | Evidence |
+| --- | --- | --- | --- |
+| Four Womenswear worlds: Casualwear, Activewear, Occasionwear, Swimwear | Explicit owner decision; corrective implementation pending review/merge | Streetwear is a styling direction inside Casualwear. Supersedes five-world UI and rejected product-type bundles. | Mandatory Completion & Corrective Implementation brief; [review](review/fashion-correction/README.md). |
+| Ten primary looks per world, 40+40=80 | Explicit owner decision; source identity independent | Preserve all108 routes, images and credits, do not delete content to meet display count. | [slots](review/fashion-correction/SLOTS.tsv), [source audit](review/fashion-correction/SOURCE-INTEGRITY.json). |
+| Menswear Explore uses one native continuous scroller | Explicit owner decision; candidate | Viewport follows worlds; menus are optional direct jumps. Presentation Mode remains deliberate scene holds. Supersedes mandatory single-film activation. | [QA](review/fashion-correction/QA.md). |
+| Three-panel master remains an extension of existing readers | Preserved approved format; real owner media pending | 5400×2700, exact thirds; explicit Editorial/Detail purpose; Front-only exhibition. | [photo handoff](PHOTO-CONTENT-HANDOFF.md). |
+
+No cinematic artistic approval is claimed by these implementation records.

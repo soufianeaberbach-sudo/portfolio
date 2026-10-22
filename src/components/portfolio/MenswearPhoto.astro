@@ -1,11 +1,10 @@
 ---
 import type{ImageAsset,SubjectView}from'../../data/portfolio';
-import{separable}from'../../data/final-photography';
+import{photoRegion,photoSizes}from'../../data/final-photography';
 interface Props{image:ImageAsset;crop?:SubjectView['crop'];eager?:boolean;sizes?:string;}
 const{image,crop='whole',eager=false,sizes='(max-width:767px) 92vw, 55vw'}=Astro.props;
-const split=crop!=='whole'&&separable(image)?image.front:1;
-const portion=split===1?1:crop==='back'?1-split:split;
+const[start,end]=photoRegion(image,crop),portion=end-start;
 ---
-<span class="mw-photo" data-mw-photo data-door-source style={`--photo-aspect:${image.width*portion/image.height};--photo-offset:${crop==='back'&&split!==1?-100*split/portion:0}%;--photo-width:${100/portion}%`}>
- <img src={image.src} srcset={image.srcset} width={image.width} height={image.height} alt={image.alt} loading={eager?'eager':'lazy'} decoding="async" sizes={sizes}/>
+<span class="mw-photo" data-mw-photo data-door-source style={`--photo-aspect:${image.width*portion/image.height};--photo-offset:${-100*start/portion}%;--photo-width:${100/portion}%`}>
+ <img src={image.src} srcset={image.srcset} width={image.width} height={image.height} alt={image.alt} loading={eager?'eager':'lazy'} decoding="async" sizes={photoSizes(image,crop,sizes)}/>
 </span>

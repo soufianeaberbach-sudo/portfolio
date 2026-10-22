@@ -1,11 +1,11 @@
 import{photoReady}from'./fixtures/final-photo.mjs';
 import assert from'node:assert/strict';import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4389',b=await chromium.launch();let checks=0;const check=(ok,msg)=>{assert(ok,msg);checks++;};
-const categories={rtw:10,activewear:10,streetwear:10,evening:10,swimwear:10};const historical={rtw:17,activewear:10,streetwear:10,evening:11,swimwear:10};const whole=new Set(['rtw-ref-08','rtw-ref-16','activewear-ref-10','evening-ref-01']);
+const categories={casualwear:10,activewear:10,evening:10,swimwear:10};const historical={rtw:17,activewear:10,streetwear:10,evening:11,swimwear:10};const whole=new Set(['rtw-ref-08','rtw-ref-16','activewear-ref-10','evening-ref-01']);
 try{
  for(const[w,h]of [[1440,900],[1366,768],[1024,768],[768,1024],[430,932],[390,844]]){
   const c=await b.newContext({viewport:{width:w,height:h},isMobile:w<500,hasTouch:w<500});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'/portfolio/#womenswear/rtw');await fontsReady(p);await p.waitForTimeout(400);
-  const ids=await p.locator('[data-ww-archive] a[data-open-subject]').evaluateAll(a=>a.map(e=>e.dataset.openSubject));check(ids.length===50&&new Set(ids).size===50,`${w}: complete unique archives`);
+  const ids=await p.locator('[data-ww-archive] a[data-open-subject]').evaluateAll(a=>a.map(e=>e.dataset.openSubject));check(ids.length===40&&new Set(ids).size===40,`${w}: complete unique archives`);
   check(await p.locator('[data-st],[data-subject-pending]').count()===0,`${w}: no technical story or repeated missing-story text`);
   for(const[category,count]of Object.entries(categories)){
    await p.locator(`[data-act-link=${category}]`).evaluate(e=>e.click());await p.waitForTimeout(850);const root=p.locator(`[data-ww-exhibition=${category}]`),rail=root.locator('.ww-rail');
@@ -20,7 +20,7 @@ try{
    for(let i=0;i<count;i++){await p.keyboard.press('Tab');check(await rail.locator('a').nth(i).evaluate(e=>document.activeElement===e),`${w}/${category}/${i}: keyboard archive`);}
    const source=rail.locator('a').last();await source.scrollIntoViewIfNeeded();const before=await p.locator('[data-act]').evaluate(e=>e.scrollTop),left=await rail.evaluate(e=>e.scrollLeft);await source.click();await p.waitForTimeout(680);
    const reader=p.locator('[data-ww-reader]:not([hidden])'),id=await reader.getAttribute('data-subject');check(await reader.count()===1,`${w}/${category}: one shared reader`);check(await reader.evaluate(e=>e.contains(document.activeElement)),`${w}/${category}: reader focus`);
-   const buttons=reader.locator('[data-ww-view]');check(await buttons.count()===(category==='swimwear'||whole.has(id)||(category==='streetwear'&&Number(id.slice(-2))>2)?0:3),`${w}/${category}: only genuine views plus original`);
+   const buttons=reader.locator('[data-ww-view]');check(await buttons.count()===(category==='swimwear'||whole.has(id)||(id.startsWith('streetwear-ref-')&&Number(id.slice(-2))>2)?0:3),`${w}/${category}: only genuine views plus original`);
    if(await buttons.count()){await buttons.nth(1).click();await photoReady(reader,1);check(await reader.locator('[data-photo-view]:not([hidden]) [data-ww-photo]').getAttribute('data-side')==='back',`${w}/${category}: back`);await buttons.nth(2).click();await photoReady(reader,2);check(await reader.locator('[data-photo-view]:not([hidden]) [data-ww-photo]').getAttribute('data-split')==='1',`${w}/${category}: complete original`);}
    await reader.locator('[data-rd-inspect]').click();await p.keyboard.press('+');await p.keyboard.press('ArrowDown');check(await reader.getAttribute('data-inspect')!==null,`${w}/${category}: inspect`);await reader.locator('[data-ww-fit]').click();await p.keyboard.press('Escape');await p.keyboard.press('Escape');await p.waitForTimeout(650);
    check(await source.evaluate(e=>e===document.activeElement),`${w}/${category}: exact source occurrence focus`);check(Math.abs(await rail.evaluate(e=>e.scrollLeft)-left)<1&&Math.abs(await p.locator('[data-act]').evaluate(e=>e.scrollTop)-before)<1,`${w}/${category}: exact source place`);
@@ -30,7 +30,7 @@ try{
   await p.emulateMedia({reducedMotion:'reduce'});
   for(const[category,count]of Object.entries(historical))for(let i=1;i<=count;i++){
    const id=`${category}-ref-${String(i).padStart(2,'0')}`;await p.evaluate(({category,id})=>location.hash=`#womenswear/${category}/${id}`,{category,id});await p.waitForTimeout(35);const r=p.locator(`[data-subject=${id}]`);check(await r.isVisible(),`${w}/${id}: deep link`);
-   check(await r.locator('[data-ww-view]').count()===(category==='swimwear'||whole.has(id)||(category==='streetwear'&&Number(id.slice(-2))>2)?0:3),`${w}/${id}: truthful availability`);
+   check(await r.locator('[data-ww-view]').count()===(category==='swimwear'||whole.has(id)||(id.startsWith('streetwear-ref-')&&Number(id.slice(-2))>2)?0:3),`${w}/${id}: truthful availability`);
    const box=await r.locator('[data-photo-view]:not([hidden]) [data-ww-photo]').boundingBox();check(box.x>=-1&&box.x+box.width<=w+1&&box.y>=40&&box.y+box.height<=h,`${w}/${id}: entire primary photographic window`);
   }
   check(errors.length===0,`${w}: no page error ${errors}`);await c.close();console.log(`${w} reviewed`);
@@ -38,7 +38,7 @@ try{
  const c=await b.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});await installFonts(c);
  const p=await c.newPage();await p.goto(base+'/portfolio/#womenswear/evening/evening-ref-04');await fontsReady(p);
  check(await p.locator('[data-subject=evening-ref-04]').isVisible(),'native garment target without JS');
- check(await p.locator('[data-ww-archive] a[data-open-subject]').count()===50,'all 50 archive links without JS');
+ check(await p.locator('[data-ww-archive] a[data-open-subject]').count()===40,'all 40 archive links without JS');
  check(await p.locator('[data-ww-exhibition][data-enhanced]').count()===0,'static resting compositions');
  const fallback=await c.newPage();await fallback.goto(base+'/portfolio/#womenswear');await fontsReady(fallback);
  const swim=fallback.locator('[data-ww-exhibition=swimwear] [data-ww-actor] .ww-photo').first();

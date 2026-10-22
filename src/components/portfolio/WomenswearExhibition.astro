@@ -6,7 +6,7 @@ import FinalPhoto from './FinalPhoto.astro';
 interface Props{subjects:Subject[];world:string;category:string;}
 const{subjects,world,category}=Astro.props,direction=directions[category];
 const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===part.id);return subject?[{...part,subject,photo:finalPhotographs(subject)[0]}]:[];});
-const door=(s:Subject)=>`#${world}/${category}/${s.id}`;
+const door=(s:Subject)=>`#${world}/${s.category}/${s.id}`;
 const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.next.id}`;
 ---
 <div class="ww-exhibition" data-ww-exhibition={category} style={`--journey:${direction.length}svh;--mobile-journey:${direction.mobileLength}svh;`}>
