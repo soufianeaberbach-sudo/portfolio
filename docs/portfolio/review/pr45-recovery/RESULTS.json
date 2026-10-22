@@ -1,0 +1,263 @@
+{
+  "executedDateUTC": "2026-10-22",
+  "reviewedSource": "6abe79a443153c6a6839780cd4e348e6245d60bb",
+  "correctedApplicationSource": "d2d85aaca192bf95757c4be1cb16996957ae038a",
+  "main": "a4b0aba1591ac043b11ca9b75b6079b0ed27a9be",
+  "localRuntime": "Node 22.23.3 / Playwright 1.56.1 / Chromium 141.0.7390.37 build1194; Debian13",
+  "ciRuntime": "Node22.23.3 / same pinned browser; Ubuntu24.04.5",
+  "originalCIFailure": "https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/39684977683",
+  "diagnosticCIFailure": "https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/39746675476",
+  "sourceCorrectionCISuccess": "https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/39749114581",
+  "finalReviewCommitCI": "Verify exact final SHA/run in PR #45; not inferred from source-only run.",
+  "artisticStatus": "PROPOSALS ONLY; approval pending; no production film changes",
+  "results": [
+    {
+      "command": "Node22 Astro build",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "7ef5de9e19eb55377f87ec22e8bd57e9323f5531067c6c87f4fe064cccf4bde2",
+      "observedUTC": "2026-10-22T08:37:13.232217+00:00",
+      "tail": [
+        "08:37:13   \u2514\u2500 /working-terms/index.html (+2ms) ",
+        "08:37:13 \u2713 Completed in 191ms.",
+        "",
+        "08:37:13 [build] 11 page(s) built in 6.18s",
+        "08:37:13 [build] Complete!"
+      ]
+    },
+    {
+      "command": "Targeted tsc noEmit",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observedUTC": "2026-10-22T08:37:13.252216+00:00",
+      "tail": []
+    },
+    {
+      "command": "Unmodified Node22 three-panel fixture",
+      "result": "PASS / observed outcome as described",
+      "assertions": 270,
+      "logSHA256": "daf2ab52ee8c4a7841147bd481eb2aeef0c3944eb550a25849e2e8374673acc7",
+      "observedUTC": "2026-10-22T08:10:22.690038+00:00",
+      "tail": [
+        "270 real-Portfolio three-panel/alpha browser checks passed"
+      ]
+    },
+    {
+      "command": "Unmodified 4x-CPU fixture",
+      "result": "PASS / observed outcome as described",
+      "assertions": 270,
+      "logSHA256": "8d082aca09f83c0deab41a2914adcf61d8322db771fe3107475e4e58c904486a",
+      "observedUTC": "2026-10-22T08:12:32.194877+00:00",
+      "tail": [
+        "select menswear 390 1",
+        "select menswear 390 2",
+        "select menswear 390 3",
+        "browser verbose Rendering was performed in a subtree hidden by content-visibility.",
+        "270 real-Portfolio three-panel/alpha browser checks passed"
+      ]
+    },
+    {
+      "command": "Repeated original view selections",
+      "result": "PASS / observed outcome as described",
+      "assertions": 192,
+      "logSHA256": "9c282328078c2d6440c0c842d00e7fae0953ddb7b6e3953c5313875c31fdb7db",
+      "observedUTC": "2026-10-22T08:15:37.958785+00:00",
+      "tail": [
+        "1024 8 four views",
+        "1024 9 four views",
+        "1024 10 four views",
+        "1024 11 four views",
+        "192 stress view selections passed"
+      ]
+    },
+    {
+      "command": "Native decode experiment, independent frame-separated controls",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "e38a60c0214490c705f9f469bce7e2c71bee5ab40edf812f796df62d6b2a715d",
+      "observedUTC": "2026-10-22T08:33:31.300273+00:00",
+      "tail": [
+        "Native decode rejections in 30 trials each: {\"unchanged\":0,\"sizeWriteBefore\":0,\"sizeWriteDuring\":30,\"loadingWrite\":0}"
+      ]
+    },
+    {
+      "command": "Controlled old-reader rejection case",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "2e200653496a4af6e1885788e2015f0d9afa83906f1d8fe42daff6f499cb845a",
+      "observedUTC": "2026-10-22T08:29:49.958139+00:00",
+      "tail": [
+        "REPRODUCED application failure on existing compiled source: {\"originalHidden\":true,\"selected\":\"2\",\"status\":\"Requested photograph unavailable. The current view remains available.\",\"naturalWidth\":5400}"
+      ]
+    },
+    {
+      "command": "Corrected matched 430px reader",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "a5006d71973ff499c902dc4e646b81f56a47c4753c6e3343b2f68d51e89d175a",
+      "observedUTC": "2026-10-22T08:47:30.895330+00:00",
+      "tail": [
+        "PASS: corrected loaded original remains accessible: {\"originalHidden\":false,\"selected\":\"3\",\"status\":\"\",\"naturalWidth\":5400}"
+      ]
+    },
+    {
+      "command": "node tests/three-panel-photography.mjs",
+      "result": "PASS / observed outcome as described",
+      "assertions": 474,
+      "logSHA256": "d607cd8404cb0e43e3f90dac141480baa30ca975ef31f72d0be16dce449fc2ba",
+      "observedUTC": "2026-10-22T08:39:12.744272+00:00",
+      "tail": [
+        "three-panel menswear 390\u00d7844: selecting 0",
+        "three-panel menswear 390\u00d7844: selecting 1",
+        "three-panel menswear 390\u00d7844: selecting 2",
+        "three-panel menswear 390\u00d7844: selecting 3",
+        "474 real-Portfolio three-panel/alpha browser checks passed"
+      ]
+    },
+    {
+      "command": "node tests/fashion-eight-worlds.mjs",
+      "result": "PASS / observed outcome as described",
+      "assertions": 376,
+      "logSHA256": "6bccdb895f4f7a6ac4ffbf3651e6dfeb6c7fb7fbe0eb46a25ba03a706ed2bcdd",
+      "observedUTC": "2026-10-22T08:45:48.044424+00:00",
+      "tail": [
+        "womenswear 1440 native continuity recorded",
+        "menswear 1440 native continuity recorded",
+        "womenswear 390 native continuity recorded",
+        "menswear 390 native continuity recorded",
+        "376 owner-contract acceptance checks passed"
+      ]
+    },
+    {
+      "command": "node tests/pr45-review.mjs",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "68f6d4f587c7c6f01338b7798686efe576952391e92c6c16e350562f389f618d",
+      "observedUTC": "2026-10-22T08:42:54.135753+00:00",
+      "tail": [
+        "1440 five composed holds in all four films, inspection/return and interruption/reduced motion verified",
+        "390 five composed holds in all four films, inspection/return and interruption/reduced motion verified"
+      ]
+    },
+    {
+      "command": "node tests/fashion-presentation-review.mjs",
+      "result": "PASS / observed outcome as described",
+      "assertions": 20,
+      "logSHA256": "ca1091aafde53256b5c51e1f6cee0f4f546635cf02d88e4d63db40cee455a891",
+      "observedUTC": "2026-10-22T08:48:03.469885+00:00",
+      "tail": [
+        "20 real 1920\u00d71080 composed holds; fullscreen supported: true"
+      ]
+    },
+    {
+      "command": "node tests/fashion-source-integrity.mjs (new report output directory)",
+      "result": "PASS / observed outcome as described",
+      "assertions": null,
+      "logSHA256": "a1dd0e937d0d971139b89e302dbb6df5691af452d34a3cbf331b90a422288f8f",
+      "observedUTC": "2026-10-22T08:39:42.423299+00:00",
+      "tail": [
+        "108 original source fingerprints preserved; 8 worlds \u00d7 10 unique looks; no public asset changes"
+      ]
+    }
+  ],
+  "visualMatrix": [
+    {
+      "width": 1440,
+      "height": 900,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "worlds": 4,
+      "states": [
+        "opening",
+        "midpoint",
+        "payoff",
+        "archive",
+        "reader",
+        "inspection",
+        "return",
+        "handoff"
+      ]
+    }
+  ],
+  "unverified": [
+    "Physical Safari and browser chrome",
+    "Real projector/remotes",
+    "Hardware/native image/GPU memory and sustained frame rate",
+    "Real owner three-panel images",
+    "No verified hosted preview for this PR"
+  ]
+}

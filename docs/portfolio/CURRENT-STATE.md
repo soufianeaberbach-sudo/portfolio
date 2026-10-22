@@ -101,6 +101,17 @@ Use [photo handoff](PHOTO-CONTENT-HANDOFF.md),
 [current QA](review/fashion-correction/QA.md). Earlier nine-world/90-look audits
 in `review/fashion-finalization` are historical and document the rejected structure.
 
+## PR #45 recovery — 22 October 2026
+
+The reviewed `6abe79a` candidate failed remote three-panel CI. Diagnostic run
+39746675476 reproduced the failure; source correction `d2d85aa` makes photographic
+preparation idempotent, reuses loaded composite windows and restores keyboard
+progression after a failed request. Source-correction GitHub run39749114581
+completed successfully. [Current technical/creative review](review/pr45-recovery/README.md)
+contains the new evidence and final CI handoff. The 4+4 architecture and 40+40 edit
+are preserved. Menswear artistic changes are **proposal-only**, awaiting owner
+approval under the current brief; no new cinematic redesign was implemented.
+
 ## Next action and limits
 
 Review the corrective candidate's actual Portfolio motion, native continuity,
