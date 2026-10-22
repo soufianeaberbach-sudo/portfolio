@@ -5179,7 +5179,11 @@
           "/portfolio/evening/7-1400.webp"
         ],
         "nativeResampled": false,
-        "reviewNote": "Inspected native over white against source: single adult sleek side-part brunette, beige opaque sleeveless scoop-neck ribbed sculpted bodice with curved seam channels, gathered hips/long front drape and entire pooling hem. Fine pale textile intact, complete head/hands/cloth, no obvious anatomy/crop/halo failure. Native framing will receive uniform safe-margin normalization in export."
+        "reviewNote": "Inspected native over white against source: single adult sleek side-part brunette, beige opaque sleeveless scoop-neck ribbed sculpted bodice with curved seam channels, gathered hips/long front drape and entire pooling hem. Fine pale textile intact, complete head/hands/cloth, no obvious anatomy/crop/halo failure. Native framing will receive uniform safe-margin normalization in export.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-07-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "back": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-07-v1/back-native.png",
@@ -5196,7 +5200,11 @@
           "/portfolio/generated/ww-ai-evening-ref-07-v1/front-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional."
+        "reviewNote": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-07-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "editorial": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-07-v1/editorial-native.png",
@@ -5214,33 +5222,129 @@
           "/portfolio/generated/ww-ai-evening-ref-07-v1/back-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Native inspected over white: same adult low-bun brunette, beige ribbed sculpted bodice and gathered smooth skirt, quiet three-quarter pose. Scoop neck, curved channels, pointed waist, long front drape and entire hem/train remain readable; complete hands and head, no obvious anatomy/crop/halo defect."
+        "reviewNote": "Native inspected over white: same adult low-bun brunette, beige ribbed sculpted bodice and gathered smooth skirt, quiet three-quarter pose. Scoop neck, curved channels, pointed waist, long front drape and entire hem/train remain readable; complete hands and head, no obvious anatomy/crop/halo defect.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-07-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
-      "master": null,
-      "status": "GENERATED",
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-evening-ref-07-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-evening-ref-07-v1/master-900.webp 900w, /portfolio/generated/ww-ai-evening-ref-07-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-evening-ref-07-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-evening-ref-07-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-evening-ref-07-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
+      },
+      "status": "READY",
       "qualityResult": {
         "frontVisual": "Inspected native over white against source: single adult sleek side-part brunette, beige opaque sleeveless scoop-neck ribbed sculpted bodice with curved seam channels, gathered hips/long front drape and entire pooling hem. Fine pale textile intact, complete head/hands/cloth, no obvious anatomy/crop/halo failure. Native framing will receive uniform safe-margin normalization in export.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; larger review exports are explicitly resampled.",
         "ownerArtisticApproval": false,
         "backVisual": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional.",
         "editorialVisual": "Native inspected over white: same adult low-bun brunette, beige ribbed sculpted bodice and gathered smooth skirt, quiet three-quarter pose. Scoop neck, curved channels, pointed waist, long front drape and entire hem/train remain readable; complete hands and head, no obvious anatomy/crop/halo defect.",
-        "setVisualReview": "Compared original Front/Back and all three real native portraits over white. Same adult sleek low-bun model, beige opaque ribbed sculpted bodice with scoop Front/high covered Back and curved channels, pointed waist, smooth gathered hip skirt and complete floor train. Genuine rear with center closure/ruching; restrained Editorial. Full head/hands/fabric, no obvious anatomy/crop failure. Internal support, exact rib gauge and fine closure remain provisional."
+        "setVisualReview": "Compared original Front/Back and all three real native portraits over white. Same adult sleek low-bun model, beige opaque ribbed sculpted bodice with scoop Front/high covered Back and curved channels, pointed waist, smooth gathered hip skirt and complete floor train. Genuine rear with center closure/ruching; restrained Editorial. Full head/hands/fabric, no obvious anatomy/crop failure. Internal support, exact rib gauge and fine closure remain provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              203,
+              15,
+              815,
+              1523
+            ],
+            "uniformScale": 1.5755968169761274,
+            "exportOpaqueBox": [
+              418,
+              162,
+              1382,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              212,
+              15,
+              854,
+              1519
+            ],
+            "uniformScale": 1.5797872340425532,
+            "exportOpaqueBox": [
+              393,
+              162,
+              1407,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              183,
+              19,
+              848,
+              1509
+            ],
+            "uniformScale": 1.5946308724832214,
+            "exportOpaqueBox": [
+              370,
+              162,
+              1430,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "masterVisualReview": "Actual white 5400x2700 master inspected: three equal undistorted panels, matching model/beige fabric, complete head/hands/hem/train, safe margins and aligned floor with uniform scaling only. Ribbing remains intact; no dark ground/halo. Internal construction remains provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Visible seam channels and rear closure are photographic interpretation; internal support/boning, exact knit gauge and pattern construction are not verified."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 2508
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "dcbf6faae1851a8b07c432d12af899ef856e1b88",
+        "commit": "f217879d54e6ed00b7c75d78dc8b21a2413d3fe9",
         "views": [
           "front",
-          "back"
+          "back",
+          "editorial"
         ],
         "master": false
       },
