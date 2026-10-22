@@ -47,8 +47,8 @@ def register(source_id, view, source_path):
     source = Path(source_path)
     image = Image.open(source)
     image.load()
-    if image.width * 3 != image.height * 2:
-        raise ValueError('Native image is not a 2:3 portrait; retain as rejected evidence separately.')
+    if image.width >= image.height:
+        raise ValueError('Native image must be a portrait; retain other framing as rejected evidence separately.')
     dest = ROOT / 'public/portfolio/generated' / look['generatedIdentity'] / f'{view}-native.png'
     dest.parent.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -151,7 +151,7 @@ def assemble(source_id):
     srcset.append(f'{master_url} 5400w')
     look['master'] = {'asset': master_url, 'width': 5400, 'height': 2700, 'panelWidth': 1800, 'panelHeight': 2700,
                       'srcset': ', '.join(srcset), 'nativePanelDimensions': [[look[v]['width'], look[v]['height']] for v in ('front', 'back', 'editorial')],
-                      'resamplingDisclosure': 'Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail.'}
+                      'resamplingDisclosure': 'Three separate native portraits (' + ', '.join(str(look[v]['width']) + '×' + str(look[v]['height']) for v in ('front', 'back', 'editorial')) + '), uniformly resampled and placed within the requested panels. Not native 1800×2700 detail.'}
     look['qualityResult'].update({'exportGeometryPass': True, 'nativeResolutionPass': False,
                                  'reviewStatus': 'PROVISIONAL_REVIEW_ONLY', 'panelMetrics': metrics,
                                  'ownerArtisticApproval': False})

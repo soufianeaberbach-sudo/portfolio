@@ -127,7 +127,7 @@ def checkpoint(args, manifest):
     worlds = ('casualwear', 'activewear', 'evening', 'swimwear')
     incomplete = [x for x in manifest['looks'] if not x.get('master')]
     incomplete.sort(key=lambda x: (worlds.index(x['category']), x.get('priority', 2), x['currentSlot']))
-    blocked = [x for x in incomplete if any(f.get('error') == 'moderation_blocked' for f in x.get('generationFailures', []))]
+    blocked = [x for x in incomplete if any(f.get('error') == 'moderation_blocked' and not x.get(f.get('view')) for f in x.get('generationFailures', []))]
     actionable = [x for x in incomplete if x not in blocked]
     completed = [x for x in manifest['looks'] if x.get('master')]
     current = next((x for x in manifest['looks'] if x['sourceIdentity'] == args.source_id), None)
