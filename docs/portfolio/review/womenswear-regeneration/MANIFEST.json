@@ -6797,6 +6797,34 @@
           "requestId": "cb17ce7e-96b6-489b-8028-3d352bf570e1",
           "assetProduced": false,
           "note": "Adult professional swimwear garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "4ad34eb3-282a-47b0-9bed-a4b0329009d5",
+          "attempt": "primary-commercial",
+          "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact blue one-piece outfit in the attached reference. One adult professional model in a neutral full-length FRONT standing pose, relaxed arms and calm expression. Preserve the blue fabric, gathered halter top, original crossing center straps and oval center opening, high-waisted connected lower section, source cut, coverage and proportions. Same adult appearance, brown center-part hair tied back, original dark sunglasses and hoop earrings, barefoot. Clear garment visibility, photorealistic textile and natural anatomy, even soft studio lighting and realistic gentle floor contact shadow. Whole head, hands, garment and feet inside generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Record actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:58:51.667505+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "bf40933a-a7d3-4bc2-8263-eb495c26c1c3",
+          "attempt": "single-neutral-revision",
+          "generationPrompt": "One neutral professional studio catalogue study of the blue swimwear in the attached reference. Preserve the exact supplied garment, fabric, color and original styling. One adult model standing straight on, full-length front, relaxed arms and neutral expression. Clear outfit visibility, realistic textile and proportions, even studio lighting and soft floor contact shadow. Complete figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; retain genuine native dimensions.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:58:51.667521+00:00"
         }
       ]
     },
