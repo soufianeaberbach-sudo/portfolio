@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:10:05.520398+00:00",
+  "updatedUTC": "2026-10-22T19:12:10.687479+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -17,12 +17,12 @@
     "PENDING": 11
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-04",
+  "currentSourceIdentity": "swimwear-ref-07",
   "currentMilestone": "blocked",
-  "lastSuccessfullyPushedCommit": "9e8ebe263f6f0ea1bf0a697391611caf1cb0fc84",
+  "lastSuccessfullyPushedCommit": "414bb57e4b4392c9eb391b46535da56ed776f8ef",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-07",
+  "nextActionableSourceIdentity": "swimwear-ref-09",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -169,9 +169,26 @@
           "recordedUTC": "2026-10-22T19:10:00.112614+00:00"
         }
       ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "aee76125-bc98-4beb-977a-9ceba70be1b3",
+          "assetProduced": false,
+          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait preserving the exact silver-grey swim set and adult brunette model in the supplied original reference. One model in calm neutral straight-on stance with arms naturally relaxed slightly apart. Preserve opaque grey bandeau top with ruched center/sweetheart edge and original slim halter/triangular strap arrangement; matching grey briefs, original crossing wrap straps across the waist and small hip rings with long side bow ties. Same source coverage, grey fabric, proportions and strap routing; no new cutouts, logos or redesign. Retain wet-look slicked-back long brown hair, gold geometric earrings, slim gold LEFT anklet and bare feet. Full head, hands, all straps/ties and both feet inside generous safe margins. Realistic adult anatomy, natural fingers/toes, textile and skin, no stretching. Soft even neutral studio lighting and subtle credible floor contact shadows. Genuine transparent alpha preserving fabric/hair/straps/shadow. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, graphic, label, border, pair or collage. Provisional AI source-based presentation; unseen rear/construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:12:06.386429+00:00"
+        }
+      ]
     }
   ],
-  "nextAction": "Generate and validate front for swimwear-ref-07; checkpoint before the following view",
+  "nextAction": "Generate and validate front for swimwear-ref-09; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -230,7 +247,7 @@
       ]
     }
   ],
-  "notes": "No file produced. Nine blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-07 Front.",
+  "notes": "No file produced. Ten blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-09 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
