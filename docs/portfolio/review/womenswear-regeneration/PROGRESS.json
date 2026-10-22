@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-08",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:41:00.393308+00:00",
+  "updatedUTC": "2026-10-22T18:43:53.803311+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 27,
   "pendingLooks": 12,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-10",
-  "currentMilestone": "rejected-editorial",
-  "lastSuccessfullyPushedCommit": "9155563869a048dfdfb3676a7065b90e99b3ce58",
+  "currentMilestone": "editorial",
+  "lastSuccessfullyPushedCommit": "d09a126d93dc5668f64d9958bf5ff3bc24d8efe7",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "evening-ref-10",
@@ -87,7 +87,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate editorial for evening-ref-10; checkpoint before the following view",
+  "nextAction": "Review three views and assemble master",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -140,12 +140,13 @@
           ],
           "sha256": "acd60d2fa5cd9fcda41651e0bc5315b68f65b5b51137e6b1dfde9280fb808d8b",
           "reason": "Visible stray four-point graphic at lower right, confirmed over white; not approved and not used in master. Front and Back remain accepted.",
-          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration."
+          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration.",
+          "generationPrompt": "One adult woman in ONE full-length EDITORIAL studio fashion portrait, exactly the deep-red asymmetric gown and sleek low-bun brunette in these references. Original source provides design; accepted Front/Back provide identical model, color, textile, proportions, beige heels and lighting. Preserve high mock neckline, ONLY LEFT long flared bell sleeve/right bare arm, small gold connector at RIGHT waist, original LEFT waist opening, gathered draped floor-length skirt and complete hem. Rear horizontal opening unchanged. Quiet front three-quarter pose and small natural weight shift, arms relaxed slightly away for readable sleeve/hardware; no lifted hem, added slit, second sleeve, cutout, jewellery or new styling. Same adult woman, center-part low bun and natural makeup. Exactly one body, no diptych or montage. Full head, hands, cuff, shoes and every garment edge on canvas with safe margins and natural undistorted anatomy. Soft neutral studio light, realistic red fabric/skin, subtle credible floor contact shadow. Genuine transparent alpha preserving cloth/hair/shadow. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, label or frame. Provisional AI source-based presentation; construction unverified."
         }
       ]
     }
   ],
-  "notes": "Editorial rejected for stray graphic; actual native evidence retained. Front/Back protected. Exact next image remains evening-ref-10 Editorial.",
+  "notes": "Accepted replacement Editorial has no stray graphic; first attempt remains preserved as rejected evidence. Assemble master next.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",

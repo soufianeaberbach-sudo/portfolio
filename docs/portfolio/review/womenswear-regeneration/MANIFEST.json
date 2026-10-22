@@ -5672,7 +5672,23 @@
         "nativeResampled": false,
         "reviewNote": "Native inspected over white: one straight rear-facing low-bun adult, deep-red high-neck covered cropped back, only left bell sleeve/right bare arm, original horizontal mid-back opening, whole long skirt/hem and beige heels. Complete head/hands/cuff, natural anatomy and subtle contact shadow, no obvious crop/halo failure. Fine hidden closures remain provisional."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-10-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "78aa292cf75031b333877113010b4278e7010fd3b9986c9fde84dab2701aeaeb",
+        "toolOutputPath": "/workspace/generated_images/exec-00b0e4b3-854c-438a-8a59-5bcbb6588005.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "New separate Editorial from accepted Front/Back after first Editorial rejected for stray graphic; original garment source previously inspected",
+        "generationPrompt": "Create a new single-person full-length EDITORIAL studio fashion photograph from these two accepted single-view portraits, preserving exactly the same adult brunette low-bun model and deep-red gown. Reference 1 Front and reference 2 Back are identity/design evidence. One adult woman, quiet front three-quarter angle with a small natural weight shift and relaxed arms slightly separated. Keep high mock neck, only LEFT long flared bell sleeve and bare RIGHT arm, small gold connector at RIGHT waist, original LEFT waist opening, gathered draped full floor skirt and beige open-toe heels. Source-supported rear horizontal opening remains part of same garment. Same proportions, hair, color, textile and styling; no new slit, sleeve or accessory. Full head, hands, cuff, shoes and every hem edge safely on canvas, realistic anatomy. Soft neutral commercial studio light, realistic skin/textile and subtle floor contact shadow. Genuine transparent background: outside the single figure and its contact shadow, the canvas must be empty transparency. Pure photographic portrait only, no decorative graphics, symbols, stars, labels, borders or second figures. Request 1800x2700 portrait if supported, otherwise actual native size. Provisional AI presentation with no construction/authorship claim.",
+        "referenceAssets": [
+          "/portfolio/generated/ww-ai-evening-ref-10-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-10-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white against accepted views and original design: same adult low-bun model, deep-red high neck/left bell sleeve/right gold connector, original waist opening and gathered floor skirt, beige sandal. Quiet three-quarter pose, full head/hands/cuff/shoes/hem, no stray graphic, no obvious anatomy/crop/halo defect."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
@@ -5680,7 +5696,9 @@
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; larger exports explicitly resampled.",
         "ownerArtisticApproval": false,
         "backVisual": "Native inspected over white: one straight rear-facing low-bun adult, deep-red high-neck covered cropped back, only left bell sleeve/right bare arm, original horizontal mid-back opening, whole long skirt/hem and beige heels. Complete head/hands/cuff, natural anatomy and subtle contact shadow, no obvious crop/halo failure. Fine hidden closures remain provisional.",
-        "editorialReview": "First native Editorial rejected for visible unrelated lower-right graphic. No accepted Editorial registered; a new Editorial from the accepted single Front/Back is next."
+        "editorialReview": "First Editorial rejected for unrelated graphic and retained separately; new Editorial from accepted single views passes. No rejected pixels used.",
+        "editorialVisual": "Native inspected over white against accepted views and original design: same adult low-bun model, deep-red high neck/left bell sleeve/right gold connector, original waist opening and gathered floor skirt, beige sandal. Quiet three-quarter pose, full head/hands/cuff/shoes/hem, no stray graphic, no obvious anatomy/crop/halo defect.",
+        "setVisualReview": "Compared original Front/Back and three accepted actual native portraits over white. Same adult center-part low-bun model, deep-red high neck, left bell sleeve/right bare arm, right gold connector, original waist opening, gathered full skirt and beige heels. True rear with horizontal opening; quiet three-quarter Editorial. Complete head/hands/cuff/hem, natural anatomy and no unrelated graphic. Hidden closures and exact hardware remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -5693,7 +5711,7 @@
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "9155563869a048dfdfb3676a7065b90e99b3ce58",
+        "commit": "d09a126d93dc5668f64d9958bf5ff3bc24d8efe7",
         "views": [
           "front",
           "back"
@@ -5710,9 +5728,12 @@
           ],
           "sha256": "acd60d2fa5cd9fcda41651e0bc5315b68f65b5b51137e6b1dfde9280fb808d8b",
           "reason": "Visible stray four-point graphic at lower right, confirmed over white; not approved and not used in master. Front and Back remain accepted.",
-          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration."
+          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration.",
+          "generationPrompt": "One adult woman in ONE full-length EDITORIAL studio fashion portrait, exactly the deep-red asymmetric gown and sleek low-bun brunette in these references. Original source provides design; accepted Front/Back provide identical model, color, textile, proportions, beige heels and lighting. Preserve high mock neckline, ONLY LEFT long flared bell sleeve/right bare arm, small gold connector at RIGHT waist, original LEFT waist opening, gathered draped floor-length skirt and complete hem. Rear horizontal opening unchanged. Quiet front three-quarter pose and small natural weight shift, arms relaxed slightly away for readable sleeve/hardware; no lifted hem, added slit, second sleeve, cutout, jewellery or new styling. Same adult woman, center-part low bun and natural makeup. Exactly one body, no diptych or montage. Full head, hands, cuff, shoes and every garment edge on canvas with safe margins and natural undistorted anatomy. Soft neutral studio light, realistic red fabric/skin, subtle credible floor contact shadow. Genuine transparent alpha preserving cloth/hair/shadow. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, label or frame. Provisional AI source-based presentation; construction unverified."
         }
-      ]
+      ],
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied deep-red asymmetric gown with one left bell sleeve, right gold waist connector, gathered skirt and original waist/back opening.",
+      "generatedCaption": "Red asymmetric gown with one bell sleeve and gold waist connector."
     },
     {
       "sourceIdentity": "evening-ref-11",
