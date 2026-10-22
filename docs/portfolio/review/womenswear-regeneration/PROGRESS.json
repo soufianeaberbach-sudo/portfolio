@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:20:34.944556+00:00",
+  "updatedUTC": "2026-10-22T19:38:03.780460+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -16,10 +16,10 @@
     "READY": 19,
     "PENDING": 11
   },
-  "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "blocked-resume-report",
-  "lastSuccessfullyPushedCommit": "75548d692743502e4c39fc8d6eeff28e0e4bc4e1",
+  "currentCategory": "activewear",
+  "currentSourceIdentity": "activewear-ref-09",
+  "currentMilestone": "front-blocked-commercial-retry",
+  "lastSuccessfullyPushedCommit": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -36,6 +36,34 @@
           "requestId": "ce9c339d-ee23-4750-94dc-d321f64096fd",
           "assetProduced": false,
           "note": "Adult commercial performance bodysuit with actual opaque sports lining rejected by native tool. No generated file; original source remains featured."
+        },
+        {
+          "view": "front",
+          "attempt": "primary-commercial",
+          "requestId": "92bcdcf9-4868-4954-aace-987faff37b70",
+          "generationPrompt": "Professional commercial activewear catalogue photograph, one adult professional fashion model, full-length FRONT standing view. Use the attached garment reference to preserve the ivory performance outfit: high stand collar, long fitted sleeves, fine technical mesh overlay, curved opaque sports-top panel underneath, opaque lower sports panel, three narrow horizontal waist bands, exact source seam layout and leg line. Keep the same adult model appearance, sleek dark hair in low bun, ivory headband, black sports watch, white athletic shoes. Calm straight-on posture with arms relaxed a little apart for clean construction visibility; neutral expression, natural proportions. One figure only. Photorealistic technical textile, clean professional grooming, soft even studio light and a realistic gentle floor contact shadow. Entire head, hands, garment and shoes visible with generous margins. Genuine transparent background preserving pale fabric, hair and shadow. No text, brand marks, graphic, watermark or border. Portrait 1800x2700 if supported, otherwise retain actual native portrait resolution without stretching. Provisional AI presentation preserving supplied design.",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Owner-authorized restrained commercial attempt; no image produced. Design/reference unchanged. Retry allowance exhausted for this view in this continuation.",
+          "recordedUTC": "2026-10-22T19:37:59.373419+00:00"
+        },
+        {
+          "view": "front",
+          "attempt": "single-neutral-revision",
+          "requestId": "331908d5-e8a7-4810-b6cb-27536db993c8",
+          "generationPrompt": "Create one professional studio catalogue photograph of the ivory activewear outfit shown in the attached reference. Preserve its supplied garment construction, fabrics, color and styling accurately. Show one adult model in a straight-on, full-length standing front view with relaxed arms, neutral expression and natural posture. Keep the source hairstyle, headband, watch and athletic shoes. Clear garment visibility, photorealistic fabric, even commercial lighting, soft floor contact shadow and ample empty margins around the complete figure. Transparent background. No text, branding, graphics or border. Provisional AI garment study; record actual native portrait dimensions.",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Owner-authorized restrained commercial attempt; no image produced. Design/reference unchanged. Retry allowance exhausted for this view in this continuation.",
+          "recordedUTC": "2026-10-22T19:37:59.373433+00:00"
         }
       ]
     },
@@ -264,7 +292,7 @@
       ]
     }
   ],
-  "notes": "29 complete, 0 partial, 11 remaining—all native-tool moderation blocked. No actionable unblocked view. First unresolved activewear-ref-09 Front requires blocker resolution. All 269 saved resume assets and evening-ref-06 Front preserved byte-for-byte; full forty-look QA/PR pending.",
+  "notes": "",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
