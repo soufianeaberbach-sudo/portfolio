@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:02:44.863513+00:00",
+  "updatedUTC": "2026-10-22T20:04:17.989603+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 8,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-08",
-  "currentMilestone": "front",
-  "lastSuccessfullyPushedCommit": "7d7a3956d5cbc9b4b171a0a00ce7de7f6de469cd",
+  "currentMilestone": "back",
+  "lastSuccessfullyPushedCommit": "9bfb20e4f9d56897db4fd6963ae796415b8364c2",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "swimwear-ref-08",
@@ -483,7 +483,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate back for swimwear-ref-08; checkpoint before the following view",
+  "nextAction": "Generate and validate editorial for swimwear-ref-08; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -553,7 +553,7 @@
   "remainingLooks": 11,
   "nextImage": {
     "sourceIdentity": "swimwear-ref-08",
-    "view": "back"
+    "view": "editorial"
   },
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",

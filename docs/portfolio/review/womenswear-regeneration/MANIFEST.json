@@ -7000,14 +7000,30 @@
         "nativeResampled": false,
         "reviewNote": "Native inspected at true 3:4 proportions over white: same adult brunette with tied-back hair/small hoops, black halter bandeau and original twisted gathered center joining the lower section, source cut and coverage, barefoot. Frontal garment visibility with a restrained source-like step rather than fully parallel feet. Whole head/hands/feet intact, natural anatomy, clean alpha edges and very subtle contact shading. Actual 1086x1448 RGBA preserved unchanged."
       },
-      "back": null,
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "c7e1b1cbe2e61c0af6a0a275b945ff4a7b9bbeb1e41c1987dee2c87b40fff695",
+        "toolOutputPath": "/workspace/generated_images/exec-b8b0c61d-039c-4228-9f2b-ad37452c89c7.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "Professional studio catalogue photograph of the same adult model and black halter one-piece in the accepted reference, full-length TRUE BACK view. One figure standing straight, directly facing away, neutral posture and relaxed arms. Preserve the identical model, tied-back brunette hair, small hoop earrings, bare feet and black fabric. Provisional rear garment interpretation: original thin halter fastening at neck, simple straight black top band and matching plain lower rear consistent with the supplied Front; no extra decorations or straps. Clear construction visibility, photorealistic fabric and natural proportions, even commercial studio light with gentle realistic contact shadow. Entire figure and garment within generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Provisional AI garment presentation, actual native portrait dimensions.",
+        "referenceAssets": [
+          "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png"
+        ],
+        "generationOperation": "Separate true-rear catalogue edit of checkpointed Front; rear construction inferred",
+        "nativeResampled": false,
+        "reviewNote": "Native reviewed at true 3:4 proportions over white: one rear-facing adult matching Front's brunette tied-back model, small hoops and barefoot styling, opaque black halter ties, straight top back band and plain V-shaped lower rear. Consistent material/color/proportions, complete head/hands/feet and realistic soft contact shadow, no obvious crop/anatomy/alpha defects. Rear construction/coverage is inferred because no historical Back exists; not verified production construction. Actual 1086x1448 RGBA retained unchanged."
+      },
       "editorial": null,
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Native inspected at true 3:4 proportions over white: same adult brunette with tied-back hair/small hoops, black halter bandeau and original twisted gathered center joining the lower section, source cut and coverage, barefoot. Frontal garment visibility with a restrained source-like step rather than fully parallel feet. Whole head/hands/feet intact, natural anatomy, clean alpha edges and very subtle contact shading. Actual 1086x1448 RGBA preserved unchanged.",
         "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
-        "ownerArtisticApproval": false
+        "ownerArtisticApproval": false,
+        "backVisual": "Native reviewed at true 3:4 proportions over white: one rear-facing adult matching Front's brunette tied-back model, small hoops and barefoot styling, opaque black halter ties, straight top back band and plain V-shaped lower rear. Consistent material/color/proportions, complete head/hands/feet and realistic soft contact shadow, no obvious crop/anatomy/alpha defects. Rear construction/coverage is inferred because no historical Back exists; not verified production construction. Actual 1086x1448 RGBA retained unchanged."
       },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional."
@@ -7029,7 +7045,14 @@
           "assetProduced": false,
           "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
         }
-      ]
+      ],
+      "lastVerifiedCheckpoint": {
+        "commit": "9bfb20e4f9d56897db4fd6963ae796415b8364c2",
+        "views": [
+          "front"
+        ],
+        "master": false
+      }
     },
     {
       "sourceIdentity": "swimwear-ref-09",
