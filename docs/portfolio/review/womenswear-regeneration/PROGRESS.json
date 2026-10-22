@@ -4,26 +4,25 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "evening-ref-08",
+  "lastCompletedSourceIdentity": "evening-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:43:53.803311+00:00",
+  "updatedUTC": "2026-10-22T18:45:30.691994+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 27,
+  "completedLooks": 28,
   "pendingLooks": 12,
-  "partiallyGeneratedLooks": 1,
+  "partiallyGeneratedLooks": 0,
   "statusCounts": {
     "INTEGRATED": 6,
-    "READY": 21,
-    "PENDING": 12,
-    "GENERATED": 1
+    "READY": 22,
+    "PENDING": 12
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-10",
-  "currentMilestone": "editorial",
-  "lastSuccessfullyPushedCommit": "d09a126d93dc5668f64d9958bf5ff3bc24d8efe7",
+  "currentMilestone": "set",
+  "lastSuccessfullyPushedCommit": "62f139e38d3b85561ee53a9a54d6d430dd52aae4",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "evening-ref-10",
+  "nextActionableSourceIdentity": "swimwear-ref-05",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -87,7 +86,7 @@
       ]
     }
   ],
-  "nextAction": "Review three views and assemble master",
+  "nextAction": "Generate and validate front for swimwear-ref-05; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -146,7 +145,7 @@
       ]
     }
   ],
-  "notes": "Accepted replacement Editorial has no stray graphic; first attempt remains preserved as rejected evidence. Assemble master next.",
+  "notes": "28 complete, no partial, 12 pending including four tool blocks. Nine Occasionwear sets complete, evening-ref-02 blocked. Master review, 195 slot/source-integrity checks and production build pass. Next swimwear-ref-05 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",

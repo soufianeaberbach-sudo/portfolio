@@ -5653,7 +5653,11 @@
           "/portfolio/evening/10-1400.webp"
         ],
         "nativeResampled": false,
-        "reviewNote": "Native inspected over white against source: same adult center-part low-bun brunette, deep-red high-neck gown with only left bell sleeve, bare right arm, right gold waist connector, original left waist opening and gathered full-length skirt. Beige toe sandal visible as source; full head/hands/cuff/hem, no obvious anatomy/crop/halo failure."
+        "reviewNote": "Native inspected over white against source: same adult center-part low-bun brunette, deep-red high-neck gown with only left bell sleeve, bare right arm, right gold waist connector, original left waist opening and gathered full-length skirt. Beige toe sandal visible as source; full head/hands/cuff/hem, no obvious anatomy/crop/halo failure.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "back": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-10-v1/back-native.png",
@@ -5670,7 +5674,11 @@
           "/portfolio/generated/ww-ai-evening-ref-10-v1/front-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Native inspected over white: one straight rear-facing low-bun adult, deep-red high-neck covered cropped back, only left bell sleeve/right bare arm, original horizontal mid-back opening, whole long skirt/hem and beige heels. Complete head/hands/cuff, natural anatomy and subtle contact shadow, no obvious crop/halo failure. Fine hidden closures remain provisional."
+        "reviewNote": "Native inspected over white: one straight rear-facing low-bun adult, deep-red high-neck covered cropped back, only left bell sleeve/right bare arm, original horizontal mid-back opening, whole long skirt/hem and beige heels. Complete head/hands/cuff, natural anatomy and subtle contact shadow, no obvious crop/halo failure. Fine hidden closures remain provisional.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "editorial": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-10-v1/editorial-native.png",
@@ -5687,10 +5695,36 @@
           "/portfolio/generated/ww-ai-evening-ref-10-v1/back-native.png"
         ],
         "nativeResampled": false,
-        "reviewNote": "Native inspected over white against accepted views and original design: same adult low-bun model, deep-red high neck/left bell sleeve/right gold connector, original waist opening and gathered floor skirt, beige sandal. Quiet three-quarter pose, full head/hands/cuff/shoes/hem, no stray graphic, no obvious anatomy/crop/halo defect."
+        "reviewNote": "Native inspected over white against accepted views and original design: same adult low-bun model, deep-red high neck/left bell sleeve/right gold connector, original waist opening and gathered floor skirt, beige sandal. Quiet three-quarter pose, full head/hands/cuff/shoes/hem, no stray graphic, no obvious anatomy/crop/halo defect.",
+        "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
-      "master": null,
-      "status": "GENERATED",
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-evening-ref-10-v1/master-900.webp 900w, /portfolio/generated/ww-ai-evening-ref-10-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-evening-ref-10-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-evening-ref-10-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-evening-ref-10-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
+      },
+      "status": "READY",
       "qualityResult": {
         "frontVisual": "Native inspected over white against source: same adult center-part low-bun brunette, deep-red high-neck gown with only left bell sleeve, bare right arm, right gold waist connector, original left waist opening and gathered full-length skirt. Beige toe sandal visible as source; full head/hands/cuff/hem, no obvious anatomy/crop/halo failure.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; larger exports explicitly resampled.",
@@ -5698,23 +5732,93 @@
         "backVisual": "Native inspected over white: one straight rear-facing low-bun adult, deep-red high-neck covered cropped back, only left bell sleeve/right bare arm, original horizontal mid-back opening, whole long skirt/hem and beige heels. Complete head/hands/cuff, natural anatomy and subtle contact shadow, no obvious crop/halo failure. Fine hidden closures remain provisional.",
         "editorialReview": "First Editorial rejected for unrelated graphic and retained separately; new Editorial from accepted single views passes. No rejected pixels used.",
         "editorialVisual": "Native inspected over white against accepted views and original design: same adult low-bun model, deep-red high neck/left bell sleeve/right gold connector, original waist opening and gathered floor skirt, beige sandal. Quiet three-quarter pose, full head/hands/cuff/shoes/hem, no stray graphic, no obvious anatomy/crop/halo defect.",
-        "setVisualReview": "Compared original Front/Back and three accepted actual native portraits over white. Same adult center-part low-bun model, deep-red high neck, left bell sleeve/right bare arm, right gold connector, original waist opening, gathered full skirt and beige heels. True rear with horizontal opening; quiet three-quarter Editorial. Complete head/hands/cuff/hem, natural anatomy and no unrelated graphic. Hidden closures and exact hardware remain provisional."
+        "setVisualReview": "Compared original Front/Back and three accepted actual native portraits over white. Same adult center-part low-bun model, deep-red high neck, left bell sleeve/right bare arm, right gold connector, original waist opening, gathered full skirt and beige heels. True rear with horizontal opening; quiet three-quarter Editorial. Complete head/hands/cuff/hem, natural anatomy and no unrelated graphic. Hidden closures and exact hardware remain provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              276,
+              17,
+              824,
+              1495
+            ],
+            "uniformScale": 1.607577807848444,
+            "exportOpaqueBox": [
+              460,
+              162,
+              1341,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              238,
+              18,
+              749,
+              1481
+            ],
+            "uniformScale": 1.6240601503759398,
+            "exportOpaqueBox": [
+              486,
+              162,
+              1315,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              257,
+              20,
+              832,
+              1476
+            ],
+            "uniformScale": 1.6318681318681318,
+            "exportOpaqueBox": [
+              430,
+              162,
+              1369,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "masterVisualReview": "Actual white 5400x2700 master inspected: equal undistorted thirds, matching model/red fabric and single left sleeve, complete head/hands/cuff/hem/shoes, safe margins and aligned figure floor. Correct Front/Back/Editorial; no star/graphic and no rejected pixels. Uniform scaling only; fine hardware/hidden construction provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Fine gold hardware/hidden neck closure and internal construction remain interpretation; source only partially reveals the beige heel details."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 2508
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "d09a126d93dc5668f64d9958bf5ff3bc24d8efe7",
+        "commit": "62f139e38d3b85561ee53a9a54d6d430dd52aae4",
         "views": [
           "front",
-          "back"
+          "back",
+          "editorial"
         ],
         "master": false
       },
