@@ -112,6 +112,17 @@ contains the new evidence and final CI handoff. The 4+4 architecture and 40+40 e
 are preserved. Menswear artistic changes are **proposal-only**, awaiting owner
 approval under the current brief; no new cinematic redesign was implemented.
 
+## Multilingual candidate — 22 October 2026
+
+`feat/complete-multilingual-localization` (from `80ccdac`) adds French, Spanish
+and Arabic versions of every public page under `/fr/`, `/es/`, `/ar/` with
+English URLs unchanged: 36 indexable localized routes, reciprocal hreflang,
+localized sitemap, a native language switcher and a genuine right-to-left
+Arabic adaptation. Portfolio ids, fragments, images and data files are
+unchanged. **Implemented on the branch only — not merged, not deployed, and not
+native-speaker reviewed.** See [LOCALIZATION](LOCALIZATION.md) and
+[review/i18n](review/i18n/README.md).
+
 ## Next action and limits
 
 Review the corrective candidate's actual Portfolio motion, native continuity,

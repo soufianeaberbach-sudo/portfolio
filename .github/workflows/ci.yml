@@ -53,6 +53,10 @@ jobs:
 
       - run: npm run test:smoke
 
+      # English, French, Spanish and Arabic: routes, hreflang, sitemap,
+      # dictionary completeness, RTL layout, switcher and localized form.
+      - run: npm run test:i18n
+
       - name: Menswear photographic content contracts
         run: |
           node tests/menswear-content.mjs

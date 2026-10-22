@@ -21,8 +21,7 @@ const DIR = new URL('./fonts/', import.meta.url);
 export async function installFonts(context) {
   const css = await readFile(new URL('fonts.css', DIR), 'utf8');
   /* The Arabic pages make a second stylesheet request for IBM Plex Sans
-     Arabic (OFL-licensed); only its Arabic subset is committed, because Latin
-     text on those pages is still set in the three faces above. */
+     Arabic (OFL-licensed); its Arabic and Latin subsets are committed. */
   const arabic = await readFile(new URL('fonts-arabic.css', DIR), 'utf8');
   await context.route('https://fonts.googleapis.com/**', (route) =>
     route.fulfill({

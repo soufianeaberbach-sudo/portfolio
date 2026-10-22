@@ -45,6 +45,7 @@ skill package or unrelated agent framework is changed.
 | [SITE-MAP-AND-NAVIGATION](SITE-MAP-AND-NAVIGATION.md) | ACTIVE | New actual routes, labels, hashes, layers/history, sitemap and DEV exclusions. No invented pattern-development path. |
 | [DESIGN-DECISIONS](DESIGN-DECISIONS.md) | ACTIVE | New accepted/superseded choices; distinguish explicit owner decisions, implementation and exploratory proposals. |
 | [PHOTO-CONTENT-HANDOFF](PHOTO-CONTENT-HANDOFF.md) | ACTIVE | New maintained guide over real slot/FinalViews architecture; no parallel image model. Record world-level verified-publication migration risk. |
+| [LOCALIZATION](LOCALIZATION.md) | ACTIVE (branch `feat/complete-multilingual-localization`, unmerged) | EN/FR/ES/AR architecture, glossary, editorial decisions, RTL rules, owner-review items and merge notes. Evidence: [review/i18n](review/i18n/README.md). |
 | [This inventory](DOCUMENTATION-INVENTORY.md) | ACTIVE | Classification, contradictions, actions and evidence boundaries. |
 | [Reconciliation report](DOCUMENTATION-RECONCILIATION.md) | REVIEW EVIDENCE | This task's discrepancy/validation record, not an application QA rerun. |
 | [19 October public observations](PUBLIC-OBSERVATIONS-2026-10-19.md) | REVIEW EVIDENCE | New limited GET record; no overwrite of the 3 October production audit. |

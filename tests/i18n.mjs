@@ -438,6 +438,30 @@ try {
       await c.close();
     }
 
+    group('photographic crops are identical in every language');
+    {
+      const geometry = async (locale) => {
+        const c = await context();
+        const p = await c.newPage();
+        await p.goto(`${BASE}${locale === 'en' ? '' : '/' + locale}/portfolio/#womenswear/casualwear/rtw-ref-02`, { waitUntil: 'domcontentloaded' });
+        await p.waitForTimeout(1500);
+        const box = await p.evaluate(() => {
+          const photo = document.querySelector('[data-ww-reader][data-subject="rtw-ref-02"] [data-photo-view="0"] .ww-photo');
+          const img = photo?.querySelector('img');
+          if (!photo || !img) return null;
+          const a = photo.getBoundingClientRect(), b = img.getBoundingClientRect();
+          return { offset: Math.round((b.left - a.left) / a.width * 1000), width: Math.round(b.width / a.width * 1000) };
+        });
+        await c.close();
+        return box;
+      };
+      const en = await geometry('en');
+      for (const locale of PREFIXED) {
+        const other = await geometry(locale);
+        check(`${locale} Front window shows the same region of the photograph as English`, en && other && en.offset === other.offset && en.width === other.width, `${JSON.stringify(en)} vs ${JSON.stringify(other)}`);
+      }
+    }
+
     group('Portfolio deep links in every language');
     for (const locale of PREFIXED) {
       const c = await context();

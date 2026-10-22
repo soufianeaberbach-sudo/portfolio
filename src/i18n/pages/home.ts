@@ -112,7 +112,7 @@ export const home = defineDict(
       stats: {
         eyebrow: 'Parcours en production',
         plus: 'plus de {n}',
-        labels: ['ans en<br />production', 'pièces<br />développées', 'programmes<br />de marques', 'postes<br />occupés', 'logiciels<br />maîtrisés'],
+        labels: ['ans en<br />production', 'pièces<br />développées', 'programmes<br />de marques', 'postes<br />occupés', 'systèmes<br />logiciels'],
       },
       brands: {
         eyebrow: 'Programmes de marques',
@@ -171,7 +171,7 @@ export const home = defineDict(
         tag: 'Listo para contratar',
         lead: 'Preparado para una colaboración profesional directa.',
         facts: [
-          ['Situación', 'Autoempresario registrado en Marruecos'],
+          ['Situación', 'Auto-entrepreneur registrado en Marruecos'],
           ['Registro', 'Desde 2018'],
           ['Facturación', 'Facturación B2B disponible'],
           ['Ubicación', 'Tánger, Marruecos'],

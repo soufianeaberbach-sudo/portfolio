@@ -90,3 +90,30 @@ html[dir='rtl'] .home-hero {
 /* Lines that grow (statistic bars, the process spine, career strata) grow
    from the reading start. transform-origin has no logical keyword. */
 html[dir='rtl'] :is(.home-stat::after, .tr__strata i) { transform-origin: right; }
+
+/* MINIMUM ARABIC LEADING. Several Latin display styles are set between 0.84
+   and 1.08, which collides Arabic ascenders, descenders, dots and shadda
+   across lines. This floor outranks them on Arabic pages only; the English
+   name and the brand masthead (lang="en") keep their own setting. */
+html[lang='ar'] body :is(h1, h2, h3, .display, .business-ready__lead, .pr-ledger__name, .pr-ledger__rule,
+  .pr-file__out, .tr__pos, .ct-credential__head, .pf-doc__title, .footer-callout__statement):not([lang='en']) {
+  line-height: 1.3 !important;
+}
+
+/* PORTFOLIO. The photographic compositions are not mirrored: plates, figures,
+   cast positions and camera moves stay exactly where they were composed, and
+   the brand masthead stays an English, left-to-right signature. Only text
+   adapts (see also the multi-word chapter-name rule in global.css). */
+
+/* PHOTOGRAPHIC GEOMETRY IS PHYSICAL. Two-up crops, measured windows, rails
+   and composed stages position images with physical offsets measured from
+   the LEFT of the source file. In a right-to-left context an overflowing
+   image would align to the right edge instead, and the Front window would
+   show the Back. These containers therefore stay left-to-right; the words
+   around them (titles, captions, controls) remain right-to-left. */
+html[dir='rtl'] :is(.ww-photo, .mw-photo, .pf-rd__window, .pf-st__window, .pf-cinema__media,
+  .ww-cast, .ww-rail, .mw-camera, .mw-rail, .ww-reader-image, .mw-reader-target, .mw-controls) {
+  direction: ltr;
+}
+/* The Menswear scene controls are part of the film: scenes 01-05 and the
+   ←/→ buttons stay in the film's own order, matching the arrow keys. */

@@ -516,3 +516,15 @@ html[data-page='contact'] .site-header:not(.is-scrolled) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* LOCALIZED CHAPTER NAMES. The Portfolio covers fit ONE word (WOMENSWEAR,
+   TECH PACKS) and let it run into the plate's negative space without ever
+   breaking. Translated names are often two words — DOSSIERS TECHNIQUES,
+   FICHAS TÉCNICAS, الأزياء الرجالية — which would run across the photograph
+   or off the canvas. Outside English they break at their spaces only:
+   min-content keeps the box exactly as wide as the longest word, so the
+   reveal clip still never cuts a word, and a single-word name is unchanged. */
+html:not([lang='en']) .pf-cover__name {
+  white-space: normal;
+  width: min-content;
+}

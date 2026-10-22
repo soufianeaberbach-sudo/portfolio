@@ -88,7 +88,9 @@ group('the public contact email is exactly the chosen form');
   const expected = [
     'src/components/BriefForm.astro',
     'src/pages/contact.astro',
-    'src/pages/privacy.astro',
+    /* Privacy's sections render through the shared, localized
+       TrustSections component, which inserts the mailto link. */
+    'src/components/TrustSections.astro',
     'wrangler.jsonc',
   ];
   for (const file of expected) {
@@ -165,7 +167,7 @@ if (!hasDist) {
 
   group('built mailto links use the chosen address');
 {
-  for (const route of ['contact', 'privacy']) {
+  for (const route of ['contact', 'privacy', 'fr/contact', 'fr/privacy', 'es/contact', 'es/privacy', 'ar/contact', 'ar/privacy']) {
     const html = await readFile(join(distPath, route, 'index.html'), 'utf8');
     const mailtos = [...html.matchAll(/href="mailto:([^"?]+)/g)].map((m) => m[1]);
     check(`/${route}/ renders at least one mailto link`, mailtos.length > 0, `${mailtos.length} found`);
