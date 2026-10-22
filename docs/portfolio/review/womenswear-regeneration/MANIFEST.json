@@ -75,21 +75,146 @@
         "shirt"
       ],
       "priority": 1,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "sha256": "70f852ee3008c84299aba8450b4fae218e0abf55d682fc29bc2d558aae05d1c9",
+        "generationOperation": "native image edit with original Front/Back photograph",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "toolOutputPath": "/workspace/generated_images/exec-5661b215-17a3-49be-a932-8850976ce328.png",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "sha256": "583d5509d317918851a763a08422ece416228d2d20540dd3322873f940a1aad1",
+        "generationOperation": "native image edit using original supplied rear plus generated Front for identity",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "toolOutputPath": "/workspace/generated_images/exec-902ba23a-484f-47b0-99be-c089c5dd1d59.png",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "sha256": "45b92ca7318a679dd70a2f590191326270f8fd2d346a81f79cfae0925454447c",
+        "generationOperation": "native image edit using original Front/Back plus generated identity views",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "toolOutputPath": "/workspace/generated_images/exec-ed9877dd-80b0-441c-9641-821a5c779d99.png",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-rtw-ref-02-v1/master-900.webp 900w, /portfolio/generated/ww-ai-rtw-ref-02-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-rtw-ref-02-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-rtw-ref-02-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-rtw-ref-02-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          1024,
+          1024,
+          1024
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "INTEGRATED",
+      "qualityResult": {
+        "nativeResolutionLimitation": "Native output is 1024\u00d71536 despite 1800\u00d72700 request; no export or resolution claim made yet.",
+        "frontVisual": "Design and complete outfit retained; safe white padding/scale still to be normalised after set validation.",
+        "setVisualReview": "Front / true rear / quiet stepping Editorial maintain pink cropped shirt, pockets, linen trouser silhouette, brown slide sandals and model. No obvious anatomy or garment-boundary failure. Native resolution limited in all three.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              304,
+              37,
+              734,
+              1482
+            ],
+            "uniformScale": 1.6442906574394465,
+            "exportOpaqueBox": [
+              547,
+              162,
+              1254,
+              2538
+            ],
+            "backgroundPreparation": "Initial RGB pink/beige set only: edge-connected RGB>=248 background; original native file retained."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              299,
+              38,
+              745,
+              1478
+            ],
+            "uniformScale": 1.65,
+            "exportOpaqueBox": [
+              532,
+              162,
+              1268,
+              2538
+            ],
+            "backgroundPreparation": "Initial RGB pink/beige set only: edge-connected RGB>=248 background; original native file retained."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              270,
+              36,
+              706,
+              1481
+            ],
+            "uniformScale": 1.6442906574394465,
+            "exportOpaqueBox": [
+              542,
+              162,
+              1259,
+              2538
+            ],
+            "backgroundPreparation": "Initial RGB pink/beige set only: edge-connected RGB>=248 background; original native file retained."
+          }
+        ],
+        "ownerArtisticApproval": false,
+        "browserCheckpoint": "Actual 1440\u00d7900 and390\u00d7844: all four views/full master, inspection, exact archive return and original source route PASS."
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Editorial presentation of the supplied pink cropped linen shirt, oatmeal wide-leg linen trousers and brown leather slide sandals.",
+      "generatedCaption": "Pink cropped shirt, oatmeal wide-leg trousers and brown leather slides."
     },
     {
       "sourceIdentity": "rtw-ref-03",
@@ -499,21 +624,145 @@
         "hood"
       ],
       "priority": 1,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "005e69fcaccc97f8de58db3506be1029f9f4e115d2660dbc8788f72099e0f00d",
+        "toolOutputPath": "/workspace/generated_images/exec-2175a1f2-85a7-4e7b-86d3-21728c98ae44.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "926305ea855b0a5d8c8b68d5eaec01f965b04a67833f4181947fd541c3da9e53",
+        "toolOutputPath": "/workspace/generated_images/exec-d2f1c798-915f-4045-ac12-a5da1fb85013.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "33f058a2143e7a7378f935c2f806042993b85ca64622c16e19bc25b8353a57cf",
+        "toolOutputPath": "/workspace/generated_images/exec-5ee24260-5e5f-4cae-9493-1fda429648e2.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-streetwear-ref-02-v1/master-900.webp 900w, /portfolio/generated/ww-ai-streetwear-ref-02-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-streetwear-ref-02-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-streetwear-ref-02-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-streetwear-ref-02-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          1024,
+          1024,
+          1024
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "INTEGRATED",
+      "qualityResult": {
+        "setVisualReview": "Three separate Front / true rear / three-quarter Editorial maintain the same new adult model, burgundy raglan hoodie, olive cuffed joggers, white low-top trainers, knit texture, proportions and complete anatomy. Native alpha tested over white; no obvious fabric-edge loss.",
+        "nativeResolutionLimitation": "Each generated panel is natively 1024\u00d71536; 1800\u00d72700 review exports are explicitly resampled.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              265,
+              16,
+              764,
+              1472
+            ],
+            "uniformScale": 1.6318681318681318,
+            "exportOpaqueBox": [
+              492,
+              162,
+              1307,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              268,
+              22,
+              753,
+              1429
+            ],
+            "uniformScale": 1.6886993603411513,
+            "exportOpaqueBox": [
+              491,
+              162,
+              1310,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              235,
+              19,
+              719,
+              1434
+            ],
+            "uniformScale": 1.6791519434628974,
+            "exportOpaqueBox": [
+              494,
+              162,
+              1306,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false,
+        "browserCheckpoint": "Actual 1440\u00d7900 and390\u00d7844: all four views/full master, inspection, exact archive return and original source route PASS."
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Editorial presentation of a burgundy cropped raglan hoodie, olive tapered cuffed joggers and white low-top trainers.",
+      "generatedCaption": "Burgundy cropped hoodie, olive joggers and white trainers."
     },
     {
       "sourceIdentity": "streetwear-ref-04",
@@ -569,21 +818,144 @@
         "utility"
       ],
       "priority": 1,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "521d773f0201e881a32f5177d115073aa86c93920dbf87b6b566ba5ff67aeeb5",
+        "toolOutputPath": "/workspace/generated_images/exec-f03673ea-2bdc-4a9e-953f-802640a0efbf.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "4f1ef7d6adbd6f12567b22a2f25b9680713bc4fb8b51b5072779432ce732d95e",
+        "toolOutputPath": "/workspace/generated_images/exec-da873767-b019-45d5-81d7-01046061a2e6.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "5300b64c55cf3bec6d3f1b1b195afc55b7d2d7dec3772acf03844537177c6b8b",
+        "toolOutputPath": "/workspace/generated_images/exec-425fa281-f3e0-43a2-9c2d-b5c5be9d2699.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-streetwear-ref-04-v1/master-900.webp 900w, /portfolio/generated/ww-ai-streetwear-ref-04-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-streetwear-ref-04-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-streetwear-ref-04-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-streetwear-ref-04-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          1024,
+          1024,
+          1024
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Front / true rear / three-quarter walking Editorial consistently show the same adult model, black cotton-poplin A-line utility midi dress, stand collar, turned cuffs, low-hip patch pockets and black fisherman sandals. No obvious anatomy/crop failure. Entire dress is a new concept; rear yoke/box pleat are provisional.",
+        "nativeResolutionLimitation": "Three independent1024\u00d71536 portraits; requested review export is resampled, not native1800 detail.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              248,
+              37,
+              791,
+              1470
+            ],
+            "uniformScale": 1.658060013956734,
+            "exportOpaqueBox": [
+              450,
+              162,
+              1351,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              256,
+              31,
+              763,
+              1438
+            ],
+            "uniformScale": 1.6886993603411513,
+            "exportOpaqueBox": [
+              472,
+              162,
+              1328,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              209,
+              18,
+              760,
+              1456
+            ],
+            "uniformScale": 1.6522948539638387,
+            "exportOpaqueBox": [
+              444,
+              162,
+              1355,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
-        "No actual rear reference; any generated rear construction is provisional."
+        "Entire dress is a provisional original AI concept. Back yoke and central box pleat are AI interpretations, not verified technical construction."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1440,
         "height": 1800
       },
-      "sourceMetadataMatchesPixels": true
+      "sourceMetadataMatchesPixels": true,
+      "generatedDescription": "AI-generated provisional original concept in Front, Back and Editorial views: ink-black cotton-poplin A-line utility midi dress with turned cuffs, patch pockets and black fisherman sandals.",
+      "generatedCaption": "Ink-black cotton-poplin utility midi dress and flat fisherman sandals."
     },
     {
       "sourceIdentity": "streetwear-ref-05",
@@ -639,21 +1011,145 @@
         "olive"
       ],
       "priority": 1,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "81d09f36a150cb2c11159b407d48a08ae1892ac3a70b6a0007d3c0eabcc459bc",
+        "toolOutputPath": "/workspace/generated_images/exec-e0ffcc44-6caa-4028-b32e-afdb21d90c58.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "30ab79a259d04b31b7e9a9a7f2d1c78d44b1ea4c1b97a5799c9894bc5ada17a5",
+        "toolOutputPath": "/workspace/generated_images/exec-754fe0a1-ca3a-4335-83a6-48e1b6ed46e2.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "d30bf404b5bc15be48eb8c6af1cefb44a49f42cad2d5bac929c563c58b97b029",
+        "toolOutputPath": "/workspace/generated_images/exec-95d37ed5-2907-4142-98fb-a0392fc1220b.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-streetwear-ref-05-v1/master-900.webp 900w, /portfolio/generated/ww-ai-streetwear-ref-05-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-streetwear-ref-05-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-streetwear-ref-05-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-streetwear-ref-05-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          1024,
+          1024,
+          1024
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "INTEGRATED",
+      "qualityResult": {
+        "setVisualReview": "Front / true rear / walking three-quarter Editorial retain model, forest-green short-sleeve knit polo, ivory culottes, tan penny loafers and complete anatomy. This is an original concept, not a garment-preserving stock edit.",
+        "nativeResolutionLimitation": "All panels natively1024\u00d71536; target export is explicitly resampled.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              295,
+              20,
+              754,
+              1465
+            ],
+            "uniformScale": 1.6442906574394465,
+            "exportOpaqueBox": [
+              523,
+              162,
+              1278,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              313,
+              30,
+              731,
+              1447
+            ],
+            "uniformScale": 1.6767819336626677,
+            "exportOpaqueBox": [
+              550,
+              162,
+              1251,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              232,
+              9,
+              744,
+              1472
+            ],
+            "uniformScale": 1.6240601503759398,
+            "exportOpaqueBox": [
+              484,
+              162,
+              1315,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false,
+        "browserCheckpoint": "Actual 1440\u00d7900 and390\u00d7844: all four views/full master, inspection, exact archive return and original source route PASS."
+      },
       "constructionUncertainties": [
-        "No actual rear reference; any generated rear construction is provisional."
+        "Entire outfit is a provisional original AI concept; rear seams, closures and fit are not verified garment construction."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1201,
         "height": 1800
       },
-      "sourceMetadataMatchesPixels": true
+      "sourceMetadataMatchesPixels": true,
+      "generatedDescription": "AI-generated provisional original concept in Front, Back and Editorial views: forest-green knit polo, ivory pleated wide culottes and tan leather loafers.",
+      "generatedCaption": "Forest-green knit polo, ivory culottes and tan leather loafers."
     },
     {
       "sourceIdentity": "streetwear-ref-10",
@@ -2922,5 +3418,6 @@
         "height": 1800
       }
     }
-  ]
+  ],
+  "exportDecision": "Review exports use 1800\u00d72700 panels and 5400\u00d72700 masters with explicit native 1024\u00d71536 resampling disclosure; no additional detail is claimed. Native files remain preserved."
 }

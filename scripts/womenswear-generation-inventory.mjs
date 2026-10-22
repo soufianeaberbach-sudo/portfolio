@@ -1,7 +1,8 @@
 /** Snapshot the verified source edit before any generated replacement is integrated. */
 import {build} from 'esbuild';
-import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+if(existsSync('docs/portfolio/review/womenswear-regeneration/MANIFEST.json'))throw Error('Source inventory already exists. Preserve it and resume the existing per-look manifest; never reseed from an edited collection.');
 const result=await build({stdin:{contents:`import{womenswear}from'./src/data/portfolio';import{referenceCollection,displayedCollection,womenswearWorlds,collectionCredit}from'./src/data/womenswear-collection';import{directions,photoFrames}from'./src/data/womenswear-direction';import additions from'./src/data/womenswear-references.json';export{additions};export const worlds=womenswearWorlds.map(world=>{const categories=womenswear.categories.filter(c=>world.id==='casualwear'?['rtw','streetwear'].includes(c.id):c.id===world.id);const pool=categories.flatMap(c=>referenceCollection(c,womenswear.id));return{...world,subjects:displayedCollection(world.id,pool).map(s=>({...s,credit:collectionCredit(womenswear.categories.find(c=>c.id===s.category),s.id),frame:photoFrames[s.id],roles:directions[world.id].cast.filter(p=>p.id===s.id).map(p=>p.role)}))};});`,resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});
 const {worlds,additions}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
 const dir='docs/portfolio/review/womenswear-regeneration';mkdirSync(dir,{recursive:true});

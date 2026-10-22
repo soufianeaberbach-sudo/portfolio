@@ -2,10 +2,11 @@
 import type {Subject} from '../../data/portfolio';
 import {directions} from '../../data/womenswear-direction';
 import {finalPhotographs} from '../../data/final-photography';
+import {featuredIdentity,generatedPresentation} from '../../data/womenswear-collection';
 import FinalPhoto from './FinalPhoto.astro';
 interface Props{subjects:Subject[];world:string;category:string;}
 const{subjects,world,category}=Astro.props,direction=directions[category];
-const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===part.id);return subject?[{...part,subject,photo:finalPhotographs(subject)[0]}]:[];});
+const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===featuredIdentity(part.id));return subject?[{...part,subject,photo:finalPhotographs(subject)[0]}]:[];});
 const door=(s:Subject)=>`#${world}/${s.category}/${s.id}`;
 const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.next.id}`;
 ---
@@ -21,7 +22,7 @@ const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.nex
   </div>
  </div>
  <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
-  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>Explore the complete edit.</p></div>
+  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>{subjects.some(s=>generatedPresentation(s.id))?'Provisional AI presentation studies alongside retained references. No garment authorship or production claim.':'Explore the complete edit.'}</p></div>
   <p class="ww-archive-cue label" aria-hidden="true">{subjects.length>2?'SWIPE TO EXPLORE':'BOTH LOOKS'} <span>{subjects.length>2?'→':''}</span></p>
   <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name} archive. ${subjects.length>2?'Swipe or scroll horizontally for every reference.':'Both references.'}`}>
    {subjects.map(subject=>{const photo=finalPhotographs(subject)[0];return <a href={door(subject)} data-nav data-open-subject={subject.id} draggable="false" aria-label={`Enter reference: ${subject.cover.alt}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 60vw, 22vw"/></a>})}

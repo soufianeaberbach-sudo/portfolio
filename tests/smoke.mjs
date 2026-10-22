@@ -20,6 +20,7 @@ import { installFonts } from './fixtures/fonts.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
+const generatedPresentations=require('../src/data/womenswear-generated.json').filter(r=>r.integrated);
 
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const HOST = '127.0.0.1';
@@ -531,15 +532,15 @@ try {
         readers: readers.map(r => r.dataset.subject),
         open: readers.filter(r => !r.hidden).length,
         invented: w.querySelectorAll('[data-st]').length,
-        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>p.textContent.includes('REFERENCE PHOTOGRAPHY')).length,
+        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>p.textContent.includes('REFERENCE PHOTOGRAPHY')||p.textContent.includes('AI-GENERATED / PROVISIONAL')).length,
         ground: getComputedStyle(w).backgroundColor,
       };
     }, world);
     check('the four public worlds have the required order', act.ids.join(',') === 'casualwear,activewear,evening,swimwear');
     check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
-    check('40 displayed garments have readers; eighteen excluded historical IDs retain direct readers',
-      new Set(act.doors).size === 40 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58
-        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === ['rtw-ref-01','rtw-ref-06','rtw-ref-07','rtw-ref-08','rtw-ref-09','rtw-ref-10','rtw-ref-11','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','streetwear-ref-03','streetwear-ref-06','streetwear-ref-07','streetwear-ref-08','streetwear-ref-09','evening-ref-09'].sort().join(','));
+    check('40 displayed garments have readers; all excluded and replaced historical IDs retain direct readers',
+      new Set(act.doors).size === 40 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58+generatedPresentations.length
+        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === [...['rtw-ref-01','rtw-ref-06','rtw-ref-07','rtw-ref-08','rtw-ref-09','rtw-ref-10','rtw-ref-11','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','streetwear-ref-03','streetwear-ref-06','streetwear-ref-07','streetwear-ref-08','streetwear-ref-09','evening-ref-09'],...generatedPresentations.map(r=>r.sourceIdentity)].sort().join(','));
     check('readers stay closed until requested', act.open === 0);
     check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
     check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');

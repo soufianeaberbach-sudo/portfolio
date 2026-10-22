@@ -1,9 +1,10 @@
 /* Contract tests: display slots, historical URLs, attribution, replacement media. */
 import assert from'node:assert/strict';import fs from'node:fs/promises';import{build}from'esbuild';
 const result=await build({stdin:{contents:"export {womenswear} from './src/data/portfolio';export * from './src/data/womenswear-collection';export {finalPhotographs} from './src/data/final-photography';export {directions} from './src/data/womenswear-direction';",resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});
-const{womenswear,referenceCollection,displayedCollection,collectionSlots,editorialSlots,womenswearWorlds,slotPhotographs,finalPhotographs,directions}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
+const{womenswear,referenceCollection,displayedCollection,collectionSlots,editorialSlots,womenswearWorlds,slotPhotographs,finalPhotographs,directions,featuredIdentity}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
 let checks=0;const check=(ok,msg)=>{assert(ok,msg);checks++;};
 const historical=JSON.parse(await fs.readFile('docs/portfolio/review/womenswear-v2/REFERENCES.json','utf8')),added=JSON.parse(await fs.readFile('src/data/womenswear-references.json','utf8'));
+const generated=JSON.parse(await fs.readFile('src/data/womenswear-generated.json','utf8')).filter(r=>r.integrated);
 const displayed=[],pool=[];
 for(const category of womenswear.categories){
  const all=referenceCollection(category,'womenswear');pool.push(...all);
@@ -11,9 +12,10 @@ for(const category of womenswear.categories){
   const subject=all.find(s=>s.id===original.id);check(subject?.cover.src===original.source&&subject.cover.width===original.sourceMetadata.width&&subject.cover.height===original.sourceMetadata.height,original.id+': original source identity and dimensions retained');
  }
 }
-for(const category of womenswearWorlds){const edit=displayedCollection(category.id,pool);displayed.push(...edit);check(edit.length===10&&new Set(edit.map(s=>s.id)).size===10,category.id+': ten unique looks');check(directions[category.id].cast.every(c=>edit.some(s=>s.id===c.id)),category.id+': camera cannot feature an excluded look');}
+for(const category of womenswearWorlds){const edit=displayedCollection(category.id,pool);displayed.push(...edit);check(edit.length===10&&new Set(edit.map(s=>s.id)).size===10,category.id+': ten unique looks');check(directions[category.id].cast.every(c=>edit.some(s=>s.id===featuredIdentity(c.id))),category.id+': camera cannot feature an excluded look');}
 check(displayed.length===40&&new Set(displayed.map(s=>s.id)).size===40,'forty displayed Womenswear looks');
-check(pool.length===58&&new Set(pool.map(s=>s.id)).size===58,'all 49 historical URLs plus nine independent additions');
+check(pool.length===58+generated.length&&new Set(pool.map(s=>s.id)).size===58+generated.length,'all 58 historical URLs plus separately identified AI presentations');
+for(const record of generated){check(record.id.startsWith('ww-ai-')&&record.id!==record.sourceIdentity&&pool.some(s=>s.id===record.sourceIdentity),record.id+': new presentation identity retains historical source');check(record.provisional&&!record.credit.photographer&&!record.credit.sourcePage,record.id+': AI attribution never borrows stock credits');check(displayed.some(s=>s.id===record.id)&&!displayed.some(s=>s.id===record.sourceIdentity),record.id+': editorial replacement uses the new identity only');}
 check(new Set(displayed.map(s=>s.cover.src)).size===40,'no duplicated photograph masquerades as a new garment');
 for(const ref of added){
  check(ref.license.url==='https://www.pexels.com/license/'&&ref.license.pageFreeMarker&&!!ref.credit.photographer&&ref.credit.sourcePage.startsWith('https://www.pexels.com/photo/'),ref.id+': verified reuse source and creator');
