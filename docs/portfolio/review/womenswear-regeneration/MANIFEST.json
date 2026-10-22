@@ -286,21 +286,152 @@
       },
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "d75682cf7b122af6defd69eec3d34c8125e529c9cc189052beb213871c77b55e",
+        "toolOutputPath": "/workspace/generated_images/exec-e9a90be0-4470-4ca3-8412-e7b39ff8d6c7.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "27ff2cf9b9897514b7ed0cf37115929253a07b97ad8137e023a619b09ab7785f",
+        "toolOutputPath": "/workspace/generated_images/exec-f857cced-9f3e-4857-ac26-10866dcb1777.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "b0f22603cd6e16dc3bd47fd889816ce94a9d9699bad03b57f58b780e5e47ef3e",
+        "toolOutputPath": "/workspace/generated_images/exec-64bcea26-9581-4240-a171-41f7aca2fb24.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-rtw-ref-03-v1/master-900.webp 900w, /portfolio/generated/ww-ai-rtw-ref-03-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-rtw-ref-03-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-rtw-ref-03-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-rtw-ref-03-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "All three full figures inspected against original Front/Back. Gathered V-neck, pointed fitted waist panel and pleated wide legs retained, high plain rear neckline and centre zip follow source. Same adult brunette bun, hoops, left bracelet and sandals. Full head/hem/feet; editorial three-quarter small step. Fine construction remains provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              301,
+              21,
+              744,
+              1512
+            ],
+            "uniformScale": 1.5935613682092555,
+            "exportOpaqueBox": [
+              547,
+              162,
+              1253,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              303,
+              29,
+              713,
+              1471
+            ],
+            "uniformScale": 1.6477115117891816,
+            "exportOpaqueBox": [
+              562,
+              162,
+              1238,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              291,
+              22,
+              743,
+              1480
+            ],
+            "uniformScale": 1.6296296296296295,
+            "exportOpaqueBox": [
+              531,
+              162,
+              1268,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied beige sleeveless gathered V-neck jumpsuit with pointed waist panel, wide legs and beige ankle-strap sandals.",
+      "generatedCaption": "Beige woven jumpsuit \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "rtw-ref-04",
@@ -353,21 +484,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "dd0e63435d4ef4a4976ea92d67cc85bde8fd317fc4ca9652018eb2f02e0f62fb",
+        "toolOutputPath": "/workspace/generated_images/exec-e3b6e915-259f-4c18-b9cb-ff8e253fff78.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "5f6f54d0ef604e2443f2718059cd3f58152aa887183d4e4b7e62dc04eec35bd5",
+        "toolOutputPath": "/workspace/generated_images/exec-f23e541c-7148-4736-b8dc-70b1e024165d.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "31f002668466c4535622447478b462d31caf39eeb38266aa6d6b035248c88343",
+        "toolOutputPath": "/workspace/generated_images/exec-f51033db-5a77-4251-b0d6-e77f52718d56.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-rtw-ref-04-v1/master-900.webp 900w, /portfolio/generated/ww-ai-rtw-ref-04-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-rtw-ref-04-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-rtw-ref-04-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-rtw-ref-04-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Three actual single figures compared with original Front/Back. Broad diagonal blue/ivory stripe direction, roundneck, side waistgathers, lowhip dropwaist seam, gathered midcalf skirt and actual oval rear opening retained. Same brunette bun, gold sandals and left bangle. Full silhouettes and shoes visible; editorial modest three-quarter step. Exact stripe registration at hidden seams remains provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              286,
+              18,
+              749,
+              1512
+            ],
+            "uniformScale": 1.5903614457831325,
+            "exportOpaqueBox": [
+              532,
+              162,
+              1268,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              294,
+              19,
+              765,
+              1496
+            ],
+            "uniformScale": 1.6086662153012863,
+            "exportOpaqueBox": [
+              521,
+              162,
+              1279,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              259,
+              15,
+              786,
+              1509
+            ],
+            "uniformScale": 1.5903614457831325,
+            "exportOpaqueBox": [
+              481,
+              162,
+              1319,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied powder-blue and ivory diagonal-striped sleeveless drop-waist midi dress with oval open back and gold sandals.",
+      "generatedCaption": "Blue stripe midi dress \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "rtw-ref-05",
@@ -430,21 +692,152 @@
       },
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "8f5aadd20779f1ce6e48c89bd70c0187ec198b2d669008c927fd66c3f14ffc86",
+        "toolOutputPath": "/workspace/generated_images/exec-48503f12-efa2-467d-8f03-bbf53ddca084.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "ba9fd8888389ce0dcaf57a31fbbf213612bc2b6e9b98995de273b8dc02c127b9",
+        "toolOutputPath": "/workspace/generated_images/exec-0a1581ba-5ea9-4bfa-b4ae-05c5b959da87.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "e47760f892512a086d3eb1f51f32679da5e2d20a84091d7a53522cc5fbf5253a",
+        "toolOutputPath": "/workspace/generated_images/exec-0889b8ff-6f87-4005-b08e-a91f3ce69185.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-rtw-ref-05-v1/master-900.webp 900w, /portfolio/generated/ww-ai-rtw-ref-05-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-rtw-ref-05-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-rtw-ref-05-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-rtw-ref-05-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Compared three actual single-person views with original Front/Back. Blush daisy/ochre foliage print, collared long sleeves and open buttonplacket, untucked fitted hip-length blouse, rust straight trousers and brown flat openheel mules retained. Same adult brunette bun, gold hoops and left bangles. Wholefigure visible, editorial small three-quarter step. Exact printrepeat and hidden seam detail provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              232,
+              22,
+              738,
+              1509
+            ],
+            "uniformScale": 1.597848016139879,
+            "exportOpaqueBox": [
+              496,
+              162,
+              1304,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              303,
+              19,
+              739,
+              1481
+            ],
+            "uniformScale": 1.6251709986320109,
+            "exportOpaqueBox": [
+              545,
+              162,
+              1254,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              292,
+              22,
+              789,
+              1499
+            ],
+            "uniformScale": 1.6086662153012863,
+            "exportOpaqueBox": [
+              501,
+              162,
+              1300,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied blush daisy-print collared blouse, rust tailored trousers and brown leather mules.",
+      "generatedCaption": "Daisy blouse and rust trousers \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "rtw-ref-15",
@@ -497,21 +890,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "06f5129e856b8bb37d9d36cbcf3469ad163ab2325323c35b85afcbb8833fd2ae",
+        "toolOutputPath": "/workspace/generated_images/exec-3965d11c-8e3b-4155-9fc8-547a2fb0cb3f.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "8cfc4c57de137ef90af9d025350282fb186075189eecfadfff4fd3b969bb7898",
+        "toolOutputPath": "/workspace/generated_images/exec-9e46e33a-aa4f-418c-846a-79c130fe8b5f.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "7fdaf7094e4dab64eaa8dcdb5c49e764cb1abc37e9e3aee35dfaa849efadcfc2",
+        "toolOutputPath": "/workspace/generated_images/exec-b7b68402-3524-478e-96c5-4b1bb570c195.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-rtw-ref-15-v1/master-900.webp 900w, /portfolio/generated/ww-ai-rtw-ref-15-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-rtw-ref-15-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-rtw-ref-15-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-rtw-ref-15-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Three actual single-person images inspected against source Front/Back: folded offshoulder band and left shoulder bow, long sleeves, blouson knit and fitted highhip hem retained. Plain folded rearband matches source. Same adult EastAsian lowbun model, chocolate wide trousers with rear weltpockets and brown pointed pumps. All figures visible; restrained three-quarter step. Fine knit and seams remain provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              304,
+              18,
+              725,
+              1504
+            ],
+            "uniformScale": 1.5989232839838492,
+            "exportOpaqueBox": [
+              563,
+              162,
+              1236,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              338,
+              21,
+              723,
+              1500
+            ],
+            "uniformScale": 1.6064908722109534,
+            "exportOpaqueBox": [
+              591,
+              162,
+              1209,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              298,
+              20,
+              715,
+              1503
+            ],
+            "uniformScale": 1.6021577882670264,
+            "exportOpaqueBox": [
+              566,
+              162,
+              1235,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 2087
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied olive off-shoulder bow knit top with chocolate tailored trousers and dark brown pumps.",
+      "generatedCaption": "Olive bow knit and chocolate tailoring \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "streetwear-ref-01",
@@ -564,21 +1088,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "1fb4af1b941a606281f4371b69347ec07d331e6c560c479e92fba1bc2a87d8be",
+        "toolOutputPath": "/workspace/generated_images/exec-4699cf86-256f-4c0f-8941-c8cb76671bdf.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "2afe71a5fd770aa1bcaf373fba987d8afe00951c55d6e4f4ca856a3883901fe8",
+        "toolOutputPath": "/workspace/generated_images/exec-eb2effb0-61a0-4967-a9bd-94aab413db41.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "15aa58f12627509bc460c5ed67100b2b918bdec4ed5f31b703fe5e7a215a13e1",
+        "toolOutputPath": "/workspace/generated_images/exec-5f800ba5-1f16-4f93-a1ce-755e0b8ab3b4.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-streetwear-ref-01-v1/master-900.webp 900w, /portfolio/generated/ww-ai-streetwear-ref-01-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-streetwear-ref-01-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-streetwear-ref-01-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-streetwear-ref-01-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Three actual single figures inspected against actual Front/Back: ivory textured crewneck, dropped elbow sleeves, leftside gathered small oval opening and looped drawstrings, asymmetric untucked hem and chocolate straightwide trousers retained. Same adult mediumbrown model bun/goldhoops and brown pumps. Whole garments visible, actual rear plain with leftgather, editorial smallstep. Fine construction provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              283,
+              18,
+              763,
+              1503
+            ],
+            "uniformScale": 1.6,
+            "exportOpaqueBox": [
+              516,
+              162,
+              1284,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              280,
+              15,
+              749,
+              1473
+            ],
+            "uniformScale": 1.6296296296296295,
+            "exportOpaqueBox": [
+              518,
+              162,
+              1283,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              238,
+              16,
+              734,
+              1495
+            ],
+            "uniformScale": 1.6064908722109534,
+            "exportOpaqueBox": [
+              501,
+              162,
+              1298,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied ivory textured drawstring-side jersey top, chocolate tailored trousers and brown pointed pumps.",
+      "generatedCaption": "Ivory gathered jersey and chocolate trousers \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "streetwear-ref-02",
@@ -1228,21 +1883,153 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "69757696a42adbcc2f513684741ab0d82fc12cbf0f8e08eb02c5ab395b99f123",
+        "toolOutputPath": "/workspace/generated_images/exec-813f50bf-b28d-4514-86a9-88e813509ef9.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "792bfe9686ee103bdac206e33582d0118ccea7f870e531cc8fc292f532f4caa0",
+        "toolOutputPath": "/workspace/generated_images/exec-ca0d73e2-360b-4869-9ffb-a19d7c1a5a15.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "d5fc363aa77b06c0c9b10c4d08606f4230652fce27f37456479c60075029aa87",
+        "toolOutputPath": "/workspace/generated_images/exec-2426ed7d-63c0-40ac-96e8-c204576c666b.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-streetwear-ref-10-v1/master-900.webp 900w, /portfolio/generated/ww-ai-streetwear-ref-10-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-streetwear-ref-10-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-streetwear-ref-10-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-streetwear-ref-10-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "All three separately generated single-person images inspected. Same adult fair freckled strawberryblonde bob model, terracotta boatneck boxy elbow-sleeve untucked jersey, navy midcalf pleated skirt and offwhite lowtoptrainers. Whole outfit visible, rear is genuine facing away, editorial restrainedstep. Front generated without stock references; new stable identity; no historical stock credit reused. Conservative rear interpretation flagged.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              250,
+              20,
+              810,
+              1463
+            ],
+            "uniformScale": 1.6465696465696467,
+            "exportOpaqueBox": [
+              439,
+              162,
+              1361,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              256,
+              20,
+              768,
+              1434
+            ],
+            "uniformScale": 1.6803394625176804,
+            "exportOpaqueBox": [
+              470,
+              162,
+              1331,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              267,
+              17,
+              761,
+              1480
+            ],
+            "uniformScale": 1.6240601503759398,
+            "exportOpaqueBox": [
+              499,
+              162,
+              1301,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
-        "No actual rear reference; any generated rear construction is provisional."
+        "Entire outfit is an original temporary AI concept, not a reproduction of the replaced stock garment or verified ABERBACH design.",
+        "Rear, seams, skirt closure and all construction are provisional AI interpretations, not confirmed technical facts."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1200,
         "height": 1800
       },
-      "sourceMetadataMatchesPixels": true
+      "sourceMetadataMatchesPixels": true,
+      "generatedDescription": "AI-generated provisional original concept: terracotta boxy elbow-sleeve jersey top, navy pleated midi skirt and offwhite leather trainers, shown Front, Back and Fashion Editorial.",
+      "generatedCaption": "Terracotta jersey and navy pleats \u00b7 temporary AI concept"
     },
     {
       "sourceIdentity": "activewear-ref-01",
@@ -1506,21 +2293,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "64d9fc211d7e102b209c85bb9c94ff97e91d194ff968f31267c1d98ba1fd130a",
+        "toolOutputPath": "/workspace/generated_images/exec-93425d41-2f19-4a47-91a7-55b30efe4b26.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "0389b86b5cdf6f82fe9b52b7795ae6af52e07f0bc20d687cbdeb5146b5f9cd0d",
+        "toolOutputPath": "/workspace/generated_images/exec-5570cae1-38fa-4bf9-a4df-ba62dc38e782.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "655d3f5ccdf4e4ded0b0999430d83da4d1f29c326eab9da9eca63ec41743f335",
+        "toolOutputPath": "/workspace/generated_images/exec-60455bbb-9b58-402a-bfdc-8acb73d59999.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-02-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-02-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-02-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-02-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-02-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Three actual single figures compared with source Front/Back: red bandeau and small original chestmark, black broadwaist ankleleggings with thin white outerpiping and curved rearyoke retained. Same adult chestnut highponytail model, leftwhitewatch and white/black trainers. Full figure and footwear, genuine rear, controlled editorial step. Fine marks and seams provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              227,
+              26,
+              762,
+              1491
+            ],
+            "uniformScale": 1.6218430034129694,
+            "exportOpaqueBox": [
+              466,
+              162,
+              1334,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              270,
+              20,
+              793,
+              1465
+            ],
+            "uniformScale": 1.6442906574394465,
+            "exportOpaqueBox": [
+              470,
+              162,
+              1330,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              214,
+              29,
+              784,
+              1503
+            ],
+            "uniformScale": 1.6119402985074627,
+            "exportOpaqueBox": [
+              441,
+              162,
+              1360,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied red strapless sports top, black leggings with thin white piping and white/black trainers.",
+      "generatedCaption": "Red bandeau and piped black leggings \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "activewear-ref-03",
@@ -1573,21 +2491,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "64d593234182a51eacf96332705faf6a72ab909a67870c1fc24d998ffeadfcce",
+        "toolOutputPath": "/workspace/generated_images/exec-b165e9fc-ee95-4dd4-a913-fca37157c078.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "2693fd773a30649e046c239c3a4d54e4db760ff76835981c95d8294765cd47fb",
+        "toolOutputPath": "/workspace/generated_images/exec-a776b60c-5d93-4681-a498-637f9f09a763.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "5d1e533795b20ca67fa3f6425d9bc4c9a8ec99016a146bc282e35c524f45b526",
+        "toolOutputPath": "/workspace/generated_images/exec-2ee00619-8dae-4099-acae-6fc308b081b7.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-03-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-03-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-03-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-03-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-03-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Compared three actual single figures with source Front/Back. White scoopneck highhip tank and black binding retained; rear correctly deep round scoop rather than racerback. White highwaist ankleleggings singleblackstripe, source smallmarks, white/blacktrainers and leftwatch consistent. Same adult warmbrown lowbunmodel, fullfigure andshoe margins, controlled three-quarter step. Fine construction provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              285,
+              25,
+              751,
+              1502
+            ],
+            "uniformScale": 1.6086662153012863,
+            "exportOpaqueBox": [
+              525,
+              162,
+              1275,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              301,
+              18,
+              736,
+              1492
+            ],
+            "uniformScale": 1.6119402985074627,
+            "exportOpaqueBox": [
+              549,
+              162,
+              1250,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              264,
+              24,
+              769,
+              1492
+            ],
+            "uniformScale": 1.6185286103542234,
+            "exportOpaqueBox": [
+              491,
+              162,
+              1309,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied white scoop-neck tank with black binding, white single-black-stripe leggings and white/black trainers.",
+      "generatedCaption": "White performance set with black binding \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "activewear-ref-04",
@@ -1852,21 +2901,153 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "cef25666387fd8c3b2ebe95206c709391e3b2d1a9778bff53af483dd3b213611",
+        "toolOutputPath": "/workspace/generated_images/exec-280d282f-a174-4794-ad2c-40dab9d1eaec.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "d64f39688e0ea1897e5d5d52731cdc3818b3d72e0fbd73890dc26a7000f31d11",
+        "toolOutputPath": "/workspace/generated_images/exec-0137ad3a-b462-42d0-9c32-30f850e6de20.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "4d21984e30fb3baf9e88a9002bd2392c877a8e3ac706a24b2788ab847a8f6ef0",
+        "toolOutputPath": "/workspace/generated_images/exec-dced7210-9a1e-42cd-84a8-ae3c36e09a80.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-05-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-05-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-05-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-05-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-05-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Three actual single-person images inspected: black one-piece crewneck longsleeve ankle-length jumpsuit, shaped waistseam and actual rear longzip retained. Same adult fair ashblonde highponytail, rightblackrectangularwatch and blackairheel/whitemidsole trainers. Wholefigure margins, genuine rear with exposedzip, controlled editorialstep. Fine seams provisional; original source watch inconsistency recorded.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              285,
+              17,
+              736,
+              1473
+            ],
+            "uniformScale": 1.6318681318681318,
+            "exportOpaqueBox": [
+              532,
+              162,
+              1268,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              297,
+              17,
+              731,
+              1464
+            ],
+            "uniformScale": 1.64201796821009,
+            "exportOpaqueBox": [
+              544,
+              162,
+              1256,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              270,
+              31,
+              796,
+              1464
+            ],
+            "uniformScale": 1.658060013956734,
+            "exportOpaqueBox": [
+              464,
+              162,
+              1336,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
-        "Reference photographs do not verify technical construction or authorship."
+        "Reference photographs do not verify technical construction or authorship.",
+        "Historical source has inconsistent watch wrist between Front and Back; generated set consistently uses model right wrist matching its Front."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied black long-sleeve ankle-length performance jumpsuit with centre-back zipper and black trainers.",
+      "generatedCaption": "Black long-sleeve performance jumpsuit \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "activewear-ref-06",
@@ -1919,21 +3100,152 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "06a68ec440c3c20bfc70a47fd4733154e4d7a0427733907c3a2d7bdcc95b4efd",
+        "toolOutputPath": "/workspace/generated_images/exec-cd5314e7-cecf-4ee3-8d92-a1901e8733e2.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "c3f6bcc7ea750523305d664b5664eaefef431ea6a6a2b2c4ea3ed74a70405e93",
+        "toolOutputPath": "/workspace/generated_images/exec-91a3bf4b-0764-481b-8647-d2f200d04b14.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "6aeda5ee420270392cccf530a4260b87eba5b7392e3bd83162e7479453b269d3",
+        "toolOutputPath": "/workspace/generated_images/exec-b2176de6-c452-468e-9c53-c2ae8fa50e6e.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-06-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-06-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-06-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-06-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-06-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "All three actual single figures compared against Front/Back source: fitted crewneck short sleeves, one-piece waist and curved legseams, midcalfhem retained. Actual rear highcrewneck and plainback no inventedzip. Same adult olive highponytail model, leftblackroundwatch, black whiteswooshtrainers. Full silhouette/shoes visible and editorial controlledstep. Fine seams provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              263,
+              30,
+              731,
+              1473
+            ],
+            "uniformScale": 1.6465696465696467,
+            "exportOpaqueBox": [
+              515,
+              162,
+              1286,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              292,
+              16,
+              742,
+              1480
+            ],
+            "uniformScale": 1.6229508196721312,
+            "exportOpaqueBox": [
+              535,
+              162,
+              1265,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              253,
+              21,
+              798,
+              1496
+            ],
+            "uniformScale": 1.6108474576271186,
+            "exportOpaqueBox": [
+              461,
+              162,
+              1338,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied black short-sleeve capri-length performance jumpsuit with black/white trainers.",
+      "generatedCaption": "Black capri performance jumpsuit \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "activewear-ref-07",
@@ -2402,7 +3714,19 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "ce9c339d-ee23-4750-94dc-d321f64096fd",
+          "assetProduced": false,
+          "note": "Adult commercial performance bodysuit with actual opaque sports lining rejected by native tool. No generated file; original source remains featured."
+        }
+      ]
     },
     {
       "sourceIdentity": "activewear-ref-10",
@@ -2443,21 +3767,164 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
-      "back": null,
-      "editorial": null,
-      "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "93b63f2f0930842f052d6c8d2e118a25c951e2a09f106aeffd1390dd487c27fb",
+        "toolOutputPath": "/workspace/generated_images/exec-c836b3e7-4753-41c0-b564-57bde76e0c4f.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/back-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "9e3cccf5e59f92d6b60523b956319704670578cfd540684943db4b02da089efa",
+        "toolOutputPath": "/workspace/generated_images/exec-1128051e-b61c-4ad4-9886-f3a6e08b4912.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "a67a39bcead5010d8f77a86da84c39499e4183a1dddee73a79b3b820636c4583",
+        "toolOutputPath": "/workspace/generated_images/exec-89968b60-b03b-4bc7-b65f-330b10e803e2.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
+      },
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/master-900.webp 900w, /portfolio/generated/ww-ai-activewear-ref-10-v1/master-1800.webp 1800w, /portfolio/generated/ww-ai-activewear-ref-10-v1/master-2700.webp 2700w, /portfolio/generated/ww-ai-activewear-ref-10-v1/master-3600.webp 3600w, /portfolio/generated/ww-ai-activewear-ref-10-v1/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native 1024\u00d71536 generations, uniformly resampled for the requested review export. Not native 1800\u00d72700 detail."
+      },
+      "status": "READY",
+      "qualityResult": {
+        "setVisualReview": "Inspected three accepted single figures against source Front/Back. Black mockneck raglan top separate untuckedhem, leftarm bars, caprileggings and three whiteouterlegstripes retained. Editorial near-side view clearly shows all three stripes; straight rear naturally partly hides outer-facing bars. Same fair highponytail/headbandmodel, leftrectangularwatch and trainers. Entirefigure visible, genuine rear; rejected first Front count and diptychrear retained. Fine logos/seams provisional.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              273,
+              14,
+              747,
+              1483
+            ],
+            "uniformScale": 1.617426820966644,
+            "exportOpaqueBox": [
+              517,
+              162,
+              1283,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              276,
+              16,
+              746,
+              1465
+            ],
+            "uniformScale": 1.639751552795031,
+            "exportOpaqueBox": [
+              515,
+              162,
+              1285,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeOpaqueBox": [
+              193,
+              21,
+              807,
+              1476
+            ],
+            "uniformScale": 1.6329896907216495,
+            "exportOpaqueBox": [
+              399,
+              162,
+              1402,
+              2538
+            ],
+            "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
+          }
+        ],
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "rejections": [
+        {
+          "view": "front",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/front-stripe-count-v1.png",
+          "reason": "Only two distinguishable white stripes; corrected before integration."
+        },
+        {
+          "view": "back",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/back-diptych-v1.png",
+          "reason": "Two people/diptych; never used or cropped into master."
+        }
+      ],
+      "generatedDescription": "AI-generated provisional Front, Back and Fashion Editorial photographs of the supplied black mockneck performance top and three-stripe capri leggings with black trainers.",
+      "generatedCaption": "Black three-stripe performance separates \u00b7 provisional AI photography"
     },
     {
       "sourceIdentity": "evening-ref-01",
@@ -3909,7 +5376,19 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "cb17ce7e-96b6-489b-8028-3d352bf570e1",
+          "assetProduced": false,
+          "note": "Adult professional swimwear garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        }
+      ]
     },
     {
       "sourceIdentity": "swimwear-ref-07",
@@ -4039,7 +5518,19 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "7a320bad-c1ec-4d25-a696-68b10e32c9a6",
+          "assetProduced": false,
+          "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        }
+      ]
     },
     {
       "sourceIdentity": "swimwear-ref-09",
