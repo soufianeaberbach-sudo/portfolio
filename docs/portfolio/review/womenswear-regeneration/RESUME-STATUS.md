@@ -1,4 +1,49 @@
-# Exact production resume status — fresh session, 22 October 2026
+# Latest repair investigation — production gate remains closed
+
+Recovered the clean branch at `a109d262a62adb73d720ae2d2d0527a1393a6f3e`.
+Fetched remote HEAD matched local HEAD. Existing validation passed for 40 source
+hashes, 92 accepted native hashes/dimensions, 29 masters, derivatives and registry.
+The five partial native views and all 329 artwork files remain preserved.
+
+Inspected repository request-related code, package metadata, MCP configuration and
+accessible runtime source. No editable image adapter/request builder is exposed.
+The repository MCP configuration starts only Playwright. The managed image tool
+exposes neither `reasoning` nor endpoint/model selection. The exact hidden
+bridge-versus-provider-routing component requires an operator request trace.
+
+Made **one neutral health probe**, a blue ceramic cube without references. It
+returned the same immediate HTTP 400 `Unknown parameter: 'reasoning'`.
+No real image, request ID, moderation decision or quota error was returned.
+**No successful smoke test exists, no repair is claimed, and no garment batch began.**
+
+Live connection checks still show Weave unlinked and Runway/Adobe/Higgsfield
+uninstalled. No paid service was installed, no credentials requested, and no
+separate API charges incurred. Text-only Figma generation cannot meet the saved
+model identity requirement.
+
+**Single actionable external blocker:** the managed image-tool operator must
+inspect the image request behind `image_gen.imagegen`, remove the unsupported
+`reasoning` field from the current image endpoint's payload or correct the image
+route/model contract, then redeploy/reconnect and prove one real image can be
+generated, decoded and saved. Preserve unrelated valid reasoning settings.
+This correction is not implementable in repository code exposed to this session.
+
+The exact two-key probe, literal error, search findings and current connection
+checks are appended under `repairInvestigations` in
+[PRODUCTION-SESSION-2026-10-22.json](PRODUCTION-SESSION-2026-10-22.json).
+The manifest, accepted artwork, registry and processing scripts are unchanged
+from the recovery checkpoint. Counts remain **92/120 natives, 29/40 complete
+looks and masters, four partial looks, 28 missing views**. Resume production at
+swimwear-ref-08 / Editorial only after the successful-image gate passes.
+No new build/browser/artistic review or final PR is claimed.
+
+The commit containing this diagnostic is the new recovery checkpoint; verify
+against the existing remote branch. The explicit SHA above names the verified
+starting state, not a self-reference to this document's containing commit.
+
+---
+
+# Previous recovery status — retained as dated evidence
 
 Started from fetched and independently verified GitHub commit
 `6571916c670574a49a4cf3711e4e178a20f3725f`, with a clean working tree on the existing

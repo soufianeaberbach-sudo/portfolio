@@ -438,5 +438,115 @@
   ],
   "resolutionRequired": "Restore native image tool request compatibility, or connect a supported reference-image editor. Resume swimwear-ref-08 Editorial using its accepted Front and Back. Existing safety decisions remain respected.",
   "browserReview": "No new look completed and no integration changed. Full site browser suite and final 40-look review were not rerun. Requested actual baseline native/master visual inspections performed; no owner artistic approval claimed.",
-  "releaseStatus": "Incomplete photography; no PR, merge or deployment. No source fallback release."
+  "releaseStatus": "Incomplete photography; no PR, merge or deployment. No source fallback release.",
+  "repairInvestigations": [
+    {
+      "startedUTC": "2026-10-22T23:00:17.787Z",
+      "finishedUTC": "2026-10-22T23:01:19.924Z",
+      "baseVerifiedCommit": "a109d262a62adb73d720ae2d2d0527a1393a6f3e",
+      "phase0": {
+        "fetchedRemote": true,
+        "cleanStartingCheckout": true,
+        "checkpointValidation": "PASS: 40 source hashes, 92 native hashes/dimensions, 29 masters, derivatives and registry",
+        "partialNativeViewsVerified": 5,
+        "missingViews": 28
+      },
+      "requestBoundary": {
+        "tool": "image_gen.imagegen",
+        "exposedArguments": [
+          "prompt",
+          "referenced_image_paths",
+          "num_last_images_to_include",
+          "transparent_background"
+        ],
+        "reasoningExposed": false,
+        "endpointOrModelSelectorExposed": false,
+        "repositoryRequestBuilderFound": false,
+        "repositoryMcpServers": [
+          "playwright"
+        ],
+        "accessibleRuntimeImageAdapterFound": false,
+        "localProviderSdkInstalled": false,
+        "configuredProviderCredentialsOrOutboundIdentities": 0,
+        "conclusion": "Unsupported parameter is introduced behind the managed tool-call boundary. No exposed repository or runtime adapter/model selector can correct it. Exact hidden bridge-versus-provider-routing component cannot be isolated without operator request traces."
+      },
+      "smokeTest": {
+        "purpose": "One neutral service-health probe; no garment or accepted artwork submitted",
+        "request": {
+          "prompt": "One matte blue ceramic cube on a plain white studio surface, softly and evenly lit, with a small realistic contact shadow. One object, no text, no graphics, no border.",
+          "transparent_background": false
+        },
+        "result": "FAIL",
+        "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+        "imageReturned": false,
+        "fileDecoded": false,
+        "nativeBytesStored": false,
+        "requestIdReturned": false,
+        "moderationDecisionReturned": false,
+        "quotaErrorReturned": false
+      },
+      "alternatives": [
+        {
+          "route": "Figma Weave",
+          "check": "Live workflow listing",
+          "result": "Account not linked; no executable workflow available"
+        },
+        {
+          "route": "Runway",
+          "check": "Live plugin discovery",
+          "installed": false,
+          "toolCallable": false
+        },
+        {
+          "route": "Adobe",
+          "check": "Live plugin discovery",
+          "installed": false,
+          "toolCallable": false
+        },
+        {
+          "route": "Higgsfield",
+          "check": "Live plugin discovery",
+          "installed": false,
+          "toolCallable": false
+        },
+        {
+          "route": "Figma raster generation",
+          "check": "Exposed tool schema",
+          "result": "No reference-image input; does not satisfy partial-set identity requirement"
+        }
+      ],
+      "productionGate": "FAIL_NO_REAL_IMAGE_RETURNED",
+      "newGarmentGenerationCalls": 0,
+      "newAcceptedImages": 0,
+      "productionBatchStarted": false,
+      "paidExternalServiceInstalled": false,
+      "separateApiChargesAuthorizedOrIncurred": false,
+      "externalBlocker": {
+        "owner": "Managed image-tool service operator",
+        "requiredAction": "Inspect the failing image request behind image_gen.imagegen. Remove the unsupported reasoning field from image requests for the current endpoint, or correct the image route/model contract. Preserve unrelated valid reasoning settings. Redeploy/reconnect the managed bridge and verify one neutral image can be generated, decoded and stored. Repository code cannot implement this correction.",
+        "resumeView": "swimwear-ref-08 / editorial",
+        "preserveAcceptedReferences": [
+          "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+          "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+        ]
+      },
+      "finalCounts": {
+        "acceptedNativeImages": 92,
+        "completeLooks": 29,
+        "masters": 29,
+        "partialLooks": 4,
+        "missingViews": 28
+      },
+      "preservation": {
+        "baselineArtworkFiles": 329,
+        "acceptedNativeHashesVerified": 92,
+        "completeManifestRecordsUnchanged": 29,
+        "integrationRegistryUnchanged": true,
+        "processingScriptsUnchanged": true
+      }
+    }
+  ],
+  "latestRepairInvestigationUTC": "2026-10-22T23:01:19.924Z",
+  "latestProductionGate": "FAIL_NO_REAL_IMAGE_RETURNED",
+  "latestRequiredExternalAction": "Inspect the failing image request behind image_gen.imagegen. Remove the unsupported reasoning field from image requests for the current endpoint, or correct the image route/model contract. Preserve unrelated valid reasoning settings. Redeploy/reconnect the managed bridge and verify one neutral image can be generated, decoded and stored. Repository code cannot implement this correction."
 }

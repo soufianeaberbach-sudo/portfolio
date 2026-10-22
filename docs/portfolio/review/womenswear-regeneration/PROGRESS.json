@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T22:46:28.576871+00:00",
+  "updatedUTC": "2026-10-22T23:03:20.540430+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 7,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "activewear",
   "currentSourceIdentity": null,
-  "currentMilestone": "fresh-session-image-tool-diagnostics",
-  "lastSuccessfullyPushedCommit": "6571916c670574a49a4cf3711e4e178a20f3725f",
+  "currentMilestone": "managed-image-bridge-repair-investigation",
+  "lastSuccessfullyPushedCommit": "a109d262a62adb73d720ae2d2d0527a1393a6f3e",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -709,7 +709,7 @@
       ]
     }
   ],
-  "notes": "Fresh session: verified starting 6571916, 92 accepted natives and 29 complete looks unchanged. Three actual image operations failed HTTP 400 unknown reasoning parameter before generation. Zero new images, moderation decisions or quota failures. All 28 missing views remain; native integration repair or connected reference editor required. See PRODUCTION-SESSION-2026-10-22.json.",
+  "notes": "Recovered a109d262. No accessible image adapter can correct the managed request. One neutral service probe failed HTTP 400 unknown reasoning parameter. Zero new accepted images; 92 natives and 29 complete masters remain protected. Live alternatives: Weave unlinked; Runway/Adobe/Higgsfield uninstalled. No paid external service used. Exact diagnostic in production report. Git CLI credential rejected; connected GitHub tools used for the recovery checkpoint.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -871,38 +871,18 @@
   "moderationBlockedIndividualViews": 11,
   "currentToolAvailability": {
     "status": "UNAVAILABLE_INVALID_PROVIDER_REQUEST",
-    "recordedUTC": "2026-10-22T22:44:38.332394+00:00",
-    "tool": "image_gen.imagegen",
-    "providerMessage": "Unknown parameter: 'reasoning'.",
     "httpStatus": 400,
-    "supportedOperationDiagnostics": [
-      {
-        "sourceIdentity": "swimwear-ref-08",
-        "view": "editorial",
-        "operation": "Limited pose/camera continuation edit; accepted Front primary, accepted Back construction check",
-        "assetProduced": false
-      },
-      {
-        "sourceIdentity": "swimwear-ref-04",
-        "view": "back",
-        "operation": "Single-reference true-rear continuation; minimal inferred rear consistent with accepted Front",
-        "assetProduced": false
-      },
-      {
-        "sourceIdentity": "evening-ref-02",
-        "view": "front",
-        "operation": "Text-described source-based generation from inspected garment specifications, no image input; source fidelity would require visual comparison before acceptance",
-        "assetProduced": false
-      }
-    ],
-    "appliesToAllMissingViews": true,
-    "missingViews": 28,
-    "moderationDecisionReturned": false,
-    "quotaDecisionReturned": false,
-    "resolutionRequired": "Restore native image tool request compatibility, or connect a supported reference-image editor. Resume swimwear-ref-08 Editorial using its accepted Front and Back. Existing safety decisions remain respected."
+    "providerMessage": "Unknown parameter: 'reasoning'.",
+    "editableRequestBuilderFound": false,
+    "neutralHealthProbeReturnedImage": false,
+    "externalOperatorAction": "Correct the managed image payload or route/model contract, then return/decode/store one real image before production.",
+    "missingViews": 28
   },
   "freshSessionAcceptedImages": 0,
   "freshSessionTechnicalFailures": 3,
   "freshSessionModerationFailures": 0,
-  "freshSessionQuotaFailures": 0
+  "freshSessionQuotaFailures": 0,
+  "latestRepairTechnicalFailures": 1,
+  "latestRepairNewImages": 0,
+  "productionGate": "FAIL_NO_REAL_IMAGE_RETURNED"
 }
