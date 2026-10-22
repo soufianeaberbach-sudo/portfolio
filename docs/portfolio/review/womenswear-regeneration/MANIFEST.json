@@ -6182,7 +6182,21 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "9d8c7702-0985-49ec-9560-26e30903f32a",
+          "assetProduced": false,
+          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait, preserving the exact metallic-silver swim set and adult brunette woman in the attached original reference. One model only in a calm neutral straight-on stance, arms naturally relaxed slightly apart. Preserve opaque metallic silver triangle halter top with slim neck/underbust ties, matching silver briefs with original side tie bows and hanging ends, source coverage, material shine and proportions. Same sleek center-part hair tied back, small hoop earrings and barefoot styling, no added accessories/cutouts/logos or redesign. Full head, hands, all tie edges and both feet visible with generous portrait margins. Realistic skin and metallic textile, natural adult limbs/fingers/toes, no stretching. Soft even neutral studio light with restrained believable floor contact shadows. Genuine transparent alpha preserving silver fabric, hair, ties and shadows. Request 1800x2700 portrait if supported; otherwise actual native dimensions. Empty canvas beyond one figure/shadow; no text, graphics, border, pair or collage. Provisional AI preservation of supplied design; rear and hidden construction not verified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No generated file exists; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:05:32.069656+00:00"
+        }
+      ]
     },
     {
       "sourceIdentity": "swimwear-ref-03",
