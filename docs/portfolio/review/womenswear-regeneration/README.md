@@ -1,6 +1,6 @@
 # Womenswear AI photography regeneration — IN PROGRESS
 
-**Current: 29 complete looks, 0 partial, 11 pending — all remaining sources are tool-moderation blocked.**
+**Current: 29 complete looks, 4 partial, 7 without generated views — 11 incomplete looks, all blocked at their next missing view.**
 Read [exact resume status](RESUME-STATUS.md), [PROGRESS.json](PROGRESS.json) and [MANIFEST.json](MANIFEST.json).
 The recovery counts below are the dated starting snapshot, not current totals.
 
@@ -78,8 +78,9 @@ integration state. Pending entries have no invented output paths.
 
 ## Resolution and provenance
 
-The native image tool returns **1024×1536** for each separately generated portrait
-despite a request for1800×2700. Native PNGs are retained untouched. The requested
+Earlier sets returned **1024×1536**; the five newest saved native portraits are
+**1086×1448 RGBA (3:4)**. Actual dimensions are recorded per view. Native PNGs
+are retained untouched; uniform scaling/placement preserves their proportions. The requested
 1800×2700 panels and5400×2700 masters are **explicitly resampled review exports**;
 they do not contain genuine native1800 detail. No small three-person image is used.
 Front, true rear and Editorial are three separate image-generation operations.

@@ -47,6 +47,15 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(native.read_bytes(), before_native)
         self.assertEqual(self.manifest.read_bytes(), before_manifest)
 
+    def test_three_by_four_native_is_preserved_without_resampling(self):
+        Image.new('RGBA', (1086, 1448), (10, 20, 30, 255)).save(self.input)
+        before = self.input.read_bytes()
+        assets.register('look', 'front', self.input)
+        view = json.loads(self.manifest.read_text())['looks'][0]['front']
+        self.assertEqual((view['width'], view['height']), (1086, 1448))
+        native = self.root / 'public' / view['nativeAsset'].lstrip('/')
+        self.assertEqual(native.read_bytes(), before)
+
     def test_interrupted_json_replace_keeps_last_valid_snapshot(self):
         before = self.manifest.read_bytes()
         with patch.object(assets.os, 'replace', side_effect=OSError('simulated interruption')):

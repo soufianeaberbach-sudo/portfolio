@@ -1,92 +1,99 @@
 # Exact production resume status
 
-Updated 2026-10-22T19:19:31.181967+00:00 — existing branch `feat/womenswear-ai-photography-regeneration`.
+Updated 2026-10-22T20:15:57.440376+00:00 — existing branch feat/womenswear-ai-photography-regeneration.
 
-**29 complete three-view looks · 0 partial · 11 pending, all moderation-blocked.**
-All forty featured slots remain present. There is no actionable unblocked image.
-The first unresolved source in world order is **activewear-ref-09 / Front**;
-resolve its existing tool blocker before any further attempt. Do not bypass tool
-safeguards, regenerate saved sets, or change a preserved design to evade a block.
+**29 complete three-view looks · 4 partial · 7 without generated views = 40 featured slots.**
+There are **11 incomplete looks**, each blocked at its next missing view.
+All accepted native images are pushed. No incomplete set has a master or site replacement.
 
-| Public world | Complete | Blocked / original retained |
-| --- | ---: | ---: |
-| Casualwear | 10 | 0 |
-| Activewear | 9 | 1 |
-| Occasionwear | 9 | 1 |
-| Swimwear | 1 | 9 |
-| Total | 29 | 11 |
+| Public world | Complete | Partial | No generated views |
+| --- | ---: | ---: | ---: |
+| Casualwear | 10 | 0 | 0 |
+| Activewear | 9 | 0 | 1 |
+| Occasionwear | 9 | 0 | 1 |
+| Swimwear | 1 | 4 | 5 |
+| Total | 29 | 4 | 7 |
 
-This continuation completed evening-ref-06 from its saved Front, then
-**evening-ref-07, evening-ref-08, evening-ref-10 and swimwear-ref-10**.
-The saved evening-ref-06 Front was never regenerated: SHA256
-`5c258c827b54b0461404fc23671f90118e44e127dcd2e1b7e57de4999b316e19`.
-All 269 artwork files in the latest user resume commit `c2e24536a367bcc145ac51408821b9ee50403f0b`
-remain byte-identical. [Preservation audit](PRESERVATION-AUDIT.json) also confirms
-all 22 original recovered complete manifest/registry records and their 246 asset
-blobs remain unchanged. Current artwork: **324 files / 407,671,352 bytes**, including
-87 accepted native portraits, 29 masters and five retained rejected attempts.
-No source photograph or committed artwork was deleted or overwritten.
+## This restrained commercial retry pass
 
-## Persistent checkpoint
+Resumed verified remote 45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd. Worked all eleven sources
+in the owner's exact order. Made 30 native image-tool calls: **five accepted
+outputs and 25 moderation rejections**. Each blocked view received at most one
+primary commercial request and one neutral revision. Source references and designs
+were unchanged. No further retry is authorized within this pass's allowance.
 
-Every accepted Front, Back and Editorial was registered, committed, pushed and
-verified against the actual remote SHA before the next generation. Masters and
-required resampled panels/WebP derivatives were separately checkpointed. All
-artwork is remotely protected. The native scratch directory is empty; only
-byte-matched, remotely protected duplicates were removed.
+New saved views: swimwear-ref-04 Front; swimwear-ref-05 Front;
+swimwear-ref-08 Front and Back; swimwear-ref-09 Front. Every one was reviewed,
+registered, committed, pushed and verified before requesting its following view.
+The Back of swimwear-ref-08 is inferred from Front, not historical rear evidence.
+No new three-view look was completed: missing views prevented assembly/integration.
 
-Last verified remote commit preceding this final status snapshot: `75548d692743502e4c39fc8d6eeff28e0e4bc4e1`.
-The commit containing this snapshot is the next checkpoint; its exact SHA must
-match `git ls-remote origin refs/heads/feat/womenswear-ai-photography-regeneration`.
-The helper computes counts, remaining work and exact next image/blocked view in
-[PROGRESS.json](PROGRESS.json) each time; a self-referential commit SHA is not fabricated.
+All **324 prior artwork files**, **29 completed manifest objects**, and the
+**entire 29-entry integration registry** remain unchanged from the resume checkpoint.
+The saved evening-ref-06 Front remains untouched. No committed artwork or source
+photograph was removed, regenerated or overwritten. Five new native files add
+3,163,992 bytes; current generated artwork has 329 files, including 92 accepted
+native views, 29 masters and five retained rejected attempts.
 
-## Remaining tool blockers
+## Exact next views and remaining blockers
 
-All attempts below produced **no image file**. Originals and historical URLs are
-retained; none is marked READY. Previous blockers were not retried. Newly attempted
-sources were each attempted once with their actual original reference, then the
-failure was saved without an altered-prompt retry. Full prompts/stages/request IDs
-are recorded in [MANIFEST.json](MANIFEST.json).
+Every row is moderation-blocked. The last request ID is shown; all 25 new failures,
+stages and literal prompts are retained in [MANIFEST.json](MANIFEST.json) and
+[this pass report](COMMERCIAL-RETRY-REPORT.json), alongside prior failures.
+All final attempts were rejected at output; the primary swimwear-ref-09 attempt
+was rejected at input. None of these 25 failures produced a file.
 
-| Source / missing view | Moderation stage | Request ID |
-| --- | --- | --- |
-| activewear-ref-09 / Front | output | `ce9c339d-ee23-4750-94dc-d321f64096fd` |
-| evening-ref-02 / Front | output | `66b93b88-cb4d-4140-9edc-7a93bdb70eb1` |
-| swimwear-ref-01 / Front | output | `d447c2f5-3caf-47b3-9ee3-a86b12fadb05` |
-| swimwear-ref-02 / Front | output | `9d8c7702-0985-49ec-9560-26e30903f32a` |
-| swimwear-ref-03 / Front | output | `4a6d0d4b-dd8e-411d-8a9b-e40312855a96` |
-| swimwear-ref-04 / Front | output | `e5a96740-7dbc-49b1-b755-e4b13e9eaf82` |
-| swimwear-ref-05 / Front | input | `0dc58e01-19c7-4c0c-93cb-36a3e21709c1` |
-| swimwear-ref-06 / Front | output | `cb17ce7e-96b6-489b-8028-3d352bf570e1` |
-| swimwear-ref-07 / Front | output | `aee76125-bc98-4beb-977a-9ceba70be1b3` |
-| swimwear-ref-08 / Front | output | `7a320bad-c1ec-4d25-a696-68b10e32c9a6` |
-| swimwear-ref-09 / Front | output | `862b4346-57b1-4980-a408-853f53acab66` |
+| Source | Saved views — do not regenerate | Next missing view | Last failed request |
+| --- | --- | --- | --- |
+| activewear-ref-09 | none | front | 331908d5-e8a7-4810-b6cb-27536db993c8 |
+| evening-ref-02 | none | front | bea01abc-3980-4a65-a291-0aa3460d0d73 |
+| swimwear-ref-01 | none | front | 3401b6eb-a34d-4110-a951-3e4ea193c8b4 |
+| swimwear-ref-02 | none | front | 391b529a-8ee4-4e71-9435-4ec7807e78c9 |
+| swimwear-ref-03 | none | front | 8bb4ba23-70a7-4609-b012-3140d0fab368 |
+| swimwear-ref-04 | front | back | 82c68451-e8d5-4175-b542-3ea82577c456 |
+| swimwear-ref-05 | front | back | 63071c6d-7d16-4476-8e87-7ae59d9e93f1 |
+| swimwear-ref-06 | none | front | bf40933a-a7d3-4bc2-8263-eb495c26c1c3 |
+| swimwear-ref-07 | none | front | 778a9892-467b-4ae2-aa39-8a51754c17be |
+| swimwear-ref-08 | front, back | editorial | e536128d-0c56-49d7-b908-e1f55b8b0de2 |
+| swimwear-ref-09 | front | back | 5eda44c4-c343-4dbc-8095-bb47d407b540 |
+
+First unresolved source in the required order: **activewear-ref-09 / Front**.
+There is no unblocked actionable view. Resolve the recorded tool blocker before
+another attempt; do not bypass safeguards or change a preserved design to get a pass.
+For saved partials, resume their listed missing view and preserve their existing
+model/garment identity. Editorial is still absent for all four partials.
+
+## Persistent checkpoint and native format
+
+Last verified remote before this status snapshot: 4cdff91e05c6661023cbb2f72e2e4f4c8084c698.
+The commit containing this document is the next checkpoint: verify its SHA with
+git ls-remote origin refs/heads/feat/womenswear-ai-photography-regeneration.
+PROGRESS.json stores the verified preceding SHA to avoid a fictitious self-reference.
+
+The five new portraits are genuine **1086×1448 RGBA** tool outputs (3:4), retained
+byte-for-byte. Earlier accepted sets keep their original 1024×1536 natives.
+Registration now accepts portrait native aspect ratios; assembly already uses
+uniform scaling/placement, so future 1800×2700 panels will preserve proportions.
+Export disclosure now derives its dimensions from the real files. Existing
+completed exports were not reassembled. The checkpoint helper distinguishes
+historical failures on saved views from unresolved missing-view blockers.
 
 ## Executed checks and limits
 
-- Astro production build succeeded with all 29 registered presentations.
-- Current manifest/native hash/dimensions/master/derivative/registry validation passed.
-- 198 ten-look identity/licensing/replacement assertions passed; 40 Womenswear slots retained.
-- Source-integrity test preserves 108 historical identities/geometries and 224 baseline source files; [executed report](evidence/source-integrity-29.json).
-- 688 focused browser assertions passed across seven new sets in this recovery: 54 grey gown; 106 rust/blue; 474 latest three gowns at all six standard sizes; 54 ivory swim concept at desktop/phone. These are scoped runs, not a full forty-look suite. Historical source return was exercised for each new presentation.
-- Representative renders were inspected; full silhouettes, white grounds, proportions and reader/inspection/return behavior pass within those scopes. [QA details/evidence](CONTINUATION-QA.md).
-- Five recovery regression tests passed. Native overwrite protection and atomic writes remain in place.
+- Six recovery regression tests passed, including byte-identical 1086×1448 retention.
+- Current source/native hashes, actual dimensions, master/derivative and registry validation passed.
+- Preservation audit confirms all prior 324 artwork blobs, 29 completed records and registry bytes unchanged.
+- All five new native files decoded and were served with matching SHA256 at all six standard viewport sizes; no distorted proportions, horizontal overflow or page errors.
+- Browser-rendered native review sheets were captured at 1440×900, 1366×768, 1024×768, 768×1024, 430×932 and 390×844. This is standalone asset review, not site-reader integration. [Results/evidence](evidence/commercial-retry/results.json).
+- Representative desktop/mobile screenshots were visually inspected. Whole silhouettes, clear garment visibility and white grounds pass. The black Front has a restrained source-like step and very light contact shading; rear styling remains provisional. A development-toolbar overlay was removed from the QA sheet and evidence recaptured without changing site code.
+- No typography, navigation, motion, responsive site layout or other public area changed. Existing historical browser/build/source-integrity results remain dated in [the earlier QA report](CONTINUATION-QA.md); they were not rerun or claimed as new full-collection QA.
 
-Native portraits remain genuine **1024×1536**. 1800×2700 panels and 5400×2700
-masters are explicitly resampled, without invented native detail. Ivory swimwear
-is an original provisional concept; the old stock photograph was not attached or
-rebranded. Rear construction and owner artistic approval remain provisional.
-The first red Editorial contained a stray graphic; it was rejected, retained, and
-excluded from the master. Its accepted separate Editorial has no graphic.
+Resources are healthy: about 29.00 GB workspace free, 4.13 GB /tmp free and
+8.24 GB RAM available during this pass's audit. No disk/RAM exhaustion was observed.
+The previous inaccessible task's cause remains unestablished. Retention policy
+remains unchanged; no LFS, history rewrite, new service, merge or deployment.
 
-Resources remain healthy: approximately 29.01 GB workspace free, 4.13 GB /tmp free,
-8.47 GB RAM available at the final preservation audit. No resource exhaustion was
-observed; the earlier inaccessible Codex task's cause remains unestablished.
-All committed panel exports remain protected; the leaner future retention proposal
-was not applied retroactively. [Retention audit](RECOVERY-AND-RETENTION.md).
-
-**The forty-look assignment is incomplete.** All remaining generation is blocked
-by the recorded native-tool moderation failures. Full forty-look collection QA,
-final comparison sheets and the final PR remain pending. No PR, merge or deployment
-was performed. Resume by resolving recorded blockers, not by regenerating saved art.
+**The forty-look assignment remains incomplete.** Full collection QA, final
+comparison sheets and the final PR await forty genuine complete sets. No PR
+was opened. Preserve the five new native checkpoints and resolve recorded
+tool blockers; do not regenerate accepted images.

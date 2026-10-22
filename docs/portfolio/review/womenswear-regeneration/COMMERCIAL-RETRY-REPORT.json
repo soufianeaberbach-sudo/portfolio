@@ -1,0 +1,634 @@
+{
+  "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
+  "baseVerifiedCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+  "completeLooks": 29,
+  "partiallyCompleteLooks": 4,
+  "pendingWithoutViews": 7,
+  "remainingIncompleteLooks": 11,
+  "unchangedBaselineArtworkFiles": 324,
+  "unchangedCompletedManifestObjects": 29,
+  "entireIntegrationRegistryUnchanged": true,
+  "toolCalls": 30,
+  "acceptedNativeOutputs": [
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "front",
+      "path": "public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "73358445fbfa468c1d0c0b185ad5b8df1e7e2f345c08cb0b65446fee61e038c8",
+      "firstCheckpoint": "082492b89574262b0b61b0d9fe0021a685c5db12"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "front",
+      "path": "public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "42eb02172f5afe8177b1553cb2e0423ed1103c3128650c91e6ca5025b91a9772",
+      "firstCheckpoint": "5105085332fc2e280f8a8e6e0c2ca0817822a59b"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "front",
+      "path": "public/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "c28bb197028bec0beb2ca0953bf8ca6249b59c0c08862a046bdf08eff2a7c88b",
+      "firstCheckpoint": "9bfb20e4f9d56897db4fd6963ae796415b8364c2"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "back",
+      "path": "public/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "c7e1b1cbe2e61c0af6a0a275b945ff4a7b9bbeb1e41c1987dee2c87b40fff695",
+      "firstCheckpoint": "67439a799067e85faa75341a20f37fbf457bb48b"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "front",
+      "path": "public/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png",
+      "width": 1086,
+      "height": 1448,
+      "sha256": "78e494a94c29acf0379c8a5c7d2352b1aafb05d00d2b6e252f89a12c9684e59b",
+      "firstCheckpoint": "ed90285a7287ca24e7d8ea1624ad005c1ee31d50"
+    }
+  ],
+  "moderationFailures": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "front",
+      "attempt": "primary-commercial",
+      "requestId": "92bcdcf9-4868-4954-aace-987faff37b70",
+      "generationPrompt": "Professional commercial activewear catalogue photograph, one adult professional fashion model, full-length FRONT standing view. Use the attached garment reference to preserve the ivory performance outfit: high stand collar, long fitted sleeves, fine technical mesh overlay, curved opaque sports-top panel underneath, opaque lower sports panel, three narrow horizontal waist bands, exact source seam layout and leg line. Keep the same adult model appearance, sleek dark hair in low bun, ivory headband, black sports watch, white athletic shoes. Calm straight-on posture with arms relaxed a little apart for clean construction visibility; neutral expression, natural proportions. One figure only. Photorealistic technical textile, clean professional grooming, soft even studio light and a realistic gentle floor contact shadow. Entire head, hands, garment and shoes visible with generous margins. Genuine transparent background preserving pale fabric, hair and shadow. No text, brand marks, graphic, watermark or border. Portrait 1800x2700 if supported, otherwise retain actual native portrait resolution without stretching. Provisional AI presentation preserving supplied design.",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Owner-authorized restrained commercial attempt; no image produced. Design/reference unchanged. Retry allowance exhausted for this view in this continuation.",
+      "recordedUTC": "2026-10-22T19:37:59.373419+00:00"
+    },
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "front",
+      "attempt": "single-neutral-revision",
+      "requestId": "331908d5-e8a7-4810-b6cb-27536db993c8",
+      "generationPrompt": "Create one professional studio catalogue photograph of the ivory activewear outfit shown in the attached reference. Preserve its supplied garment construction, fabrics, color and styling accurately. Show one adult model in a straight-on, full-length standing front view with relaxed arms, neutral expression and natural posture. Keep the source hairstyle, headband, watch and athletic shoes. Clear garment visibility, photorealistic fabric, even commercial lighting, soft floor contact shadow and ample empty margins around the complete figure. Transparent background. No text, branding, graphics or border. Provisional AI garment study; record actual native portrait dimensions.",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Owner-authorized restrained commercial attempt; no image produced. Design/reference unchanged. Retry allowance exhausted for this view in this continuation.",
+      "recordedUTC": "2026-10-22T19:37:59.373433+00:00"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "d1dd11d2-39f1-4a7a-87cb-35b7f44010f1",
+      "attempt": "primary-commercial",
+      "generationPrompt": "One professional commercial occasionwear photograph of the supplied formal gown, preserving the reference design. Show one adult professional fashion model in a full-length FRONT studio view, straight-on poised standing posture, neutral refined expression and relaxed arms. Retain the sand-beige honeycomb textile, broad off-shoulder folded neckline, fitted column silhouette gently widening to the floor, original hem and drape, source tonal foundation and styling. Same brunette adult appearance with neat swept-back updo. Faithful garment color, cut, texture and proportions; no redesigned parts or accessories. Photorealistic luxury catalogue clarity, soft even studio lighting, natural anatomy and subtle realistic floor contact shadow. Full head, hands and entire gown hem visible within generous portrait margins. Genuine transparent background preserving beige textile and fine edges. One figure only, no text, logo, graphic, border or watermark. Request 1800x2700 if supported, otherwise actual native portrait size. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:40:52.239851+00:00"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "bea01abc-3980-4a65-a291-0aa3460d0d73",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "Professional studio catalogue study of the formal beige gown in the supplied reference. Accurately preserve its original design, fabric, color, neckline, hem and styling. One adult model only, shown standing straight on from the front, full length, arms relaxed, neutral expression. Keep the source hairstyle. Even studio lighting, realistic garment detail, natural posture, soft contact shadow, generous clear margins around the whole figure and hem. Transparent background, no typography or graphics. Provisional AI presentation of the supplied garment; preserve actual native portrait dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:40:52.239865+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "a238f16e-b604-4b7f-b36e-e6e8bdc0b21d",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact silver-grey and lime set in the attached reference. One adult professional model in a neutral full-length FRONT standing pose, arms relaxed at sides, feet naturally parallel, calm expression. Preserve the silver-grey bandeau top, thin lime shoulder straps and binding, side ruching, matching bottom with lime edging and original side straps and long ties. Retain the source adult appearance, slicked-back brown hair, gold disc earrings, slim anklet and barefoot styling. Accurate source garment coverage, color, fabric and construction, no redesign. Premium catalogue clarity, realistic proportions and textile, even studio lighting and soft realistic floor contact shadow. Entire head, hands, feet and all ties inside generous margins. Genuine transparent background. No text, logo, graphic, border or watermark. Request 1800x2700 portrait if supported, otherwise preserve actual native size. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving commercial catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:43:12.661302+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "3401b6eb-a34d-4110-a951-3e4ea193c8b4",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue photograph of the supplied silver-grey swimwear with lime trim. Preserve the reference garment exactly. Adult model standing straight on, full-length front, relaxed arms and neutral posture. Keep the original hairstyle and accessories. Clear outfit visibility and photorealistic textile, even lighting and soft floor shadow. Complete figure and all garment edges inside ample portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation. Record genuine native dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving commercial catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:43:12.661317+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "b4b749aa-e797-41c1-84d4-24481ca57aa1",
+      "attempt": "primary-commercial",
+      "generationPrompt": "One professional commercial swimwear catalogue photograph, full-length FRONT view of the exact metallic-silver swim set in the supplied reference. One adult model standing straight on with relaxed arms and neutral expression. Preserve the opaque silver triangle halter top, slim original ties, matching silver bottom with side tie bows and hanging ends, original coverage, material and proportions. Same adult appearance, center-part brown hair tied back, small hoop earrings, barefoot. Clear garment visibility and natural standing posture, realistic fabric and anatomy, soft even studio lighting and gentle floor contact shadow. Complete head, hands, all garment edges and both feet within ample safe margins. Genuine transparent background; no text, logo, graphic, border or watermark. Actual native portrait dimensions, request 1800x2700 if available. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:45:08.019011+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "391b529a-8ee4-4e71-9435-4ec7807e78c9",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "Professional studio catalogue study of the silver swimwear in the attached reference, preserving the supplied design and styling exactly. One adult model only, full-length front, straight standing posture, neutral expression and relaxed arms. Accurate garment fabric, color and construction. Even studio lighting, photorealistic detail, natural proportions and soft contact shadow. Entire figure and garment within generous portrait margins. Transparent background, no text or graphics. Provisional AI presentation; retain actual native image dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:45:08.019027+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "4fe62728-581b-4cbc-a76f-ad4855812c74",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey leopard-pattern swim set with red trim in the attached reference. One adult model standing straight on in a full-length FRONT view, calm expression, relaxed arms and natural parallel foot placement. Preserve the original bandeau-style top with narrow red shoulder straps and binding, matching patterned bottom with red binding and slim side straps, source coverage, print scale and construction. Keep the source adult appearance, brown center-part hair tied back, small hoop earrings, barefoot. Photorealistic textile and natural proportions, soft even studio light and realistic gentle floor contact shadow. Complete head, hands, garment and feet visible with generous portrait margins. Genuine transparent background; no text, logo, graphics, watermark or border. Request 1800x2700 portrait if supported; preserve actual native dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:47:23.159597+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "8bb4ba23-70a7-4609-b012-3140d0fab368",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue study of the supplied grey patterned swimwear with red edging. Preserve the exact reference design and styling. One adult model, full-length front standing view, straight posture, relaxed arms and neutral expression. Clear garment visibility, accurate textile and color, even lighting and soft contact shadow. The whole figure and all garment edges inside ample portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; retain actual native dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:47:23.159612+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "7b7c8e25-a76a-40dc-b6a3-ed3118eec068",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact magenta swim set in the attached reference. One adult professional model, full-length FRONT view, straight standing posture, relaxed arms and neutral expression. Preserve the opaque magenta gathered bandeau top with thin halter straps, matching tie-side bottom, source fabric sheen, color, coverage, bows and long ties. Same adult appearance, sleek dark center-part hair tied back, small hoop earrings, barefoot. Clear garment visibility, natural proportions and photorealistic textile. Even soft studio light, realistic subtle floor contact shadow. Complete head, hands, all garment edges and feet safely inside generous portrait margins. Genuine transparent background. No text, logo, graphics, border or watermark. Request 1800x2700 portrait if available, retain truthful native dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Primary source-preserving catalogue request rejected. Second neutral attempt subsequently produced a valid Front; original failure retained as history.",
+      "recordedUTC": "2026-10-22T19:50:17.478437+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "84a4f771-82a7-4836-a307-9f1097ccc479",
+      "attempt": "primary-commercial",
+      "generationPrompt": "One neutral professional studio catalogue photograph, full-length TRUE BACK view of the same adult model and magenta swimwear in the accepted Front reference. Model standing straight with back to camera, relaxed arms, face away. Preserve the identical model proportions, dark center-part hair in low bun, small hoop earrings, bare feet, magenta gathered bandeau and thin halter straps, matching tied-side bottom and long bows. Provisional rear interpretation consistent with Front: gathered straight top back band, slim halter ties behind neck, matching plain magenta rear panel and original side ties. No added decoration or redesigned outfit. Clear garment visibility, realistic textile and natural standing anatomy, even studio lighting and gentle contact shadow. Whole head, hands, outfit and feet within generous safe margins, portrait canvas. Genuine transparent background. No text, graphics, branding or border. Provisional AI garment study; retain actual native portrait dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T19:52:56.261946+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "82c68451-e8d5-4175-b542-3ea82577c456",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "Professional catalogue photograph of the same adult model and magenta outfit in the attached accepted image, viewed directly from behind. One full-length standing figure, neutral posture, arms relaxed, face turned away. Preserve the outfit, textile, color, hairstyle, accessories and barefoot styling. Rear garment arrangement is provisional and should stay consistent with the supplied Front. Soft even studio lighting, photorealistic detail, natural proportions, realistic floor contact shadow and generous margins around the whole figure. Transparent background. No text or graphics. Provisional AI garment presentation; retain genuine native portrait size.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T19:52:56.261962+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "c0bf41cc-e030-49f5-9299-680f7016a4e2",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey and white swim outfit in the attached reference. One adult model, straight-on full-length FRONT standing view, relaxed arms and neutral expression. Preserve the grey scoop top with thin straps layered over the visible white halter top, matching grey high-waisted bottom with original narrow crossed waist straps, source fabric, coverage, proportions and colors. Retain the original dark square sunglasses with gold hinges, small hoop earrings, neat tied-back brown hair and barefoot styling. Clear garment visibility and natural posture, photorealistic textile, soft even studio lighting and realistic floor contact shadow. Whole head, hands, outfit and feet inside generous portrait margins. Genuine transparent background; no text, logo, graphics or border. Retain actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Primary source-preserving catalogue request rejected. Second neutral attempt produced a valid Front; original failure retained as history.",
+      "recordedUTC": "2026-10-22T19:54:58.830750+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "028a7a38-bd88-4cb0-93a1-04b0fdaa4f57",
+      "attempt": "primary-commercial",
+      "generationPrompt": "One neutral professional studio catalogue photograph of the same adult model and grey-and-white swim outfit in the accepted Front reference, full-length TRUE BACK standing view. Back directly toward camera, face away, arms relaxed and natural posture. Preserve identical model, tied-back brown hair, dark square sunglasses, small hoop earrings, bare feet, grey outer scoop top over white halter layer and grey high-waisted bottom with original narrow waist straps. Provisional rear construction consistent with the supplied Front: simple grey back band/straps, white halter neck ties, matching plain grey rear and same waist-strap arrangement. No added decoration or styling. Photorealistic textile and natural proportions, even studio light, soft realistic floor contact shadow, entire head/hands/feet inside generous portrait margins. Genuine transparent background, no text or graphics. Provisional AI presentation; retain actual native size.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T19:56:55.570834+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "63071c6d-7d16-4476-8e87-7ae59d9e93f1",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "Professional studio catalogue study of the same adult model and grey-and-white outfit in the attached accepted image, viewed directly from behind. One full-length standing figure, neutral posture, relaxed arms, face away. Preserve the exact outfit, colors, fabric, original accessories, hairstyle and bare feet. Rear design remains a provisional interpretation consistent with the supplied Front. Clear garment visibility, soft even lighting, photorealistic detail, natural proportions and gentle floor contact shadow. Whole figure safely inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T19:56:55.570848+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "4ad34eb3-282a-47b0-9bed-a4b0329009d5",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact blue one-piece outfit in the attached reference. One adult professional model in a neutral full-length FRONT standing pose, relaxed arms and calm expression. Preserve the blue fabric, gathered halter top, original crossing center straps and oval center opening, high-waisted connected lower section, source cut, coverage and proportions. Same adult appearance, brown center-part hair tied back, original dark sunglasses and hoop earrings, barefoot. Clear garment visibility, photorealistic textile and natural anatomy, even soft studio lighting and realistic gentle floor contact shadow. Whole head, hands, garment and feet inside generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Record actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:58:51.667505+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "bf40933a-a7d3-4bc2-8263-eb495c26c1c3",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue study of the blue swimwear in the attached reference. Preserve the exact supplied garment, fabric, color and original styling. One adult model standing straight on, full-length front, relaxed arms and neutral expression. Clear outfit visibility, realistic textile and proportions, even studio lighting and soft floor contact shadow. Complete figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; retain genuine native dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T19:58:51.667521+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "c0d07b10-43b2-47b9-b029-03e9e806e4dc",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey swim set in the attached reference. One adult model, straight-on full-length FRONT standing view, relaxed arms and neutral expression. Preserve the silver-grey gathered top with center ruching and original forked halter straps, matching tie-side bottom, original crossed wraparound waist straps and long side bows, source material, coverage and proportions. Keep the source adult appearance, swept-back long dark hair with clean professional grooming, original small gold earrings and slim anklet, barefoot. Clear garment visibility, photorealistic textile, natural proportions, even soft studio light and gentle floor contact shadow. Complete head, hands, ties and feet within generous portrait margins. Genuine transparent background, no text, graphics, logo or border. Retain actual native dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T20:01:12.586084+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "778a9892-467b-4ae2-aa39-8a51754c17be",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue study of the grey swimwear in the supplied reference. Preserve the exact garment design, material, color, straps, ties and original styling. One adult model standing straight on, full-length front view, relaxed arms and neutral posture. Clear outfit visibility, photorealistic detail, natural proportions, even studio lighting and soft contact shadow. Whole figure and garment edges inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
+      "recordedUTC": "2026-10-22T20:01:12.586100+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "editorial",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "00446695-0326-43c7-8c9f-bed7cbcf523a",
+      "attempt": "primary-commercial",
+      "generationPrompt": "One professional commercial studio catalogue photograph of the identical adult model and black halter garment in the accepted Front and Back references. Full-length EDITORIAL view in a calm front three-quarter standing posture, arms relaxed, neutral expression. Preserve exactly the same black textile, halter straps, gathered bandeau and twisted center connection, original lower section and provisional rear arrangement. Same brunette model, tied-back bun, small hoop earrings, barefoot. Clean garment visibility, photorealistic material and natural proportions, soft even studio lighting with a gentle realistic floor contact shadow. Entire head, hands, outfit and feet within generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Provisional AI garment presentation; retain actual native portrait dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+        "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
+      "recordedUTC": "2026-10-22T20:06:21.797380+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "editorial",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "e536128d-0c56-49d7-b908-e1f55b8b0de2",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue study of the same adult model and black outfit in the two accepted references. Full-length calm three-quarter standing view, arms relaxed, neutral expression. Preserve the identical garment design, material, color, model identity, hairstyle and original styling. Accurate outfit visibility, photorealistic detail, even lighting, natural proportions and soft floor contact shadow. Whole figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+        "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
+      "recordedUTC": "2026-10-22T20:06:21.797408+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "front",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "input",
+      "category": "sexual",
+      "requestId": "809f940a-59c7-4154-a7eb-93f66e5d6654",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey swim set in the attached reference. One adult model standing straight on, full-length FRONT view, relaxed arms and neutral expression. Preserve the gathered grey bandeau top with original central oval join and forked halter straps, matching grey bottom with original narrow upper waist band, small connecting straps and long side ties, source coverage, cut, fabric and proportions. Same adult appearance, brown center-part hair tied back, original brown sunglasses and small hoop earrings, barefoot. Clear construction visibility, photorealistic textile, natural proportions, soft even studio lighting and realistic gentle floor contact shadow. Entire head, hands, ties and feet inside generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Retain actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Primary source-preserving catalogue request rejected at input. Second neutral attempt used the exact same unchanged original reference and produced a valid Front; original failure retained as history.",
+      "recordedUTC": "2026-10-22T20:08:21.302612+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "9a070553-08c2-43fb-b4d5-61be396cadaa",
+      "attempt": "primary-commercial",
+      "generationPrompt": "Professional studio catalogue photograph of the same adult model and grey swim set in the accepted Front reference, full-length TRUE BACK standing view. One figure directly facing away, neutral posture and relaxed arms. Preserve identical model proportions, brown hair tied back, original brown sunglasses and hoop earrings, bare feet, grey material and original halter/waist straps and long side ties. Provisional rear construction consistent with the supplied Front: simple grey top back band, original halter neck fastening, matching plain grey lower rear and narrow upper waist band with connecting straps. Clear garment visibility, photorealistic fabric, natural proportions, even studio lighting and gentle realistic contact shadow. Entire figure and all ties within generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Provisional AI garment presentation; retain actual native dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T20:10:44.073764+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "back",
+      "tool": "OpenAI native image tool",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "5eda44c4-c343-4dbc-8095-bb47d407b540",
+      "attempt": "single-neutral-revision",
+      "generationPrompt": "One neutral professional studio catalogue study of the same adult model and grey outfit in the attached accepted image, viewed directly from behind. Full-length standing figure, relaxed arms, neutral posture, face away. Preserve the exact outfit, fabric, color, original accessories, hairstyle and bare feet. Rear arrangement is provisional and consistent with the supplied Front. Clear garment visibility, photorealistic detail, natural proportions, even lighting and soft floor contact shadow. Complete figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+      "referenceAssets": [
+        "/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png"
+      ],
+      "assetProduced": false,
+      "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+      "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
+      "recordedUTC": "2026-10-22T20:10:44.073782+00:00"
+    }
+  ],
+  "partialResumePoints": [
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "nextMissingView": "editorial"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    }
+  ],
+  "storage": {
+    "workspaceFreeBytes": 29002137600,
+    "tmpFreeBytes": 4128423936,
+    "ramAvailableBytes": 8237670400
+  },
+  "scope": "Only generated Womenswear photography, recovery scripts/tests and its review documentation changed. No site integration of incomplete sets.",
+  "limits": "Every requested source and missing view reached the permitted retry limit where blocked. No further generation in this pass; no complete new master, no PR, merge or deployment.",
+  "verifiedRemoteBeforeSnapshot": "4cdff91e05c6661023cbb2f72e2e4f4c8084c698",
+  "blockedViewResume": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "331908d5-e8a7-4810-b6cb-27536db993c8"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "bea01abc-3980-4a65-a291-0aa3460d0d73"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "3401b6eb-a34d-4110-a951-3e4ea193c8b4"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "391b529a-8ee4-4e71-9435-4ec7807e78c9"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "8bb4ba23-70a7-4609-b012-3140d0fab368"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "82c68451-e8d5-4175-b542-3ea82577c456"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "63071c6d-7d16-4476-8e87-7ae59d9e93f1"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "bf40933a-a7d3-4bc2-8263-eb495c26c1c3"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "778a9892-467b-4ae2-aa39-8a51754c17be"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "nextMissingView": "editorial",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "e536128d-0c56-49d7-b908-e1f55b8b0de2"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "5eda44c4-c343-4dbc-8095-bb47d407b540"
+    }
+  ],
+  "executedChecks": {
+    "recoveryRegressionTests": 6,
+    "manifestAndImageValidation": "PASS",
+    "preservationOf29CompleteEntriesAnd324ArtworkFiles": "PASS",
+    "entireRegistryBytesUnchanged": true,
+    "browserNativeReview": "evidence/commercial-retry/results.json",
+    "sixViewportSizes": [
+      [
+        1440,
+        900
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "browserScope": "Five new native files served byte-identically by Astro; standalone review, not reader integration or full forty-look QA."
+  }
+}

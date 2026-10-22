@@ -1,7 +1,8 @@
 """Register real tool outputs and deterministically assemble reviewed individual views.
 
 No garment generation or anatomy editing occurs here. Native files are never changed.
-Resampling is explicit: the image tool currently returns 1024x1536 portraits.
+Native portrait dimensions are recorded as returned. Review exports use uniform
+scaling and placement; native artwork is never resampled or overwritten.
 """
 from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw

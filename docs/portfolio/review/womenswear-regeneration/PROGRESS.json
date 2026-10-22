@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:10:49.284928+00:00",
+  "updatedUTC": "2026-10-22T20:17:10.617758+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 7,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "back-blocked-commercial-retry",
-  "lastSuccessfullyPushedCommit": "ed90285a7287ca24e7d8ea1624ad005c1ee31d50",
+  "currentMilestone": "commercial-retry-resume-report",
+  "lastSuccessfullyPushedCommit": "4cdff91e05c6661023cbb2f72e2e4f4c8084c698",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -656,5 +656,146 @@
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES",
+  "latestRetryPass": {
+    "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+    "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
+    "toolCalls": 30,
+    "acceptedNativeOutputs": 5,
+    "moderationFailures": 25,
+    "attemptLimitPerBlockedView": 2,
+    "status": "RETRY_ALLOWANCES_EXHAUSTED",
+    "completedNewLooks": 0
+  },
+  "blockedViewResume": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "331908d5-e8a7-4810-b6cb-27536db993c8"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "bea01abc-3980-4a65-a291-0aa3460d0d73"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "3401b6eb-a34d-4110-a951-3e4ea193c8b4"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "391b529a-8ee4-4e71-9435-4ec7807e78c9"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "8bb4ba23-70a7-4609-b012-3140d0fab368"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "82c68451-e8d5-4175-b542-3ea82577c456"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "63071c6d-7d16-4476-8e87-7ae59d9e93f1"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "bf40933a-a7d3-4bc2-8263-eb495c26c1c3"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "savedViews": [],
+      "nextMissingView": "front",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "778a9892-467b-4ae2-aa39-8a51754c17be"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "nextMissingView": "editorial",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "e536128d-0c56-49d7-b908-e1f55b8b0de2"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back",
+      "status": "BLOCKED_MODERATION",
+      "currentPassAttemptsExhausted": true,
+      "latestRequestId": "5eda44c4-c343-4dbc-8095-bb47d407b540"
+    }
+  ],
+  "partialResumePoints": [
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "nextMissingView": "editorial"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "savedViews": [
+        "front"
+      ],
+      "nextMissingView": "back"
+    }
+  ],
+  "nativeResolutionNote": "Original accepted sets retain 1024x1536 natives. Five new saved portraits are actual 1086x1448 RGBA, not resampled; uniform 1800x2700 exports remain pending complete sets."
 }
