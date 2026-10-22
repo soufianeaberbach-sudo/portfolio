@@ -3965,14 +3965,34 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-01-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "c2240867c91a3e094ec9112bc026d8aeae16d5ec676dd0fbd25cd28af733c1f7",
+        "toolOutputPath": "/workspace/generated_images/exec-595f5602-ad52-4e16-8946-1cd552ca0942.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Native image edit with original supplied Front/Back photograph; one separately generated Front portrait",
+        "generationPrompt": "Create ONE full-length professional studio fashion photograph: the FRONT view of the exact grey botanical-print occasion gown in the attached original reference. The reference is a two-view evidence plate, but your output must contain exactly ONE adult woman, ONE continuous portrait, no diptych or collage. Preserve this supplied garment rather than designing a new dress: soft dove-grey chiffon with black scattered botanical flowers and leaves, wide boat neckline, gently blouson bodice, fitted high waist and hips, long voluminous sleeves with stacked elbow flounces and wide transparent bell cuffs, slim upper skirt flaring toward the floor, cascading vertical skirt flounces and a complete soft train pooling naturally behind her. Maintain the fabric opacity and print character of the original. Use the same adult brunette model appearance as the reference, hair in a neat updo, natural editorial makeup. Face and torso squarely toward the camera, relaxed neutral stance, arms gently separated so sleeves and hands are readable; do not invent accessories. Full head, both hands, all gown edges and entire train visible with generous safe margins. The train must fit within the portrait, with no cut-off cloth or body. Fine realistic fabric texture, correct human anatomy, soft even commercial fashion lighting, realistic subtle contact shadow at the hem. Requested delivery 1800x2700 portrait if supported; otherwise retain the actual native portrait resolution without claiming native 1800 detail. Output with genuine transparent background/alpha, preserving the pale textile and all translucent fabric edges. No labels, borders, extra figures or text. This is a provisional AI reinterpretation of supplied source photography, not evidence of garment authorship or manufacturing.",
+        "referenceAssets": [
+          "/portfolio/evening/1-1400.webp"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Inspected native RGBA over white. One adult model, frontal torso, full head/hands and complete grey botanical gown/train; boat neck, blouson waist, tiered elbow flounces, transparent bell cuffs and vertical skirt flounces retained. No obvious anatomy failure; no dark background/halo over white. Fine print placement remains interpretive."
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Inspected native RGBA over white. One adult model, frontal torso, full head/hands and complete grey botanical gown/train; boat neck, blouson waist, tiered elbow flounces, transparent bell cuffs and vertical skirt flounces retained. No obvious anatomy failure; no dark background/halo over white. Fine print placement remains interpretive.",
+        "nativeResolutionLimitation": "Actual native Front is 1024x1536 RGBA; requested 1800x2700 delivery will be an explicit resampled export.",
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
-        "Reference photographs do not verify technical construction or authorship."
+        "Reference photographs do not verify technical construction or authorship.",
+        "Fine floral motif placement, unseen fastenings and exact pattern/construction remain AI interpretation; source photography does not verify them."
       ],
       "replacementStatus": "NOT_INTEGRATED",
       "actualSourceDimensions": {
