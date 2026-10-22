@@ -4051,7 +4051,7 @@
         ],
         "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
       },
-      "status": "READY",
+      "status": "INTEGRATED",
       "qualityResult": {
         "frontVisual": "Inspected native RGBA over white. One adult model, frontal torso, full head/hands and complete grey botanical gown/train; boat neck, blouson waist, tiered elbow flounces, transparent bell cuffs and vertical skirt flounces retained. No obvious anatomy failure; no dark background/halo over white. Fine print placement remains interpretive.",
         "nativeResolutionLimitation": "Actual native Front is 1024x1536 RGBA; requested 1800x2700 delivery will be an explicit resampled export.",
@@ -4127,26 +4127,27 @@
             "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
           }
         ],
-        "masterVisualReview": "Inspected actual 5400x2700 master over white: three equal undistorted panels, whole head/hands/sleeves/train retained with safe margins and aligned hem floor. Grey fabric/translucent cuffs remain intact without a dark ground or halo. Wider Editorial train is uniformly scaled to fit its panel, with no body stretching. Provisional artistic review only."
+        "masterVisualReview": "Inspected actual 5400x2700 master over white: three equal undistorted panels, whole head/hands/sleeves/train retained with safe margins and aligned hem floor. Grey fabric/translucent cuffs remain intact without a dark ground or halo. Wider Editorial train is uniformly scaled to fit its panel, with no body stretching. Provisional artistic review only.",
+        "browserCheckpoint": "Executed 54 assertions at 1440x900 and 390x844: all four view controls, full 5400px master decode, panel thirds/proportions, AI attribution, Look Closer, exact archive focus return, historical original image and no overflow/runtime errors. Screenshots inspected; Front reads fully on desktop and mobile. Complete Original fits all three panels at reduced phone scale; Look Closer remains available."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Fine floral motif placement, unseen fastenings and exact pattern/construction remain AI interpretation; source photography does not verify them."
       ],
-      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1875
       },
       "sourceMetadataMatchesPixels": false,
       "lastVerifiedCheckpoint": {
-        "commit": "53ea11aee051b997fbc3825696e90d5bc06cbe05",
+        "commit": "095bed5b9c208e2b482c85d97be4f5338b85d8d8",
         "views": [
           "front",
           "back",
           "editorial"
         ],
-        "master": false
+        "master": true
       },
       "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied dove-grey botanical-print chiffon gown with boat neckline, deep tied rear opening, layered bell sleeves, cascading skirt flounces and full train.",
       "generatedCaption": "Grey botanical chiffon gown, tiered bell sleeves and flounced train."
