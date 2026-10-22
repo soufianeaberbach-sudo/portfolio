@@ -5435,14 +5435,33 @@
         "nativeResampled": false,
         "reviewNote": "Inspected native over white: one rear-facing adult straight-haired brunette; chocolate leather-look broad left shoulder/diagonal back, right arm and hip ties, small left lower-back opening and whole floor hem preserved. Complete hands/head/tie edges, restrained contact shadow, no obvious anatomy/crop/halo failure. Material and unseen construction remain provisional."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-08-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "741056e3c8a3448c88c65f561b1f9a23ce73080782ba67cb1ce5a29ca89fd39d",
+        "toolOutputPath": "/workspace/generated_images/exec-7a320f2d-304d-4f6c-8fcb-357b0268d297.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial native edit using original source and accepted Front/Back",
+        "generationPrompt": "Exactly ONE adult woman in one full-length EDITORIAL fashion studio portrait, preserving the identical chocolate-brown asymmetric leather-look gown and long straight brunette model from the references. Original Front/Back supplies design evidence; accepted single Front/Back establish identity, brown sheen/texture, proportions and studio light. Keep broad LEFT shoulder, diagonal draped bodice, RIGHT upper-arm and RIGHT hip knots with long hanging ends, original LEFT waist opening, fitted long skirt softly flaring to complete floor hem. Same source coverage and styling. Quiet front three-quarter angle, small natural weight shift, arms relaxed slightly away so ties/drape are readable; no fabric lifting, added slit, straps, cutouts or accessories. Same adult woman with loose center-part straight brown hair, natural makeup. One body only, no diptych, collage or montage. Full head/hair/hands and all tie/hem edges safely in frame, natural anatomy and undistorted proportions. Soft neutral premium fashion light, believable leather-look surface and skin, subtle hem/floor contact shadow. Genuine transparent alpha background preserving fabric/hair edges and shadow. Request 1800x2700 portrait if supported; otherwise actual native dimensions. No text, labels or border. Provisional AI photographic interpretation, actual material and construction unverified.",
+        "referenceAssets": [
+          "/portfolio/evening/8-1400.webp",
+          "/portfolio/generated/ww-ai-evening-ref-08-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-08-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white: same straight-haired adult brunette and chocolate asymmetric leather-look gown, quiet three-quarter pose. Left shoulder, right arm/hip knots, left waist opening and full floor skirt remain; complete head/hands/hem/ties, natural anatomy and contact shadow, no obvious crop/halo defect."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Inspected native over white against source. One adult straight-haired brunette in chocolate leather-look gown: left broad shoulder, right upper-arm/hip knots with hanging ends, diagonal drape, original left waist opening and full floor skirt retained. Whole head/hands/hem/ties; realistic sheen and soft contact shadow, no obvious anatomy/crop/alpha-ground failure.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; larger exports will be explicitly resampled.",
         "ownerArtisticApproval": false,
-        "backVisual": "Inspected native over white: one rear-facing adult straight-haired brunette; chocolate leather-look broad left shoulder/diagonal back, right arm and hip ties, small left lower-back opening and whole floor hem preserved. Complete hands/head/tie edges, restrained contact shadow, no obvious anatomy/crop/halo failure. Material and unseen construction remain provisional."
+        "backVisual": "Inspected native over white: one rear-facing adult straight-haired brunette; chocolate leather-look broad left shoulder/diagonal back, right arm and hip ties, small left lower-back opening and whole floor hem preserved. Complete hands/head/tie edges, restrained contact shadow, no obvious anatomy/crop/halo failure. Material and unseen construction remain provisional.",
+        "editorialVisual": "Native inspected over white: same straight-haired adult brunette and chocolate asymmetric leather-look gown, quiet three-quarter pose. Left shoulder, right arm/hip knots, left waist opening and full floor skirt remain; complete head/hands/hem/ties, natural anatomy and contact shadow, no obvious crop/halo defect.",
+        "setVisualReview": "Compared original Front/Back and three actual native portraits over white. Same adult long-haired brunette, chocolate leather-look material, broad left shoulder/diagonal drape, right upper-arm/hip ties, original left waist/lower-back opening and complete long skirt. Genuine rear and restrained Editorial; whole head/hands/ties/hem, natural anatomy and consistent sheen. Material, knots and invisible construction remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -5455,12 +5474,15 @@
       },
       "sourceMetadataMatchesPixels": false,
       "lastVerifiedCheckpoint": {
-        "commit": "982b4b0f6b1516d0b81d95f2bcff968e906bb49a",
+        "commit": "38dcb2ce159b5341a6963cb7afcbdb08a53c6404",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied chocolate-brown asymmetric leather-look gown with one shoulder, right arm and hip ties, waist opening and full-length skirt.",
+      "generatedCaption": "Chocolate asymmetric gown with tied arm and hip details."
     },
     {
       "sourceIdentity": "evening-ref-10",
