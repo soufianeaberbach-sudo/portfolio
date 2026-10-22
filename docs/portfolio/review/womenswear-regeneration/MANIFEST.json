@@ -4959,14 +4959,33 @@
         "nativeResampled": false,
         "reviewNote": "Inspected actual native over white against original rear and accepted Front. One rear-facing adult model with loose straight brown hair to one side, opaque sky-blue sleeveless gown, deep rear V, diagonal overlapping wrap and gathered hips, whole long hem retained. Shoulders/hips face away; head turns slightly aside. Complete hands and fabric, no obvious anatomy/crop/halo failure. Hidden collar connection remains provisional."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-06-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "457b847c1bbcbc00af86aaaedce6095232e3ba3c0cd4a132a0e70be0f75e749a",
+        "toolOutputPath": "/workspace/generated_images/exec-705d7b80-6487-4636-be31-ef6424667c82.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial native edit using original source and accepted Front/Back identity views",
+        "generationPrompt": "Create exactly ONE adult model in ONE full-length EDITORIAL studio portrait of the identical sky-blue jersey occasion gown and long straight brown-haired woman established by the references. The original two-view garment source is design evidence; the accepted single Front and true Back establish identity, material, blue color, hair, proportions and lighting. Preserve the garment precisely: sleeveless broad shoulders, softly folded high front neckline, gathered bust into the smooth curved opaque midriff panel, shaped waist/hips with diagonal gathered wrap and long central front drape, full floor-length softly flared skirt. Source-supported deep V back and lower-back overlap remain unchanged. Pose a restrained front three-quarter angle with a small natural weight shift, relaxed arms with one hand lightly lifted away from hip, no dramatic action or fabric lift. Same adult woman with center-part loose straight brown hair and natural makeup; no jewellery, belt, new slit or accessory. Exactly one figure, no diptych, collage or second body. Full head, hands, hair and whole hem visible with generous safe margins and natural undistorted anatomy. Premium quiet studio fashion light, realistic jersey folds/skin, subtle floor contact shadow. Genuine transparent alpha background retaining blue textile and hair edges. Requested 1800x2700 portrait if supported, otherwise actual native dimensions. No text, labels or frame. Provisional AI photographic interpretation, not proof of manufacture or construction.",
+        "referenceAssets": [
+          "/portfolio/evening/6-1400.webp",
+          "/portfolio/generated/ww-ai-evening-ref-06-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-06-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white. Same adult loose-haired brunette and sky-blue gown, restrained three-quarter weight shift and lightly raised hand. Gathered high-neck bust, opaque curved midriff panel, gathered hips, long front drape and full floor hem retained. Complete head/hands/cloth, no obvious anatomy/crop/alpha-ground failure."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Native inspected over white against source: one adult model with loose center-part brown hair; opaque sky-blue sleeveless high-neck jersey gown, gathered bust, curved smooth midriff panel, gathered hips and long central front drape retained. Whole head/hands/hem visible with natural proportions; no obvious anatomy, crop or halo failure.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; review exports are explicitly resampled.",
         "ownerArtisticApproval": false,
-        "backVisual": "Inspected actual native over white against original rear and accepted Front. One rear-facing adult model with loose straight brown hair to one side, opaque sky-blue sleeveless gown, deep rear V, diagonal overlapping wrap and gathered hips, whole long hem retained. Shoulders/hips face away; head turns slightly aside. Complete hands and fabric, no obvious anatomy/crop/halo failure. Hidden collar connection remains provisional."
+        "backVisual": "Inspected actual native over white against original rear and accepted Front. One rear-facing adult model with loose straight brown hair to one side, opaque sky-blue sleeveless gown, deep rear V, diagonal overlapping wrap and gathered hips, whole long hem retained. Shoulders/hips face away; head turns slightly aside. Complete hands and fabric, no obvious anatomy/crop/halo failure. Hidden collar connection remains provisional.",
+        "editorialVisual": "Native inspected over white. Same adult loose-haired brunette and sky-blue gown, restrained three-quarter weight shift and lightly raised hand. Gathered high-neck bust, opaque curved midriff panel, gathered hips, long front drape and full floor hem retained. Complete head/hands/cloth, no obvious anatomy/crop/alpha-ground failure.",
+        "setVisualReview": "Compared original Front/Back and all three actual native views over white. Same adult brunette with long straight hair and opaque sky-blue jersey gown: high gathered front, curved midriff panel, hip wrap/gathers and long front drape; true rear retains deep V and diagonal overlap. Full head/hands/hem, one model per frame, natural anatomy and restrained Editorial. Hidden rear collar connection/internal construction remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -4979,12 +4998,15 @@
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "c2e24536a367bcc145ac51408821b9ee50403f0b",
+        "commit": "febd2375e71fa153a9c51ae8a4abffdf7bebf6fc",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied sky-blue sleeveless gathered jersey gown with high front neckline, curved midriff panel, long front drape and deep V wrap back.",
+      "generatedCaption": "Sky-blue gathered jersey gown with deep V back and long front drape."
     },
     {
       "sourceIdentity": "evening-ref-07",

@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-05",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:11:27.626081+00:00",
+  "updatedUTC": "2026-10-22T18:13:56.814518+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 24,
   "pendingLooks": 15,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-06",
-  "currentMilestone": "back",
-  "lastSuccessfullyPushedCommit": "c2e24536a367bcc145ac51408821b9ee50403f0b",
+  "currentMilestone": "editorial",
+  "lastSuccessfullyPushedCommit": "febd2375e71fa153a9c51ae8a4abffdf7bebf6fc",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "evening-ref-06",
@@ -87,7 +87,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate editorial for evening-ref-06; checkpoint before the following view",
+  "nextAction": "Review three views and assemble master",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -129,7 +129,7 @@
       ]
     }
   ],
-  "notes": "Verified saved Front at c2e24536a367bcc145ac51408821b9ee50403f0b without regeneration; accepted newly returned Back. Editorial is the exact next image.",
+  "notes": "Saved Front preserved; newly accepted Back and Editorial complete all three native views. Assemble master next.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
