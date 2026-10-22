@@ -32,7 +32,7 @@ const paths: Record<NonNullable<Props['dir']>, string> = {
 ---
 
 <svg
-  class={className ? `arrow ${className}` : 'arrow'}
+  class={className ? `arrow arrow--${dir} ${className}` : `arrow arrow--${dir}`}
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"

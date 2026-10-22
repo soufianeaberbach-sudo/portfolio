@@ -1,0 +1,8 @@
+---
+/* The experience page in French, Spanish or Arabic. One implementation serves
+   every language: the page reads its locale from the URL. */
+import Page from '../experience.astro';
+import { localeStaticPaths } from '../../i18n/locales';
+export const getStaticPaths = localeStaticPaths;
+---
+<Page />

@@ -18,7 +18,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { indexableRoutes, trustRoutes } from '../src/data/site-routes.mjs';
+import { indexableRoutes, localizedRoutes, trustRoutes } from '../src/data/site-routes.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/[\\\/]$/, '');
 /* A line may name the old domain on purpose — this guard has to declare what
@@ -145,9 +145,12 @@ if (!hasDist) {
   failures.push('dist/ missing: the built-output assertions did not run');
 } else {
   const ROUTES = indexableRoutes.map(({ path }) => path.replace(/^\/|\/$/g, ''));
+  /* Every language version is canonical in its own right, so the apex,
+     og:url and no-www guarantees below cover all 36 localized pages. */
+  const ALL_ROUTES = localizedRoutes.map(({ path }) => path.replace(/^\/|\/$/g, ''));
 
   group('built pages canonicalize to the apex');
-  for (const route of ROUTES) {
+  for (const route of ALL_ROUTES) {
     const file = join(distPath, route, 'index.html');
     const html = await readFile(file, 'utf8');
     const label = `/${route}${route ? '/' : ''}`;
@@ -222,14 +225,14 @@ group('built social image is absolute on the apex');
     const xml = await readFile(join(distPath, 'sitemap.xml'), 'utf8');
     check('no old domain in the sitemap', !xml.includes(OLD_WEBSITE_DOMAIN));
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    const expected = ROUTES.map((r) => `${NEW_ORIGIN}/${r}${r ? '/' : ''}`);
-    check(`lists exactly ${expected.length} URLs`, locs.length === expected.length, `${locs.length} found`);
-    check('lists exactly the English routes', JSON.stringify(locs) === JSON.stringify(expected), locs.join(' '));
+    const expected = ALL_ROUTES.map((r) => `${NEW_ORIGIN}/${r}${r ? '/' : ''}`);
+    check(`lists exactly ${expected.length} URLs`, locs.length === expected.length && expected.length === 36, `${locs.length} found`);
+    check('lists exactly the localized indexable routes', [...locs].sort().join(' ') === [...expected].sort().join(' '), locs.join(' '));
     check('every URL is https on the apex', locs.every((l) => l.startsWith(`${NEW_ORIGIN}/`)));
     check('no www URL', !locs.some((l) => l.includes('//www.')));
     check('no duplicates', new Set(locs).size === locs.length);
-    /* Phase A is English-only, and noindex routes must never be listed. */
-    for (const banned of ['/contact/sent', '/404', '/fr/', '/es/', '/ar/']) {
+    /* Noindex flow routes must never be listed, in any language. */
+    for (const banned of ['/contact/sent', '/404', '/lab/', '/api/', '/it/']) {
       check(`sitemap excludes ${banned}`, !locs.some((l) => l.includes(banned)));
     }
   }
@@ -263,13 +266,14 @@ group('built social image is absolute on the apex');
     for (const route of trustRoutes) check(`${path} footer links to ${route.path}`, footer.includes(`href="${route.path}"`));
   }
 
-  group('Phase A added no multilingual routes and no trackers');
+  group('exactly the four approved languages exist, with no trackers');
   {
     const entries = await readdir(distPath, { withFileTypes: true });
     const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
-    for (const locale of ['fr', 'es', 'ar', 'it']) {
-      check(`no /${locale}/ route exists yet`, !dirs.includes(locale), dirs.join(' '));
+    for (const locale of ['fr', 'es', 'ar']) {
+      check(`/${locale}/ route exists`, dirs.includes(locale), dirs.join(' '));
     }
+    check('no unapproved /it/ route exists', !dirs.includes('it'), dirs.join(' '));
     const html = await readFile(join(distPath, 'index.html'), 'utf8');
     for (const tracker of [
       'googletagmanager', 'google-analytics', 'gtag(', 'connect.facebook.net',
@@ -277,8 +281,8 @@ group('built social image is absolute on the apex');
     ]) {
       check(`no ${tracker} on the home page`, !html.includes(tracker));
     }
-    check('no hreflang alternates yet', !html.includes('hreflang'));
-    check('html lang is still en', /<html lang="en"/.test(html));
+    check('home declares reciprocal hreflang alternates', ['en', 'fr', 'es', 'ar', 'x-default'].every((code) => html.includes(`hreflang="${code}"`)));
+    check('English html lang is still en', /<html lang="en"/.test(html));
   }
 }
 

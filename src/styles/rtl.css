@@ -1,0 +1,53 @@
+/* ARABIC — RIGHT-TO-LEFT EDITORIAL ADAPTATION.
+ *
+ * Scoped entirely to html[lang='ar'], so English, French and Spanish render
+ * exactly as before. The page is genuinely dir="rtl" (set on <html>); this
+ * file only adjusts what the Latin design system assumed:
+ *
+ *   TYPE. Arabic is set in IBM Plex Sans Arabic. JetBrains Mono stays first in
+ *   the mono stack so digits and Latin codes keep the technical register, and
+ *   Arabic letters fall through to Plex Arabic glyph by glyph.
+ *
+ *   NO TRACKING, NO CAPITALS. Arabic is a joined script: letter-spacing
+ *   breaks the joins and uppercase does not exist. The Latin system's tracked
+ *   uppercase labels become plain, slightly larger Arabic labels.
+ *
+ *   LINE HEIGHT. The Latin display face is set very tight; Arabic needs room
+ *   for its ascenders, descenders and dots.
+ *
+ *   DIRECTION BY MEANING. Navigation arrows mirror; photographs, garments,
+ *   logos and the Portfolio's composed scenes do not (see the Portfolio
+ *   section below). Nothing is mirrored with a global transform.
+ */
+
+html[lang='ar'] {
+  --display: 'IBM Plex Sans Arabic', 'Archivo', sans-serif;
+  --body: 'IBM Plex Sans Arabic', 'Inter', Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
+}
+
+html[lang='ar'] body :where(*) {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+/* Display type: the weight Plex Arabic actually has, and Arabic line height. */
+html[lang='ar'] :where(h1, h2, h3, .display) {
+  font-variation-settings: normal;
+  font-weight: 700;
+  line-height: 1.22;
+}
+html[lang='ar'] .display em { font-style: normal; }
+html[lang='ar'] :where(.label, .eyebrow) { font-size: max(.78rem, 1em); line-height: 1.6; }
+html[lang='ar'] :where(p, li, dd, blockquote) { line-height: 1.85; }
+
+/* Latin values inside Arabic copy keep their own direction. */
+html[lang='ar'] :where([dir='ltr']) { unicode-bidi: isolate; }
+
+/* Directional arrows point the way an Arabic reader moves. Up and down are
+   not mirrored; neither is anything that is not an arrow. */
+html[dir='rtl'] :is(.arrow--ne, .arrow--left, .arrow--right) path {
+  transform: scaleX(-1);
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
