@@ -4,26 +4,25 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "evening-ref-07",
+  "lastCompletedSourceIdentity": "evening-ref-08",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:31:28.110073+00:00",
+  "updatedUTC": "2026-10-22T18:32:50.006517+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 26,
+  "completedLooks": 27,
   "pendingLooks": 13,
-  "partiallyGeneratedLooks": 1,
+  "partiallyGeneratedLooks": 0,
   "statusCounts": {
     "INTEGRATED": 6,
-    "READY": 20,
-    "PENDING": 13,
-    "GENERATED": 1
+    "READY": 21,
+    "PENDING": 13
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-08",
-  "currentMilestone": "editorial",
-  "lastSuccessfullyPushedCommit": "38dcb2ce159b5341a6963cb7afcbdb08a53c6404",
+  "currentMilestone": "set",
+  "lastSuccessfullyPushedCommit": "a829ee84c321eae7802be659a12bbd98ffb197b3",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "evening-ref-08",
+  "nextActionableSourceIdentity": "evening-ref-10",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -87,7 +86,7 @@
       ]
     }
   ],
-  "nextAction": "Review three views and assemble master",
+  "nextAction": "Generate and validate front for evening-ref-10; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -129,7 +128,7 @@
       ]
     }
   ],
-  "notes": "Three native chocolate gown views accepted; assemble master next.",
+  "notes": "27 complete, no partial, 13 pending including four tool blocks. Master reviewed, native/hash/registry and 192 slot checks pass. Next evening-ref-10 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
