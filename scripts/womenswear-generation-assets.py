@@ -5,7 +5,7 @@ Resampling is explicit: the image tool currently returns 1024x1536 portraits.
 """
 from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
-import argparse, hashlib, json, shutil
+import argparse, hashlib, json, os, shutil, tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REVIEW = ROOT / 'docs/portfolio/review/womenswear-regeneration'
@@ -15,23 +15,63 @@ REGISTRY = ROOT / 'src/data/womenswear-generated.json'
 def read_manifest():
     return json.loads(MANIFEST.read_text())
 
+def atomic_json(path, value):
+    fd, name = tempfile.mkstemp(prefix=path.name + '.', suffix='.tmp', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'w') as stream:
+            json.dump(value, stream, indent=2)
+            stream.write('\n')
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(name, path)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
+
 def save_manifest(manifest):
-    MANIFEST.write_text(json.dumps(manifest, indent=2) + '\n')
+    atomic_json(MANIFEST, manifest)
+
+def save_image(image, path, **options):
+    fd, name = tempfile.mkstemp(prefix=path.stem + '.', suffix=path.suffix, dir=path.parent)
+    os.close(fd)
+    try:
+        image.save(name, **options)
+        os.replace(name, path)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
 
 def register(source_id, view, source_path):
     manifest = read_manifest()
     look = next(item for item in manifest['looks'] if item['sourceIdentity'] == source_id)
     source = Path(source_path)
     image = Image.open(source)
+    image.load()
     if image.width * 3 != image.height * 2:
         raise ValueError('Native image is not a 2:3 portrait; retain as rejected evidence separately.')
     dest = ROOT / 'public/portfolio/generated' / look['generatedIdentity'] / f'{view}-native.png'
     dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(source, dest)
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    if dest.exists() and hashlib.sha256(dest.read_bytes()).hexdigest() != digest:
+        raise ValueError('Refusing to overwrite an existing native. Record a rejected/versioned generation explicitly.')
+    if look.get(view):
+        if look[view].get('sha256') == digest and dest.exists():
+            print(source_id, view, 'already registered; existing QA and export metadata preserved')
+            return
+        raise ValueError('Existing registered view differs; preserve it and review explicitly.')
+    if not dest.exists():
+        fd, name = tempfile.mkstemp(prefix=view + '.', suffix='.tmp', dir=dest.parent)
+        os.close(fd)
+        try:
+            shutil.copy2(source, name)
+            os.replace(name, dest)
+        finally:
+            if os.path.exists(name):
+                os.unlink(name)
     look[view] = {
         'nativeAsset': '/' + str(dest.relative_to(ROOT / 'public')),
         'width': image.width, 'height': image.height, 'mode': image.mode,
-        'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+        'sha256': digest,
         'toolOutputPath': str(source), 'qualityStatus': 'AWAITING_SET_QA',
     }
     look['status'] = 'GENERATED'
@@ -58,6 +98,8 @@ def prepared_rgba(image, source_id):
 def assemble(source_id):
     manifest = read_manifest()
     look = next(item for item in manifest['looks'] if item['sourceIdentity'] == source_id)
+    if look.get('master'):
+        raise ValueError('Existing completed master is protected; do not regenerate saved sets.')
     if not look.get('qualityResult', {}).get('setVisualReview'):
         raise ValueError('Review the three real views and record setVisualReview before export.')
     panels = []
@@ -89,7 +131,7 @@ def assemble(source_id):
         canvas = Image.new('RGBA', (1800, 2700), (255, 255, 255, 255))
         canvas.alpha_composite(resized, (x, y))
         panel = canvas.convert('RGB')
-        panel.save(asset_dir / f'{view}.png', optimize=True)
+        save_image(panel, asset_dir / f'{view}.png', optimize=True)
         panels.append(panel)
         output.update({'asset': f'/portfolio/generated/{look["generatedIdentity"]}/{view}.png', 'exportWidth': 1800, 'exportHeight': 2700,
                        'resampled': native.size != (1800, 2700), 'qualityStatus': 'VISUAL_PASS_NATIVE_RESOLUTION_LIMITED'})
@@ -99,11 +141,11 @@ def assemble(source_id):
     master = Image.new('RGB', (5400, 2700), 'white')
     for index, panel in enumerate(panels):
         master.paste(panel, (1800 * index, 0))
-    master.save(asset_dir / 'master.png', optimize=True)
+    save_image(master, asset_dir / 'master.png', optimize=True)
     srcset = []
     for width in (900, 1800, 2700, 3600):
         derivative = master.resize((width, width // 2), Image.Resampling.LANCZOS)
-        derivative.save(asset_dir / f'master-{width}.webp', quality=94, method=6)
+        save_image(derivative, asset_dir / f'master-{width}.webp', quality=94, method=6)
         srcset.append(f'/portfolio/generated/{look["generatedIdentity"]}/master-{width}.webp {width}w')
     master_url = f'/portfolio/generated/{look["generatedIdentity"]}/master.png'
     srcset.append(f'{master_url} 5400w')
@@ -115,7 +157,6 @@ def assemble(source_id):
                                  'ownerArtisticApproval': False})
     look['status'] = 'READY'
     look['replacementStatus'] = 'READY_FOR_REVIEW_INTEGRATION'
-    save_manifest(manifest)
     records = json.loads(REGISTRY.read_text()) if REGISTRY.exists() else []
     record = {'id': look['generatedIdentity'], 'sourceIdentity': source_id, 'category': look['sourceCategory'],
               'caption': look.get('generatedCaption', look.get('generatedDescription', look['source']['alt'])),
@@ -128,7 +169,10 @@ def assemble(source_id):
                         'alt': look.get('generatedDescription', 'AI-generated provisional presentation of ' + look['source']['alt']),
                         'front': 1/3, 'views': 3, 'thirdView': 'editorial', 'separable': True}}
     records = [r for r in records if r['id'] != record['id']] + [record]
-    REGISTRY.write_text(json.dumps(records, indent=2) + '\n')
+    atomic_json(REGISTRY, records)
+    # Publish manifest readiness last. If interrupted earlier, the three native
+    # checkpoints still exist and deterministic assembly can safely be resumed.
+    save_manifest(manifest)
     print('READY review export:', source_id, '3 individual panels, 5400x2700 master, 4 WebP derivatives; native resolution limitation retained.')
 
 if __name__ == '__main__':

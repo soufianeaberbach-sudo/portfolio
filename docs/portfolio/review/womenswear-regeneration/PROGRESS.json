@@ -1,0 +1,121 @@
+{
+  "recoveredRemoteCommit": "81b5a04c722095a2151bc6d1851f24026d369202",
+  "storageObservations": {
+    "audit": "RESOURCE-AUDIT.json",
+    "healthyAtRecovery": true
+  },
+  "lastCompletedSourceIdentity": null,
+  "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
+  "updatedUTC": "2026-10-22T16:14:37.468033+00:00",
+  "branch": "feat/womenswear-ai-photography-regeneration",
+  "completedLooks": 22,
+  "pendingLooks": 18,
+  "partiallyGeneratedLooks": 0,
+  "statusCounts": {
+    "INTEGRATED": 3,
+    "READY": 19,
+    "PENDING": 18
+  },
+  "currentCategory": "activewear",
+  "currentSourceIdentity": null,
+  "currentMilestone": "recovery",
+  "lastSuccessfullyPushedCommit": "81b5a04c722095a2151bc6d1851f24026d369202",
+  "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
+  "nextIncompleteSourceIdentity": "activewear-ref-09",
+  "nextActionableSourceIdentity": "evening-ref-01",
+  "blockedSources": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "ce9c339d-ee23-4750-94dc-d321f64096fd",
+          "assetProduced": false,
+          "note": "Adult commercial performance bodysuit with actual opaque sports lining rejected by native tool. No generated file; original source remains featured."
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "cb17ce7e-96b6-489b-8028-3d352bf570e1",
+          "assetProduced": false,
+          "note": "Adult professional swimwear garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "7a320bad-c1ec-4d25-a696-68b10e32c9a6",
+          "assetProduced": false,
+          "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
+        }
+      ]
+    }
+  ],
+  "nextAction": "Generate and validate front for evening-ref-01; checkpoint before the following view",
+  "knownRejectedGenerations": [
+    {
+      "sourceIdentity": "activewear-ref-04",
+      "rejections": [
+        {
+          "view": "front",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-04-v1/rejected/front-stripe-count-v1.png",
+          "reason": "The visible outer-leg stripe group does not clearly retain all three source stripes; not approved for integration.",
+          "nativeDimensions": [
+            1024,
+            1536
+          ]
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "activewear-ref-10",
+      "rejections": [
+        {
+          "view": "front",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/front-stripe-count-v1.png",
+          "reason": "Only two distinguishable white stripes; corrected before integration."
+        },
+        {
+          "view": "back",
+          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/back-diptych-v1.png",
+          "reason": "Two people/diptych; never used or cropped into master."
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "evening-ref-03",
+      "rejections": [
+        {
+          "view": "back",
+          "asset": "/portfolio/generated/ww-ai-evening-ref-03-v1/rejected/back-diptych-v1.png",
+          "reason": "Two people/diptych instead of one independently generated rear panel. Rejected; not used or cropped into master."
+        }
+      ]
+    }
+  ],
+  "notes": "Recovered 22 complete sets; preserved 246 asset files, four rejected outputs and three prior tool blocks. Next actionable source evening-ref-01.",
+  "limitations": [
+    "All photography remains provisional pending owner artistic approval.",
+    "Native resolution and inferred construction remain explicit in the manifest.",
+    "Full collection QA and final PR wait for all forty completed sets."
+  ]
+}
