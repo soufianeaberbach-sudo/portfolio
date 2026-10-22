@@ -7139,12 +7139,31 @@
       },
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "78e494a94c29acf0379c8a5c7d2352b1aafb05d00d2b6e252f89a12c9684e59b",
+        "toolOutputPath": "/workspace/generated_images/exec-f71bba2d-a8bd-4f5a-9403-814fcbd46f8d.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "One neutral professional studio catalogue study of the grey swimwear shown in the attached reference. Preserve the exact supplied garment design, material, color and original styling. One adult model standing straight on, full-length front view, relaxed arms and neutral expression. Clear outfit visibility, realistic textile and natural proportions, even lighting and soft floor contact shadow. Whole figure and all garment edges within generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; retain actual native dimensions.",
+        "referenceAssets": [
+          "/portfolio/swim/9-1400.webp"
+        ],
+        "generationOperation": "Separate neutral catalogue Front from original reference; accepted second owner-authorized attempt",
+        "nativeResampled": false,
+        "reviewNote": "Native inspected at true 3:4 proportions over white: same adult center-part tied-back brunette with brown sunglasses and hoops, grey gathered bandeau with central oval opening and forked halter straps, matching bottom and original narrow upper waistband/vertical connectors/long side ties, barefoot. Faithful source cut/color/styling, full head/hands/feet, calm straight stance, natural anatomy, clean alpha edges and subtle contact shading. Actual 1086x1448 RGBA retained unchanged."
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Native inspected at true 3:4 proportions over white: same adult center-part tied-back brunette with brown sunglasses and hoops, grey gathered bandeau with central oval opening and forked halter straps, matching bottom and original narrow upper waistband/vertical connectors/long side ties, barefoot. Faithful source cut/color/styling, full head/hands/feet, calm straight stance, natural anatomy, clean alpha edges and subtle contact shading. Actual 1086x1448 RGBA retained unchanged.",
+        "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional."
       ],
@@ -7166,6 +7185,20 @@
           "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait preserving the exact silver-grey swim set and adult brunette woman in the supplied original reference. One model only, calm neutral straight-on stance, arms relaxed slightly apart. Preserve opaque grey ruched bandeau top with original small center oval opening and slim triangular halter strap arrangement; matching grey briefs with original doubled waist straps/vertical bridge tabs and side bow ties with hanging ends. Same source coverage, fabric, proportions and strap routing; no extra cutout, logo or redesign. Same sleek center-part low bun, oversized brown square sunglasses, small gold hoop earrings and bare feet; no new accessories. Full head, hands, all strap/tie edges and both feet inside generous safe margins. Natural realistic adult anatomy, skin/textile and fingers/toes, no stretching. Soft even neutral studio lighting and restrained floor contact shadows. Genuine transparent alpha preserving fabric, hair, straps and shadows. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, graphic, label, border, second figure or collage. Provisional AI source-based preservation; unseen rear/construction unverified.",
           "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
           "recordedUTC": "2026-10-22T19:15:00.075277+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "input",
+          "category": "sexual",
+          "requestId": "809f940a-59c7-4154-a7eb-93f66e5d6654",
+          "attempt": "primary-commercial",
+          "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey swim set in the attached reference. One adult model standing straight on, full-length FRONT view, relaxed arms and neutral expression. Preserve the gathered grey bandeau top with original central oval join and forked halter straps, matching grey bottom with original narrow upper waist band, small connecting straps and long side ties, source coverage, cut, fabric and proportions. Same adult appearance, brown center-part hair tied back, original brown sunglasses and small hoop earrings, barefoot. Clear construction visibility, photorealistic textile, natural proportions, soft even studio lighting and realistic gentle floor contact shadow. Entire head, hands, ties and feet inside generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Retain actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Primary source-preserving catalogue request rejected at input. Second neutral attempt used the exact same unchanged original reference and produced a valid Front; original failure retained as history.",
+          "recordedUTC": "2026-10-22T20:08:21.302612+00:00"
         }
       ]
     },

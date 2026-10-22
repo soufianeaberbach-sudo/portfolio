@@ -6,24 +6,24 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:06:27.129943+00:00",
+  "updatedUTC": "2026-10-22T20:08:25.763737+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
-  "pendingLooks": 8,
-  "partiallyGeneratedLooks": 3,
+  "pendingLooks": 7,
+  "partiallyGeneratedLooks": 4,
   "statusCounts": {
     "INTEGRATED": 10,
     "READY": 19,
-    "PENDING": 8,
-    "GENERATED": 3
+    "PENDING": 7,
+    "GENERATED": 4
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-08",
-  "currentMilestone": "editorial-blocked-commercial-retry",
-  "lastSuccessfullyPushedCommit": "67439a799067e85faa75341a20f37fbf457bb48b",
+  "currentSourceIdentity": "swimwear-ref-09",
+  "currentMilestone": "front",
+  "lastSuccessfullyPushedCommit": "d29e55b169eb09599126b2849259066bd7e75f76",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": null,
+  "nextActionableSourceIdentity": "swimwear-ref-09",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -515,26 +515,9 @@
           "recordedUTC": "2026-10-22T20:01:12.586100+00:00"
         }
       ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-09",
-      "failures": [
-        {
-          "view": "front",
-          "tool": "OpenAI native image tool",
-          "error": "moderation_blocked",
-          "moderationStage": "output",
-          "category": "sexual",
-          "requestId": "862b4346-57b1-4980-a408-853f53acab66",
-          "assetProduced": false,
-          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait preserving the exact silver-grey swim set and adult brunette woman in the supplied original reference. One model only, calm neutral straight-on stance, arms relaxed slightly apart. Preserve opaque grey ruched bandeau top with original small center oval opening and slim triangular halter strap arrangement; matching grey briefs with original doubled waist straps/vertical bridge tabs and side bow ties with hanging ends. Same source coverage, fabric, proportions and strap routing; no extra cutout, logo or redesign. Same sleek center-part low bun, oversized brown square sunglasses, small gold hoop earrings and bare feet; no new accessories. Full head, hands, all strap/tie edges and both feet inside generous safe margins. Natural realistic adult anatomy, skin/textile and fingers/toes, no stretching. Soft even neutral studio lighting and restrained floor contact shadows. Genuine transparent alpha preserving fabric, hair, straps and shadows. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, graphic, label, border, second figure or collage. Provisional AI source-based preservation; unseen rear/construction unverified.",
-          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
-          "recordedUTC": "2026-10-22T19:15:00.075277+00:00"
-        }
-      ]
     }
   ],
-  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
+  "nextAction": "Generate and validate back for swimwear-ref-09; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -602,11 +585,14 @@
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
   "remainingLooks": 11,
-  "nextImage": null,
+  "nextImage": {
+    "sourceIdentity": "swimwear-ref-09",
+    "view": "back"
+  },
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
+  "productionState": "IN_PROGRESS"
 }
