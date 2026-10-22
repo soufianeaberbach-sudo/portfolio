@@ -6618,12 +6618,31 @@
         "silver"
       ],
       "priority": 1,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "42eb02172f5afe8177b1553cb2e0423ed1103c3128650c91e6ca5025b91a9772",
+        "toolOutputPath": "/workspace/generated_images/exec-cb6e9da3-0fad-4332-a293-6a9edb466892.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "One neutral professional studio catalogue study of the grey and white swimwear shown in the reference. Preserve the exact supplied design, materials, colors and original accessories. One adult model standing straight on, full-length front, relaxed arms and neutral expression. Clear outfit visibility, realistic textile and proportions, even studio lighting and soft floor shadow. Entire figure within generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
+        "referenceAssets": [
+          "/portfolio/swim/5-1400.webp"
+        ],
+        "generationOperation": "Separate neutral catalogue Front from original reference; accepted second owner-authorized attempt",
+        "nativeResampled": false,
+        "reviewNote": "Native reviewed at true 3:4 proportions over white: matching adult tied-back brunette with dark square sunglasses and small hoops, grey scoop top over white halter layer, grey high-waisted bottom and narrow crossed waist straps, barefoot. Source garment colors/cut/accessories retained, complete head/hands/feet, neutral posture, natural anatomy, clear edges and soft floor shadow. Actual 1086x1448 RGBA native preserved unchanged."
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Native reviewed at true 3:4 proportions over white: matching adult tied-back brunette with dark square sunglasses and small hoops, grey scoop top over white halter layer, grey high-waisted bottom and narrow crossed waist straps, barefoot. Source garment colors/cut/accessories retained, complete head/hands/feet, neutral posture, natural anatomy, clear edges and soft floor shadow. Actual 1086x1448 RGBA native preserved unchanged.",
+        "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional."
       ],
@@ -6645,6 +6664,20 @@
           "recordedUTC": "2026-10-22T18:49:15.729278+00:00",
           "generationPrompt": "ONE full-length FRONT professional swimwear catalogue studio photograph of the exact outfit in the attached original reference. Exactly one adult female fashion model, calm neutral straight-on stance, arms naturally relaxed slightly away; no pair or collage. Preserve this supplied opaque silver-grey swim set and styling: grey scoop bralette with thin shoulder straps over visible white halter bikini triangles/white neck straps, matching grey high-waisted briefs with the original slim V-shaped crossing waist straps, exact source coverage/material proportions, large black square sunglasses with gold hinges, small gold hoop earrings, slicked-back brown hair in low bun, barefoot. No new cutouts, logos, accessories or garment redesign. Same adult appearance and styling as source; realistic skin and garment texture, anatomically natural limbs, hands and toes. Entire head, sunglasses, hands, full silhouette and both feet in frame with generous safe margins. Neutral commercial catalogue treatment, soft even studio lighting and realistic subtle floor contact shadows. Genuine transparent alpha background preserving grey/white fabric, hair and shadow. Request portrait 1800x2700 if supported; otherwise actual native portrait dimensions, without stretching proportions. Empty canvas outside figure/shadow; no graphic, text, label or border. Provisional AI presentation preserving supplied design; no construction/authorship claim.",
           "note": "Source-preserving adult swimwear catalogue request rejected at input. No image exists; original source preserved. No altered-prompt retry."
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "c0bf41cc-e030-49f5-9299-680f7016a4e2",
+          "attempt": "primary-commercial",
+          "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact grey and white swim outfit in the attached reference. One adult model, straight-on full-length FRONT standing view, relaxed arms and neutral expression. Preserve the grey scoop top with thin straps layered over the visible white halter top, matching grey high-waisted bottom with original narrow crossed waist straps, source fabric, coverage, proportions and colors. Retain the original dark square sunglasses with gold hinges, small hoop earrings, neat tied-back brown hair and barefoot styling. Clear garment visibility and natural posture, photorealistic textile, soft even studio lighting and realistic floor contact shadow. Whole head, hands, outfit and feet inside generous portrait margins. Genuine transparent background; no text, logo, graphics or border. Retain actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Primary source-preserving catalogue request rejected. Second neutral attempt produced a valid Front; original failure retained as history.",
+          "recordedUTC": "2026-10-22T19:54:58.830750+00:00"
         }
       ]
     },
