@@ -4690,14 +4690,34 @@
       "sourceWindow": null,
       "cinematicRoles": [],
       "priority": 2,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-05-v1/front-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "7bbb26e14807d960ee67cec0516ad0d3b21238ce4e8540a0387e6c9db88db096",
+        "toolOutputPath": "/workspace/generated_images/exec-0367706b-0c66-4b61-a474-361ae9a6d14d.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate native Front edit using original supplied Front/Back photograph",
+        "generationPrompt": "Make exactly ONE full-length FRONT professional studio fashion portrait, ONE adult woman only, based faithfully on the supplied rust chiffon gown reference. The two-view plate is garment evidence, not an output layout: never produce two people or a diptych. Preserve the original asymmetric design and proportions: muted terracotta/rust flowing chiffon with subtle tonal lighter organic curved motifs; loose layered blouson/overblouse falling over the high hip; softly ruffled front neckline; on the wearer's RIGHT (image left), thin spaghetti shoulder strap, exposed upper shoulder and long wide dropped bell sleeve; on the wearer's LEFT (image right), a broader draped chiffon shoulder/cape section flowing into a long cascading vertical flounce with a paler reverse edge. Long loose skirt to the floor, soft layered hem with slight natural pooling, same opacity/lining as source. Do not make it symmetrical, tailored, sleeveless or a new gown. Same adult brunette model appearance as source, neat swept-back bun/updo and natural fashion makeup, no added jewellery. Body and face squarely facing camera, neutral relaxed stance, arms naturally lowered slightly away so sleeve/cape silhouette and complete hands are readable. Keep entire head, hands, garment edges and hem safely inside the portrait; no body distortion, cropped cloth or added slit/accessories. Soft neutral studio lighting, realistic fabric grain/translucency, realistic anatomy and subtle hem contact shadow. Genuine transparent background/alpha preserving all rust chiffon and translucent edges. Requested 1800x2700 portrait if available; otherwise return true native size. No text, labels, frames or montage. Provisional AI presentation of supplied design; no authorship/manufacturing claim.",
+        "referenceAssets": [
+          "/portfolio/evening/5-1400.webp"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive."
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive.",
+        "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; requested exports will be explicitly resampled.",
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
-        "Reference photographs do not verify technical construction or authorship."
+        "Reference photographs do not verify technical construction or authorship.",
+        "Fine tonal motif placement, hidden fastenings and exact pattern/construction remain interpretation from the supplied photographs."
       ],
       "replacementStatus": "NOT_INTEGRATED",
       "actualSourceDimensions": {
