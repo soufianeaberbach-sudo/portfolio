@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-01",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T16:26:07.492650+00:00",
+  "updatedUTC": "2026-10-22T16:27:52.700155+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 23,
   "pendingLooks": 17,
@@ -17,12 +17,12 @@
     "PENDING": 17
   },
   "currentCategory": "evening",
-  "currentSourceIdentity": "evening-ref-01",
-  "currentMilestone": "qa",
-  "lastSuccessfullyPushedCommit": "095bed5b9c208e2b482c85d97be4f5338b85d8d8",
+  "currentSourceIdentity": "evening-ref-02",
+  "currentMilestone": "blocked",
+  "lastSuccessfullyPushedCommit": "fa93fd76c6e35a2926bb2245a4f36e6f0953fecb",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "evening-ref-02",
+  "nextActionableSourceIdentity": "evening-ref-05",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -36,6 +36,22 @@
           "requestId": "ce9c339d-ee23-4750-94dc-d321f64096fd",
           "assetProduced": false,
           "note": "Adult commercial performance bodysuit with actual opaque sports lining rejected by native tool. No generated file; original source remains featured."
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "66b93b88-cb4d-4140-9edc-7a93bdb70eb1",
+          "assetProduced": false,
+          "recordedUTC": "2026-10-22T16:27:48.190940+00:00",
+          "note": "Source-based adult commercial gown request rejected by the native tool. No generated file exists, no altered-prompt retry; original source and slot preserved."
         }
       ]
     },
@@ -70,7 +86,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate front for evening-ref-02; checkpoint before the following view",
+  "nextAction": "Generate and validate front for evening-ref-05; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -112,7 +128,7 @@
       ]
     }
   ],
-  "notes": "23 complete sets; 54 focused browser checks and screenshot critique passed. Next actionable source evening-ref-02.",
+  "notes": "Native tool output moderation rejected Front; no asset produced. Four blocked sources; next actionable evening-ref-05.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
