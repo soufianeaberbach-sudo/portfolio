@@ -4776,7 +4776,7 @@
         ],
         "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
       },
-      "status": "READY",
+      "status": "INTEGRATED",
       "qualityResult": {
         "frontVisual": "Inspected actual native RGBA over white against source. Single adult brunette updo, asymmetrical rust chiffon gown with wearer-right thin strap/cold shoulder and bell sleeve, wearer-left broad cape and pale-reverse cascading flounce, loose upper layer and floor-length skirt retained. Entire head/hands/hem visible, no obvious anatomy failure or dark halo. Fine tonal print placement is interpretive.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; requested exports will be explicitly resampled.",
@@ -4852,13 +4852,14 @@
             "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
           }
         ],
-        "masterVisualReview": "Inspected actual white 5400x2700 master: equal undistorted thirds, intact head/hands/sleeves/cascade/hem, consistent model/rust color and safe margins. Figure floor aligned with uniform scaling only; no dark ground or halo. Native limitation and provisional construction remain explicit."
+        "masterVisualReview": "Inspected actual white 5400x2700 master: equal undistorted thirds, intact head/hands/sleeves/cascade/hem, consistent model/rust color and safe margins. Figure floor aligned with uniform scaling only; no dark ground or halo. Native limitation and provisional construction remain explicit.",
+        "browserCheckpoint": "106 assertions across these two new sets at 1440x900 and 390x844: four actual views/full master, exact panel proportions/thirds, AI disclosure, Look Closer, archive focus return, historical original source and no overflow/runtime errors. Representative screenshots inspected: full silhouette, clean white ground, subordinate labels, safe phone framing. Owner artistic approval remains pending."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Fine tonal motif placement, hidden fastenings and exact pattern/construction remain interpretation from the supplied photographs."
       ],
-      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1875
@@ -5012,7 +5013,7 @@
         ],
         "resamplingDisclosure": "Three separate native 1024×1536 generations, uniformly resampled for the requested review export. Not native 1800×2700 detail."
       },
-      "status": "READY",
+      "status": "INTEGRATED",
       "qualityResult": {
         "frontVisual": "Native inspected over white against source: one adult model with loose center-part brown hair; opaque sky-blue sleeveless high-neck jersey gown, gathered bust, curved smooth midriff panel, gathered hips and long central front drape retained. Whole head/hands/hem visible with natural proportions; no obvious anatomy, crop or halo failure.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; review exports are explicitly resampled.",
@@ -5088,26 +5089,27 @@
             "backgroundPreparation": "Native tool alpha; no background threshold or fabric recolouring."
           }
         ],
-        "masterVisualReview": "Inspected actual 5400x2700 white-ground master: three equal undistorted thirds, consistent sky-blue color/model/hair, complete head/hands/hem and safe margins. Front preserves gathered high-neck/midriff panel; true rear preserves deep V/diagonal wrap; Editorial restrained. No dark ground, halo or body stretching; uniform scale and aligned hem floor. Native detail and hidden collar construction remain provisional."
+        "masterVisualReview": "Inspected actual 5400x2700 white-ground master: three equal undistorted thirds, consistent sky-blue color/model/hair, complete head/hands/hem and safe margins. Front preserves gathered high-neck/midriff panel; true rear preserves deep V/diagonal wrap; Editorial restrained. No dark ground, halo or body stretching; uniform scale and aligned hem floor. Native detail and hidden collar construction remain provisional.",
+        "browserCheckpoint": "106 assertions across these two new sets at 1440x900 and 390x844: four actual views/full master, exact panel proportions/thirds, AI disclosure, Look Closer, archive focus return, historical original source and no overflow/runtime errors. Representative screenshots inspected: full silhouette, clean white ground, subordinate labels, safe phone framing. Owner artistic approval remains pending."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
         "Exact internal pattern, gathering/fastenings and rear collar connection hidden by source hair remain provisional; source supports the deep rear V and diagonal wrap."
       ],
-      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
+      "replacementStatus": "INTEGRATED_PROVISIONAL_REVIEW",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 2508
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "50cd64020641f33fbfae63c3f65fa4eac0aaf0e9",
+        "commit": "be6e0672db8210770fcd659b3a391d76c1cad1e1",
         "views": [
           "front",
           "back",
           "editorial"
         ],
-        "master": false
+        "master": true
       },
       "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied sky-blue sleeveless gathered jersey gown with high front neckline, curved midriff panel, long front drape and deep V wrap back.",
       "generatedCaption": "Sky-blue gathered jersey gown with deep V back and long front drape."

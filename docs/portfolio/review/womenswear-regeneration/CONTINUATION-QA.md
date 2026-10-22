@@ -33,3 +33,9 @@ construction remain interpretation; owner artistic approval is still pending.
 No full-collection completion claim: 23 complete sets after this addition, 17
 incomplete including three pre-existing tool-moderation blocks. Final six-size
 collection review, broad regression and final PR remain pending.
+
+## evening-ref-05 / evening-ref-06 focused batch
+
+25 complete sets, no partial sets, 15 pending including four tool blocks. Blue gown Front was verified at `c2e24536a367bcc145ac51408821b9ee50403f0b` and never regenerated; Back `febd2375e71fa153a9c51ae8a4abffdf7bebf6fc`, Editorial `50cd64020641f33fbfae63c3f65fa4eac0aaf0e9`, master `be6e0672db8210770fcd659b3a391d76c1cad1e1`. Rust master `0fa8c8362b0ec9212c8df19c076f2b089cf6f0e1`. Every push verified against the remote SHA.
+
+Production build and 186 slot checks passed. [106 focused browser assertions](evidence/evening-05-06-browser.json) passed at 1440x900 and 390x844. Inspected [rust phone Front](evidence/evening-ref-05-front-390.jpg) and [blue desktop Back](evidence/evening-ref-06-back-1440.jpg): garment remains primary, white grounds integrate without halos, full hems and hands fit, type remains subordinate, actual view/inspection/return behavior passes and phone framing is safe. Cinematic system unchanged; no new motion claim. All photography stays provisional, native 1024x1536 with disclosed resampling. Final whole-collection six-size/regression review remains pending. Next actionable source: evening-ref-07 Front.

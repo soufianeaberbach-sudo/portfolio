@@ -6,20 +6,20 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-06",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:15:27.980394+00:00",
+  "updatedUTC": "2026-10-22T18:16:41.451089+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 25,
   "pendingLooks": 15,
   "partiallyGeneratedLooks": 0,
   "statusCounts": {
-    "INTEGRATED": 4,
-    "READY": 21,
+    "INTEGRATED": 6,
+    "READY": 19,
     "PENDING": 15
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-06",
-  "currentMilestone": "set",
-  "lastSuccessfullyPushedCommit": "50cd64020641f33fbfae63c3f65fa4eac0aaf0e9",
+  "currentMilestone": "qa",
+  "lastSuccessfullyPushedCommit": "be6e0672db8210770fcd659b3a391d76c1cad1e1",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "evening-ref-07",
@@ -128,7 +128,7 @@
       ]
     }
   ],
-  "notes": "25 complete sets, 0 partial, 15 pending including four recorded blocks. Saved Front unchanged; Back/Editorial and all derived files complete. Focused file checks, 186 slot checks and Astro build passed.",
+  "notes": "25 complete; no partial; 15 pending including four tool blocks. 106 focused browser checks pass. Exact next image evening-ref-07 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
