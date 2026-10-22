@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T18:47:31.021733+00:00",
+  "updatedUTC": "2026-10-22T18:49:21.147097+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 28,
   "pendingLooks": 12,
@@ -16,13 +16,13 @@
     "READY": 19,
     "PENDING": 12
   },
-  "currentCategory": "evening",
-  "currentSourceIdentity": "evening-ref-10",
-  "currentMilestone": "qa",
-  "lastSuccessfullyPushedCommit": "df22aac7b0ec03ad830c7f9e9dd7e5fea38ee59e",
+  "currentCategory": "swimwear",
+  "currentSourceIdentity": "swimwear-ref-05",
+  "currentMilestone": "blocked",
+  "lastSuccessfullyPushedCommit": "2960843cff639baad64b281243b557f79204cc72",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-05",
+  "nextActionableSourceIdentity": "swimwear-ref-10",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -52,6 +52,23 @@
           "assetProduced": false,
           "recordedUTC": "2026-10-22T16:27:48.190940+00:00",
           "note": "Source-based adult commercial gown request rejected by the native tool. No generated file exists, no altered-prompt retry; original source and slot preserved."
+        }
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "input",
+          "category": "sexual",
+          "requestId": "0dc58e01-19c7-4c0c-93cb-36a3e21709c1",
+          "assetProduced": false,
+          "recordedUTC": "2026-10-22T18:49:15.729278+00:00",
+          "generationPrompt": "ONE full-length FRONT professional swimwear catalogue studio photograph of the exact outfit in the attached original reference. Exactly one adult female fashion model, calm neutral straight-on stance, arms naturally relaxed slightly away; no pair or collage. Preserve this supplied opaque silver-grey swim set and styling: grey scoop bralette with thin shoulder straps over visible white halter bikini triangles/white neck straps, matching grey high-waisted briefs with the original slim V-shaped crossing waist straps, exact source coverage/material proportions, large black square sunglasses with gold hinges, small gold hoop earrings, slicked-back brown hair in low bun, barefoot. No new cutouts, logos, accessories or garment redesign. Same adult appearance and styling as source; realistic skin and garment texture, anatomically natural limbs, hands and toes. Entire head, sunglasses, hands, full silhouette and both feet in frame with generous safe margins. Neutral commercial catalogue treatment, soft even studio lighting and realistic subtle floor contact shadows. Genuine transparent alpha background preserving grey/white fabric, hair and shadow. Request portrait 1800x2700 if supported; otherwise actual native portrait dimensions, without stretching proportions. Empty canvas outside figure/shadow; no graphic, text, label or border. Provisional AI presentation preserving supplied design; no construction/authorship claim.",
+          "note": "Source-preserving adult swimwear catalogue request rejected at input. No image exists; original source preserved. No altered-prompt retry."
         }
       ]
     },
@@ -86,7 +103,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate front for swimwear-ref-05; checkpoint before the following view",
+  "nextAction": "Generate and validate front for swimwear-ref-10; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -145,7 +162,7 @@
       ]
     }
   ],
-  "notes": "28 complete, no partial, 12 pending including four blocks. 474 checks on only three new gowns at all six viewports pass. Exact next image swimwear-ref-05 Front.",
+  "notes": "No file produced. Five sources now blocked; 28 complete, no partial, 12 pending. Next actionable swimwear-ref-10 original concept Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",
