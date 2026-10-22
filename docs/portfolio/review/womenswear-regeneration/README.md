@@ -1,5 +1,9 @@
 # Womenswear AI photography regeneration — IN PROGRESS
 
+**Current: 29 complete looks, 0 partial, 11 pending — all remaining sources are tool-moderation blocked.**
+Read [exact resume status](RESUME-STATUS.md), [PROGRESS.json](PROGRESS.json) and [MANIFEST.json](MANIFEST.json).
+The recovery counts below are the dated starting snapshot, not current totals.
+
 ## Verified incremental recovery — 22 October 2026
 
 Recovered the **existing branch** from remote `81b5a04c722095a2151bc6d1851f24026d369202`,

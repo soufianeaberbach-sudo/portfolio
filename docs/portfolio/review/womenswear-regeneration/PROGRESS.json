@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:12:10.687479+00:00",
+  "updatedUTC": "2026-10-22T19:20:34.944556+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -17,12 +17,12 @@
     "PENDING": 11
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-07",
-  "currentMilestone": "blocked",
-  "lastSuccessfullyPushedCommit": "414bb57e4b4392c9eb391b46535da56ed776f8ef",
+  "currentSourceIdentity": "swimwear-ref-09",
+  "currentMilestone": "blocked-resume-report",
+  "lastSuccessfullyPushedCommit": "75548d692743502e4c39fc8d6eeff28e0e4bc4e1",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-09",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -186,9 +186,26 @@
           "recordedUTC": "2026-10-22T19:12:06.386429+00:00"
         }
       ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "862b4346-57b1-4980-a408-853f53acab66",
+          "assetProduced": false,
+          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait preserving the exact silver-grey swim set and adult brunette woman in the supplied original reference. One model only, calm neutral straight-on stance, arms relaxed slightly apart. Preserve opaque grey ruched bandeau top with original small center oval opening and slim triangular halter strap arrangement; matching grey briefs with original doubled waist straps/vertical bridge tabs and side bow ties with hanging ends. Same source coverage, fabric, proportions and strap routing; no extra cutout, logo or redesign. Same sleek center-part low bun, oversized brown square sunglasses, small gold hoop earrings and bare feet; no new accessories. Full head, hands, all strap/tie edges and both feet inside generous safe margins. Natural realistic adult anatomy, skin/textile and fingers/toes, no stretching. Soft even neutral studio lighting and restrained floor contact shadows. Genuine transparent alpha preserving fabric, hair, straps and shadows. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, graphic, label, border, second figure or collage. Provisional AI source-based preservation; unseen rear/construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:15:00.075277+00:00"
+        }
+      ]
     }
   ],
-  "nextAction": "Generate and validate front for swimwear-ref-09; checkpoint before the following view",
+  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -247,10 +264,20 @@
       ]
     }
   ],
-  "notes": "No file produced. Ten blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-09 Front.",
+  "notes": "29 complete, 0 partial, 11 remaining—all native-tool moderation blocked. No actionable unblocked view. First unresolved activewear-ref-09 Front requires blocker resolution. All 269 saved resume assets and evening-ref-06 Front preserved byte-for-byte; full forty-look QA/PR pending.",
   "limitations": [
+    "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
+    "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
+    "Native accepted portraits remain 1024x1536; 1800x2700 panels/5400x2700 masters are disclosed resampled exports.",
     "All photography remains provisional pending owner artistic approval.",
-    "Native resolution and inferred construction remain explicit in the manifest.",
-    "Full collection QA and final PR wait for all forty completed sets."
-  ]
+    "Full forty-look collection QA and final PR are not complete; no merge or deployment."
+  ],
+  "remainingLooks": 11,
+  "nextImage": null,
+  "nextBlockedImage": {
+    "sourceIdentity": "activewear-ref-09",
+    "view": "front",
+    "status": "BLOCKED_MODERATION"
+  },
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
 }
