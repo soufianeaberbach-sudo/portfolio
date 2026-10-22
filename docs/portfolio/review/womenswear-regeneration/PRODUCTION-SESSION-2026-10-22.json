@@ -1,0 +1,442 @@
+{
+  "startedUTC": "2026-10-22T22:41:38.379309+00:00",
+  "baseVerifiedCommit": "6571916c670574a49a4cf3711e4e178a20f3725f",
+  "startingCounts": {
+    "completeLooks": 29,
+    "acceptedNativeImages": 92,
+    "partialLooks": 4,
+    "missingViews": 28
+  },
+  "tool": {
+    "name": "image_gen.imagegen",
+    "operations": [
+      "generation",
+      "reference-image edit"
+    ],
+    "exposedSettings": [
+      "prompt",
+      "referenced_image_paths",
+      "num_last_images_to_include",
+      "transparent_background"
+    ],
+    "unavailableControls": [
+      "size",
+      "quality",
+      "number_of_outputs",
+      "seed",
+      "fidelity"
+    ],
+    "usageEndpointAvailable": false
+  },
+  "styleSpecification": {
+    "inspected": [
+      "ww-ai-swimwear-ref-10-v1 natives/master",
+      "ww-ai-swimwear-ref-08-v1 Front/Back",
+      "ww-ai-swimwear-ref-04-v1 Front",
+      "ww-ai-swimwear-ref-05-v1 Front",
+      "ww-ai-swimwear-ref-09-v1 Front",
+      "ww-ai-activewear-ref-07-v1 natives/master",
+      "ww-ai-evening-ref-04-v1 natives/master",
+      "ww-ai-rtw-ref-02-v1 natives/master"
+    ],
+    "grammar": "Soft even neutral commercial studio light; realistic skin and opaque/transparent textile behavior as source; whole adult figure, restrained pose, undistorted camera, complete hair/hands/hem/feet; same model and styling within look; true rear; white final ground and subtle contact shadow; no graphics. Existing assembly uses 88% maximum opaque height and 94% floor alignment, with uniform scale and preserved alpha."
+  },
+  "attemptPolicy": "One carefully selected operation per actionable missing view in this session. No repeat after a new moderation refusal for that view; continue independent views. Accepted originals never resubmitted after input refusal. No safety bypass. Source unsupported rear remains provisional.",
+  "baselineArtworkFiles": 329,
+  "attempts": [
+    {
+      "id": "swimwear-ref-08",
+      "view": "editorial",
+      "prompt": "Edit the first accepted catalogue photograph into one new full-length editorial photograph, using the second accepted photograph only to check the same garment's rear arrangement. Keep this exact adult woman, face, body proportions, tied-back brunette bun, small hoop earrings, bare feet and black swimsuit. Make the photographic change small and specific: turn her standing orientation about 25 degrees toward camera-left, with a gentle natural weight shift, both feet on the floor, relaxed hands and a neutral catalogue expression. Preserve the opaque black gathered halter bandeau, twisted gathered central connection, high-waisted lower section, original cut and thin neck straps, without changing garment details or coverage. Keep the same soft frontal studio lighting, neutral white balance, realistic textile and skin, full-length camera distance and subtle floor contact shadow. Portrait composition with the entire head, both hands and both feet comfortably inside the frame. Render exactly one model in one photograph, with no text, graphics, border, props or watermark. Transparent background preserving the fabric edges, hair and contact shadow. This is a provisional apparel presentation; the rear reference is already an inferred construction.",
+      "refs": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+      ],
+      "operation": "Limited pose/camera continuation edit; accepted Front primary, accepted Back construction check",
+      "recordedUTC": "2026-10-22T22:42:47.626Z",
+      "status": "TECHNICAL_FAILURE",
+      "assetProduced": false,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+      "httpStatus": 400,
+      "moderationDecision": null,
+      "requestId": null
+    },
+    {
+      "id": "swimwear-ref-04",
+      "view": "back",
+      "prompt": "Create a companion rear catalogue photograph by editing the supplied accepted Front. Keep the exact adult woman's proportions, dark center-part hair in the low bun, small hoop earrings, bare feet, magenta fabric color and gathered texture. Turn her whole standing figure directly away from the camera, with the back of the head visible and both arms naturally relaxed. Show exactly one rear-facing figure. The matching magenta swim set keeps its halter fastening behind the neck and side bows with long ends. Since only a Front exists, use a simple provisional matching gathered rear top band and conventional matching lower back panel; do not treat unseen construction as verified. Match the Front's neutral studio illumination, full-length framing and gentle grounded contact shadow. Entire hair, hands, ties and feet inside ample portrait margins, natural body geometry, realistic skin and textile. Transparent background. No text, graphic, prop, border, extra straps or second subject.",
+      "refs": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+      ],
+      "operation": "Single-reference true-rear continuation; minimal inferred rear consistent with accepted Front",
+      "recordedUTC": "2026-10-22T22:43:07.167Z",
+      "status": "TECHNICAL_FAILURE",
+      "assetProduced": false,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+      "httpStatus": 400,
+      "moderationDecision": null,
+      "requestId": null
+    },
+    {
+      "id": "evening-ref-02",
+      "view": "front",
+      "operation": "Text-described source-based generation from inspected garment specifications, no image input; source fidelity would require visual comparison before acceptance",
+      "refs": [],
+      "prompt": "Produce one full-length front catalogue photograph from this garment specification transcribed from the owner's beige occasionwear reference: a sand-beige floor-length column gown with a broad straight off-shoulder folded band extending over both upper arms, all-over open honeycomb mesh textile with fine beige edges, fitted body through hips, then a gently flared floor hem and modest pooling fabric. The source has tonal foundation layers beneath the semi-sheer mesh. Preserve this textile structure, neckline proportions and long silhouette. One adult professional fashion model about 30 with chestnut hair swept into a neat low updo, natural realistic proportions and neutral expression, facing straight toward camera with relaxed arms clear of the waist. Full head, hands and complete hem comfortably inside a portrait frame. Soft balanced catalogue light, neutral white balance, realistic skin and woven textile detail, subtle floor contact shadow. Transparent background, exactly one person, no lettering, symbols, props or border. This is a provisional source-described garment presentation; exact reference fidelity must be reviewed before acceptance.",
+      "recordedUTC": "2026-10-22T22:43:19.000Z",
+      "status": "TECHNICAL_FAILURE",
+      "assetProduced": false,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+      "httpStatus": 400,
+      "moderationDecision": null,
+      "requestId": null
+    }
+  ],
+  "preservationValidation": {
+    "all329BaselineArtworkFilesUnchanged": true,
+    "all29CompleteManifestRecordsUnchanged": true,
+    "integrationRegistryUnchanged": true,
+    "nativeDimensions": {
+      "(1024, 1536)": 87,
+      "(1086, 1448)": 5
+    },
+    "nativeAlpha": {
+      "RGBOrOpaque": 3,
+      "realAlpha": 89
+    },
+    "partialNativeMetrics": [
+      {
+        "sourceIdentity": "swimwear-ref-04",
+        "view": "front",
+        "dimensions": [
+          1086,
+          1448
+        ],
+        "mode": "RGBA",
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "opaqueBounds": [
+          347,
+          32,
+          746,
+          1405
+        ],
+        "supportBounds": [
+          346,
+          31,
+          747,
+          1413
+        ]
+      },
+      {
+        "sourceIdentity": "swimwear-ref-05",
+        "view": "front",
+        "dimensions": [
+          1086,
+          1448
+        ],
+        "mode": "RGBA",
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "opaqueBounds": [
+          357,
+          33,
+          739,
+          1415
+        ],
+        "supportBounds": [
+          356,
+          32,
+          740,
+          1418
+        ]
+      },
+      {
+        "sourceIdentity": "swimwear-ref-08",
+        "view": "front",
+        "dimensions": [
+          1086,
+          1448
+        ],
+        "mode": "RGBA",
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "opaqueBounds": [
+          349,
+          35,
+          770,
+          1428
+        ],
+        "supportBounds": [
+          348,
+          34,
+          771,
+          1429
+        ]
+      },
+      {
+        "sourceIdentity": "swimwear-ref-08",
+        "view": "back",
+        "dimensions": [
+          1086,
+          1448
+        ],
+        "mode": "RGBA",
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "opaqueBounds": [
+          347,
+          32,
+          758,
+          1406
+        ],
+        "supportBounds": [
+          346,
+          31,
+          759,
+          1413
+        ]
+      },
+      {
+        "sourceIdentity": "swimwear-ref-09",
+        "view": "front",
+        "dimensions": [
+          1086,
+          1448
+        ],
+        "mode": "RGBA",
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "opaqueBounds": [
+          339,
+          19,
+          749,
+          1418
+        ],
+        "supportBounds": [
+          338,
+          18,
+          750,
+          1420
+        ]
+      }
+    ]
+  },
+  "historicallyModerationBlockedMissingViews": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "back"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "front"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "editorial"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "back"
+    }
+  ],
+  "executedChecks": [
+    "Existing checkpoint validator passed: 40 source hashes, 92 native hashes/dimensions, 29 masters, four derivatives per master and registry.",
+    "All 329 baseline artwork SHA256 values match the verified starting checkpoint.",
+    "29 completed manifest records and entire integration registry unchanged.",
+    "Six existing recovery regression tests passed."
+  ],
+  "updatedUTC": "2026-10-22T22:44:38.332394+00:00",
+  "status": "BLOCKED_IMAGE_TOOL_INTEGRATION",
+  "actualToolCalls": 3,
+  "newAcceptedImages": 0,
+  "newCompleteLooks": 0,
+  "newModerationFailures": 0,
+  "newQuotaFailures": 0,
+  "technicalFailures": 3,
+  "finalCounts": {
+    "completeLooks": 29,
+    "acceptedNativeImages": 92,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 7,
+    "missingIndividualViews": 28,
+    "historicallyModerationBlockedMissingViews": 11,
+    "allMissingViewsUnavailableThroughCurrentNativeTool": 28
+  },
+  "remainingViews": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/sport/9-1400.webp"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/evening/2-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/1-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/2-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/3-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "savedViews": [
+        "front"
+      ],
+      "missingViews": [
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/4-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "savedViews": [
+        "front"
+      ],
+      "missingViews": [
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/5-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/6-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/7-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "missingViews": [
+        "editorial"
+      ],
+      "source": "/portfolio/swim/8-1400.webp"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "savedViews": [
+        "front"
+      ],
+      "missingViews": [
+        "back",
+        "editorial"
+      ],
+      "source": "/portfolio/swim/9-1400.webp"
+    }
+  ],
+  "alternateRouteInvestigation": [
+    {
+      "tool": "Figma Weave published-workflow listing",
+      "result": "Account not linked. No workflow available for execution.",
+      "requiredAction": "Link Figma account in https://app.weavy.ai/settings?section=profile"
+    },
+    {
+      "tool": "Figma Weave model discovery",
+      "result": "Account not linked. No model contract or quote returned."
+    },
+    {
+      "tool": "Figma generate_image schema inspection",
+      "result": "Text-only raster generation into an editable Figma file, no reference-image input parameter; unsuitable for maintaining exact accepted model identity in partial sets. No file created or credits spent."
+    },
+    {
+      "tool": "Plugin discovery for missing reference-image editing capability",
+      "result": "Runway, Adobe and Higgsfield found but not installed. Runway suggested as an optional reference-edit route. No connection confirmed or generation attempted."
+    }
+  ],
+  "resolutionRequired": "Restore native image tool request compatibility, or connect a supported reference-image editor. Resume swimwear-ref-08 Editorial using its accepted Front and Back. Existing safety decisions remain respected.",
+  "browserReview": "No new look completed and no integration changed. Full site browser suite and final 40-look review were not rerun. Requested actual baseline native/master visual inspections performed; no owner artistic approval claimed.",
+  "releaseStatus": "Incomplete photography; no PR, merge or deployment. No source fallback release."
+}

@@ -1,4 +1,104 @@
-# Exact production resume status
+# Exact production resume status — fresh session, 22 October 2026
+
+Started from fetched and independently verified GitHub commit
+`6571916c670574a49a4cf3711e4e178a20f3725f`, with a clean working tree on the existing
+branch. **29 complete looks · 92 accepted native images · 4 partial looks · 28
+missing views. Zero new images were produced.** All accepted artwork is preserved.
+
+## Current blocker: image-tool request incompatibility
+
+Three actual `image_gen.imagegen` calls returned immediate **HTTP 400**:
+
+> Unknown parameter: 'reasoning'.
+
+Provider type/code: `invalid_request_error` / `unknown_parameter`. The exposed
+tool accepts prompt, image-reference paths, recent-image count and transparency;
+it exposes no reasoning, size, quality, fidelity or seed parameter to correct.
+
+| Attempted missing view | Operation tested | Result |
+| --- | --- | --- |
+| swimwear-ref-08 / Editorial | Limited pose edit using accepted Front and Back | HTTP 400; no file |
+| swimwear-ref-04 / Back | Single-reference rear edit using accepted Front | HTTP 400; no file |
+| evening-ref-02 / Front | Source-described generation without image input, from inspected garment specifications | HTTP 400; no file |
+
+These are **technical failures, not moderation or quota failures**. No moderation
+decision or request ID was returned. Exact prompts, references, operations and raw
+errors are in [the fresh-session report](PRODUCTION-SESSION-2026-10-22.json) and
+the three corresponding manifest failure entries. Further garment calls through
+the same failing integration were not sent. No accepted view was requested again.
+
+Separately, historical moderation failures remain recorded on **11 distinct
+still-missing views**. The other 17 missing views must not be described as having
+received their own moderation refusal. All 28 are currently unavailable through
+the failing native tool. The previous pass's retry ceiling below is historical;
+this session investigated new supported operations under the latest owner brief.
+
+## Alternate routes checked
+
+- Figma Weave workflow listing and model discovery both report that the Figma
+  account is not linked to Weave. Link through
+  <https://app.weavy.ai/settings?section=profile> before this route can be inspected
+  or used. No model contract, credit quote or output was available.
+- Figma raster generation exposes text prompts but no reference-image input. It
+  requires an editable Figma file and consumes Figma credits; it cannot establish
+  the exact saved model identity needed for partial sets. No Figma file was created.
+- Discovery found Runway, Adobe and Higgsfield, currently uninstalled. Runway was
+  suggested for the missing reference-edit capability. No connection or credit
+  balance is claimed. An optional route question was sent to the owner while
+  independent preservation checks continued; no answer was received at this checkpoint.
+
+**Required capability:** restore native image-tool request compatibility, or
+enable a supported reference-image editor. Inspect its actual schema, access,
+cost and safeguards before production. Weave requires explicit per-run credit
+approval under its tool instructions. No safety decision may be bypassed.
+
+## Exact remaining views, in production priority
+
+| Source identity | Saved — never regenerate | Missing genuine views |
+| --- | --- | --- |
+| swimwear-ref-08 | Front, Back | Editorial |
+| swimwear-ref-04 | Front | Back, Editorial |
+| swimwear-ref-05 | Front | Back, Editorial |
+| swimwear-ref-09 | Front | Back, Editorial |
+| activewear-ref-09 | None | Front, Back, Editorial |
+| evening-ref-02 | None | Front, Back, Editorial |
+| swimwear-ref-01 | None | Front, Back, Editorial |
+| swimwear-ref-02 | None | Front, Back, Editorial |
+| swimwear-ref-03 | None | Front, Back, Editorial |
+| swimwear-ref-06 | None | Front, Back, Editorial |
+| swimwear-ref-07 | None | Front, Back, Editorial |
+
+## Fresh-session preservation and verification
+
+- Existing checkpoint validation passed: 40 source hashes, 92 native
+  hashes/dimensions, 29 masters, all responsive derivatives and the registry.
+- All **329 baseline artwork files**, **29 completed manifest objects** and the
+  full integration registry remain unchanged. Registration, assembly and checkpoint
+  scripts are also unchanged. No source fallback release was made.
+- Real natives: **87 at 1024×1536**, **5 at 1086×1448**. There are 89 files with
+  real alpha and three retained RGB natives from the initial pink/beige set.
+  Existing 1800×2700 panels, 5400×2700 masters and WebP derivatives are unchanged.
+- Inspected actual natives and masters for swimwear-ref-10, activewear-ref-07,
+  evening-ref-04 and rtw-ref-02, plus all five partial natives. Observed style,
+  alpha and figure bounds are recorded in the new report.
+- All six existing recovery regression tests passed.
+- No new look completed or site integration changed. No fresh build, site-browser
+  matrix, forty-look artistic review, owner approval, PR, merge or deployment is claimed.
+
+Once a production-capable tool is available, resume **swimwear-ref-08 / Editorial**
+using accepted Front and Back. Preserve the same black garment, model, hair, hoops
+and bare feet; rear construction remains inferred. Then continue the four partials,
+including independently actionable Editorial views, and seven source-based looks.
+Push and verify every accepted native before further generation. Assemble only
+three genuine views. Full collection QA and the final PR remain pending.
+
+The commit containing this snapshot is the current recovery checkpoint; verify
+with `git ls-remote origin refs/heads/feat/womenswear-ai-photography-regeneration`.
+PROGRESS.json names the previously verified SHA to avoid self-reference.
+
+---
+
+# Historical previous-session status — retained as dated evidence
 
 Updated 2026-10-22T20:15:57.440376+00:00 — existing branch feat/womenswear-ai-photography-regeneration.
 

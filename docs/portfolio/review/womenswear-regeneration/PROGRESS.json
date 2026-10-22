@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:17:10.617758+00:00",
+  "updatedUTC": "2026-10-22T22:46:28.576871+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 7,
@@ -17,10 +17,10 @@
     "PENDING": 7,
     "GENERATED": 4
   },
-  "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "commercial-retry-resume-report",
-  "lastSuccessfullyPushedCommit": "4cdff91e05c6661023cbb2f72e2e4f4c8084c698",
+  "currentCategory": "activewear",
+  "currentSourceIdentity": null,
+  "currentMilestone": "fresh-session-image-tool-diagnostics",
+  "lastSuccessfullyPushedCommit": "6571916c670574a49a4cf3711e4e178a20f3725f",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -109,6 +109,27 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Restrained source-preserving commercial request; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:40:52.239865+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "error": "invalid_request_error",
+          "httpStatus": 400,
+          "providerErrorCode": "unknown_parameter",
+          "providerMessage": "Unknown parameter: 'reasoning'.",
+          "moderationStage": null,
+          "moderationDecision": null,
+          "requestId": null,
+          "assetProduced": false,
+          "attempt": "fresh-session-supported-operation-diagnostic",
+          "generationOperation": "Text-described source-based generation from inspected garment specifications, no image input; source fidelity would require visual comparison before acceptance",
+          "generationPrompt": "Produce one full-length front catalogue photograph from this garment specification transcribed from the owner's beige occasionwear reference: a sand-beige floor-length column gown with a broad straight off-shoulder folded band extending over both upper arms, all-over open honeycomb mesh textile with fine beige edges, fitted body through hips, then a gently flared floor hem and modest pooling fabric. The source has tonal foundation layers beneath the semi-sheer mesh. Preserve this textile structure, neckline proportions and long silhouette. One adult professional fashion model about 30 with chestnut hair swept into a neat low updo, natural realistic proportions and neutral expression, facing straight toward camera with relaxed arms clear of the waist. Full head, hands and complete hem comfortably inside a portrait frame. Soft balanced catalogue light, neutral white balance, realistic skin and woven textile detail, subtle floor contact shadow. Transparent background, exactly one person, no lettering, symbols, props or border. This is a provisional source-described garment presentation; exact reference fidelity must be reviewed before acceptance.",
+          "referenceAssets": [],
+          "transparentBackground": true,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+          "recordedUTC": "2026-10-22T22:43:19.000Z",
+          "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
+          "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
         }
       ]
     },
@@ -268,6 +289,30 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
           "recordedUTC": "2026-10-22T20:06:21.797408+00:00"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "error": "invalid_request_error",
+          "httpStatus": 400,
+          "providerErrorCode": "unknown_parameter",
+          "providerMessage": "Unknown parameter: 'reasoning'.",
+          "moderationStage": null,
+          "moderationDecision": null,
+          "requestId": null,
+          "assetProduced": false,
+          "attempt": "fresh-session-supported-operation-diagnostic",
+          "generationOperation": "Limited pose/camera continuation edit; accepted Front primary, accepted Back construction check",
+          "generationPrompt": "Edit the first accepted catalogue photograph into one new full-length editorial photograph, using the second accepted photograph only to check the same garment's rear arrangement. Keep this exact adult woman, face, body proportions, tied-back brunette bun, small hoop earrings, bare feet and black swimsuit. Make the photographic change small and specific: turn her standing orientation about 25 degrees toward camera-left, with a gentle natural weight shift, both feet on the floor, relaxed hands and a neutral catalogue expression. Preserve the opaque black gathered halter bandeau, twisted gathered central connection, high-waisted lower section, original cut and thin neck straps, without changing garment details or coverage. Keep the same soft frontal studio lighting, neutral white balance, realistic textile and skin, full-length camera distance and subtle floor contact shadow. Portrait composition with the entire head, both hands and both feet comfortably inside the frame. Render exactly one model in one photograph, with no text, graphics, border, props or watermark. Transparent background preserving the fabric edges, hair and contact shadow. This is a provisional apparel presentation; the rear reference is already an inferred construction.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+          ],
+          "transparentBackground": true,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+          "recordedUTC": "2026-10-22T22:42:47.626Z",
+          "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
+          "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
         }
       ]
     },
@@ -468,6 +513,29 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
           "recordedUTC": "2026-10-22T19:52:56.261962+00:00"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "error": "invalid_request_error",
+          "httpStatus": 400,
+          "providerErrorCode": "unknown_parameter",
+          "providerMessage": "Unknown parameter: 'reasoning'.",
+          "moderationStage": null,
+          "moderationDecision": null,
+          "requestId": null,
+          "assetProduced": false,
+          "attempt": "fresh-session-supported-operation-diagnostic",
+          "generationOperation": "Single-reference true-rear continuation; minimal inferred rear consistent with accepted Front",
+          "generationPrompt": "Create a companion rear catalogue photograph by editing the supplied accepted Front. Keep the exact adult woman's proportions, dark center-part hair in the low bun, small hoop earrings, bare feet, magenta fabric color and gathered texture. Turn her whole standing figure directly away from the camera, with the back of the head visible and both arms naturally relaxed. Show exactly one rear-facing figure. The matching magenta swim set keeps its halter fastening behind the neck and side bows with long ends. Since only a Front exists, use a simple provisional matching gathered rear top band and conventional matching lower back panel; do not treat unseen construction as verified. Match the Front's neutral studio illumination, full-length framing and gentle grounded contact shadow. Entire hair, hands, ties and feet inside ample portrait margins, natural body geometry, realistic skin and textile. Transparent background. No text, graphic, prop, border, extra straps or second subject.",
+          "referenceAssets": [
+            "/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+          ],
+          "transparentBackground": true,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
+          "recordedUTC": "2026-10-22T22:43:07.167Z",
+          "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
+          "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
         }
       ]
     },
@@ -641,7 +709,7 @@
       ]
     }
   ],
-  "notes": "",
+  "notes": "Fresh session: verified starting 6571916, 92 accepted natives and 29 complete looks unchanged. Three actual image operations failed HTTP 400 unknown reasoning parameter before generation. Zero new images, moderation decisions or quota failures. All 28 missing views remain; native integration repair or connected reference editor required. See PRODUCTION-SESSION-2026-10-22.json.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -797,5 +865,44 @@
       "nextMissingView": "back"
     }
   ],
-  "nativeResolutionNote": "Original accepted sets retain 1024x1536 natives. Five new saved portraits are actual 1086x1448 RGBA, not resampled; uniform 1800x2700 exports remain pending complete sets."
+  "nativeResolutionNote": "Original accepted sets retain 1024x1536 natives. Five new saved portraits are actual 1086x1448 RGBA, not resampled; uniform 1800x2700 exports remain pending complete sets.",
+  "acceptedNativeImages": 92,
+  "missingIndividualViews": 28,
+  "moderationBlockedIndividualViews": 11,
+  "currentToolAvailability": {
+    "status": "UNAVAILABLE_INVALID_PROVIDER_REQUEST",
+    "recordedUTC": "2026-10-22T22:44:38.332394+00:00",
+    "tool": "image_gen.imagegen",
+    "providerMessage": "Unknown parameter: 'reasoning'.",
+    "httpStatus": 400,
+    "supportedOperationDiagnostics": [
+      {
+        "sourceIdentity": "swimwear-ref-08",
+        "view": "editorial",
+        "operation": "Limited pose/camera continuation edit; accepted Front primary, accepted Back construction check",
+        "assetProduced": false
+      },
+      {
+        "sourceIdentity": "swimwear-ref-04",
+        "view": "back",
+        "operation": "Single-reference true-rear continuation; minimal inferred rear consistent with accepted Front",
+        "assetProduced": false
+      },
+      {
+        "sourceIdentity": "evening-ref-02",
+        "view": "front",
+        "operation": "Text-described source-based generation from inspected garment specifications, no image input; source fidelity would require visual comparison before acceptance",
+        "assetProduced": false
+      }
+    ],
+    "appliesToAllMissingViews": true,
+    "missingViews": 28,
+    "moderationDecisionReturned": false,
+    "quotaDecisionReturned": false,
+    "resolutionRequired": "Restore native image tool request compatibility, or connect a supported reference-image editor. Resume swimwear-ref-08 Editorial using its accepted Front and Back. Existing safety decisions remain respected."
+  },
+  "freshSessionAcceptedImages": 0,
+  "freshSessionTechnicalFailures": 3,
+  "freshSessionModerationFailures": 0,
+  "freshSessionQuotaFailures": 0
 }
