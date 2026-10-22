@@ -5198,14 +5198,33 @@
         "nativeResampled": false,
         "reviewNote": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-07-v1/editorial-native.png",
+        "width": 1024,
+        "height": 1536,
+        "mode": "RGBA",
+        "sha256": "093fd4e96a238656d4ca437778273b6218f4b98cd4d7b17c78c6f6d1d8fbf6f2",
+        "toolOutputPath": "/workspace/generated_images/exec-365c435f-ab14-490f-b22e-7790baab7404.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationOperation": "Separate Editorial native edit using original evidence and accepted Front/Back",
+        "generationPrompt": "ONE adult woman, ONE full-length EDITORIAL studio fashion portrait of the identical warm beige gown and sleek brunette low-bun model in the references. Original two-view source is garment evidence; accepted Front and true Back establish exact identity, opaque pale beige fabric, fine ribbed sculpted bodice/seam channels, smooth skirt, proportions and light. Preserve scoop front neck, sleeveless broad tank shoulders, curved vertical bodice seams ending in pointed lower waist, gathered hip wrap into a long central front drape, full floor-length skirt and modest pooling train; high covered rear and center closure unchanged. Quiet front three-quarter pose, natural small weight shift, arms relaxed with one hand slightly away to reveal hip drape. No new slit, cutout, accessories, symmetry change or altered garment. Same adult woman and hairstyle. Exactly one body, no diptych/collage. Full head, hands, every hem/train edge safely visible, undistorted proportions and realistic anatomy. Soft neutral studio light, realistic textile and skin, subtle floor contact shadow. Genuine transparent alpha preserving all pale fabric/ribbing and hair edges. Request 1800x2700 portrait if supported; otherwise true native dimensions. No text, frame or labels. Provisional AI source-based presentation, not verified garment construction.",
+        "referenceAssets": [
+          "/portfolio/evening/7-1400.webp",
+          "/portfolio/generated/ww-ai-evening-ref-07-v1/front-native.png",
+          "/portfolio/generated/ww-ai-evening-ref-07-v1/back-native.png"
+        ],
+        "nativeResampled": false,
+        "reviewNote": "Native inspected over white: same adult low-bun brunette, beige ribbed sculpted bodice and gathered smooth skirt, quiet three-quarter pose. Scoop neck, curved channels, pointed waist, long front drape and entire hem/train remain readable; complete hands and head, no obvious anatomy/crop/halo defect."
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Inspected native over white against source: single adult sleek side-part brunette, beige opaque sleeveless scoop-neck ribbed sculpted bodice with curved seam channels, gathered hips/long front drape and entire pooling hem. Fine pale textile intact, complete head/hands/cloth, no obvious anatomy/crop/halo failure. Native framing will receive uniform safe-margin normalization in export.",
         "nativeResolutionLimitation": "Actual native is 1024x1536 RGBA; larger review exports are explicitly resampled.",
         "ownerArtisticApproval": false,
-        "backVisual": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional."
+        "backVisual": "Inspected native over white against source rear. One rear-facing adult low-bun model, opaque beige ribbed high covered back, curved vertical seam channels, center closure, pointed bodice and gathered center-back skirt with complete pooling train. Natural hands/head and full cloth visible; no obvious anatomy/crop/halo failure. Fine closure/internal support remain provisional.",
+        "editorialVisual": "Native inspected over white: same adult low-bun brunette, beige ribbed sculpted bodice and gathered smooth skirt, quiet three-quarter pose. Scoop neck, curved channels, pointed waist, long front drape and entire hem/train remain readable; complete hands and head, no obvious anatomy/crop/halo defect.",
+        "setVisualReview": "Compared original Front/Back and all three real native portraits over white. Same adult sleek low-bun model, beige opaque ribbed sculpted bodice with scoop Front/high covered Back and curved channels, pointed waist, smooth gathered hip skirt and complete floor train. Genuine rear with center closure/ruching; restrained Editorial. Full head/hands/fabric, no obvious anatomy/crop failure. Internal support, exact rib gauge and fine closure remain provisional."
       },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship.",
@@ -5218,12 +5237,15 @@
       },
       "sourceMetadataMatchesPixels": true,
       "lastVerifiedCheckpoint": {
-        "commit": "3af71ebf096a9e04bbd06979ce8bce1c587d59d2",
+        "commit": "dcbf6faae1851a8b07c432d12af899ef856e1b88",
         "views": [
-          "front"
+          "front",
+          "back"
         ],
         "master": false
-      }
+      },
+      "generatedDescription": "AI-generated provisional Front, true Back and Editorial presentation of the supplied beige gown with sleeveless ribbed sculpted bodice, curved seam channels, gathered skirt, long front drape and full hem.",
+      "generatedCaption": "Beige sculpted ribbed-bodice gown with gathered skirt and long drape."
     },
     {
       "sourceIdentity": "evening-ref-08",
