@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:40:57.603873+00:00",
+  "updatedUTC": "2026-10-22T19:43:17.881397+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -16,10 +16,10 @@
     "READY": 19,
     "PENDING": 11
   },
-  "currentCategory": "evening",
-  "currentSourceIdentity": "evening-ref-02",
+  "currentCategory": "swimwear",
+  "currentSourceIdentity": "swimwear-ref-01",
   "currentMilestone": "front-blocked-commercial-retry",
-  "lastSuccessfullyPushedCommit": "d6dd77c630d79b7497800354415b2d55af0343ae",
+  "lastSuccessfullyPushedCommit": "03ea8681fd6bf6165f62309d967995a9c3a8c9b2",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -172,6 +172,34 @@
           "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait of the same adult woman and exact swim set in the supplied original reference. One model only, neutral straight-on standing pose with arms relaxed slightly away, not a pair or collage. Preserve opaque silver-grey bandeau swim top with thin neon-lime shoulder straps/binding and side ruching, matching grey briefs with lime edging and original doubled hip straps/long side ties. Same source coverage, fabric, proportions and lime color. Retain slicked-back long brown hair, large round gold disc earrings, slim gold anklet on wearer's LEFT ankle, barefoot. No new cutouts, logos, jewellery or redesign. Entire head, hands, all strap/tie edges and both feet within safe portrait margins. Natural adult anatomy, realistic skin/textile and fingers/toes. Soft neutral catalogue studio light and subtle believable floor contact shadows. Genuine transparent alpha preserving fabric, hair, ties and shadows. Request 1800x2700 portrait if supported; otherwise actual native dimensions with no body stretching. One figure and shadow only; no text, graphic, label or border. Provisional AI preservation of supplied design, not verified construction or authorship.",
           "note": "Source-preserving adult swim catalogue request rejected by native output moderation. No image/file produced; original source retained; no altered-prompt retry.",
           "recordedUTC": "2026-10-22T19:03:10.462940+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "a238f16e-b604-4b7f-b36e-e6e8bdc0b21d",
+          "attempt": "primary-commercial",
+          "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact silver-grey and lime set in the attached reference. One adult professional model in a neutral full-length FRONT standing pose, arms relaxed at sides, feet naturally parallel, calm expression. Preserve the silver-grey bandeau top, thin lime shoulder straps and binding, side ruching, matching bottom with lime edging and original side straps and long ties. Retain the source adult appearance, slicked-back brown hair, gold disc earrings, slim anklet and barefoot styling. Accurate source garment coverage, color, fabric and construction, no redesign. Premium catalogue clarity, realistic proportions and textile, even studio lighting and soft realistic floor contact shadow. Entire head, hands, feet and all ties inside generous margins. Genuine transparent background. No text, logo, graphic, border or watermark. Request 1800x2700 portrait if supported, otherwise preserve actual native size. Provisional AI presentation preserving supplied design.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Source-preserving commercial catalogue request rejected; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:43:12.661302+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "3401b6eb-a34d-4110-a951-3e4ea193c8b4",
+          "attempt": "single-neutral-revision",
+          "generationPrompt": "One neutral professional studio catalogue photograph of the supplied silver-grey swimwear with lime trim. Preserve the reference garment exactly. Adult model standing straight on, full-length front, relaxed arms and neutral posture. Keep the original hairstyle and accessories. Clear outfit visibility and photorealistic textile, even lighting and soft floor shadow. Complete figure and all garment edges inside ample portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation. Record genuine native dimensions.",
+          "assetProduced": false,
+          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
+          "note": "Source-preserving commercial catalogue request rejected; no output. Two-attempt allowance exhausted.",
+          "recordedUTC": "2026-10-22T19:43:12.661317+00:00"
         }
       ]
     },
