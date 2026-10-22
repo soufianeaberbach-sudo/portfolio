@@ -6984,12 +6984,31 @@
         "black"
       ],
       "priority": 1,
-      "front": null,
+      "front": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "c28bb197028bec0beb2ca0953bf8ca6249b59c0c08862a046bdf08eff2a7c88b",
+        "toolOutputPath": "/workspace/generated_images/exec-75c4fe9b-db78-4c81-94f6-924ae8dc0adb.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "Professional commercial swimwear catalogue photograph of the exact black one-piece garment in the attached reference. One adult professional model, straight-on full-length FRONT standing view, relaxed arms and neutral expression. Preserve the black bandeau-style halter top, central twisted gathered connection to the matching high-waisted lower section, source openings, coverage, fabric, cut and proportions. Same adult appearance, brown hair neatly tied back, original small hoop earrings, barefoot. Clear construction visibility, photorealistic textile, natural proportions and posture. Soft even studio lighting and realistic gentle floor contact shadow. Whole head, hands, outfit and feet within generous portrait margins. Genuine transparent background, no text, branding, graphics or border. Record actual native portrait dimensions. Provisional AI presentation preserving supplied design.",
+        "referenceAssets": [
+          "/portfolio/swim/8-1400.webp"
+        ],
+        "generationOperation": "Separate commercial Front from original garment reference; accepted primary attempt",
+        "nativeResampled": false,
+        "reviewNote": "Native inspected at true 3:4 proportions over white: same adult brunette with tied-back hair/small hoops, black halter bandeau and original twisted gathered center joining the lower section, source cut and coverage, barefoot. Frontal garment visibility with a restrained source-like step rather than fully parallel feet. Whole head/hands/feet intact, natural anatomy, clean alpha edges and very subtle contact shading. Actual 1086x1448 RGBA preserved unchanged."
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "frontVisual": "Native inspected at true 3:4 proportions over white: same adult brunette with tied-back hair/small hoops, black halter bandeau and original twisted gathered center joining the lower section, source cut and coverage, barefoot. Frontal garment visibility with a restrained source-like step rather than fully parallel feet. Whole head/hands/feet intact, natural anatomy, clean alpha edges and very subtle contact shading. Actual 1086x1448 RGBA preserved unchanged.",
+        "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
+        "ownerArtisticApproval": false
+      },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional."
       ],

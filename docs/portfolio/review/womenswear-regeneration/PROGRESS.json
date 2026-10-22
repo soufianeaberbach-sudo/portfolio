@@ -6,24 +6,24 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T20:01:17.884122+00:00",
+  "updatedUTC": "2026-10-22T20:02:44.863513+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
-  "pendingLooks": 9,
-  "partiallyGeneratedLooks": 2,
+  "pendingLooks": 8,
+  "partiallyGeneratedLooks": 3,
   "statusCounts": {
     "INTEGRATED": 10,
     "READY": 19,
-    "PENDING": 9,
-    "GENERATED": 2
+    "PENDING": 8,
+    "GENERATED": 3
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-07",
-  "currentMilestone": "front-blocked-commercial-retry",
-  "lastSuccessfullyPushedCommit": "cf7101b0291a882c5447b4178ac1174b54a06697",
+  "currentSourceIdentity": "swimwear-ref-08",
+  "currentMilestone": "front",
+  "lastSuccessfullyPushedCommit": "7d7a3956d5cbc9b4b171a0a00ce7de7f6de469cd",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": null,
+  "nextActionableSourceIdentity": "swimwear-ref-08",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -217,21 +217,6 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:58:51.667521+00:00"
-        }
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-08",
-      "failures": [
-        {
-          "view": "front",
-          "tool": "OpenAI native image tool",
-          "error": "moderation_blocked",
-          "moderationStage": "output",
-          "category": "sexual",
-          "requestId": "7a320bad-c1ec-4d25-a696-68b10e32c9a6",
-          "assetProduced": false,
-          "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
         }
       ]
     },
@@ -498,7 +483,7 @@
       ]
     }
   ],
-  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
+  "nextAction": "Generate and validate back for swimwear-ref-08; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -566,11 +551,14 @@
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
   "remainingLooks": 11,
-  "nextImage": null,
+  "nextImage": {
+    "sourceIdentity": "swimwear-ref-08",
+    "view": "back"
+  },
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "BLOCKED_ALL_REMAINING_SOURCES"
+  "productionState": "IN_PROGRESS"
 }
