@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T19:05:36.332856+00:00",
+  "updatedUTC": "2026-10-22T19:07:45.152866+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 11,
@@ -17,12 +17,12 @@
     "PENDING": 11
   },
   "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-02",
+  "currentSourceIdentity": "swimwear-ref-03",
   "currentMilestone": "blocked",
-  "lastSuccessfullyPushedCommit": "d2d7adb1d1038fc1ced132ee01a3357124b7c413",
+  "lastSuccessfullyPushedCommit": "129404db249c3fe15f7ba318f512186f0ad0184f",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-03",
+  "nextActionableSourceIdentity": "swimwear-ref-04",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -135,9 +135,26 @@
           "recordedUTC": "2026-10-22T19:05:32.069656+00:00"
         }
       ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "failures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "4a6d0d4b-dd8e-411d-8a9b-e40312855a96",
+          "assetProduced": false,
+          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait of exactly the supplied grey/black leopard-print swim set and same adult brunette model. Original reference is garment evidence. Preserve opaque grey leopard bandeau top, thin RED shoulder straps and red neckline/underbust binding, matching leopard briefs with red edging and slim red side bands; same source coverage/material/proportions, no added ties, cutouts, logos or redesign. Same sleek center-part brown hair in low bun, small gold hoop earrings, barefoot. Neutral straight-on upright stance, arms relaxed slightly apart with natural complete hands; exactly one figure, no pair or collage. Full head, hands, garment edges and both feet inside generous safe margins. Realistic adult anatomy, skin/textile and fingers/toes, no body stretching. Soft neutral studio light and restrained floor contact shadow. Genuine transparent alpha preserving red/printed fabric, hair and shadows. Request 1800x2700 portrait if supported, otherwise actual native dimensions. Empty canvas beyond model/shadow, no text/graphic/labels/border. Provisional AI preservation of original design, hidden/rear construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:07:39.929414+00:00"
+        }
+      ]
     }
   ],
-  "nextAction": "Generate and validate front for swimwear-ref-03; checkpoint before the following view",
+  "nextAction": "Generate and validate front for swimwear-ref-04; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -196,7 +213,7 @@
       ]
     }
   ],
-  "notes": "No file produced. Seven blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-03 Front.",
+  "notes": "No file produced. Eight blocked sources; 29 complete, no partial, 11 pending. Exact next image swimwear-ref-04 Front.",
   "limitations": [
     "All photography remains provisional pending owner artistic approval.",
     "Native resolution and inferred construction remain explicit in the manifest.",

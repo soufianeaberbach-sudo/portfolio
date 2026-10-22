@@ -6260,7 +6260,21 @@
         "width": 1400,
         "height": 1867
       },
-      "sourceMetadataMatchesPixels": false
+      "sourceMetadataMatchesPixels": false,
+      "generationFailures": [
+        {
+          "view": "front",
+          "tool": "OpenAI native image tool",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "4a6d0d4b-dd8e-411d-8a9b-e40312855a96",
+          "assetProduced": false,
+          "generationPrompt": "ONE full-length FRONT commercial swimwear catalogue studio portrait of exactly the supplied grey/black leopard-print swim set and same adult brunette model. Original reference is garment evidence. Preserve opaque grey leopard bandeau top, thin RED shoulder straps and red neckline/underbust binding, matching leopard briefs with red edging and slim red side bands; same source coverage/material/proportions, no added ties, cutouts, logos or redesign. Same sleek center-part brown hair in low bun, small gold hoop earrings, barefoot. Neutral straight-on upright stance, arms relaxed slightly apart with natural complete hands; exactly one figure, no pair or collage. Full head, hands, garment edges and both feet inside generous safe margins. Realistic adult anatomy, skin/textile and fingers/toes, no body stretching. Soft neutral studio light and restrained floor contact shadow. Genuine transparent alpha preserving red/printed fabric, hair and shadows. Request 1800x2700 portrait if supported, otherwise actual native dimensions. Empty canvas beyond model/shadow, no text/graphic/labels/border. Provisional AI preservation of original design, hidden/rear construction unverified.",
+          "note": "Source-preserving adult commercial swimwear request rejected by native output moderation. No file produced; original reference retained, no altered-prompt retry.",
+          "recordedUTC": "2026-10-22T19:07:39.929414+00:00"
+        }
+      ]
     },
     {
       "sourceIdentity": "swimwear-ref-04",
