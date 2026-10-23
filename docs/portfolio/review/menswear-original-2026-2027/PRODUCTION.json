@@ -166,7 +166,7 @@
       "majorCategory": "m-streetwear",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -188,7 +188,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:43:19.621538+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-05/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1810709,
+        "sha256": "39c35adbfdc50c83a2eac1c16347aecb418cba2ef56da6419fa55c596c276af3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-0463d6d9-1880-4978-9764-350c48353aa4.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-streetwear-05/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: black centre-part hair and plain waffle back, moss wide cargo with paired flap rear pockets, side bellows and logical seat seams. Native rear pocket flaps have paired snaps, a visible design refinement of planned generic rear flaps. Same graphite trail shoes, scale and white studio.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:57:10.174532+00:00"
+      },
       "editorial": null,
       "master": null
     },
