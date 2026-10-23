@@ -227,11 +227,41 @@
       "category": "Activewear",
       "productSubtype": "Technical tracksuit",
       "representativeFront": true,
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-corrected-2026-2027/mw-r2-activewear-05/front-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeMode": "RGB",
+        "nativeBytes": 1763909,
+        "sha256": "b6089085015667a33c329838ffa89d12019869a0680a9a1d52fb587286a9cf0a",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-15fc457d-9984-480b-8793-f9d2ed48942e.png",
+        "generatedAt": "2026-10-23T22:46:22.295331+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-direction-reset-2026-10-23/prompts/mw-r2-activewear-05-front.txt",
+        "promptSHA256": "d3466397c7764af6a4e450fe0a74794e1d9d3e4c57c741076f8222d0f2430e9f",
+        "exportPath": "public/portfolio/ai-concepts/menswear-corrected-2026-2027/mw-r2-activewear-05/front.png",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "exportSHA256": "bd9f9ac0c969f018f05c5604e32c8979e9c53bd80c3b550d3778d8bb57e11cab",
+        "previewPath": "public/portfolio/ai-concepts/menswear-corrected-2026-2027/mw-r2-activewear-05/front-600.webp",
+        "previewSHA256": "094899491b7026e5cfd96bfe2589530907fe2466c76a3401157eb7bf7f738e0d",
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentVisualQC": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Natural young-adult short waves/curls and light stubble, credible unexaggerated athletic proportions. Coordinated regular-relaxed tricot tracksuit clearly differs from gym shorts: raglan seams, stand collar, centre zip, rib cuffs and band, zipped pockets and straight pants. Visible colour reads as muted petrol/steel blue; pale side panels widen slightly at lower leg, a visible design refinement to lock. White tee and grey-white trainers retained. Ankle zips are specified but not confirmed from this front angle; hidden construction remains proposed. Full head and footwear, neutral white studio and natural folds. Pass as unapproved Front candidate.",
+        "ownerApproval": "PENDING",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or manufactured-product authorship claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "FRONT_CANDIDATE_PENDING_OWNER",
       "ownerApproval": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
