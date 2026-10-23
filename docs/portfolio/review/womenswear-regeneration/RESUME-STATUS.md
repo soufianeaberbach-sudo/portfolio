@@ -1,3 +1,15 @@
+# Owner production stop — 23 October 2026
+
+**All image generation and independent creative production stopped.**
+Await a new owner-approved visual brief.
+
+- Tide Panel / `ww-ai-swimwear-ref-04-v2`: **OWNER_REJECTED**. Featured slot restored to `/portfolio/swim/4-1400.webp`.
+- Forest Fold / `ww-ai-evening-ref-02-v2`: **OWNER_REJECTED**. Featured slot restored to `/portfolio/evening/2-1400.webp`.
+- Both registry records remain preserved with `integrated: false`; all V1/V2 native files, masters, exports, prompts, reviews and commits retained.
+- 31 complete active AI looks; the two rejected V2 sets are excluded from active completion. 33 physical masters remain archived. No other featured mapping changed.
+
+Earlier checkpoint text below is historical and superseded by this stop.
+
 # Current product-photography pass — 23 October 2026
 
 Verified start: `c76e77f4d18498f157bdeced23f324e16beb8358`.

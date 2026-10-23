@@ -30,5 +30,17 @@ class VersionAccountingTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'Conflicting versions'):
             checkpoint.native_inventory(value)
 
+    def test_owner_rejection_preserves_files_and_excludes_active_completion(self):
+        look = {'generationType': 'original-concept', 'master': {'asset': '/v2/master.png'},
+                'ownerReview': {'status': 'OWNER_REJECTED'},
+                **{v: {'nativeAsset': '/v2/' + v + '.png', 'sha256': v} for v in checkpoint.VIEWS}}
+        counts = checkpoint.native_inventory({'looks': [look]})
+        self.assertEqual(counts['retainedNativeFiles'], 3)
+        self.assertEqual(counts['retainedCompleteMasters'], 1)
+        self.assertEqual(counts['activeSelectedViews'], 0)
+        self.assertEqual(counts['completeActiveLooks'], 0)
+        self.assertEqual(counts['originalConcepts'], 0)
+        self.assertEqual(counts['ownerRejectedLooks'], 1)
+
 if __name__ == '__main__':
     unittest.main()

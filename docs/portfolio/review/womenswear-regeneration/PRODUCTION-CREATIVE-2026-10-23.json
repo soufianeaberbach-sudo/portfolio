@@ -240,14 +240,16 @@
   "metrics": {
     "retainedNativeFiles": 110,
     "newNativeFiles": 9,
-    "activeSelectedViews": 99,
+    "activeSelectedViews": 93,
     "pendingCandidateNativeViews": 4,
-    "completeActiveLooks": 33,
-    "completeMasters": 33,
+    "completeActiveLooks": 31,
+    "completeMasters": 31,
     "sourceBasedRegenerations": 27,
-    "originalConcepts": 6,
+    "originalConcepts": 4,
     "digitallyRenderedLooks": 0,
-    "ownerArtisticApprovals": 0
+    "ownerArtisticApprovals": 0,
+    "retainedCompleteMasters": 33,
+    "ownerRejectedCompleteLooks": 2
   },
   "remainingActiveSlots": [
     {
@@ -328,5 +330,39 @@
     "nativeResolutionControls": "Not exposed; actual returned portrait sizes retained",
     "paidAlternativeUsed": false,
     "renderedGarmentUsed": false
+  },
+  "metricsBeforeOwnerRejection": {
+    "retainedNativeFiles": 110,
+    "newNativeFiles": 9,
+    "activeSelectedViews": 99,
+    "pendingCandidateNativeViews": 4,
+    "completeActiveLooks": 33,
+    "completeMasters": 33,
+    "sourceBasedRegenerations": 27,
+    "originalConcepts": 6,
+    "digitallyRenderedLooks": 0,
+    "ownerArtisticApprovals": 0
+  },
+  "productionState": "STOPPED_BY_OWNER",
+  "ownerDecision": {
+    "recordedUTC": "2026-10-23T14:26:06.379849+00:00",
+    "rejectedConcepts": [
+      "ww-ai-swimwear-ref-04-v2",
+      "ww-ai-evening-ref-02-v2"
+    ],
+    "featuredSourcesRestored": [
+      "/portfolio/swim/4-1400.webp",
+      "/portfolio/evening/2-1400.webp"
+    ],
+    "generationStopped": true,
+    "assetsAndPriorReviewsPreserved": true
+  },
+  "interruptedReturnedOutput": "evidence/owner-stop-2026-10-23/interrupted-output.json",
+  "ownerStopCallAccounting": {
+    "callsBeforeStop": 12,
+    "registeredTechnicalAcceptances": 9,
+    "outputModerationRefusals": 2,
+    "returnedButUnreviewedAtStop": 1,
+    "callsAfterOwnerStop": 0
   }
 }

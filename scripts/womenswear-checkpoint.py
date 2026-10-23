@@ -41,9 +41,12 @@ def native_inventory(manifest):
                 continue
             previous = files.setdefault(item['nativeAsset'], item['sha256'])
             assert previous == item['sha256'], 'Conflicting versions share one native path'
-    complete = [look for look in manifest['looks'] if look.get('master')]
+    retained_complete = [look for look in manifest['looks'] if look.get('master')]
+    complete = [look for look in retained_complete if look.get('ownerReview', {}).get('status') != 'OWNER_REJECTED']
     return {'retainedNativeFiles': len(files), 'activeSelectedViews': len(complete) * 3,
             'completeActiveLooks': len(complete),
+            'retainedCompleteMasters': len(retained_complete),
+            'ownerRejectedLooks': sum(look.get('ownerReview', {}).get('status') == 'OWNER_REJECTED' for look in manifest['looks']),
             'pendingCandidateNativeViews': sum(bool(look.get(v)) for look in manifest['looks'] if not look.get('master') for v in VIEWS),
             'originalConcepts': sum(look['generationType'] == 'original-concept' for look in complete),
             'sourceBasedRegenerations': sum(look['generationType'] == 'preserved-design' for look in complete),
@@ -162,12 +165,13 @@ def checkpoint(args, manifest):
                 args.paths.append(manifest_name)
     previous_progress = json.loads(PROGRESS.read_text()) if PROGRESS.exists() else {}
     worlds = ('casualwear', 'activewear', 'evening', 'swimwear')
-    incomplete = [x for x in manifest['looks'] if not x.get('master')]
+    incomplete = [x for x in manifest['looks'] if not x.get('master') or x.get('ownerReview', {}).get('status') == 'OWNER_REJECTED']
     incomplete.sort(key=lambda x: (worlds.index(x['category']), x.get('priority', 2), x['currentSlot']))
     original_slots = manifest.get('creativeRecovery', {}).get('originalConceptSlots', [])
     blocked = [x for x in incomplete if not (x['sourceIdentity'] in original_slots and x.get('productionVersion') != 'creative-v2') and any(f.get('error') == 'moderation_blocked' and not x.get(f.get('view')) for f in x.get('generationFailures', []))]
-    actionable = [x for x in incomplete if x not in blocked]
-    completed = [x for x in manifest['looks'] if x.get('master')]
+    stopped = manifest.get('productionControl', {}).get('status') == 'STOPPED_BY_OWNER'
+    actionable = [] if stopped else [x for x in incomplete if x not in blocked]
+    completed = [x for x in manifest['looks'] if x.get('master') and x.get('ownerReview', {}).get('status') != 'OWNER_REJECTED']
     current = next((x for x in manifest['looks'] if x['sourceIdentity'] == args.source_id), None)
     last_completed = args.source_id if current and current.get('master') else previous_progress.get('lastCompletedSourceIdentity')
     progress = {
@@ -179,8 +183,9 @@ def checkpoint(args, manifest):
         'acceptedNativeImages': native_inventory(manifest)['retainedNativeFiles'],
         'remainingLooks': len(incomplete),
         'pendingLooks': sum(not any(x.get(v) for v in VIEWS) for x in incomplete),
-        'partiallyGeneratedLooks': sum(any(x.get(v) for v in VIEWS) for x in incomplete),
-        'productionState': 'IN_PROGRESS' if actionable else 'BLOCKED_ALL_REMAINING_SOURCES' if incomplete else 'READY_FOR_FINAL_COLLECTION_QA',
+        'partiallyGeneratedLooks': sum(not x.get('master') and any(x.get(v) for v in VIEWS) for x in incomplete),
+        'ownerRejectedLooks': native_inventory(manifest)['ownerRejectedLooks'],
+        'productionState': 'STOPPED_BY_OWNER' if stopped else 'IN_PROGRESS' if actionable else 'BLOCKED_ALL_REMAINING_SOURCES' if incomplete else 'READY_FOR_FINAL_COLLECTION_QA',
         'nextImage': {'sourceIdentity': actionable[0]['sourceIdentity'], 'view': next(v for v in VIEWS if not actionable[0].get(v))} if actionable and any(not actionable[0].get(v) for v in VIEWS) else None,
         'nextBlockedImage': {'sourceIdentity': blocked[0]['sourceIdentity'], 'view': blocked[0]['generationFailures'][-1]['view'], 'status': 'BLOCKED_MODERATION'} if blocked else None,
         'statusCounts': dict(Counter(x['status'] for x in manifest['looks'])),
@@ -193,7 +198,7 @@ def checkpoint(args, manifest):
         'nextIncompleteSourceIdentity': incomplete[0]['sourceIdentity'] if incomplete else None,
         'nextActionableSourceIdentity': actionable[0]['sourceIdentity'] if actionable else None,
         'blockedSources': [{'sourceIdentity': x['sourceIdentity'], 'failures': x['generationFailures']} for x in blocked],
-        'nextAction': next((f'Generate and validate {v} for {actionable[0]["sourceIdentity"]}; checkpoint before the following view' for v in VIEWS if actionable and not actionable[0].get(v)), 'Review three views and assemble master' if actionable else 'Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending' if incomplete else 'Full final QA before opening one PR'),
+        'nextAction': 'Await a new owner-approved visual brief. No image generation, independent design, casting or replacement concept is authorized.' if stopped else next((f'Generate and validate {v} for {actionable[0]["sourceIdentity"]}; checkpoint before the following view' for v in VIEWS if actionable and not actionable[0].get(v)), 'Review three views and assemble master' if actionable else 'Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending' if incomplete else 'Full final QA before opening one PR'),
         'knownRejectedGenerations': [{'sourceIdentity': x['sourceIdentity'], 'rejections': x['rejections']} for x in manifest['looks'] if x.get('rejections')],
         'notes': args.note,
         'limitations': previous_progress.get('limitations', ['All photography remains provisional pending owner artistic approval.', 'Native resolution and inferred construction remain explicit in the manifest.', 'Full collection QA and final PR wait for all forty completed sets.']),

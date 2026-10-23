@@ -34,7 +34,10 @@ def accept(a):
   bounds=json.loads(a.bounds);im=Image.open(a.native);o['nativeBackgroundReview']={'kind':'opaque-white','nativeSHA256':o['sha256'],'subjectBounds':bounds,'supportBounds':json.loads(a.support) if a.support else [0,0,im.width,im.height],'review':'Actual native inspected. Complete subject and contact shadow; every opaque pixel retained; bounds measure placement only.'}
  x['qualityResult'][a.view+'Visual']=a.note;save(M,m);r=report();r['attempts'].append({'sourceIdentity':a.id,'generatedIdentity':x['generatedIdentity'],'view':a.view,'status':'ACCEPTED','recordedUTC':now(),'request':req,'nativeAsset':o['nativeAsset'],'nativeDimensions':[o['width'],o['height']],'sha256':o['sha256'],'reviewNote':a.note});refresh(m,r);print(json.dumps(metrics(m)))
 def fail(a):
- m=read(M);r=report();req=read(Path(a.request));e=read(Path(a.error));r['attempts'].append({'sourceIdentity':a.id,'view':a.view,'request':req,**e});refresh(m,r);print(e['status'],a.id,a.view)
+ m=read(M);r=report();req=read(Path(a.request));e=read(Path(a.error));r['attempts'].append({'sourceIdentity':a.id,'view':a.view,'request':req,**e});x=next(x for x in m['looks'] if x['sourceIdentity']==a.id)
+ if x.get('productionVersion')=='creative-v2':
+  x['generationFailures']=[{'view':t['view'],'error':'moderation_blocked' if t['status']=='MODERATION_REFUSED' else t['status'],'generationPrompt':t['request']['prompt'],'referenceAssets':t['request'].get('referenced_image_paths',[]),**{k:t.get(k) for k in ['status','moderationStage','requestId','rawError','recordedUTC']}} for t in r['attempts'] if t['sourceIdentity']==a.id and t['status']!='ACCEPTED']
+ refresh(m,r);print(e['status'],a.id,a.view)
 def review(a):
  m=read(M);x=next(x for x in m['looks'] if x['sourceIdentity']==a.id);assert all(x.get(v) for v in V);x['qualityResult']['setVisualReview']=a.note;save(M,m);A['assemble'](a.id);m=read(M);r=report();r['setReviews'].append({'sourceIdentity':a.id,'review':a.note,'recordedUTC':now()});refresh(m,r);print(json.dumps(metrics(m)))
 def audit(a):

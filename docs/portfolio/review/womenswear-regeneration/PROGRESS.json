@@ -4,11 +4,11 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "evening-ref-02",
+  "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T14:19:42.405846+00:00",
+  "updatedUTC": "2026-10-23T14:35:47.964534+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 33,
+  "completedLooks": 31,
   "pendingLooks": 4,
   "partiallyGeneratedLooks": 3,
   "statusCounts": {
@@ -17,13 +17,13 @@
     "PENDING": 4,
     "GENERATED": 3
   },
-  "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-05",
-  "currentMilestone": "creative-v2-front",
-  "lastSuccessfullyPushedCommit": "7de5395c08afb18ccdcc2e228ebd66394164a382",
+  "currentCategory": "activewear",
+  "currentSourceIdentity": null,
+  "currentMilestone": "owner-rejection-original-source-restoration",
+  "lastSuccessfullyPushedCommit": "42e4ea2a34a3ffa69c602038c09e32af5dd29bf1",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "activewear-ref-09",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "swimwear-ref-02",
@@ -55,7 +55,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate front for activewear-ref-09; checkpoint before the following view",
+  "nextAction": "Await a new owner-approved visual brief. No image generation, independent design, casting or replacement concept is authorized.",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -114,7 +114,7 @@
       ]
     }
   ],
-  "notes": "Genuine inspected original-concept native; versioned files, V1 history preserved; full-set integration only after QA.",
+  "notes": "Owner rejected Tide Panel and Forest Fold V2. Exactly two featured mappings restored to original historical images; all other 38 unchanged. V1/V2 files, metadata and history preserved. Rejected concepts excluded from active completion. Production stopped pending owner-approved brief. 190 focused checks, 12 tests, source integrity, 204 identity checks and build pass.",
   "limitations": [
     "31 actual complete sets; five partial sets; four without generated imagery. 19 genuine views remain missing.",
     "All 97 baseline native photographs and all 350 baseline artwork files are byte-identical.",
@@ -122,17 +122,14 @@
     "No exact moderation trigger or guaranteed filtering fix established; controlled API route unavailable without connection/spending authorization.",
     "Full forty-look site QA, owner artistic approval and final PR remain pending. No merge or deployment."
   ],
-  "remainingLooks": 7,
-  "nextImage": {
-    "sourceIdentity": "activewear-ref-09",
-    "view": "front"
-  },
+  "remainingLooks": 9,
+  "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "swimwear-ref-02",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "IN_PROGRESS",
+  "productionState": "STOPPED_BY_OWNER",
   "latestRetryPass": {
     "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
     "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
@@ -413,23 +410,30 @@
   "creativeMetrics": {
     "retainedNativeFiles": 110,
     "newNativeFiles": 9,
-    "activeSelectedViews": 99,
+    "activeSelectedViews": 93,
     "pendingCandidateNativeViews": 4,
-    "completeActiveLooks": 33,
-    "completeMasters": 33,
+    "completeActiveLooks": 31,
+    "completeMasters": 31,
     "sourceBasedRegenerations": 27,
-    "originalConcepts": 6,
+    "originalConcepts": 4,
     "digitallyRenderedLooks": 0,
-    "ownerArtisticApprovals": 0
+    "ownerArtisticApprovals": 0,
+    "retainedCompleteMasters": 33,
+    "ownerRejectedCompleteLooks": 2
   },
   "nativeInventory": {
     "retainedNativeFiles": 110,
-    "activeSelectedViews": 99,
-    "completeActiveLooks": 33,
+    "activeSelectedViews": 93,
+    "completeActiveLooks": 31,
+    "retainedCompleteMasters": 33,
+    "ownerRejectedLooks": 2,
     "pendingCandidateNativeViews": 4,
-    "originalConcepts": 6,
+    "originalConcepts": 4,
     "sourceBasedRegenerations": 27,
     "digitallyRenderedLooks": 0,
     "ownerArtisticApprovals": 0
-  }
+  },
+  "ownerRejectedLooks": 2,
+  "ownerArtisticApprovals": 0,
+  "lastPhysicalMasterBeforeOwnerRejection": "evening-ref-02"
 }

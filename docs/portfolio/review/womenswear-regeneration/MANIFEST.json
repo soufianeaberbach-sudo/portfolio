@@ -4628,7 +4628,8 @@
             ],
             "backgroundPreparation": "Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold. Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured."
           }
-        ]
+        ],
+        "ownerArtisticDecision": "OWNER_REJECTED"
       },
       "constructionUncertainties": [
         "Original AI concept, not historical garment reproduction or verified technical pattern.",
@@ -5016,6 +5017,20 @@
           "editorial"
         ],
         "master": false
+      },
+      "ownerReview": {
+        "status": "OWNER_REJECTED",
+        "reviewedBy": "owner",
+        "recordedUTC": "2026-10-23T14:26:06.379849+00:00",
+        "reason": "Owner rejected garment selection, construction fidelity, casting and overall fashion art direction.",
+        "ownerArtisticApproval": false,
+        "featuredPresentation": "RESTORED_HISTORICAL_SOURCE"
+      },
+      "featuredPresentation": {
+        "kind": "historical-source",
+        "sourceIdentity": "evening-ref-02",
+        "asset": "/portfolio/evening/2-1400.webp",
+        "reason": "OWNER_REJECTED_V2"
       }
     },
     {
@@ -8032,7 +8047,8 @@
             "backgroundPreparation": "Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold. Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured."
           }
         ],
-        "exportRefinement": "First uncheckpointed master showed opaque-canvas edges. Extend only outside native photo bounds; source pixels unchanged."
+        "exportRefinement": "First uncheckpointed master showed opaque-canvas edges. Extend only outside native photo bounds; source pixels unchanged.",
+        "ownerArtisticDecision": "OWNER_REJECTED"
       },
       "constructionUncertainties": [
         "Original AI concept, not historical garment reproduction or verified technical pattern.",
@@ -8445,6 +8461,20 @@
           "editorial"
         ],
         "master": false
+      },
+      "ownerReview": {
+        "status": "OWNER_REJECTED",
+        "reviewedBy": "owner",
+        "recordedUTC": "2026-10-23T14:26:06.379849+00:00",
+        "reason": "Owner rejected garment selection, construction fidelity, casting and overall fashion art direction.",
+        "ownerArtisticApproval": false,
+        "featuredPresentation": "RESTORED_HISTORICAL_SOURCE"
+      },
+      "featuredPresentation": {
+        "kind": "historical-source",
+        "sourceIdentity": "swimwear-ref-04",
+        "asset": "/portfolio/swim/4-1400.webp",
+        "reason": "OWNER_REJECTED_V2"
       }
     },
     {
@@ -10497,5 +10527,14 @@
     ],
     "route": "C",
     "reason": "Owner-authorized independent designs after documented faithful-production failures; no refused source inputs submitted."
+  },
+  "productionControl": {
+    "status": "STOPPED_BY_OWNER",
+    "recordedUTC": "2026-10-23T14:26:06.379849+00:00",
+    "imageGenerationAuthorized": false,
+    "independentDesignAuthorized": false,
+    "castingAuthorized": false,
+    "replacementConceptAuthorized": false,
+    "nextRequirement": "New owner-approved visual brief. Do not resume production without it."
   }
 }
