@@ -2869,7 +2869,39 @@
         "reviewNotes": "Recovered genuine rear output after runtime restart. Same brown waves, oxide waffle raglan layer, short stand neck, curved hem, charcoal shorts and grey trail heels. No front chest zip incorrectly repeated at rear.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1772193,
+        "nativeMode": "RGB",
+        "sha256": "be548c6de3095eb6a33bdb593df7574c7e010941bcb60e8e1de025b9460b4f69",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-704e0b84-8810-4979-a270-f7efe7d00b6a.png",
+        "generatedAt": "2026-10-23T23:41:08.764408+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-06-editorial.txt",
+        "promptSHA256": "5a44eaf2f9002aba2c8df0be8ee030979e26a5d1459a5bffc4bf9b67bcdec5ba",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-06/editorial.png",
+        "exportSHA256": "d0ca79c59ac739937a7587cfac2d6e626ad5fb315ed760a2b8829c3acf5d5f46",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-06/editorial-600.webp",
+        "previewSHA256": "3538ab3419f383845786fe7fb854e7a74b20c2ea38d41dd03ec70467017b7603",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Recovered native: same recognizable model and oxide quarter-zip, chest pocket, charcoal shorts, black socks and grey shoes. Controlled walking step and bent arm show movement with garment clearly readable.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4877,7 +4909,7 @@
       "key": "mw-r2-activewear-06:editorial",
       "look": "mw-r2-activewear-06",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5691,6 +5723,15 @@
       "at": "2026-10-23T23:41:01.960726+00:00",
       "notes": "Recovered genuine rear output after runtime restart. Same brown waves, oxide waffle raglan layer, short stand neck, curved hem, charcoal shorts and grey trail heels. No front chest zip incorrectly repeated at rear.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-06",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:41:08.768673+00:00",
+      "notes": "Recovered native: same recognizable model and oxide quarter-zip, chest pocket, charcoal shorts, black socks and grey shoes. Controlled walking step and bent arm show movement with garment clearly readable.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5703,11 +5744,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 17,
-    "acceptedActivePhotographs": 56,
+    "acceptedActivePhotographs": 57,
     "incompleteLooks": 23,
     "completedMasters": 17,
     "unresolvedViews": [
-      "mw-r2-activewear-06:editorial",
       "mw-r2-activewear-07:back",
       "mw-r2-activewear-07:editorial",
       "mw-r2-activewear-08:front",
