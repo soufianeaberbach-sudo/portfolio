@@ -1271,7 +1271,7 @@
       "majorCategory": "m-tailoring",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -1293,7 +1293,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:52:26.538512+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-04/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1715612,
+        "sha256": "d6e03b4e40154969ecd891250fac233fff815613364611dd2105eed6f2f39211",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-772c7457-6090-4831-b0f3-cc15b53e4ee4.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-tailoring-04/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: same straight shoulder-length hair, cool-stone gabardine and coat length; horizontal storm shield, centre inverted pleat/vent, belt loops, epaulettes, raglan sleeves and cuff buckles plausible. No front buttons on back. Slate trouser and black boot heels consistent.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T19:14:49.540723+00:00"
+      },
       "editorial": null,
       "master": null
     },
