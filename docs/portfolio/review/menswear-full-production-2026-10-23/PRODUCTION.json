@@ -1040,11 +1040,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1897265,
+        "nativeMode": "RGB",
+        "sha256": "45b0698a99627fd3b59440953666c45d8b71b8df258b29826fdbbfa5a090c871",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-0ff848fd-0f74-48bb-ab75-afdd7b21c9cd.png",
+        "generatedAt": "2026-10-23T23:22:13.008472+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-07-front.txt",
+        "promptSHA256": "2f456ea9728ee8ce1ab40a934c03ac0959887cac62cef28b82134b8d5348606b",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-07/front.png",
+        "exportSHA256": "e9810026eba20e576c9e3611016655549d558ffdcefb2dcd241126e564425643",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-07/front-600.webp",
+        "previewSHA256": "99ca9b1dcf244b93eafb4bd28bad0b2692fdc14b27c5aac8d7dde7805255b253",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Oat melange V cardigan, five buttons, two rib-edged patch pockets, knit cuffs/hem and plausible knit drape. Rust underlayer, dark indigo jeans and brown suede chukkas elevate knit primary. Natural dark waves and stubble suitable commercial adult casting.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -3830,7 +3860,7 @@
       "key": "mw-r2-casualwear-07:front",
       "look": "mw-r2-casualwear-07",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4649,6 +4679,15 @@
       "at": "2026-10-23T23:22:05.637857+00:00",
       "notes": "Premium mineral-blue heavyweight hoodie and jogger coordinate with credible loopback folds, kangaroo pocket, double-layer hood, rib bands and tapered cuffed legs. White tee neckline and grey retro trainers coherent, natural young-adult model and complete framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-05/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-07",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:22:13.012933+00:00",
+      "notes": "Oat melange V cardigan, five buttons, two rib-edged patch pockets, knit cuffs/hem and plausible knit drape. Rust underlayer, dark indigo jeans and brown suede chukkas elevate knit primary. Natural dark waves and stubble suitable commercial adult casting.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4661,13 +4700,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 10,
-    "acceptedActivePhotographs": 34,
+    "acceptedActivePhotographs": 35,
     "incompleteLooks": 30,
     "completedMasters": 10,
     "unresolvedViews": [
       "mw-r2-casualwear-05:back",
       "mw-r2-casualwear-05:editorial",
-      "mw-r2-casualwear-07:front",
       "mw-r2-casualwear-07:back",
       "mw-r2-casualwear-07:editorial",
       "mw-r2-casualwear-09:front",
