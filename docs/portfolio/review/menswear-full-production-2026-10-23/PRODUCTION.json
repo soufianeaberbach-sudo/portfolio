@@ -255,7 +255,39 @@
         "reviewNotes": "Boxy washed-ink tee has heavy jersey body, dropped shoulder, broad short sleeve, substantial crew binding and straight hem. Sand shorts and canvas low-tops form commercially clear summer support. Natural adult casting and full white studio framing.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1740106,
+        "nativeMode": "RGB",
+        "sha256": "354a06954947860a7346d6c3f987e8d1042f0e262c680aaccc965efd523e3e4b",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-4f22a5ea-1017-4918-8930-9d37dfb63cff.png",
+        "generatedAt": "2026-10-23T23:18:48.768638+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-02-back.txt",
+        "promptSHA256": "6597a6c5ef5ec1e2868c17ca16614e0706cf8401484c9d677076b153d526963b",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/back.png",
+        "exportSHA256": "a53321d336ead18ee25807c030e06219215fb24033d2d9450e230a1cad7a5d56",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/back-600.webp",
+        "previewSHA256": "aa2ce13de8298cbab882654eaf922c54ed739de986d640a28b70a423c589b0f3",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear, same short brown hair, boxy navy jersey, sand chino shorts and cream canvas shoe heels. Plain back, side seams and broad sleeves consistent; no moved front closures.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -3500,7 +3532,7 @@
       "key": "mw-r2-casualwear-02:back",
       "look": "mw-r2-casualwear-02",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4363,6 +4395,15 @@
       "at": "2026-10-23T23:16:47.057285+00:00",
       "notes": "Same recognizable adult model, three-button polo, texture, tuck, belt, trousers and brown loafers. Elegant crossing walking step, relaxed pocket hand, gaze off camera; clear fashion gesture distinct from Front.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-03/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-02",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:18:48.772356+00:00",
+      "notes": "Genuine rear, same short brown hair, boxy navy jersey, sand chino shorts and cream canvas shoe heels. Plain back, side seams and broad sleeves consistent; no moved front closures.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4375,11 +4416,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 8,
-    "acceptedActivePhotographs": 28,
+    "acceptedActivePhotographs": 29,
     "incompleteLooks": 32,
     "completedMasters": 8,
     "unresolvedViews": [
-      "mw-r2-casualwear-02:back",
       "mw-r2-casualwear-02:editorial",
       "mw-r2-casualwear-04:front",
       "mw-r2-casualwear-04:back",
