@@ -166,7 +166,7 @@
       "majorCategory": "m-streetwear",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -185,8 +185,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: generous barrel-leg cargo is primary; two bellows thigh pockets, knee articulation, matte ripstop and plausible fly; short waffle Henley keeps pockets visible. Distinct adult casting and trail shoes, complete frame, neutral white. Placket button count will be documented from accepted image.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:43:19.621538+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-05/front.png",
+        "generatedAt": "2026-10-23T18:43:19.621538+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "f56a1ecde208f91bc9d76eb6e1e515762495d6d0cd909b27359722c32ecd8bba"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-05/back-native.png",
@@ -204,8 +212,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: black centre-part hair and plain waffle back, moss wide cargo with paired flap rear pockets, side bellows and logical seat seams. Native rear pocket flaps have paired snaps, a visible design refinement of planned generic rear flaps. Same graphite trail shoes, scale and white studio.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:57:10.174532+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-05/back.png",
+        "generatedAt": "2026-10-23T18:57:10.174532+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "20e9f59c9437c52223437280c3751730d11f91a6f7df640a012e0b65b391b295"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-05/editorial-native.png",
@@ -223,10 +239,38 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Campaign pass: confident long angled step, rear heel lifted, relaxed pocket hand; cargo volume and thigh pockets remain readable. Model face, hair, waffle Henley, moss ripstop and trail footwear visually match Front. Believable knee folds and normal anatomy.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:57:15.268847+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-05/editorial.png",
+        "generatedAt": "2026-10-23T18:57:15.268847+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "7b51317ea92c5fe9c02f7c62eff46b5a3f94d883245416da651a5b3e59032677"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-05/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "626dc49b337a169cf72d08c67908ce80c4a2e42a733ff77c8e515496848a36f5",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Coherent cargo set with real rear construction and fashion step; fabric, hair, shoes and core pockets match. As-rendered paired pocket snap treatment retained. Full body scale similar across views; owner review pending.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      }
     },
     {
       "id": "mw26-streetwear-06",
