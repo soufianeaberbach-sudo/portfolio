@@ -119,13 +119,66 @@
       ],
       "sha256": "31e7f3aff69e7f35f82598143957a1127af03b5d69b10d615d281300d58302e2",
       "reviewNote": "Actual full native inspected against original Front and saved Back: matching adult chestnut-updo model, natural proportions, broad straight off-shoulder folded arm band, beige honeycomb mesh with source tonal foundation, fitted column and complete gently flared pooling hem. Relaxed natural hands, full head and hem in frame, soft neutral light, clean white studio floor and realistic contact shadow. Material transparency and mesh placement remain an AI interpretation; no verified technical-construction claim. Native retained byte-for-byte at recorded actual dimensions."
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:33:55.033Z",
+      "generationPrompt": "Make one separate full-length Editorial catalogue photograph of the exact adult woman and beige honeycomb-mesh gown in the two accepted photographs. The first accepted Front defines her face, chestnut swept-back low updo, body proportions, neckline and complete gown; the second accepted Back defines the low back, tie and matching material. Keep the identical broad straight off-shoulder folded band over both upper arms, mesh size, beige color, tonal foundation layers, fitted column, subtle flare and complete pooling hem. Keep the low-back tie arrangement unchanged. Give her a restrained front three-quarter orientation, about twenty degrees, with a small natural weight shift and relaxed natural hands; calm catalogue expression. Match the Front's balanced neutral soft studio light, realistic skin and textile, white cyclorama and white floor with a soft natural contact shadow. Preserve the opaque white studio background. Entire head, hands and every hem edge inside comfortable full-length portrait margins. Exactly one adult professional model in one photograph, no typography, logos, props, extra decorations, graphic elements, borders, collage or duplicate people. Non-sexual commercial garment presentation; no outfit or coverage changes. Construction remains provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-evening-ref-02-v1/front-native.png",
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 726ab85c-51f6-4973-8a13-2651811ee74f. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "726ab85c-51f6-4973-8a13-2651811ee74f"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:35:23.740Z",
+      "generationPrompt": "Create one new full-length FRONT commercial studio catalogue photograph of the same adult professional model and azure-blue halter garment. First accepted Back is the primary identity, proportions, brunette low bun, sunglasses, small hoop earrings, bare feet, blue fabric and lighting reference. Second original Front supplies the precise front construction and facial reference. Preserve the bright blue gathered cup panels, thin halter neck straps, original narrow crossed front straps joining the small central ring, the teardrop abdomen opening, waist openings, high-waisted lower section and original leg line. Keep the matching rear arrangement from the accepted Back as a provisional construction interpretation. Do not change straps, openings, material, coverage, styling or model. Neutral upright stance directly facing camera, relaxed arms with naturally visible hands, both feet standing on the white studio floor. Balanced soft neutral commercial lighting, realistic textile/skin and natural body proportions. Opaque seamless clean white cyclorama and white floor, with subtle natural floor-contact shadow. Whole head, both hands and both feet comfortably inside full-length portrait margins. Exactly one adult model in one photograph, no lettering, logos, graphics, props, border, collage or duplicate people. Non-sexual professional fashion catalogue presentation.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-06-v1/back-native.png",
+        "/workspace/portfolio/public/portfolio/swim/6-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 9e55a433-90ee-4936-9e88-921e2b6fd91c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:36:58.060Z",
+      "generationPrompt": "Create one separate full-length Editorial photograph of the exact adult professional model and grey-and-white swim set in the accepted Front. Maintain her facial features, natural proportions, brunette low bun, dark square sunglasses, small hoops and bare feet. Keep the grey scoop top with thin shoulder straps layered over the white halter, grey high-waisted bottom and original narrow crossing waist straps, exact colors, fabric, cut and coverage. A quiet front three-quarter standing orientation with a gentle natural weight shift, calm expression and relaxed hands. Photograph her in an opaque seamless clean white studio with white floor and a small natural contact shadow, soft neutral light and realistic skin and textile detail. Keep the full head, both hands, all straps and feet comfortably inside a full-length portrait with generous margins. Exactly one adult model in one photograph, no text, added graphics, logos, props, border, montage or duplicate figure. Non-sexual professional apparel catalogue presentation. Preserve the outfit and accessories without additions or design changes.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID b79b5f98-8f4b-427c-8064-24121f3ec71a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a"
     }
   ],
   "notAttempted": [],
   "newAcceptedImages": 1,
   "newCompleteLooks": 0,
   "ownerArtisticApproval": false,
-  "updatedUTC": "2026-10-23T09:32:11.163581+00:00",
+  "updatedUTC": "2026-10-23T09:37:25.600646+00:00",
   "finalCounts": {
     "completeLooks": 31,
     "acceptedNativeImages": 98,
