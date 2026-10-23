@@ -1435,12 +1435,34 @@
         "adoptedFromGeneratedConcept": "mw26-activewear-04",
         "selectionReview": "Same young-adult model, green/white polo trim and shorts, sock stripes and court footwear; genuine rear and lateral court Editorial."
       },
-      "master": null,
-      "status": "PLANNED",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-04/master.png",
+        "sha256": "def32cef519b6c19a52cf95c53f61dbff1149b8dcafe753e6613f066ee50075f",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "adoptedFromGeneratedConcept": "mw26-activewear-04",
-      "autonomousReview": "Same young-adult model, green/white polo trim and shorts, sock stripes and court footwear; genuine rear and lateral court Editorial."
+      "autonomousReview": "Same young-adult model, green/white polo trim and shorts, sock stripes and court footwear; genuine rear and lateral court Editorial.",
+      "setReview": {
+        "at": "2026-10-23T23:14:13.293609+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Same young-adult model, green/white polo trim and shorts, sock stripes and court footwear; genuine rear and lateral court Editorial.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-activewear-05",
@@ -4021,10 +4043,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 3,
+    "completedLooks": 4,
     "acceptedActivePhotographs": 22,
-    "incompleteLooks": 37,
-    "completedMasters": 3,
+    "incompleteLooks": 36,
+    "completedMasters": 4,
     "unresolvedViews": [
       "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
