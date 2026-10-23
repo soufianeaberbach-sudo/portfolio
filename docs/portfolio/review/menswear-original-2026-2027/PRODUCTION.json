@@ -641,12 +641,28 @@
       "majorCategory": "m-tailoring",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-04/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1790372,
+        "sha256": "c4228869a7ab04a8902d97a27a99761a1d8fa2271113c7c89039f47acddccac5",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-d8aa6428-06c6-41a1-9273-3082d8036de3.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: cool-stone double-breasted trench, believable raglan sleeve pitch, collar and lapels, functional waist and cuff buckles, slant welts, storm flap and weighted gabardine hem. Long straight-haired adult model distinct. Accepted as-rendered below-knee length and eight-button double-breasted arrangement, replacing mid-calf six-button intent. Slate trousers and black boots coherent; white studio and complete frame pass.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:52:26.538512+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
