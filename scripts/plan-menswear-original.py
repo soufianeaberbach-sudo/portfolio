@@ -5,6 +5,8 @@ import json, re
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'docs/portfolio/review/menswear-original-2026-2027'
 OUT.mkdir(parents=True, exist_ok=True)
+if (OUT/'PRODUCTION.json').exists():
+ raise SystemExit('Existing collection and production records are protected. Edit them explicitly; do not reinitialize.')
 
 # Each row defines a different primary product. Fabric weights are design targets,
 # not tested material specifications or claims about a manufactured garment.
