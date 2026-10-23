@@ -3975,11 +3975,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1740916,
+        "nativeMode": "RGB",
+        "sha256": "e6674e2463ec150a6648231bf8df8733b2c6f9e34e285a4eaef75054acf7d84f",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-32517ae9-aa3b-45ad-8978-7ea9c4d2c0f1.png",
+        "generatedAt": "2026-10-23T23:56:48.328793+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-03-front.txt",
+        "promptSHA256": "a28f15908c51408204bbec8c16e484134bef35ac6aa03053d1498e7decc397cf",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/front.png",
+        "exportSHA256": "4d6b5e00f066829a6f1edc3c34963ff637c60e8dd187f571e86aa98cba8d9b6d",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/front-600.webp",
+        "previewSHA256": "cdf40c6012f980712ee310d0da367f1db13e082146c162128edf750677b4cee2",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Pale sage Harrington clearly distinct from rib-neck bomber: two-position stand collar, raglan sleeves, flap side entries, elastic cuffs and side-back waistband. Cream knit, navy chinos and plain white leather low-tops form clean transseasonal outfit. Natural commercial adult casting and crisp poplin structure.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -6132,8 +6162,15 @@
       "key": "mw-r2-outerwear-03:front",
       "look": "mw-r2-outerwear-03",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-23T23:56:48.332586+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-03:back",
@@ -7021,6 +7058,15 @@
       "at": "2026-10-23T23:55:49.804502+00:00",
       "notes": "Marine-navy mid-thigh parka has proper hood/high collar, covered zip/snap placket, two vertical chest zips and two lower flap pockets, cuff tabs and lightly shaped waist. Oat knit, slate cargos and brown boots appropriate cold-season support. Natural adult model and complete white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-03",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:56:48.332586+00:00",
+      "notes": "Pale sage Harrington clearly distinct from rib-neck bomber: two-position stand collar, raglan sleeves, flap side entries, elastic cuffs and side-back waistband. Cream knit, navy chinos and plain white leather low-tops form clean transseasonal outfit. Natural commercial adult casting and crisp poplin structure.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7033,11 +7079,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 24,
-    "acceptedActivePhotographs": 75,
+    "acceptedActivePhotographs": 76,
     "incompleteLooks": 16,
     "completedMasters": 24,
     "unresolvedViews": [
-      "mw-r2-outerwear-03:front",
       "mw-r2-outerwear-03:back",
       "mw-r2-outerwear-03:editorial",
       "mw-r2-outerwear-05:front",
