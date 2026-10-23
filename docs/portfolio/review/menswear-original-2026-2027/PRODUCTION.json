@@ -568,15 +568,43 @@
       "majorCategory": "m-tailoring",
       "slot": 1,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-01/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1847272,
+        "sha256": "1a0b237a9150ea97060bc8a4e746e1c631fd2ae86557e289a43f5a5405b3305d",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-0a74a94c-3e35-48ed-8720-09471b689ab7.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass after casting/fit retry: platinum buzz-cut adult is distinct; charcoal suit has fuller straight leg and relaxed jacket, balanced broad notch lapels, plausible shoulder pitch and flap pockets. Upper button fastened, lower open; pearl cuffs and black derbies coherent. No physical tailoring validation claimed.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:51:07.940354+00:00"
+      },
       "back": null,
       "editorial": null,
-      "master": null
+      "master": null,
+      "rejectedAttempts": [
+        {
+          "path": "assets/source/menswear-original-2026-2027/mw26-tailoring-01/rejected-front-casting-fit-01.png",
+          "sha256": "6ec01a35c8120f0cda7bc86374d1287b453b97424a72cf4d4e7163fad49db01b",
+          "nativeDimensions": [
+            1024,
+            1536
+          ],
+          "reason": "Dark wavy casting too close to court; waist suppression and taper too conventional for intended relaxed tailoring.",
+          "selected": false
+        }
+      ]
     },
     {
       "id": "mw26-tailoring-02",
