@@ -207,12 +207,28 @@
       "majorCategory": "m-activewear",
       "slot": 2,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-02/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1702648,
+        "sha256": "8b640c1742a1f48af4a7f5447b56d62d17a615feaf544b349537689ceb71b2be",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-34a21e3e-a75b-4f95-9022-c56542be3629.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: lightweight perforated ice-blue singlet, bound armholes, short split running bottoms, cushioned mesh shoes and credible athletic casting. Complete square Front with neutral white floor and soft contact shadow. Liner and internal cord remain design intent, not visually certified.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:44:29.695743+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
