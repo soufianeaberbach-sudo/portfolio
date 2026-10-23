@@ -17,6 +17,18 @@ def sync(data):
   elif item['state']=='SELECTED':raise ValueError('Selected view disappeared')
  data['statistics']={'targetLooks':40,'targetViews':120,'completedLooks':sum(bool(x.get('master')) for x in data['looks']),'acceptedActivePhotographs':sum(bool(x[v]) for x in data['looks'] for v in VIEWS),'incompleteLooks':sum(not x.get('master') for x in data['looks']),'completedMasters':sum(bool(x.get('master')) for x in data['looks']),'unresolvedViews':[x['key'] for x in data['queue'] if x['state']!='SELECTED'],'failedGenerationAttempts':sum(x['outcome'] in ('PROVIDER_ERROR','REJECTED_VISUAL') for x in data['attempts'])}
  base.atomic(MANIFEST,data)
+ publish_catalog(data)
+
+def publish_catalog(data):
+ records=[]
+ for x in data['looks']:
+  if not x['master']:continue
+  c=x['concept'];views={}
+  for v in VIEWS:
+   rec=x[v];views[v]={'src':'/'+rec['exportPath'].removeprefix('public/'),'preview':'/'+rec['previewPath'].removeprefix('public/'),'width':1800,'height':2700,'alt':c['name']+' — '+x['productSubtype']+', '+v+' view. Original AI fashion concept.'}
+  records.append({'id':x['id'],'category':x['technicalCategoryId'],'position':x['position'],'title':c['name'],'product':x['productSubtype'],'fabric':c['fabric'],'construction':c.get('actualSelectedDesign',c['silhouette']+'; '+c['seams']+'; '+c['pockets']),'styling':c['styling'],'colour':c['colour'],'views':views,'master':'/'+x['master']['path'].removeprefix('public/'),'ownerArtisticAcceptance':'PENDING','provenance':'Original AI fashion concept / visual exploration. Material and construction are design intent; no physical sample or manufactured project is claimed.'})
+ base.atomic(ROOT/'src/data/menswear-ai-production.json',{'collectionId':data['collectionId'],'selectedCompleteLooks':records})
+
 def normalize(rec):
  rec=dict(rec)
  rec['nativeDimensions']=rec.get('nativeDimensions',[rec.get('nativeWidth'),rec.get('nativeHeight')]);rec['agentSelection']='SELECTED_AUTONOMOUS';rec['ownerArtisticAcceptance']='PENDING';rec['nativeHighResolutionClaim']=False
@@ -27,7 +39,7 @@ def normalize(rec):
  rec['previewSHA256']=base.digest(ROOT/rec['previewPath']);return rec
 
 def checkpoint(message,paths):
- paths=[Path(p) for p in paths]+[MANIFEST]+list((REVIEW/'receipts').glob('*.json'))
+ paths=[Path(p) for p in paths]+[MANIFEST,ROOT/'src/data/menswear-ai-production.json']+list((REVIEW/'receipts').glob('*.json'))
  base.checkpoint(message,list(dict.fromkeys(paths)))
 
 def register(a):

@@ -1,6 +1,6 @@
 ---
 import type{GarmentWorld}from'../../data/portfolio';
-import{menswearPool,menswearDisplayed}from'../../data/menswear-collection';
+import{menswearPool,menswearDisplayed,menswearActorSubject,menswearConcept}from'../../data/menswear-collection';
 import type{MenswearCategory}from'../../data/menswear-collection';
 import{photoRegion,photoSizes}from'../../data/final-photography';
 import{menswearDirections,menswearWindows}from'../../data/menswear-direction';
@@ -22,7 +22,7 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
     <div class="mw-walkway"><div class="mw-frame" data-mw-frame>
      <header class="mw-film-title"><p class="label">{r.number} / {r.direction.name}</p><h3 id={`${r.id}-heading`}>{r.direction.title}</h3></header>
      <div class="mw-camera" data-mw-camera>
-      {r.direction.cast.map(photo=>{const subject=r.display.find(s=>s.id.endsWith(`-pexels-${photo}`))!,primary=subject.views[0],image=primary?.image??subject.cover;
+      {r.direction.cast.map(photo=>{const subject=menswearActorSubject(r.id,photo,r.display),primary=subject.views[0],image=primary?.image??subject.cover;
        const original=image.src.match(new RegExp(`/pexels-${photo}\\.(webp|jpg)$`));
        const[start,end]=photoRegion(image,primary?.crop??'whole');
        const window=original&&menswearWindows[photo]?menswearWindows[photo]:[start,0,end-start,1];
@@ -34,13 +34,13 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
     </div></div>
     <section class="mw-archive" data-mw-archive aria-labelledby={`${r.id}-archive-title`}>
      <header><h3 id={`${r.id}-archive-title`}>The {r.direction.name.toLowerCase()} edit.</h3><p class="label">Ten looks / <span data-mw-rail-hint>Explore →</span></p></header>
-     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten references. Swipe or use arrow keys to explore.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id}><MenswearPhoto image={s.views[0]?.image??s.cover} crop={s.views[0]?.crop??'whole'} sizes="(max-width:699px) 52vw, (max-width:1400px) 21vw, 310px"/><span class="label">{String(i+1).padStart(2,'0')}</span></a></li>)}</ol>
-     <p class="mw-provenance">Temporary reference photography. Independent photographers and garments; no ABERBACH authorship or endorsement is claimed. Credits accompany each photograph.</p>
+     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Swipe or use arrow keys to explore.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id}><MenswearPhoto image={s.views[0]?.image??s.cover} crop={s.views[0]?.crop??'whole'} sizes="(max-width:699px) 52vw, (max-width:1400px) 21vw, 310px"/><span class="label">{String(i+1).padStart(2,'0')}</span></a></li>)}</ol>
+     <p class="mw-provenance">Original AI fashion concepts are identified in their viewers. Preserved historical photographs retain their source credits. Material and construction descriptions express design intent.</p>
      <a class="mw-handoff" href={r.direction.next.startsWith('m-')?`#menswear/${r.direction.next}`:`#${r.direction.next}`} data-nav><span class="label">{index===3?'Next chapter':'Next world'}</span><span>{index===3?'Pattern Development':ranges[index+1].direction.name} ↗</span></a>
     </section>
    </div>
   </article>)}
-  <details class="mw-all-references" data-mw-all-references><summary class="label">Full reference collection / {ranges.reduce((n,r)=>n+r.pool.length,0)} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved; historical entries may share an original photograph.</p><ul>{ranges.flatMap(r=>r.pool.map(s=><li><a href={`#menswear/${s.category}/${s.id}`} data-nav data-open-subject={s.id} data-mw-reference-door>{s.id} — {s.cover.alt}</a></li>))}</ul></details>
+  <details class="mw-all-references" data-mw-all-references><summary class="label">Full reference collection / {ranges.reduce((n,r)=>n+r.pool.filter(s=>!menswearConcept(s.id)).length,0)} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved; historical entries may share an original photograph.</p><ul>{ranges.flatMap(r=>r.pool.filter(s=>!menswearConcept(s.id)).map(s=><li><a href={`#menswear/${s.category}/${s.id}`} data-nav data-open-subject={s.id} data-mw-reference-door>{s.id} — {s.cover.alt}</a></li>))}</ul></details>
   <p class="mw-flow-exit label" data-mw-flow-exit>Continue scrolling / Pattern Development ↓</p>
   </div>
   <footer class="mw-controls"><button data-mw-prev aria-label="Previous composed scene">←</button><ol aria-label="Composed scenes">{[0,1,2,3,4].map(n=><li><button data-mw-scene={n} aria-label={`Scene ${n+1}`} aria-pressed={n===0?'true':'false'}>{String(n+1).padStart(2,'0')}</button></li>)}</ol><button data-mw-next aria-label="Next composed scene">→</button><p class="mw-mode label" data-mw-mode>Scroll to explore</p><button data-mw-fullscreen hidden aria-label="Toggle fullscreen">Fullscreen ↗</button></footer>
