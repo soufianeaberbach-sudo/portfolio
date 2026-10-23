@@ -503,12 +503,34 @@
         "adoptedFromGeneratedConcept": "mw26-streetwear-05",
         "selectionReview": "Rechecked actual three-view set: visible thigh flap has single snap consistently; rear flap pockets and knee articulation coherent. Fashion side-step, same hair and shoes. Lock single-snap actual design instead of a contradictory generic description."
       },
-      "master": null,
-      "status": "PLANNED",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-06/master.png",
+        "sha256": "626dc49b337a169cf72d08c67908ce80c4a2e42a733ff77c8e515496848a36f5",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "adoptedFromGeneratedConcept": "mw26-streetwear-05",
-      "autonomousReview": "Rechecked actual three-view set: visible thigh flap has single snap consistently; rear flap pockets and knee articulation coherent. Fashion side-step, same hair and shoes. Lock single-snap actual design instead of a contradictory generic description."
+      "autonomousReview": "Rechecked actual three-view set: visible thigh flap has single snap consistently; rear flap pockets and knee articulation coherent. Fashion side-step, same hair and shoes. Lock single-snap actual design instead of a contradictory generic description.",
+      "setReview": {
+        "at": "2026-10-23T23:13:11.251910+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Rechecked actual three-view set: visible thigh flap has single snap consistently; rear flap pockets and knee articulation coherent. Fashion side-step, same hair and shoes. Lock single-snap actual design instead of a contradictory generic description.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-07",
@@ -3955,10 +3977,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 0,
+    "completedLooks": 1,
     "acceptedActivePhotographs": 22,
-    "incompleteLooks": 40,
-    "completedMasters": 0,
+    "incompleteLooks": 39,
+    "completedMasters": 1,
     "unresolvedViews": [
       "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
