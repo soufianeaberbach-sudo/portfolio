@@ -782,12 +782,34 @@
         "adoptedFromGeneratedConcept": "mw26-rtw-05",
         "selectionReview": "Linen texture, box-pleat back, short camp sleeves and coordinated straight pants read consistently; natural red waves suit garment without imposed novelty. Fisherman sandals include small toe windows."
       },
-      "master": null,
-      "status": "PLANNED",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-08/master.png",
+        "sha256": "50eec3060951795c94cadcfb8359c83b3df65b8fb086a4309391ad652a976cb7",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "adoptedFromGeneratedConcept": "mw26-rtw-05",
-      "autonomousReview": "Linen texture, box-pleat back, short camp sleeves and coordinated straight pants read consistently; natural red waves suit garment without imposed novelty. Fisherman sandals include small toe windows."
+      "autonomousReview": "Linen texture, box-pleat back, short camp sleeves and coordinated straight pants read consistently; natural red waves suit garment without imposed novelty. Fisherman sandals include small toe windows.",
+      "setReview": {
+        "at": "2026-10-23T23:13:48.604838+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Linen texture, box-pleat back, short camp sleeves and coordinated straight pants read consistently; natural red waves suit garment without imposed novelty. Fisherman sandals include small toe windows.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-09",
@@ -3977,10 +3999,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 1,
+    "completedLooks": 2,
     "acceptedActivePhotographs": 22,
-    "incompleteLooks": 39,
-    "completedMasters": 1,
+    "incompleteLooks": 38,
+    "completedMasters": 2,
     "unresolvedViews": [
       "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
