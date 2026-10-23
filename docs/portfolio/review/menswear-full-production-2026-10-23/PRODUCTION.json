@@ -1919,7 +1919,39 @@
         "reviewNotes": "Genuine rear retains same brown curls, slate blue raglan tee, black shorts with side vents, charcoal crew socks and white trainer heels. Plain rear technical knit and realistic motion ease.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1733671,
+        "nativeMode": "RGB",
+        "sha256": "b7b1a15b8e90160b3a097fdb26598f2715b08be7b8f9fd9cb0ae3564fef94905",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-14d26670-88e2-4d64-ad25-29d5769ee9f6.png",
+        "generatedAt": "2026-10-23T23:34:54.504885+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-01-editorial.txt",
+        "promptSHA256": "d3033835a7b269e0af75e0e9cc6c2c0f2eb1c92db28ea643c0be7f953f80be1c",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-01/editorial.png",
+        "exportSHA256": "cb0072c152143f2cadfa6cb8efb9298ad507e86a17858ef990ce35cb6ecc4f2e",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-01/editorial-600.webp",
+        "previewSHA256": "93a868629f7953d5e343553a0c20548db41fc0dcf769c74d0d4c8f51e15a331c",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same athlete/outfit, controlled forward lunge with correct supporting rear leg, natural arms and readable training tee/shorts; full footwear and white studio continuous. Functional motion distinct from static Front.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4454,7 +4486,7 @@
       "key": "mw-r2-activewear-01:editorial",
       "look": "mw-r2-activewear-01",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5301,6 +5333,15 @@
       "at": "2026-10-23T23:34:48.342915+00:00",
       "notes": "Genuine rear retains same brown curls, slate blue raglan tee, black shorts with side vents, charcoal crew socks and white trainer heels. Plain rear technical knit and realistic motion ease.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-01",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:34:54.508170+00:00",
+      "notes": "Same athlete/outfit, controlled forward lunge with correct supporting rear leg, natural arms and readable training tee/shorts; full footwear and white studio continuous. Functional motion distinct from static Front.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5313,11 +5354,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 14,
-    "acceptedActivePhotographs": 48,
+    "acceptedActivePhotographs": 49,
     "incompleteLooks": 26,
     "completedMasters": 14,
     "unresolvedViews": [
-      "mw-r2-activewear-01:editorial",
       "mw-r2-activewear-03:back",
       "mw-r2-activewear-03:editorial",
       "mw-r2-activewear-05:back",
