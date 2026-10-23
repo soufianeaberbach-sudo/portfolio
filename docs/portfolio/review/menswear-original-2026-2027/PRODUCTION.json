@@ -749,7 +749,7 @@
       "majorCategory": "m-rtw",
       "slot": 2,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -768,8 +768,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass after casting retry: shaved head and moustache clearly distinguish this model; tobacco vertical tuck texture, fashioned collar and sleeve ribs readable. Oat pleated trousers and espresso suede loafers coherent. Accepted as-rendered variant: four-button placket and lightly tucked hem expose belt, replacing three-button untucked intent. White studio and complete silhouette pass.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:47:32.319854+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-02/front.png",
+        "generatedAt": "2026-10-23T18:47:32.319854+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "78d6196489dcfe1d854f2c8afcd850d1739dd41a3b9a6bd74d56822e92d37c6b"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-02/back-native.png",
@@ -787,8 +795,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: same shaved head and ears, continuous tobacco vertical knit, sleeve rib bands and lightly tucked rib hem. Oat trouser seat and two neat welt pockets plausible, same suede loafer heels. No front placket or pockets invented on back.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:06:35.553611+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-02/back.png",
+        "generatedAt": "2026-10-23T19:06:35.553611+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "01b77f33abc86405418a9c1b506946c4f059fb5cf046b9705c4a32ba79141eb9"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-02/editorial-native.png",
@@ -806,10 +822,31 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Campaign pass: long walking step with pocket hand and off-camera gaze; shaved head, moustache, aquiline face and knit texture preserved. Same tucked polo, belt, oat pleated trousers and espresso loafers. Natural garment motion and complete frame.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:09:55.175725+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-02/editorial.png",
+        "generatedAt": "2026-10-23T19:09:55.175725+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "1877d1717a32d50ee52e4384693139a671a5102bfd6e15d46b1a57a5b705d7de"
       },
-      "master": null,
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-02/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "bea2780619f0618b354fe2310a92cc8aa9dbcc26bc2849b6db1f3c60fdecffe0",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
       "rejectedAttempts": [
         {
           "path": "assets/source/menswear-original-2026-2027/mw26-rtw-02/rejected-front-casting-01.png",
@@ -821,7 +858,24 @@
           "reason": "Casting face and wavy hairstyle too close to court pilot; garment plausible, not selected.",
           "selected": false
         }
-      ]
+      ],
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Recast knit-polo set coherent across genuine front/rear and walking Editorial; distinctive adult identity, tobacco tuck texture, oat trouser drape and suede footwear match. Four-button accepted Front is design authority; some buttons become less exposed in movement.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-rtw-03",
