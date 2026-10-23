@@ -2611,12 +2611,34 @@
         "adoptedFromGeneratedConcept": "mw26-tailoring-04",
         "selectionReview": "Belted below-knee eight-button trench, rear storm shield/cuff tabs/back vent and same long-haired adult casting. Editorial hand overlaps flap partially; Front provides unobscured construction, overall pose acceptable."
       },
-      "master": null,
-      "status": "PLANNED",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-09/master.png",
+        "sha256": "8a628c1ba5a0fd1f10453b7b1ab5d2f5057fe4ef28d5e6075a8f2f2c386b46da",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "adoptedFromGeneratedConcept": "mw26-tailoring-04",
-      "autonomousReview": "Belted below-knee eight-button trench, rear storm shield/cuff tabs/back vent and same long-haired adult casting. Editorial hand overlaps flap partially; Front provides unobscured construction, overall pose acceptable."
+      "autonomousReview": "Belted below-knee eight-button trench, rear storm shield/cuff tabs/back vent and same long-haired adult casting. Editorial hand overlaps flap partially; Front provides unobscured construction, overall pose acceptable.",
+      "setReview": {
+        "at": "2026-10-23T23:14:36.645228+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Belted below-knee eight-button trench, rear storm shield/cuff tabs/back vent and same long-haired adult casting. Editorial hand overlaps flap partially; Front provides unobscured construction, overall pose acceptable.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-outerwear-10",
@@ -4065,10 +4087,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 5,
+    "completedLooks": 6,
     "acceptedActivePhotographs": 22,
-    "incompleteLooks": 35,
-    "completedMasters": 5,
+    "incompleteLooks": 34,
+    "completedMasters": 6,
     "unresolvedViews": [
       "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
