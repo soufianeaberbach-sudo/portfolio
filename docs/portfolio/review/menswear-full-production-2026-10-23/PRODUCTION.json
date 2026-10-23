@@ -3068,10 +3068,32 @@
         "reviewNotes": "Recovered native retains same model and all outfit pieces. Natural diagonal step with one pocket hand, pants knee articulation visible and plausible stretch-woven movement, full-length white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-07/master.png",
+        "sha256": "6808d450c35ab0ae8a8c4b72b2f8203c54b5df067ce9fd0202d94f179237c78d",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
-      "provenance": "Original AI fashion concept / visual exploration"
+      "provenance": "Original AI fashion concept / visual exploration",
+      "setReview": {
+        "at": "2026-10-23T23:41:44.263217+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-activewear-08",
@@ -5847,10 +5869,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 18,
+    "completedLooks": 19,
     "acceptedActivePhotographs": 59,
-    "incompleteLooks": 22,
-    "completedMasters": 18,
+    "incompleteLooks": 21,
+    "completedMasters": 19,
     "unresolvedViews": [
       "mw-r2-activewear-08:front",
       "mw-r2-activewear-08:back",
