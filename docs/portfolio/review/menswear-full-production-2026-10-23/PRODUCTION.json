@@ -56,11 +56,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1928935,
+        "nativeMode": "RGB",
+        "sha256": "0fab953f407e72c32796003f1bccb4563157aced4d429e103a3daeb68ee41b24",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-e2b723b8-4700-489b-8d46-2e6c5d3197d9.png",
+        "generatedAt": "2026-10-23T23:15:02.392252+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-01-front.txt",
+        "promptSHA256": "c4db07cefe2bf0682cc9a71e7de0675d1397589963f40187c3d4203f377a7948",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-01/front.png",
+        "exportSHA256": "be8cca13a55d701b31fa8741021add4acfd143d821d431705905bb64228ebdc2",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-01/front-600.webp",
+        "previewSHA256": "7c2ad9e3489f36ea0258e66badafe84d3f7e4a9dbeacc0c97a7d9eb7cf55d550",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Five-pocket indigo denim is primary, full straight leg and believable twill/stitch weight; stone long-sleeve jersey, tobacco belt and brown suede derbies coherent. Natural young adult commercial casting, complete head/shoes and white studio. Selected autonomously.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -3240,7 +3270,7 @@
       "key": "mw-r2-casualwear-01:front",
       "look": "mw-r2-casualwear-01",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4077,7 +4107,17 @@
       "attempts": []
     }
   ],
-  "attempts": [],
+  "attempts": [
+    {
+      "look": "mw-r2-casualwear-01",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:15:02.396182+00:00",
+      "notes": "Five-pocket indigo denim is primary, full straight leg and believable twill/stitch weight; stone long-sleeve jersey, tobacco belt and brown suede derbies coherent. Natural young adult commercial casting, complete head/shoes and white studio. Selected autonomously.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/front-v01-native.png"
+    }
+  ],
   "archivedNotSelected": [
     "mw26-rtw-02",
     "mw26-tailoring-01"
@@ -4088,11 +4128,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 6,
-    "acceptedActivePhotographs": 22,
+    "acceptedActivePhotographs": 23,
     "incompleteLooks": 34,
     "completedMasters": 6,
     "unresolvedViews": [
-      "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
       "mw-r2-casualwear-01:editorial",
       "mw-r2-casualwear-02:front",
