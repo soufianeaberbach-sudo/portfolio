@@ -120,7 +120,39 @@
         "reviewNotes": "True rear: same brown waves, stone long sleeves, brown belt and suede derby heels. Denim rear yoke and two patch pockets coherent, complete framing and unchanged palette.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1880720,
+        "nativeMode": "RGB",
+        "sha256": "9d91d464ffdaafbc0b34ca6719b68e2e77c6c1241f360e9260cd1f5d4e69818e",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-e866c41d-3f99-4d50-82ef-308617669ecd.png",
+        "generatedAt": "2026-10-23T23:15:15.191875+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-01-editorial.txt",
+        "promptSHA256": "405a2cdc4cdac7b76401da456c33edc7d3e99007bf31b017b3f24a67eba1edde",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-01/editorial.png",
+        "exportSHA256": "1556cf2fbbad91dfb9bb5032d6cba1e924b58ebfead3c451d09aea7626f07cd4",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-01/editorial-600.webp",
+        "previewSHA256": "13bd0ecb16cd5f8e9b00666d3f36ab3de35f2c10365ae7e4708188b2a6c25e23",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Recognizable same model and outfit, natural forward step and one hand at front pocket; garment remains readable with credible denim folds, stylish relaxed commercial fashion movement.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -3316,7 +3348,7 @@
       "key": "mw-r2-casualwear-01:editorial",
       "look": "mw-r2-casualwear-01",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4157,6 +4189,15 @@
       "at": "2026-10-23T23:15:08.221376+00:00",
       "notes": "True rear: same brown waves, stone long sleeves, brown belt and suede derby heels. Denim rear yoke and two patch pockets coherent, complete framing and unchanged palette.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-01",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:15:15.199205+00:00",
+      "notes": "Recognizable same model and outfit, natural forward step and one hand at front pocket; garment remains readable with credible denim folds, stylish relaxed commercial fashion movement.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4169,11 +4210,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 6,
-    "acceptedActivePhotographs": 24,
+    "acceptedActivePhotographs": 25,
     "incompleteLooks": 34,
     "completedMasters": 6,
     "unresolvedViews": [
-      "mw-r2-casualwear-01:editorial",
       "mw-r2-casualwear-02:front",
       "mw-r2-casualwear-02:back",
       "mw-r2-casualwear-02:editorial",
