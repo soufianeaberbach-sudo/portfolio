@@ -1,7 +1,7 @@
 """Checkpoint immutable native outputs; export reviewed sets without retouching."""
 from pathlib import Path
-from PIL import Image
-import argparse, hashlib, json, shutil, subprocess, urllib.request, urllib.parse, datetime, tempfile, os
+from PIL import Image, ImageChops
+import argparse, hashlib, json, shutil, subprocess, urllib.request, urllib.parse, datetime, tempfile, os, fcntl
 
 ROOT=Path(__file__).resolve().parents[1]
 REVIEW=ROOT/'docs/portfolio/review/menswear-original-2026-2027'
@@ -21,23 +21,48 @@ def atomic(path,value):
   if os.path.exists(tmp): os.unlink(tmp)
 def run(*args): return subprocess.check_output(args,cwd=ROOT,text=True).strip()
 
+def validate_set(look):
+ master=Image.open(ROOT/look['master']['path']);master.load()
+ assert master.size==(5400,2700), 'Master geometry'
+ assert len({look[v]['sha256'] for v in ('front','back','editorial')})==3, 'Views must be separate images'
+ for i,view in enumerate(('front','back','editorial')):
+  rec=look[view];native=ROOT/rec['nativePath'];im=Image.open(native);im.load()
+  assert digest(native)==rec['sha256'], 'Native changed'
+  assert im.size==(rec['nativeWidth'],rec['nativeHeight']), 'Native dimension mismatch'
+  panel=Image.open(ROOT/rec['exportPath']);panel.load()
+  assert panel.size==(1800,2700), 'Panel geometry'
+  assert digest(ROOT/rec['exportPath'])==rec['exportSHA256'], 'Export changed'
+  assert ImageChops.difference(master.crop((i*1800,0,(i+1)*1800,2700)),panel).getbbox() is None, 'Master panel differs'
+  assert rec['nativeResolutionClaim'] is False, 'Resolution disclosure'
+ out=ROOT/EXPORTS/look['id']
+ for w in (900,1800,2700,3600):
+  im=Image.open(out/f'master-{w}.webp');im.load();assert im.size==(w,w//2)
+ return {'nativeHashes':True,'decoding':True,'individualGeometry':True,'masterGeometry':True,'exactMasterPanels':True,'responsiveGeometry':True,'threeDistinctFiles':True,'resolutionDisclosure':True}
+
 def checkpoint(message,paths):
  run('git','add','--sparse','--',*[str(p) for p in paths])
  run('git','commit','-m',message)
- run('git','push','origin','HEAD:feat/menswear-ai-photography-regeneration')
  head=run('git','rev-parse','HEAD')
+ run('git','push','origin',head+':refs/heads/feat/menswear-ai-photography-regeneration')
+ verify_remote(head,paths)
+
+def verify_remote(head,paths):
  remote=run('git','ls-remote','origin','refs/heads/feat/menswear-ai-photography-regeneration').split()[0]
- if head!=remote: raise ValueError('Remote branch head differs')
+ if head!=remote and subprocess.run(['git','merge-base','--is-ancestor',head,remote],cwd=ROOT).returncode:
+  raise ValueError('Remote branch does not contain checkpoint')
  verified=[]
  for path in paths:
   path=Path(path)
   if not path.is_absolute(): path=ROOT/path
   if not path.is_file(): continue
   relative=str(path.relative_to(ROOT))
+  if '/receipts/' in relative: continue
+  committed=subprocess.check_output(['git','show',head+':'+relative],cwd=ROOT)
+  expected=hashlib.sha256(committed).hexdigest()
   url='https://raw.githubusercontent.com/soufianeaberbach-sudo/portfolio/'+head+'/'+urllib.parse.quote(relative)
   with urllib.request.urlopen(url,timeout=60) as response: downloaded=response.read()
-  if hashlib.sha256(downloaded).hexdigest()!=digest(path): raise ValueError('Remote byte verification failed: '+relative)
-  verified.append({'path':relative,'sha256':digest(path),'gitBlob':run('git','hash-object',relative),'remoteBytesVerified':True})
+  if hashlib.sha256(downloaded).hexdigest()!=expected: raise ValueError('Remote byte verification failed: '+relative)
+  verified.append({'path':relative,'sha256':expected,'gitBlob':run('git','rev-parse',head+':'+relative),'remoteBytesVerified':True})
  receipt=REVIEW/'receipts'/(head+'.json')
  atomic(receipt,{'commit':head,'branchHeadVerified':True,'verifiedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':verified})
  # Receipt is included by the next checkpoint (finalization commits all receipts).
@@ -93,7 +118,9 @@ def assemble(a):
  look['setReview']={'agentVisualStatus':'PASS_FOR_OWNER_REVIEW','notes':a.notes,'ownerApproval':False,
  'scaleReview':'Full-length scale compared visually across native set; no anatomy or garment retouching',
  'limits':'Hidden construction, physical fit and performance not verified. Model continuity assessed visually.'}
- look['productionStatus']='PILOT_SET_READY_FOR_OWNER_REVIEW';atomic(REGISTRY,registry)
+ look['productionStatus']='PILOT_SET_READY_FOR_OWNER_REVIEW'
+ look['focusedChecks']=validate_set(look)
+ atomic(REGISTRY,registry)
  paths=list(out.glob('*'))+[REGISTRY]+list((REVIEW/'receipts').glob('*.json'))
  checkpoint('Assemble reviewed '+a.look+' three-view master and derivatives',paths)
 
@@ -101,7 +128,10 @@ if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('operation',choices=['register','assemble']);p.add_argument('look')
  p.add_argument('--view',choices=['front','back','editorial']);p.add_argument('--source');p.add_argument('--notes',required=True)
  a=p.parse_args()
- if a.operation=='register':
-  if not a.view or not a.source:p.error('register needs --view and --source')
-  register(a)
- else:assemble(a)
+ # Serialize registry mutations, commits, pushes and verification in this clone.
+ with open(ROOT/'.git/menswear-original-production.lock','w') as lock:
+  fcntl.flock(lock,fcntl.LOCK_EX)
+  if a.operation=='register':
+   if not a.view or not a.source:p.error('register needs --view and --source')
+   register(a)
+  else:assemble(a)

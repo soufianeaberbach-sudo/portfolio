@@ -912,7 +912,7 @@
       "majorCategory": "m-rtw",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -934,7 +934,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:48:29.931185+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-05/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1819722,
+        "sha256": "7d3783c4ec76857847e604db4f12d55c34f744924379af96544ab04b261aa729",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-2e011b0e-803f-4f54-a9b7-92948912a4a9.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-rtw-05/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: matching copper waves and linen slubs, rear yoke with central box pleat, plain short-sleeve back, straight side-split hem. Matching wide trousers with quiet rear welts; correct sand fisherman heel straps. Natural lightweight drape and full frame.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T19:11:56.865725+00:00"
+      },
       "editorial": null,
       "master": null
     },
