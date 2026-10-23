@@ -795,7 +795,39 @@
         "reviewNotes": "Genuine rear with same natural curls, double-layer hood and centre seam, plain sweatshirt back, rib bands, jogger back patch pocket and same trainer heels. Dense jersey folds and silhouette continuous.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-05/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1829675,
+        "nativeMode": "RGB",
+        "sha256": "57b1b472d6fc52f6486919eb8205f81fde9857826fafd2b36a095ff6dbe4227d",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-df098026-6c95-49d5-a3d4-128063ee4d3e.png",
+        "generatedAt": "2026-10-23T23:24:43.565580+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-05/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-05-editorial.txt",
+        "promptSHA256": "58661d48b1a241cc4b31eef286927b197038211bb02df0be6e89fb0274b04a8a",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-05/editorial.png",
+        "exportSHA256": "655c442cd6350285cac175ad5b5c1b7b7b4d877febc795b3900fb293472fa89c",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-05/editorial-600.webp",
+        "previewSHA256": "6fb5ef5acd62d11bb85a693bc8d6dffa8370cd727cf7317e803a42a68a0aa62e",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same model, blue hooded coordinate and grey trainers; relaxed forward step and kangaroo-pocket hand create natural contemporary streetwear gesture. Full outfit and contact shadow retained.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -3864,7 +3896,7 @@
       "key": "mw-r2-casualwear-05:editorial",
       "look": "mw-r2-casualwear-05",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4729,6 +4761,15 @@
       "at": "2026-10-23T23:24:36.384779+00:00",
       "notes": "Genuine rear with same natural curls, double-layer hood and centre seam, plain sweatshirt back, rib bands, jogger back patch pocket and same trainer heels. Dense jersey folds and silhouette continuous.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-05/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-05",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:24:43.569191+00:00",
+      "notes": "Same model, blue hooded coordinate and grey trainers; relaxed forward step and kangaroo-pocket hand create natural contemporary streetwear gesture. Full outfit and contact shadow retained.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-05/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4741,11 +4782,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 10,
-    "acceptedActivePhotographs": 36,
+    "acceptedActivePhotographs": 37,
     "incompleteLooks": 30,
     "completedMasters": 10,
     "unresolvedViews": [
-      "mw-r2-casualwear-05:editorial",
       "mw-r2-casualwear-07:back",
       "mw-r2-casualwear-07:editorial",
       "mw-r2-casualwear-09:front",
