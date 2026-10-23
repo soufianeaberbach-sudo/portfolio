@@ -3839,7 +3839,39 @@
         "reviewNotes": "Espresso leather blouson has fine grain and moderate body, point collar, front yoke/panels, centre metal zip, zip welts and side snap tabs. Dusty blue tee, charcoal straight trousers and dark brown Chelsea boots coherent. Natural adult casting and full-length white studio. Selected worn open; preserve visible seam map and opening.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1812136,
+        "nativeMode": "RGB",
+        "sha256": "5544c8af282d2d66b3a50743bd4c3aed8423ae4674f9149a5f9eec3644cf1c44",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-32d89f57-7804-4cdb-8c60-ed0a710055e2.png",
+        "generatedAt": "2026-10-23T23:52:51.243107+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-02-back.txt",
+        "promptSHA256": "0e5fed3282b11490244b81763cf2c8f947b6517c6ab2e0a019d807e6526b7955",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/back.png",
+        "exportSHA256": "b61fb40a02da6f34e884996c187d3d91673ac12bed4a67514476d62cb7c25268",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/back-600.webp",
+        "previewSHA256": "d4b2f6f4e70cee1e5cc95122bd5d7d0a7f2326ff51bf612e350e64a8bd1562f8",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear shows same dark waves, leather back yoke and centre seam, hem adjuster tabs, cuff zips and credible grain/body. Charcoal trousers with rear button welts and same brown Chelsea heels continuous.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -5602,7 +5634,7 @@
       "key": "mw-r2-outerwear-02:back",
       "look": "mw-r2-outerwear-02",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6455,6 +6487,15 @@
       "at": "2026-10-23T23:52:34.355055+00:00",
       "notes": "Same youthful model, open oxblood bomber, ivory crew tee, stone trousers and suede gum trainers. Confident forward walk and light zip-edge adjustment make clear contemporary outerwear Editorial with pockets still visible.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-01/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-02",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:52:51.246834+00:00",
+      "notes": "True rear shows same dark waves, leather back yoke and centre seam, hem adjuster tabs, cuff zips and credible grain/body. Charcoal trousers with rear button welts and same brown Chelsea heels continuous.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6467,11 +6508,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 23,
-    "acceptedActivePhotographs": 71,
+    "acceptedActivePhotographs": 72,
     "incompleteLooks": 17,
     "completedMasters": 23,
     "unresolvedViews": [
-      "mw-r2-outerwear-02:back",
       "mw-r2-outerwear-02:editorial",
       "mw-r2-outerwear-03:front",
       "mw-r2-outerwear-03:back",
