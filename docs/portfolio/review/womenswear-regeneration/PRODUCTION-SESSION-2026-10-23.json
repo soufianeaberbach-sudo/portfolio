@@ -375,6 +375,60 @@
       "moderationStage": "output",
       "category": "sexual",
       "requestId": "bea7de62-50ff-43a1-b429-e38a69945c14"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "back",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T08:34:58.792Z",
+      "generationPrompt": "Create one full-length TRUE BACK commercial catalogue photograph of the exact outfit and adult model shown in the source. Preserve grey-and-black leopard-print scoop/bandeau swim top with bright red binding, two thin red parallel shoulder straps and matching leopard-print lower garment with original thin red fixed side straps and red leg binding; preserve print scale and distribution, neckline, cut and source coverage. Same adult professional model with source facial features and natural proportions, center-part brunette hair in a low bun, gold hoop earrings and bare feet. Directly rear-facing neutral upright stance, shoulders and hips away, back of head visible, relaxed arms. With no historical rear photograph, use this minimal provisional interpretation: a simple matching leopard-print rear top band with red binding and the same two parallel straps, matching leopard lower rear with original thin red fixed side straps and red edging. Do not mirror the Front or add straps, decorations or a different outfit. Balanced neutral studio light, realistic textile, skin and natural anatomy, subtle natural floor-contact shadow. Entire head, hands, all garment edges and feet safely inside comfortable portrait margins. Genuine transparent background preserving garment and hair edges. Exactly one model in one photograph, no text, graphics, props, border, diptych, collage or extra figure. Rear arrangement and construction remain provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/3-1400.webp"
+      ],
+      "assetProduced": false,
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 82ea7624-a66b-409c-84cd-e72535fad085. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_FAILURE",
+      "error": "moderation_blocked",
+      "moderationStage": "input",
+      "category": "sexual",
+      "requestId": "82ea7624-a66b-409c-84cd-e72535fad085"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T08:36:19.871Z",
+      "generationPrompt": "One full-length FRONT professional commercial swimwear catalogue photograph of the exact supplied outfit. Preserve bright azure-blue halter one-piece with gathered side cup panels, the original narrow crossing front straps joining a small central ring, original teardrop abdomen opening and waist openings, matching high-waisted lower section and source leg line; retain exact material, color, seams, cut, ring position and coverage. Keep the same adult professional model with source facial features and natural proportions, center-part brunette low bun, black rectangular sunglasses with original light side arms, small gold hoop earrings and bare feet. Neutral upright stance directly facing camera, relaxed arms and neutral expression, clear garment visibility. Natural anatomy and realistic skin/textile, balanced neutral soft studio illumination, subtle natural floor-contact shadow. Full head, both hands, all garment edges and feet comfortably within generous portrait margins. Genuine transparent background preserving hair, fabric edges and shadow. Exactly one model in one photograph, no text, graphics, props, border, diptych, montage or duplicate figures. Source-based provisional apparel presentation; unseen rear construction is unverified.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/6-1400.webp"
+      ],
+      "assetProduced": false,
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID ae67b1ad-340b-4b04-8b73-bb449b48490e. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_FAILURE",
+      "error": "moderation_blocked",
+      "moderationStage": "output",
+      "category": "sexual",
+      "requestId": "ae67b1ad-340b-4b04-8b73-bb449b48490e"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "back",
+      "recordedUTC": "2026-10-23T08:38:24.358846+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Create one full-length TRUE BACK commercial catalogue photograph of the exact outfit and adult model shown in the source. Preserve bright azure-blue halter one-piece with gathered side cup panels, the original narrow crossing front straps joining a small central ring, original teardrop abdomen opening and waist openings, matching high-waisted lower section and source leg line; retain exact material, color, seams, cut, ring position and coverage. Same adult professional model with source facial features and natural proportions, center-part brunette low bun, black rectangular sunglasses with original light side arms, small gold hoop earrings and bare feet. Directly rear-facing neutral upright stance, shoulders and hips away, back of head visible, relaxed arms. With no historical rear photograph, use this minimal provisional interpretation: the same narrow halter neck fastening and simple matching blue top back band, matching plain blue lower rear consistent with the source waist sides; no extra cutouts or decorations. Do not mirror the Front or add straps, decorations or a different outfit. Balanced neutral studio light, realistic textile, skin and natural anatomy, subtle natural floor-contact shadow. Entire head, hands, all garment edges and feet safely inside comfortable portrait margins. Genuine transparent background preserving garment and hair edges. Exactly one model in one photograph, no text, graphics, props, border, diptych, collage or extra figure. Rear arrangement and construction remain provisional.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/swim/6-1400.webp"
+        ],
+        "transparent_background": true
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-06-v1/back-native.png",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "sha256": "507e2158d77caf5b7c3e16e4ca4a794b77d4fac33153c665388c3e64f226a12b",
+      "reviewNote": "Actual native inspected over white: one rear-facing adult with compatible source proportions, brunette low bun, rectangular dark sunglasses, hoops and bare feet. Azure-blue material and source waist-side continuity preserved with simple halter fastening, plain matching top band and high-waisted lower rear. This entire unseen rear arrangement is provisional; exact closure and sunglass temple finish are not verified. Full head, natural hands and feet, balanced studio light, clean alpha and soft grounded contact shadow. Native file retained byte-for-byte at its recorded actual dimensions. Front remains missing after provider refusal."
     }
   ],
   "setReviews": [
@@ -391,15 +445,15 @@
   ],
   "ownerArtisticApproval": false,
   "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
-  "updatedUTC": "2026-10-23T08:33:52.205441+00:00",
+  "updatedUTC": "2026-10-23T08:38:24.358864+00:00",
   "finalCounts": {
     "completeLooks": 31,
-    "acceptedNativeImages": 96,
-    "partialLooks": 3,
-    "withoutGeneratedViews": 6,
-    "missingViews": 24
+    "acceptedNativeImages": 97,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 5,
+    "missingViews": 23
   },
-  "newAcceptedImages": 4,
+  "newAcceptedImages": 5,
   "remainingViews": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -458,7 +512,6 @@
       "sourceIdentity": "swimwear-ref-06",
       "missingViews": [
         "front",
-        "back",
         "editorial"
       ]
     },
@@ -482,5 +535,17 @@
     "baselineArtworkFilesUnchanged": 329,
     "acceptedBaselineNativeImagesUnchanged": 92,
     "completeBaselineManifestRecordsUnchanged": 29
-  }
+  },
+  "notRequested": [
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "editorial",
+      "status": "NOT_REQUESTED_SOURCE_INPUT_REFUSAL",
+      "assetProduced": false,
+      "actualToolCall": false,
+      "recordedUTC": "2026-10-23T08:35:38.522407+00:00",
+      "sourceRequestId": "82ea7624-a66b-409c-84cd-e72535fad085",
+      "reason": "Original source rejected at input for Back; do not resubmit the same source or remove the image to evade the input safeguard. No independent accepted companion exists. Editorial received no separate provider decision."
+    }
+  ]
 }
