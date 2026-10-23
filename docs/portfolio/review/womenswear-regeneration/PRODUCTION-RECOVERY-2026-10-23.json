@@ -278,19 +278,123 @@
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
       "requestId": "41da0a86-1062-4806-ba4c-63e1eee4995c"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "front",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:50:57.916Z",
+      "generationPrompt": "Produce one full-length FRONT commercial catalogue photograph of the exact outfit in the original garment source. Preserve grey/silver gathered bandeau top with neon yellow-green binding and two thin parallel shoulder straps, matching grey bottom with neon binding, original double side straps and long tied bows at both hips. Same adult source model with natural proportions, slicked-back straight brunette hair loose behind shoulders, large gold disc earrings, thin gold anklet on her left ankle and bare feet. One adult professional model in a neutral upright front-facing stance, relaxed natural hands, both feet on a white studio floor and calm expression. Opaque seamless white cyclorama and white floor, soft balanced neutral studio light, realistic textile and skin, subtle floor-contact shadow and natural anatomy. Full head, both hands, all original ties and feet comfortably inside generous portrait margins. Exactly one model in one photograph; no typography, logos, props, added graphics, border, collage or duplicate figures. Non-sexual commercial garment presentation; preserve source cut, material and coverage. Unseen rear construction is provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/1-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 4975f0f1-78e7-4f36-b4ca-71499a47e3ae. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "back",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:51:42.436Z",
+      "generationPrompt": "Create one full-length TRUE BACK commercial catalogue photograph of the exact adult model and outfit shown in the original source. Same adult source model with natural proportions, slicked-back straight brunette hair loose behind shoulders, large gold disc earrings, thin gold anklet on her left ankle and bare feet. Preserve grey/silver gathered bandeau top with neon yellow-green binding and two thin parallel shoulder straps, matching grey bottom with neon binding, original double side straps and long tied bows at both hips. Directly rear-facing neutral upright stance, shoulders and hips away, back of head visible, relaxed natural hands and both feet on the white floor. Since no historical rear exists, use this explicitly provisional arrangement: a simple matching grey rear bandeau with neon binding and the same two parallel straps, matching plain grey lower rear with neon edging and original long side bows. Preserve outfit material, color, cut and coverage; no new decorations or straps. Opaque seamless white cyclorama and white studio floor, balanced neutral soft light, realistic skin and textile, subtle natural floor-contact shadow. Full head, hands, all ties and feet comfortably inside full-length portrait margins. Exactly one adult professional model in one photograph, no text, logos, graphics, props, border, diptych, collage or second figure. Non-sexual commercial garment presentation; do not mirror the Front.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/1-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 0072d826-24eb-4b4d-9ba1-7b2b1062f258. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "input",
+      "requestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "recordedUTC": "2026-10-23T09:55:24.739904+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Produce one full-length FRONT commercial catalogue photograph of the exact outfit in the original garment source. Preserve metallic silver triangle halter top with thin original neck and lower-band ties, matching silver tie-side bottom and long side bows; retain reflective silver fabric, triangular panels, gathering, original cut and coverage. Same adult source model with natural proportions, center-part brunette hair tied in a low bun, small gold hoop earrings and bare feet. One adult professional model in a neutral upright front-facing stance, relaxed natural hands, both feet on a white studio floor and calm expression. Opaque seamless white cyclorama and white floor, soft balanced neutral studio light, realistic textile and skin, subtle floor-contact shadow and natural anatomy. Full head, both hands, all original ties and feet comfortably inside generous portrait margins. Exactly one model in one photograph; no typography, logos, props, added graphics, border, collage or duplicate figures. Non-sexual commercial garment presentation; preserve source cut, material and coverage. Unseen rear construction is provisional.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+        ],
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-02-v1/front-native.png",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "sha256": "071eb164e820ca64b24193091feceaec40d83e233d0cfa34d0b4451fcd773ae1",
+      "reviewNote": "Actual native inspected against original: matching adult source model, center-part brunette low bun, gold hoops and bare feet. Metallic silver triangle halter top, thin neck/lower-band ties, matching reflective silver lower garment and original side bows retained with source cut and coverage. Neutral full frontal standing pose, complete head, natural hands and both feet, realistic body proportions and textile reflections. White studio floor and subtle natural contact shadow; no stray graphic or duplicate figure. Genuine native retained unchanged at recorded actual dimensions; unseen rear construction remains provisional."
     }
   ],
-  "notAttempted": [],
-  "newAcceptedImages": 2,
+  "notAttempted": [
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "editorial",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "front",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "82ea7624-a66b-409c-84cd-e72535fad085"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "back",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "82ea7624-a66b-409c-84cd-e72535fad085"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "editorial",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "82ea7624-a66b-409c-84cd-e72535fad085"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "front",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "a190c142-0332-497e-bd88-8b0e6a125983"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "back",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "a190c142-0332-497e-bd88-8b0e6a125983"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "editorial",
+      "status": "NOT_ATTEMPTED",
+      "reason": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery.",
+      "priorRequestId": "a190c142-0332-497e-bd88-8b0e6a125983"
+    }
+  ],
+  "newAcceptedImages": 3,
   "newCompleteLooks": 0,
   "ownerArtisticApproval": false,
-  "updatedUTC": "2026-10-23T09:49:14.682812+00:00",
+  "updatedUTC": "2026-10-23T09:55:24.739922+00:00",
   "finalCounts": {
     "completeLooks": 31,
-    "acceptedNativeImages": 99,
-    "partialLooks": 4,
-    "withoutGeneratedViews": 5,
-    "missingViews": 21
+    "acceptedNativeImages": 100,
+    "partialLooks": 5,
+    "withoutGeneratedViews": 4,
+    "missingViews": 20
   },
   "remainingViews": [
     {
@@ -318,7 +422,6 @@
     {
       "sourceIdentity": "swimwear-ref-02",
       "missingViews": [
-        "front",
         "back",
         "editorial"
       ]
@@ -374,5 +477,10 @@
     "swimwear-ref-07": {
       "available": "One historical source plus its responsive copy; no accepted companion or genuine independent design reference found. Previously refused source will not be resubmitted."
     }
+  },
+  "preservationValidation": {
+    "baselineArtworkFilesUnchanged": 350,
+    "acceptedBaselineNativeImagesUnchanged": 97,
+    "completeBaselineManifestRecordsUnchanged": 31
   }
 }
