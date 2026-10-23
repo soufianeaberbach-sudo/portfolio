@@ -40,12 +40,28 @@
       "majorCategory": "m-streetwear",
       "slot": 3,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-03/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1997333,
+        "sha256": "5b3dba65bbd2c29267d107b5e503fb37de009e3446f93ec213a44d81f55d2737",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-3bb7e763-517c-4de9-8052-700a3e7a3b07.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: distinct cropped trucker and wide denim; plausible grain, collar, button and pocket construction; strong adult casting; square Front, natural fingers, complete head and shoes, neutral white studio. Six-button placket and twin flaps readable. No historical image inputs.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:41:54.248509+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
