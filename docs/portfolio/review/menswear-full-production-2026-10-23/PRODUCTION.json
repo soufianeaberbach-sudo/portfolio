@@ -3201,7 +3201,39 @@
         "reviewNotes": "Genuine rear preserves same brown waves, deployed hood, back vent-yoke, cuff tabs, olive articulated pants with right thigh zipped storage and brown trail shoe heels. Light shell and woven trouser behaviours credible.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-08/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1707950,
+        "nativeMode": "RGB",
+        "sha256": "505b69f90947f36d8b34c34128caac43de326001aa5ae6252ea8ab657b7dae33",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-527a74f3-72cc-447a-93eb-cd192fb30c8b.png",
+        "generatedAt": "2026-10-23T23:44:57.814021+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-08/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-08-editorial.txt",
+        "promptSHA256": "7c97659fd701bd8ae8896c68918a13c48d530b6de0d06a54127a8808ad131dd7",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-08/editorial.png",
+        "exportSHA256": "424af20fdde4ffa8b73d27babca3214430056254551864e13ab40c65a7d28d6f",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-08/editorial-600.webp",
+        "previewSHA256": "6c77d25b9d94f37123393bbe566d7843e667967fa54c05a259ca047dd6555178",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same recognizable adult and full hiking outfit; measured forward stride with natural arms, clear shell zip/pockets/hood and articulated olive pants. Appropriate controlled outdoor-inspired studio motion without distracting props.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -5121,7 +5153,7 @@
       "key": "mw-r2-activewear-08:editorial",
       "look": "mw-r2-activewear-08",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5946,6 +5978,15 @@
       "at": "2026-10-23T23:44:51.841130+00:00",
       "notes": "Genuine rear preserves same brown waves, deployed hood, back vent-yoke, cuff tabs, olive articulated pants with right thigh zipped storage and brown trail shoe heels. Light shell and woven trouser behaviours credible.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-08/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-08",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:44:57.817700+00:00",
+      "notes": "Same recognizable adult and full hiking outfit; measured forward stride with natural arms, clear shell zip/pockets/hood and articulated olive pants. Appropriate controlled outdoor-inspired studio motion without distracting props.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-08/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5958,11 +5999,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 19,
-    "acceptedActivePhotographs": 61,
+    "acceptedActivePhotographs": 62,
     "incompleteLooks": 21,
     "completedMasters": 19,
     "unresolvedViews": [
-      "mw-r2-activewear-08:editorial",
       "mw-r2-activewear-09:front",
       "mw-r2-activewear-09:back",
       "mw-r2-activewear-09:editorial",
