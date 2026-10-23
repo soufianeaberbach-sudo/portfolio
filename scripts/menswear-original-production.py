@@ -64,7 +64,10 @@ def verify_remote(head,paths):
   if hashlib.sha256(downloaded).hexdigest()!=expected: raise ValueError('Remote byte verification failed: '+relative)
   verified.append({'path':relative,'sha256':expected,'gitBlob':run('git','rev-parse',head+':'+relative),'remoteBytesVerified':True})
  receipt=REVIEW/'receipts'/(head+'.json')
- atomic(receipt,{'commit':head,'branchHeadVerified':True,'verifiedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':verified})
+ previous=json.loads(receipt.read_text()).get('files',[]) if receipt.exists() else []
+ merged={item['path']:item for item in previous+verified}
+ atomic(receipt,{'commit':head,'branchHeadVerified':True,'remoteHead':remote,'remoteContainsCheckpoint':True,
+  'verifiedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':list(merged.values())})
  # Receipt is included by the next checkpoint (finalization commits all receipts).
  print('PUSHED_AND_REMOTE_BYTES_VERIFIED',head,len(verified),'files')
 
