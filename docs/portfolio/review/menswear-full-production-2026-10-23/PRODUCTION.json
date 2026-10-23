@@ -153,10 +153,32 @@
         "reviewNotes": "Recognizable same model and outfit, natural forward step and one hand at front pocket; garment remains readable with credible denim folds, stylish relaxed commercial fashion movement.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-01/master.png",
+        "sha256": "c89e018e5d0aaffdd426ed1e521d2e84e1c5806d8ae9ad56aa52c15ddad3d266",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
-      "provenance": "Original AI fashion concept / visual exploration"
+      "provenance": "Original AI fashion concept / visual exploration",
+      "setReview": {
+        "at": "2026-10-23T23:15:31.465639+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Three genuine separate photographs; identity, clothing, belt, shoes and denim wash consistent. Genuine rear construction and walking Editorial. Slight pose-driven scale variation acceptable; no garment cropping or stretching.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-02",
@@ -4209,10 +4231,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 6,
+    "completedLooks": 7,
     "acceptedActivePhotographs": 25,
-    "incompleteLooks": 34,
-    "completedMasters": 6,
+    "incompleteLooks": 33,
+    "completedMasters": 7,
     "unresolvedViews": [
       "mw-r2-casualwear-02:front",
       "mw-r2-casualwear-02:back",
