@@ -3872,7 +3872,39 @@
         "reviewNotes": "True rear shows same dark waves, leather back yoke and centre seam, hem adjuster tabs, cuff zips and credible grain/body. Charcoal trousers with rear button welts and same brown Chelsea heels continuous.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1849771,
+        "nativeMode": "RGB",
+        "sha256": "85e3713837dfd21026b72b25caaa12f028cf66dfa26e8512824af6361dc9205f",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-31916618-7bbb-48b2-9174-224f46cc17f6.png",
+        "generatedAt": "2026-10-23T23:52:58.091118+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-02-editorial.txt",
+        "promptSHA256": "8ef518eade8674cdece0eb1a745ac24737b5cebc690e5140c389ae5dc896c9ac",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/editorial.png",
+        "exportSHA256": "734e7e7b6900f1e59fffcbb4502f3564dce38950bc0d6927d253e6d3d42bcd56",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/editorial-600.webp",
+        "previewSHA256": "bb77ce862209452924c863b3070372aeb4b42f3be389cbf02da06de115309c10",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same recognizable model and espresso leather blouson with point collar, yoke, zip welts, snap hem tabs and cuff zip. Natural forward step and small jacket adjustment; blue tee, charcoal trouser and brown boots consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -5641,7 +5673,7 @@
       "key": "mw-r2-outerwear-02:editorial",
       "look": "mw-r2-outerwear-02",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6496,6 +6528,15 @@
       "at": "2026-10-23T23:52:51.246834+00:00",
       "notes": "True rear shows same dark waves, leather back yoke and centre seam, hem adjuster tabs, cuff zips and credible grain/body. Charcoal trousers with rear button welts and same brown Chelsea heels continuous.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-02",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:52:58.096219+00:00",
+      "notes": "Same recognizable model and espresso leather blouson with point collar, yoke, zip welts, snap hem tabs and cuff zip. Natural forward step and small jacket adjustment; blue tee, charcoal trouser and brown boots consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6508,11 +6549,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 23,
-    "acceptedActivePhotographs": 72,
+    "acceptedActivePhotographs": 73,
     "incompleteLooks": 17,
     "completedMasters": 23,
     "unresolvedViews": [
-      "mw-r2-outerwear-02:editorial",
       "mw-r2-outerwear-03:front",
       "mw-r2-outerwear-03:back",
       "mw-r2-outerwear-03:editorial",
