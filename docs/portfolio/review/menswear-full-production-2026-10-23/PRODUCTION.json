@@ -3416,7 +3416,39 @@
         "reviewNotes": "Warm taupe athleisure double-knit short-sleeve sweatshirt and straight full-length trousers, rib crew and hem band, tonal sand lifestyle trainers. Dense soft drape and boxy top contrast with tapered jogger and performance kits; natural commercially attractive adult model.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-10/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1695762,
+        "nativeMode": "RGB",
+        "sha256": "1c8b1b974043fbd2383efa06a44ad519823e76492730286fbee7c06d935abe08",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-b4e511b0-9f5b-45ce-8a29-0d34505fe759.png",
+        "generatedAt": "2026-10-23T23:47:55.434568+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-10/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-10-back.txt",
+        "promptSHA256": "7e0adea4420532b347b2cc1ad3857d68cebad961fa7f022cbd4bfc0a7d66d949",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-10/back.png",
+        "exportSHA256": "467b353e08e9d0b7e436eb8dfa8693684eba1e01239e3d4cfab2557c438d63ef",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-10/back-600.webp",
+        "previewSHA256": "b2b5a711c741bad1f5cbc34c4ebc36397af2b42ff45bf7a144fc59fde0a8c55d",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear: same natural chestnut hair, taupe short-sleeve sweatshirt with rib bands, straight double-knit trousers with single rear patch and sand trainer heels. Fabric weight and palette consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -5272,7 +5304,7 @@
       "key": "mw-r2-activewear-10:back",
       "look": "mw-r2-activewear-10",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6104,6 +6136,15 @@
       "at": "2026-10-23T23:47:49.832181+00:00",
       "notes": "Footwear correction succeeds: plain cream high-tops with blank tongues and clean sides; no readable branding. Same orange mesh V jersey, cream binding, long basketball shorts, white crew socks and natural adult model retained. Original rejected native preserved; this corrected Front is selected as version 02.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/front-v02-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-10",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:47:55.438339+00:00",
+      "notes": "Genuine rear: same natural chestnut hair, taupe short-sleeve sweatshirt with rib bands, straight double-knit trousers with single rear patch and sand trainer heels. Fabric weight and palette consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-10/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6116,13 +6157,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 20,
-    "acceptedActivePhotographs": 64,
+    "acceptedActivePhotographs": 65,
     "incompleteLooks": 20,
     "completedMasters": 20,
     "unresolvedViews": [
       "mw-r2-activewear-09:back",
       "mw-r2-activewear-09:editorial",
-      "mw-r2-activewear-10:back",
       "mw-r2-activewear-10:editorial",
       "mw-r2-outerwear-01:back",
       "mw-r2-outerwear-01:editorial",
