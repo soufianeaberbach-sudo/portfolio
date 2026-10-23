@@ -157,15 +157,20 @@
       "sourceIdentity": "swimwear-ref-08",
       "review": "Compared the three real natives: matching adult brunette model, tied bun, hoops, barefoot styling, black halter fabric and garment proportions. Front and Editorial preserve gathered bandeau and central twisted join; Back is a separate true rear with provisional matching straight band and plain lower rear. Complete silhouettes, natural anatomy, consistent studio light and soft contact shadows. Editorial changes stance only. Rear construction remains inferred; owner artistic approval pending.",
       "recordedUTC": "2026-10-23T07:55:58.663815+00:00"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "review": "All three genuine natives visually compared: same adult model, brunette bun, brown sunglasses, hoops and bare feet. Grey fabric, gathered bandeau, forked halter, oval Front join, upper waistband, connectors and side bows consistent. Back is a separate true rear; inferred gathered rear band and matching lower rear are provisional. Editorial is a restrained three-quarter stance. Complete silhouettes, natural hands and feet, balanced light and clean alpha. Standard export preserves figure proportions and floor alignment.",
+      "recordedUTC": "2026-10-23T08:10:11.605040+00:00"
     }
   ],
   "ownerArtisticApproval": false,
   "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
-  "updatedUTC": "2026-10-23T08:09:09.569673+00:00",
+  "updatedUTC": "2026-10-23T08:10:11.605057+00:00",
   "finalCounts": {
-    "completeLooks": 30,
+    "completeLooks": 31,
     "acceptedNativeImages": 95,
-    "partialLooks": 3,
+    "partialLooks": 2,
     "withoutGeneratedViews": 7,
     "missingViews": 25
   },
@@ -241,5 +246,12 @@
         "editorial"
       ]
     }
-  ]
+  ],
+  "executedChecks": [
+    "40 source/native hash and export geometry validator passed",
+    "6 existing recovery regression tests passed",
+    "108 historical source fingerprints and original files preserved",
+    "106 focused browser assertions for new swimwear 08/09 sets at 1440x900 and 390x844"
+  ],
+  "browserEvidence": "evidence/production-2026-10-23/RESULTS.json"
 }

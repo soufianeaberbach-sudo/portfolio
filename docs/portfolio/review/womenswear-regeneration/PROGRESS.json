@@ -4,26 +4,26 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "swimwear-ref-08",
+  "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:09:11.737118+00:00",
+  "updatedUTC": "2026-10-23T08:11:55.690810+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 30,
+  "completedLooks": 31,
   "pendingLooks": 7,
-  "partiallyGeneratedLooks": 3,
+  "partiallyGeneratedLooks": 2,
   "statusCounts": {
     "INTEGRATED": 10,
-    "READY": 20,
+    "READY": 21,
     "PENDING": 7,
-    "GENERATED": 3
+    "GENERATED": 2
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "editorial-native",
-  "lastSuccessfullyPushedCommit": "6247e1e5c6c9813c6d9215a6b2668c4507e3bdd5",
+  "currentMilestone": "assembled-master-and-browser-qa",
+  "lastSuccessfullyPushedCommit": "94ea7ff9a40b389e33afc09fd357fb93899387d5",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-09",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -576,7 +576,7 @@
       ]
     }
   ],
-  "nextAction": "Review three views and assemble master",
+  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -635,7 +635,7 @@
       ]
     }
   ],
-  "notes": "95 accepted native images, all three swimwear 09 views now real and reviewed; assemble next. Four moderation refusals recorded independently.",
+  "notes": "31 complete sets, 95 accepted natives. New swimwear 08/09 masters and focused desktop/mobile browser evidence reviewed. Four new moderation refusals retained. Continue activewear 09 Front.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -643,14 +643,14 @@
     "All photography remains provisional pending owner artistic approval.",
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
-  "remainingLooks": 10,
+  "remainingLooks": 9,
   "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "IN_PROGRESS",
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES",
   "latestRetryPass": {
     "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
     "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
@@ -792,23 +792,19 @@
     }
   ],
   "nativeResolutionNote": "Original accepted sets retain 1024x1536 natives. Five new saved portraits are actual 1086x1448 RGBA, not resampled; uniform 1800x2700 exports remain pending complete sets.",
-  "acceptedNativeImages": 92,
-  "missingIndividualViews": 28,
+  "acceptedNativeImages": 95,
+  "missingIndividualViews": 25,
   "moderationBlockedIndividualViews": 11,
   "currentToolAvailability": {
-    "status": "UNAVAILABLE_INVALID_PROVIDER_REQUEST",
-    "httpStatus": 400,
-    "providerMessage": "Unknown parameter: 'reasoning'.",
-    "editableRequestBuilderFound": false,
-    "neutralHealthProbeReturnedImage": false,
-    "externalOperatorAction": "Correct the managed image payload or route/model contract, then return/decode/store one real image before production.",
-    "missingViews": 28
+    "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
+    "reasoningErrorRecurred": false,
+    "newAcceptedImages": 3
   },
-  "freshSessionAcceptedImages": 0,
-  "freshSessionTechnicalFailures": 3,
-  "freshSessionModerationFailures": 0,
+  "freshSessionAcceptedImages": 3,
+  "freshSessionTechnicalFailures": 0,
+  "freshSessionModerationFailures": 4,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,
-  "productionGate": "FAIL_NO_REAL_IMAGE_RETURNED"
+  "productionGate": "PASS_REAL_IMAGE_RETURNED_DECODED_SAVED"
 }
