@@ -1603,11 +1603,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1852658,
+        "nativeMode": "RGB",
+        "sha256": "4ab3b3fbf3a84ffea2945942d58ee9bc92301166f4117e4a8778de1cf5be67a0",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-cd0ab7e2-c0cb-4073-8d5d-11444d9017df.png",
+        "generatedAt": "2026-10-23T23:27:41.930119+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-10-front.txt",
+        "promptSHA256": "d900a6411bf27e19f731172b6ffafeabf3417b771b9f6b43809a3e5e5ae73806",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/front.png",
+        "exportSHA256": "2fa293e822366dd257f03c0fea0016d08ca2fc48225de4536255908efd25bfd0",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/front-600.webp",
+        "previewSHA256": "7aafa1f3a172fb9c4883dd23ef023b5ed4e1671c6a60deadb36eb7684b525370",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Terracotta dobby-linen camp shirt and above-knee shorts coordinate has credible slub woven drape, five shirt buttons, chest patch, open camp collar and clean hems. Ivory slides and subtle brown bracelet coherent. Complete toes/head and young-adult commercial casting.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -4125,7 +4155,7 @@
       "key": "mw-r2-casualwear-10:front",
       "look": "mw-r2-casualwear-10",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4935,6 +4965,15 @@
       "at": "2026-10-23T23:27:36.417172+00:00",
       "notes": "Warm-stone shirt-weight overshirt with point collar, two flat chest patches, seven-button placket, button cuffs and straight hem. Muted teal crew and dark brown straight trousers with ecru low-tops support primary. Fully open styling is selected; woven texture and natural adult casting credible.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-10",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:27:41.933858+00:00",
+      "notes": "Terracotta dobby-linen camp shirt and above-knee shorts coordinate has credible slub woven drape, five shirt buttons, chest patch, open camp collar and clean hems. Ivory slides and subtle brown bracelet coherent. Complete toes/head and young-adult commercial casting.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4947,13 +4986,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 12,
-    "acceptedActivePhotographs": 40,
+    "acceptedActivePhotographs": 41,
     "incompleteLooks": 28,
     "completedMasters": 12,
     "unresolvedViews": [
       "mw-r2-casualwear-09:back",
       "mw-r2-casualwear-09:editorial",
-      "mw-r2-casualwear-10:front",
       "mw-r2-casualwear-10:back",
       "mw-r2-casualwear-10:editorial",
       "mw-r2-activewear-01:front",
