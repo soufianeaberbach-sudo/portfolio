@@ -1720,7 +1720,39 @@
         "reviewNotes": "Terracotta dobby-linen camp shirt and above-knee shorts coordinate has credible slub woven drape, five shirt buttons, chest patch, open camp collar and clean hems. Ivory slides and subtle brown bracelet coherent. Complete toes/head and young-adult commercial casting.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1800874,
+        "nativeMode": "RGB",
+        "sha256": "0a7e07f3cea1e08c4cc976300e6a3b46d14a3ef954509b6f82e28495434a6f26",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-7ed4a38a-2010-46b4-bbfc-4badd7fd1fba.png",
+        "generatedAt": "2026-10-23T23:34:23.952082+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-10-back.txt",
+        "promptSHA256": "519d423901d5b2b890bf9278d47789531dce92643a1013580c8289c9287d265a",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/back.png",
+        "exportSHA256": "952dbffb2c4529e87af22f2f5ea7deb104099277b18959505312d1497a020243",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/back-600.webp",
+        "previewSHA256": "05bf30b62003a72412f228e200726f0c26e3022602811fed9eb1be57b9d0cb8f",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear, same brown waves, terracotta coordinate, back yoke, two short rear welts, left wrist bracelet and ivory slide heels. Woven slub, shirt length and above-knee short silhouette consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -4308,7 +4340,7 @@
       "key": "mw-r2-casualwear-10:back",
       "look": "mw-r2-casualwear-10",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5156,6 +5188,15 @@
       "at": "2026-10-23T23:29:55.952350+00:00",
       "notes": "Same recognizable model and all garment colours, two chest pockets and open overshirt preserved. Relaxed three-quarter cuff adjustment and forward step make clear contemporary editorial stance without hiding primary garment.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-10",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:34:23.957295+00:00",
+      "notes": "Genuine rear, same brown waves, terracotta coordinate, back yoke, two short rear welts, left wrist bracelet and ivory slide heels. Woven slub, shirt length and above-knee short silhouette consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5168,11 +5209,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 13,
-    "acceptedActivePhotographs": 45,
+    "acceptedActivePhotographs": 46,
     "incompleteLooks": 27,
     "completedMasters": 13,
     "unresolvedViews": [
-      "mw-r2-casualwear-10:back",
       "mw-r2-casualwear-10:editorial",
       "mw-r2-activewear-01:back",
       "mw-r2-activewear-01:editorial",
