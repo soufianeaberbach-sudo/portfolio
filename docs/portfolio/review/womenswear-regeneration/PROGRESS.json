@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:28:58.109744+00:00",
+  "updatedUTC": "2026-10-23T08:34:55.622804+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 6,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "activewear",
   "currentSourceIdentity": null,
-  "currentMilestone": "source-production-outcomes",
-  "lastSuccessfullyPushedCommit": "3b20ef45be02b0996ca7e5a373011130b2786c76",
+  "currentMilestone": "remaining-swimwear-production",
+  "lastSuccessfullyPushedCommit": "99deda82a0230c05b3b3e49d0dd939d2b114caca",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -489,6 +489,54 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:45:08.019027+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:29:51.049Z",
+          "generationPrompt": "One full-length FRONT professional commercial swimwear catalogue photograph of the exact supplied outfit. Preserve metallic silver triangle halter swim top with thin original neck and lower band ties, matching silver tie-side bottom and long side bows; preserve reflective silver material, triangular panel shapes, gathering, exact coverage and cut. Keep the same adult professional model with source facial features and natural proportions, center-part brunette hair tied in a neat low bun, small gold hoop earrings and bare feet. Neutral upright stance directly facing camera, relaxed arms and neutral expression, clear garment visibility. Natural anatomy and realistic skin/textile, balanced neutral soft studio illumination, subtle natural floor-contact shadow. Full head, both hands, all ties and feet comfortably within generous portrait margins. Genuine transparent background preserving hair, fabric edges and shadow. Exactly one model in one photograph, no text, graphics, props, border, diptych, montage or duplicate figures. Source-based provisional apparel presentation; unseen rear construction is unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID adb9da26-4859-48ab-b33c-d8d8838ebc5a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "adb9da26-4859-48ab-b33c-d8d8838ebc5a"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:31:07.963Z",
+          "generationPrompt": "Create one full-length TRUE BACK commercial catalogue photograph of the exact outfit and adult model shown in the source. Preserve metallic silver triangle halter swim top with thin original neck and lower band ties, matching silver tie-side bottom and long side bows; preserve reflective silver material, triangular panel shapes, gathering, exact coverage and cut. Same adult professional model with source facial features and natural proportions, center-part brunette hair tied in a neat low bun, small gold hoop earrings and bare feet. Directly rear-facing neutral upright stance, shoulders and hips away, back of head visible, relaxed arms. With no historical rear photograph, use this minimal provisional interpretation: the original thin halter fastening behind the neck and matching thin back tie, plain matching silver lower rear with original long side bows. Do not mirror the Front or add straps, decorations or a different outfit. Balanced neutral studio light, realistic textile, skin and natural anatomy, subtle natural floor-contact shadow. Entire head, hands, all ties and feet safely inside comfortable portrait margins. Genuine transparent background preserving garment and hair edges. Exactly one model in one photograph, no text, graphics, props, border, diptych, collage or extra figure. Rear arrangement and construction remain provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 183ce8cb-f8dd-4374-86b6-99fcae111fdb. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "183ce8cb-f8dd-4374-86b6-99fcae111fdb"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:32:19.192Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial fashion photograph of the exact outfit in the source. Preserve metallic silver triangle halter swim top with thin original neck and lower band ties, matching silver tie-side bottom and long side bows; preserve reflective silver material, triangular panel shapes, gathering, exact coverage and cut. Keep the same adult professional model with source facial features and natural proportions, center-part brunette hair tied in a neat low bun, small gold hoop earrings and bare feet. Quiet front three-quarter catalogue stance with a small natural weight shift and relaxed hands, neutral expression and clear garment visibility. No outfit or styling changes. Balanced neutral soft studio lighting, realistic textile and skin, natural anatomy and subtle grounded floor-contact shadow. Entire head, both hands, all ties and feet comfortably inside portrait margins. Genuine transparent background preserving garment edges, hair and shadow. Exactly one model, one photograph; no text, graphics, props, border, diptych, collage or duplicate person. Source-based provisional apparel photograph; unseen rear construction is inferred.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID e5f6784e-716d-4ed1-83f7-f6757cc9b08d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "e5f6784e-716d-4ed1-83f7-f6757cc9b08d"
         }
       ]
     },
@@ -534,6 +582,22 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:47:23.159612+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:33:51.222Z",
+          "generationPrompt": "One full-length FRONT professional commercial swimwear catalogue photograph of the exact supplied outfit. Preserve grey-and-black leopard-print scoop/bandeau swim top with bright red binding, two thin red parallel shoulder straps and matching leopard-print lower garment with original thin red fixed side straps and red leg binding; preserve print scale and distribution, neckline, cut and source coverage. Keep the same adult professional model with source facial features and natural proportions, center-part brunette hair in a low bun, gold hoop earrings and bare feet. Neutral upright stance directly facing camera, relaxed arms and neutral expression, clear garment visibility. Natural anatomy and realistic skin/textile, balanced neutral soft studio illumination, subtle natural floor-contact shadow. Full head, both hands, all garment edges and feet comfortably within generous portrait margins. Genuine transparent background preserving hair, fabric edges and shadow. Exactly one model in one photograph, no text, graphics, props, border, diptych, montage or duplicate figures. Source-based provisional apparel presentation; unseen rear construction is unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/3-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID bea7de62-50ff-43a1-b429-e38a69945c14. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "bea7de62-50ff-43a1-b429-e38a69945c14"
         }
       ]
     },
@@ -764,7 +828,7 @@
       ]
     }
   ],
-  "notes": "96 genuine natives, 31 complete masters. All baseline files preserved. Completed permitted requests through swimwear 01; 12 new output moderation refusals, no image technical or quota failure. Continue swimwear 02.",
+  "notes": "96 accepted natives and 31 masters remain protected. Provider output moderation refused each independently requested swimwear 01/02 view and swimwear 03 Front. Continue remaining missing views without retries.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -931,7 +995,7 @@
   },
   "freshSessionAcceptedImages": 4,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 12,
+  "freshSessionModerationFailures": 16,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,
