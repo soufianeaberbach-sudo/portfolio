@@ -523,7 +523,7 @@
       "majorCategory": "m-activewear",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -542,8 +542,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: warm-white court polo with forest collar and sleeve binding; forest court shorts, ball-pocket openings, matching sock band and stable low-profile court-style shoes. Pique surface, side vents and natural fit readable. Casting differs from running and streetwear. Full frame and neutral white pass; actual sport performance untested.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:45:17.352520+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/front.png",
+        "generatedAt": "2026-10-23T18:45:17.352520+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "b664733a57601811c0c6dd318adb71ce42e1206df81b14ff38e4af516208f5c1"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-04/back-native.png",
@@ -561,8 +569,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: matching dark waves, plain warm-white polo, forest collar and sleeve binding; forest shorts with clean seat seams and side vents, single sock stripe and correct green shoe heel panels. Proportions, scale and neutral white match.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:03:58.882299+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/back.png",
+        "generatedAt": "2026-10-23T19:03:58.882299+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "b0c661db284ad87fd39c00b2e0a084b9773cc4de715cee3f7daec323d0d97408"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-04/editorial-native.png",
@@ -580,10 +596,48 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Court campaign pass: balanced lateral recovery step, soft knees, free hands, raised rear heel, no sporting prop. Same face and waves, collar/binding, shorts, socks and shoes; readable side vents and believable fabric motion. Distinct from running stride.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:05:18.882832+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/editorial.png",
+        "generatedAt": "2026-10-23T19:05:18.882832+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "472a48e1a48cfac5a3bf66fcbb1cfb8da643aa505a9891b5bccdf21ef636a659"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "def32cef519b6c19a52cf95c53f61dbff1149b8dcafe753e6613f066ee50075f",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Court set continuity passes visible review. Front and rear are clear commercial views; Editorial has a credible lateral movement and consistent model, palette and trim. Physical sports performance remains untested.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-activewear-05",
