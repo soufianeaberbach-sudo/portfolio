@@ -1271,7 +1271,7 @@
       "majorCategory": "m-tailoring",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -1290,8 +1290,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: cool-stone double-breasted trench, believable raglan sleeve pitch, collar and lapels, functional waist and cuff buckles, slant welts, storm flap and weighted gabardine hem. Long straight-haired adult model distinct. Accepted as-rendered below-knee length and eight-button double-breasted arrangement, replacing mid-calf six-button intent. Slate trousers and black boots coherent; white studio and complete frame pass.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:52:26.538512+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-04/front.png",
+        "generatedAt": "2026-10-23T18:52:26.538512+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "8fe206b98185df6b60f898ad2e1be218b2ba135695eb991046f97d16741058db"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-04/back-native.png",
@@ -1309,8 +1317,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: same straight shoulder-length hair, cool-stone gabardine and coat length; horizontal storm shield, centre inverted pleat/vent, belt loops, epaulettes, raglan sleeves and cuff buckles plausible. No front buttons on back. Slate trouser and black boot heels consistent.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:14:49.540723+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-04/back.png",
+        "generatedAt": "2026-10-23T19:14:49.540723+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "a51b33f9dd12e287171cec831f81bc3855370ed39530241190646a94f0608291"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-04/editorial-native.png",
@@ -1328,10 +1344,48 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Outerwear campaign pass: purposeful walking step and natural lapel touch, subtle hem movement, same face and straight hair, coat overlap, button arrangement, buckled belt and cuffs. Hand partially overlaps storm flap in Editorial; full flap remains inspectable in Front. Complete boots and head.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:14:53.983558+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-04/editorial.png",
+        "generatedAt": "2026-10-23T19:14:53.983558+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "26ba831a36b7071e07229b7e1c49923b6bf850ae610a70997c1147506941d67a"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-04/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "8a628c1ba5a0fd1f10453b7b1ab5d2f5057fe4ef28d5e6075a8f2f2c386b46da",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Trench set passes visible continuity: below-knee eight-button Front variant, credible rear storm shield and centre pleat/vent, consistent belt, cuff straps, casting and black boots. Editorial movement natural; partial hand overlap noted. Construction is proposed, not manufactured evidence.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-tailoring-05",
