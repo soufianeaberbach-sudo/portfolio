@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:11:55.690810+00:00",
+  "updatedUTC": "2026-10-23T08:16:58.530689+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 7,
@@ -17,10 +17,10 @@
     "PENDING": 7,
     "GENERATED": 2
   },
-  "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "assembled-master-and-browser-qa",
-  "lastSuccessfullyPushedCommit": "94ea7ff9a40b389e33afc09fd357fb93899387d5",
+  "currentCategory": "activewear",
+  "currentSourceIdentity": null,
+  "currentMilestone": "priority-b-provider-outcomes",
+  "lastSuccessfullyPushedCommit": "8baf8bca1148a601eb3250cccb84bb21ef80aa6b",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -65,6 +65,54 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Owner-authorized restrained commercial attempt; no image produced. Design/reference unchanged. Retry allowance exhausted for this view in this continuation.",
           "recordedUTC": "2026-10-22T19:37:59.373433+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:12:55.681Z",
+          "generationPrompt": "Create one separate full-length FRONT commercial activewear catalogue photograph of the exact sand/ivory ensemble shown on the adult professional model in the original Front and Back reference. Preserve source construction: fine sheer sand mesh long sleeves and high mock neckline, opaque ivory scoop bust panel with thin straps, three narrow horizontal ivory waist bands, original opaque matching brief panel and tonal edge binding. Preserve natural model proportions, dark hair in a neat low bun, slim ivory headband, black watch on her left wrist and white trainers. Face directly toward camera in a neutral upright catalogue stance with relaxed arms clear of the outfit. Same garment color and textile transparency as reference, realistic skin and fabric, balanced soft neutral studio illumination, subtle grounded floor contact shadow. One model only, entire head, natural hands, garment and both shoes inside generous portrait margins. Genuine transparent background preserving fine mesh and hair edges. No typography, decorative graphics, props, collage, diptych or second figure. Provisional source-based apparel photography; not verified garment construction.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/sport/9-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 3c952931-2eba-4cb7-8ba1-fd6d03a289de. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "3c952931-2eba-4cb7-8ba1-fd6d03a289de"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:14:21.090Z",
+          "generationPrompt": "Produce one separate full-length TRUE BACK catalogue photograph of the sand/ivory activewear shown in the supplied original Front/Back reference. Exactly one adult professional model standing directly away, back of head visible, neutral posture and relaxed arms. Preserve the source adult model and natural proportions, dark low bun, slim ivory headband, left-wrist black watch and white trainers. Keep the high mock neck and fine sheer sand mesh long sleeves and back, the original opaque ivory scoop-back underlayer with thin shoulder straps, three narrow horizontal ivory bands at the waist, original matching brief panel and tonal binding. Follow the actual rear photograph for the curved back panel and proportions. Realistic textile transparency and skin, balanced neutral studio light and subtle floor contact shadow. Full head, hands, complete outfit and both shoes within comfortable portrait margins. Genuine transparent background preserving fine garment and hair edges. No text, added graphics, props, montage, diptych or duplicate people. Provisional source-based apparel photograph, construction unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/sport/9-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 55b09124-0f49-42f1-92bd-6a84cc00143d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "55b09124-0f49-42f1-92bd-6a84cc00143d"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:16:08.251Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial activewear photograph from the adult model and exact sand/ivory outfit in the supplied original Front/Back reference. Same natural model proportions, dark low bun, slim ivory headband, black watch on left wrist and white trainers. Preserve fine sheer sand mesh long sleeves, high mock neck, opaque ivory scoop bust underlayer and thin straps, all three narrow horizontal ivory waist bands, matching opaque brief panel and tonal binding; rear follows the supplied original rear. Quiet front three-quarter stance with a small natural step, neutral expression and relaxed hands, without garment motion or styling changes. Premium photorealistic textile and skin, balanced neutral studio lighting and soft natural floor-contact shadow. Entire head, hands and both shoes comfortably inside portrait margins. Exactly one model in one photograph, genuine transparent background preserving mesh/hair/shadow. No added graphics, typography, props, montage, collage or duplicate people. Provisional source-based presentation, construction unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/sport/9-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID ff892511-6a06-4a06-b3a4-6bb6677a6e84. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "ff892511-6a06-4a06-b3a4-6bb6677a6e84"
         }
       ]
     },
@@ -635,7 +683,7 @@
       ]
     }
   ],
-  "notes": "31 complete sets, 95 accepted natives. New swimwear 08/09 masters and focused desktop/mobile browser evidence reviewed. Four new moderation refusals retained. Continue activewear 09 Front.",
+  "notes": "Working image tool; 3 new accepted natives, 31 masters, 7 new output moderation refusals. No technical or quota error. Production continues evening 02.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -647,7 +695,7 @@
   "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
-    "view": "front",
+    "view": "editorial",
     "status": "BLOCKED_MODERATION"
   },
   "productionState": "BLOCKED_ALL_REMAINING_SOURCES",
@@ -802,7 +850,7 @@
   },
   "freshSessionAcceptedImages": 3,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 4,
+  "freshSessionModerationFailures": 7,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,
