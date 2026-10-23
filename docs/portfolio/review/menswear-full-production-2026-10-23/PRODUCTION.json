@@ -2805,11 +2805,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1831371,
+        "nativeMode": "RGB",
+        "sha256": "6a534861b9743204d32dddd7a1bbf863c71123a4c9c4dd33146472ea65c7300a",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-650abc8a-5191-4eaf-8fd3-b1bd087dc526.png",
+        "generatedAt": "2026-10-23T23:36:16.292166+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-06-front.txt",
+        "promptSHA256": "ee4ee7b5ff1f4f091bc30b34109c3eb17a954215a16e9e365dba533396ab785a",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-06/front.png",
+        "exportSHA256": "73533ca61420cfabef99396fcff9479af191e92304f51d284c5dc9094cb12cc0",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-06/front-600.webp",
+        "previewSHA256": "af6dc8f95356d7b8579ec3e60c6e687cf1bdcc15eaa03cfd0a56436fd757c3a2",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Oxide-red waffle performance quarter-zip with stand neck, raglan seams and vertical chest zip, charcoal stretch shorts, black socks and grey trail trainers. Credible regular athletic fit and natural adult casting; no unsupported performance certification.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -4771,7 +4801,7 @@
       "key": "mw-r2-activewear-06:front",
       "look": "mw-r2-activewear-06",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5572,6 +5602,15 @@
       "at": "2026-10-23T23:35:57.287388+00:00",
       "notes": "Same recognizable model and complete tracksuit, zip height, white tee and trainers. Relaxed diagonal walking stride with one pocket hand gives credible sports-fashion attitude. Panels and soft tricot folds consistent.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-06",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:36:16.295814+00:00",
+      "notes": "Oxide-red waffle performance quarter-zip with stand neck, raglan seams and vertical chest zip, charcoal stretch shorts, black socks and grey trail trainers. Credible regular athletic fit and natural adult casting; no unsupported performance certification.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5584,11 +5623,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 17,
-    "acceptedActivePhotographs": 53,
+    "acceptedActivePhotographs": 54,
     "incompleteLooks": 23,
     "completedMasters": 17,
     "unresolvedViews": [
-      "mw-r2-activewear-06:front",
       "mw-r2-activewear-06:back",
       "mw-r2-activewear-06:editorial",
       "mw-r2-activewear-07:front",
