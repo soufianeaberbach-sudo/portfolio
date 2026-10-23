@@ -4303,14 +4303,14 @@
         ],
         "generationOperation": "Separate true-rear generation following original Front and Back garment source",
         "nativeResampled": false,
-        "reviewNote": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1086x1448 RGBA retained unchanged; Front remains missing after provider refusal.",
+        "reviewNote": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1084x1451 RGBA retained unchanged; Front remains missing after provider refusal.",
         "acceptedUTC": "2026-10-23T08:20:00.606624+00:00"
       },
       "editorial": null,
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
-        "backVisual": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1086x1448 RGBA retained unchanged; Front remains missing after provider refusal.",
+        "backVisual": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1084x1451 RGBA retained unchanged; Front remains missing after provider refusal.",
         "ownerArtisticApproval": false,
         "nativeResolutionLimitation": "Actual native dimensions recorded per view. Standard panels/masters use uniform scaling; no native high-resolution claim."
       },
@@ -4399,6 +4399,23 @@
           "moderationStage": "output",
           "category": "sexual",
           "requestId": "680d2a30-44fe-462f-af6a-bc97dadef0bd"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:22:08.935Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial occasionwear photograph. The first reference is the accepted Back and establishes the adult model, chestnut low updo, beige mesh material, rear construction and studio light. The second reference supplies the exact Front neckline and silhouette. Keep the same adult professional model and natural proportions; preserve the beige honeycomb mesh, broad straight off-shoulder folded band over both upper arms, fitted column, gentle flare, complete pooling hem, low open back and thin horizontal back tie with long ends. Preserve tonal foundation layers as visible in the original; no new slit, trim, lining design or extra straps. Quiet front three-quarter stance with gentle natural weight shift, relaxed natural hands and neutral expression. Same balanced neutral light, realistic textile and soft floor-contact shadow. Entire head, both hands, complete hem and any visible shoe tips safely inside comfortable portrait margins. Genuine transparent background preserving fine mesh and hair edges. Exactly one model in one photograph, no text, graphics, props, border, collage or duplicate figures. Provisional source-based apparel presentation, construction unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
+            "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 336f05ac-792a-42d1-9bb1-f7454b4043da. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "336f05ac-792a-42d1-9bb1-f7454b4043da"
         }
       ],
       "generationRecovery": {
@@ -6324,6 +6341,54 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving commercial catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:43:12.661317+00:00"
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:24:25.611Z",
+          "generationPrompt": "One full-length FRONT professional commercial swimwear catalogue photograph of the exact supplied outfit. Preserve grey/silver gathered bandeau swim top with neon yellow-green contrast binding and two thin parallel shoulder straps; matching grey bottom with neon binding, original double side straps and long tied bows at both hips. Keep the same adult professional model with source facial features and natural proportions, slicked-back straight brunette hair worn loose behind shoulders, large gold disc earrings, thin gold anklet on her left ankle and bare feet. Neutral upright stance directly facing camera, relaxed arms and neutral expression, clear garment visibility. Natural anatomy and realistic skin/textile, balanced neutral soft studio illumination, subtle natural floor-contact shadow. Full head, both hands, all ties and feet comfortably within generous portrait margins. Genuine transparent background preserving hair, fabric edges and shadow. Exactly one model in one photograph, no text, graphics, props, border, diptych, montage or duplicate figures. Source-based provisional apparel presentation; unseen rear construction is unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/1-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 3b195c8e-4586-439e-baf5-0c7d6860666f. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "3b195c8e-4586-439e-baf5-0c7d6860666f"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:25:48.217Z",
+          "generationPrompt": "Create one full-length TRUE BACK commercial catalogue photograph of the exact outfit and adult model shown in the source. Preserve grey/silver gathered bandeau swim top with neon yellow-green contrast binding and two thin parallel shoulder straps; matching grey bottom with neon binding, original double side straps and long tied bows at both hips. Same adult professional model with source facial features and natural proportions, slicked-back straight brunette hair worn loose behind shoulders, large gold disc earrings, thin gold anklet on her left ankle and bare feet. Directly rear-facing neutral upright stance, shoulders and hips away, back of head visible, relaxed arms. With no historical rear photograph, use this minimal provisional interpretation: simple matching grey rear bandeau with neon binding and the same parallel straps, matching plain grey lower rear with neon edging and original side bows. Do not mirror the Front or add straps, decorations or a different outfit. Balanced neutral studio light, realistic textile, skin and natural anatomy, subtle natural floor-contact shadow. Entire head, hands, all ties and feet safely inside comfortable portrait margins. Genuine transparent background preserving garment and hair edges. Exactly one model in one photograph, no text, graphics, props, border, diptych, collage or extra figure. Rear arrangement and construction remain provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/1-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID de1cf511-c588-40bf-b15d-63160f6f91b5. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "de1cf511-c588-40bf-b15d-63160f6f91b5"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:28:00.562Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial fashion photograph of the exact outfit in the source. Preserve grey/silver gathered bandeau swim top with neon yellow-green contrast binding and two thin parallel shoulder straps; matching grey bottom with neon binding, original double side straps and long tied bows at both hips. Keep the same adult professional model with source facial features and natural proportions, slicked-back straight brunette hair worn loose behind shoulders, large gold disc earrings, thin gold anklet on her left ankle and bare feet. Quiet front three-quarter catalogue stance with a small natural weight shift and relaxed hands, neutral expression and clear garment visibility. No outfit or styling changes. Balanced neutral soft studio lighting, realistic textile and skin, natural anatomy and subtle grounded floor-contact shadow. Entire head, both hands, all ties and feet comfortably inside portrait margins. Genuine transparent background preserving garment edges, hair and shadow. Exactly one model, one photograph; no text, graphics, props, border, diptych, collage or duplicate person. Source-based provisional apparel photograph; unseen rear construction is inferred.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/1-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 2a7e6673-ad88-49eb-b018-f3781cbfc6d2. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "2a7e6673-ad88-49eb-b018-f3781cbfc6d2"
         }
       ],
       "generationRecovery": {
