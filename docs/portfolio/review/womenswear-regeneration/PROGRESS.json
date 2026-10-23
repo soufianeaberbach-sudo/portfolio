@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:46:35.738626+00:00",
+  "updatedUTC": "2026-10-23T09:32:13.988313+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 5,
@@ -17,10 +17,10 @@
     "PENDING": 5,
     "GENERATED": 4
   },
-  "currentCategory": "activewear",
-  "currentSourceIdentity": null,
-  "currentMilestone": "final-permitted-production-checkpoint",
-  "lastSuccessfullyPushedCommit": "f234d0ee7b1208865b094e2dbfffc2011c456108",
+  "currentCategory": "evening",
+  "currentSourceIdentity": "evening-ref-02",
+  "currentMilestone": "recovered-front-native",
+  "lastSuccessfullyPushedCommit": "ba083f05c7509e48989b79e1a11b6b1afdd67332",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -315,6 +315,22 @@
           "category": "sexual",
           "requestId": "561a06ed-a241-43bb-b119-0bd2f038bd4e",
           "httpStatus": 400
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T09:28:55.407Z",
+          "generationPrompt": "Use the accepted photograph to produce one new full-length rear catalogue photograph of the same adult professional model in a clean white commercial studio. She stands directly facing away, upright and relaxed, both feet on the white studio floor, natural hands and back of head visible. Keep the brunette low bun, dark square sunglasses, small hoop earrings, bare feet and natural body proportions. Preserve the original grey scoop swim top layered over the white halter, grey thin shoulder straps, grey high-waisted bottom and narrow waist straps, exact fabric and color. Infer only the unseen rear arrangement: a simple grey rear band over the white halter fastening, matching lower rear and continuity of existing waist straps; mark this construction provisional. Match the soft neutral lighting and realistic textile of the Front. Render an opaque seamless white background and white floor with a small natural contact shadow. Entire head, hands and feet comfortably within a full-length portrait. Exactly one adult model, no lettering, logos, props, graphic elements, collage or border. Non-sexual professional garment catalogue presentation. Do not change the outfit or coverage.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f2e46082-066f-4811-a417-c16328b66edb. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "f2e46082-066f-4811-a417-c16328b66edb"
         }
       ]
     },
@@ -786,6 +802,24 @@
           "moderationStage": "output",
           "category": "sexual",
           "requestId": "dcdc6827-af8f-47c5-a5e3-565f403d9766"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "error": "moderation_blocked",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "input",
+          "category": "sexual",
+          "requestId": "aea5dadc-4235-434f-973e-089801cf7d0d",
+          "recordedUTC": "2026-10-23T09:26:20.141Z",
+          "generationPrompt": "Photograph this same adult professional fashion model and exact magenta swim set in a real seamless white catalogue studio. Produce a new full-length BACK photograph: the model stands upright facing directly away from the camera, both feet resting on the white studio floor, relaxed hands, back of head visible. Preserve her natural proportions, dark center-part low bun, small hoop earrings and bare feet. Preserve the opaque magenta fabric, gathered bandeau, thin halter fastening and both original side bows with their long ends. Since no historical rear exists, the simple matching gathered rear top band and matching lower rear are provisional design continuity. Use the same neutral softbox lighting and realistic textile as the reference. Frame the entire head, both hands, ties and both feet with comfortable white space, an undistorted catalogue camera and a small natural contact shadow. The native photograph should include an opaque clean white cyclorama and floor. Exactly one adult model in one photograph; no text, props, logos, graphics, border or collage. This is non-sexual commercial garment photography. Keep the outfit and coverage unchanged.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID aea5dadc-4235-434f-973e-089801cf7d0d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "method": "Opaque white studio native photograph"
         }
       ]
     },
@@ -928,7 +962,7 @@
       ]
     }
   ],
-  "notes": "Production pass complete for independently permitted views: 26 calls, 5 new accepted natives, 21 provider moderation refusals, 2 unrequested Editorials blocked by source input decisions. Final 97/120 natives and 31/40 masters. All baseline artwork preserved. Production build, 318 six-viewport reader assertions, 204 collection checks, 6 recovery tests and source integrity pass. No final PR, merge or deployment.",
+  "notes": "Recovery first real output: evening 02 Front generated using accepted Back primary and original Front construction in opaque white studio. 98 genuine natives, 31 masters. One input and one output refusal recorded separately. Preserve all 97 starting natives.",
   "limitations": [
     "31 genuine complete provisional sets and four partial sets; 23 views remain unavailable after provider moderation decisions or source-input blocks.",
     "All original 92 natives, 329 baseline artwork files, historical sources and 29 complete baseline records are preserved.",
@@ -1105,17 +1139,17 @@
     }
   ],
   "nativeResolutionNote": "87 original accepted natives at 1024x1536, 9 at 1086x1448 and 1 at 1084x1451. All native bytes unchanged; 1800x2700 panels and 5400x2700 masters use proportional resampling.",
-  "acceptedNativeImages": 97,
-  "missingIndividualViews": 23,
+  "acceptedNativeImages": 98,
+  "missingIndividualViews": 22,
   "moderationBlockedIndividualViews": 21,
   "currentToolAvailability": {
     "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
     "reasoningErrorRecurred": false,
-    "newAcceptedImages": 5
+    "newAcceptedImages": 1
   },
-  "freshSessionAcceptedImages": 5,
+  "freshSessionAcceptedImages": 1,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 21,
+  "freshSessionModerationFailures": 2,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,

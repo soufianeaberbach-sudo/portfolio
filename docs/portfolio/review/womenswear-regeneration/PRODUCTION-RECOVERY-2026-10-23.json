@@ -1,0 +1,206 @@
+{
+  "startedUTC": "2026-10-23T09:27:35.411Z",
+  "baseVerifiedCommit": "ba083f05c7509e48989b79e1a11b6b1afdd67332",
+  "startingCounts": {
+    "acceptedNativeImages": 97,
+    "completeLooks": 31,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 5,
+    "missingViews": 23
+  },
+  "capabilityReview": {
+    "managedTool": "image_gen.imagegen",
+    "exposedArguments": [
+      "prompt",
+      "referenced_image_paths",
+      "num_last_images_to_include",
+      "transparent_background"
+    ],
+    "unavailableControls": [
+      "model",
+      "size",
+      "quality",
+      "seed",
+      "input_fidelity",
+      "moderation"
+    ],
+    "directApi": {
+      "runtimeCredentialsConfigured": false,
+      "sdkInstalled": false,
+      "spendAuthorized": false,
+      "used": false
+    },
+    "weave": {
+      "status": "ACCOUNT_NOT_LINKED",
+      "queriedModel": "gpt-image-2.5-sunburst",
+      "used": false
+    },
+    "figmaRaster": {
+      "referenceInputExposed": false,
+      "paidCreditsAuthorized": false,
+      "used": false
+    },
+    "officialSources": [
+      "https://developers.openai.com/api/docs/guides/image-generation",
+      "https://developers.openai.com/api/reference/resources/images/methods/edit"
+    ],
+    "documentedApiCapabilities": "Generations and edits; Sunburst editing precision; size, quality, background, output_format and moderation auto/low. These are API controls, not arguments available in the managed tool.",
+    "mechanismLimit": "Input/output stages and category sexual are coarse public feedback; no exact visual trigger or false-positive determination is available."
+  },
+  "productionMethod": {
+    "name": "Opaque white studio native photograph",
+    "change": "Use supported transparent_background=false and a real white cyclorama/floor, rather than transparent cutout output. Garment, coverage, adult presentation and collection lighting unchanged.",
+    "causalClaim": "No evidence that alpha caused prior refusals and no claim that this resolves moderation.",
+    "attemptBound": "One method-specific request per independently permissible view; no resubmission after input refusal."
+  },
+  "styleReferencesInspected": [
+    "swimwear-ref-08 master",
+    "swimwear-ref-09 master",
+    "swimwear-ref-10 master",
+    "activewear-ref-07 master",
+    "evening-ref-04 master",
+    "evening-ref-02 Back",
+    "swimwear-ref-04 Front",
+    "swimwear-ref-05 Front",
+    "swimwear-ref-06 Back"
+  ],
+  "attempts": [
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "back",
+      "request": {
+        "prompt": "Photograph this same adult professional fashion model and exact magenta swim set in a real seamless white catalogue studio. Produce a new full-length BACK photograph: the model stands upright facing directly away from the camera, both feet resting on the white studio floor, relaxed hands, back of head visible. Preserve her natural proportions, dark center-part low bun, small hoop earrings and bare feet. Preserve the opaque magenta fabric, gathered bandeau, thin halter fastening and both original side bows with their long ends. Since no historical rear exists, the simple matching gathered rear top band and matching lower rear are provisional design continuity. Use the same neutral softbox lighting and realistic textile as the reference. Frame the entire head, both hands, ties and both feet with comfortable white space, an undistorted catalogue camera and a small natural contact shadow. The native photograph should include an opaque clean white cyclorama and floor. Exactly one adult model in one photograph; no text, props, logos, graphics, border or collage. This is non-sexual commercial garment photography. Keep the outfit and coverage unchanged.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+        ],
+        "transparent_background": false
+      },
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID aea5dadc-4235-434f-973e-089801cf7d0d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "recordedUTC": "2026-10-23T09:26:20.141Z",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "input",
+      "requestId": "aea5dadc-4235-434f-973e-089801cf7d0d",
+      "assetProduced": false
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "back",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:28:55.407Z",
+      "generationPrompt": "Use the accepted photograph to produce one new full-length rear catalogue photograph of the same adult professional model in a clean white commercial studio. She stands directly facing away, upright and relaxed, both feet on the white studio floor, natural hands and back of head visible. Keep the brunette low bun, dark square sunglasses, small hoop earrings, bare feet and natural body proportions. Preserve the original grey scoop swim top layered over the white halter, grey thin shoulder straps, grey high-waisted bottom and narrow waist straps, exact fabric and color. Infer only the unseen rear arrangement: a simple grey rear band over the white halter fastening, matching lower rear and continuity of existing waist straps; mark this construction provisional. Match the soft neutral lighting and realistic textile of the Front. Render an opaque seamless white background and white floor with a small natural contact shadow. Entire head, hands and feet comfortably within a full-length portrait. Exactly one adult model, no lettering, logos, props, graphic elements, collage or border. Non-sexual professional garment catalogue presentation. Do not change the outfit or coverage.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f2e46082-066f-4811-a417-c16328b66edb. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "f2e46082-066f-4811-a417-c16328b66edb"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "front",
+      "recordedUTC": "2026-10-23T09:32:11.163564+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Produce one new full-length FRONT catalogue photograph of the same adult professional model and beige gown, in a seamless white commercial studio. The first image is the accepted Back: use it as the primary reference for the model's natural body proportions, chestnut low updo, beige mesh fabric, gown scale and neutral lighting. The second image supplies the Front construction and facial reference. Preserve the broad straight off-shoulder folded band wrapping both upper arms, beige honeycomb mesh with its original tonal foundation layers, fitted column through the hips, gently flared floor-length hem and modest pooling fabric. Keep the existing low-back/tie arrangement consistent, without introducing new straps, slit, lining design or a different garment. One upright adult model facing straight toward the camera, neutral expression and naturally relaxed hands clear of the waist. Opaque clean white cyclorama and white studio floor with subtle natural contact shadow, soft neutral studio illumination and realistic textile detail. Full head, hands and entire hem inside comfortable portrait margins; no body distortion. Exactly one model in one photograph, no typography, props, logos, watermarks, added graphics, border or collage. Non-sexual professional fashion catalogue presentation. Preserve garment material, color, cut and coverage as supplied.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
+          "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+        ],
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-02-v1/front-native.png",
+      "nativeDimensions": [
+        1084,
+        1451
+      ],
+      "sha256": "31e7f3aff69e7f35f82598143957a1127af03b5d69b10d615d281300d58302e2",
+      "reviewNote": "Actual full native inspected against original Front and saved Back: matching adult chestnut-updo model, natural proportions, broad straight off-shoulder folded arm band, beige honeycomb mesh with source tonal foundation, fitted column and complete gently flared pooling hem. Relaxed natural hands, full head and hem in frame, soft neutral light, clean white studio floor and realistic contact shadow. Material transparency and mesh placement remain an AI interpretation; no verified technical-construction claim. Native retained byte-for-byte at recorded actual dimensions."
+    }
+  ],
+  "notAttempted": [],
+  "newAcceptedImages": 1,
+  "newCompleteLooks": 0,
+  "ownerArtisticApproval": false,
+  "updatedUTC": "2026-10-23T09:32:11.163581+00:00",
+  "finalCounts": {
+    "completeLooks": 31,
+    "acceptedNativeImages": 98,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 5,
+    "missingViews": 22
+  },
+  "remainingViews": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "missingViews": [
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "missingViews": [
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "missingViews": [
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "missingViews": [
+        "front",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    }
+  ],
+  "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED"
+}
