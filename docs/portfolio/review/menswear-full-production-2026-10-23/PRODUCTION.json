@@ -3002,7 +3002,39 @@
         "reviewNotes": "Graphite technical joggers are primary, with knee darts, zipped entries, elastic cuff and ankle zips. Grey moderate-armhole sleeveless crew, crew socks and stable off-white trainers complementary. Natural athletic adult with believable proportions, full-length white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1697864,
+        "nativeMode": "RGB",
+        "sha256": "16f5bead4a32e70b1c41e557189bb825c3bd5099043e708c2f348f0192356291",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-fd9a83c0-880b-4428-93a4-f0a2aa5f288a.png",
+        "generatedAt": "2026-10-23T23:41:27.674687+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-07-back.txt",
+        "promptSHA256": "ad4add4ed08fde5b5fc73613ecac5cec0775c4078703016951e6461402754a0b",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-07/back.png",
+        "exportSHA256": "0ed7fd59d386dfa59146df791ebd719a0bb8d3b810485f6864802842cb6be8cf",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-07/back-600.webp",
+        "previewSHA256": "76ce6b272eddffdcaa6eb844db815fcf5fefe0c0d0a6d69c1c244bf797f60ce0",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Recovered true rear: same short dark hair, grey sleeveless top, graphite joggers, single rear welt zip, cuff/ankle zips, crew socks and off-white trainer heels. Fabric and full-length proportions consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -4945,7 +4977,7 @@
       "key": "mw-r2-activewear-07:back",
       "look": "mw-r2-activewear-07",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5754,6 +5786,15 @@
       "at": "2026-10-23T23:41:08.768673+00:00",
       "notes": "Recovered native: same recognizable model and oxide quarter-zip, chest pocket, charcoal shorts, black socks and grey shoes. Controlled walking step and bent arm show movement with garment clearly readable.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-06/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-07",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:41:27.678492+00:00",
+      "notes": "Recovered true rear: same short dark hair, grey sleeveless top, graphite joggers, single rear welt zip, cuff/ankle zips, crew socks and off-white trainer heels. Fabric and full-length proportions consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5766,11 +5807,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 18,
-    "acceptedActivePhotographs": 57,
+    "acceptedActivePhotographs": 58,
     "incompleteLooks": 22,
     "completedMasters": 18,
     "unresolvedViews": [
-      "mw-r2-activewear-07:back",
       "mw-r2-activewear-07:editorial",
       "mw-r2-activewear-08:front",
       "mw-r2-activewear-08:back",
