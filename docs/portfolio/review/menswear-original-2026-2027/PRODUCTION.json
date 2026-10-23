@@ -749,7 +749,7 @@
       "majorCategory": "m-rtw",
       "slot": 2,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -771,7 +771,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:47:32.319854+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-02/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1866728,
+        "sha256": "ca7604826e16af4c24e85e317ed149c3fac39417a2c8d08b353defef63428ae9",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-4ba1bfdd-b913-4554-9883-878e3f8f1770.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-rtw-02/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: same shaved head and ears, continuous tobacco vertical knit, sleeve rib bands and lightly tucked rib hem. Oat trouser seat and two neat welt pockets plausible, same suede loafer heels. No front placket or pockets invented on back.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T19:06:35.553611+00:00"
+      },
       "editorial": null,
       "master": null,
       "rejectedAttempts": [
