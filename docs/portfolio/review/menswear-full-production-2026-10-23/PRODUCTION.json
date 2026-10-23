@@ -1521,11 +1521,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1866684,
+        "nativeMode": "RGB",
+        "sha256": "59ac94cde90a92117727d6a2b9a92d4854ff25f8fc429f24bf83a14b18d4d4ad",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-0521b8d3-7e14-4ae3-8bea-deb2cf80f501.png",
+        "generatedAt": "2026-10-23T23:27:36.412523+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-09-front.txt",
+        "promptSHA256": "32d21e8051a488496b484c04b0d0240b4cdc30e6feaef0ea505ceef5dc38adef",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-09/front.png",
+        "exportSHA256": "2894c2315f1458a9fb3c9a64d13abda0a7f4c15c1acd61ee497c32bd561c7b89",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-09/front-600.webp",
+        "previewSHA256": "6290401cf15ff385c65f192b56475f63cc0227fac649644a10cc83d2bfa60982",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Warm-stone shirt-weight overshirt with point collar, two flat chest patches, seven-button placket, button cuffs and straight hem. Muted teal crew and dark brown straight trousers with ecru low-tops support primary. Fully open styling is selected; woven texture and natural adult casting credible.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -4074,7 +4104,7 @@
       "key": "mw-r2-casualwear-09:front",
       "look": "mw-r2-casualwear-09",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4896,6 +4926,15 @@
       "at": "2026-10-23T23:25:08.161759+00:00",
       "notes": "Same model, five-button cardigan and rust underlayer, dark denim and suede chukkas. Gentle walking stance, one hand at cardigan and one near trouser pocket; visible knit pockets and credible fabric movement.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-09",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:27:36.417172+00:00",
+      "notes": "Warm-stone shirt-weight overshirt with point collar, two flat chest patches, seven-button placket, button cuffs and straight hem. Muted teal crew and dark brown straight trousers with ecru low-tops support primary. Fully open styling is selected; woven texture and natural adult casting credible.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4908,11 +4947,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 12,
-    "acceptedActivePhotographs": 39,
+    "acceptedActivePhotographs": 40,
     "incompleteLooks": 28,
     "completedMasters": 12,
     "unresolvedViews": [
-      "mw-r2-casualwear-09:front",
       "mw-r2-casualwear-09:back",
       "mw-r2-casualwear-09:editorial",
       "mw-r2-casualwear-10:front",
