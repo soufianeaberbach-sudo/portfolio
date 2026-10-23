@@ -1,3 +1,63 @@
+# Production checkpoint — 23 October 2026
+
+Image generation works today. The first requested swimwear-ref-08 Editorial
+returned a genuine 1086×1448 RGBA file, was visually inspected, registered,
+pushed at `d207b8b4749bb6cfb09a45d08c56b28c5dba4a6e` and verified remotely.
+The previous `Unknown parameter: reasoning` error did not recur; no managed-tool
+repair is claimed.
+
+**92 starting natives + 5 new = 97/120 accepted natives. 31/40 complete looks
+and actual masters. Four partial looks, five without generated views.**
+
+New images: swimwear-ref-08 Editorial; swimwear-ref-09 Back and Editorial;
+evening-ref-02 Back; swimwear-ref-06 Back. Each native was saved unchanged,
+hashed, visually reviewed, committed, pushed and remotely verified before the
+next generation. Four new natives are 1086×1448, evening-ref-02 Back is 1084×1451.
+Existing natives remain 87 at 1024×1536 and five at 1086×1448.
+
+New complete sets: swimwear-ref-08 and swimwear-ref-09. Both have three exact
+1800×2700 panels, a 5400×2700 master and four responsive WebP derivatives,
+assembled with the existing proportional-placement script and integrated by
+registry into their intended slots. Native high-resolution output is not claimed.
+Unseen rear construction remains provisional.
+
+26 actual production requests: five accepted files, 19 output moderation
+refusals and two input moderation refusals. No image-service technical or quota
+error. Each independently permitted view was attempted once; no refused view
+was retried. Source input refusals for swimwear-ref-03 and swimwear-ref-07 Back
+also block their Editorial requests. Those two Editorials were not submitted
+and received no separate provider decision. All literal requests/errors and
+request IDs are retained in PRODUCTION-SESSION-2026-10-23.json and the manifest.
+
+| Remaining source | Missing genuine views |
+| --- | --- |
+| swimwear-ref-04 | Back, Editorial |
+| swimwear-ref-05 | Back, Editorial |
+| activewear-ref-09 | Front, Back, Editorial |
+| evening-ref-02 | Front, Editorial |
+| swimwear-ref-01 | Front, Back, Editorial |
+| swimwear-ref-02 | Front, Back, Editorial |
+| swimwear-ref-03 | Front, Back, Editorial (source-input blocked) |
+| swimwear-ref-06 | Front, Editorial |
+| swimwear-ref-07 | Front, Back, Editorial (source-input blocked) |
+
+Validation passes: all source/native hashes and dimensions; 31 masters,
+93 panels and 124 derivatives; all 329 baseline artwork files and 29 completed
+baseline records preserved; 108 historical source fingerprints; 204 collection
+identity checks; six recovery regression tests; production build (11 pages).
+The two new integrated sets passed 318 reader assertions across all six required
+viewports, with 48 screenshots. Actual native composites, masters and desktop,
+tablet and mobile evidence were visually inspected. See
+[evidence](evidence/production-2026-10-23/RESULTS.json) and
+[new native review sheet](evidence/production-2026-10-23/new-native-review.jpg).
+
+Photography remains incomplete. Full forty-look final QA, owner artistic approval
+and final PR remain pending. No merge or deployment. Menswear and other branches
+were not modified. Verify the containing checkpoint against the remote branch;
+PROGRESS.json names its previously verified remote commit to avoid self-reference.
+
+---
+
 # Latest repair investigation — production gate remains closed
 
 Recovered the clean branch at `a109d262a62adb73d720ae2d2d0527a1393a6f3e`.
