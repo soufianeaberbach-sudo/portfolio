@@ -80,7 +80,10 @@
       "status": "MODERATION_REFUSED",
       "moderationStage": "input",
       "requestId": "aea5dadc-4235-434f-973e-089801cf7d0d",
-      "assetProduced": false
+      "assetProduced": false,
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-05",
@@ -97,7 +100,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f2e46082-066f-4811-a417-c16328b66edb. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "f2e46082-066f-4811-a417-c16328b66edb"
+      "requestId": "f2e46082-066f-4811-a417-c16328b66edb",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "evening-ref-02",
@@ -118,7 +124,8 @@
         1451
       ],
       "sha256": "31e7f3aff69e7f35f82598143957a1127af03b5d69b10d615d281300d58302e2",
-      "reviewNote": "Actual full native inspected against original Front and saved Back: matching adult chestnut-updo model, natural proportions, broad straight off-shoulder folded arm band, beige honeycomb mesh with source tonal foundation, fitted column and complete gently flared pooling hem. Relaxed natural hands, full head and hem in frame, soft neutral light, clean white studio floor and realistic contact shadow. Material transparency and mesh placement remain an AI interpretation; no verified technical-construction claim. Native retained byte-for-byte at recorded actual dimensions."
+      "reviewNote": "Actual full native inspected against original Front and saved Back: matching adult chestnut-updo model, natural proportions, broad straight off-shoulder folded arm band, beige honeycomb mesh with source tonal foundation, fitted column and complete gently flared pooling hem. Relaxed natural hands, full head and hem in frame, soft neutral light, clean white studio floor and realistic contact shadow. Material transparency and mesh placement remain an AI interpretation; no verified technical-construction claim. Native retained byte-for-byte at recorded actual dimensions.",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "evening-ref-02",
@@ -136,7 +143,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 726ab85c-51f6-4973-8a13-2651811ee74f. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "726ab85c-51f6-4973-8a13-2651811ee74f"
+      "requestId": "726ab85c-51f6-4973-8a13-2651811ee74f",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-06",
@@ -154,7 +164,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 9e55a433-90ee-4936-9e88-921e2b6fd91c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c"
+      "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-05",
@@ -171,7 +184,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID b79b5f98-8f4b-427c-8064-24121f3ec71a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a"
+      "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-06",
@@ -189,7 +205,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 51a1ca64-7c48-4bd8-8d3a-b26bd036282b. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b"
+      "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-04",
@@ -209,7 +228,8 @@
         1448
       ],
       "sha256": "5eeada6daf2dcbdb5db7cb092eadc782fdde5bfd6f6e8ed04083069ce5d1b777",
-      "reviewNote": "Actual new native visually compared with original garment photograph and saved Front: compatible adult model facial features, dark center-part tied-back hair, small hoops, bare feet and natural proportions. Magenta gathered bandeau and thin halter, matching original tie-side bottom, bows and long ends retained. Distinct restrained three-quarter step, full head, natural hands and feet, realistic textile, balanced light and white studio floor with soft contact shadow. Source-supported visible construction retained; exact unseen rear remains provisional. Genuine native saved unchanged at recorded dimensions."
+      "reviewNote": "Actual new native visually compared with original garment photograph and saved Front: compatible adult model facial features, dark center-part tied-back hair, small hoops, bare feet and natural proportions. Magenta gathered bandeau and thin halter, matching original tie-side bottom, bows and long ends retained. Distinct restrained three-quarter step, full head, natural hands and feet, realistic textile, balanced light and white studio floor with soft contact shadow. Source-supported visible construction retained; exact unseen rear remains provisional. Genuine native saved unchanged at recorded dimensions.",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-04",
@@ -226,7 +246,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID d0b014bb-a4fb-431b-9537-d3ec650961dd. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "input",
-      "requestId": "d0b014bb-a4fb-431b-9537-d3ec650961dd"
+      "requestId": "d0b014bb-a4fb-431b-9537-d3ec650961dd",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "activewear-ref-09",
@@ -243,7 +266,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 164ec3b8-ef0f-4d67-aba0-26742af9042d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "164ec3b8-ef0f-4d67-aba0-26742af9042d"
+      "requestId": "164ec3b8-ef0f-4d67-aba0-26742af9042d",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "activewear-ref-09",
@@ -260,7 +286,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 76f0a2a8-49b4-40f8-b009-d802383c5cb5. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "76f0a2a8-49b4-40f8-b009-d802383c5cb5"
+      "requestId": "76f0a2a8-49b4-40f8-b009-d802383c5cb5",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "activewear-ref-09",
@@ -277,7 +306,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 41da0a86-1062-4806-ba4c-63e1eee4995c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "41da0a86-1062-4806-ba4c-63e1eee4995c"
+      "requestId": "41da0a86-1062-4806-ba4c-63e1eee4995c",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-01",
@@ -294,7 +326,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 4975f0f1-78e7-4f36-b4ca-71499a47e3ae. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
-      "requestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae"
+      "requestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-01",
@@ -311,7 +346,10 @@
       "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 0072d826-24eb-4b4d-9ba1-7b2b1062f258. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "status": "MODERATION_REFUSED",
       "moderationStage": "input",
-      "requestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258"
+      "requestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-02",
@@ -331,7 +369,8 @@
         1448
       ],
       "sha256": "071eb164e820ca64b24193091feceaec40d83e233d0cfa34d0b4451fcd773ae1",
-      "reviewNote": "Actual native inspected against original: matching adult source model, center-part brunette low bun, gold hoops and bare feet. Metallic silver triangle halter top, thin neck/lower-band ties, matching reflective silver lower garment and original side bows retained with source cut and coverage. Neutral full frontal standing pose, complete head, natural hands and both feet, realistic body proportions and textile reflections. White studio floor and subtle natural contact shadow; no stray graphic or duplicate figure. Genuine native retained unchanged at recorded actual dimensions; unseen rear construction remains provisional."
+      "reviewNote": "Actual native inspected against original: matching adult source model, center-part brunette low bun, gold hoops and bare feet. Metallic silver triangle halter top, thin neck/lower-band ties, matching reflective silver lower garment and original side bows retained with source cut and coverage. Neutral full frontal standing pose, complete head, natural hands and both feet, realistic body proportions and textile reflections. White studio floor and subtle natural contact shadow; no stray graphic or duplicate figure. Genuine native retained unchanged at recorded actual dimensions; unseen rear construction remains provisional.",
+      "actualToolCall": true
     },
     {
       "sourceIdentity": "swimwear-ref-02",
@@ -351,7 +390,89 @@
         1448
       ],
       "sha256": "8295ba22345a271d6a85f0eff2897ff126e9d9d6bfa9904e43305b004db5e116",
-      "reviewNote": "Actual native visually compared with accepted Front: same adult proportions, brunette low bun, gold hoops and barefoot styling. A separate directly rear-facing figure with natural hands and feet. Metallic silver neck/back ties, original side bows, matching reflective material and consistent garment proportions retained. Rear top fastening and matching lower rear are inferred because no original rear exists; coverage and technical construction remain provisional. Full head, hands, ties and feet visible, neutral studio light, white floor and natural contact shadow. Native retained unchanged at recorded actual dimensions."
+      "reviewNote": "Actual native visually compared with accepted Front: same adult proportions, brunette low bun, gold hoops and barefoot styling. A separate directly rear-facing figure with natural hands and feet. Metallic silver neck/back ties, original side bows, matching reflective material and consistent garment proportions retained. Rear top fastening and matching lower rear are inferred because no original rear exists; coverage and technical construction remain provisional. Full head, hands, ties and feet visible, neutral studio light, white floor and natural contact shadow. Native retained unchanged at recorded actual dimensions.",
+      "actualToolCall": true
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T10:00:34.487Z",
+      "generationPrompt": "Make one distinct full-length Editorial commercial catalogue photograph of the same adult model and exact silver swim set in the accepted Front and Back. Use Front as primary for her face, natural proportions, center-part brunette low bun, gold hoops, bare feet and reflective silver triangle halter design; Back checks the matching provisional rear tie arrangement. Keep the identical thin halter and back ties, silver triangular panels, gathering, original lower garment and long side bows, material, cut and coverage. Quiet front three-quarter standing orientation with a small natural weight shift, relaxed natural hands and calm catalogue expression. Match the accepted photographs' opaque clean white cyclorama and white floor, balanced neutral studio light, realistic skin and metallic textile reflections and subtle natural floor-contact shadow. Full head, both hands, all ties and feet comfortably inside generous portrait margins. Exactly one adult professional model in one photograph, no text, logos, props, graphics, border, collage or duplicate figure. Non-sexual commercial garment presentation. Preserve outfit and styling unchanged. Rear construction remains provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v1/front-native.png",
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v1/back-native.png"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 53775076-002c-48c5-b2ee-af2d374f049a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "53775076-002c-48c5-b2ee-af2d374f049a",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T10:04:18.716Z",
+      "generationPrompt": "Create one new full-length Editorial commercial catalogue photograph directly from this original garment photograph. Keep the exact adult source model, facial features, center-part brunette low bun, dark square sunglasses, small hoop earrings, bare feet and natural proportions. Preserve the grey scoop swim top layered over the original white halter, grey shoulder straps, matching grey high-waisted bottom and original narrow crossed waist straps, source material, color, cut and coverage. Quiet slight front three-quarter stance with a small natural weight shift, relaxed natural hands and calm catalogue expression. Opaque seamless white studio cyclorama and white floor with balanced neutral soft studio light, realistic skin/textile detail and subtle natural floor-contact shadow. Full head, both hands, all garment edges and feet comfortably inside generous portrait margins. Exactly one adult professional model in one photograph; no text, logos, graphics, props, border, collage or duplicate figures. Non-sexual commercial garment presentation. Preserve outfit and styling unchanged; unseen rear construction remains provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/5-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 37b02af0-c5b8-4967-8955-ae2be1fb44f1. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "37b02af0-c5b8-4967-8955-ae2be1fb44f1",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T10:06:03.222Z",
+      "generationPrompt": "Create one separate full-length Editorial commercial occasionwear catalogue photograph directly from this original two-view garment source. Use the exact adult source model with natural proportions, matching facial features and chestnut hair in the neat low updo. Preserve the beige honeycomb-mesh gown: broad straight off-shoulder folded band over both upper arms, original tonal foundation layers and mesh transparency, fitted column through hips, gentle flare into the complete pooling floor hem, low open back and original thin horizontal back tie with long ends. Exact beige material, honeycomb scale, neckline and garment proportions; no new lining, slit, straps or trim. One restrained front three-quarter standing pose with a gentle natural weight shift, relaxed natural hands and neutral professional expression. Opaque seamless white cyclorama and white studio floor, balanced neutral soft studio light, realistic textile and subtle natural floor-contact shadow. Full head, hands and all hem edges comfortably inside generous full-length portrait margins. Exactly one adult professional model in one photograph; no typography, logos, props, graphics, border, collage, diptych or second figure. Non-sexual commercial garment presentation. Preserve outfit and coverage unchanged; construction is provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 58da8827-8f1a-45bb-b823-6d96c922d436. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "58da8827-8f1a-45bb-b823-6d96c922d436",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T10:07:40.602Z",
+      "generationPrompt": "Create one distinct full-length Editorial commercial catalogue photograph directly from this unchanged original garment photograph. Preserve the exact adult source model, natural proportions, center-part brunette low bun, small gold hoops and bare feet. Same metallic silver triangle halter top with original thin neck and lower-band ties, triangular gathered panels, matching silver lower garment and long side bows, original cut and coverage. Quiet front three-quarter orientation with a gentle natural weight shift and relaxed natural hands, neutral professional expression. Keep silver textile reflections realistic and match the source model and styling. Opaque seamless white studio cyclorama and white floor with balanced neutral soft light and a subtle natural floor-contact shadow. Whole head, both hands, all ties and both feet comfortably inside generous full-length portrait margins. Exactly one adult professional model in one photograph; no text, logos, graphics, props, border, collage, diptych or duplicate figure. Non-sexual commercial garment presentation. No changes to outfit, material, color or styling. Unseen rear construction remains provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 075e522d-dede-4fb0-9941-a059d0c068a3. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "075e522d-dede-4fb0-9941-a059d0c068a3",
+      "httpStatus": 400,
+      "category": "sexual",
+      "actualToolCall": true
     }
   ],
   "notAttempted": [
@@ -408,7 +529,7 @@
   "newAcceptedImages": 4,
   "newCompleteLooks": 0,
   "ownerArtisticApproval": false,
-  "updatedUTC": "2026-10-23T09:58:14.214919+00:00",
+  "updatedUTC": "2026-10-23T10:22:28.585656+00:00",
   "finalCounts": {
     "completeLooks": 31,
     "acceptedNativeImages": 101,
@@ -501,5 +622,526 @@
     "baselineArtworkFilesUnchanged": 350,
     "acceptedBaselineNativeImagesUnchanged": 97,
     "completeBaselineManifestRecordsUnchanged": 31
-  }
+  },
+  "finishedUTC": "2026-10-23T10:19:52.563363+00:00",
+  "status": "PARTIAL_RECOVERY_PROVIDER_MODERATION",
+  "actualToolCalls": 20,
+  "distinctMissingViewsAttempted": 16,
+  "newModerationRefusals": 16,
+  "newInputModerationRefusals": 3,
+  "newOutputModerationRefusals": 13,
+  "distinctRemainingViewsRefusedInRecovery": 12,
+  "notAttemptedViews": 7,
+  "technicalErrors": 0,
+  "quotaErrors": 0,
+  "visuallyRejectedFiles": 0,
+  "nativeDimensions": {
+    "1024x1536": 87,
+    "1084x1451": 2,
+    "1086x1448": 12
+  },
+  "newNativeDimensions": {
+    "1086x1448 RGB": 3,
+    "1084x1451 RGB": 1
+  },
+  "productionCapabilityGate": {
+    "realFileReturned": true,
+    "decodedAndSaved": true,
+    "referenceEditingDemonstrated": "Swimwear 02 Back returned from its accepted Front as sole image reference; evening 02 Front used accepted Back plus original Front.",
+    "requestSchemaValidated": [
+      "prompt",
+      "referenced_image_paths",
+      "transparent_background=false"
+    ],
+    "nativeFilesPushedAndVerifiedBeforeNextGeneration": true,
+    "managedModelIdentity": "Not exposed; Sunburst was documented but not selected.",
+    "filterConfiguration": "Not exposed; no moderation setting changed."
+  },
+  "viewAssessments": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/sport/9-1400.webp",
+      "materialAndConstruction": "Front and back views of a sand long-sleeved mesh look with opaque bust and brief panels, photographed together on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "Actual original Front and Back source",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "3c952931-2eba-4cb7-8ba1-fd6d03a289de"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "164ec3b8-ef0f-4d67-aba0-26742af9042d",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/sport/9-1400.webp",
+      "materialAndConstruction": "Front and back views of a sand long-sleeved mesh look with opaque bust and brief panels, photographed together on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "Actual original Front and Back source",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "55b09124-0f49-42f1-92bd-6a84cc00143d"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "76f0a2a8-49b4-40f8-b009-d802383c5cb5",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/sport/9-1400.webp",
+      "materialAndConstruction": "Front and back views of a sand long-sleeved mesh look with opaque bust and brief panels, photographed together on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "Actual original Front and Back source",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "ff892511-6a06-4a06-b3a4-6bb6677a6e84"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "41da0a86-1062-4806-ba4c-63e1eee4995c",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/evening/2-1400.webp",
+      "materialAndConstruction": "Front and back views of a nude off-shoulder column gown with a low open back, photographed together on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "back"
+      ],
+      "rearEvidence": "Actual original Front and Back source",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "680d2a30-44fe-462f-af6a-bc97dadef0bd"
+        }
+      ],
+      "currentOutcome": "ACCEPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/evening/2-1400.webp",
+      "materialAndConstruction": "Front and back views of a nude off-shoulder column gown with a low open back, photographed together on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "back"
+      ],
+      "rearEvidence": "Actual original Front and Back source",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "336f05ac-792a-42d1-9bb1-f7454b4043da"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "58da8827-8f1a-45bb-b823-6d96c922d436",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/1-1400.webp",
+      "materialAndConstruction": "A bandeau bikini with contrast binding and long tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "3b195c8e-4586-439e-baf5-0c7d6860666f"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/1-1400.webp",
+      "materialAndConstruction": "A bandeau bikini with contrast binding and long tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "de1cf511-c588-40bf-b15d-63160f6f91b5"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/1-1400.webp",
+      "materialAndConstruction": "A bandeau bikini with contrast binding and long tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "2a7e6673-ad88-49eb-b018-f3781cbfc6d2"
+        }
+      ],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/2-1400.webp",
+      "materialAndConstruction": "A silver triangle bikini with tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "adb9da26-4859-48ab-b33c-d8d8838ebc5a"
+        }
+      ],
+      "currentOutcome": "ACCEPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/2-1400.webp",
+      "materialAndConstruction": "A silver triangle bikini with tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "183ce8cb-f8dd-4374-86b6-99fcae111fdb"
+        }
+      ],
+      "currentOutcome": "ACCEPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/2-1400.webp",
+      "materialAndConstruction": "A silver triangle bikini with tie sides, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "e5f6784e-716d-4ed1-83f7-f6757cc9b08d"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "075e522d-dede-4fb0-9941-a059d0c068a3",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/3-1400.webp",
+      "materialAndConstruction": "A printed bikini with contrast red trim and thin straps, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "bea7de62-50ff-43a1-b429-e38a69945c14"
+        }
+      ],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/3-1400.webp",
+      "materialAndConstruction": "A printed bikini with contrast red trim and thin straps, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "input",
+          "requestId": "82ea7624-a66b-409c-84cd-e72535fad085"
+        }
+      ],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/3-1400.webp",
+      "materialAndConstruction": "A printed bikini with contrast red trim and thin straps, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/4-1400.webp",
+      "materialAndConstruction": "A magenta textured bandeau bikini with tie-side briefs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "front"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "f308ffa5-2f5c-451c-97a6-5c1adb873505"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "d0b014bb-a4fb-431b-9537-d3ec650961dd",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/4-1400.webp",
+      "materialAndConstruction": "A magenta textured bandeau bikini with tie-side briefs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "front"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "dcdc6827-af8f-47c5-a5e3-565f403d9766"
+        }
+      ],
+      "currentOutcome": "ACCEPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/5-1400.webp",
+      "materialAndConstruction": "A silver halter bikini with high-cut briefs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "front"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "479c644c-9c0f-43f4-9432-5997fc3c42e5"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "f2e46082-066f-4811-a417-c16328b66edb",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/5-1400.webp",
+      "materialAndConstruction": "A silver halter bikini with high-cut briefs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "front"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "561a06ed-a241-43bb-b119-0bd2f038bd4e"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "37b02af0-c5b8-4967-8955-ae2be1fb44f1",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/6-1400.webp",
+      "materialAndConstruction": "A blue one-piece swimsuit with a front ring detail and high-cut legs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "back"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "ae67b1ad-340b-4b04-8b73-bb449b48490e"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/6-1400.webp",
+      "materialAndConstruction": "A blue one-piece swimsuit with a front ring detail and high-cut legs, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [
+        "back"
+      ],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "57282df6-2186-465d-8a24-c5174650bb34"
+        }
+      ],
+      "currentOutcome": "MODERATION_REFUSED",
+      "latestCurrentRequestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b",
+      "inputConstraint": null
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "front",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/7-1400.webp",
+      "materialAndConstruction": "A silver bikini with long ties wrapped around the waist, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "output",
+          "requestId": "4bb3c642-c6f5-4485-a14c-f9847d3f912b"
+        }
+      ],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "back",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/7-1400.webp",
+      "materialAndConstruction": "A silver bikini with long ties wrapped around the waist, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [
+        {
+          "stage": "input",
+          "requestId": "a190c142-0332-497e-bd88-8b0e6a125983"
+        }
+      ],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "view": "editorial",
+      "assessmentBasis": "Owner requires adult professional commercial model; actual references visually appear adult. Neutral non-sexual catalogue activity. Owner authorizes use of existing reference photography; historical rights/credits are preserved, no new licensing claim.",
+      "garmentReference": "/portfolio/swim/7-1400.webp",
+      "materialAndConstruction": "A silver bikini with long ties wrapped around the waist, photographed on a white studio ground.",
+      "savedCompanionsAtBaseline": [],
+      "rearEvidence": "No actual rear source; rear construction provisional",
+      "historicalRefusalStages": [],
+      "currentOutcome": "NOT_ATTEMPTED",
+      "latestCurrentRequestId": null,
+      "inputConstraint": "Prior input-stage request refusal involving the only available source; no genuine independent garment reference or accepted companion available. Exact offending component is not disclosed. Do not resubmit this source family or fabricate a substitute specification. No new provider decision for this view in recovery."
+    }
+  ],
+  "executedChecks": [
+    "PASS: all 101 native hashes, actual dimensions and image decoding; 40 source hashes; 31 masters, 93 panels, 124 responsive derivatives and registry",
+    "PASS: all 350 baseline artwork files byte-identical, all 97 baseline native fields preserved, all 31 complete baseline manifest records unchanged",
+    "PASS: full 31-record generated-image registry and prior production-session report byte-identical to baseline",
+    "PASS: 108 historical source fingerprints and original photographic files preserved",
+    "PASS: 204 collection identity, licensing and replacement assertions; 40 unique displayed Womenswear identities",
+    "PASS: eight recovery regression tests, including preservation of opaque white fabric/RGB pixels and rejection of stale or incomplete placement reviews",
+    "PASS: current production build, 11 pages",
+    "PASS: 144 standalone native-comparison browser assertions across six requested viewports; six actual screenshots visually inspected",
+    "PASS: four reviewed 1800x2700 proportional placement previews, floor at 2538, native bytes unchanged; all four previews visually inspected",
+    "PASS: git diff --check; no Menswear/site UI/registry/hosting changes"
+  ],
+  "exportStatus": {
+    "newCompleteMasters": 0,
+    "existingMastersPreserved": 31,
+    "panelContract": [
+      1800,
+      2700
+    ],
+    "masterContract": [
+      5400,
+      2700
+    ],
+    "reviewPreviews": 4,
+    "opaqueWhiteHandling": "Review bounds tied to native SHA256, uniform scaling and canvas placement; all RGB pixels preserved, no background threshold, no masking or recoloring. Existing alpha workflow unchanged.",
+    "incompleteSetsIntegrated": false
+  },
+  "visualReview": {
+    "scope": "Native-source/companion comparisons and four placement previews only; no complete-set/site integration claim",
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "checks": 144,
+    "screenshots": 6,
+    "results": "evidence/recovery-2026-10-23/RESULTS.json",
+    "placementReview": "evidence/recovery-2026-10-23/PLACEMENT-REVIEW.json",
+    "findings": "Actual native and comparison screenshots show source-supported necklines, materials, ties and styling, compatible model identity, natural hands/feet and complete hems. Reviewed placement previews retain complete figures at consistent scale and floor with white presentation. Very light native studio-floor grain is retained. No visible garment/anatomy/crop/graphic failure observed. Rear silver construction remains inferred; owner approval pending."
+  },
+  "mechanismConclusion": "Coarse public moderation stages do not identify the exact visual trigger or prove false positives. Opaque studio natives plus genuine independent references produced four files, but successes do not establish that background or reference choice caused prior blocks. The permitted bounded methods still received 16 refusals. No managed moderation repair, filter removal, provider bypass or new API billing occurred.",
+  "methodBoundConclusion": "Opaque accepted-companion method, genuine original garment source method where independently available, and new accepted opaque companions were evaluated. Changed references were genuine unchanged sources or accepted photographs; no cropped/obscured refused input or fabricated substitute specification was used. Refused input combinations were not resubmitted.",
+  "authorizationLimit": "Managed tool has no exposed model/fidelity/moderation controls. Direct API lacks configured credentials and spending authorization; Weave is unlinked. No external paid route used.",
+  "releaseStatus": "Incomplete: 101/120 natives, 31/40 complete looks. 19 views remain. No final PR, merge or deployment; full forty-look site QA and owner artistic approval pending."
 }

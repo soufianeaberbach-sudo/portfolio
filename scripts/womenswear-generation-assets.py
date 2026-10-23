@@ -96,6 +96,32 @@ def prepared_rgba(image, source_id):
     rgba.putalpha(removed)
     return rgba, 'Initial RGB pink/beige set only: edge-connected RGB>=248 background; original native file retained.'
 
+def reviewed_placement(image, source_id, output):
+    review = output.get('nativeBackgroundReview')
+    if image.mode == 'RGB' and review:
+        if review.get('kind') != 'opaque-white' or review.get('nativeSHA256') != output.get('sha256'):
+            raise ValueError('Opaque white placement review must identify this exact native.')
+        body = review.get('subjectBounds')
+        support = review.get('supportBounds')
+        for bounds in (body, support):
+            if not isinstance(bounds, list) or len(bounds) != 4 or not all(type(v) is int for v in bounds):
+                raise ValueError('Opaque placement requires four reviewed integer bounds.')
+            left, top, right, bottom = bounds
+            if not (0 <= left < right <= image.width and 0 <= top < bottom <= image.height):
+                raise ValueError('Reviewed opaque bounds exceed the native image.')
+        if not (support[0] <= body[0] and support[1] <= body[1] and support[2] >= body[2] and support[3] >= body[3]):
+            raise ValueError('Reviewed support must contain the complete subject.')
+        # Keep every RGB pixel, including white fabric and highlights. The bounds
+        # measure placement only; they never mask, recolour or remove background.
+        return image.convert('RGBA'), tuple(body), tuple(support), 'Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold.'
+    rgba, method = prepared_rgba(image, source_id)
+    alpha = rgba.getchannel('A')
+    body = alpha.point(lambda value: 255 if value >= 160 else 0).getbbox()
+    support = alpha.point(lambda value: 255 if value >= 10 else 0).getbbox()
+    if body is None or support is None:
+        raise ValueError('Empty subject')
+    return rgba, body, support, method
+
 def assemble(source_id):
     manifest = read_manifest()
     look = next(item for item in manifest['looks'] if item['sourceIdentity'] == source_id)
@@ -111,11 +137,7 @@ def assemble(source_id):
         if not output:
             raise ValueError(f'Missing actual {view} image')
         native = Image.open(ROOT / 'public' / output['nativeAsset'].lstrip('/'))
-        rgba, matte_method = prepared_rgba(native, source_id)
-        alpha = rgba.getchannel('A')
-        body_box = alpha.point(lambda value: 255 if value >= 160 else 0).getbbox()
-        if body_box is None:
-            raise ValueError('Empty subject')
+        rgba, body_box, support, matte_method = reviewed_placement(native, source_id, output)
         left, top, right, bottom = body_box
         # Uniform scaling only. Measured opaque figure is at most 88% high and
         # 82% wide. Floor aligns at 94%; soft alpha shadow remains below the sole.
@@ -125,7 +147,6 @@ def assemble(source_id):
         y = round(2538 - bottom * scale)
         # An oversized transparent canvas is harmless; no non-transparent content
         # may leave the panel. Check actual support after the same uniform transform.
-        support = alpha.point(lambda value: 255 if value >= 10 else 0).getbbox()
         sl, st, sr, sb = support
         if min(x + sl * scale, y + st * scale) < 0 or x + sr * scale > 1800 or y + sb * scale > 2700:
             raise ValueError(f'{view}: subject/shadow exceeds safe canvas; revise framing, never crop anatomy.')
@@ -136,7 +157,8 @@ def assemble(source_id):
         panels.append(panel)
         output.update({'asset': f'/portfolio/generated/{look["generatedIdentity"]}/{view}.png', 'exportWidth': 1800, 'exportHeight': 2700,
                        'resampled': native.size != (1800, 2700), 'qualityStatus': 'VISUAL_PASS_NATIVE_RESOLUTION_LIMITED'})
-        metrics.append({'view': view, 'nativeDimensions': list(native.size), 'nativeOpaqueBox': list(body_box), 'uniformScale': scale,
+        bounds_key = 'nativeSubjectBox' if native.mode == 'RGB' and output.get('nativeBackgroundReview') else 'nativeOpaqueBox'
+        metrics.append({'view': view, 'nativeDimensions': list(native.size), bounds_key: list(body_box), 'uniformScale': scale,
                         'exportOpaqueBox': [round(x + left * scale), round(y + top * scale), round(x + right * scale), round(y + bottom * scale)],
                         'backgroundPreparation': matte_method})
     master = Image.new('RGB', (5400, 2700), 'white')

@@ -1,3 +1,60 @@
+# Latest production recovery — 23 October 2026
+
+Verified start: `ba083f05c7509e48989b79e1a11b6b1afdd67332`.
+**97 starting natives + 4 new = 101/120 accepted natives. 31/40 complete masters,
+five partial looks, four without generated imagery, 19 missing views.**
+
+New genuine files: evening-ref-02 Front; swimwear-ref-04 Editorial;
+swimwear-ref-02 Front and Back. Each was visually inspected, registered, hashed,
+pushed and remotely verified before the next generation. Three are 1086×1448 RGB;
+evening Front is 1084×1451 RGB. Opaque white studio natives are retained unchanged.
+
+20 production calls across 16 distinct missing views: four accepted files,
+13 output moderation refusals and three input moderation refusals. Seven views
+were not attempted because refused source-input combinations had no independently
+available garment reference/companion. They are not new moderation decisions.
+Exact requests, request IDs, view assessments and capabilities are in
+[the recovery record](PRODUCTION-RECOVERY-2026-10-23.json).
+
+The supported opaque-white studio method and genuine source/accepted-companion
+methods produced files, but do not identify the exact moderation trigger or
+establish a filtering repair. The managed tool exposes no model/fidelity/
+moderation controls. Direct API credentials/spending are not configured or
+authorized; Weave is unlinked. No new account, paid API or safeguard bypass used.
+
+| Source | Still missing |
+| --- | --- |
+| swimwear-ref-04 | Back |
+| swimwear-ref-05 | Back, Editorial |
+| evening-ref-02 | Editorial |
+| swimwear-ref-06 | Front, Editorial |
+| activewear-ref-09 | Front, Back, Editorial |
+| swimwear-ref-01 | Front, Back, Editorial |
+| swimwear-ref-02 | Editorial |
+| swimwear-ref-03 | Front, Back, Editorial |
+| swimwear-ref-07 | Front, Back, Editorial |
+
+All 350 baseline artwork files, 97 baseline natives, 31 complete manifest records,
+the 31-entry registry and historical source photographs remain preserved.
+The existing export script now supports explicit SHA-bound review geometry for
+opaque white natives without clearing or recoloring any RGB pixel. Four
+1800×2700 placement previews are review evidence only; no new master/integration
+was created. The standard master contract remains 5400×2700.
+
+Current checks: hashes/dimensions/decoding/registry; source integrity; 204 collection
+checks; eight recovery tests; production build (11 pages); 144 standalone native
+browser assertions across all six required viewports. All six comparison
+screenshots and four placement previews were visually inspected. See
+[comparison results](evidence/recovery-2026-10-23/RESULTS.json) and
+[placement evidence](evidence/recovery-2026-10-23/PLACEMENT-REVIEW.json).
+This is partial-native review, not full forty-look website QA or owner approval.
+
+No final PR, merge or deployment. No Menswear/UI/hosting changes. The containing
+commit is the next checkpoint; verify it against the remote branch. Earlier
+session reports below remain historical evidence.
+
+---
+
 # Production checkpoint — 23 October 2026
 
 Image generation works today. The first requested swimwear-ref-08 Editorial

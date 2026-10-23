@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T09:58:17.965804+00:00",
+  "updatedUTC": "2026-10-23T10:22:32.806845+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 4,
@@ -17,10 +17,10 @@
     "PENDING": 4,
     "GENERATED": 5
   },
-  "currentCategory": "swimwear",
-  "currentSourceIdentity": "swimwear-ref-02",
-  "currentMilestone": "recovered-back-native",
-  "lastSuccessfullyPushedCommit": "f637def3a38c5ddcaf91d06f8c7011608c8b130a",
+  "currentCategory": "activewear",
+  "currentSourceIdentity": null,
+  "currentMilestone": "final-moderation-recovery-checkpoint",
+  "lastSuccessfullyPushedCommit": "e138199b42140b5064d36b3d20c6abe80cef6bcc",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -131,7 +131,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 164ec3b8-ef0f-4d67-aba0-26742af9042d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "164ec3b8-ef0f-4d67-aba0-26742af9042d"
+          "requestId": "164ec3b8-ef0f-4d67-aba0-26742af9042d",
+          "httpStatus": 400
         },
         {
           "view": "back",
@@ -147,7 +148,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 76f0a2a8-49b4-40f8-b009-d802383c5cb5. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "76f0a2a8-49b4-40f8-b009-d802383c5cb5"
+          "requestId": "76f0a2a8-49b4-40f8-b009-d802383c5cb5",
+          "httpStatus": 400
         },
         {
           "view": "editorial",
@@ -163,7 +165,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 41da0a86-1062-4806-ba4c-63e1eee4995c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "41da0a86-1062-4806-ba4c-63e1eee4995c"
+          "requestId": "41da0a86-1062-4806-ba4c-63e1eee4995c",
+          "httpStatus": 400
         }
       ]
     },
@@ -280,7 +283,25 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 726ab85c-51f6-4973-8a13-2651811ee74f. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "726ab85c-51f6-4973-8a13-2651811ee74f"
+          "requestId": "726ab85c-51f6-4973-8a13-2651811ee74f",
+          "httpStatus": 400
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T10:06:03.222Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial occasionwear catalogue photograph directly from this original two-view garment source. Use the exact adult source model with natural proportions, matching facial features and chestnut hair in the neat low updo. Preserve the beige honeycomb-mesh gown: broad straight off-shoulder folded band over both upper arms, original tonal foundation layers and mesh transparency, fitted column through hips, gentle flare into the complete pooling floor hem, low open back and original thin horizontal back tie with long ends. Exact beige material, honeycomb scale, neckline and garment proportions; no new lining, slit, straps or trim. One restrained front three-quarter standing pose with a gentle natural weight shift, relaxed natural hands and neutral professional expression. Opaque seamless white cyclorama and white studio floor, balanced neutral soft studio light, realistic textile and subtle natural floor-contact shadow. Full head, hands and all hem edges comfortably inside generous full-length portrait margins. Exactly one adult professional model in one photograph; no typography, logos, props, graphics, border, collage, diptych or second figure. Non-sexual commercial garment presentation. Preserve outfit and coverage unchanged; construction is provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 58da8827-8f1a-45bb-b823-6d96c922d436. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "58da8827-8f1a-45bb-b823-6d96c922d436",
+          "httpStatus": 400
         }
       ]
     },
@@ -395,7 +416,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f2e46082-066f-4811-a417-c16328b66edb. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "f2e46082-066f-4811-a417-c16328b66edb"
+          "requestId": "f2e46082-066f-4811-a417-c16328b66edb",
+          "httpStatus": 400
         },
         {
           "view": "editorial",
@@ -411,7 +433,25 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID b79b5f98-8f4b-427c-8064-24121f3ec71a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a"
+          "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a",
+          "httpStatus": 400
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T10:04:18.716Z",
+          "generationPrompt": "Create one new full-length Editorial commercial catalogue photograph directly from this original garment photograph. Keep the exact adult source model, facial features, center-part brunette low bun, dark square sunglasses, small hoop earrings, bare feet and natural proportions. Preserve the grey scoop swim top layered over the original white halter, grey shoulder straps, matching grey high-waisted bottom and original narrow crossed waist straps, source material, color, cut and coverage. Quiet slight front three-quarter stance with a small natural weight shift, relaxed natural hands and calm catalogue expression. Opaque seamless white studio cyclorama and white floor with balanced neutral soft studio light, realistic skin/textile detail and subtle natural floor-contact shadow. Full head, both hands, all garment edges and feet comfortably inside generous portrait margins. Exactly one adult professional model in one photograph; no text, logos, graphics, props, border, collage or duplicate figures. Non-sexual commercial garment presentation. Preserve outfit and styling unchanged; unseen rear construction remains provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/5-1400.webp"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 37b02af0-c5b8-4967-8955-ae2be1fb44f1. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "37b02af0-c5b8-4967-8955-ae2be1fb44f1",
+          "httpStatus": 400
         }
       ]
     },
@@ -506,7 +546,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 9e55a433-90ee-4936-9e88-921e2b6fd91c. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c"
+          "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c",
+          "httpStatus": 400
         },
         {
           "view": "editorial",
@@ -523,7 +564,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 51a1ca64-7c48-4bd8-8d3a-b26bd036282b. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b"
+          "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b",
+          "httpStatus": 400
         }
       ]
     },
@@ -635,7 +677,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 4975f0f1-78e7-4f36-b4ca-71499a47e3ae. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
-          "requestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae"
+          "requestId": "4975f0f1-78e7-4f36-b4ca-71499a47e3ae",
+          "httpStatus": 400
         },
         {
           "view": "back",
@@ -651,7 +694,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 0072d826-24eb-4b4d-9ba1-7b2b1062f258. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "input",
-          "requestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258"
+          "requestId": "0072d826-24eb-4b4d-9ba1-7b2b1062f258",
+          "httpStatus": 400
         }
       ]
     },
@@ -747,6 +791,41 @@
           "moderationStage": "output",
           "category": "sexual",
           "requestId": "e5f6784e-716d-4ed1-83f7-f6757cc9b08d",
+          "httpStatus": 400
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T10:00:34.487Z",
+          "generationPrompt": "Make one distinct full-length Editorial commercial catalogue photograph of the same adult model and exact silver swim set in the accepted Front and Back. Use Front as primary for her face, natural proportions, center-part brunette low bun, gold hoops, bare feet and reflective silver triangle halter design; Back checks the matching provisional rear tie arrangement. Keep the identical thin halter and back ties, silver triangular panels, gathering, original lower garment and long side bows, material, cut and coverage. Quiet front three-quarter standing orientation with a small natural weight shift, relaxed natural hands and calm catalogue expression. Match the accepted photographs' opaque clean white cyclorama and white floor, balanced neutral studio light, realistic skin and metallic textile reflections and subtle natural floor-contact shadow. Full head, both hands, all ties and feet comfortably inside generous portrait margins. Exactly one adult professional model in one photograph, no text, logos, props, graphics, border, collage or duplicate figure. Non-sexual commercial garment presentation. Preserve outfit and styling unchanged. Rear construction remains provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v1/front-native.png",
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v1/back-native.png"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 53775076-002c-48c5-b2ee-af2d374f049a. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "53775076-002c-48c5-b2ee-af2d374f049a",
+          "httpStatus": 400
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T10:07:40.602Z",
+          "generationPrompt": "Create one distinct full-length Editorial commercial catalogue photograph directly from this unchanged original garment photograph. Preserve the exact adult source model, natural proportions, center-part brunette low bun, small gold hoops and bare feet. Same metallic silver triangle halter top with original thin neck and lower-band ties, triangular gathered panels, matching silver lower garment and long side bows, original cut and coverage. Quiet front three-quarter orientation with a gentle natural weight shift and relaxed natural hands, neutral professional expression. Keep silver textile reflections realistic and match the source model and styling. Opaque seamless white studio cyclorama and white floor with balanced neutral soft light and a subtle natural floor-contact shadow. Whole head, both hands, all ties and both feet comfortably inside generous full-length portrait margins. Exactly one adult professional model in one photograph; no text, logos, graphics, props, border, collage, diptych or duplicate figure. Non-sexual commercial garment presentation. No changes to outfit, material, color or styling. Unseen rear construction remains provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/swim/2-1400.webp"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 075e522d-dede-4fb0-9941-a059d0c068a3. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "075e522d-dede-4fb0-9941-a059d0c068a3",
           "httpStatus": 400
         }
       ]
@@ -966,7 +1045,8 @@
           "transparentBackground": false,
           "assetProduced": false,
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID aea5dadc-4235-434f-973e-089801cf7d0d. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
-          "method": "Opaque white studio native photograph"
+          "method": "Opaque white studio native photograph",
+          "httpStatus": 400
         },
         {
           "view": "back",
@@ -982,7 +1062,8 @@
           "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID d0b014bb-a4fb-431b-9537-d3ec650961dd. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"input\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
           "status": "MODERATION_REFUSED",
           "moderationStage": "input",
-          "requestId": "d0b014bb-a4fb-431b-9537-d3ec650961dd"
+          "requestId": "d0b014bb-a4fb-431b-9537-d3ec650961dd",
+          "httpStatus": 400
         }
       ]
     },
@@ -1125,12 +1206,13 @@
       ]
     }
   ],
-  "notes": "101 accepted genuine natives. Swimwear 02 Back generated from its saved opaque Front, visually reviewed and marked provisional rear construction. Save and remotely verify before Editorial. All baseline artwork preserved.",
+  "notes": "Recovery saved 4 new native photographs: 101/120 accepted, 31/40 complete masters, 19 missing views. 20 requests across 16 distinct views: 4 accepted, 13 output refusals, 3 input refusals; 7 current-pass views not attempted due input/reference constraints. Supported opaque studio and genuine reference methods evaluated without safeguard bypass or paid API use. All 97 baseline natives, 350 artwork files and 31 masters preserved. Build, source integrity, 204 collection checks, 8 recovery tests, 144 six-viewport native comparison checks and 4 exact placement previews pass. No final PR, merge or deployment.",
   "limitations": [
-    "31 genuine complete provisional sets and four partial sets; 23 views remain unavailable after provider moderation decisions or source-input blocks.",
-    "All original 92 natives, 329 baseline artwork files, historical sources and 29 complete baseline records are preserved.",
-    "Native dimensions vary and remain explicit; standard panels and masters are disclosed resampled exports.",
-    "Owner artistic approval, full forty-look final QA and final PR remain pending; no merge or deployment."
+    "31 actual complete sets; five partial sets; four without generated imagery. 19 genuine views remain missing.",
+    "All 97 baseline native photographs and all 350 baseline artwork files are byte-identical.",
+    "Native resolutions remain explicit. Four new RGB natives have reviewed geometry without background removal; no incomplete master or site integration was made.",
+    "No exact moderation trigger or guaranteed filtering fix established; controlled API route unavailable without connection/spending authorization.",
+    "Full forty-look site QA, owner artistic approval and final PR remain pending. No merge or deployment."
   ],
   "remainingLooks": 9,
   "nextImage": null,
@@ -1154,14 +1236,13 @@
     {
       "sourceIdentity": "swimwear-ref-04",
       "savedViews": [
-        "front"
-      ],
-      "missingViews": [
-        "back",
+        "front",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "missingViews": [
+        "back"
+      ],
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "swimwear-ref-05",
@@ -1172,8 +1253,29 @@
         "back",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "missingViews": [
+        "editorial"
+      ],
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "savedViews": [
+        "back"
+      ],
+      "missingViews": [
+        "front",
+        "editorial"
+      ],
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "activewear-ref-09",
@@ -1183,20 +1285,7 @@
         "back",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
-    },
-    {
-      "sourceIdentity": "evening-ref-02",
-      "savedViews": [
-        "back"
-      ],
-      "missingViews": [
-        "front",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "swimwear-ref-01",
@@ -1206,19 +1295,18 @@
         "back",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "swimwear-ref-02",
-      "savedViews": [],
-      "missingViews": [
+      "savedViews": [
         "front",
-        "back",
+        "back"
+      ],
+      "missingViews": [
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "swimwear-ref-03",
@@ -1228,22 +1316,7 @@
         "back",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": [
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-06",
-      "savedViews": [
-        "back"
-      ],
-      "missingViews": [
-        "front",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": []
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     },
     {
       "sourceIdentity": "swimwear-ref-07",
@@ -1253,21 +1326,18 @@
         "back",
         "editorial"
       ],
-      "status": "BLOCKED_PROVIDER_MODERATION",
-      "inputDependentUnrequestedViews": [
-        "editorial"
-      ]
+      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
     }
   ],
   "partialResumePoints": [
     {
       "sourceIdentity": "swimwear-ref-04",
       "savedViews": [
-        "front"
+        "front",
+        "editorial"
       ],
       "missingViews": [
-        "back",
-        "editorial"
+        "back"
       ]
     },
     {
@@ -1283,10 +1353,10 @@
     {
       "sourceIdentity": "evening-ref-02",
       "savedViews": [
+        "front",
         "back"
       ],
       "missingViews": [
-        "front",
         "editorial"
       ]
     },
@@ -1299,12 +1369,22 @@
         "front",
         "editorial"
       ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "missingViews": [
+        "editorial"
+      ]
     }
   ],
-  "nativeResolutionNote": "87 original accepted natives at 1024x1536, 9 at 1086x1448 and 1 at 1084x1451. All native bytes unchanged; 1800x2700 panels and 5400x2700 masters use proportional resampling.",
+  "nativeResolutionNote": "87 natives at 1024x1536, 12 at 1086x1448, 2 at 1084x1451. Four new recovery natives are RGB white-studio files, retained unchanged. Reviewed proportional placements preserve every RGB pixel; standard master geometry remains 5400x2700.",
   "acceptedNativeImages": 101,
   "missingIndividualViews": 19,
-  "moderationBlockedIndividualViews": 21,
+  "moderationBlockedIndividualViews": 17,
   "currentToolAvailability": {
     "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
     "reasoningErrorRecurred": false,
@@ -1312,7 +1392,7 @@
   },
   "freshSessionAcceptedImages": 4,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 12,
+  "freshSessionModerationFailures": 16,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,
@@ -1321,11 +1401,11 @@
     {
       "sourceIdentity": "swimwear-ref-04",
       "savedViews": [
-        "front"
+        "front",
+        "editorial"
       ],
       "missingViews": [
-        "back",
-        "editorial"
+        "back"
       ]
     },
     {
@@ -1339,48 +1419,12 @@
       ]
     },
     {
-      "sourceIdentity": "activewear-ref-09",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
       "sourceIdentity": "evening-ref-02",
       "savedViews": [
+        "front",
         "back"
       ],
       "missingViews": [
-        "front",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-01",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-02",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-03",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
         "editorial"
       ]
     },
@@ -1395,6 +1439,43 @@
       ]
     },
     {
+      "sourceIdentity": "activewear-ref-09",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "savedViews": [
+        "front",
+        "back"
+      ],
+      "missingViews": [
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "savedViews": [],
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
       "sourceIdentity": "swimwear-ref-07",
       "savedViews": [],
       "missingViews": [
@@ -1403,5 +1484,16 @@
         "editorial"
       ]
     }
-  ]
+  ],
+  "latestProductionRecovery": {
+    "report": "PRODUCTION-RECOVERY-2026-10-23.json",
+    "startingNatives": 97,
+    "newAcceptedNatives": 4,
+    "actualCalls": 20,
+    "inputRefusals": 3,
+    "outputRefusals": 13,
+    "distinctViewsAttempted": 16,
+    "notAttemptedViews": 7,
+    "remainingViews": 19
+  }
 }

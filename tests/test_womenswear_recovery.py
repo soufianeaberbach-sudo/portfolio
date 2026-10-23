@@ -81,6 +81,36 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(self.manifest.read_bytes(), before)
         self.assertFalse((self.root / 'public').exists())
 
+    def test_reviewed_white_native_preserves_white_fabric_and_all_rgb_pixels(self):
+        native = Image.new('RGB', (20, 30), 'white')
+        native.putpixel((10, 10), (253, 254, 252))
+        native.putpixel((10, 20), (25, 30, 40))
+        before = native.tobytes()
+        output = {'sha256': 'reviewed-native', 'nativeBackgroundReview': {
+            'kind': 'opaque-white', 'nativeSHA256': 'reviewed-native',
+            'subjectBounds': [5, 2, 15, 28], 'supportBounds': [2, 1, 18, 30],
+        }}
+        rgba, body, support, _ = assets.reviewed_placement(native, 'look', output)
+        self.assertEqual(rgba.convert('RGB').tobytes(), before)
+        self.assertEqual(rgba.getchannel('A').getextrema(), (255, 255))
+        self.assertEqual(body, (5, 2, 15, 28))
+        self.assertEqual(support, (2, 1, 18, 30))
+        self.assertEqual(native.tobytes(), before)
+
+    def test_white_placement_rejects_stale_review_and_incomplete_support(self):
+        native = Image.new('RGB', (20, 30), 'white')
+        output = {'sha256': 'new-native', 'nativeBackgroundReview': {
+            'kind': 'opaque-white', 'nativeSHA256': 'old-native',
+            'subjectBounds': [5, 2, 15, 28], 'supportBounds': [6, 1, 18, 30],
+        }}
+        with self.assertRaisesRegex(ValueError, 'exact native'):
+            assets.reviewed_placement(native, 'look', output)
+        output['nativeBackgroundReview']['nativeSHA256'] = 'new-native'
+        with self.assertRaisesRegex(ValueError, 'complete subject'):
+            assets.reviewed_placement(native, 'look', output)
+        with self.assertRaisesRegex(ValueError, 'explicit review'):
+            assets.reviewed_placement(native, 'look', {})
+
 
 if __name__ == '__main__':
     unittest.main()
