@@ -288,7 +288,39 @@
         "reviewNotes": "Genuine rear, same short brown hair, boxy navy jersey, sand chino shorts and cream canvas shoe heels. Plain back, side seams and broad sleeves consistent; no moved front closures.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1770346,
+        "nativeMode": "RGB",
+        "sha256": "fbd11a13fdf1fc137200e3c1ceb356fae9f64c3043c3c2c1442c05dd1bdf76a2",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-6c9d0fe4-be3c-4f52-ae90-3ead15f4ed26.png",
+        "generatedAt": "2026-10-23T23:18:54.678807+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-02-editorial.txt",
+        "promptSHA256": "162bcbe5085d7b71ff86985df564c66c23ab749ccd207c33d04f795c44e56e02",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/editorial.png",
+        "exportSHA256": "9d5d937ab590f4766940f4dff00a09b4447a30ce7a25ce92f70b5ad697268fa0",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/editorial-600.webp",
+        "previewSHA256": "df2749bd2eaf41e374a3a5bb6ef1288e005bb601e4e123a6ba965c0275e9d0fc",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same natural model and outfit, relaxed three-quarter step and pocket hand. Heavy jersey drape, boxy shoulders and short hems retained; fashion posture distinct from product stance.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -3539,7 +3571,7 @@
       "key": "mw-r2-casualwear-02:editorial",
       "look": "mw-r2-casualwear-02",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4404,6 +4436,15 @@
       "at": "2026-10-23T23:18:48.772356+00:00",
       "notes": "Genuine rear, same short brown hair, boxy navy jersey, sand chino shorts and cream canvas shoe heels. Plain back, side seams and broad sleeves consistent; no moved front closures.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-02",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:18:54.682492+00:00",
+      "notes": "Same natural model and outfit, relaxed three-quarter step and pocket hand. Heavy jersey drape, boxy shoulders and short hems retained; fashion posture distinct from product stance.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4416,11 +4457,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 8,
-    "acceptedActivePhotographs": 29,
+    "acceptedActivePhotographs": 30,
     "incompleteLooks": 32,
     "completedMasters": 8,
     "unresolvedViews": [
-      "mw-r2-casualwear-02:editorial",
       "mw-r2-casualwear-04:front",
       "mw-r2-casualwear-04:back",
       "mw-r2-casualwear-04:editorial",
