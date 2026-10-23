@@ -2,7 +2,12 @@ import type {FinalViews,ImageCredit,MarketCategory,Subject} from './portfolio';
 import {projectSubject,referenceSubject} from './portfolio';
 import {exhibitionImage} from './womenswear-exhibition';
 import additions from './womenswear-references.json';
+import generated from './womenswear-generated.json';
 const externalReferences=additions.map(r=>({...r,image:{...r.image,views:1 as const}}));
+const generatedReferences=generated.filter(r=>r.integrated).map(r=>({...r,image:{...r.image,views:3 as const,thirdView:'editorial' as const}}));
+/** New presentations have their own identities; historical routes retain original pixels. */
+export const generatedPresentation=(id:string)=>generatedReferences.find(r=>r.id===id);
+export const featuredIdentity=(sourceId:string)=>generatedReferences.find(r=>r.sourceIdentity===sourceId)?.id??sourceId;
 
 /** Display order is independent of the immutable historical reference arrays.
  * Replace photography here, retaining the slot's ID and category URL. Only
@@ -24,11 +29,15 @@ export const collectionSlots:Record<string,CollectionSlot[]>={
  swimwear:slots('swimwear',[1,2,3,4,5,6,7,8,9,10]),
 };
 // Four public edits, independent of the five immutable source pools.
-export const editorialSlots:Record<string,CollectionSlot[]>={
+const sourceEditorialSlots:Record<string,CollectionSlot[]>={
  casualwear:[...slots('rtw',[2,3,4,5,15]),...slots('streetwear',[1,2,4,5,10])].map(slot=>Object.values(collectionSlots).flat().find(source=>source.id===slot.id)!),
  activewear:collectionSlots.activewear,evening:collectionSlots.evening,swimwear:collectionSlots.swimwear,
 };
+export const editorialSlots:Record<string,CollectionSlot[]>=Object.fromEntries(Object.entries(sourceEditorialSlots).map(([world,selection])=>[world,selection.map(slot=>{
+ const id=featuredIdentity(slot.id);return id===slot.id?slot:{id};
+})]));
 export function collectionCredit(category:MarketCategory,id:string):ImageCredit|undefined {
+ const presentation=generatedPresentation(id);if(presentation)return presentation.credit;
  const slot=collectionSlots[category.id]?.find(s=>s.id===id);
  // Replacing a photograph must not retain the former creator's credit.
  if(slot?.photography)return slot.credit;
@@ -45,9 +54,10 @@ export function slotPhotographs(subject:Subject,slot:CollectionSlot):Subject {
  return {...subject,cover,views:parsed.views,caption:cover.alt};
 }
 export function referenceCollection(category:MarketCategory,world:string):Subject[] {
- const references=[...category.references,...externalReferences.filter(r=>r.category===category.id)];
+ const references=[...category.references,...externalReferences.filter(r=>r.category===category.id),...generatedReferences.filter(r=>r.category===category.id)];
  return references.map(reference=>{
   let subject=referenceSubject({...reference,image:exhibitionImage(reference.image)},world,category.id);
+  const presentation=generatedPresentation(subject.id);if(presentation)subject={...subject,caption:presentation.caption};
   if(additions.some(r=>r.id===reference.id))subject={...subject,views:subject.views.map(v=>({...v,label:'Primary photograph'}))};
   const slot=collectionSlots[category.id]?.find(s=>s.id===subject.id);
   return slot?slotPhotographs(subject,slot):subject;

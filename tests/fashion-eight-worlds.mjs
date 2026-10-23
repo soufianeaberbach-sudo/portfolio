@@ -1,11 +1,13 @@
 /** Owner acceptance: four + four worlds, original routes and genuinely native continuity. */
-import assert from'node:assert/strict';import{chromium}from'playwright';import{build}from'esbuild';import{mkdirSync,writeFileSync}from'node:fs';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';
+import assert from'node:assert/strict';import{chromium}from'playwright';import{build}from'esbuild';import{mkdirSync,writeFileSync,readFileSync}from'node:fs';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';
 const out=process.env.CORRECTION_QA_DIR||'.qa-director/correction/acceptance';mkdirSync(out,{recursive:true});
 const bundled=await build({stdin:{contents:"export{womenswear}from'./src/data/portfolio';export*from'./src/data/womenswear-collection';export*from'./src/data/menswear-collection';",resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});
 const data=await import('data:text/javascript;base64,'+Buffer.from(bundled.outputFiles[0].text).toString('base64'));
 const pools=[...data.womenswear.categories.flatMap(c=>data.referenceCollection(c,'womenswear')),...['m-streetwear','m-activewear','m-rtw','m-tailoring'].flatMap(data.menswearPool)];
+const generated=JSON.parse(readFileSync('src/data/womenswear-generated.json','utf8')).filter(r=>r.integrated);
 let checks=0;const records=[];function check(ok,label){assert(ok,label);checks++;records.push(label);}
-check(pools.length===108&&new Set(pools.map(s=>s.id)).size===108,'108 unchanged unique subject identities');
+check(pools.length===108+generated.length&&new Set(pools.map(s=>s.id)).size===108+generated.length,'108 preserved identities plus unique AI presentation routes');
+check(pools.filter(s=>!data.generatedPresentation(s.id)).length===108,'all 108 historical subjects remain independently routable');
 const ww=['casualwear','activewear','evening','swimwear'],mw=['m-streetwear','m-activewear','m-rtw','m-tailoring'];
 const labels=['Casualwear','Activewear','Occasionwear','Swimwear'];
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',b=await chromium.launch();
@@ -18,7 +20,7 @@ try{
  const archiveIds=[];for(const cat of[...ww,...mw]){const doors=p.locator(ww.includes(cat)?`[data-ww-archive=${cat}] .ww-rail a`:`[data-mw-film=${cat}] [data-mw-archive-door]`),ids=await doors.evaluateAll(es=>es.map(e=>e.dataset.openSubject));check(ids.length===10&&new Set(ids).size===10,cat+': ten primary unique looks');archiveIds.push(...ids);}
  check(archiveIds.length===80&&new Set(archiveIds).size===80,'80 unique primary displayed identities');
  check(await p.locator('[data-mw-reference-door]').count()===50,'discreet full Menswear reference access');
- check(await p.locator('[data-all-references] [data-reference-link]').count()===58,'discreet full Womenswear reference access');
+ check(await p.locator('[data-all-references] [data-reference-link]').count()===58+generated.length,'discreet full Womenswear reference and provisional presentation access');
  for(const s of pools){await p.evaluate(s=>location.hash=`#${s.world}/${s.category}/${s.id}`,s);await p.waitForFunction(id=>document.querySelector(`[data-subject="${id}"]:not([hidden])`),s.id);const r=p.locator(`[data-subject="${s.id}"]:not([hidden])`);check(await r.getAttribute('data-of')===s.category,`${s.id}: immutable source category`);check(await r.locator('img').first().getAttribute('src')===s.views[0].image.src,`${s.id}: original reader image at historical URL`);await r.locator('img').first().evaluate(im=>im.decode());check(await r.locator('img').first().evaluate(im=>im.naturalWidth>0&&im.naturalHeight>0),`${s.id}: actual historical photograph decoded`);}
  for(const alias of['rtw','streetwear','casualwear']){await p.evaluate(alias=>location.hash='#womenswear/'+alias,alias);await p.waitForTimeout(120);check(await p.locator('[data-act-name]').textContent()==='Casualwear',alias+': arrives in Casualwear');check((await p.locator('[data-act-count]').textContent()).trim()==='01 / 04',alias+': four-world counter');}
  await p.goto(base+'/portfolio/#womenswear/rtw/rtw-ref-01');await p.keyboard.press('Escape');await p.waitForTimeout(150);check(await p.evaluate(()=>location.hash)==='#womenswear/casualwear','excluded historical garment closes into correct editorial context');check(await p.locator('[data-act-toggle]').evaluate(e=>e===document.activeElement),'historical no-source return focus');

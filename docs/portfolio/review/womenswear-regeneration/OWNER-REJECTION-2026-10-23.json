@@ -1,0 +1,41 @@
+{
+  "status": "STOPPED_BY_OWNER",
+  "recordedUTC": "2026-10-23T14:35:44.620720+00:00",
+  "imageGenerationCallsAfterStop": 0,
+  "rejectedConcepts": [
+    {
+      "generatedIdentity": "ww-ai-swimwear-ref-04-v2",
+      "ownerDecision": "OWNER_REJECTED",
+      "featuredIdentity": "swimwear-ref-04",
+      "featuredImage": "/portfolio/swim/4-1400.webp"
+    },
+    {
+      "generatedIdentity": "ww-ai-evening-ref-02-v2",
+      "ownerDecision": "OWNER_REJECTED",
+      "featuredIdentity": "evening-ref-02",
+      "featuredImage": "/portfolio/evening/2-1400.webp"
+    }
+  ],
+  "otherFeaturedLooksUnchanged": 38,
+  "allExistingGeneratedArtworkFilesPreserved": 379,
+  "physicalMastersRetained": 33,
+  "completeActiveAILooksExcludingRejected": 31,
+  "ownerRejectedLooksCountedAsAcceptedCompletions": 0,
+  "preservedUnreviewedPreStopOutput": "evidence/owner-stop-2026-10-23/interrupted-output.json",
+  "validation": {
+    "recoveryAndVersionTests": 12,
+    "focusedBrowserAndMappingChecks": 190,
+    "featuredIdentityChecks": 204,
+    "historicalFingerprintsPreserved": 108,
+    "manifestSourceNativeArchiveMasterValidation": "PASS",
+    "productionBuild": "PASS: 11 pages",
+    "screenshotsVisuallyInspected": [
+      "1440x900: original magenta swimwear and beige occasionwear, complete figures, original captions and controls",
+      "390x844: same historical assets and captions, complete framing, no transition clone after settling"
+    ],
+    "noOtherFeaturedMappingChanged": true
+  },
+  "nextAction": "Await a new owner-approved visual brief. No further design, casting, replacement concept or image generation authorized.",
+  "merged": false,
+  "deployed": false
+}

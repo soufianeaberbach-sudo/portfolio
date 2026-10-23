@@ -20,6 +20,7 @@ import { installFonts } from './fixtures/fonts.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
+const generatedPresentations=require('../src/data/womenswear-generated.json').filter(r=>r.integrated);
 
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const HOST = '127.0.0.1';
@@ -531,15 +532,15 @@ try {
         readers: readers.map(r => r.dataset.subject),
         open: readers.filter(r => !r.hidden).length,
         invented: w.querySelectorAll('[data-st]').length,
-        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>p.textContent.includes('REFERENCE PHOTOGRAPHY')).length,
+        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>p.textContent.includes('REFERENCE PHOTOGRAPHY')||p.textContent.includes('AI-GENERATED / PROVISIONAL')).length,
         ground: getComputedStyle(w).backgroundColor,
       };
     }, world);
     check('the four public worlds have the required order', act.ids.join(',') === 'casualwear,activewear,evening,swimwear');
     check('every category remains reachable from the control', act.control.join(',') === act.ids.join(','));
-    check('40 displayed garments have readers; eighteen excluded historical IDs retain direct readers',
-      new Set(act.doors).size === 40 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58
-        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === ['rtw-ref-01','rtw-ref-06','rtw-ref-07','rtw-ref-08','rtw-ref-09','rtw-ref-10','rtw-ref-11','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','streetwear-ref-03','streetwear-ref-06','streetwear-ref-07','streetwear-ref-08','streetwear-ref-09','evening-ref-09'].sort().join(','));
+    check('40 displayed garments have readers; all excluded and replaced historical IDs retain direct readers',
+      new Set(act.doors).size === 40 && act.doors.every(id => act.readers.includes(id)) && act.readers.length === 58+generatedPresentations.length
+        && act.readers.filter(id=>!act.doors.includes(id)).sort().join(',') === [...['rtw-ref-01','rtw-ref-06','rtw-ref-07','rtw-ref-08','rtw-ref-09','rtw-ref-10','rtw-ref-11','rtw-ref-12','rtw-ref-13','rtw-ref-14','rtw-ref-16','rtw-ref-17','streetwear-ref-03','streetwear-ref-06','streetwear-ref-07','streetwear-ref-08','streetwear-ref-09','evening-ref-09'],...generatedPresentations.map(r=>r.sourceIdentity)].sort().join(','));
     check('readers stay closed until requested', act.open === 0);
     check('no process evidence is fabricated', act.invented === 0 && act.pending === act.readers.length);
     check('white photographs share the exhibition ground', act.ground === 'rgb(255, 255, 255)');
@@ -709,7 +710,7 @@ try {
       };
     });
     check('a cell in the range is a real link to that garment',
-      /^#womenswear\/rtw\/rtw-ref-\d\d$/.test(before.href), before.href);
+      before.href===`#womenswear/rtw/${generatedPresentations.find(r=>r.sourceIdentity==='rtw-ref-02')?.id??'rtw-ref-02'}` && before.href.endsWith('/'+before.id), before.href);
 
     await p.evaluate(() => document.querySelector('[data-territory="casualwear"] .ww-rail a').click());
     await p.waitForTimeout(900);
@@ -729,7 +730,7 @@ try {
         views: rd.querySelectorAll('[data-ww-view]').length,
         travel: rd.hasAttribute('data-travel'),
         stages: rd.querySelectorAll('.pf-rd__stage-item').length,
-        pending: rd.querySelector('.ww-reader-head p')?.textContent.includes('REFERENCE PHOTOGRAPHY'),
+        pending: ['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL'].includes(rd.querySelector('.ww-reader-head p')?.textContent),
         verified: rd.dataset.verified,
       };
     }, before.id);
@@ -744,7 +745,7 @@ try {
     check('and the way out goes back to the territory, not to the portfolio',
       entered.backTo === '#womenswear/casualwear', entered.backTo);
     check('both garment views remain available',
-      !entered.travel && entered.views === 3, JSON.stringify({ travel: entered.travel, views: entered.views }));
+      !entered.travel && entered.views === (generatedPresentations.some(r=>r.id===before.id)?4:3), JSON.stringify({ travel: entered.travel, views: entered.views }));
     check('no development stage is invented for an unverified frame',
       entered.verified === 'no' && entered.stages === 0 && entered.pending,
       JSON.stringify(entered));

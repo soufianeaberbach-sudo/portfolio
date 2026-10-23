@@ -1,0 +1,90 @@
+{
+  "measuredUTC": "2026-10-22T16:13:32.064047+00:00",
+  "recoveredRemoteCommit": "81b5a04c722095a2151bc6d1851f24026d369202",
+  "initialWorkspaceContainedPriorCheckout": false,
+  "initialDiskAvailableApproxGiB": 30,
+  "initialMemoryAvailableApproxGiB": 9.2,
+  "disks": {
+    "/workspace": {
+      "totalBytes": 33770192896,
+      "usedBytes": 2333016064,
+      "freeBytes": 29702414336
+    },
+    "/tmp": {
+      "totalBytes": 5226233856,
+      "usedBytes": 128487424,
+      "freeBytes": 5097746432
+    }
+  },
+  "memory": {
+    "MemTotal": 10452471808,
+    "MemAvailable": 9612451840,
+    "SwapTotal": 0,
+    "SwapFree": 0
+  },
+  "directories": {
+    ".git": {
+      "exists": true,
+      "apparentBytes": 964881220,
+      "measurementComplete": true
+    },
+    "public/portfolio/generated": {
+      "exists": true,
+      "apparentBytes": 300756940,
+      "measurementComplete": true
+    },
+    ".qa-director": {
+      "exists": true,
+      "apparentBytes": 284,
+      "measurementComplete": true
+    },
+    "dist": {
+      "exists": false
+    },
+    "node_modules": {
+      "exists": true,
+      "apparentBytes": 518296494,
+      "measurementComplete": true
+    },
+    "/workspace/generated_images": {
+      "exists": false
+    },
+    "/tmp": {
+      "exists": true,
+      "apparentBytes": 125270359,
+      "measurementComplete": false
+    },
+    "/tmp/aberbach-npm-cache": {
+      "exists": true,
+      "apparentBytes": 123623597,
+      "measurementComplete": true
+    },
+    "/home/agent/.npm": {
+      "exists": true,
+      "apparentBytes": 0,
+      "measurementComplete": true
+    },
+    "/home/agent/.cache": {
+      "exists": true,
+      "apparentBytes": 41,
+      "measurementComplete": true
+    }
+  },
+  "workingTreeExcludingGitApparentBytes": 1320567885,
+  "assets": {
+    "files": 246,
+    "fileBytes": 300756940,
+    "resampledIndividualPanelBytes": 90687363,
+    "nativeBytes": 98186208,
+    "masterBytes": 90979200,
+    "webpBytes": 13818818,
+    "rejectedFileBytes": 7085351
+  },
+  "observations": [
+    "Disk and RAM healthy; no evidence establishing cause of previous inaccessible Codex task.",
+    "Initial clone needed network permission in this executor; succeeded using the configured proxy.",
+    "Initial npm ci failed because default /home/agent/.npm cache was not writable; npm ci succeeded with cache under /tmp/aberbach-npm-cache.",
+    "Temporary directory measurement excludes inaccessible daemon files when measurementComplete is false.",
+    "No pre-existing committed artwork or source files removed."
+  ]
+}
