@@ -339,10 +339,42 @@
         "agentSelection": "SELECTED_AUTONOMOUS",
         "ownerArtisticAcceptance": "PENDING"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-03/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1656291,
+        "nativeMode": "RGB",
+        "sha256": "872c931ee4b3d37a6a72872316e555141a86f685e5bca412f0d7df83c3ed5f11",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-7fa4f093-9540-4019-b0a6-b662dfb01412.png",
+        "generatedAt": "2026-10-23T23:16:39.777776+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-corrected-2026-2027/mw-r2-casualwear-03/front-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-03-back.txt",
+        "promptSHA256": "8510fa1cb382694ba2bc0394e624e9563e5351a638fc943ec9abb694d537bfad",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-03/back.png",
+        "exportSHA256": "21b43fb3fa7ed906de57bd1a2854e93731855d40cec83eec6706013525a86645",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-03/back-600.webp",
+        "previewSHA256": "7e84bd11bc2ab456984014f8b1965860716897dbd8e50c128576e3fec021873d",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear retains same brown waves, vertical buttercream knit, rib sleeves/hem, chocolate straight trouser and suede loafers. Rear two buttoned welts plausible and consistent with outfit; belt mostly concealed by hem naturally.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
@@ -3435,7 +3467,7 @@
       "key": "mw-r2-casualwear-03:back",
       "look": "mw-r2-casualwear-03",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4259,6 +4291,15 @@
       "at": "2026-10-23T23:16:32.153428+00:00",
       "notes": "Boxy washed-ink tee has heavy jersey body, dropped shoulder, broad short sleeve, substantial crew binding and straight hem. Sand shorts and canvas low-tops form commercially clear summer support. Natural adult casting and full white studio framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-03",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:16:39.783363+00:00",
+      "notes": "Genuine rear retains same brown waves, vertical buttercream knit, rib sleeves/hem, chocolate straight trouser and suede loafers. Rear two buttoned welts plausible and consistent with outfit; belt mostly concealed by hem naturally.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-03/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4271,13 +4312,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 7,
-    "acceptedActivePhotographs": 26,
+    "acceptedActivePhotographs": 27,
     "incompleteLooks": 33,
     "completedMasters": 7,
     "unresolvedViews": [
       "mw-r2-casualwear-02:back",
       "mw-r2-casualwear-02:editorial",
-      "mw-r2-casualwear-03:back",
       "mw-r2-casualwear-03:editorial",
       "mw-r2-casualwear-04:front",
       "mw-r2-casualwear-04:back",
