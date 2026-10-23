@@ -3369,7 +3369,39 @@
         "reviewNotes": "True rear of same orange mesh basketball coordinate, cream neck/armhole/shorts binding, natural dark curls, white crew socks and unbranded cream high-top heels. No team marks or numbers. Correct jersey rear neckline and opaque short lining.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1818037,
+        "nativeMode": "RGB",
+        "sha256": "b80949f733900a44bc936e52554ade153870f0a65ea900d4055011c18bc272fc",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-9f3d78ee-cd9c-43a8-8f6b-48d2153c6a84.png",
+        "generatedAt": "2026-10-23T23:52:09.527454+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/front-v02-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-09-editorial.txt",
+        "promptSHA256": "a93e8db014f3e14af62d5f2cf1acc7a5dd04b1c1d21e01f3f8a606505212e5c7",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/editorial.png",
+        "exportSHA256": "2a0e018765e9acd4d35820847bc4aed4b6c6c8d49ac56a2f38100d5b66418a96",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/editorial-600.webp",
+        "previewSHA256": "2357e5a89a1155c11ea33630d94c10c38811ce8f52a79993a756ac7bb7d777e4",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same model and orange mesh kit, plain cream high-tops preserved after footwear correction. Relaxed lateral fashion step and pocket hand, natural proportions and clear basketball silhouette, no theatrical sports mime.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -5406,7 +5438,7 @@
       "key": "mw-r2-activewear-09:editorial",
       "look": "mw-r2-activewear-09",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6288,6 +6320,15 @@
       "at": "2026-10-23T23:52:03.199848+00:00",
       "notes": "True rear of same orange mesh basketball coordinate, cream neck/armhole/shorts binding, natural dark curls, white crew socks and unbranded cream high-top heels. No team marks or numbers. Correct jersey rear neckline and opaque short lining.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:52:09.531114+00:00",
+      "notes": "Same model and orange mesh kit, plain cream high-tops preserved after footwear correction. Relaxed lateral fashion step and pocket hand, natural proportions and clear basketball silhouette, no theatrical sports mime.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6300,11 +6341,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 21,
-    "acceptedActivePhotographs": 68,
+    "acceptedActivePhotographs": 69,
     "incompleteLooks": 19,
     "completedMasters": 21,
     "unresolvedViews": [
-      "mw-r2-activewear-09:editorial",
       "mw-r2-outerwear-01:back",
       "mw-r2-outerwear-01:editorial",
       "mw-r2-outerwear-02:back",
