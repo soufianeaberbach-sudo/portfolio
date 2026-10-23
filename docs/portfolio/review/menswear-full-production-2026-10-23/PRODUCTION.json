@@ -1223,10 +1223,32 @@
         "reviewNotes": "Same model, five-button cardigan and rust underlayer, dark denim and suede chukkas. Gentle walking stance, one hand at cardigan and one near trouser pocket; visible knit pockets and credible fabric movement.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-07/master.png",
+        "sha256": "aac1879acd3499109b4aaeb800eb475cffb96a14c470b817eb04a069cbee6b61",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
-      "provenance": "Original AI fashion concept / visual exploration"
+      "provenance": "Original AI fashion concept / visual exploration",
+      "setReview": {
+        "at": "2026-10-23T23:25:17.995825+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-08",
@@ -4885,10 +4907,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 11,
+    "completedLooks": 12,
     "acceptedActivePhotographs": 39,
-    "incompleteLooks": 29,
-    "completedMasters": 11,
+    "incompleteLooks": 28,
+    "completedMasters": 12,
     "unresolvedViews": [
       "mw-r2-casualwear-09:front",
       "mw-r2-casualwear-09:back",
