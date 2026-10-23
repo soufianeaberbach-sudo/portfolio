@@ -3671,10 +3671,42 @@
         "agentSelection": "SELECTED_AUTONOMOUS",
         "ownerArtisticAcceptance": "PENDING"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-01/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1690325,
+        "nativeMode": "RGB",
+        "sha256": "7ce0df181c0198662539b70ba38b56fc8760df2989b97f5af1ae857979441d3a",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5315242d-6f71-41c9-a184-c55196db31b4.png",
+        "generatedAt": "2026-10-23T23:52:28.628103+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-corrected-2026-2027/mw-r2-outerwear-01/front-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-01-back.txt",
+        "promptSHA256": "3b1a58893483702b822258734710be81352e4ef48a328a0bd59fdb7b38d5db96",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-01/back.png",
+        "exportSHA256": "49a7eae604e6ab498958558ffc53321838b299293de00989a91fecf4e2e46769",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-01/back-600.webp",
+        "previewSHA256": "b6b0d72807a60effff1984dd7e1d134224dd9d17a8f8deaf26a37d370700f662",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear, same brown fringe, oxblood compact-twill bomber, centre-back seam, two-piece sleeves and matching rib neck/cuffs/hem. Stone five-pocket twill trousers and brown suede gum-sole heel continuity. Balanced short jacket body.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
@@ -5495,7 +5527,7 @@
       "key": "mw-r2-outerwear-01:back",
       "look": "mw-r2-outerwear-01",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6351,6 +6383,15 @@
       "at": "2026-10-23T23:52:09.531114+00:00",
       "notes": "Same model and orange mesh kit, plain cream high-tops preserved after footwear correction. Relaxed lateral fashion step and pocket hand, natural proportions and clear basketball silhouette, no theatrical sports mime.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-01",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:52:28.631755+00:00",
+      "notes": "Genuine rear, same brown fringe, oxblood compact-twill bomber, centre-back seam, two-piece sleeves and matching rib neck/cuffs/hem. Stone five-pocket twill trousers and brown suede gum-sole heel continuity. Balanced short jacket body.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-01/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6363,11 +6404,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 22,
-    "acceptedActivePhotographs": 69,
+    "acceptedActivePhotographs": 70,
     "incompleteLooks": 18,
     "completedMasters": 22,
     "unresolvedViews": [
-      "mw-r2-outerwear-01:back",
       "mw-r2-outerwear-01:editorial",
       "mw-r2-outerwear-02:back",
       "mw-r2-outerwear-02:editorial",
