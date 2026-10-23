@@ -1108,7 +1108,7 @@
       "majorCategory": "m-tailoring",
       "slot": 1,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -1127,8 +1127,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass after casting/fit retry: platinum buzz-cut adult is distinct; charcoal suit has fuller straight leg and relaxed jacket, balanced broad notch lapels, plausible shoulder pitch and flap pockets. Upper button fastened, lower open; pearl cuffs and black derbies coherent. No physical tailoring validation claimed.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:51:07.940354+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-01/front.png",
+        "generatedAt": "2026-10-23T18:51:07.940354+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "7bc8ec985618e7d7816fdb87081b5eb890a488de3d8a6b68217dd4892f48548e"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-01/back-native.png",
@@ -1146,8 +1154,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: same platinum buzz cut, broad shoulder balance, charcoal woven grain, clean centre-back seam and two rear side vents. Two-piece sleeves, cuff button groups and pearl cuff exposure plausible. Full straight trousers and derby heels match.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:12:34.525529+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-01/back.png",
+        "generatedAt": "2026-10-23T19:12:34.525529+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "9186215b4e374796e017974825f83937ea4fc0b2f926484cd97500b85f9497e2"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-tailoring-01/editorial-native.png",
@@ -1165,10 +1181,31 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Tailoring campaign pass: elegant long stride with gentle jacket/lapel adjustment, natural raised rear foot and free hand; exact pale buzz-cut model and charcoal/pearl styling preserved. Lapels roll plausibly, trousers retain full woven movement, black derbies consistent.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:12:39.365826+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-01/editorial.png",
+        "generatedAt": "2026-10-23T19:12:39.365826+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "81fa069b3c42c4f98c304ed61cc9456749cbf9faa6a616823cd89dc14df0be9e"
       },
-      "master": null,
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-tailoring-01/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "305b562fe74868d28fa1a8388d53cfd2b405ba10e10e0483151994110ada98a0",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
       "rejectedAttempts": [
         {
           "path": "assets/source/menswear-original-2026-2027/mw26-tailoring-01/rejected-front-casting-fit-01.png",
@@ -1180,7 +1217,24 @@
           "reason": "Dark wavy casting too close to court; waist suppression and taper too conventional for intended relaxed tailoring.",
           "selected": false
         }
-      ]
+      ],
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Modern relaxed suit set passes visible balance and continuity: strong shoulder, broad notch, two-button front, genuine double-vent rear, full straight trouser and campaign stride. Physical fit and internal canvas are not verified by imagery.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-tailoring-02",
