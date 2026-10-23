@@ -912,7 +912,7 @@
       "majorCategory": "m-rtw",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -931,8 +931,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: eucalyptus linen coordinated short-sleeve shirt and wide straight trouser, realistic slub texture and soft creases, square chest pocket, corozo-style buttons and side splits. Distinct red-haired freckled adult casting. Sand suede fisherman cage shoes include small toe openings; accepted styling variation from fully closed-toe brief. Collar sits as relaxed open camp-style spread. Full frame and white background pass.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:48:29.931185+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/front.png",
+        "generatedAt": "2026-10-23T18:48:29.931185+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "f8834938429346e39c43071c69b105e90d9c97854eb5f50126d69af68153c238"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-05/back-native.png",
@@ -950,8 +958,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: matching copper waves and linen slubs, rear yoke with central box pleat, plain short-sleeve back, straight side-split hem. Matching wide trousers with quiet rear welts; correct sand fisherman heel straps. Natural lightweight drape and full frame.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:11:56.865725+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/back.png",
+        "generatedAt": "2026-10-23T19:11:56.865725+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "0e0fd1fcb3f97675a2199054470874057242a947a6f3d8485b129ffbc8c6e491"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-05/editorial-native.png",
@@ -969,10 +985,48 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Campaign pass: airy diagonal walking step, relaxed pocket hand, same freckled face/copper waves, eucalyptus coordinated linen, natural tank, chest patch pocket and sand fisherman shoes. Linen moves with believable creases; no stiff catalogue duplicate.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:12:03.077010+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/editorial.png",
+        "generatedAt": "2026-10-23T19:12:03.077010+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "642798b41d936c19d929a1ddeac6665324d7443bcb7383e3465e07ffe11e01ba"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "50eec3060951795c94cadcfb8359c83b3df65b8fb086a4309391ad652a976cb7",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Coherent warm-season linen set: genuine box-pleat rear and walking Editorial, consistent casting, slub weave, full trouser volume and fisherman sandals. Front accepted open-collar and toe-window styling retained.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-rtw-06",
