@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T09:55:27.226930+00:00",
+  "updatedUTC": "2026-10-23T09:58:17.965804+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 4,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-02",
-  "currentMilestone": "recovered-front-native",
-  "lastSuccessfullyPushedCommit": "58e286aaff4dfad861e32f0743fe1cbb65ef002d",
+  "currentMilestone": "recovered-back-native",
+  "lastSuccessfullyPushedCommit": "f637def3a38c5ddcaf91d06f8c7011608c8b130a",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -1125,7 +1125,7 @@
       ]
     }
   ],
-  "notes": "100 genuine accepted native images. Swimwear 02 Front generated in opaque white studio, visually compared with original and retained unchanged. All 97 baseline natives and 31 masters protected; continue matching Back using saved Front.",
+  "notes": "101 accepted genuine natives. Swimwear 02 Back generated from its saved opaque Front, visually reviewed and marked provisional rear construction. Save and remotely verify before Editorial. All baseline artwork preserved.",
   "limitations": [
     "31 genuine complete provisional sets and four partial sets; 23 views remain unavailable after provider moderation decisions or source-input blocks.",
     "All original 92 natives, 329 baseline artwork files, historical sources and 29 complete baseline records are preserved.",
@@ -1302,15 +1302,15 @@
     }
   ],
   "nativeResolutionNote": "87 original accepted natives at 1024x1536, 9 at 1086x1448 and 1 at 1084x1451. All native bytes unchanged; 1800x2700 panels and 5400x2700 masters use proportional resampling.",
-  "acceptedNativeImages": 100,
-  "missingIndividualViews": 20,
+  "acceptedNativeImages": 101,
+  "missingIndividualViews": 19,
   "moderationBlockedIndividualViews": 21,
   "currentToolAvailability": {
     "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
     "reasoningErrorRecurred": false,
-    "newAcceptedImages": 3
+    "newAcceptedImages": 4
   },
-  "freshSessionAcceptedImages": 3,
+  "freshSessionAcceptedImages": 4,
   "freshSessionTechnicalFailures": 0,
   "freshSessionModerationFailures": 12,
   "freshSessionQuotaFailures": 0,
