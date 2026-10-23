@@ -6048,6 +6048,21 @@
       "at": "2026-10-23T23:45:22.085906+00:00",
       "notes": "Warm taupe athleisure double-knit short-sleeve sweatshirt and straight full-length trousers, rib crew and hem band, tonal sand lifestyle trainers. Dense soft drape and boxy top contrast with tapered jogger and performance kits; natural commercially attractive adult model.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-10/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "front",
+      "pass": 1,
+      "outcome": "REJECTED_VISUAL",
+      "at": "2026-10-23T23:45:26.860599+00:00",
+      "cause": "Basketball outfit/model suitable, but tongue marks and familiar shoe side graphic risk unrelated branding. Preserve raw output; correct only footwear to a plain unbranded construction.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/rejected/front-v01-shoe-branding-native.png",
+      "sha256": "929a086881090d7372c57c8f9b6ca5b1231e42a8d0d30fb3a757c87f7b0c835c",
+      "nativeDimensions": [
+        1024,
+        1536
+      ],
+      "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-09-front.txt"
     }
   ],
   "archivedNotSelected": [
@@ -6122,6 +6137,6 @@
       "mw-r2-tailoring-10:back",
       "mw-r2-tailoring-10:editorial"
     ],
-    "failedGenerationAttempts": 1
+    "failedGenerationAttempts": 2
   }
 }

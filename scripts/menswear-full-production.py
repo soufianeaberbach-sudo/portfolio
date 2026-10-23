@@ -15,7 +15,7 @@ def sync(data):
   look=next(x for x in data['looks'] if x['id']==item['look'])
   if look[item['view']]:item['state']='SELECTED'
   elif item['state']=='SELECTED':raise ValueError('Selected view disappeared')
- data['statistics']={'targetLooks':40,'targetViews':120,'completedLooks':sum(bool(x.get('master')) for x in data['looks']),'acceptedActivePhotographs':sum(bool(x[v]) for x in data['looks'] for v in VIEWS),'incompleteLooks':sum(not x.get('master') for x in data['looks']),'completedMasters':sum(bool(x.get('master')) for x in data['looks']),'unresolvedViews':[x['key'] for x in data['queue'] if x['state']!='SELECTED'],'failedGenerationAttempts':sum(x['outcome'] in ('PROVIDER_ERROR','REJECTED_VISUAL') for x in data['attempts'])}
+ data['statistics']={'targetLooks':40,'targetViews':120,'completedLooks':sum(bool(x.get('master')) for x in data['looks']),'acceptedActivePhotographs':sum(bool(x[v]) for x in data['looks'] for v in VIEWS),'incompleteLooks':sum(not x.get('master') for x in data['looks']),'completedMasters':sum(bool(x.get('master')) for x in data['looks']),'unresolvedViews':[x['key'] for x in data['queue'] if x['state']!='SELECTED'],'failedGenerationAttempts':sum(x['outcome'] in ('PROVIDER_ERROR','REJECTED_VISUAL','INTERRUPTED_NO_OUTPUT') for x in data['attempts'])}
  base.atomic(MANIFEST,data)
  publish_catalog(data)
 
@@ -47,12 +47,13 @@ def register(a):
  assert not look[a.view],'Selected view protected: use explicit supersession/version workflow'
  if a.view!='front':assert look['front'],'Companion needs accepted Front'
  im=Image.open(a.source);im.load();assert im.height>im.width
- target=ROOT/'assets/source/menswear-full-2026-2027'/a.look/(a.view+'-v01-native.png');assert not target.exists()
+ version=1+sum(t['outcome']=='REJECTED_VISUAL' and t['look']==a.look and t['view']==a.view for t in data['attempts'])
+ target=ROOT/'assets/source/menswear-full-2026-2027'/a.look/(a.view+f'-v{version:02d}-native.png');assert not target.exists()
  target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(a.source,target);assert base.digest(Path(a.source))==base.digest(target)
  out=EXPORTS/a.look;out.mkdir(parents=True,exist_ok=True);scale=min(1800/im.width,2700/im.height);size=(round(im.width*scale),round(im.height*scale))
  panel=Image.new('RGB',(1800,2700),'white');panel.paste(im.convert('RGB').resize(size,Image.Resampling.LANCZOS),((1800-size[0])//2,(2700-size[1])//2));panel.save(out/(a.view+'.png'),compress_level=4);panel.resize((600,900),Image.Resampling.LANCZOS).save(out/(a.view+'-600.webp'),quality=93,method=6)
- prompt=REVIEW/'prompts'/(a.look+'-'+a.view+'.txt')
- rec={'nativePath':str(target.relative_to(ROOT)),'nativeDimensions':list(im.size),'nativeBytes':target.stat().st_size,'nativeMode':im.mode,'sha256':base.digest(target),'tool':'OpenAI image_gen.imagegen','toolOutputPath':a.source,'generatedAt':now(),'referenceInputs':[] if a.view=='front' else [look['front']['nativePath']],'promptPath':str(prompt.relative_to(ROOT)),'promptSHA256':base.digest(prompt),'exportPath':str((out/(a.view+'.png')).relative_to(ROOT)),'exportSHA256':base.digest(out/(a.view+'.png')),'previewPath':str((out/(a.view+'-600.webp')).relative_to(ROOT)),'previewSHA256':base.digest(out/(a.view+'-600.webp')),'exportDimensions':[1800,2700],'uniformScale':scale,'resampled':size!=im.size,'nativeHighResolutionClaim':False,'agentSelection':'SELECTED_AUTONOMOUS','ownerArtisticAcceptance':'PENDING','reviewNotes':a.notes,'provenance':'Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed'}
+ prompt=ROOT/a.prompt if getattr(a,'prompt',None) else REVIEW/'prompts'/(a.look+'-'+a.view+'.txt')
+ rec={'nativePath':str(target.relative_to(ROOT)),'nativeDimensions':list(im.size),'nativeBytes':target.stat().st_size,'nativeMode':im.mode,'sha256':base.digest(target),'tool':'OpenAI image_gen.imagegen','toolOutputPath':a.source,'generatedAt':now(),'referenceInputs':getattr(a,'references',[]) if a.view=='front' else [look['front']['nativePath']],'promptPath':str(prompt.relative_to(ROOT)),'promptSHA256':base.digest(prompt),'exportPath':str((out/(a.view+'.png')).relative_to(ROOT)),'exportSHA256':base.digest(out/(a.view+'.png')),'previewPath':str((out/(a.view+'-600.webp')).relative_to(ROOT)),'previewSHA256':base.digest(out/(a.view+'-600.webp')),'exportDimensions':[1800,2700],'uniformScale':scale,'resampled':size!=im.size,'nativeHighResolutionClaim':False,'agentSelection':'SELECTED_AUTONOMOUS','ownerArtisticAcceptance':'PENDING','reviewNotes':a.notes,'provenance':'Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed'}
  look[a.view]=rec;look['status']='VIEWS_IN_PROGRESS';data['attempts'].append({'look':a.look,'view':a.view,'pass':data['currentPass'],'outcome':'SELECTED','at':now(),'notes':a.notes,'nativePath':rec['nativePath']});sync(data)
  checkpoint('feat(menswear): save '+a.look+' '+a.view,[target,prompt,out/(a.view+'.png'),out/(a.view+'-600.webp')])
 
