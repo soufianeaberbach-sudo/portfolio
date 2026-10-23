@@ -1753,7 +1753,39 @@
         "reviewNotes": "Genuine rear, same brown waves, terracotta coordinate, back yoke, two short rear welts, left wrist bracelet and ivory slide heels. Woven slub, shirt length and above-knee short silhouette consistent.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1763768,
+        "nativeMode": "RGB",
+        "sha256": "b90153736acd7448e70a85a2c14fe2d03e6925bf413d1b36721fd133a0cc3172",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-9d623ff9-d82a-46d3-b82d-1a54d0affb1b.png",
+        "generatedAt": "2026-10-23T23:34:30.002336+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-10-editorial.txt",
+        "promptSHA256": "e356a76bf3cfd55fbeee5fd000990c45cb12c89cd0692de5673763e0ae8fc883",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/editorial.png",
+        "exportSHA256": "5cac6e18ec8699370c8c2a5526e01e4b23233404f4f5cbce493d1e8ba2e13be3",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/editorial-600.webp",
+        "previewSHA256": "213b651b1349507c52c02995c0aa45f64d23d806d2355cf73a6b1ba1353ecf0a",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same model, five-button camp shirt/chest patch, shorts, bracelet and ivory slides. Natural diagonal walking step with pocket hand; outfit remains visible and full-length, plausible light woven movement.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4347,7 +4379,7 @@
       "key": "mw-r2-casualwear-10:editorial",
       "look": "mw-r2-casualwear-10",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5197,6 +5229,15 @@
       "at": "2026-10-23T23:34:23.957295+00:00",
       "notes": "Genuine rear, same brown waves, terracotta coordinate, back yoke, two short rear welts, left wrist bracelet and ivory slide heels. Woven slub, shirt length and above-knee short silhouette consistent.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-10",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:34:30.005973+00:00",
+      "notes": "Same model, five-button camp shirt/chest patch, shorts, bracelet and ivory slides. Natural diagonal walking step with pocket hand; outfit remains visible and full-length, plausible light woven movement.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5209,11 +5250,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 13,
-    "acceptedActivePhotographs": 46,
+    "acceptedActivePhotographs": 47,
     "incompleteLooks": 27,
     "completedMasters": 13,
     "unresolvedViews": [
-      "mw-r2-casualwear-10:editorial",
       "mw-r2-activewear-01:back",
       "mw-r2-activewear-01:editorial",
       "mw-r2-activewear-03:back",
