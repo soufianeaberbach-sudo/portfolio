@@ -2669,10 +2669,42 @@
         "agentSelection": "SELECTED_AUTONOMOUS",
         "ownerArtisticAcceptance": "PENDING"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1666684,
+        "nativeMode": "RGB",
+        "sha256": "c41c9738ef0656c98af3b467d62e98aaa12eb968ac78616b062d9a004e8e77c4",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-b388e518-a64e-4bbe-88fe-731519723f2f.png",
+        "generatedAt": "2026-10-23T23:35:51.578816+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-corrected-2026-2027/mw-r2-activewear-05/front-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-05-back.txt",
+        "promptSHA256": "2ce9ba3f532f2b48364c1233d0c4f4072259b3ff486c1b8e3c3e57bbed9511df",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-05/back.png",
+        "exportSHA256": "d9b0c7aaf6697a0d475e4e8117c9f4c8c021ba1ff85b3e20bf048a4a90237ae5",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-05/back-600.webp",
+        "previewSHA256": "35d809e92bd48586e100ff239d25d654e9df490b01be2cb134f6a19df263718c",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear keeps same dark curls, petrol-blue tricot, silver side panels, raglan back seams, dark rib band/cuffs, straight track pants and grey-white trainer heels. Rear is plain and colour/scale consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
@@ -4671,7 +4703,7 @@
       "key": "mw-r2-activewear-05:back",
       "look": "mw-r2-activewear-05",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5468,6 +5500,15 @@
       "at": "2026-10-23T23:35:17.620618+00:00",
       "notes": "Same recognizable model and forest football outfit, believable controlled lateral ready step and natural arm balance. Mint raglan/underarm/calf panels, ankle zips and turf footwear consistent, full garment visible.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-05",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:35:51.581915+00:00",
+      "notes": "True rear keeps same dark curls, petrol-blue tricot, silver side panels, raglan back seams, dark rib band/cuffs, straight track pants and grey-white trainer heels. Rear is plain and colour/scale consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5480,11 +5521,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 16,
-    "acceptedActivePhotographs": 51,
+    "acceptedActivePhotographs": 52,
     "incompleteLooks": 24,
     "completedMasters": 16,
     "unresolvedViews": [
-      "mw-r2-activewear-05:back",
       "mw-r2-activewear-05:editorial",
       "mw-r2-activewear-06:front",
       "mw-r2-activewear-06:back",
