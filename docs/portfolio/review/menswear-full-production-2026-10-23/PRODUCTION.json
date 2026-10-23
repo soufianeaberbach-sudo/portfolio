@@ -321,10 +321,32 @@
         "reviewNotes": "Same natural model and outfit, relaxed three-quarter step and pocket hand. Heavy jersey drape, boxy shoulders and short hems retained; fashion posture distinct from product stance.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/master.png",
+        "sha256": "ae7145b03dff3264959d47e4369d71b3eb9955a0ff34c0b400d5affb444c7876",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
-      "provenance": "Original AI fashion concept / visual exploration"
+      "provenance": "Original AI fashion concept / visual exploration",
+      "setReview": {
+        "at": "2026-10-23T23:19:04.346206+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Consistent model, jersey silhouette, navy/sand palette and canvas shoes. Genuine rear and three-quarter Editorial, full-length framing.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-03",
@@ -4456,10 +4478,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 8,
+    "completedLooks": 9,
     "acceptedActivePhotographs": 30,
-    "incompleteLooks": 32,
-    "completedMasters": 8,
+    "incompleteLooks": 31,
+    "completedMasters": 9,
     "unresolvedViews": [
       "mw-r2-casualwear-04:front",
       "mw-r2-casualwear-04:back",
