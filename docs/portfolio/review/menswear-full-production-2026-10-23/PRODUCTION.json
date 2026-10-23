@@ -3336,7 +3336,39 @@
         "reviewNotes": "Footwear correction succeeds: plain cream high-tops with blank tongues and clean sides; no readable branding. Same orange mesh V jersey, cream binding, long basketball shorts, white crew socks and natural adult model retained. Original rejected native preserved; this corrected Front is selected as version 02.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1872778,
+        "nativeMode": "RGB",
+        "sha256": "8532be191f6c379c874b52574110412abc591a55ab18ca685c467a9b9809b3ea",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-b0361a08-1e97-4712-83dc-6602475cd7d6.png",
+        "generatedAt": "2026-10-23T23:52:03.195197+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/front-v02-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-09-back.txt",
+        "promptSHA256": "ae038de35d92d556253fdc83f9bf333c3f03514a215b60107e22c297851e0b54",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/back.png",
+        "exportSHA256": "21db6681d60e8ec45b0559809539bea2365d6f5e16101dbc7e52c67b473bb8de",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/back-600.webp",
+        "previewSHA256": "e65203dc5b7992168c25427175eac2646d99776988d2b600445e867b63357f94",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear of same orange mesh basketball coordinate, cream neck/armhole/shorts binding, natural dark curls, white crew socks and unbranded cream high-top heels. No team marks or numbers. Correct jersey rear neckline and opaque short lining.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -5367,7 +5399,7 @@
       "key": "mw-r2-activewear-09:back",
       "look": "mw-r2-activewear-09",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6247,6 +6279,15 @@
       "at": "2026-10-23T23:48:20.688139+00:00",
       "notes": "Espresso leather blouson has fine grain and moderate body, point collar, front yoke/panels, centre metal zip, zip welts and side snap tabs. Dusty blue tee, charcoal straight trousers and dark brown Chelsea boots coherent. Natural adult casting and full-length white studio. Selected worn open; preserve visible seam map and opening.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:52:03.199848+00:00",
+      "notes": "True rear of same orange mesh basketball coordinate, cream neck/armhole/shorts binding, natural dark curls, white crew socks and unbranded cream high-top heels. No team marks or numbers. Correct jersey rear neckline and opaque short lining.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6259,11 +6300,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 21,
-    "acceptedActivePhotographs": 67,
+    "acceptedActivePhotographs": 68,
     "incompleteLooks": 19,
     "completedMasters": 21,
     "unresolvedViews": [
-      "mw-r2-activewear-09:back",
       "mw-r2-activewear-09:editorial",
       "mw-r2-outerwear-01:back",
       "mw-r2-outerwear-01:editorial",
