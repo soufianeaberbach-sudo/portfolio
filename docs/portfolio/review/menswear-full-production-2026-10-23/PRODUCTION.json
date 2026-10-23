@@ -1190,7 +1190,39 @@
         "reviewNotes": "True rear, consistent natural dark hair, oat melange knit with plain back, rib neck/cuffs/hem, dark indigo jean rear patches and brown suede chukka heels. Believable knit and woven contrast.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1839093,
+        "nativeMode": "RGB",
+        "sha256": "b25e555bdc95c3805455a573ec865d8daa0d0c3d29995a43bee02e3677a418ae",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-7762cefc-b6b5-4dc8-9ea0-7ca498ce0c5a.png",
+        "generatedAt": "2026-10-23T23:25:08.157624+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-07-editorial.txt",
+        "promptSHA256": "748eb2c926f5a44827394ea4783dd480b2cc39236496e19d196d6502755d82ae",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-07/editorial.png",
+        "exportSHA256": "84b9c476acffc1f9b3296190596005eadc5e53dee45227dcac6f3d81feb47280",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-07/editorial-600.webp",
+        "previewSHA256": "d5a0c670462c6c047503c2fa29d7ddb1ea616cc7c1ea5f24faff17fa664018db",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same model, five-button cardigan and rust underlayer, dark denim and suede chukkas. Gentle walking stance, one hand at cardigan and one near trouser pocket; visible knit pockets and credible fabric movement.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -3992,7 +4024,7 @@
       "key": "mw-r2-casualwear-07:editorial",
       "look": "mw-r2-casualwear-07",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4833,6 +4865,15 @@
       "at": "2026-10-23T23:25:02.798923+00:00",
       "notes": "True rear, consistent natural dark hair, oat melange knit with plain back, rib neck/cuffs/hem, dark indigo jean rear patches and brown suede chukka heels. Believable knit and woven contrast.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-07",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:25:08.161759+00:00",
+      "notes": "Same model, five-button cardigan and rust underlayer, dark denim and suede chukkas. Gentle walking stance, one hand at cardigan and one near trouser pocket; visible knit pockets and credible fabric movement.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-07/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4845,11 +4886,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 11,
-    "acceptedActivePhotographs": 38,
+    "acceptedActivePhotographs": 39,
     "incompleteLooks": 29,
     "completedMasters": 11,
     "unresolvedViews": [
-      "mw-r2-casualwear-07:editorial",
       "mw-r2-casualwear-09:front",
       "mw-r2-casualwear-09:back",
       "mw-r2-casualwear-09:editorial",
