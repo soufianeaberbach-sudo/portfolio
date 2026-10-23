@@ -253,12 +253,28 @@
       "majorCategory": "m-activewear",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-04/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1687798,
+        "sha256": "3852bebf65670ec9e99f00add7ca487fbad602520d97d6465a7241a8520215a3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-52433ad7-b4d2-4b17-8d9e-f7174072d56c.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: warm-white court polo with forest collar and sleeve binding; forest court shorts, ball-pocket openings, matching sock band and stable low-profile court-style shoes. Pique surface, side vents and natural fit readable. Casting differs from running and streetwear. Full frame and neutral white pass; actual sport performance untested.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:45:17.352520+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
