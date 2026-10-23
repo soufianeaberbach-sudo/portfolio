@@ -40,7 +40,7 @@
       "majorCategory": "m-streetwear",
       "slot": 3,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -59,8 +59,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: distinct cropped trucker and wide denim; plausible grain, collar, button and pocket construction; strong adult casting; square Front, natural fingers, complete head and shoes, neutral white studio. Six-button placket and twin flaps readable. No historical image inputs.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:41:54.248509+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-03/front.png",
+        "generatedAt": "2026-10-23T18:41:54.248509+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "b3d37f16936277bd9387f7381b9950b25d591b0a702fc1afb11b014900da5a8d"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-03/back-native.png",
@@ -78,8 +86,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: same short afro, wash, cropped boxy body, yoke, two vertical panels and button hem tabs; jeans rear yoke and two patch pockets, shoes viewed from heel. No mirrored front. Complete silhouette.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:55:07.860742+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-03/back.png",
+        "generatedAt": "2026-10-23T18:55:07.860742+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "164fce569053d588c73ed87106026be430aea6957577a412662c6ed55bd62702"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-03/editorial-native.png",
@@ -97,10 +113,38 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Campaign pass: real long walking stride and natural jacket touch, not static Front duplicate. Facial identity, afro, ecru tee, denim wash, chest flaps, button placket and chocolate shoes consistent. Natural limb overlap; full frame.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:55:13.225264+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-03/editorial.png",
+        "generatedAt": "2026-10-23T18:55:13.225264+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "dca589fa1789c1a36e9f6b1550a2da6364e396d1a751c02a1122f2ebf6d07192"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-streetwear-03/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "fe4cdb6f5a1b45da2c1be9e500c912ea75604ab3c1a3efe35dac04cae0e7ac73",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Three-view set visually coherent: denim grain, cropped body, wide leg, model and footwear match. Back construction plausible and Editorial dynamic. Native portrait scale comparable; full frame exported uniformly without retouching.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      }
     },
     {
       "id": "mw26-streetwear-04",
