@@ -129,6 +129,27 @@
       ],
       "sha256": "b94253847be49a1d20cd0fe13826dd2d50667b4cffb432d114df2b4422b0db7c",
       "reviewNote": "Inspected actual native over white: one true rear-facing adult, matching brunette bun, brown sunglasses, small hoops and bare feet. Grey gathered back band, original halter ties, narrow upper waistband, vertical connectors and long side bows retained with consistent material and proportions. Rear lower panel and top closure are inferred, provisional construction. Full head, hands and feet visible; natural anatomy, matching neutral studio light, clean alpha and subtle grounded shadow. Actual 1086x1448 RGBA native unchanged."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "view": "editorial",
+      "recordedUTC": "2026-10-23T08:09:09.569658+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Create one new full-length Editorial commercial studio photograph from these accepted Front and Back references. Use Front as primary for the exact adult professional model, face and garment; Back checks provisional rear arrangement. Preserve the same brunette bun, brown sunglasses, small hoop earrings, bare feet and natural proportions. Exact grey gathered bandeau with central oval join and forked halter straps, matching lower garment, original thin upper waistband, vertical connectors and long side ties. No changes to material, grey color, cut or coverage. Quiet front three-quarter stance with small natural weight shift, relaxed arms and neutral expression. Same balanced neutral lighting, realistic textile and skin, subtle natural floor contact shadow. Full head, both hands, all ties and feet inside comfortable portrait margins. Genuine transparent background preserving edges and hair. Exactly one model in one photograph, no graphics, text, props, borders, collage or duplicate person. Source-based provisional apparel presentation; inferred rear construction remains provisional.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png",
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-09-v1/back-native.png"
+        ],
+        "transparent_background": true
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-09-v1/editorial-native.png",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "sha256": "f67348e799ec0b53dc895c96ddcdcd11f8adb3f928397ae31d5d1ca7eaa574e8",
+      "reviewNote": "Actual native and white composite inspected: matching adult brunette model, bun, brown sunglasses, hoops and bare feet. Exact grey gathered bandeau with central oval join and forked halter straps, narrow upper waistband, vertical connectors and side ties retained. Restrained front three-quarter weight shift, full head, natural hands and feet, consistent neutral studio light and realistic fabric. Clean alpha edges and soft contact shadow. Rear construction remains provisional. Genuine 1086x1448 RGBA saved unchanged."
     }
   ],
   "setReviews": [
@@ -140,15 +161,15 @@
   ],
   "ownerArtisticApproval": false,
   "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
-  "updatedUTC": "2026-10-23T08:06:59.854042+00:00",
+  "updatedUTC": "2026-10-23T08:09:09.569673+00:00",
   "finalCounts": {
     "completeLooks": 30,
-    "acceptedNativeImages": 94,
+    "acceptedNativeImages": 95,
     "partialLooks": 3,
     "withoutGeneratedViews": 7,
-    "missingViews": 26
+    "missingViews": 25
   },
-  "newAcceptedImages": 2,
+  "newAcceptedImages": 3,
   "remainingViews": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -217,12 +238,6 @@
       "missingViews": [
         "front",
         "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-09",
-      "missingViews": [
         "editorial"
       ]
     }

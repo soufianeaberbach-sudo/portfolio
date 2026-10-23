@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-08",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:07:03.200161+00:00",
+  "updatedUTC": "2026-10-23T08:09:11.737118+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 30,
   "pendingLooks": 7,
@@ -19,8 +19,8 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-09",
-  "currentMilestone": "back-native",
-  "lastSuccessfullyPushedCommit": "b689bc0e4562e0c31337f6d0ed924b7c77e6e17e",
+  "currentMilestone": "editorial-native",
+  "lastSuccessfullyPushedCommit": "6247e1e5c6c9813c6d9215a6b2668c4507e3bdd5",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "swimwear-ref-09",
@@ -576,7 +576,7 @@
       ]
     }
   ],
-  "nextAction": "Generate and validate editorial for swimwear-ref-09; checkpoint before the following view",
+  "nextAction": "Review three views and assemble master",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -635,7 +635,7 @@
       ]
     }
   ],
-  "notes": "94 accepted genuine natives. Swimwear 09 Back visually passed; four new provider moderation refusals recorded. No technical image error. Existing 92 protected.",
+  "notes": "95 accepted native images, all three swimwear 09 views now real and reviewed; assemble next. Four moderation refusals recorded independently.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -644,10 +644,7 @@
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
   "remainingLooks": 10,
-  "nextImage": {
-    "sourceIdentity": "swimwear-ref-09",
-    "view": "editorial"
-  },
+  "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
