@@ -1987,11 +1987,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1757104,
+        "nativeMode": "RGB",
+        "sha256": "584ce0e12a6fd7be20a2165acea87224bc98fd5fce270d0a1d81f225f0fd37bb",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-d3f9b7e9-a366-4bc9-a834-dc53c05ff152.png",
+        "generatedAt": "2026-10-23T23:27:54.617328+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-03-front.txt",
+        "promptSHA256": "0e4df4975b87cb67a7ff1e9c0c251ff02e3ed651af0a4937d0c211c028572b34",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/front.png",
+        "exportSHA256": "8ee668b247b7fd817ff49d4e73ed6d1a437bea251f604774ede0aef22587dda3",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/front-600.webp",
+        "previewSHA256": "57daecf6a67439f84e0df33fb01788736509c70108c0c4e30f5a763147d7831e",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Forest football training jersey, mint raglan/underarm mesh panels and rib V-neck paired with tapered full-length tricot pants, calf panels and visible ankle zips. Forest socks and black turf shoes category-appropriate; no club logos or kit numbers. Natural adult athletic casting.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -4248,7 +4278,7 @@
       "key": "mw-r2-activewear-03:front",
       "look": "mw-r2-activewear-03",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5013,6 +5043,15 @@
       "at": "2026-10-23T23:27:49.059315+00:00",
       "notes": "Slate-blue raglan training tee and black seven-inch stretch woven shorts, neat crew bind, low-bulk seams, side zip pockets and side vent. Charcoal socks and stable off-white cross-trainers believable gym styling; normal athletic model, full-length white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-03",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:27:54.621223+00:00",
+      "notes": "Forest football training jersey, mint raglan/underarm mesh panels and rib V-neck paired with tapered full-length tricot pants, calf panels and visible ankle zips. Forest socks and black turf shoes category-appropriate; no club logos or kit numbers. Natural adult athletic casting.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5025,7 +5064,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 12,
-    "acceptedActivePhotographs": 42,
+    "acceptedActivePhotographs": 43,
     "incompleteLooks": 28,
     "completedMasters": 12,
     "unresolvedViews": [
@@ -5035,7 +5074,6 @@
       "mw-r2-casualwear-10:editorial",
       "mw-r2-activewear-01:back",
       "mw-r2-activewear-01:editorial",
-      "mw-r2-activewear-03:front",
       "mw-r2-activewear-03:back",
       "mw-r2-activewear-03:editorial",
       "mw-r2-activewear-05:back",
