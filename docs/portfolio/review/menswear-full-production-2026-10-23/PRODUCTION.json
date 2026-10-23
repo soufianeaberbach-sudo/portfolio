@@ -1683,11 +1683,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1775550,
+        "nativeMode": "RGB",
+        "sha256": "7cbbb09f592752766ffef7ea1b5ec6873546a662f777b67dfae204c8a0218c44",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-b7d76978-8352-4b08-85da-f6b70ad7df94.png",
+        "generatedAt": "2026-10-23T23:27:49.055261+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-01-front.txt",
+        "promptSHA256": "c80d3f296ab6e1b4f5bd09946b541e3d00a1c888fef7576f07b7a77e32dae766",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-01/front.png",
+        "exportSHA256": "40d8ecee960a0cddb7f47693cb9f42d13dff5acadecc68ddeac77d0a71c84865",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-01/front-600.webp",
+        "previewSHA256": "9af1e75097c72fb29a9d7b5712b3158c90bdd1c00719c937f1e9a4a88958e185",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Slate-blue raglan training tee and black seven-inch stretch woven shorts, neat crew bind, low-bulk seams, side zip pockets and side vent. Charcoal socks and stable off-white cross-trainers believable gym styling; normal athletic model, full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -4176,7 +4206,7 @@
       "key": "mw-r2-activewear-01:front",
       "look": "mw-r2-activewear-01",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4974,6 +5004,15 @@
       "at": "2026-10-23T23:27:41.933858+00:00",
       "notes": "Terracotta dobby-linen camp shirt and above-knee shorts coordinate has credible slub woven drape, five shirt buttons, chest patch, open camp collar and clean hems. Ivory slides and subtle brown bracelet coherent. Complete toes/head and young-adult commercial casting.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-10/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-01",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:27:49.059315+00:00",
+      "notes": "Slate-blue raglan training tee and black seven-inch stretch woven shorts, neat crew bind, low-bulk seams, side zip pockets and side vent. Charcoal socks and stable off-white cross-trainers believable gym styling; normal athletic model, full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4986,7 +5025,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 12,
-    "acceptedActivePhotographs": 41,
+    "acceptedActivePhotographs": 42,
     "incompleteLooks": 28,
     "completedMasters": 12,
     "unresolvedViews": [
@@ -4994,7 +5033,6 @@
       "mw-r2-casualwear-09:editorial",
       "mw-r2-casualwear-10:back",
       "mw-r2-casualwear-10:editorial",
-      "mw-r2-activewear-01:front",
       "mw-r2-activewear-01:back",
       "mw-r2-activewear-01:editorial",
       "mw-r2-activewear-03:front",
