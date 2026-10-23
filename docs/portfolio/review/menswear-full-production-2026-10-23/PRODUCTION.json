@@ -3303,11 +3303,43 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/front-v02-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1858405,
+        "nativeMode": "RGB",
+        "sha256": "273401fd1c25f5df434c53e98825d7d65bfb317540c06d18b2bee43f80e50c14",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-8b9c4022-9f7a-43f3-acc8-c5188ace6975.png",
+        "generatedAt": "2026-10-23T23:47:49.828476+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/rejected/front-v01-shoe-branding-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-09-front-v02.txt",
+        "promptSHA256": "3a2000290d6682cc26b15078bcf4345b1bff18e78369d511cae63bb5aacf8883",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/front.png",
+        "exportSHA256": "a92404f673acc0418095cb118afb676e249ed1a0a205b9420b48a702553c2f69",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-09/front-600.webp",
+        "previewSHA256": "f151e3b95b48da06d43ee80cf117b0ecd5d5ea85ad8f931ed8dd41d30d66fc0b",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Footwear correction succeeds: plain cream high-tops with blank tongues and clean sides; no readable branding. Same orange mesh V jersey, cream binding, long basketball shorts, white crew socks and natural adult model retained. Original rejected native preserved; this corrected Front is selected as version 02.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -5212,7 +5244,7 @@
       "key": "mw-r2-activewear-09:front",
       "look": "mw-r2-activewear-09",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6063,6 +6095,15 @@
         1536
       ],
       "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-09-front.txt"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:47:49.832181+00:00",
+      "notes": "Footwear correction succeeds: plain cream high-tops with blank tongues and clean sides; no readable branding. Same orange mesh V jersey, cream binding, long basketball shorts, white crew socks and natural adult model retained. Original rejected native preserved; this corrected Front is selected as version 02.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-09/front-v02-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6075,11 +6116,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 20,
-    "acceptedActivePhotographs": 63,
+    "acceptedActivePhotographs": 64,
     "incompleteLooks": 20,
     "completedMasters": 20,
     "unresolvedViews": [
-      "mw-r2-activewear-09:front",
       "mw-r2-activewear-09:back",
       "mw-r2-activewear-09:editorial",
       "mw-r2-activewear-10:back",
