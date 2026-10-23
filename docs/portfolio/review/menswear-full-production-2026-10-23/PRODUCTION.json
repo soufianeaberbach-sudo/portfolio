@@ -3636,11 +3636,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1914344,
+        "nativeMode": "RGB",
+        "sha256": "666cd30fd82d6938f60e67a30c31dd2cce2a79c28dc4aff15741f9ee133e4ff3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5161ce2e-2ae2-4459-b1f3-950862820b8c.png",
+        "generatedAt": "2026-10-23T23:48:20.682483+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-02-front.txt",
+        "promptSHA256": "449aade98ddecf7dcaa02ec504586245d0a4c71653175a467133d1b5b358ea72",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/front.png",
+        "exportSHA256": "1c86c4ec082855db8835a7d3755194c3804c45a09575f3c41047a36b8f8d2aba",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-02/front-600.webp",
+        "previewSHA256": "39d4667cb5aee22ed6c3b9f75c1a4db5c41e2e9b1450c1cc5c376d94f5968e7e",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Espresso leather blouson has fine grain and moderate body, point collar, front yoke/panels, centre metal zip, zip welts and side snap tabs. Dusty blue tee, charcoal straight trousers and dark brown Chelsea boots coherent. Natural adult casting and full-length white studio. Selected worn open; preserve visible seam map and opening.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -5393,7 +5423,7 @@
       "key": "mw-r2-outerwear-02:front",
       "look": "mw-r2-outerwear-02",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -6208,6 +6238,15 @@
       "at": "2026-10-23T23:48:01.130774+00:00",
       "notes": "Same recognizable young-adult model and full taupe coordinate, clean crew/rib finish and sand trainers. Relaxed crossing walking stride with pocket hand, natural soft knit folds and outfit visible; appropriate premium lifestyle Editorial.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-10/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-02",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:48:20.688139+00:00",
+      "notes": "Espresso leather blouson has fine grain and moderate body, point collar, front yoke/panels, centre metal zip, zip welts and side snap tabs. Dusty blue tee, charcoal straight trousers and dark brown Chelsea boots coherent. Natural adult casting and full-length white studio. Selected worn open; preserve visible seam map and opening.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-02/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -6220,7 +6259,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 21,
-    "acceptedActivePhotographs": 66,
+    "acceptedActivePhotographs": 67,
     "incompleteLooks": 19,
     "completedMasters": 21,
     "unresolvedViews": [
@@ -6228,7 +6267,6 @@
       "mw-r2-activewear-09:editorial",
       "mw-r2-outerwear-01:back",
       "mw-r2-outerwear-01:editorial",
-      "mw-r2-outerwear-02:front",
       "mw-r2-outerwear-02:back",
       "mw-r2-outerwear-02:editorial",
       "mw-r2-outerwear-03:front",
