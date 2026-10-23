@@ -462,12 +462,28 @@
       "majorCategory": "m-rtw",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-05/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1945043,
+        "sha256": "8b0e6eafbae29dea48cf9ffa4dd09fe07278a38c7de94fc1c3be86fb48df3354",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-2e073226-5e99-4ab3-9da5-338fb217d699.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: eucalyptus linen coordinated short-sleeve shirt and wide straight trouser, realistic slub texture and soft creases, square chest pocket, corozo-style buttons and side splits. Distinct red-haired freckled adult casting. Sand suede fisherman cage shoes include small toe openings; accepted styling variation from fully closed-toe brief. Collar sits as relaxed open camp-style spread. Full frame and white background pass.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:48:29.931185+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
