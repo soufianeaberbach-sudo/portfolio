@@ -3035,7 +3035,39 @@
         "reviewNotes": "Recovered true rear: same short dark hair, grey sleeveless top, graphite joggers, single rear welt zip, cuff/ankle zips, crew socks and off-white trainer heels. Fabric and full-length proportions consistent.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1717265,
+        "nativeMode": "RGB",
+        "sha256": "fbef8398331fad7a9948ff91132999baf86f77a5d8200394e7d4f7dcc35bda91",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-bd19d95b-e9e3-4492-b5f0-35f360ce8b59.png",
+        "generatedAt": "2026-10-23T23:41:33.049078+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-07-editorial.txt",
+        "promptSHA256": "899ab22172f0fd20b6b3550fee38070c98807a3b61759f6aea8f36ed82f8d3bd",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-07/editorial.png",
+        "exportSHA256": "22eda0bead470c1a1a5857538443e8b97627d2e41544e12c885cdcd4d9e2a86d",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-07/editorial-600.webp",
+        "previewSHA256": "eb49c1f02712cdb77ebb47d1954e34ac8ad9f63445ad021a15f53488b51963d4",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Recovered native retains same model and all outfit pieces. Natural diagonal step with one pocket hand, pants knee articulation visible and plausible stretch-woven movement, full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4984,7 +5016,7 @@
       "key": "mw-r2-activewear-07:editorial",
       "look": "mw-r2-activewear-07",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5795,6 +5827,15 @@
       "at": "2026-10-23T23:41:27.678492+00:00",
       "notes": "Recovered true rear: same short dark hair, grey sleeveless top, graphite joggers, single rear welt zip, cuff/ankle zips, crew socks and off-white trainer heels. Fabric and full-length proportions consistent.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-07",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:41:33.052606+00:00",
+      "notes": "Recovered native retains same model and all outfit pieces. Natural diagonal step with one pocket hand, pants knee articulation visible and plausible stretch-woven movement, full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-07/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5807,11 +5848,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 18,
-    "acceptedActivePhotographs": 58,
+    "acceptedActivePhotographs": 59,
     "incompleteLooks": 22,
     "completedMasters": 18,
     "unresolvedViews": [
-      "mw-r2-activewear-07:editorial",
       "mw-r2-activewear-08:front",
       "mw-r2-activewear-08:back",
       "mw-r2-activewear-08:editorial",
