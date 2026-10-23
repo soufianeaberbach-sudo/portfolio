@@ -13,6 +13,7 @@ def read():return json.loads(MANIFEST.read_text())
 def sync(data):
  for item in data['queue']:
   look=next(x for x in data['looks'] if x['id']==item['look'])
+  item['attempts']=[{k:v for k,v in a.items() if k in ('at','outcome','pass','cause','nativePath')} for a in data['attempts'] if a['look']==item['look'] and a['view']==item['view']]
   if look[item['view']]:item['state']='SELECTED'
   elif item['state']=='SELECTED':raise ValueError('Selected view disappeared')
  data['statistics']={'targetLooks':40,'targetViews':120,'completedLooks':sum(bool(x.get('master')) for x in data['looks']),'acceptedActivePhotographs':sum(bool(x[v]) for x in data['looks'] for v in VIEWS),'incompleteLooks':sum(not x.get('master') for x in data['looks']),'completedMasters':sum(bool(x.get('master')) for x in data['looks']),'unresolvedViews':[x['key'] for x in data['queue'] if x['state']!='SELECTED'],'failedGenerationAttempts':sum(x['outcome'] in ('PROVIDER_ERROR','REJECTED_VISUAL','INTERRUPTED_NO_OUTPUT') for x in data['attempts'])}
@@ -26,7 +27,7 @@ def publish_catalog(data):
   c=x['concept'];views={}
   for v in VIEWS:
    rec=x[v];views[v]={'src':'/'+rec['exportPath'].removeprefix('public/'),'preview':'/'+rec['previewPath'].removeprefix('public/'),'width':1800,'height':2700,'alt':c['name']+' — '+x['productSubtype']+', '+v+' view. Original AI fashion concept.'}
-  records.append({'id':x['id'],'category':x['technicalCategoryId'],'position':x['position'],'title':c['name'],'product':x['productSubtype'],'fabric':c['fabric'],'construction':c.get('actualSelectedDesign',c['silhouette']+'; '+c['seams']+'; '+c['pockets']),'styling':c['styling'],'colour':c['colour'],'views':views,'master':'/'+x['master']['path'].removeprefix('public/'),'ownerArtisticAcceptance':'PENDING','provenance':'Original AI fashion concept / visual exploration. Material and construction are design intent; no physical sample or manufactured project is claimed.'})
+  records.append({'id':x['id'],'category':x['technicalCategoryId'],'position':x['position'],'title':c['name'],'product':x['productSubtype'],'fabric':c['fabric'],'construction':c.get('archivedOriginalSpecification',{}).get('designLanguage',c['silhouette']+'. '+c['seams']+'. '+('Clean front without pockets.' if c['pockets']=='None' else c['pockets']+'.')),'styling':c['styling'],'colour':c['colour'],'views':views,'master':'/'+x['master']['path'].removeprefix('public/'),'ownerArtisticAcceptance':'PENDING','provenance':'Original AI fashion concept / visual exploration. Material and construction are design intent; no physical sample or manufactured project is claimed.'})
  base.atomic(ROOT/'src/data/menswear-ai-production.json',{'collectionId':data['collectionId'],'selectedCompleteLooks':records})
 
 def normalize(rec):

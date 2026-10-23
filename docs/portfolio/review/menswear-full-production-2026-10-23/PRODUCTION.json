@@ -6300,7 +6300,15 @@
       "look": "mw-r2-outerwear-06",
       "view": "front",
       "state": "PENDING",
-      "attempts": []
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "REJECTED_VISUAL",
+          "at": "2026-10-23T23:57:04.570617+00:00",
+          "cause": "Windbreaker/model/garment construction suitable; conspicuous crossed curved side marks on trainers undermine unbranded footwear requirement. Correct shoes only, preserve original output.",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/rejected/front-v01-shoe-marks-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-06:back",
@@ -7159,6 +7167,21 @@
       "at": "2026-10-23T23:56:59.585470+00:00",
       "notes": "Camel wool overcoat shows brushed melton body, structured natural shoulder, wide notch lapel, three-button front, chest welt and lower flaps. Black roll-neck, deep indigo straight denim and polished black boots refined. Actual selected length reads below knee rather than target mid-calf; record this visible refinement for companions. Natural commercial adult casting, full framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-06",
+      "view": "front",
+      "pass": 1,
+      "outcome": "REJECTED_VISUAL",
+      "at": "2026-10-23T23:57:04.570617+00:00",
+      "cause": "Windbreaker/model/garment construction suitable; conspicuous crossed curved side marks on trainers undermine unbranded footwear requirement. Correct shoes only, preserve original output.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/rejected/front-v01-shoe-marks-native.png",
+      "sha256": "f58f65fc4a1b25b4a93053481374968df22909d7a8b22df26e0231350dcca9a0",
+      "nativeDimensions": [
+        1024,
+        1536
+      ],
+      "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-06-front.txt"
     }
   ],
   "archivedNotSelected": [
@@ -7218,6 +7241,6 @@
       "mw-r2-tailoring-10:back",
       "mw-r2-tailoring-10:editorial"
     ],
-    "failedGenerationAttempts": 2
+    "failedGenerationAttempts": 3
   }
 }
