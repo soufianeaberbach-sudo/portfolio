@@ -224,11 +224,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1804411,
+        "nativeMode": "RGB",
+        "sha256": "8dbbee5b499afcfbe96335fe9eaddc15e5abdeacfc24971f9323ef1571eb1814",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-53903bda-bd19-40ec-8782-afe119ea467c.png",
+        "generatedAt": "2026-10-23T23:16:32.149092+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-02-front.txt",
+        "promptSHA256": "f2fe5cefda6a65e1db14e268253fd107a2716cc1867d9659c8d88282ac1cb7bb",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/front.png",
+        "exportSHA256": "3cd53503b8121581e5d0ea483f1ce3e3a62b230f13b9ed419f5460a61dcbf384",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-02/front-600.webp",
+        "previewSHA256": "7d5f2d29fd6a1d3975d58e09c560ce0d656f12ced8d36a3c383972e40fc89c55",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Boxy washed-ink tee has heavy jersey body, dropped shoulder, broad short sleeve, substantial crew binding and straight hem. Sand shorts and canvas low-tops form commercially clear summer support. Natural adult casting and full white studio framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -3377,7 +3407,7 @@
       "key": "mw-r2-casualwear-02:front",
       "look": "mw-r2-casualwear-02",
       "view": "front",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -4220,6 +4250,15 @@
       "at": "2026-10-23T23:15:15.199205+00:00",
       "notes": "Recognizable same model and outfit, natural forward step and one hand at front pocket; garment remains readable with credible denim folds, stylish relaxed commercial fashion movement.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-01/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-02",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:16:32.153428+00:00",
+      "notes": "Boxy washed-ink tee has heavy jersey body, dropped shoulder, broad short sleeve, substantial crew binding and straight hem. Sand shorts and canvas low-tops form commercially clear summer support. Natural adult casting and full white studio framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-02/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -4232,11 +4271,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 7,
-    "acceptedActivePhotographs": 25,
+    "acceptedActivePhotographs": 26,
     "incompleteLooks": 33,
     "completedMasters": 7,
     "unresolvedViews": [
-      "mw-r2-casualwear-02:front",
       "mw-r2-casualwear-02:back",
       "mw-r2-casualwear-02:editorial",
       "mw-r2-casualwear-03:back",
