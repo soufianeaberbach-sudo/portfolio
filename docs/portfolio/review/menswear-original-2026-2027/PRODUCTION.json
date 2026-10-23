@@ -86,12 +86,28 @@
       "majorCategory": "m-streetwear",
       "slot": 5,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-05/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1898558,
+        "sha256": "e46c9c4d199993bd9da631295a9ca5f1f8e8dfea6c74d45e2f0f0bf068356919",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-f84d0922-0234-4379-9554-b5a2b9fc974f.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass: generous barrel-leg cargo is primary; two bellows thigh pockets, knee articulation, matte ripstop and plausible fly; short waffle Henley keeps pockets visible. Distinct adult casting and trail shoes, complete frame, neutral white. Placket button count will be documented from accepted image.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:43:19.621538+00:00"
+      },
       "back": null,
       "editorial": null,
       "master": null
