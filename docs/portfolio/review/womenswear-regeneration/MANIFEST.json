@@ -4448,7 +4448,11 @@
             1536
           ],
           "review": "Actual native inspected. Complete subject and contact shadow; every opaque pixel retained; bounds measure placement only."
-        }
+        },
+        "asset": "/portfolio/generated/ww-ai-evening-ref-02-v2/front.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "back": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-02-v2/back-native.png",
@@ -4482,7 +4486,11 @@
             1500
           ],
           "review": "Actual native inspected. Complete subject and contact shadow; every opaque pixel retained; bounds measure placement only."
-        }
+        },
+        "asset": "/portfolio/generated/ww-ai-evening-ref-02-v2/back.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
       "editorial": {
         "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-02-v2/editorial-native.png",
@@ -4517,21 +4525,116 @@
             1500
           ],
           "review": "Actual native inspected. Complete subject and contact shadow; every opaque pixel retained; bounds measure placement only."
-        }
+        },
+        "asset": "/portfolio/generated/ww-ai-evening-ref-02-v2/editorial.png",
+        "exportWidth": 1800,
+        "exportHeight": 2700,
+        "resampled": true
       },
-      "master": null,
-      "status": "GENERATED",
+      "master": {
+        "asset": "/portfolio/generated/ww-ai-evening-ref-02-v2/master.png",
+        "width": 5400,
+        "height": 2700,
+        "panelWidth": 1800,
+        "panelHeight": 2700,
+        "srcset": "/portfolio/generated/ww-ai-evening-ref-02-v2/master-900.webp 900w, /portfolio/generated/ww-ai-evening-ref-02-v2/master-1800.webp 1800w, /portfolio/generated/ww-ai-evening-ref-02-v2/master-2700.webp 2700w, /portfolio/generated/ww-ai-evening-ref-02-v2/master-3600.webp 3600w, /portfolio/generated/ww-ai-evening-ref-02-v2/master.png 5400w",
+        "nativePanelDimensions": [
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ],
+          [
+            1024,
+            1536
+          ]
+        ],
+        "resamplingDisclosure": "Three separate native portraits (1024×1536, 1024×1536, 1024×1536), uniformly resampled and placed within the requested panels. Not native 1800×2700 detail."
+      },
+      "status": "READY",
       "qualityResult": {
         "ownerArtisticApproval": false,
         "frontVisual": "Distinct mature adult model with silver-grey natural coils and deep brown skin. Forest-green faille one-shoulder gown has the planned broad diagonal fold, architectural waist and gently flared complete hem; black pumps and gold wrist cuff. Actual image inspected: natural hands, complete head and shoes, grounded white studio, realistic fabric. Original concept, not archived beige-mesh reproduction.",
         "backVisual": "True rear photograph: matching silver-grey coils, same right shoulder folded neckline and right-wrist gold cuff, forest-green faille, architectural crossed waist folds, closed rear and complete flared skirt. Correct black pump heels, natural hands, full model and grounded shadow. Original-concept construction continuity visually passes.",
-        "editorialVisual": "Actual Editorial inspected: same silver-coil adult model, forest-green faille shoulder fold and waist construction, right-wrist cuff and black pumps. Distinct gentle three-quarter weight shift with complete draped hem and natural hands. White studio, subtle contact shadow and compatible scale; original provisional concept."
+        "editorialVisual": "Actual Editorial inspected: same silver-coil adult model, forest-green faille shoulder fold and waist construction, right-wrist cuff and black pumps. Distinct gentle three-quarter weight shift with complete draped hem and natural hands. White studio, subtle contact shadow and compatible scale; original provisional concept.",
+        "setVisualReview": "Three genuine matching photographs of Forest Fold reviewed: mature silver-coil model, consistent right-shoulder folded neckline, crossed architectural waist, green faille, right-wrist cuff and black pumps. True rear, distinct subtle Editorial stance, natural hands and full hem. Complete original provisional concept, separate from archived beige historical gown.",
+        "exportGeometryPass": true,
+        "nativeResolutionPass": false,
+        "reviewStatus": "PROVISIONAL_REVIEW_ONLY",
+        "panelMetrics": [
+          {
+            "view": "front",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeSubjectBox": [
+              282,
+              41,
+              750,
+              1445
+            ],
+            "uniformScale": 1.6923076923076923,
+            "exportOpaqueBox": [
+              504,
+              162,
+              1296,
+              2538
+            ],
+            "backgroundPreparation": "Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold. Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured."
+          },
+          {
+            "view": "back",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeSubjectBox": [
+              278,
+              38,
+              748,
+              1430
+            ],
+            "uniformScale": 1.706896551724138,
+            "exportOpaqueBox": [
+              499,
+              162,
+              1301,
+              2538
+            ],
+            "backgroundPreparation": "Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold. Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured."
+          },
+          {
+            "view": "editorial",
+            "nativeDimensions": [
+              1024,
+              1536
+            ],
+            "nativeSubjectBox": [
+              276,
+              43,
+              747,
+              1420
+            ],
+            "uniformScale": 1.7254901960784315,
+            "exportOpaqueBox": [
+              493,
+              162,
+              1306,
+              2538
+            ],
+            "backgroundPreparation": "Reviewed opaque white studio native; RGB pixels preserved, no background removal or colour threshold. Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured."
+          }
+        ]
       },
       "constructionUncertainties": [
         "Original AI concept, not historical garment reproduction or verified technical pattern.",
         "All generated construction remains provisional pending owner artistic review."
       ],
-      "replacementStatus": "NOT_INTEGRATED",
+      "replacementStatus": "READY_FOR_REVIEW_INTEGRATION",
       "actualSourceDimensions": {
         "width": 1400,
         "height": 1875
@@ -4906,10 +5009,11 @@
         "historicalInputSubmitted": false
       },
       "lastVerifiedCheckpoint": {
-        "commit": "5272352f705429cc3e3d5b28983f3c8ddf13c7ff",
+        "commit": "1bbb20ebc8e05dd64a75fe9b88941a2d46c245bc",
         "views": [
           "front",
-          "back"
+          "back",
+          "editorial"
         ],
         "master": false
       }

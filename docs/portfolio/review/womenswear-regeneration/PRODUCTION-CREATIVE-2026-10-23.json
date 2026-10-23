@@ -143,18 +143,23 @@
       "sourceIdentity": "swimwear-ref-04",
       "review": "Three coherent separately generated original-concept photographs: same copper pixie adult model, navy-and-ivory long-sleeve swim design, genuine rear, distinct Editorial step, full figures and grounded shadows. Reviewed opaque studio edges extended only outside the uniformly scaled photo; all original native pixels and all V1 assets preserved.",
       "recordedUTC": "2026-10-23T14:01:07.905398+00:00"
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "review": "Three genuine matching photographs of Forest Fold reviewed: mature silver-coil model, consistent right-shoulder folded neckline, crossed architectural waist, green faille, right-wrist cuff and black pumps. True rear, distinct subtle Editorial stance, natural hands and full hem. Complete original provisional concept, separate from archived beige historical gown.",
+      "recordedUTC": "2026-10-23T14:09:25.001957+00:00"
     }
   ],
-  "updatedUTC": "2026-10-23T14:08:06.779567+00:00",
+  "updatedUTC": "2026-10-23T14:09:25.001973+00:00",
   "metrics": {
     "retainedNativeFiles": 107,
     "newNativeFiles": 6,
-    "activeSelectedViews": 96,
-    "pendingCandidateNativeViews": 7,
-    "completeActiveLooks": 32,
-    "completeMasters": 32,
+    "activeSelectedViews": 99,
+    "pendingCandidateNativeViews": 4,
+    "completeActiveLooks": 33,
+    "completeMasters": 33,
     "sourceBasedRegenerations": 27,
-    "originalConcepts": 5,
+    "originalConcepts": 6,
     "digitallyRenderedLooks": 0,
     "ownerArtisticApprovals": 0
   },
@@ -167,12 +172,6 @@
         "back",
         "editorial"
       ],
-      "masterPending": true
-    },
-    {
-      "sourceIdentity": "evening-ref-02",
-      "identity": "ww-ai-evening-ref-02-v2",
-      "missingCandidateViews": [],
       "masterPending": true
     },
     {
@@ -231,5 +230,17 @@
       ],
       "masterPending": true
     }
-  ]
+  ],
+  "productionScripts": [
+    "scripts/womenswear-creative-production.py",
+    "scripts/womenswear-generation-assets.py",
+    "scripts/womenswear-checkpoint.py"
+  ],
+  "capabilities": {
+    "productionTool": "image_gen.imagegen",
+    "referenceEditing": "Accepted original-concept companion paths supported and successfully used",
+    "nativeResolutionControls": "Not exposed; actual returned portrait sizes retained",
+    "paidAlternativeUsed": false,
+    "renderedGarmentUsed": false
+  }
 }

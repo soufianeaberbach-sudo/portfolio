@@ -4,23 +4,23 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "swimwear-ref-04",
+  "lastCompletedSourceIdentity": "evening-ref-02",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T14:08:10.915489+00:00",
+  "updatedUTC": "2026-10-23T14:11:13.407478+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 32,
+  "completedLooks": 33,
   "pendingLooks": 4,
-  "partiallyGeneratedLooks": 4,
+  "partiallyGeneratedLooks": 3,
   "statusCounts": {
     "INTEGRATED": 10,
-    "READY": 22,
+    "READY": 23,
     "PENDING": 4,
-    "GENERATED": 4
+    "GENERATED": 3
   },
   "currentCategory": "evening",
   "currentSourceIdentity": "evening-ref-02",
-  "currentMilestone": "creative-v2-editorial",
-  "lastSuccessfullyPushedCommit": "5272352f705429cc3e3d5b28983f3c8ddf13c7ff",
+  "currentMilestone": "creative-v2-complete",
+  "lastSuccessfullyPushedCommit": "1bbb20ebc8e05dd64a75fe9b88941a2d46c245bc",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "activewear-ref-09",
@@ -84,7 +84,7 @@
       ]
     }
   ],
-  "notes": "Genuine inspected original-concept native; versioned files, V1 history preserved; full-set integration only after QA.",
+  "notes": "Three native views, exact master/panels and responsive exports visually reviewed. Focused desktop/mobile browser checks pass; historical source remains accessible. V1 files and metadata retained. Original concept provisional, no owner artistic approval.",
   "limitations": [
     "31 actual complete sets; five partial sets; four without generated imagery. 19 genuine views remain missing.",
     "All 97 baseline native photographs and all 350 baseline artwork files are byte-identical.",
@@ -92,7 +92,7 @@
     "No exact moderation trigger or guaranteed filtering fix established; controlled API route unavailable without connection/spending authorization.",
     "Full forty-look site QA, owner artistic approval and final PR remain pending. No merge or deployment."
   ],
-  "remainingLooks": 8,
+  "remainingLooks": 7,
   "nextImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front"
@@ -379,21 +379,21 @@
   "creativeMetrics": {
     "retainedNativeFiles": 107,
     "newNativeFiles": 6,
-    "activeSelectedViews": 96,
-    "pendingCandidateNativeViews": 7,
-    "completeActiveLooks": 32,
-    "completeMasters": 32,
+    "activeSelectedViews": 99,
+    "pendingCandidateNativeViews": 4,
+    "completeActiveLooks": 33,
+    "completeMasters": 33,
     "sourceBasedRegenerations": 27,
-    "originalConcepts": 5,
+    "originalConcepts": 6,
     "digitallyRenderedLooks": 0,
     "ownerArtisticApprovals": 0
   },
   "nativeInventory": {
     "retainedNativeFiles": 107,
-    "activeSelectedViews": 96,
-    "completeActiveLooks": 32,
-    "pendingCandidateNativeViews": 7,
-    "originalConcepts": 5,
+    "activeSelectedViews": 99,
+    "completeActiveLooks": 33,
+    "pendingCandidateNativeViews": 4,
+    "originalConcepts": 6,
     "sourceBasedRegenerations": 27,
     "digitallyRenderedLooks": 0,
     "ownerArtisticApprovals": 0
