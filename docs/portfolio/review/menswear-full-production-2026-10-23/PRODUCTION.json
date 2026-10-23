@@ -2276,7 +2276,39 @@
         "reviewNotes": "Forest football training jersey, mint raglan/underarm mesh panels and rib V-neck paired with tapered full-length tricot pants, calf panels and visible ankle zips. Forest socks and black turf shoes category-appropriate; no club logos or kit numbers. Natural adult athletic casting.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1688681,
+        "nativeMode": "RGB",
+        "sha256": "dd5a8bf0ba25db9e940fa0a48265c199f89ffcb0d7e406e4ae1aab7bdb5180ce",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-28f15fe8-623a-43c2-8d63-ba2dbf19f617.png",
+        "generatedAt": "2026-10-23T23:35:12.220981+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-03-back.txt",
+        "promptSHA256": "b263c0978ca8fc16c074fe7b2c182465e253c55fb161733992e31066527c61ca",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/back.png",
+        "exportSHA256": "3d1d467ecf2c2d6f115b22554ac15e44f5d1d0423a89f3d43ec70c01bbe5fe1d",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/back-600.webp",
+        "previewSHA256": "52248c7ca14627ca510f90f3c4852c3e5f9b3b598cd691ec44c95a2a03cb3803",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear with same model hair, forest/mint raglan jersey, underarm inserts, tapered training trousers, calf panels, ankle zips and black turf shoe heels. Panel placement and material coherent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -4543,7 +4575,7 @@
       "key": "mw-r2-activewear-03:back",
       "look": "mw-r2-activewear-03",
       "view": "back",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5364,6 +5396,15 @@
       "at": "2026-10-23T23:34:54.508170+00:00",
       "notes": "Same athlete/outfit, controlled forward lunge with correct supporting rear leg, natural arms and readable training tee/shorts; full footwear and white studio continuous. Functional motion distinct from static Front.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-01/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-03",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:35:12.224326+00:00",
+      "notes": "True rear with same model hair, forest/mint raglan jersey, underarm inserts, tapered training trousers, calf panels, ankle zips and black turf shoe heels. Panel placement and material coherent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5376,11 +5417,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 15,
-    "acceptedActivePhotographs": 49,
+    "acceptedActivePhotographs": 50,
     "incompleteLooks": 25,
     "completedMasters": 15,
     "unresolvedViews": [
-      "mw-r2-activewear-03:back",
       "mw-r2-activewear-03:editorial",
       "mw-r2-activewear-05:back",
       "mw-r2-activewear-05:editorial",
