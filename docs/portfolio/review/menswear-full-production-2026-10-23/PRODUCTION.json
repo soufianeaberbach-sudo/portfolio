@@ -2702,7 +2702,39 @@
         "reviewNotes": "True rear keeps same dark curls, petrol-blue tricot, silver side panels, raglan back seams, dark rib band/cuffs, straight track pants and grey-white trainer heels. Rear is plain and colour/scale consistent.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1685490,
+        "nativeMode": "RGB",
+        "sha256": "d5857e387f29ae947920e5b21a55e91714e3edc54747768568a9c2c99c073243",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-e4453069-75fa-4ed0-9609-9a70f94289b9.png",
+        "generatedAt": "2026-10-23T23:35:57.283082+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-corrected-2026-2027/mw-r2-activewear-05/front-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-05-editorial.txt",
+        "promptSHA256": "19cf9438c55c5402524a7f70e7b808160f8d893751a8159010ae94c01eb27815",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-05/editorial.png",
+        "exportSHA256": "81870437b4171dea204bc4ebe384330fb4e44a0a48d58f5c7ee36ddad52040f8",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-05/editorial-600.webp",
+        "previewSHA256": "b9e1dea1441f2349c931c6feeb9d274b072d5cf9996424711ccd3eebecf5d66e",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same recognizable model and complete tracksuit, zip height, white tee and trainers. Relaxed diagonal walking stride with one pocket hand gives credible sports-fashion attitude. Panels and soft tricot folds consistent.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4710,7 +4742,7 @@
       "key": "mw-r2-activewear-05:editorial",
       "look": "mw-r2-activewear-05",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5509,6 +5541,15 @@
       "at": "2026-10-23T23:35:51.581915+00:00",
       "notes": "True rear keeps same dark curls, petrol-blue tricot, silver side panels, raglan back seams, dark rib band/cuffs, straight track pants and grey-white trainer heels. Rear is plain and colour/scale consistent.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-05",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:35:57.287388+00:00",
+      "notes": "Same recognizable model and complete tracksuit, zip height, white tee and trainers. Relaxed diagonal walking stride with one pocket hand gives credible sports-fashion attitude. Panels and soft tricot folds consistent.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-05/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5521,11 +5562,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 16,
-    "acceptedActivePhotographs": 52,
+    "acceptedActivePhotographs": 53,
     "incompleteLooks": 24,
     "completedMasters": 16,
     "unresolvedViews": [
-      "mw-r2-activewear-05:editorial",
       "mw-r2-activewear-06:front",
       "mw-r2-activewear-06:back",
       "mw-r2-activewear-06:editorial",
