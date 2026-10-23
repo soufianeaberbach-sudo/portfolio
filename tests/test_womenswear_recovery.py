@@ -111,6 +111,16 @@ class RecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'explicit review'):
             assets.reviewed_placement(native, 'look', {})
 
+    def test_opaque_canvas_extension_preserves_photo_and_joins_edges(self):
+        image = Image.new('RGBA', (4, 5), (248, 249, 250, 255))
+        image.putpixel((0, 2), (220, 225, 230, 255))
+        image.putpixel((2, 3), (255, 255, 255, 255))
+        canvas = assets.studio_canvas(image, 2, 1, opaque=True, size=(8, 8))
+        self.assertEqual(canvas.crop((2, 1, 6, 6)).tobytes(), image.tobytes())
+        self.assertEqual(canvas.getpixel((0, 3)), image.getpixel((0, 2)))
+        self.assertEqual(canvas.getpixel((3, 0)), image.getpixel((1, 0)))
+        self.assertEqual(canvas.getpixel((3, 7)), image.getpixel((1, 4)))
+
 
 if __name__ == '__main__':
     unittest.main()

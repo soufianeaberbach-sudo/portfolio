@@ -23,6 +23,32 @@ MANIFEST = REVIEW / 'MANIFEST.json'
 PROGRESS = REVIEW / 'PROGRESS.json'
 VIEWS = ('front', 'back', 'editorial')
 
+def presentation_versions(manifest):
+    """Yield current candidates and preserved historical production records."""
+    def versions(look):
+        yield look
+        for archive in look.get('archivedPresentations', []):
+            yield from versions(archive['presentation'])
+    for look in manifest['looks']:
+        yield from versions(look)
+
+def native_inventory(manifest):
+    files = {}
+    for version in presentation_versions(manifest):
+        for view in VIEWS:
+            item = version.get(view)
+            if not item:
+                continue
+            previous = files.setdefault(item['nativeAsset'], item['sha256'])
+            assert previous == item['sha256'], 'Conflicting versions share one native path'
+    complete = [look for look in manifest['looks'] if look.get('master')]
+    return {'retainedNativeFiles': len(files), 'activeSelectedViews': len(complete) * 3,
+            'completeActiveLooks': len(complete),
+            'pendingCandidateNativeViews': sum(bool(look.get(v)) for look in manifest['looks'] if not look.get('master') for v in VIEWS),
+            'originalConcepts': sum(look['generationType'] == 'original-concept' for look in complete),
+            'sourceBasedRegenerations': sum(look['generationType'] == 'preserved-design' for look in complete),
+            'digitallyRenderedLooks': 0, 'ownerArtisticApprovals': 0}
+
 def git(*args):
     return subprocess.check_output(['git', *args], cwd=ROOT, text=True).strip()
 
@@ -53,6 +79,17 @@ def validate(manifest):
         ('casualwear', 'activewear', 'evening', 'swimwear'), 10)
     registry = json.loads((ROOT / 'src/data/womenswear-generated.json').read_text())
     records = {r['sourceIdentity']: r for r in registry}
+    inventory = native_inventory(manifest)
+    for version in presentation_versions(manifest):
+        for view in VIEWS:
+            item = version.get(view)
+            if not item:
+                continue
+            native = asset_path(item['nativeAsset'])
+            assert hashlib.sha256(native.read_bytes()).hexdigest() == item['sha256'], str(native)
+            with Image.open(native) as image:
+                assert image.size == (item['width'], item['height']), str(native)
+                image.verify()
     for look in manifest['looks']:
         source = asset_path(look['source']['src'])
         assert hashlib.sha256(source.read_bytes()).hexdigest() == look['sourceSHA256'], look['sourceIdentity'] + ': source changed'
@@ -84,7 +121,7 @@ def validate(manifest):
             record = records[look['sourceIdentity']]
             assert record['image']['src'] == look['master']['asset'], look['sourceIdentity']
             assert record['provisional'] is True, look['sourceIdentity']
-    print('PASS: 40 source hashes, actual native hashes/dimensions, masters, derivatives and registry')
+    print('PASS: 40 source hashes, current and archived native hashes/dimensions, masters, derivatives and registry; ' + str(inventory))
 
 def remote_head():
     lines = git('ls-remote', 'origin', 'refs/heads/' + BRANCH).splitlines()
@@ -127,7 +164,8 @@ def checkpoint(args, manifest):
     worlds = ('casualwear', 'activewear', 'evening', 'swimwear')
     incomplete = [x for x in manifest['looks'] if not x.get('master')]
     incomplete.sort(key=lambda x: (worlds.index(x['category']), x.get('priority', 2), x['currentSlot']))
-    blocked = [x for x in incomplete if any(f.get('error') == 'moderation_blocked' and not x.get(f.get('view')) for f in x.get('generationFailures', []))]
+    original_slots = manifest.get('creativeRecovery', {}).get('originalConceptSlots', [])
+    blocked = [x for x in incomplete if not (x['sourceIdentity'] in original_slots and x.get('productionVersion') != 'creative-v2') and any(f.get('error') == 'moderation_blocked' and not x.get(f.get('view')) for f in x.get('generationFailures', []))]
     actionable = [x for x in incomplete if x not in blocked]
     completed = [x for x in manifest['looks'] if x.get('master')]
     current = next((x for x in manifest['looks'] if x['sourceIdentity'] == args.source_id), None)
@@ -137,6 +175,8 @@ def checkpoint(args, manifest):
         'updatedUTC': datetime.now(timezone.utc).isoformat(),
         'branch': BRANCH,
         'completedLooks': len(completed),
+        'nativeInventory': native_inventory(manifest),
+        'acceptedNativeImages': native_inventory(manifest)['retainedNativeFiles'],
         'remainingLooks': len(incomplete),
         'pendingLooks': sum(not any(x.get(v) for v in VIEWS) for x in incomplete),
         'partiallyGeneratedLooks': sum(any(x.get(v) for v in VIEWS) for x in incomplete),

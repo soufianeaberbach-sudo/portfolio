@@ -122,6 +122,24 @@ def reviewed_placement(image, source_id, output):
         raise ValueError('Empty subject')
     return rgba, body, support, method
 
+def studio_canvas(resized, x, y, opaque=False, size=(1800, 2700)):
+    """Extend only outside a reviewed opaque photograph, preserving its pixels."""
+    canvas = Image.new('RGBA', size, (255, 255, 255, 255))
+    width, height = resized.size
+    if opaque:
+        if x > 0:
+            canvas.alpha_composite(resized.crop((0, 0, 1, height)).resize((x, height)), (0, y))
+        if x + width < size[0]:
+            canvas.alpha_composite(resized.crop((width-1, 0, width, height)).resize((size[0]-x-width, height)), (x+width, y))
+    canvas.alpha_composite(resized, (x, y))
+    if opaque:
+        if y > 0:
+            canvas.paste(canvas.crop((0, y, size[0], y+1)).resize((size[0], y)), (0, 0))
+        if y + height < size[1]:
+            bottom = y + height
+            canvas.paste(canvas.crop((0, bottom-1, size[0], bottom)).resize((size[0], size[1]-bottom)), (0, bottom))
+    return canvas
+
 def assemble(source_id):
     manifest = read_manifest()
     look = next(item for item in manifest['looks'] if item['sourceIdentity'] == source_id)
@@ -150,10 +168,12 @@ def assemble(source_id):
         sl, st, sr, sb = support
         if min(x + sl * scale, y + st * scale) < 0 or x + sr * scale > 1800 or y + sb * scale > 2700:
             raise ValueError(f'{view}: subject/shadow exceeds safe canvas; revise framing, never crop anatomy.')
-        canvas = Image.new('RGBA', (1800, 2700), (255, 255, 255, 255))
-        canvas.alpha_composite(resized, (x, y))
+        opaque_studio = native.mode == 'RGB' and bool(output.get('nativeBackgroundReview'))
+        canvas = studio_canvas(resized, x, y, opaque=opaque_studio)
+        if opaque_studio:
+            matte_method += ' Outside-photo canvas uses continuous edge extension; no native pixel masked or recoloured.'
         panel = canvas.convert('RGB')
-        save_image(panel, asset_dir / f'{view}.png', optimize=True)
+        save_image(panel, asset_dir / f'{view}.png', compress_level=4)
         panels.append(panel)
         output.update({'asset': f'/portfolio/generated/{look["generatedIdentity"]}/{view}.png', 'exportWidth': 1800, 'exportHeight': 2700,
                        'resampled': native.size != (1800, 2700), 'qualityStatus': 'VISUAL_PASS_NATIVE_RESOLUTION_LIMITED'})
@@ -164,7 +184,7 @@ def assemble(source_id):
     master = Image.new('RGB', (5400, 2700), 'white')
     for index, panel in enumerate(panels):
         master.paste(panel, (1800 * index, 0))
-    save_image(master, asset_dir / 'master.png', optimize=True)
+    save_image(master, asset_dir / 'master.png', compress_level=4)
     srcset = []
     for width in (900, 1800, 2700, 3600):
         derivative = master.resize((width, width // 2), Image.Resampling.LANCZOS)
@@ -185,12 +205,16 @@ def assemble(source_id):
               'caption': look.get('generatedCaption', look.get('generatedDescription', look['source']['alt'])),
               'editorialWorld': look['category'], 'slot': look['currentSlot'], 'generationType': look['generationType'],
               'provisional': True, 'integrated': True, 'nativeResolutionLimited': True,
-              'backInterpreted': (look['source'].get('views', 1) == 1),
+              'backInterpreted': (look['generationType'] != 'original-concept' and look['source'].get('views', 1) == 1),
               'uncertainties': look['constructionUncertainties'],
               'credit': {'source': 'AI-generated provisional presentation · OpenAI native image tool'},
               'image': {'src': master_url, 'srcset': ', '.join(srcset), 'width': 5400, 'height': 2700,
                         'alt': look.get('generatedDescription', 'AI-generated provisional presentation of ' + look['source']['alt']),
                         'front': 1/3, 'views': 3, 'thirdView': 'editorial', 'separable': True}}
+    if look.get('provenance'):
+        record.update({'provenance': look['provenance'], 'conceptName': look['conceptName'],
+                       'productionVersion': look['productionVersion'],
+                       'historicalReproduction': False, 'ownerArtisticApproval': False})
     records = [r for r in records if r['id'] != record['id']] + [record]
     atomic_json(REGISTRY, records)
     # Publish manifest readiness last. If interrupted earlier, the three native
