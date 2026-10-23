@@ -27,15 +27,36 @@
       ],
       "sha256": "ed26f60bdd57dfe533799f582e49a2a8e3c0a93a4b52f974425ef5c0b89152fe",
       "reviewNote": "Actual full native inspected: distinct adult copper-pixie freckled model; navy crew-neck long-sleeve swim one-piece, symmetric ivory curved side panels, clean seams and cuffs. Original concept differs clearly from archived magenta design and existing swimwear. Complete head, natural hands and feet, balanced white studio and grounded shadow; no text, duplicates or visible defects. Native bytes unchanged; provisional concept, no historical fidelity claim."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "generatedIdentity": "ww-ai-swimwear-ref-04-v2",
+      "view": "back",
+      "status": "ACCEPTED",
+      "recordedUTC": "2026-10-23T13:50:30.742737+00:00",
+      "request": {
+        "prompt": "Create a matching true rear product photograph of the same adult copper-pixie model and original navy-and-ivory long-sleeve swim one-piece in the accepted Front photograph. Stand naturally facing directly away, with the back of the head visible and arms relaxed. Continue the ivory curved side panels around the sides; keep the navy back, high round neckline, short concealed centre-back zipper, long sleeves and simple swim-leg hems. Same fabric, model, barefoot styling and photographic scale. White studio, balanced soft light, realistic textile detail and subtle floor-contact shadow. Complete head, hands and feet within generous full-length portrait margins. One model, one photograph, no text or graphics.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v2/front-native.png"
+        ],
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-04-v2/back-native.png",
+      "nativeDimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "494397950824b3658e22a760820f747ec34d4f85ec4281debb1e55fd5bf4d5a7",
+      "reviewNote": "True directly rear-facing new photograph with back of copper pixie head visible. Matching navy knit, long sleeves, ivory side insets and original-concept concealed short centre-back zip; same model proportions and barefoot styling. Natural hands, complete feet, grounded shadow and clean white studio; no mirrored Front. All rear details belong to the provisional original concept, not historical garment evidence."
     }
   ],
   "setReviews": [],
-  "updatedUTC": "2026-10-23T13:47:58.312388+00:00",
+  "updatedUTC": "2026-10-23T13:50:30.742756+00:00",
   "metrics": {
-    "retainedNativeFiles": 102,
-    "newNativeFiles": 1,
+    "retainedNativeFiles": 103,
+    "newNativeFiles": 2,
     "activeSelectedViews": 93,
-    "pendingCandidateNativeViews": 7,
+    "pendingCandidateNativeViews": 8,
     "completeActiveLooks": 31,
     "completeMasters": 31,
     "sourceBasedRegenerations": 27,
@@ -94,7 +115,6 @@
       "sourceIdentity": "swimwear-ref-04",
       "identity": "ww-ai-swimwear-ref-04-v2",
       "missingCandidateViews": [
-        "back",
         "editorial"
       ],
       "masterPending": true
