@@ -1160,12 +1160,34 @@
         "adoptedFromGeneratedConcept": "mw26-activewear-02",
         "selectionReview": "Same athletic model and shoes across true racerback, split running shorts, back waist zip and controlled running Editorial. No certified performance claimed."
       },
-      "master": null,
-      "status": "PLANNED",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-02/master.png",
+        "sha256": "a627a5051f87087062ae33ff7f0e34cf194af16636cbc7d0e041305fd917496c",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "adoptedFromGeneratedConcept": "mw26-activewear-02",
-      "autonomousReview": "Same athletic model and shoes across true racerback, split running shorts, back waist zip and controlled running Editorial. No certified performance claimed."
+      "autonomousReview": "Same athletic model and shoes across true racerback, split running shorts, back waist zip and controlled running Editorial. No certified performance claimed.",
+      "setReview": {
+        "at": "2026-10-23T23:14:02.501799+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Same athletic model and shoes across true racerback, split running shorts, back waist zip and controlled running Editorial. No certified performance claimed.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-activewear-03",
@@ -3999,10 +4021,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 2,
+    "completedLooks": 3,
     "acceptedActivePhotographs": 22,
-    "incompleteLooks": 38,
-    "completedMasters": 2,
+    "incompleteLooks": 37,
+    "completedMasters": 3,
     "unresolvedViews": [
       "mw-r2-casualwear-01:front",
       "mw-r2-casualwear-01:back",
