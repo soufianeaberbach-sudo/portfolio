@@ -523,7 +523,7 @@
       "majorCategory": "m-activewear",
       "slot": 4,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -545,7 +545,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:45:17.352520+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-04/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1665319,
+        "sha256": "c0c3410d95f4bce0c26e8c9b5934dd946423fffc2f1c0ffa124e8477e05cf5b8",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-ddb5ce63-bb95-4e28-92f7-a95f3eedb930.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-activewear-04/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: matching dark waves, plain warm-white polo, forest collar and sleeve binding; forest shorts with clean seat seams and side vents, single sock stripe and correct green shoe heel panels. Proportions, scale and neutral white match.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T19:03:58.882299+00:00"
+      },
       "editorial": null,
       "master": null
     },
