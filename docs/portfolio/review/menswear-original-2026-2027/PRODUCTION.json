@@ -387,7 +387,7 @@
       "majorCategory": "m-activewear",
       "slot": 2,
       "pilot": true,
-      "productionStatus": "COMPANIONS_IN_PROGRESS",
+      "productionStatus": "PILOT_SET_READY_FOR_OWNER_REVIEW",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -406,8 +406,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Visible pass: lightweight perforated ice-blue singlet, bound armholes, short split running bottoms, cushioned mesh shoes and credible athletic casting. Complete square Front with neutral white floor and soft contact shadow. Liner and internal cord remain design intent, not visually certified.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T18:44:29.695743+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-02/front.png",
+        "generatedAt": "2026-10-23T18:44:29.695743+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "38366f04993d364780de57e408a222ec56e4c6c7111045c66baa90c5e643c927"
       },
       "back": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-02/back-native.png",
@@ -425,8 +433,16 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "True rear pass: racerback straps logically join front, consistent perforation and binding, graphite split shorts have one narrow rear zip and no invented bulky pockets. Hair, runner physique, socks and pale-lime shoe heels match. Complete silhouette and neutral white.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:01:07.648621+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-02/back.png",
+        "generatedAt": "2026-10-23T19:01:07.648621+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "8a7fb41142420519f834dd89eeaf6bd8d476a540dd803930c6d688368dfa8e96"
       },
       "editorial": {
         "nativePath": "assets/source/menswear-original-2026-2027/mw26-activewear-02/editorial-native.png",
@@ -444,10 +460,48 @@
         "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
         "reviewNotes": "Performance campaign pass: light running stride, correct opposing arm and leg, relaxed hands, landing foot and lifted rear shoe entirely framed. Same face, hair, singlet perforation and lime bar, split shorts, socks and shoes. Subtle plausible moving textile folds.",
         "ownerApproved": false,
-        "exportPath": null,
-        "generatedAt": "2026-10-23T19:01:13.573320+00:00"
+        "exportPath": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-02/editorial.png",
+        "generatedAt": "2026-10-23T19:01:13.573320+00:00",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeResolutionClaim": false,
+        "exportSHA256": "13511cbe35bdf5c47c5184844ef72f456fdc61ac60e72884fed487a9a1b216a8"
       },
-      "master": null
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-02/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "sha256": "a627a5051f87087062ae33ff7f0e34cf194af16636cbc7d0e041305fd917496c",
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three separately generated native portraits uniformly resampled; 5400\u00d72700 is export geometry, not native photographic resolution."
+      },
+      "setReview": {
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "notes": "Running set coherent across Front, genuine racerback and natural running Editorial. Core model, ice-blue/graphite palette, shoe geometry and tiny front bar match; no unsupported athletic performance claim.",
+        "ownerApproval": false,
+        "scaleReview": "Full-length scale compared visually across native set; no anatomy or garment retouching",
+        "limits": "Hidden construction, physical fit and performance not verified. Model continuity assessed visually."
+      },
+      "focusedChecks": {
+        "nativeHashes": true,
+        "decoding": true,
+        "individualGeometry": true,
+        "masterGeometry": true,
+        "exactMasterPanels": true,
+        "responsiveGeometry": true,
+        "threeDistinctFiles": true,
+        "resolutionDisclosure": true
+      }
     },
     {
       "id": "mw26-activewear-03",
