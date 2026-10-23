@@ -40,7 +40,7 @@
       "majorCategory": "m-streetwear",
       "slot": 3,
       "pilot": true,
-      "productionStatus": "FRONT_REVIEWED",
+      "productionStatus": "COMPANIONS_IN_PROGRESS",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
@@ -62,7 +62,25 @@
         "exportPath": null,
         "generatedAt": "2026-10-23T18:41:54.248509+00:00"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-streetwear-03/back-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1944711,
+        "sha256": "e82eba749aa16054d2f52706ed9855abc067d14709a6ae2cc26a3973f4a41f4a",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5c74ebd0-5488-42af-b117-bcc48e46abaf.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [
+          "assets/source/menswear-original-2026-2027/mw26-streetwear-03/front-native.png"
+        ],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "True rear pass: same short afro, wash, cropped boxy body, yoke, two vertical panels and button hem tabs; jeans rear yoke and two patch pockets, shoes viewed from heel. No mirrored front. Complete silhouette.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:55:07.860742+00:00"
+      },
       "editorial": null,
       "master": null
     },
