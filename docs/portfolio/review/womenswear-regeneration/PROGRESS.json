@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T09:37:33.523158+00:00",
+  "updatedUTC": "2026-10-23T09:42:45.397847+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
   "pendingLooks": 5,
@@ -17,10 +17,10 @@
     "PENDING": 5,
     "GENERATED": 4
   },
-  "currentCategory": "activewear",
-  "currentSourceIdentity": null,
-  "currentMilestone": "partial-look-recovery-outcomes",
-  "lastSuccessfullyPushedCommit": "0793fbaee87894361a0f0456a65da4eb7b1328b6",
+  "currentCategory": "swimwear",
+  "currentSourceIdentity": "swimwear-ref-04",
+  "currentMilestone": "independent-source-editorial-native",
+  "lastSuccessfullyPushedCommit": "baeacf85dc2466caa5f8e152efd0b0809a143dbe",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -459,6 +459,23 @@
           "status": "MODERATION_REFUSED",
           "moderationStage": "output",
           "requestId": "9e55a433-90ee-4936-9e88-921e2b6fd91c"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T09:38:41.620Z",
+          "generationPrompt": "Produce one new full-length Editorial commercial studio photograph. Use the accepted Back as the primary reference for this adult model's natural proportions, brunette low bun, rectangular sunglasses, small hoops, bare feet, blue material and provisional rear arrangement. Use the original Front for exact visible garment construction and face. Keep the azure-blue gathered cup panels, thin halter neck straps, original narrow crossed front straps, small central ring, teardrop abdomen opening, waist openings and high-waisted lower section, all source colors, fabric, cut and coverage. A restrained front three-quarter standing pose with a small natural weight shift, relaxed natural hands and neutral expression. Opaque seamless white cyclorama and white floor, balanced neutral studio light and subtle natural floor-contact shadow. Whole head, both hands and feet inside comfortable full-length portrait margins; realistic anatomy, textile and skin. Exactly one adult professional model in one photograph, no text, logos, added graphics, props, borders, collage or second person. Non-sexual garment catalogue presentation; preserve outfit and accessories unchanged. Unseen rear construction remains provisional.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-06-v1/back-native.png",
+            "/workspace/portfolio/public/portfolio/swim/6-1400.webp"
+          ],
+          "transparentBackground": false,
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 51a1ca64-7c48-4bd8-8d3a-b26bd036282b. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b"
         }
       ]
     },
@@ -1012,7 +1029,7 @@
       ]
     }
   ],
-  "notes": "98 accepted natives; evening 02 Front remotely saved. Recovery has one input refusal and four output refusals. Exact requests and decisions retained; no claimed moderation repair. Continue remaining independently permitted production.",
+  "notes": "99 accepted native photographs. Swimwear 04 Editorial generated from its unchanged original independent garment reference, visually compared with saved Front and preserved. Rejected Front input not reused. All 97 baseline natives and 31 masters protected.",
   "limitations": [
     "31 genuine complete provisional sets and four partial sets; 23 views remain unavailable after provider moderation decisions or source-input blocks.",
     "All original 92 natives, 329 baseline artwork files, historical sources and 29 complete baseline records are preserved.",
@@ -1189,17 +1206,17 @@
     }
   ],
   "nativeResolutionNote": "87 original accepted natives at 1024x1536, 9 at 1086x1448 and 1 at 1084x1451. All native bytes unchanged; 1800x2700 panels and 5400x2700 masters use proportional resampling.",
-  "acceptedNativeImages": 98,
-  "missingIndividualViews": 22,
+  "acceptedNativeImages": 99,
+  "missingIndividualViews": 21,
   "moderationBlockedIndividualViews": 21,
   "currentToolAvailability": {
     "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
     "reasoningErrorRecurred": false,
-    "newAcceptedImages": 1
+    "newAcceptedImages": 2
   },
-  "freshSessionAcceptedImages": 1,
+  "freshSessionAcceptedImages": 2,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 5,
+  "freshSessionModerationFailures": 6,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,

@@ -172,19 +172,57 @@
       "status": "MODERATION_REFUSED",
       "moderationStage": "output",
       "requestId": "b79b5f98-8f4b-427c-8064-24121f3ec71a"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "view": "editorial",
+      "tool": "image_gen.imagegen",
+      "recordedUTC": "2026-10-23T09:38:41.620Z",
+      "generationPrompt": "Produce one new full-length Editorial commercial studio photograph. Use the accepted Back as the primary reference for this adult model's natural proportions, brunette low bun, rectangular sunglasses, small hoops, bare feet, blue material and provisional rear arrangement. Use the original Front for exact visible garment construction and face. Keep the azure-blue gathered cup panels, thin halter neck straps, original narrow crossed front straps, small central ring, teardrop abdomen opening, waist openings and high-waisted lower section, all source colors, fabric, cut and coverage. A restrained front three-quarter standing pose with a small natural weight shift, relaxed natural hands and neutral expression. Opaque seamless white cyclorama and white floor, balanced neutral studio light and subtle natural floor-contact shadow. Whole head, both hands and feet inside comfortable full-length portrait margins; realistic anatomy, textile and skin. Exactly one adult professional model in one photograph, no text, logos, added graphics, props, borders, collage or second person. Non-sexual garment catalogue presentation; preserve outfit and accessories unchanged. Unseen rear construction remains provisional.",
+      "referenceAssets": [
+        "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-06-v1/back-native.png",
+        "/workspace/portfolio/public/portfolio/swim/6-1400.webp"
+      ],
+      "transparentBackground": false,
+      "assetProduced": false,
+      "error": "moderation_blocked",
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 51a1ca64-7c48-4bd8-8d3a-b26bd036282b. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "51a1ca64-7c48-4bd8-8d3a-b26bd036282b"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "view": "editorial",
+      "recordedUTC": "2026-10-23T09:42:41.538884+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Create one distinct full-length Editorial commercial catalogue photograph of the exact adult professional model and magenta swim set in this original garment photograph. Keep the source model's facial features, natural proportions, center-part dark hair tied low, small hoop earrings and bare feet. Preserve the opaque magenta gathered bandeau, its thin halter straps, matching original tie-side bottom, bow positions and long tie ends, exact color, material, cut and coverage. Use a quiet slight three-quarter orientation with a gentle natural weight shift and relaxed hands, calm professional expression. Opaque seamless white commercial studio and white floor, balanced neutral lighting, realistic textile and a small natural floor-contact shadow. Entire head, both hands, all ties and feet comfortably inside full-length portrait margins. Exactly one adult model in one photograph, no text, logos, graphics, props, frame, diptych, montage or extra figure. Non-sexual commercial garment presentation. No outfit changes. Rear construction is not supported by this Front source and remains provisional.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/swim/4-1400.webp"
+        ],
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-04-v1/editorial-native.png",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "sha256": "5eeada6daf2dcbdb5db7cb092eadc782fdde5bfd6f6e8ed04083069ce5d1b777",
+      "reviewNote": "Actual new native visually compared with original garment photograph and saved Front: compatible adult model facial features, dark center-part tied-back hair, small hoops, bare feet and natural proportions. Magenta gathered bandeau and thin halter, matching original tie-side bottom, bows and long ends retained. Distinct restrained three-quarter step, full head, natural hands and feet, realistic textile, balanced light and white studio floor with soft contact shadow. Source-supported visible construction retained; exact unseen rear remains provisional. Genuine native saved unchanged at recorded dimensions."
     }
   ],
   "notAttempted": [],
-  "newAcceptedImages": 1,
+  "newAcceptedImages": 2,
   "newCompleteLooks": 0,
   "ownerArtisticApproval": false,
-  "updatedUTC": "2026-10-23T09:37:25.600646+00:00",
+  "updatedUTC": "2026-10-23T09:42:41.538906+00:00",
   "finalCounts": {
     "completeLooks": 31,
-    "acceptedNativeImages": 98,
+    "acceptedNativeImages": 99,
     "partialLooks": 4,
     "withoutGeneratedViews": 5,
-    "missingViews": 22
+    "missingViews": 21
   },
   "remainingViews": [
     {
@@ -228,8 +266,7 @@
     {
       "sourceIdentity": "swimwear-ref-04",
       "missingViews": [
-        "back",
-        "editorial"
+        "back"
       ]
     },
     {
@@ -255,5 +292,19 @@
       ]
     }
   ],
-  "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED"
+  "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
+  "independentReferenceReview": {
+    "swimwear-ref-04": {
+      "rejectedRequestReference": "/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png",
+      "independentOriginal": "/portfolio/swim/4-1400.webp",
+      "evidence": "Unchanged historical original garment photograph, distinct from generated native. It is the saved Front provenance in the manifest and was visually inspected: matching adult model/garment. No input-stage refusal of this original file is recorded. Owner authorizes original-reference use. Eligible for one independent Editorial request; acceptance and identity must still be verified.",
+      "noRejectedFileAltered": true
+    },
+    "swimwear-ref-03": {
+      "available": "One historical source plus its responsive copy; no accepted companion or genuine independent design reference found. Previously refused source will not be resubmitted."
+    },
+    "swimwear-ref-07": {
+      "available": "One historical source plus its responsive copy; no accepted companion or genuine independent design reference found. Previously refused source will not be resubmitted."
+    }
+  }
 }
