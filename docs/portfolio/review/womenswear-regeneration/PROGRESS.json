@@ -6,21 +6,21 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-09",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T08:16:58.530689+00:00",
+  "updatedUTC": "2026-10-23T08:20:03.011011+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 31,
-  "pendingLooks": 7,
-  "partiallyGeneratedLooks": 2,
+  "pendingLooks": 6,
+  "partiallyGeneratedLooks": 3,
   "statusCounts": {
     "INTEGRATED": 10,
     "READY": 21,
-    "PENDING": 7,
-    "GENERATED": 2
+    "PENDING": 6,
+    "GENERATED": 3
   },
-  "currentCategory": "activewear",
-  "currentSourceIdentity": null,
-  "currentMilestone": "priority-b-provider-outcomes",
-  "lastSuccessfullyPushedCommit": "8baf8bca1148a601eb3250cccb84bb21ef80aa6b",
+  "currentCategory": "evening",
+  "currentSourceIdentity": "evening-ref-02",
+  "currentMilestone": "back-native",
+  "lastSuccessfullyPushedCommit": "48c46260a8680e55ce8b161961a6cac252c956a6",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": null,
@@ -178,6 +178,22 @@
           "recordedUTC": "2026-10-22T22:43:19.000Z",
           "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
           "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:18:12.142Z",
+          "generationPrompt": "Create one full-length FRONT premium commercial occasionwear catalogue photograph of the exact beige gown and adult professional model in the supplied original Front and Back reference. Preserve the broad straight off-shoulder folded band wrapping both upper arms, open honeycomb mesh textile with fine beige outlines and tonal foundation layers as visible in source, fitted long column through hips and gentle flare into a complete floor-length hem with modest pooling. Same beige color, mesh scale, neckline proportions and silhouette. Preserve the adult model, natural proportions and chestnut hair swept into the same neat low updo. Face directly toward camera in a calm neutral full-length catalogue stance with natural relaxed hands. Balanced neutral studio illumination, realistic textile detail and subtle floor-contact shadow. Entire head, hands, complete hem and any visible shoe tips comfortably inside a portrait frame. Genuine transparent background preserving mesh and hair edges and shadow. Exactly one model in one photograph; no text, graphics, props, borders, diptych or duplicate figures. Provisional source-based apparel presentation; preserve the supplied design without claiming verified construction.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 680d2a30-44fe-462f-af6a-bc97dadef0bd. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "680d2a30-44fe-462f-af6a-bc97dadef0bd"
         }
       ]
     },
@@ -683,7 +699,7 @@
       ]
     }
   ],
-  "notes": "Working image tool; 3 new accepted natives, 31 masters, 7 new output moderation refusals. No technical or quota error. Production continues evening 02.",
+  "notes": "96 accepted natives, 31 complete masters. Evening 02 true Back produced and visually validated; Front refusal preserved. Continue independent Editorial.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -840,17 +856,17 @@
     }
   ],
   "nativeResolutionNote": "Original accepted sets retain 1024x1536 natives. Five new saved portraits are actual 1086x1448 RGBA, not resampled; uniform 1800x2700 exports remain pending complete sets.",
-  "acceptedNativeImages": 95,
-  "missingIndividualViews": 25,
+  "acceptedNativeImages": 96,
+  "missingIndividualViews": 24,
   "moderationBlockedIndividualViews": 11,
   "currentToolAvailability": {
     "status": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
     "reasoningErrorRecurred": false,
-    "newAcceptedImages": 3
+    "newAcceptedImages": 4
   },
-  "freshSessionAcceptedImages": 3,
+  "freshSessionAcceptedImages": 4,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 7,
+  "freshSessionModerationFailures": 8,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,

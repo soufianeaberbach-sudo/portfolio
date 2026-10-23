@@ -4289,11 +4289,31 @@
       "cinematicRoles": [],
       "priority": 2,
       "front": null,
-      "back": null,
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
+        "width": 1084,
+        "height": 1451,
+        "mode": "RGBA",
+        "sha256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+        "toolOutputPath": "/workspace/generated_images/exec-bcca5b58-d315-4d8b-869b-9e1441c78c5a.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "Create one separate full-length TRUE BACK commercial occasionwear catalogue photograph of the exact beige honeycomb-mesh gown and adult model in the supplied original Front/Back source. One model standing directly away with back of head visible, calm posture and relaxed hands. Preserve chestnut hair in the neat low updo and natural proportions. Follow the actual rear reference: broad straight off-shoulder band wrapping upper arms, low open back below it, thin tonal horizontal tie with long bow ends at mid-back, matching column skirt with original center rear closure, fitted hips and gently flared complete floor-length pooling hem. Keep beige mesh color, honeycomb pattern scale and tonal foundation layers as visible in source; no new slit, straps, trim or silhouette changes. Balanced neutral commercial studio lighting, realistic textile and subtle natural floor-contact shadow. Full head, hands, all ties, entire hem and any visible shoe tips inside comfortable portrait margins. Genuine transparent background preserving fine mesh, hair and shadow. Exactly one model, one photograph; no text, graphics, props, diptych, collage or border. Provisional source-based garment presentation, construction unverified.",
+        "referenceAssets": [
+          "/portfolio/evening/2-1400.webp"
+        ],
+        "generationOperation": "Separate true-rear generation following original Front and Back garment source",
+        "nativeResampled": false,
+        "reviewNote": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1086x1448 RGBA retained unchanged; Front remains missing after provider refusal.",
+        "acceptedUTC": "2026-10-23T08:20:00.606624+00:00"
+      },
       "editorial": null,
       "master": null,
-      "status": "PENDING",
-      "qualityResult": null,
+      "status": "GENERATED",
+      "qualityResult": {
+        "backVisual": "Inspected actual native over white against original rear: single directly rear-facing adult, compatible chestnut low updo and natural body proportions. Beige honeycomb mesh, broad off-shoulder arm band, low open back, thin horizontal back tie and long bow ends, center rear closure, fitted column and gently flared pooling hem retained. Full head, natural hands and entire hem visible, neutral light, fine mesh/alpha intact and subtle floor contact shading. Exact lace topology and technical construction remain provisional. Genuine 1086x1448 RGBA retained unchanged; Front remains missing after provider refusal.",
+        "ownerArtisticApproval": false,
+        "nativeResolutionLimitation": "Actual native dimensions recorded per view. Standard panels/masters use uniform scaling; no native high-resolution claim."
+      },
       "constructionUncertainties": [
         "Reference photographs do not verify technical construction or authorship."
       ],
@@ -4363,6 +4383,22 @@
           "recordedUTC": "2026-10-22T22:43:19.000Z",
           "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
           "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
+        },
+        {
+          "view": "front",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:18:12.142Z",
+          "generationPrompt": "Create one full-length FRONT premium commercial occasionwear catalogue photograph of the exact beige gown and adult professional model in the supplied original Front and Back reference. Preserve the broad straight off-shoulder folded band wrapping both upper arms, open honeycomb mesh textile with fine beige outlines and tonal foundation layers as visible in source, fitted long column through hips and gentle flare into a complete floor-length hem with modest pooling. Same beige color, mesh scale, neckline proportions and silhouette. Preserve the adult model, natural proportions and chestnut hair swept into the same neat low updo. Face directly toward camera in a calm neutral full-length catalogue stance with natural relaxed hands. Balanced neutral studio illumination, realistic textile detail and subtle floor-contact shadow. Entire head, hands, complete hem and any visible shoe tips comfortably inside a portrait frame. Genuine transparent background preserving mesh and hair edges and shadow. Exactly one model in one photograph; no text, graphics, props, borders, diptych or duplicate figures. Provisional source-based apparel presentation; preserve the supplied design without claiming verified construction.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/evening/2-1400.webp"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 680d2a30-44fe-462f-af6a-bc97dadef0bd. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "680d2a30-44fe-462f-af6a-bc97dadef0bd"
         }
       ],
       "generationRecovery": {
