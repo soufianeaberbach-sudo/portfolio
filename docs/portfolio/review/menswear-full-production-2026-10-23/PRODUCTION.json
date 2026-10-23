@@ -405,11 +405,33 @@
         "reviewNotes": "Same recognizable adult model, three-button polo, texture, tuck, belt, trousers and brown loafers. Elegant crossing walking step, relaxed pocket hand, gaze off camera; clear fashion gesture distinct from Front.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-03/master.png",
+        "sha256": "c762b348f0f9d12ea70448833ad25ec52c4b857ab61b7a988f0d02f90dac99ea",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
-      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
+      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance.",
+      "setReview": {
+        "at": "2026-10-23T23:16:58.835108+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Same model, outfit and studio; genuine rear construction and relaxed walking Editorial. Three distinct native hashes and exact uncropped panel assembly.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-casualwear-04",
@@ -4352,10 +4374,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 7,
+    "completedLooks": 8,
     "acceptedActivePhotographs": 28,
-    "incompleteLooks": 33,
-    "completedMasters": 7,
+    "incompleteLooks": 32,
+    "completedMasters": 8,
     "unresolvedViews": [
       "mw-r2-casualwear-02:back",
       "mw-r2-casualwear-02:editorial",
