@@ -1786,10 +1786,32 @@
         "reviewNotes": "Same model, five-button camp shirt/chest patch, shorts, bracelet and ivory slides. Natural diagonal walking step with pocket hand; outfit remains visible and full-length, plausible light woven movement.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-10/master.png",
+        "sha256": "89816585ea007462356d1ba844e53adf9b3f5321b0dcbf346abdc7dc4bc86f3e",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
-      "provenance": "Original AI fashion concept / visual exploration"
+      "provenance": "Original AI fashion concept / visual exploration",
+      "setReview": {
+        "at": "2026-10-23T23:34:39.521876+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-activewear-01",
@@ -5249,10 +5271,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 13,
+    "completedLooks": 14,
     "acceptedActivePhotographs": 47,
-    "incompleteLooks": 27,
-    "completedMasters": 13,
+    "incompleteLooks": 26,
+    "completedMasters": 14,
     "unresolvedViews": [
       "mw-r2-activewear-01:back",
       "mw-r2-activewear-01:editorial",
