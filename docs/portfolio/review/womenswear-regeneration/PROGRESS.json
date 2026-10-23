@@ -4,26 +4,26 @@
     "audit": "RESOURCE-AUDIT.json",
     "healthyAtRecovery": true
   },
-  "lastCompletedSourceIdentity": "swimwear-ref-10",
+  "lastCompletedSourceIdentity": "swimwear-ref-08",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T07:54:52.522165+00:00",
+  "updatedUTC": "2026-10-23T07:57:18.582896+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
-  "completedLooks": 29,
+  "completedLooks": 30,
   "pendingLooks": 7,
-  "partiallyGeneratedLooks": 4,
+  "partiallyGeneratedLooks": 3,
   "statusCounts": {
     "INTEGRATED": 10,
-    "READY": 19,
+    "READY": 20,
     "PENDING": 7,
-    "GENERATED": 4
+    "GENERATED": 3
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-08",
-  "currentMilestone": "editorial-native",
-  "lastSuccessfullyPushedCommit": "5008d1fb53d1f9506a8630e7de066ac4d50b204f",
+  "currentMilestone": "assembled-master",
+  "lastSuccessfullyPushedCommit": "d207b8b4749bb6cfb09a45d08c56b28c5dba4a6e",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": "swimwear-ref-08",
+  "nextActionableSourceIdentity": null,
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -575,7 +575,7 @@
       ]
     }
   ],
-  "nextAction": "Review three views and assemble master",
+  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -634,7 +634,7 @@
       ]
     }
   ],
-  "notes": "Production image tool works: real 1086x1448 RGBA Editorial generated, inspected and saved. Existing 92 natives preserved. Continue partial looks.",
+  "notes": "30 actual three-view masters. New black set visually inspected, standard geometry validated, registry integrated. Focused browser checks pending dependency installation; continue production.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -642,14 +642,14 @@
     "All photography remains provisional pending owner artistic approval.",
     "Full forty-look collection QA and final PR are not complete; no merge or deployment."
   ],
-  "remainingLooks": 11,
+  "remainingLooks": 10,
   "nextImage": null,
   "nextBlockedImage": {
     "sourceIdentity": "activewear-ref-09",
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "IN_PROGRESS",
+  "productionState": "BLOCKED_ALL_REMAINING_SOURCES",
   "latestRetryPass": {
     "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
     "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
