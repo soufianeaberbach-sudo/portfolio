@@ -2309,7 +2309,39 @@
         "reviewNotes": "True rear with same model hair, forest/mint raglan jersey, underarm inserts, tapered training trousers, calf panels, ankle zips and black turf shoe heels. Panel placement and material coherent.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1749382,
+        "nativeMode": "RGB",
+        "sha256": "f55ba25ab6ba81828b6aa87f8aa69c4253eab90fe284017f629bad1f0d116961",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-a60da001-c745-4ef9-baa7-83b2af3050f9.png",
+        "generatedAt": "2026-10-23T23:35:17.617275+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-activewear-03-editorial.txt",
+        "promptSHA256": "f373fba3b9869da8c5f09fb86ec2f4df0a818dfbc2bfb45fee44dab663c675ab",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/editorial.png",
+        "exportSHA256": "13d687ab8a0c3b6b6c85423260d77d23319b2512d765d3d237d3b87c07810b1c",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-activewear-03/editorial-600.webp",
+        "previewSHA256": "35a76641c084b1b996d29d0e66d6ca1a8cc190bcf699411fbb3b7efc1f3b4a2c",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same recognizable model and forest football outfit, believable controlled lateral ready step and natural arm balance. Mint raglan/underarm/calf panels, ankle zips and turf footwear consistent, full garment visible.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4582,7 +4614,7 @@
       "key": "mw-r2-activewear-03:editorial",
       "look": "mw-r2-activewear-03",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5405,6 +5437,15 @@
       "at": "2026-10-23T23:35:12.224326+00:00",
       "notes": "True rear with same model hair, forest/mint raglan jersey, underarm inserts, tapered training trousers, calf panels, ankle zips and black turf shoe heels. Panel placement and material coherent.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-activewear-03",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:35:17.620618+00:00",
+      "notes": "Same recognizable model and forest football outfit, believable controlled lateral ready step and natural arm balance. Mint raglan/underarm/calf panels, ankle zips and turf footwear consistent, full garment visible.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-activewear-03/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5417,11 +5458,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 15,
-    "acceptedActivePhotographs": 50,
+    "acceptedActivePhotographs": 51,
     "incompleteLooks": 25,
     "completedMasters": 15,
     "unresolvedViews": [
-      "mw-r2-activewear-03:editorial",
       "mw-r2-activewear-05:back",
       "mw-r2-activewear-05:editorial",
       "mw-r2-activewear-06:front",
