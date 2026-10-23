@@ -62,7 +62,8 @@ def register(a):
   'exportPath':None,'generatedAt':datetime.datetime.now(datetime.timezone.utc).isoformat()}
  look['productionStatus']='FRONT_REVIEWED' if a.view=='front' else 'COMPANIONS_IN_PROGRESS'
  atomic(REGISTRY,registry)
- paths=[target,REGISTRY]+list((REVIEW/'receipts').glob('*.json')) if (REVIEW/'receipts').exists() else [target,REGISTRY]
+ paths=[target,REGISTRY]+list((REVIEW/'prompts').glob(a.look+'-*'))
+ if (REVIEW/'receipts').exists(): paths+=list((REVIEW/'receipts').glob('*.json'))
  checkpoint('Save reviewed '+a.look+' '+a.view+' native and production record',paths)
 
 def assemble(a):

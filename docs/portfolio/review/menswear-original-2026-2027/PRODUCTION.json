@@ -389,15 +389,43 @@
       "majorCategory": "m-rtw",
       "slot": 2,
       "pilot": true,
-      "productionStatus": "PLANNED",
+      "productionStatus": "FRONT_REVIEWED",
       "ownerApproval": {
         "status": "PENDING",
         "approved": false
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-original-2026-2027/mw26-rtw-02/front-native.png",
+        "nativeWidth": 1024,
+        "nativeHeight": 1536,
+        "mode": "RGB",
+        "bytes": 1915648,
+        "sha256": "8a0bdf276afd94f9b7e030c23cdd35f4660fb0f676bddfed76968ab180d14b09",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-2f862287-54f8-47b6-9d97-17210ebbfc8e.png",
+        "provenance": "Original AI fashion concept / visual exploration",
+        "referenceInputs": [],
+        "agentVisualStatus": "PASS_FOR_OWNER_REVIEW",
+        "reviewNotes": "Visible pass after casting retry: shaved head and moustache clearly distinguish this model; tobacco vertical tuck texture, fashioned collar and sleeve ribs readable. Oat pleated trousers and espresso suede loafers coherent. Accepted as-rendered variant: four-button placket and lightly tucked hem expose belt, replacing three-button untucked intent. White studio and complete silhouette pass.",
+        "ownerApproved": false,
+        "exportPath": null,
+        "generatedAt": "2026-10-23T18:47:32.319854+00:00"
+      },
       "back": null,
       "editorial": null,
-      "master": null
+      "master": null,
+      "rejectedAttempts": [
+        {
+          "path": "assets/source/menswear-original-2026-2027/mw26-rtw-02/rejected-front-casting-01.png",
+          "sha256": "5dd27699152e24bae282ee572892f2503a934fe75d2f19367791e870d03f50a1",
+          "nativeDimensions": [
+            1024,
+            1536
+          ],
+          "reason": "Casting face and wavy hairstyle too close to court pilot; garment plausible, not selected.",
+          "selected": false
+        }
+      ]
     },
     {
       "id": "mw26-rtw-03",
