@@ -1585,7 +1585,39 @@
         "reviewNotes": "True rear shows same dark hair, stone overshirt back yoke and plain body, cuff plackets, dark brown trousers and ecru sneaker heels. Woven shell and straight hem coherent; correct no front pockets on rear.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1749245,
+        "nativeMode": "RGB",
+        "sha256": "4827dabbd7d50b238d013079442ad8d2cf69a9e573154a623113788606107425",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-961ef381-f408-41a6-949e-2e049444a657.png",
+        "generatedAt": "2026-10-23T23:29:55.949037+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-casualwear-09-editorial.txt",
+        "promptSHA256": "cb242eddcaa9d608f594f836bea29c2d4201e30c112044f36fb64921698bb40c",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-09/editorial.png",
+        "exportSHA256": "91491c2c09ce4c2656eedc495e690adaa2c36e0a7f3df785c1aa15e0acce6bbc",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-casualwear-09/editorial-600.webp",
+        "previewSHA256": "1be79a995fcabaebbd4d90dda197779448e627c7bf113d0d5fbfae1791687864",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same recognizable model and all garment colours, two chest pockets and open overshirt preserved. Relaxed three-quarter cuff adjustment and forward step make clear contemporary editorial stance without hiding primary garment.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -4240,7 +4272,7 @@
       "key": "mw-r2-casualwear-09:editorial",
       "look": "mw-r2-casualwear-09",
       "view": "editorial",
-      "state": "PENDING",
+      "state": "SELECTED",
       "attempts": []
     },
     {
@@ -5093,6 +5125,15 @@
       "at": "2026-10-23T23:29:50.150860+00:00",
       "notes": "True rear shows same dark hair, stone overshirt back yoke and plain body, cuff plackets, dark brown trousers and ecru sneaker heels. Woven shell and straight hem coherent; correct no front pockets on rear.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-casualwear-09",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-23T23:29:55.952350+00:00",
+      "notes": "Same recognizable model and all garment colours, two chest pockets and open overshirt preserved. Relaxed three-quarter cuff adjustment and forward step make clear contemporary editorial stance without hiding primary garment.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-casualwear-09/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -5105,11 +5146,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 12,
-    "acceptedActivePhotographs": 44,
+    "acceptedActivePhotographs": 45,
     "incompleteLooks": 28,
     "completedMasters": 12,
     "unresolvedViews": [
-      "mw-r2-casualwear-09:editorial",
       "mw-r2-casualwear-10:back",
       "mw-r2-casualwear-10:editorial",
       "mw-r2-activewear-01:back",
