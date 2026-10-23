@@ -162,6 +162,43 @@
       ],
       "sha256": "d27c6ca09ff00616c7f2d25579f30c4d12df021cca3a80f8e26f420b2a58b8e0",
       "reviewNote": "Independent original-concept Back returned and inspected: adult blonde curly-bob model, ochre ribbed one-piece, broad straight straps, closed straight rear neckline and espresso waistband. True rear-facing full figure, natural hands and heels, clean white studio, grounded shadow. Distinct from archived silver swimwear; original design not historical recreation."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "request": {
+        "prompt": "Create one premium commercial swimwear catalogue photograph. Photograph the same adult model and original Ochre Wrap outfit in the accepted companion photograph. Clear frontal product view, relaxed natural standing posture. Keep the model identity, hairstyle, accessories, shoes and garment unchanged. Design: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
+        "transparent_background": false,
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v2/back-native.png"
+        ]
+      },
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID da70760d-754f-4b8a-a290-a5e2bf0db8fe. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "recordedUTC": "2026-10-23T14:15:24.230Z",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "da70760d-754f-4b8a-a290-a5e2bf0db8fe"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "generatedIdentity": "ww-ai-swimwear-ref-02-v2",
+      "view": "editorial",
+      "status": "ACCEPTED",
+      "recordedUTC": "2026-10-23T14:17:54.561241+00:00",
+      "request": {
+        "prompt": "Create a distinct editorial product photograph of the same adult blonde curly-bob model and original ochre ribbed swim one-piece in this accepted Back photograph. Use a restrained rear three-quarter stance and a small natural step, with relaxed arms. Keep the broad straps, straight rear neckline, espresso waistband, rib texture, black stud earrings and barefoot styling unchanged. Match the model identity, garment proportions, lighting and photographic scale. Clean white studio, balanced soft light and subtle natural floor shadow. Complete head, hands and feet comfortably within the full-length portrait frame. One model, one photograph, no text or graphics.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v2/back-native.png"
+        ],
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-02-v2/editorial-native.png",
+      "nativeDimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "3c0198cc4f3e0cc0f51618090e8bb3957d093643fac124330672dc4402058287",
+      "reviewNote": "Separate restrained rear-three-quarter Editorial with matching adult curly-bob model, ochre ribbed swim design, broad straps, straight rear neckline, espresso waistband and black studs. Natural step, complete hands and feet, white studio and realistic contact shadow. Front remains provider-refused; this image is not counted as a substitute Front or complete set."
     }
   ],
   "setReviews": [
@@ -181,12 +218,12 @@
       "recordedUTC": "2026-10-23T14:09:25.001957+00:00"
     }
   ],
-  "updatedUTC": "2026-10-23T14:14:17.318654+00:00",
+  "updatedUTC": "2026-10-23T14:17:54.561262+00:00",
   "metrics": {
-    "retainedNativeFiles": 108,
-    "newNativeFiles": 7,
+    "retainedNativeFiles": 109,
+    "newNativeFiles": 8,
     "activeSelectedViews": 99,
-    "pendingCandidateNativeViews": 3,
+    "pendingCandidateNativeViews": 4,
     "completeActiveLooks": 33,
     "completeMasters": 33,
     "sourceBasedRegenerations": 27,
@@ -219,8 +256,7 @@
       "sourceIdentity": "swimwear-ref-02",
       "identity": "ww-ai-swimwear-ref-02-v2",
       "missingCandidateViews": [
-        "front",
-        "editorial"
+        "front"
       ],
       "masterPending": true
     },

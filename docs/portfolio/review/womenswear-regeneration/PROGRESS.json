@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "evening-ref-02",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T14:14:27.266828+00:00",
+  "updatedUTC": "2026-10-23T14:17:58.009188+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 33,
   "pendingLooks": 4,
@@ -19,12 +19,42 @@
   },
   "currentCategory": "swimwear",
   "currentSourceIdentity": "swimwear-ref-02",
-  "currentMilestone": "creative-v2-back",
-  "lastSuccessfullyPushedCommit": "858ff9328f86b6f535300a00e07b7d05861adb28",
+  "currentMilestone": "creative-v2-editorial",
+  "lastSuccessfullyPushedCommit": "eecb77a6cd6161fd553e229abed74df9487d2930",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
   "nextActionableSourceIdentity": "activewear-ref-09",
-  "blockedSources": [],
+  "blockedSources": [
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "failures": [
+        {
+          "view": "front",
+          "error": "moderation_blocked",
+          "generationPrompt": "Create one premium commercial swimwear catalogue photograph. Genuinely original fashion concept: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Model: Adult woman about 32, pale olive skin, broad face, dark brows, platinum-blonde jaw-length curly side-part bob, small black round stud earrings, barefoot. Clear frontal product view, relaxed natural standing posture. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
+          "referenceAssets": [],
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "5e6944cf-21d2-4d27-aa2f-1a2780b24804",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 5e6944cf-21d2-4d27-aa2f-1a2780b24804. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "recordedUTC": "2026-10-23T14:12:04.788Z"
+        },
+        {
+          "view": "front",
+          "error": "moderation_blocked",
+          "generationPrompt": "Create one premium commercial swimwear catalogue photograph. Photograph the same adult model and original Ochre Wrap outfit in the accepted companion photograph. Clear frontal product view, relaxed natural standing posture. Keep the model identity, hairstyle, accessories, shoes and garment unchanged. Design: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v2/back-native.png"
+          ],
+          "status": "MODERATION_REFUSED",
+          "moderationStage": "output",
+          "requestId": "da70760d-754f-4b8a-a290-a5e2bf0db8fe",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID da70760d-754f-4b8a-a290-a5e2bf0db8fe. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "recordedUTC": "2026-10-23T14:15:24.230Z"
+        }
+      ]
+    }
+  ],
   "nextAction": "Generate and validate front for activewear-ref-09; checkpoint before the following view",
   "knownRejectedGenerations": [
     {
@@ -97,7 +127,11 @@
     "sourceIdentity": "activewear-ref-09",
     "view": "front"
   },
-  "nextBlockedImage": null,
+  "nextBlockedImage": {
+    "sourceIdentity": "swimwear-ref-02",
+    "view": "front",
+    "status": "BLOCKED_MODERATION"
+  },
   "productionState": "IN_PROGRESS",
   "latestRetryPass": {
     "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
@@ -259,18 +293,18 @@
     }
   ],
   "nativeResolutionNote": "87 natives at 1024x1536, 12 at 1086x1448, 2 at 1084x1451. Four new recovery natives are RGB white-studio files, retained unchanged. Reviewed proportional placements preserve every RGB pixel; standard master geometry remains 5400x2700.",
-  "acceptedNativeImages": 108,
-  "missingIndividualViews": 18,
+  "acceptedNativeImages": 109,
+  "missingIndividualViews": 17,
   "moderationBlockedIndividualViews": 17,
   "currentToolAvailability": {
     "status": "WORKING_REAL_ORIGINAL_CONCEPT_OUTPUTS",
     "report": "PRODUCTION-CREATIVE-2026-10-23.json",
-    "newAcceptedImages": 7,
+    "newAcceptedImages": 8,
     "reasoningErrorRecurred": false
   },
-  "freshSessionAcceptedImages": 7,
+  "freshSessionAcceptedImages": 8,
   "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 1,
+  "freshSessionModerationFailures": 2,
   "freshSessionQuotaFailures": 0,
   "latestRepairTechnicalFailures": 1,
   "latestRepairNewImages": 0,
@@ -377,10 +411,10 @@
   "currentProductionReport": "PRODUCTION-CREATIVE-2026-10-23.json",
   "creativeProductionReport": "PRODUCTION-CREATIVE-2026-10-23.json",
   "creativeMetrics": {
-    "retainedNativeFiles": 108,
-    "newNativeFiles": 7,
+    "retainedNativeFiles": 109,
+    "newNativeFiles": 8,
     "activeSelectedViews": 99,
-    "pendingCandidateNativeViews": 3,
+    "pendingCandidateNativeViews": 4,
     "completeActiveLooks": 33,
     "completeMasters": 33,
     "sourceBasedRegenerations": 27,
@@ -389,10 +423,10 @@
     "ownerArtisticApprovals": 0
   },
   "nativeInventory": {
-    "retainedNativeFiles": 108,
+    "retainedNativeFiles": 109,
     "activeSelectedViews": 99,
     "completeActiveLooks": 33,
-    "pendingCandidateNativeViews": 3,
+    "pendingCandidateNativeViews": 4,
     "originalConcepts": 6,
     "sourceBasedRegenerations": 27,
     "digitallyRenderedLooks": 0,
