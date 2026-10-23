@@ -6647,6 +6647,40 @@
           "recordedUTC": "2026-10-22T22:43:07.167Z",
           "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
           "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T07:58:47.903Z",
+          "generationPrompt": "Create one full-length true rear commercial catalogue photograph of the same adult professional model and magenta swim set in the accepted Front reference. Stand directly facing away from the camera, back of head visible, relaxed arms and neutral upright stance. Preserve her exact body proportions, dark center-part hair in a low bun, small hoop earrings, bare feet, opaque magenta color, gathered top texture, thin halter neck straps and both side bows with long ends. Use a simple gathered matching rear top band, halter fastening behind the neck and matching lower rear, consistent with the Front; unseen rear construction is provisional. Same balanced neutral studio light, realistic skin and textile, gentle natural contact shadow. Entire head, hands, ties and both feet comfortably inside the portrait frame. One model, one photograph, no text, graphics, props, border, collage or extra people. Genuine transparent background retaining hair, textile edges and soft floor contact shadow.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "error": "moderation_blocked",
+          "status": "MODERATION_FAILURE",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f308ffa5-2f5c-451c-97a6-5c1adb873505. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "httpStatus": 400,
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "f308ffa5-2f5c-451c-97a6-5c1adb873505"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:00:50.903Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial fashion photograph of the exact adult model and magenta swim set in the accepted Front reference. Keep her face, natural proportions, center-part dark hair in the low bun, small hoop earrings and bare feet. Preserve the exact opaque magenta gathered bandeau, thin halter straps, matching tie-side bottom, bow positions and long tie ends, color, cut, coverage and material. A restrained front three-quarter stance with a small natural weight shift, relaxed hands and neutral catalogue expression. Keep the same balanced neutral studio illumination and realistic textile detail. Full head, both hands, all ties and feet comfortably inside the portrait frame, realistic anatomy and gentle grounded floor shadow. Genuine transparent background preserving hair and garment edges. Exactly one model in one photograph, no added accessories, text, graphics, props, borders, diptychs or collages. Provisional source-based apparel presentation; rear construction is unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-04-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID dcdc6827-af8f-47c5-a5e3-565f403d9766. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "httpStatus": 400,
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "dcdc6827-af8f-47c5-a5e3-565f403d9766"
         }
       ],
       "lastVerifiedCheckpoint": {
@@ -6814,6 +6848,38 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Back request rejected; accepted Front remains remotely protected. Two-attempt Back allowance exhausted; Editorial and assembly await Back.",
           "recordedUTC": "2026-10-22T19:56:55.570848+00:00"
+        },
+        {
+          "view": "back",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:02:59.833Z",
+          "generationPrompt": "One full-length true rear studio catalogue photograph of the same adult professional model and grey-and-white swimwear in this accepted Front. Model stands upright directly facing away, relaxed arms, back of head visible. Preserve identical natural proportions, brunette low bun, dark square sunglasses, small hoop earrings and bare feet. Keep opaque grey scoop top with thin grey shoulder straps over the original white halter layer, matching grey high-waisted lower garment and its original narrow crossing waist straps, exact colors, fabric and proportions. Rear construction is provisional: simple matching grey back band over white halter fastening, matching plain lower rear and continuity of the existing waist straps. Soft balanced neutral commercial studio light, realistic textile and skin, subtle grounded floor shadow. Entire head, natural hands and feet comfortably within portrait margins. Exactly one model in one photograph, no typography, graphics, props, extra people, collage or border. Genuine transparent background preserving textile edges, hair and soft shadow. Provisional source-based apparel presentation; unseen construction is unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 479c644c-9c0f-43f4-9432-5997fc3c42e5. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "479c644c-9c0f-43f4-9432-5997fc3c42e5"
+        },
+        {
+          "view": "editorial",
+          "tool": "image_gen.imagegen",
+          "recordedUTC": "2026-10-23T08:04:45.052Z",
+          "generationPrompt": "Create one separate full-length Editorial commercial fashion photograph using this accepted Front as the primary identity and garment reference. Same adult professional model, exact facial features, brunette bun, dark square sunglasses, small hoops, bare feet and natural body proportions. Preserve the exact grey scoop swim top over its white halter layer, thin shoulder straps, grey high-waisted bottom and original narrow crossed waist straps, all colors, material and garment coverage. Give her a quiet front three-quarter standing orientation and gentle natural weight shift, relaxed arms and natural hands, neutral expression. Balanced neutral studio light matching the Front, realistic skin and textile, soft floor contact shadow. Full head, both hands and both feet inside generous portrait margins. Genuine transparent background, intact hair and fabric edges. One model, one photograph, no text, graphics, props, new styling, extra people, collage or border. Provisional source-based apparel presentation; unseen rear construction unverified.",
+          "referenceAssets": [
+            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-05-v1/front-native.png"
+          ],
+          "assetProduced": false,
+          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 561a06ed-a241-43bb-b119-0bd2f038bd4e. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+          "status": "MODERATION_FAILURE",
+          "error": "moderation_blocked",
+          "moderationStage": "output",
+          "category": "sexual",
+          "requestId": "561a06ed-a241-43bb-b119-0bd2f038bd4e"
         }
       ],
       "lastVerifiedCheckpoint": {
@@ -7449,14 +7515,31 @@
         "nativeResampled": false,
         "reviewNote": "Native inspected at true 3:4 proportions over white: same adult center-part tied-back brunette with brown sunglasses and hoops, grey gathered bandeau with central oval opening and forked halter straps, matching bottom and original narrow upper waistband/vertical connectors/long side ties, barefoot. Faithful source cut/color/styling, full head/hands/feet, calm straight stance, natural anatomy, clean alpha edges and subtle contact shading. Actual 1086x1448 RGBA retained unchanged."
       },
-      "back": null,
+      "back": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-09-v1/back-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "b94253847be49a1d20cd0fe13826dd2d50667b4cffb432d114df2b4422b0db7c",
+        "toolOutputPath": "/workspace/generated_images/exec-36f58c5a-5270-46e6-a146-9a3ef60b8e87.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "Create one full-length true rear commercial studio catalogue photograph of the exact adult professional model and grey swim set in the accepted Front. Directly rear-facing upright stance, back of head visible, arms relaxed. Preserve identical model proportions, center-part brunette bun, brown sunglasses, small hoop earrings and bare feet. Same grey gathered bandeau with original forked halter straps and thin upper waistband, vertical connectors and long side bows; same material, grey tone, garment cut and proportions. Provisional rear: simple gathered grey back band, original halter fastening, matching plain lower rear and continuity of original waistband and side ties. Do not invent extra straps or decoration. Balanced neutral studio lighting, realistic textile and natural anatomy, subtle floor contact shadow. Full head, both hands, all ties and feet comfortably inside portrait margins. Genuine transparent background with clean textile and hair edges. Exactly one model in one photograph; no text, graphic elements, props, borders, collages or duplicate figures. Unseen rear construction is inferred and provisional.",
+        "referenceAssets": [
+          "/portfolio/generated/ww-ai-swimwear-ref-09-v1/front-native.png"
+        ],
+        "generationOperation": "Reference-image continuation preserving garment and model",
+        "nativeResampled": false,
+        "reviewNote": "Inspected actual native over white: one true rear-facing adult, matching brunette bun, brown sunglasses, small hoops and bare feet. Grey gathered back band, original halter ties, narrow upper waistband, vertical connectors and long side bows retained with consistent material and proportions. Rear lower panel and top closure are inferred, provisional construction. Full head, hands and feet visible; natural anatomy, matching neutral studio light, clean alpha and subtle grounded shadow. Actual 1086x1448 RGBA native unchanged.",
+        "acceptedUTC": "2026-10-23T08:06:59.837558+00:00"
+      },
       "editorial": null,
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Native inspected at true 3:4 proportions over white: same adult center-part tied-back brunette with brown sunglasses and hoops, grey gathered bandeau with central oval opening and forked halter straps, matching bottom and original narrow upper waistband/vertical connectors/long side ties, barefoot. Faithful source cut/color/styling, full head/hands/feet, calm straight stance, natural anatomy, clean alpha edges and subtle contact shading. Actual 1086x1448 RGBA retained unchanged.",
-        "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
-        "ownerArtisticApproval": false
+        "nativeResolutionLimitation": "Actual native dimensions recorded per view. Standard panels/masters use uniform scaling; no native high-resolution claim.",
+        "ownerArtisticApproval": false,
+        "backVisual": "Inspected actual native over white: one true rear-facing adult, matching brunette bun, brown sunglasses, small hoops and bare feet. Grey gathered back band, original halter ties, narrow upper waistband, vertical connectors and long side bows retained with consistent material and proportions. Rear lower panel and top closure are inferred, provisional construction. Full head, hands and feet visible; natural anatomy, matching neutral studio light, clean alpha and subtle grounded shadow. Actual 1086x1448 RGBA native unchanged."
       },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional."
@@ -7530,7 +7613,7 @@
         }
       ],
       "lastVerifiedCheckpoint": {
-        "commit": "4cdff91e05c6661023cbb2f72e2e4f4c8084c698",
+        "commit": "b689bc0e4562e0c31337f6d0ed924b7c77e6e17e",
         "views": [
           "front"
         ],
