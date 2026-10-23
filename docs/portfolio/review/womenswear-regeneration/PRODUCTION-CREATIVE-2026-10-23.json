@@ -131,6 +131,37 @@
       ],
       "sha256": "11b8aa4498cbdbd579edd4cd345c1962cdf4ec01fb657dc5be3475e3c2f06d50",
       "reviewNote": "Actual Editorial inspected: same silver-coil adult model, forest-green faille shoulder fold and waist construction, right-wrist cuff and black pumps. Distinct gentle three-quarter weight shift with complete draped hem and natural hands. White studio, subtle contact shadow and compatible scale; original provisional concept."
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "view": "front",
+      "request": {
+        "prompt": "Create one premium commercial swimwear catalogue photograph. Genuinely original fashion concept: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Model: Adult woman about 32, pale olive skin, broad face, dark brows, platinum-blonde jaw-length curly side-part bob, small black round stud earrings, barefoot. Clear frontal product view, relaxed natural standing posture. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
+        "transparent_background": false
+      },
+      "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 5e6944cf-21d2-4d27-aa2f-1a2780b24804. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "recordedUTC": "2026-10-23T14:12:04.788Z",
+      "status": "MODERATION_REFUSED",
+      "moderationStage": "output",
+      "requestId": "5e6944cf-21d2-4d27-aa2f-1a2780b24804"
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "generatedIdentity": "ww-ai-swimwear-ref-02-v2",
+      "view": "back",
+      "status": "ACCEPTED",
+      "recordedUTC": "2026-10-23T14:14:17.318541+00:00",
+      "request": {
+        "prompt": "Create one premium commercial swimwear catalogue photograph. Genuinely original fashion concept: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Model: Adult woman about 32, pale olive skin, broad face, dark brows, platinum-blonde jaw-length curly side-part bob, small black round stud earrings, barefoot. True directly rear-facing product view, back of head visible, relaxed natural standing posture. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
+        "transparent_background": false
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-02-v2/back-native.png",
+      "nativeDimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "d27c6ca09ff00616c7f2d25579f30c4d12df021cca3a80f8e26f420b2a58b8e0",
+      "reviewNote": "Independent original-concept Back returned and inspected: adult blonde curly-bob model, ochre ribbed one-piece, broad straight straps, closed straight rear neckline and espresso waistband. True rear-facing full figure, natural hands and heels, clean white studio, grounded shadow. Distinct from archived silver swimwear; original design not historical recreation."
     }
   ],
   "setReviews": [
@@ -150,12 +181,12 @@
       "recordedUTC": "2026-10-23T14:09:25.001957+00:00"
     }
   ],
-  "updatedUTC": "2026-10-23T14:09:25.001973+00:00",
+  "updatedUTC": "2026-10-23T14:14:17.318654+00:00",
   "metrics": {
-    "retainedNativeFiles": 107,
-    "newNativeFiles": 6,
+    "retainedNativeFiles": 108,
+    "newNativeFiles": 7,
     "activeSelectedViews": 99,
-    "pendingCandidateNativeViews": 4,
+    "pendingCandidateNativeViews": 3,
     "completeActiveLooks": 33,
     "completeMasters": 33,
     "sourceBasedRegenerations": 27,
@@ -186,8 +217,9 @@
     },
     {
       "sourceIdentity": "swimwear-ref-02",
-      "identity": "ww-ai-swimwear-ref-02-v1",
+      "identity": "ww-ai-swimwear-ref-02-v2",
       "missingCandidateViews": [
+        "front",
         "editorial"
       ],
       "masterPending": true
