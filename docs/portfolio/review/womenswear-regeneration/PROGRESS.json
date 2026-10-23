@@ -6,7 +6,7 @@
   },
   "lastCompletedSourceIdentity": "swimwear-ref-10",
   "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-22T23:03:20.540430+00:00",
+  "updatedUTC": "2026-10-23T07:54:52.522165+00:00",
   "branch": "feat/womenswear-ai-photography-regeneration",
   "completedLooks": 29,
   "pendingLooks": 7,
@@ -17,13 +17,13 @@
     "PENDING": 7,
     "GENERATED": 4
   },
-  "currentCategory": "activewear",
-  "currentSourceIdentity": null,
-  "currentMilestone": "managed-image-bridge-repair-investigation",
-  "lastSuccessfullyPushedCommit": "a109d262a62adb73d720ae2d2d0527a1393a6f3e",
+  "currentCategory": "swimwear",
+  "currentSourceIdentity": "swimwear-ref-08",
+  "currentMilestone": "editorial-native",
+  "lastSuccessfullyPushedCommit": "5008d1fb53d1f9506a8630e7de066ac4d50b204f",
   "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
   "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": null,
+  "nextActionableSourceIdentity": "swimwear-ref-08",
   "blockedSources": [
     {
       "sourceIdentity": "activewear-ref-09",
@@ -238,81 +238,6 @@
           "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
           "note": "Source-preserving catalogue request rejected; no output. Two-attempt allowance exhausted.",
           "recordedUTC": "2026-10-22T19:58:51.667521+00:00"
-        }
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-08",
-      "failures": [
-        {
-          "view": "front",
-          "tool": "OpenAI native image tool",
-          "error": "moderation_blocked",
-          "moderationStage": "output",
-          "category": "sexual",
-          "requestId": "7a320bad-c1ec-4d25-a696-68b10e32c9a6",
-          "assetProduced": false,
-          "note": "Adult commercial swimwear catalogue garment-preserving request rejected by native tool. No generated asset exists; historical slot unchanged."
-        },
-        {
-          "view": "editorial",
-          "tool": "OpenAI native image tool",
-          "error": "moderation_blocked",
-          "moderationStage": "output",
-          "category": "sexual",
-          "requestId": "00446695-0326-43c7-8c9f-bed7cbcf523a",
-          "attempt": "primary-commercial",
-          "generationPrompt": "One professional commercial studio catalogue photograph of the identical adult model and black halter garment in the accepted Front and Back references. Full-length EDITORIAL view in a calm front three-quarter standing posture, arms relaxed, neutral expression. Preserve exactly the same black textile, halter straps, gathered bandeau and twisted center connection, original lower section and provisional rear arrangement. Same brunette model, tied-back bun, small hoop earrings, barefoot. Clean garment visibility, photorealistic material and natural proportions, soft even studio lighting with a gentle realistic floor contact shadow. Entire head, hands, outfit and feet within generous portrait margins. Genuine transparent background, no text, logo, graphics or border. Provisional AI garment presentation; retain actual native portrait dimensions.",
-          "referenceAssets": [
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
-          ],
-          "assetProduced": false,
-          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
-          "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
-          "recordedUTC": "2026-10-22T20:06:21.797380+00:00"
-        },
-        {
-          "view": "editorial",
-          "tool": "OpenAI native image tool",
-          "error": "moderation_blocked",
-          "moderationStage": "output",
-          "category": "sexual",
-          "requestId": "e536128d-0c56-49d7-b908-e1f55b8b0de2",
-          "attempt": "single-neutral-revision",
-          "generationPrompt": "One neutral professional studio catalogue study of the same adult model and black outfit in the two accepted references. Full-length calm three-quarter standing view, arms relaxed, neutral expression. Preserve the identical garment design, material, color, model identity, hairstyle and original styling. Accurate outfit visibility, photorealistic detail, even lighting, natural proportions and soft floor contact shadow. Whole figure inside generous portrait margins. Transparent background, no text or graphics. Provisional AI garment presentation; record actual native dimensions.",
-          "referenceAssets": [
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
-          ],
-          "assetProduced": false,
-          "continuationCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
-          "note": "Editorial request rejected; accepted Front and Back remain remotely protected. Two-attempt Editorial allowance exhausted; assembly awaits genuine Editorial.",
-          "recordedUTC": "2026-10-22T20:06:21.797408+00:00"
-        },
-        {
-          "view": "editorial",
-          "tool": "image_gen.imagegen",
-          "error": "invalid_request_error",
-          "httpStatus": 400,
-          "providerErrorCode": "unknown_parameter",
-          "providerMessage": "Unknown parameter: 'reasoning'.",
-          "moderationStage": null,
-          "moderationDecision": null,
-          "requestId": null,
-          "assetProduced": false,
-          "attempt": "fresh-session-supported-operation-diagnostic",
-          "generationOperation": "Limited pose/camera continuation edit; accepted Front primary, accepted Back construction check",
-          "generationPrompt": "Edit the first accepted catalogue photograph into one new full-length editorial photograph, using the second accepted photograph only to check the same garment's rear arrangement. Keep this exact adult woman, face, body proportions, tied-back brunette bun, small hoop earrings, bare feet and black swimsuit. Make the photographic change small and specific: turn her standing orientation about 25 degrees toward camera-left, with a gentle natural weight shift, both feet on the floor, relaxed hands and a neutral catalogue expression. Preserve the opaque black gathered halter bandeau, twisted gathered central connection, high-waisted lower section, original cut and thin neck straps, without changing garment details or coverage. Keep the same soft frontal studio lighting, neutral white balance, realistic textile and skin, full-length camera distance and subtle floor contact shadow. Portrait composition with the entire head, both hands and both feet comfortably inside the frame. Render exactly one model in one photograph, with no text, graphics, border, props or watermark. Transparent background preserving the fabric edges, hair and contact shadow. This is a provisional apparel presentation; the rear reference is already an inferred construction.",
-          "referenceAssets": [
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
-            "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
-          ],
-          "transparentBackground": true,
-          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Unknown parameter: 'reasoning'.\\\",\\n    \\\"type\\\": \\\"invalid_request_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"unknown_parameter\\\"\\n  }\\n}\")",
-          "recordedUTC": "2026-10-22T22:42:47.626Z",
-          "continuationCheckpoint": "6571916c670574a49a4cf3711e4e178a20f3725f",
-          "note": "Request failed before an image or moderation decision was returned. Not a moderation or quota failure. Exposed tool schema has no reasoning parameter to correct. No accepted view requested again."
         }
       ]
     },
@@ -650,7 +575,7 @@
       ]
     }
   ],
-  "nextAction": "Resolve remaining tool-blocked sources without bypassing safeguards; final collection QA remains pending",
+  "nextAction": "Review three views and assemble master",
   "knownRejectedGenerations": [
     {
       "sourceIdentity": "activewear-ref-04",
@@ -709,7 +634,7 @@
       ]
     }
   ],
-  "notes": "Recovered a109d262. No accessible image adapter can correct the managed request. One neutral service probe failed HTTP 400 unknown reasoning parameter. Zero new accepted images; 92 natives and 29 complete masters remain protected. Live alternatives: Weave unlinked; Runway/Adobe/Higgsfield uninstalled. No paid external service used. Exact diagnostic in production report. Git CLI credential rejected; connected GitHub tools used for the recovery checkpoint.",
+  "notes": "Production image tool works: real 1086x1448 RGBA Editorial generated, inspected and saved. Existing 92 natives preserved. Continue partial looks.",
   "limitations": [
     "29 complete provisional three-view sets; 11 remaining sources have native image-tool moderation blockers and no generated output.",
     "All accepted photography is remotely checkpointed; original references and all prior complete sets remain protected.",
@@ -724,7 +649,7 @@
     "view": "front",
     "status": "BLOCKED_MODERATION"
   },
-  "productionState": "BLOCKED_ALL_REMAINING_SOURCES",
+  "productionState": "IN_PROGRESS",
   "latestRetryPass": {
     "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
     "updatedUTC": "2026-10-22T20:15:57.440376+00:00",

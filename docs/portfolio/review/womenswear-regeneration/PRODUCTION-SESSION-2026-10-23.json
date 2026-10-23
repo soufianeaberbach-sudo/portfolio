@@ -1,0 +1,135 @@
+{
+  "startedUTC": "2026-10-23T07:54:47.686781+00:00",
+  "baseVerifiedCommit": "5008d1fb53d1f9506a8630e7de066ac4d50b204f",
+  "startingCounts": {
+    "completeLooks": 29,
+    "acceptedNativeImages": 92,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 7,
+    "missingViews": 28
+  },
+  "tool": "image_gen.imagegen",
+  "styleReferencesInspected": [
+    "swimwear-ref-10 master",
+    "swimwear-ref-08 Front and Back",
+    "swimwear-ref-04 Front",
+    "swimwear-ref-05 Front",
+    "swimwear-ref-09 Front",
+    "activewear-ref-07 master",
+    "evening-ref-04 master"
+  ],
+  "attempts": [
+    {
+      "sourceIdentity": "swimwear-ref-08",
+      "view": "editorial",
+      "recordedUTC": "2026-10-23T07:54:47.686804+00:00",
+      "status": "ACCEPTED",
+      "request": {
+        "prompt": "Edit the first accepted catalogue photograph into one new full-length editorial photograph, using the second accepted photograph only to check the same garment's rear arrangement. Keep this exact adult woman, face, body proportions, tied-back brunette bun, small hoop earrings, bare feet and black swimsuit. Make the photographic change small and specific: turn her standing orientation about 25 degrees toward camera-left, with a gentle natural weight shift, both feet on the floor, relaxed hands and a neutral catalogue expression. Preserve the opaque black gathered halter bandeau, twisted gathered central connection, high-waisted lower section, original cut and thin neck straps, without changing garment details or coverage. Keep the same soft frontal studio lighting, neutral white balance, realistic textile and skin, full-length camera distance and subtle floor contact shadow. Portrait composition with the entire head, both hands and both feet comfortably inside the frame. Render exactly one model in one photograph, with no text, graphics, border, props or watermark. Transparent background preserving the fabric edges, hair and contact shadow. This is a provisional apparel presentation; the rear reference is already an inferred construction.",
+        "referenced_image_paths": [
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+          "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+        ],
+        "transparent_background": true
+      },
+      "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-08-v1/editorial-native.png",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "sha256": "11d2c9a8a45694e9a5b14d0882f11cd3131c1e5ee79bf03585f404f945332d15",
+      "reviewNote": "Inspected native and white composite: same adult model, facial features, brunette bun, small hoops and bare feet. Black halter bandeau, twisted gathered front connection, high waist and side openings retained in a restrained three-quarter stance. Full head, natural hands and both feet visible, realistic anatomy, matching neutral light, clean alpha and soft contact shadow. Rear construction remains inferred. Genuine 1086x1448 RGBA retained unchanged."
+    }
+  ],
+  "setReviews": [],
+  "ownerArtisticApproval": false,
+  "imageToolStatus": "WORKING_REAL_PRODUCTION_OUTPUT_RETURNED",
+  "updatedUTC": "2026-10-23T07:54:47.686811+00:00",
+  "finalCounts": {
+    "completeLooks": 29,
+    "acceptedNativeImages": 93,
+    "partialLooks": 4,
+    "withoutGeneratedViews": 7,
+    "missingViews": 27
+  },
+  "newAcceptedImages": 1,
+  "remainingViews": [
+    {
+      "sourceIdentity": "activewear-ref-09",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "evening-ref-02",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-01",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-02",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-03",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-04",
+      "missingViews": [
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-05",
+      "missingViews": [
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-06",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-07",
+      "missingViews": [
+        "front",
+        "back",
+        "editorial"
+      ]
+    },
+    {
+      "sourceIdentity": "swimwear-ref-09",
+      "missingViews": [
+        "back",
+        "editorial"
+      ]
+    }
+  ]
+}

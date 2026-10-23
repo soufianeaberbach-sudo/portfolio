@@ -7149,14 +7149,32 @@
         "nativeResampled": false,
         "reviewNote": "Native reviewed at true 3:4 proportions over white: one rear-facing adult matching Front's brunette tied-back model, small hoops and barefoot styling, opaque black halter ties, straight top back band and plain V-shaped lower rear. Consistent material/color/proportions, complete head/hands/feet and realistic soft contact shadow, no obvious crop/anatomy/alpha defects. Rear construction/coverage is inferred because no historical Back exists; not verified production construction. Actual 1086x1448 RGBA retained unchanged."
       },
-      "editorial": null,
+      "editorial": {
+        "nativeAsset": "/portfolio/generated/ww-ai-swimwear-ref-08-v1/editorial-native.png",
+        "width": 1086,
+        "height": 1448,
+        "mode": "RGBA",
+        "sha256": "11d2c9a8a45694e9a5b14d0882f11cd3131c1e5ee79bf03585f404f945332d15",
+        "toolOutputPath": "/workspace/generated_images/exec-7422d929-d508-4c47-8da1-4ede3504106e.png",
+        "qualityStatus": "VISUAL_PASS_NATIVE_RESOLUTION_LIMITED",
+        "generationPrompt": "Edit the first accepted catalogue photograph into one new full-length editorial photograph, using the second accepted photograph only to check the same garment's rear arrangement. Keep this exact adult woman, face, body proportions, tied-back brunette bun, small hoop earrings, bare feet and black swimsuit. Make the photographic change small and specific: turn her standing orientation about 25 degrees toward camera-left, with a gentle natural weight shift, both feet on the floor, relaxed hands and a neutral catalogue expression. Preserve the opaque black gathered halter bandeau, twisted gathered central connection, high-waisted lower section, original cut and thin neck straps, without changing garment details or coverage. Keep the same soft frontal studio lighting, neutral white balance, realistic textile and skin, full-length camera distance and subtle floor contact shadow. Portrait composition with the entire head, both hands and both feet comfortably inside the frame. Render exactly one model in one photograph, with no text, graphics, border, props or watermark. Transparent background preserving the fabric edges, hair and contact shadow. This is a provisional apparel presentation; the rear reference is already an inferred construction.",
+        "referenceAssets": [
+          "/portfolio/generated/ww-ai-swimwear-ref-08-v1/front-native.png",
+          "/portfolio/generated/ww-ai-swimwear-ref-08-v1/back-native.png"
+        ],
+        "generationOperation": "Reference-image continuation preserving garment and model",
+        "nativeResampled": false,
+        "reviewNote": "Inspected native and white composite: same adult model, facial features, brunette bun, small hoops and bare feet. Black halter bandeau, twisted gathered front connection, high waist and side openings retained in a restrained three-quarter stance. Full head, natural hands and both feet visible, realistic anatomy, matching neutral light, clean alpha and soft contact shadow. Rear construction remains inferred. Genuine 1086x1448 RGBA retained unchanged.",
+        "acceptedUTC": "2026-10-23T07:54:47.652114+00:00"
+      },
       "master": null,
       "status": "GENERATED",
       "qualityResult": {
         "frontVisual": "Native inspected at true 3:4 proportions over white: same adult brunette with tied-back hair/small hoops, black halter bandeau and original twisted gathered center joining the lower section, source cut and coverage, barefoot. Frontal garment visibility with a restrained source-like step rather than fully parallel feet. Whole head/hands/feet intact, natural anatomy, clean alpha edges and very subtle contact shading. Actual 1086x1448 RGBA preserved unchanged.",
-        "nativeResolutionLimitation": "Actual native portrait dimensions are recorded per view; 1800x2700 panels and 5400x2700 master are uniformly resampled review exports.",
+        "nativeResolutionLimitation": "Actual native dimensions recorded per view. Standard panels/masters use uniform scaling; no native high-resolution claim.",
         "ownerArtisticApproval": false,
-        "backVisual": "Native reviewed at true 3:4 proportions over white: one rear-facing adult matching Front's brunette tied-back model, small hoops and barefoot styling, opaque black halter ties, straight top back band and plain V-shaped lower rear. Consistent material/color/proportions, complete head/hands/feet and realistic soft contact shadow, no obvious crop/anatomy/alpha defects. Rear construction/coverage is inferred because no historical Back exists; not verified production construction. Actual 1086x1448 RGBA retained unchanged."
+        "backVisual": "Native reviewed at true 3:4 proportions over white: one rear-facing adult matching Front's brunette tied-back model, small hoops and barefoot styling, opaque black halter ties, straight top back band and plain V-shaped lower rear. Consistent material/color/proportions, complete head/hands/feet and realistic soft contact shadow, no obvious crop/anatomy/alpha defects. Rear construction/coverage is inferred because no historical Back exists; not verified production construction. Actual 1086x1448 RGBA retained unchanged.",
+        "editorialVisual": "Inspected native and white composite: same adult model, facial features, brunette bun, small hoops and bare feet. Black halter bandeau, twisted gathered front connection, high waist and side openings retained in a restrained three-quarter stance. Full head, natural hands and both feet visible, realistic anatomy, matching neutral light, clean alpha and soft contact shadow. Rear construction remains inferred. Genuine 1086x1448 RGBA retained unchanged."
       },
       "constructionUncertainties": [
         "No actual rear reference; any generated rear construction is provisional.",
@@ -7241,7 +7259,7 @@
         }
       ],
       "lastVerifiedCheckpoint": {
-        "commit": "67439a799067e85faa75341a20f37fbf457bb48b",
+        "commit": "5008d1fb53d1f9506a8630e7de066ac4d50b204f",
         "views": [
           "front",
           "back"
