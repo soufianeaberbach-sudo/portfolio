@@ -3737,11 +3737,33 @@
         "reviewNotes": "Same youthful model, open oxblood bomber, ivory crew tee, stone trousers and suede gum trainers. Confident forward walk and light zip-edge adjustment make clear contemporary outerwear Editorial with pockets still visible.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-01/master.png",
+        "sha256": "1a50d33c00b414f0ecf6f50d1c5c96ae466a75066283ea66ccdb73d86a54cf30",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
-      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
+      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance.",
+      "setReview": {
+        "at": "2026-10-23T23:52:43.344029+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-outerwear-02",
@@ -6444,10 +6466,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 22,
+    "completedLooks": 23,
     "acceptedActivePhotographs": 71,
-    "incompleteLooks": 18,
-    "completedMasters": 22,
+    "incompleteLooks": 17,
+    "completedMasters": 23,
     "unresolvedViews": [
       "mw-r2-outerwear-02:back",
       "mw-r2-outerwear-02:editorial",
