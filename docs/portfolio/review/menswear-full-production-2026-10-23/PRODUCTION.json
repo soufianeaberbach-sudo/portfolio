@@ -5343,14 +5343,36 @@
         "reviewNotes": "Same model and three-button camel coat, black roll-neck, indigo denim and polished boots. Elegant three-quarter walking stride and light lapel adjustment create natural wool swing, retain selected below-knee length and visible construction.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-10/master.png",
+        "sha256": "6790cac789c735c4253ec0064fccf5eec54aa866da64453d18aef4f8865909bb",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "selectedDesignRefinements": {
         "silhouette": "Long single-breasted wool overcoat, selected below-knee length, balanced straight drape",
         "hem": "Wide clean below-knee coat hem",
         "styling": "Camel overcoat worn open over black roll-neck, deep indigo straight denim and black polished boots"
+      },
+      "setReview": {
+        "at": "2026-10-24T00:07:49.995490+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
       }
     },
     {
@@ -7896,10 +7918,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 28,
+    "completedLooks": 29,
     "acceptedActivePhotographs": 90,
-    "incompleteLooks": 12,
-    "completedMasters": 28,
+    "incompleteLooks": 11,
+    "completedMasters": 29,
     "unresolvedViews": [
       "mw-r2-outerwear-06:back",
       "mw-r2-tailoring-01:front",
