@@ -6289,7 +6289,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1617619,
+        "nativeMode": "RGB",
+        "sha256": "df714c5915f75c33c6d9cbe70eb47c384aa4184723dc489b61ae20461ce129bd",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-6cd74c40-1eb5-4e4c-a866-8cf5c0f39f18.png",
+        "generatedAt": "2026-10-24T00:23:37.668209+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-06-editorial.txt",
+        "promptSHA256": "40472b9c8961f22cd579432cfd2b357e1ac4be6c495ebd6a5fafb0dd8f7c682f",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/editorial.png",
+        "exportSHA256": "943905750bec3b6ca69e1c772b9be99ce9073e723438b4aed98b669b516acc1d",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-600.webp",
+        "previewSHA256": "db32ec2c8dd6f66dc0989d19a2517c5e56c19859fecd3474bd4ea850617f7a26",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model, black shawl-lapel tuxedo, white bib shirt, black bow tie/cummerbund and patent shoes. Controlled elegant walking pose with light lapel adjustment; coherent satin finish, readable outfit, full head and footwear in white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7983,8 +8015,15 @@
       "key": "mw-r2-tailoring-06:editorial",
       "look": "mw-r2-tailoring-06",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:23:37.671350+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-07:front",
@@ -8920,6 +8959,15 @@
       "at": "2026-10-24T00:23:32.044264+00:00",
       "notes": "Same adult model, chocolate three-piece suit, ivory shirt, muted-blue tie and brown Oxford shoes. Refined three-quarter step with light jacket opening and one hand in trouser pocket; waistcoat and lining read clearly, natural anatomy and complete framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-06",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:23:37.671350+00:00",
+      "notes": "Same adult model, black shawl-lapel tuxedo, white bib shirt, black bow tie/cummerbund and patent shoes. Controlled elegant walking pose with light lapel adjustment; coherent satin finish, readable outfit, full head and footwear in white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8932,13 +8980,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 34,
-    "acceptedActivePhotographs": 109,
+    "acceptedActivePhotographs": 110,
     "incompleteLooks": 6,
     "completedMasters": 34,
     "unresolvedViews": [
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-06:back",
-      "mw-r2-tailoring-06:editorial",
       "mw-r2-tailoring-07:back",
       "mw-r2-tailoring-07:editorial",
       "mw-r2-tailoring-08:back",
