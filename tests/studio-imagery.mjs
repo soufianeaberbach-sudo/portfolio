@@ -29,7 +29,7 @@ try {
     await page.waitForFunction(e=>e.complete&&e.naturalWidth>0,await image.elementHandle());
     await image.evaluate(e=>e.decode());await page.waitForTimeout(800);
     const geometry=await image.evaluate(e=>{const r=e.getBoundingClientRect(),f=e.parentElement.getBoundingClientRect(),style=getComputedStyle(e.parentElement);return{src:e.currentSrc,w:e.naturalWidth,h:e.naturalHeight,ratio:f.width/f.height,imageRatio:r.width/r.height,fit:getComputedStyle(e).objectFit,alt:e.alt,border:style.borderTopWidth,left:f.left,right:f.right};});
-    check(geometry.src.includes(`/${section}-studio/`),`${section} ${n}: new selected asset`);
+    check(geometry.src.includes(`/${section}-reset/`),`${section} ${n}: new reset asset`);
     check(geometry.w>0&&geometry.h>0,`${section} ${n}: decoded`);
     check(geometry.alt.length>30,`${section} ${n}: meaningful alternative text`);
     check(geometry.border==='0px',`${section} ${n}: no frame rule`);

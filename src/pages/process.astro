@@ -19,7 +19,7 @@ import Arrow from '../components/Arrow.astro';
  *
  * Five newly generated editorial studio illustrations follow the actual
  * decisions. They illustrate the workflow, not an asserted client project.
- * Sources and prompts: assets/source/studio-imagery-2026-10-24/.
+ * Sources and prompts: assets/source/studio-reset-2026-10-24/.
  */
 
 interface Visual {
@@ -71,7 +71,7 @@ const stages: Stage[] = [
     visual: {
       file: '01-brief',
       widths: [900, 1440],
-      alt: 'An overshirt pencil sketch beside three cotton swatches, a graphite pencil and folded ecru twill on a studio worktable.',
+      alt: 'Two fashion professionals discuss the shoulder and collar of a finished navy shirt used as a product reference.',
       position: '50% 50%',
     },
   },
@@ -90,7 +90,7 @@ const stages: Stage[] = [
     visual: {
       file: '02-technical-build',
       widths: [900, 1440],
-      alt: 'Paper body, sleeve and cuff patterns beside a sewn ecru sleeve sample and dressmaking shears on a cutting table.',
+      alt: 'A patternmaker draws a sleeve-cap curve with a graphite pencil on a single sheet of flat pattern paper.',
       position: '50% 50%',
     },
   },
@@ -108,7 +108,7 @@ const stages: Stage[] = [
     visual: {
       file: '03-validation',
       widths: [900, 1440],
-      alt: 'An overshirt toile on a tailoring form, with waist balance stitching and pins recording a side-seam fit correction.',
+      alt: 'A fitter checks upper-back ease in an unfinished cotton shirt toile worn by an adult fit model, with raw hem and sleeve ends.',
       position: '50% 50%',
     },
   },
@@ -133,7 +133,7 @@ const stages: Stage[] = [
     visual: {
       file: '04-specification',
       widths: [900, 1440],
-      alt: 'Graduated sleeve patterns in three sizes beside a transparent ruler and an ecru fabric and button reference card.',
+      alt: 'A technician checks the chest width of a finished navy shirt with a flexible centimetre tape laid flat from one side edge to the other.',
       position: '50% 50%',
     },
   },
@@ -157,13 +157,13 @@ const stages: Stage[] = [
     visual: {
       file: '05-handoff',
       widths: [900, 1440],
-      alt: 'A finished ecru overshirt folded beside a technical folder and matching swatch, with repeated garments on a rail behind.',
+      alt: 'Two studio colleagues hand over a finished navy shirt hanging from a wooden hanger at a white atelier doorway.',
       position: '50% 50%',
     },
   },
 ];
 
-const src = (file: string, w: number) => `/process-studio/${file}-${w}.webp`;
+const src = (file: string, w: number) => `/process-reset/${file}-${w}.webp`;
 ---
 
 <SiteLayout

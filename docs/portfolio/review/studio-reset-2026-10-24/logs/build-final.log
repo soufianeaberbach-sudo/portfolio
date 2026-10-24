@@ -1,0 +1,58 @@
+
+> soufiane-portfolio@1.0.0 build
+> astro build
+
+16:36:49 [content] Syncing content
+16:36:49 [content] Synced content
+16:36:49 [types] Generated 38ms
+16:36:49 [build] output: "static"
+16:36:49 [build] mode: "static"
+16:36:49 [build] directory: /workspace/portfolio/dist/
+16:36:49 [build] Collecting build info...
+16:36:49 [build] ✓ Completed in 61ms.
+16:36:49 [build] Building static entrypoints...
+16:36:54 [vite] ✓ built in 5.25s
+16:36:54 [build] ✓ Completed in 5.29s.
+
+ building client (vite)
+16:36:54 [vite] transforming...
+16:36:55 [vite] ✓ 24 modules transformed.
+16:36:55 [vite] rendering chunks...
+16:36:55 [vite] computing gzip size...
+16:36:55 [vite] dist/_astro/portfolio.astro_astro_type_script_index_1_lang.C50PCUit.js    7.35 kB │ gzip:  2.53 kB
+16:36:55 [vite] dist/_astro/ScrollTrigger.C8IefbVz.js                                   114.87 kB │ gzip: 45.46 kB
+16:36:55 [vite] dist/_astro/portfolio.astro_astro_type_script_index_0_lang.CgUTxt90.js  158.68 kB │ gzip: 35.21 kB
+16:36:55 [vite] ✓ built in 744ms
+
+ generating static routes
+16:36:55 ▶ src/pages/404.astro
+16:36:55   └─ /404.html (+13ms)
+16:36:55 ▶ src/pages/before-we-start.astro
+16:36:55   └─ /before-we-start/index.html (+7ms)
+16:36:55 ▶ src/pages/contact/sent.astro
+16:36:55   └─ /contact/sent/index.html (+3ms)
+16:36:55 ▶ src/pages/contact.astro
+16:36:55   └─ /contact/index.html (+8ms)
+16:36:55 ▶ src/pages/experience.astro
+16:36:55   └─ /experience/index.html (+5ms)
+16:36:55 ▶ src/pages/expertise.astro
+16:36:55   └─ /expertise/index.html (+3ms)
+16:36:55 ▶ src/pages/index.astro
+16:36:55   └─ /index.html (+5ms)
+16:36:55 ▶ src/pages/lab/[story].astro
+16:36:55 ▶ src/pages/portfolio.astro
+16:36:55   └─ /portfolio/index.html (+67ms)
+16:36:55 ▶ src/pages/privacy.astro
+16:36:55   └─ /privacy/index.html (+6ms)
+16:36:55 ▶ src/pages/process.astro
+16:36:55   └─ /process/index.html (+5ms)
+16:36:55 λ src/pages/robots.txt.ts
+16:36:55   └─ /robots.txt (+2ms)
+16:36:55 λ src/pages/sitemap.xml.ts
+16:36:55   └─ /sitemap.xml (+2ms)
+16:36:55 ▶ src/pages/working-terms.astro
+16:36:55   └─ /working-terms/index.html (+3ms)
+16:36:55 ✓ Completed in 176ms.
+
+16:36:55 [build] 11 page(s) built in 6.36s
+16:36:55 [build] Complete!
