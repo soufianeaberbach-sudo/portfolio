@@ -20,11 +20,14 @@
 | Final six-viewport capture and viewer geometry | 103 |
 | Portable self-contained review, all forty looks / four display choices and focus return | 379 |
 | Site-wide smoke after authorized taxonomy / reader-count migration | 303 |
-| **Total checks passed** | **6,595** |
+| Cold category/navigation contracts | 40 |
+| Eight-world native continuity / all 179 historical and AI routes | 590 |
+| Real-Portfolio three-panel, native decoding and alpha preservation | 498 |
+| **Total counted checks passed** | **7,723** |
 
 `ASTRO_TELEMETRY_DISABLED=1 npm run build` passed: eleven static pages. The final site-wide smoke run reported **303 passed, 0 failed**. The production suite passed after the photographic-aperture refinement. A later nonvisual chapter publication marker was corrected to `ai-concept-preview`, then verified by the final capture and site smoke. Numeric cinematic choreography, viewer/history code and Womenswear code were not changed.
 
-Actual commands and output are preserved in [qa/](qa/) and [QA-RUN.json](QA-RUN.json). The two label maps in `fashion-navigation.mjs` and `fashion-final-review.mjs` were aligned with the authorized taxonomy and syntax-checked; those additional suites are not represented as executed in the totals above.
+Actual commands and output are preserved in [qa/](qa/) and [QA-RUN.json](QA-RUN.json). `fashion-navigation.mjs` was executed after its label map was aligned with the authorized taxonomy. `fashion-final-review.mjs` is a capture helper: its label map was aligned and syntax-checked, but it is not claimed as an additional executed suite. The shared original-source fingerprint/blob guard also passed; its uninstrumented assertions are additional to the counted total above.
 
 ## Native files, exports and historical protection
 
@@ -52,6 +55,12 @@ The contact-sheet cover and final page of the 41-page all-master PDF were render
 Three image-production attempts were unsuccessful and recovered: Activewear 09 Front runtime interruption without output; Activewear 09 Front shoe-detail rejection; Outerwear 06 Front shoe-detail rejection. Both rejected native outputs remain archived. No missing selected view or provider restriction remains.
 
 [Operational recovery](OPERATIONAL-RECOVERY.md) records the telemetry, sparse-checkout and preview setup failures. A preliminary browser run overlapping a rebuild timed out and is not counted as a successful final result. The first site smoke run reported 300 passed / two obsolete-contract assertions failed; it is retained in `qa/site-smoke-superseded-assertions.log`, alongside the final passing result. No product failure is hidden by excluding those preliminary runs from the passed totals.
+
+## PR CI contract recovery
+
+The first PR run [40046600010](https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/40046600010) at `b376d6f9913f2c6f87b76cd7eb7417c54a1c6080` passed build, Worker validation/backend, domain, production-checker tests and site smoke, then failed the shared source-integrity accounting: it expected 139 routes (108 historical + 31 Womenswear AI) and encountered 179 after adding forty independent Menswear concepts. The exact assertion excerpt is retained in `qa/ci-first-run-assertion.txt`. No original-source fingerprint or photograph had changed.
+
+The shared tests now explicitly account for the forty new concepts while retaining the original 108-source fingerprint and every original photographic-blob assertion. The disposable three-panel fixture resolves the current featured concept identities; separate legacy-route assertions ensure synthetic fixture slots never reassign historical URLs. Local shared source-integrity, category navigation, native eight-world continuity and six-viewport three-panel suites all pass. CI now also runs the dedicated complete Menswear AI identity/coverage guard. The updated PR run status is reported in the PR; this document does not claim a remote success that has not yet completed.
 
 ## Limits and publication state
 

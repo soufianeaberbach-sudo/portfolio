@@ -1,0 +1,25 @@
+4T00:49:57.3723481Z 204 ten-look identity, licensing and replacement checks passed
+2026-10-24T00:49:57.4682402Z node:internal/modules/run_main:123
+2026-10-24T00:49:57.4682795Z     triggerUncaughtException(
+2026-10-24T00:49:57.4683273Z     ^
+2026-10-24T00:49:57.4683498Z 
+2026-10-24T00:49:57.4684197Z AssertionError [ERR_ASSERTION]: historical pool plus separate AI identities
+2026-10-24T00:49:57.4684632Z 
+2026-10-24T00:49:57.4684729Z 179 !== 139
+2026-10-24T00:49:57.4684874Z 
+2026-10-24T00:49:57.4685304Z     at file:///home/runner/work/portfolio/portfolio/tests/fashion-source-integrity.mjs:4:313
+2026-10-24T00:49:57.4686454Z     at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+2026-10-24T00:49:57.4686923Z   generatedMessage: false,
+2026-10-24T00:49:57.4687179Z   code: 'ERR_ASSERTION',
+2026-10-24T00:49:57.4687424Z   actual: 179,
+2026-10-24T00:49:57.4687650Z   expected: 139,
+2026-10-24T00:49:57.4687883Z   operator: 'strictEqual',
+2026-10-24T00:49:57.4688122Z   diff: 'simple'
+2026-10-24T00:49:57.4688330Z }
+2026-10-24T00:49:57.4688432Z 
+2026-10-24T00:49:57.4688525Z Node.js v22.23.3
+2026-10-24T00:49:57.4751501Z ##[error]Process completed with exit code 1.
+2026-10-24T00:49:57.4901526Z Post job cleanup.
+2026-10-24T00:49:57.5797886Z [command]/usr/bin/git version
+2026-10-24T00:49:57.5847530Z git version 2.55.0
+2026-10-24T00:49:57.5890399Z Temporarily overridin

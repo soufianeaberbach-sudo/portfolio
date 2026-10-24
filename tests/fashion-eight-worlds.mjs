@@ -5,9 +5,10 @@ const bundled=await build({stdin:{contents:"export{womenswear}from'./src/data/po
 const data=await import('data:text/javascript;base64,'+Buffer.from(bundled.outputFiles[0].text).toString('base64'));
 const pools=[...data.womenswear.categories.flatMap(c=>data.referenceCollection(c,'womenswear')),...['m-streetwear','m-activewear','m-rtw','m-tailoring'].flatMap(data.menswearPool)];
 const generated=JSON.parse(readFileSync('src/data/womenswear-generated.json','utf8')).filter(r=>r.integrated);
+const menswearGenerated=JSON.parse(readFileSync('src/data/menswear-ai-production.json','utf8')).selectedCompleteLooks;
 let checks=0;const records=[];function check(ok,label){assert(ok,label);checks++;records.push(label);}
-check(pools.length===108+generated.length&&new Set(pools.map(s=>s.id)).size===108+generated.length,'108 preserved identities plus unique AI presentation routes');
-check(pools.filter(s=>!data.generatedPresentation(s.id)).length===108,'all 108 historical subjects remain independently routable');
+check(pools.length===108+generated.length+menswearGenerated.length&&new Set(pools.map(s=>s.id)).size===108+generated.length+menswearGenerated.length,'108 preserved identities plus unique AI presentation routes');
+check(pools.filter(s=>!data.generatedPresentation(s.id)&&!data.menswearConcept(s.id)).length===108,'all 108 historical subjects remain independently routable');
 const ww=['casualwear','activewear','evening','swimwear'],mw=['m-streetwear','m-activewear','m-rtw','m-tailoring'];
 const labels=['Casualwear','Activewear','Occasionwear','Swimwear'];
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',b=await chromium.launch();
