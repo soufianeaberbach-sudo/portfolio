@@ -35,6 +35,9 @@ try{
     const control=reader.locator(`[data-ww-view="${view}"]`);if(count>1)await control[width<500?'tap':'click']();
     const panel=reader.locator(`[data-photo-view="${view}"]`);await panel.waitFor({state:'visible'});
     await panel.locator('img').evaluate(image=>image.decode());
+    // Decode/visibility can resolve before the compositor paints the new view.
+    // Capture the selected photograph, not the previous frame's pixels.
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     if(count>1)check(await control.getAttribute('aria-pressed')==='true','selection matches visible view');
     const geometry=await panel.locator('[data-ww-photo]').evaluate(photo=>{
      const box=photo.getBoundingClientRect(),image=photo.querySelector('img'),frame=image.getBoundingClientRect();

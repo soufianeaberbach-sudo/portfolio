@@ -5,12 +5,18 @@ const baseline=JSON.parse(fs.readFileSync('docs/portfolio/review/menswear-studio
 // blobs. Keep every Menswear, original artwork and remaining source check strict.
 const recovery=JSON.parse(fs.readFileSync('tests/fixtures/womenswear-recovery-preservation.json'));
 assert.equal(recovery.baseline,baseline.baseline);
+// The subsequent owner directive replaces only three exact presentation blobs.
+// Keep the original recovery receipt intact and pin this finishing pass separately.
+const studio=JSON.parse(fs.readFileSync('tests/fixtures/studio-imagery-preservation.json'));
+assert.equal(studio.baseline,baseline.baseline);
+const studioPaths=new Set(['src/components/ExpertiseVisual.astro','src/pages/process.astro','src/data/womenswear-generated.json']);
+assert.deepEqual(new Set(Object.keys(studio.changes)),studioPaths);
 const raw=execFileSync('git',['ls-tree','-r','-z','HEAD'],{maxBuffer:16*1024*1024}).toString();
 const current=new Map(raw.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));let checks=0;
 for(const [path,baselineOid]of Object.entries(baseline.paths)){
- const update=recovery.changes[path];
+ const update=studio.changes[path]??recovery.changes[path];
  if(update){
-  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro','Womenswear authorization cannot exempt Menswear/assets');
+  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path),'authorization cannot exempt Menswear/assets');
   assert(!path.startsWith('public/'),'original photographic files remain immutable');
   assert.equal(update.baselineSHA1,baselineOid,'authorization must identify the original baseline blob');
  }
