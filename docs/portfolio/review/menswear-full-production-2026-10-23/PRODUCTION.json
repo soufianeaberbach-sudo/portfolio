@@ -6176,7 +6176,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1806832,
+        "nativeMode": "RGB",
+        "sha256": "d57bb680a351bc2d053e17902ade92092dba216d56d061d86ac10f2ef3616241",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-3e7ced10-1397-41eb-b1c2-c96cba72aef6.png",
+        "generatedAt": "2026-10-24T00:23:32.040386+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-05-editorial.txt",
+        "promptSHA256": "ed3efe97882b0e0d17c285c29a36bf4bd7eb10aaedeceaa883367378ea0b4804",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-05/editorial.png",
+        "exportSHA256": "443d2622569c05015b3f007473b399ba69fc180bf7a020325192a99c33d5bcec",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-05/editorial-600.webp",
+        "previewSHA256": "a79075868cbed249afda3ada6954e489a214edb90153f2a329cde9e7a50fe3d1",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model, chocolate three-piece suit, ivory shirt, muted-blue tie and brown Oxford shoes. Refined three-quarter step with light jacket opening and one hand in trouser pocket; waistcoat and lining read clearly, natural anatomy and complete framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7916,8 +7948,15 @@
       "key": "mw-r2-tailoring-05:editorial",
       "look": "mw-r2-tailoring-05",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:23:32.044264+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-06:front",
@@ -8872,6 +8911,15 @@
       "at": "2026-10-24T00:21:04.465920+00:00",
       "notes": "Distinct midnight-green collarless tailored jacket with four visible buttons/buttonholes, rounded lower fronts, chest welt and two lower welts, matching straight tailored trousers. Ivory fine crew knit and black penny loafers; natural young adult model, clean woven behavior and full-length white studio. Selected four-button front supersedes initial three-button proposal.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-05",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:23:32.044264+00:00",
+      "notes": "Same adult model, chocolate three-piece suit, ivory shirt, muted-blue tie and brown Oxford shoes. Refined three-quarter step with light jacket opening and one hand in trouser pocket; waistcoat and lining read clearly, natural anatomy and complete framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8884,12 +8932,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 34,
-    "acceptedActivePhotographs": 108,
+    "acceptedActivePhotographs": 109,
     "incompleteLooks": 6,
     "completedMasters": 34,
     "unresolvedViews": [
       "mw-r2-tailoring-05:back",
-      "mw-r2-tailoring-05:editorial",
       "mw-r2-tailoring-06:back",
       "mw-r2-tailoring-06:editorial",
       "mw-r2-tailoring-07:back",
