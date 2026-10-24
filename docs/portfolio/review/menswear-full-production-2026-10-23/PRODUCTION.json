@@ -4035,7 +4035,39 @@
         "reviewNotes": "Pale sage Harrington clearly distinct from rib-neck bomber: two-position stand collar, raglan sleeves, flap side entries, elastic cuffs and side-back waistband. Cream knit, navy chinos and plain white leather low-tops form clean transseasonal outfit. Natural commercial adult casting and crisp poplin structure.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1684361,
+        "nativeMode": "RGB",
+        "sha256": "3ae5d360fe0e7325bfaa6e9cd2d016ba115ae69517195f114bb01cafecbb3ef1",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-fb7664de-1c45-4f08-9635-80ee35666dd1.png",
+        "generatedAt": "2026-10-24T00:02:53.812279+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-03-back.txt",
+        "promptSHA256": "d8f17f44c5a61800c5055edc5db0198c43aeea023a67ea58e6a680e04db80e46",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/back.png",
+        "exportSHA256": "cb85bdb437a81ea1351dad7327ef5de36525e2a417a43e07074b7f835cccc2c0",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/back-600.webp",
+        "previewSHA256": "8a3b3f00ec6f8f7a942d8afc824aef2af8827bfd94ef55f783d02f2ae676705d",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear shows same natural brown hair, sage Harrington raglan sleeves and curved umbrella yoke, elastic side-back waist/cuffs, navy chinos and plain white shoe heels. Distinct credible lightweight blouson construction.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -6308,8 +6340,15 @@
       "key": "mw-r2-outerwear-03:back",
       "look": "mw-r2-outerwear-03",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:02:53.815474+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-03:editorial",
@@ -7269,6 +7308,15 @@
       "at": "2026-10-24T00:02:46.763315+00:00",
       "notes": "Footwear correction passes: clean charcoal/grey mesh trainers with generic panels and no conspicuous crossed side motif. Same curly-haired adult, cobalt hooded ripstop shell, grey tee, navy straight technical trousers and studio retained. Selected corrected native version 02; original rejected output preserved.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/front-v02-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-03",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:02:53.815474+00:00",
+      "notes": "True rear shows same natural brown hair, sage Harrington raglan sleeves and curved umbrella yoke, elastic side-back waist/cuffs, navy chinos and plain white shoe heels. Distinct credible lightweight blouson construction.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7281,11 +7329,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 24,
-    "acceptedActivePhotographs": 79,
+    "acceptedActivePhotographs": 80,
     "incompleteLooks": 16,
     "completedMasters": 24,
     "unresolvedViews": [
-      "mw-r2-outerwear-03:back",
       "mw-r2-outerwear-03:editorial",
       "mw-r2-outerwear-05:back",
       "mw-r2-outerwear-05:editorial",
