@@ -176,7 +176,7 @@
     {
       "suite": "smoke",
       "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/smoke.log",
-      "summary": "npm notice",
+      "summary": "303 passed, 0 failed",
       "sha256": "aaaa6db9b323ae0545936dfb62be682b4d7158888cae58feefdfacb9bb7d9679",
       "status": "PASS"
     }
@@ -215,5 +215,6 @@
   "limitations": [
     "Chromium browser emulation; native Safari and physical devices not executed.",
     "Deployment is independently verified after merge; this local record does not itself prove release."
-  ]
+  ],
+  "applicationAndTestCheckpoint": "f0b955c1a1eb2e3cd9623a2e89813736bde2b18e"
 }
