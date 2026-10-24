@@ -4597,7 +4597,39 @@
         "reviewNotes": "Footwear correction passes: clean charcoal/grey mesh trainers with generic panels and no conspicuous crossed side motif. Same curly-haired adult, cobalt hooded ripstop shell, grey tee, navy straight technical trousers and studio retained. Selected corrected native version 02; original rejected output preserved.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1662309,
+        "nativeMode": "RGB",
+        "sha256": "894ea0d00416b7bb528ac8555857c809ea1281516386df6b830bc7e73b22ef53",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-3ea856ca-16ac-4bf0-959d-6feb67744796.png",
+        "generatedAt": "2026-10-24T00:08:49.563568+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/front-v02-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-06-back.txt",
+        "promptSHA256": "f0b6d316f7f592e9ca5c54bfae467ea74617ca96c9bd40763454091001b847e6",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-06/back.png",
+        "exportSHA256": "4635424046a1c4988e86cbc8f6fa87156e2fa38631960579d067afb131a15f81",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-06/back-600.webp",
+        "previewSHA256": "c6db599976a922cd45ce8c2a29e8deac8af38abf2e6a2ef8428e29c754d61d35",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear of same curly-haired adult and cobalt ripstop windbreaker, hood/back vent-yoke, raglan sleeves and elastic cuffs. Navy technical trousers and corrected plain charcoal-grey trail heels continuous; crisp light shell behaviour credible.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": {
         "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-v01-native.png",
         "nativeDimensions": [
@@ -6882,8 +6914,15 @@
       "key": "mw-r2-outerwear-06:back",
       "look": "mw-r2-outerwear-06",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:08:49.568357+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-06:editorial",
@@ -7907,6 +7946,15 @@
       "at": "2026-10-24T00:07:39.609603+00:00",
       "notes": "Same model and three-button camel coat, black roll-neck, indigo denim and polished boots. Elegant three-quarter walking stride and light lapel adjustment create natural wool swing, retain selected below-knee length and visible construction.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-06",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:08:49.568357+00:00",
+      "notes": "Genuine rear of same curly-haired adult and cobalt ripstop windbreaker, hood/back vent-yoke, raglan sleeves and elastic cuffs. Navy technical trousers and corrected plain charcoal-grey trail heels continuous; crisp light shell behaviour credible.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7919,11 +7967,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 29,
-    "acceptedActivePhotographs": 90,
+    "acceptedActivePhotographs": 91,
     "incompleteLooks": 11,
     "completedMasters": 29,
     "unresolvedViews": [
-      "mw-r2-outerwear-06:back",
       "mw-r2-tailoring-01:front",
       "mw-r2-tailoring-01:back",
       "mw-r2-tailoring-01:editorial",
