@@ -4877,7 +4877,39 @@
         "reviewNotes": "Marine-navy mid-thigh parka has proper hood/high collar, covered zip/snap placket, two vertical chest zips and two lower flap pockets, cuff tabs and lightly shaped waist. Oat knit, slate cargos and brown boots appropriate cold-season support. Natural adult model and complete white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1708261,
+        "nativeMode": "RGB",
+        "sha256": "b6e067ba34cffe64f36a94f8eaa96a416e3e87611e01bccdd71dcecc2de1d4f0",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-bd6009da-591e-48f4-8bf4-e3536b2c59c4.png",
+        "generatedAt": "2026-10-24T00:07:08.535488+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-08-back.txt",
+        "promptSHA256": "0a6c922a4d8f071f594a1f9052bf4a7359920bb80805b0e30c8cce826fbb421e",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-08/back.png",
+        "exportSHA256": "1c22650c8d3f8705d6e4bb93a236e63158910bd0562589e9a527bbc7aadec8af",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-08/back-600.webp",
+        "previewSHA256": "72e3cff89c97300942bd6bbb1a6efd3bafdf67a6e5f4785192d2a007bbc676f5",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear retains same brown hair, navy hooded parka with back yoke, centre seam, internal waist shaping and small split fishtail/drawcord, cuff tabs, slate cargo pockets and brown boot heels. Mid-thigh length and shell texture continuous.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -6787,8 +6819,15 @@
       "key": "mw-r2-outerwear-08:back",
       "look": "mw-r2-outerwear-08",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:07:08.540459+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-08:editorial",
@@ -7671,6 +7710,15 @@
       "at": "2026-10-24T00:07:02.820633+00:00",
       "notes": "Same curly-haired adult and corrected plain grey trail shoes, cobalt hooded shell, grey tee and navy straight pants. Natural walking step and pocket hand, light ripstop movement credible; outfit clearly visible, no conspicuous shoe marks return.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-08",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:07:08.540459+00:00",
+      "notes": "Genuine rear retains same brown hair, navy hooded parka with back yoke, centre seam, internal waist shaping and small split fishtail/drawcord, cuff tabs, slate cargo pockets and brown boot heels. Mid-thigh length and shell texture continuous.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7683,12 +7731,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 27,
-    "acceptedActivePhotographs": 86,
+    "acceptedActivePhotographs": 87,
     "incompleteLooks": 13,
     "completedMasters": 27,
     "unresolvedViews": [
       "mw-r2-outerwear-06:back",
-      "mw-r2-outerwear-08:back",
       "mw-r2-outerwear-08:editorial",
       "mw-r2-outerwear-10:back",
       "mw-r2-outerwear-10:editorial",
