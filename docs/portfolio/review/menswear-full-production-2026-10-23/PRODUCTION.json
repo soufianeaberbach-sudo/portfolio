@@ -6549,11 +6549,41 @@
         "approval": "AUTONOMOUS_PRODUCTION_AUTHORIZED; FINAL_PERSONAL_ACCEPTANCE_PENDING",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1821777,
+        "nativeMode": "RGB",
+        "sha256": "5c3d4f71d84363f2c03f88a146a39c782df2847ec05ec0c8f258b17ae58b484a",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-cc42d3b0-9bc6-4197-ac49-05fda425afd2.png",
+        "generatedAt": "2026-10-24T00:21:04.462232+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-10-front.txt",
+        "promptSHA256": "4279331c66240dcb146675c7c04984563242cfc8de22eda43f177f27df8e3db8",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-10/front.png",
+        "exportSHA256": "064f51bd2960f1e5cc3749b3777871d81a6c8bbd05e123bb44d9b860334fbcee",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-10/front-600.webp",
+        "previewSHA256": "d1a66628287568266bf91a4900bd4717aa60a1adc75d1b18ee579cf5e3ba189b",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Distinct midnight-green collarless tailored jacket with four visible buttons/buttonholes, rounded lower fronts, chest welt and two lower welts, matching straight tailored trousers. Ivory fine crew knit and black penny loafers; natural young adult model, clean woven behavior and full-length white studio. Selected four-button front supersedes initial three-button proposal.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     }
@@ -7997,8 +8027,15 @@
       "key": "mw-r2-tailoring-10:front",
       "look": "mw-r2-tailoring-10",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:21:04.465920+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-10:back",
@@ -8818,6 +8855,15 @@
       "at": "2026-10-24T00:20:40.952423+00:00",
       "notes": "True rear; same brown hair, oat textured linen jacket and cuffed trousers, white band-collar shirt and tan suede loafers. Soft shoulder, centre-back shaping and twin side vents, natural linen creases and complete framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-10",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:21:04.465920+00:00",
+      "notes": "Distinct midnight-green collarless tailored jacket with four visible buttons/buttonholes, rounded lower fronts, chest welt and two lower welts, matching straight tailored trousers. Ivory fine crew knit and black penny loafers; natural young adult model, clean woven behavior and full-length white studio. Selected four-button front supersedes initial three-button proposal.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8830,7 +8876,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 34,
-    "acceptedActivePhotographs": 107,
+    "acceptedActivePhotographs": 108,
     "incompleteLooks": 6,
     "completedMasters": 34,
     "unresolvedViews": [
@@ -8844,7 +8890,6 @@
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:back",
       "mw-r2-tailoring-09:editorial",
-      "mw-r2-tailoring-10:front",
       "mw-r2-tailoring-10:back",
       "mw-r2-tailoring-10:editorial"
     ],
