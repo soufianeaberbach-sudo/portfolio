@@ -8,7 +8,7 @@
   ],
   "threeViewComplete": false,
   "method": "retained-faithful-views",
-  "reviewNote": "Reviewed faithful V1 Front and distinct Editorial: magenta textured bikini, same casting, complete head and feet, clean native alpha and soft contact shadow. No missing Back is invented; rejected navy V2 remains inactive.",
+  "reviewNote": "Reviewed faithful V1 Front and distinct Editorial: magenta textured bikini, same casting, complete head and feet, clean native alpha and soft contact shadow. No missing Back is invented; rejected navy V2 remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
   "sourceSHA256": "5dbdc5d58c6c5832044a26d7cd03a7cc14911cd4ca3ec298ff0f4315cad84edc",
   "outputs": {
     "front": {
@@ -28,7 +28,18 @@
         246
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-04-v1/front-refined-alpha.png",
+        "alphaSHA256": "73358445fbfa468c1d0c0b185ad5b8df1e7e2f345c08cb0b65446fee61e038c8",
+        "exportSHA256": "69ccd6863ef1bdfab32c59868fc90f30f35bd28196b64780003db5cd5626425e",
+        "scale": 1.730517115804807,
+        "offset": [
+          -46,
+          107
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     },
     "editorial": {
       "inputPath": "public/portfolio/generated/ww-ai-swimwear-ref-04-v1/editorial-native.png",
@@ -47,7 +58,18 @@
         246
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-04-v1/editorial-refined-alpha.png",
+        "alphaSHA256": "47592ea3dc4d7ceb30b58de37ad24a76eed9ef144043b7c889f2b0e00af6cf3c",
+        "exportSHA256": "a691fb3abd619f2d7297d041e80389fedf578c6bf1c0ef5d31bac02e943364e1",
+        "scale": 1.7918552036199096,
+        "offset": [
+          -30,
+          33
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     }
   },
   "ownerArtisticApproval": false,

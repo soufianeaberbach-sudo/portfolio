@@ -7,7 +7,7 @@
   ],
   "threeViewComplete": false,
   "method": "retained-faithful-views",
-  "reviewNote": "Usable faithful silver halter bikini Front recovered from accepted V1 native, complete figure and clean alpha. No invented Editorial or Back; unrelated Olive Pique replacement is not integrated.",
+  "reviewNote": "Usable faithful silver halter bikini Front recovered from accepted V1 native, complete figure and clean alpha. No invented Editorial or Back; unrelated Olive Pique replacement is not integrated. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
   "sourceSHA256": "eb2128dc2d017f66ff394e7b6fb23b09f5307049e9f99ec8286d8bb9ae78ba69",
   "outputs": {
     "front": {
@@ -27,7 +27,18 @@
         246
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-05-v1/front-refined-alpha.png",
+        "alphaSHA256": "42eb02172f5afe8177b1553cb2e0423ed1103c3128650c91e6ca5025b91a9772",
+        "exportSHA256": "b4010d8a46bab7e5d68eba7651ab4ab3ac45b45c6ea59b3c38eed0a1ab5fe0a2",
+        "scale": 1.719247467438495,
+        "offset": [
+          -42,
+          105
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     }
   },
   "ownerArtisticApproval": false,

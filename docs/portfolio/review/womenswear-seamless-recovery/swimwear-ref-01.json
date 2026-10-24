@@ -7,7 +7,7 @@
   ],
   "threeViewComplete": false,
   "method": "edited-existing",
-  "reviewNote": "Generation refused; two background-only tool edits retained the original silver/lime garment and pose. Reviewed final alpha composited on white: complete fingers, fine lime ties, hair and feet, subtle natural shadow and no photographic rectangle. Front/primary only, no new pose claimed.",
+  "reviewNote": "Generation refused; two background-only tool edits retained the original silver/lime garment and pose. Reviewed final alpha composited on white: complete fingers, fine lime ties, hair and feet, subtle natural shadow and no photographic rectangle. Front/primary only, no new pose claimed. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
   "sourceSHA256": "a0f8303fc2bb6c7ffa1a0f934fc45079f7dad631289b31cc15565e79be294215",
   "outputs": {
     "front": {
@@ -27,7 +27,18 @@
         246
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-01-v1/front-refined-alpha.png",
+        "alphaSHA256": "4607c37dc85dd9565c685714b04e40325a5b0c62f98d162ec6f57e20f875e984",
+        "exportSHA256": "cc19d89fb28758d3031517f446bb68c4649c6bf021b870fc407b96db70dcdf21",
+        "scale": 1.7444933920704846,
+        "offset": [
+          -90,
+          78
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     }
   },
   "ownerArtisticApproval": false,

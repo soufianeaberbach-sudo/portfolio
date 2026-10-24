@@ -5097,7 +5097,7 @@
         ],
         "threeViewComplete": false,
         "method": "retained-faithful-views",
-        "reviewNote": "Faithful nude mesh column gown V1 Front and Back retained. Full train, hair, fingers and mesh edges preserved through native alpha. New Editorial refused; rejected Forest Fold remains inactive.",
+        "reviewNote": "Faithful nude mesh column gown V1 Front and Back retained. Full train, hair, fingers and mesh edges preserved; Front RGB background refined with segmentation and Back native alpha retained. New Editorial refused; rejected Forest Fold remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
         "sourceSHA256": "30a07d65654f71f97c62af52820c07e2fd28a84cdc799ddf5ef27937a5be99c1",
         "outputs": {
           "front": {
@@ -5117,7 +5117,18 @@
               241
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/front-refined-alpha.png",
+              "alphaSHA256": "7626f1c8f57838f7d357d8aba0b86ba59366da74048ecd16d93bdfb7585c1913",
+              "exportSHA256": "7cf3befa43ee8e6e92884d8ee89afc4fc47965e65e6f001b7f9c26603139351b",
+              "scale": 1.715523465703971,
+              "offset": [
+                -42,
+                117
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           },
           "back": {
             "inputPath": "public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
@@ -5136,7 +5147,18 @@
               241
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-refined-alpha.png",
+              "alphaSHA256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+              "exportSHA256": "a04706d5d9f71d738a7ae3d75c16c97516f2e0c4a0ca9f8552e4e00dbed2d737",
+              "scale": 1.722987672226251,
+              "offset": [
+                -66,
+                95
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           }
         },
         "ownerArtisticApproval": false,
@@ -7183,7 +7205,7 @@
         ],
         "threeViewComplete": false,
         "method": "edited-existing",
-        "reviewNote": "Generation refused; two background-only tool edits retained the original silver/lime garment and pose. Reviewed final alpha composited on white: complete fingers, fine lime ties, hair and feet, subtle natural shadow and no photographic rectangle. Front/primary only, no new pose claimed.",
+        "reviewNote": "Generation refused; two background-only tool edits retained the original silver/lime garment and pose. Reviewed final alpha composited on white: complete fingers, fine lime ties, hair and feet, subtle natural shadow and no photographic rectangle. Front/primary only, no new pose claimed. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
         "sourceSHA256": "a0f8303fc2bb6c7ffa1a0f934fc45079f7dad631289b31cc15565e79be294215",
         "outputs": {
           "front": {
@@ -7203,7 +7225,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-01-v1/front-refined-alpha.png",
+              "alphaSHA256": "4607c37dc85dd9565c685714b04e40325a5b0c62f98d162ec6f57e20f875e984",
+              "exportSHA256": "cc19d89fb28758d3031517f446bb68c4649c6bf021b870fc407b96db70dcdf21",
+              "scale": 1.7444933920704846,
+              "offset": [
+                -90,
+                78
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           }
         },
         "ownerArtisticApproval": false,
@@ -7759,7 +7792,7 @@
         ],
         "threeViewComplete": false,
         "method": "retained-faithful-views",
-        "reviewNote": "Faithful silver triangle bikini V1 Front and Back retained after Editorial refusal. Complete figure, fine tie strings, natural proportions and subtle grounding preserved. Unrelated ochre redesign remains inactive.",
+        "reviewNote": "Faithful silver triangle bikini V1 Front and Back retained after Editorial refusal. Complete figure, fine tie strings, natural proportions and subtle grounding preserved. Unrelated ochre redesign remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
         "sourceSHA256": "050da9837144def2e521b69a3d86770ceec276666454821470603adc1ffa6750",
         "outputs": {
           "front": {
@@ -7779,7 +7812,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/front-refined-alpha.png",
+              "alphaSHA256": "0f9fcd0980df7ba20048b03040ed3d3c6f1679205dbd79e0dd454dc99260657c",
+              "exportSHA256": "c87b70105b74ced176be34a0eb6f59dea4e80c549489ba3e252876a58fa0042e",
+              "scale": 1.7613046701260193,
+              "offset": [
+                -57,
+                97
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           },
           "back": {
             "inputPath": "public/portfolio/generated/ww-ai-swimwear-ref-02-v1/back-native.png",
@@ -7798,7 +7842,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/back-refined-alpha.png",
+              "alphaSHA256": "cd9a3c2729ef0261033bc1b1a81e9c58d47c54a07483c4b2566ba024ef961cb8",
+              "exportSHA256": "ed4b0cbc964e3da1dafef054e658afca66c561a491cc8d3d3ea8a6cd732a3965",
+              "scale": 1.7972768532526475,
+              "offset": [
+                -75,
+                96
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           }
         },
         "ownerArtisticApproval": false,
@@ -8721,7 +8776,7 @@
         ],
         "threeViewComplete": false,
         "method": "retained-faithful-views",
-        "reviewNote": "Reviewed faithful V1 Front and distinct Editorial: magenta textured bikini, same casting, complete head and feet, clean native alpha and soft contact shadow. No missing Back is invented; rejected navy V2 remains inactive.",
+        "reviewNote": "Reviewed faithful V1 Front and distinct Editorial: magenta textured bikini, same casting, complete head and feet, clean native alpha and soft contact shadow. No missing Back is invented; rejected navy V2 remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
         "sourceSHA256": "5dbdc5d58c6c5832044a26d7cd03a7cc14911cd4ca3ec298ff0f4315cad84edc",
         "outputs": {
           "front": {
@@ -8741,7 +8796,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-04-v1/front-refined-alpha.png",
+              "alphaSHA256": "73358445fbfa468c1d0c0b185ad5b8df1e7e2f345c08cb0b65446fee61e038c8",
+              "exportSHA256": "69ccd6863ef1bdfab32c59868fc90f30f35bd28196b64780003db5cd5626425e",
+              "scale": 1.730517115804807,
+              "offset": [
+                -46,
+                107
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           },
           "editorial": {
             "inputPath": "public/portfolio/generated/ww-ai-swimwear-ref-04-v1/editorial-native.png",
@@ -8760,7 +8826,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-04-v1/editorial-refined-alpha.png",
+              "alphaSHA256": "47592ea3dc4d7ceb30b58de37ad24a76eed9ef144043b7c889f2b0e00af6cf3c",
+              "exportSHA256": "a691fb3abd619f2d7297d041e80389fedf578c6bf1c0ef5d31bac02e943364e1",
+              "scale": 1.7918552036199096,
+              "offset": [
+                -30,
+                33
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           }
         },
         "ownerArtisticApproval": false,
@@ -9247,7 +9324,7 @@
         ],
         "threeViewComplete": false,
         "method": "retained-faithful-views",
-        "reviewNote": "Usable faithful silver halter bikini Front recovered from accepted V1 native, complete figure and clean alpha. No invented Editorial or Back; unrelated Olive Pique replacement is not integrated.",
+        "reviewNote": "Usable faithful silver halter bikini Front recovered from accepted V1 native, complete figure and clean alpha. No invented Editorial or Back; unrelated Olive Pique replacement is not integrated. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
         "sourceSHA256": "eb2128dc2d017f66ff394e7b6fb23b09f5307049e9f99ec8286d8bb9ae78ba69",
         "outputs": {
           "front": {
@@ -9267,7 +9344,18 @@
               246
             ],
             "resampled": true,
-            "nativeHighResolutionClaim": false
+            "nativeHighResolutionClaim": false,
+            "refinement": {
+              "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-05-v1/front-refined-alpha.png",
+              "alphaSHA256": "42eb02172f5afe8177b1553cb2e0423ed1103c3128650c91e6ca5025b91a9772",
+              "exportSHA256": "b4010d8a46bab7e5d68eba7651ab4ab3ac45b45c6ea59b3c38eed0a1ab5fe0a2",
+              "scale": 1.719247467438495,
+              "offset": [
+                -42,
+                105
+              ],
+              "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            }
           }
         },
         "ownerArtisticApproval": false,

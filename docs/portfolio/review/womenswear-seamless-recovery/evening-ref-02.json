@@ -8,7 +8,7 @@
   ],
   "threeViewComplete": false,
   "method": "retained-faithful-views",
-  "reviewNote": "Faithful nude mesh column gown V1 Front and Back retained. Full train, hair, fingers and mesh edges preserved through native alpha. New Editorial refused; rejected Forest Fold remains inactive.",
+  "reviewNote": "Faithful nude mesh column gown V1 Front and Back retained. Full train, hair, fingers and mesh edges preserved; Front RGB background refined with segmentation and Back native alpha retained. New Editorial refused; rejected Forest Fold remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
   "sourceSHA256": "30a07d65654f71f97c62af52820c07e2fd28a84cdc799ddf5ef27937a5be99c1",
   "outputs": {
     "front": {
@@ -28,7 +28,18 @@
         241
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/front-refined-alpha.png",
+        "alphaSHA256": "7626f1c8f57838f7d357d8aba0b86ba59366da74048ecd16d93bdfb7585c1913",
+        "exportSHA256": "7cf3befa43ee8e6e92884d8ee89afc4fc47965e65e6f001b7f9c26603139351b",
+        "scale": 1.715523465703971,
+        "offset": [
+          -42,
+          117
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     },
     "back": {
       "inputPath": "public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
@@ -47,7 +58,18 @@
         241
       ],
       "resampled": true,
-      "nativeHighResolutionClaim": false
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-refined-alpha.png",
+        "alphaSHA256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+        "exportSHA256": "a04706d5d9f71d738a7ae3d75c16c97516f2e0c4a0ca9f8552e4e00dbed2d737",
+        "scale": 1.722987672226251,
+        "offset": [
+          -66,
+          95
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
     }
   },
   "ownerArtisticApproval": false,
