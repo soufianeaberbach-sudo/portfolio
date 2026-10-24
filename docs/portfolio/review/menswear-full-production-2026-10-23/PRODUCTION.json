@@ -6709,7 +6709,39 @@
         "reviewNotes": "Genuine rear-facing same adult model, white formal shirt, charcoal trousers with side adjusters and cuffs, black loafers. Shirt yoke, sleeve plackets/cuffs, rear darts and two buttoned trouser welt pockets rendered coherently; neutral white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1719576,
+        "nativeMode": "RGB",
+        "sha256": "c9ec5fb3f82dc5bbd089e552448fda0afcf5296ef450a02c3aa7e1f7afb6a5a1",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-c5680884-29e7-48f8-83d3-2b8e36d36c8b.png",
+        "generatedAt": "2026-10-24T00:26:20.906555+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-08-editorial.txt",
+        "promptSHA256": "45aa105504df942cb0d8fcaf24c46cc6c578d390c61a9fafee642a2d06b34d9f",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/editorial.png",
+        "exportSHA256": "db6c2934e9a5a8a6b66c3a1bb8fc5e84123898fe33d40a0ab06d462f3584d441",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/editorial-600.webp",
+        "previewSHA256": "3015f97379e9dc67f7ea0e576701c3c9092ce558bfb5776b9ab8f0498fdb010e",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model, white formal shirt, burgundy tie, charcoal double-pleated cuffed trousers with side adjusters and black penny loafers. Stylish natural cuff adjustment and diagonal step; plausible arms/hands, coherent cloth and full-length studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -8457,8 +8489,15 @@
       "key": "mw-r2-tailoring-08:editorial",
       "look": "mw-r2-tailoring-08",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:26:20.909916+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-09:front",
@@ -9440,6 +9479,15 @@
       "at": "2026-10-24T00:26:00.709259+00:00",
       "notes": "Same adult model and olive waistcoat/cuffed trouser outfit, ivory shirt and brown Derby shoes. Natural three-quarter walking step and one hand in trouser pocket; six-button waistcoat with lowest open, consistent front welts and material, complete white studio framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-08",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:26:20.909916+00:00",
+      "notes": "Same adult model, white formal shirt, burgundy tie, charcoal double-pleated cuffed trousers with side adjusters and black penny loafers. Stylish natural cuff adjustment and diagonal step; plausible arms/hands, coherent cloth and full-length studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9452,11 +9500,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 38,
-    "acceptedActivePhotographs": 118,
+    "acceptedActivePhotographs": 119,
     "incompleteLooks": 2,
     "completedMasters": 38,
     "unresolvedViews": [
-      "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-10:back"
     ],
     "failedGenerationAttempts": 3
