@@ -5472,11 +5472,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1788003,
+        "nativeMode": "RGB",
+        "sha256": "b98b5bab6c7ec818e179d719223fe0dedcb3c63499c5840b22f7718573fa1103",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-f46ce633-3da1-46fd-b244-6a785aab8f43.png",
+        "generatedAt": "2026-10-24T00:09:09.045916+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-01-front.txt",
+        "promptSHA256": "75c7e6cdd06dd20ebe0316ee831db9872c8d6969b7a1b9ed8869f2eb93e621e9",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/front.png",
+        "exportSHA256": "dec348a3f6688419fec658f7ddcb4482d8bb323895238efc0cb0159d634d699e",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/front-600.webp",
+        "previewSHA256": "0538a2e76bbf64a327e8df4844cd01e39af2bcb53dd58a1db50e9d80e787bb7f",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Modern navy hopsack two-piece suit has notch lapel, two-button stance with upper button fastened, credible chest shaping, natural light-padded shoulder, flap hips and chest welt. Light-blue open-neck shirt and brown leather derbies coherent; straight trousers and balanced woven drape, natural handsome adult casting.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -7111,8 +7141,15 @@
       "key": "mw-r2-tailoring-01:front",
       "look": "mw-r2-tailoring-01",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:09:09.050065+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-01:back",
@@ -7977,6 +8014,15 @@
       "at": "2026-10-24T00:08:49.568357+00:00",
       "notes": "Genuine rear of same curly-haired adult and cobalt ripstop windbreaker, hood/back vent-yoke, raglan sleeves and elastic cuffs. Navy technical trousers and corrected plain charcoal-grey trail heels continuous; crisp light shell behaviour credible.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-01",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:09:09.050065+00:00",
+      "notes": "Modern navy hopsack two-piece suit has notch lapel, two-button stance with upper button fastened, credible chest shaping, natural light-padded shoulder, flap hips and chest welt. Light-blue open-neck shirt and brown leather derbies coherent; straight trousers and balanced woven drape, natural handsome adult casting.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7989,11 +8035,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 30,
-    "acceptedActivePhotographs": 91,
+    "acceptedActivePhotographs": 92,
     "incompleteLooks": 10,
     "completedMasters": 30,
     "unresolvedViews": [
-      "mw-r2-tailoring-01:front",
       "mw-r2-tailoring-01:back",
       "mw-r2-tailoring-01:editorial",
       "mw-r2-tailoring-02:back",
