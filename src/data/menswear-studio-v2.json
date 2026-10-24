@@ -6138,6 +6138,469 @@
       ],
       "status": "EXPORTED_PENDING_VISUAL_REVIEW",
       "exportSeconds": 37.13
+    },
+    {
+      "id": "mw-r2-activewear-04",
+      "category": "m-activewear",
+      "position": 4,
+      "views": {
+        "front": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-activewear-04/front-native.png",
+            "sha256": "3852bebf65670ec9e99f00add7ca487fbad602520d97d6465a7241a8520215a3",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/front.png",
+            "sha256": "b664733a57601811c0c6dd318adb71ce42e1206df81b14ff38e4af516208f5c1"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/front-native-size-white.png",
+            "bytes": 600620,
+            "sha256": "9e076cddbdf7493778003b02de79a4bf777847fb6cd976951bcc6fb4ab724039",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/front-segmentation.png",
+            "bytes": 48165,
+            "sha256": "00215c77596b6b11ee25fea3b2f3bfbc5e0901fe7aeeb5bf51c439ce3cfc69e0",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/front-alpha.png",
+            "bytes": 51211,
+            "sha256": "fa3629c7fdaddbdd12607390bb528f1f8ca05ff0ecb181fa27011733007290e2",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/front-trimap.png",
+            "bytes": 14614,
+            "sha256": "efdb4c04b9cbcda607da89104b3f51dbfe14f666de4e3f6fd33e910c9efb41db",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/front-shadow.png",
+            "bytes": 5149,
+            "sha256": "12ea0af16a3658467e20ed0d3472a13d614a1555b84b1f23c6577519805095c7",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front.png",
+            "bytes": 1462359,
+            "sha256": "bfe0985dfa0731289a27c4bb37df711dea2d6faecea0986e529d2a29e8c0ba80",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-600.webp",
+              "bytes": 143178,
+              "sha256": "aee2257d7bef4074e2356aaf53d044981250a5a2154ead1fec0c28c3401e5dae",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-1200.webp",
+              "bytes": 521550,
+              "sha256": "f9d58871371cff243d974e806b092e5d3cb00600b766af2f081df00d9217ff24",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-1800.webp",
+              "bytes": 976150,
+              "sha256": "66ac41b2572ca41e5feea64b26601a15458fff0b52b2f5d1cb298a494041eb53",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/front-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              259,
+              22,
+              753,
+              1433
+            ],
+            "foregroundFraction": 0.233461,
+            "preservedCorePixels": 345265,
+            "preservedLightCorePixels": 148060,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1179648,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 30471,
+            "enclosedGapAreas": [
+              8
+            ],
+            "shadowPixels": 16943,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.010772
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        },
+        "back": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-activewear-04/back-native.png",
+            "sha256": "c0c3410d95f4bce0c26e8c9b5934dd946423fffc2f1c0ffa124e8477e05cf5b8",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/back.png",
+            "sha256": "b0c661db284ad87fd39c00b2e0a084b9773cc4de715cee3f7daec323d0d97408"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/back-native-size-white.png",
+            "bytes": 556222,
+            "sha256": "9d372d1a40d28cd16059cdd359e0717361e64ae2ff2b6e6d1afb1af801c821df",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/back-segmentation.png",
+            "bytes": 45621,
+            "sha256": "cbbff7b0d87fa5d372ff1696e059dc002b5aed14dabcd64dc53389e93b3de236",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/back-alpha.png",
+            "bytes": 49421,
+            "sha256": "63dcfe09d42b3453867d5419053cd5c68a8d8889d6074c24d3eb049b3733f94b",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/back-trimap.png",
+            "bytes": 14130,
+            "sha256": "301608f51e831c9bdc342c69694a7c5d81e8812259bd84c6771e436878adccf0",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/back-shadow.png",
+            "bytes": 4853,
+            "sha256": "413818cd060a508e501a1784f61798fab27d94fd7678799cc53b9352e2accd11",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back.png",
+            "bytes": 1334534,
+            "sha256": "b0e775c7223b2abd41129891cf42bf6c26d0d168db75c41faa37f465d2b26cd9",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-600.webp",
+              "bytes": 134722,
+              "sha256": "9cd4279ff6069c1453d5db0468fad308f6b7357811ef648f798ed64d4a0735f1",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-1200.webp",
+              "bytes": 484634,
+              "sha256": "60149ccb137e43395a5863719a9c3282fa5411306b9863b7ff3621126377304f",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-1800.webp",
+              "bytes": 884958,
+              "sha256": "339e7da647ef96a5f7c75935167b0bfd8f1b36f191a31b46642ff39acb9d74aa",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/back-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              269,
+              21,
+              748,
+              1417
+            ],
+            "foregroundFraction": 0.230838,
+            "preservedCorePixels": 342334,
+            "preservedLightCorePixels": 151929,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1186643,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 29043,
+            "enclosedGapAreas": [
+              9
+            ],
+            "shadowPixels": 14568,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.009262
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        },
+        "editorial": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-activewear-04/editorial-native.png",
+            "sha256": "c6005dc941f92d9a6816e243b8ae6ab2054df4dbce6f10282d360d5956445145",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-activewear-04/editorial.png",
+            "sha256": "472a48e1a48cfac5a3bf66fcbb1cfb8da643aa505a9891b5bccdf21ef636a659"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/editorial-native-size-white.png",
+            "bytes": 580215,
+            "sha256": "45388ba0068982aa1a790d6b84a0ee64e14d98c45c18f4cde34de00f479e474d",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/editorial-segmentation.png",
+            "bytes": 48307,
+            "sha256": "09fe6c2066834e20254c3c615301b606c1103322cca4fbd6e83ddf5eb9612f4b",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/editorial-alpha.png",
+            "bytes": 50740,
+            "sha256": "747e0a661b041f4da66b1d4fdba64065cde2572e938858d7ee4675fcb7a63d71",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/editorial-trimap.png",
+            "bytes": 16318,
+            "sha256": "095bde2f1643cdd06589acd2f5989a1bb52f131d040c5b2d0d4b4106db6a8e02",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-activewear-04/editorial-shadow.png",
+            "bytes": 4604,
+            "sha256": "954753cc25c35083812b771666ff3d975e75b7332baa62401a066e75ccccd934",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial.png",
+            "bytes": 1403929,
+            "sha256": "f4f8c79e4c9bfcf2a2662cfb8c46cae5914ed72b7da3d2af38fb598bf00529e8",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-600.webp",
+              "bytes": 141210,
+              "sha256": "850a9202fb2f2a1b51bf3a8f07fab059ab8f55a049974970ef31c93645080ec9",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-1200.webp",
+              "bytes": 498330,
+              "sha256": "7133b1713862f2b82bfc76cce73c582148d1914716496c662b0a5818ddd64390",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-1800.webp",
+              "bytes": 926658,
+              "sha256": "5eb25735d3666da8b5b393795f8428b21e6a4433f0aebd9081e80a028585704a",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/editorial-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              220,
+              21,
+              820,
+              1388
+            ],
+            "foregroundFraction": 0.219834,
+            "preservedCorePixels": 325291,
+            "preservedLightCorePixels": 136602,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1205059,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 30082,
+            "enclosedGapAreas": [
+              12
+            ],
+            "shadowPixels": 12171,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.007738
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        }
+      },
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master.png",
+        "bytes": 4206499,
+        "sha256": "0c39df08836f4580a90e0adcdc5f736463fcdfa678939b94f62bd74815d9cf9a",
+        "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ]
+      },
+      "masterResponsive": [
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-900.webp",
+          "bytes": 121964,
+          "sha256": "f53a5f85e7d8a2fd7ed82d9154e237e2bf30cae3f7421a107a8aa30e1051c998",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-900.webp",
+          "dimensions": [
+            900,
+            450
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-1800.webp",
+          "bytes": 431940,
+          "sha256": "040ae3536be51efa7d2ee3984bb555a05e82cdd2ddf0dc5b94bc3213082795cc",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-1800.webp",
+          "dimensions": [
+            1800,
+            900
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-2700.webp",
+          "bytes": 933328,
+          "sha256": "17241f404ccc68af36400a49fcd595f8b1c25ceeb42909bc6456328e3dc79e81",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-2700.webp",
+          "dimensions": [
+            2700,
+            1350
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-3600.webp",
+          "bytes": 1521462,
+          "sha256": "795198edfe6aa3521b23e94254e5455349e666c6ecfdcf1cc1a9e253aac7adbf",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-activewear-04/master-3600.webp",
+          "dimensions": [
+            3600,
+            1800
+          ]
+        }
+      ],
+      "status": "EXPORTED_PENDING_VISUAL_REVIEW",
+      "exportSeconds": 29.71
     }
   ],
   "failures": [
