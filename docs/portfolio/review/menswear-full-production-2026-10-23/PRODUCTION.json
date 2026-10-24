@@ -6434,7 +6434,39 @@
         "reviewNotes": "True rear of moss textured unstructured blazer and cream trousers; same dark curls, pale-blue collar/cuffs and brown suede loafers. Centre seam, two side vents, plausible sleeve pitch and clean tailored trouser drape.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1741300,
+        "nativeMode": "RGB",
+        "sha256": "16e8b0c67a0609f0dd71113560bb033515b46b49a7fd15ad6b070f5fbadfe088",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-9f9eda3e-f720-4aeb-a930-b9c1856588c6.png",
+        "generatedAt": "2026-10-24T00:23:49.194434+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-07-editorial.txt",
+        "promptSHA256": "939a52ddb97cc3fd160183b5bb5312ac84951a500d614e09ae71fe416082aebd",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-07/editorial.png",
+        "exportSHA256": "59b28c6cdb3e10401df44081288c17b53a7f73aa28dd878406e2aa19b48f3456",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-07/editorial-600.webp",
+        "previewSHA256": "af48686d72fb75306afc6c9549e9fc5dce7f2e8e3c46863caabe4fe1db5127f9",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult curly-haired model and moss blazer/blue shirt/cream trouser/brown suede loafer outfit. Natural crossing step and relaxed pocketed hand, woven texture and soft tailoring retained, no awkward limbs and full-length studio framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -8089,8 +8121,15 @@
       "key": "mw-r2-tailoring-07:editorial",
       "look": "mw-r2-tailoring-07",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:23:49.198308+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-08:front",
@@ -9016,6 +9055,15 @@
       "at": "2026-10-24T00:23:43.520455+00:00",
       "notes": "True rear of moss textured unstructured blazer and cream trousers; same dark curls, pale-blue collar/cuffs and brown suede loafers. Centre seam, two side vents, plausible sleeve pitch and clean tailored trouser drape.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-07",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:23:49.198308+00:00",
+      "notes": "Same adult curly-haired model and moss blazer/blue shirt/cream trouser/brown suede loafer outfit. Natural crossing step and relaxed pocketed hand, woven texture and soft tailoring retained, no awkward limbs and full-length studio framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9028,13 +9076,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 34,
-    "acceptedActivePhotographs": 111,
+    "acceptedActivePhotographs": 112,
     "incompleteLooks": 6,
     "completedMasters": 34,
     "unresolvedViews": [
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-06:back",
-      "mw-r2-tailoring-07:editorial",
       "mw-r2-tailoring-08:back",
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:back",
