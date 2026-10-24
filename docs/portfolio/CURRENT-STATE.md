@@ -12,6 +12,17 @@ The forty new `mw-r2-…` identities are independent of all fifty preserved hist
 
 The [full review package](review/menswear-full-production-2026-10-23/README.md) contains the actual forty-look contact sheet, all-view review PDF, portable interactive review, selected registry, construction plan, dated research and final technical/browser/remote reports. This is a review branch, not merged or deployed. Final personal owner artistic acceptance remains pending, separately from autonomous production selection.
 
+## Womenswear seamless recovery candidate — 24 October 2026
+
+`fix/womenswear-recovery-seamless-integration`, based on latest main
+`2c90815dda21ec6183e7e283f94935e2a49c793c`, preserves 31 complete active sets and
+integrates nine previously unresolved looks as truthful partial or retouched
+presentations. All forty featured Womenswear looks now have usable Front/primary
+photography. One recovery has Front + Editorial, three Front + Back and five
+Front/primary only. No rejected redesign is reactivated. Menswear and all original
+source/generated artwork remain unchanged. This is a review branch, not a merge
+or production deployment. [Actual recovery report and screenshots](review/womenswear-seamless-recovery/README.md).
+
 ## Authority and reading order
 
 1. Latest explicit user instructions.

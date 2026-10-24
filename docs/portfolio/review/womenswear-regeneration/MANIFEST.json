@@ -5158,6 +5158,11 @@
                 95
               ],
               "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            },
+            "finalPerimeter": {
+              "asset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-final.png",
+              "sha256": "e1253faa42ef8d996f376bb98943892c397d3c27329f60d6998fcfe2ac8bc038",
+              "change": "Only exterior 8px, removes native alpha<=1/255 noise; complete subject untouched; earlier files preserved."
             }
           }
         },
@@ -8807,6 +8812,11 @@
                 107
               ],
               "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+            },
+            "finalPerimeter": {
+              "asset": "/portfolio/recovery/ww-recovery-swimwear-ref-04-v1/front-final.png",
+              "sha256": "7d47e020627aa500267f643b1325a6d48a6d79a626c9bf15e690a9a9f4a310aa",
+              "change": "Only exterior 8px, removes native alpha<=1/255 noise; complete subject untouched; earlier files preserved."
             }
           },
           "editorial": {
@@ -11019,5 +11029,15 @@
     "castingAuthorized": false,
     "replacementConceptAuthorized": false,
     "nextRequirement": "New owner-approved visual brief. Do not resume production without it."
+  },
+  "recoveryPass": {
+    "date": "2026-10-24",
+    "brief": "Womenswear-only relaxed completion and seamless white integration",
+    "activeSelectionRegistry": "src/data/womenswear-generated.json",
+    "usableFeaturedLooks": 40,
+    "preservedThreeViewLooks": 31,
+    "recoveredLooks": 9,
+    "unresolvedUsableLooks": 0,
+    "note": "Original status and generation candidates remain historical evidence. Per-look recoveryPresentation is the active partial/fallback state, with no fabricated master."
   }
 }

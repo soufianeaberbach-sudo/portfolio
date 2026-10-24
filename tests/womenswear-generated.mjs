@@ -25,6 +25,7 @@ try{
    check(await exhibition.locator(`.ww-rail [data-open-subject="${record.sourceIdentity}"]`).count()===0,'old reference is removed by slot remapping');
    await source.scrollIntoViewIfNeeded();await source.click();
    const reader=page.locator(`[data-ww-reader][data-subject="${record.id}"]`);await reader.waitFor({state:'visible'});
+   await page.waitForFunction(()=>!document.querySelector('.ww-match')&&!document.querySelector('[data-ww-moving]'));
    check(await reader.getAttribute('data-verified')==='no','AI presentation never becomes a verified project');
    check((await reader.locator('.ww-reader-head').innerText()).includes(record.generationType==='background-retouch'?'AI-RETOUCHED':'AI-GENERATED'),'truthful AI provenance is visible');
    const separate=record.photography?Object.entries(record.photography):null;

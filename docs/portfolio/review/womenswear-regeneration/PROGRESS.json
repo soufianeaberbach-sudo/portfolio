@@ -1,439 +1,133 @@
 {
-  "recoveredRemoteCommit": "81b5a04c722095a2151bc6d1851f24026d369202",
-  "storageObservations": {
-    "audit": "RESOURCE-AUDIT.json",
-    "healthyAtRecovery": true
-  },
-  "lastCompletedSourceIdentity": "swimwear-ref-09",
-  "recoveryNote": "Remote HEAD was a batched commit covering multiple sets; exact within-commit completion order is not established. Next accepted set will record its source identity.",
-  "updatedUTC": "2026-10-23T14:35:47.964534+00:00",
-  "branch": "feat/womenswear-ai-photography-regeneration",
+  "updatedUTC": "2026-10-24T13:36:05.901404+00:00",
+  "branch": "fix/womenswear-recovery-seamless-integration",
+  "baseCommit": "2c90815dda21ec6183e7e283f94935e2a49c793c",
+  "productionState": "RECOVERY_INTEGRATED_BROWSER_VERIFIED",
+  "completionRule": "Usable Front/primary with genuine optional views; three-view generation is optional, not a publication gate.",
+  "totalFeaturedLooks": 40,
+  "usableFeaturedLooks": 40,
   "completedLooks": 31,
-  "pendingLooks": 4,
-  "partiallyGeneratedLooks": 3,
-  "statusCounts": {
-    "INTEGRATED": 10,
-    "READY": 23,
-    "PENDING": 4,
-    "GENERATED": 3
-  },
-  "currentCategory": "activewear",
-  "currentSourceIdentity": null,
-  "currentMilestone": "owner-rejection-original-source-restoration",
-  "lastSuccessfullyPushedCommit": "42e4ea2a34a3ffa69c602038c09e32af5dd29bf1",
-  "checkpointCommit": "The commit containing this snapshot; verify with git log -1 -- this file and git ls-remote. The explicit SHA above was verified before this commit.",
-  "nextIncompleteSourceIdentity": "activewear-ref-09",
-  "nextActionableSourceIdentity": null,
-  "blockedSources": [
-    {
-      "sourceIdentity": "swimwear-ref-02",
-      "failures": [
-        {
-          "view": "front",
-          "error": "moderation_blocked",
-          "generationPrompt": "Create one premium commercial swimwear catalogue photograph. Genuinely original fashion concept: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Model: Adult woman about 32, pale olive skin, broad face, dark brows, platinum-blonde jaw-length curly side-part bob, small black round stud earrings, barefoot. Clear frontal product view, relaxed natural standing posture. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
-          "referenceAssets": [],
-          "status": "MODERATION_REFUSED",
-          "moderationStage": "output",
-          "requestId": "5e6944cf-21d2-4d27-aa2f-1a2780b24804",
-          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID 5e6944cf-21d2-4d27-aa2f-1a2780b24804. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
-          "recordedUTC": "2026-10-23T14:12:04.788Z"
-        },
-        {
-          "view": "front",
-          "error": "moderation_blocked",
-          "generationPrompt": "Create one premium commercial swimwear catalogue photograph. Photograph the same adult model and original Ochre Wrap outfit in the accepted companion photograph. Clear frontal product view, relaxed natural standing posture. Keep the model identity, hairstyle, accessories, shoes and garment unchanged. Design: Ochre matte ribbed swimming one-piece, broad straps and a wrap V neckline, diagonal front overlap seams and flat espresso waistband, straight closed rear neckline with two broad straps; no openings or extra ties. Clean white studio, balanced soft neutral lighting, realistic textile and subtle natural floor-contact shadow. Normal full-length portrait perspective; complete head, hands, garment and feet comfortably within generous margins. One model, one photograph, no text or graphic overlays.",
-          "referenceAssets": [
-            "/workspace/portfolio/public/portfolio/generated/ww-ai-swimwear-ref-02-v2/back-native.png"
-          ],
-          "status": "MODERATION_REFUSED",
-          "moderationStage": "output",
-          "requestId": "da70760d-754f-4b8a-a290-a5e2bf0db8fe",
-          "rawError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID da70760d-754f-4b8a-a290-a5e2bf0db8fe. safety_violations=[sexual].\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"sexual\\\"\\n      ]\\n    }\\n  }\\n}\")",
-          "recordedUTC": "2026-10-23T14:15:24.230Z"
-        }
-      ]
-    }
-  ],
-  "nextAction": "Await a new owner-approved visual brief. No image generation, independent design, casting or replacement concept is authorized.",
-  "knownRejectedGenerations": [
-    {
-      "sourceIdentity": "activewear-ref-04",
-      "rejections": [
-        {
-          "view": "front",
-          "asset": "/portfolio/generated/ww-ai-activewear-ref-04-v1/rejected/front-stripe-count-v1.png",
-          "reason": "The visible outer-leg stripe group does not clearly retain all three source stripes; not approved for integration.",
-          "nativeDimensions": [
-            1024,
-            1536
-          ]
-        }
-      ]
-    },
-    {
-      "sourceIdentity": "activewear-ref-10",
-      "rejections": [
-        {
-          "view": "front",
-          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/front-stripe-count-v1.png",
-          "reason": "Only two distinguishable white stripes; corrected before integration."
-        },
-        {
-          "view": "back",
-          "asset": "/portfolio/generated/ww-ai-activewear-ref-10-v1/rejected/back-diptych-v1.png",
-          "reason": "Two people/diptych; never used or cropped into master."
-        }
-      ]
-    },
-    {
-      "sourceIdentity": "evening-ref-03",
-      "rejections": [
-        {
-          "view": "back",
-          "asset": "/portfolio/generated/ww-ai-evening-ref-03-v1/rejected/back-diptych-v1.png",
-          "reason": "Two people/diptych instead of one independently generated rear panel. Rejected; not used or cropped into master."
-        }
-      ]
-    },
-    {
-      "sourceIdentity": "evening-ref-10",
-      "rejections": [
-        {
-          "view": "editorial",
-          "asset": "/portfolio/generated/ww-ai-evening-ref-10-v1/rejected/editorial-graphic-v1.png",
-          "nativeDimensions": [
-            1024,
-            1536
-          ],
-          "sha256": "acd60d2fa5cd9fcda41651e0bc5315b68f65b5b51137e6b1dfde9280fb808d8b",
-          "reason": "Visible stray four-point graphic at lower right, confirmed over white; not approved and not used in master. Front and Back remain accepted.",
-          "generationOperation": "First separate Editorial attempt from original and accepted Front/Back; rejected before registration.",
-          "generationPrompt": "One adult woman in ONE full-length EDITORIAL studio fashion portrait, exactly the deep-red asymmetric gown and sleek low-bun brunette in these references. Original source provides design; accepted Front/Back provide identical model, color, textile, proportions, beige heels and lighting. Preserve high mock neckline, ONLY LEFT long flared bell sleeve/right bare arm, small gold connector at RIGHT waist, original LEFT waist opening, gathered draped floor-length skirt and complete hem. Rear horizontal opening unchanged. Quiet front three-quarter pose and small natural weight shift, arms relaxed slightly away for readable sleeve/hardware; no lifted hem, added slit, second sleeve, cutout, jewellery or new styling. Same adult woman, center-part low bun and natural makeup. Exactly one body, no diptych or montage. Full head, hands, cuff, shoes and every garment edge on canvas with safe margins and natural undistorted anatomy. Soft neutral studio light, realistic red fabric/skin, subtle credible floor contact shadow. Genuine transparent alpha preserving cloth/hair/shadow. Request 1800x2700 portrait if supported, otherwise actual native dimensions. No text, label or frame. Provisional AI source-based presentation; construction unverified."
-        }
-      ]
-    }
-  ],
-  "notes": "Owner rejected Tide Panel and Forest Fold V2. Exactly two featured mappings restored to original historical images; all other 38 unchanged. V1/V2 files, metadata and history preserved. Rejected concepts excluded from active completion. Production stopped pending owner-approved brief. 190 focused checks, 12 tests, source integrity, 204 identity checks and build pass.",
-  "limitations": [
-    "31 actual complete sets; five partial sets; four without generated imagery. 19 genuine views remain missing.",
-    "All 97 baseline native photographs and all 350 baseline artwork files are byte-identical.",
-    "Native resolutions remain explicit. Four new RGB natives have reviewed geometry without background removal; no incomplete master or site integration was made.",
-    "No exact moderation trigger or guaranteed filtering fix established; controlled API route unavailable without connection/spending authorization.",
-    "Full forty-look site QA, owner artistic approval and final PR remain pending. No merge or deployment."
-  ],
-  "remainingLooks": 9,
-  "nextImage": null,
-  "nextBlockedImage": {
-    "sourceIdentity": "swimwear-ref-02",
-    "view": "front",
-    "status": "BLOCKED_MODERATION"
-  },
-  "productionState": "STOPPED_BY_OWNER",
-  "latestRetryPass": {
-    "baseCheckpoint": "45ce26a1bba5c3d10c13356d7d5c999a9e88fbfd",
-    "updatedUTC": "2026-10-22T20:15:57.440376+00:00",
-    "toolCalls": 30,
-    "acceptedNativeOutputs": 5,
-    "moderationFailures": 25,
-    "attemptLimitPerBlockedView": 2,
-    "status": "RETRY_ALLOWANCES_EXHAUSTED",
-    "completedNewLooks": 0
-  },
-  "blockedViewResume": [
-    {
-      "sourceIdentity": "swimwear-ref-04",
-      "savedViews": [
-        "front",
-        "editorial"
-      ],
-      "missingViews": [
-        "back"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-05",
-      "savedViews": [
-        "front"
-      ],
-      "missingViews": [
-        "back",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "evening-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-06",
-      "savedViews": [
-        "back"
-      ],
-      "missingViews": [
-        "front",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "activewear-ref-09",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-01",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-03",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    },
-    {
-      "sourceIdentity": "swimwear-ref-07",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ],
-      "status": "BLOCKED_PROVIDER_MODERATION_OR_REFERENCE_UNAVAILABLE"
-    }
-  ],
-  "partialResumePoints": [
-    {
-      "sourceIdentity": "swimwear-ref-04",
-      "savedViews": [
-        "front",
-        "editorial"
-      ],
-      "missingViews": [
-        "back"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-05",
-      "savedViews": [
-        "front"
-      ],
-      "missingViews": [
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "evening-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-06",
-      "savedViews": [
-        "back"
-      ],
-      "missingViews": [
-        "front",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ]
-    }
-  ],
-  "nativeResolutionNote": "87 natives at 1024x1536, 12 at 1086x1448, 2 at 1084x1451. Four new recovery natives are RGB white-studio files, retained unchanged. Reviewed proportional placements preserve every RGB pixel; standard master geometry remains 5400x2700.",
-  "acceptedNativeImages": 110,
-  "missingIndividualViews": 17,
-  "moderationBlockedIndividualViews": 17,
-  "currentToolAvailability": {
-    "status": "WORKING_REAL_ORIGINAL_CONCEPT_OUTPUTS",
-    "report": "PRODUCTION-CREATIVE-2026-10-23.json",
-    "newAcceptedImages": 9,
-    "reasoningErrorRecurred": false
-  },
-  "freshSessionAcceptedImages": 9,
-  "freshSessionTechnicalFailures": 0,
-  "freshSessionModerationFailures": 2,
-  "freshSessionQuotaFailures": 0,
-  "latestRepairTechnicalFailures": 1,
-  "latestRepairNewImages": 0,
-  "productionGate": "PASS_REAL_ORIGINAL_CONCEPT_NATIVE_RETURNED",
-  "remainingViews": [
-    {
-      "sourceIdentity": "swimwear-ref-04",
-      "savedViews": [
-        "front",
-        "editorial"
-      ],
-      "missingViews": [
-        "back"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-05",
-      "savedViews": [
-        "front"
-      ],
-      "missingViews": [
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "evening-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-06",
-      "savedViews": [
-        "back"
-      ],
-      "missingViews": [
-        "front",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "activewear-ref-09",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-01",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-02",
-      "savedViews": [
-        "front",
-        "back"
-      ],
-      "missingViews": [
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-03",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    },
-    {
-      "sourceIdentity": "swimwear-ref-07",
-      "savedViews": [],
-      "missingViews": [
-        "front",
-        "back",
-        "editorial"
-      ]
-    }
-  ],
-  "latestProductionRecovery": {
-    "report": "PRODUCTION-RECOVERY-2026-10-23.json",
-    "startingNatives": 97,
-    "newAcceptedNatives": 4,
-    "actualCalls": 20,
-    "inputRefusals": 3,
-    "outputRefusals": 13,
-    "distinctViewsAttempted": 16,
-    "notAttemptedViews": 7,
-    "remainingViews": 19
-  },
-  "currentProductionReport": "PRODUCTION-CREATIVE-2026-10-23.json",
-  "creativeProductionReport": "PRODUCTION-CREATIVE-2026-10-23.json",
-  "creativeMetrics": {
-    "retainedNativeFiles": 110,
-    "newNativeFiles": 9,
-    "activeSelectedViews": 93,
-    "pendingCandidateNativeViews": 4,
-    "completeActiveLooks": 31,
-    "completeMasters": 31,
-    "sourceBasedRegenerations": 27,
-    "originalConcepts": 4,
-    "digitallyRenderedLooks": 0,
-    "ownerArtisticApprovals": 0,
-    "retainedCompleteMasters": 33,
-    "ownerRejectedCompleteLooks": 2
-  },
-  "nativeInventory": {
-    "retainedNativeFiles": 110,
-    "activeSelectedViews": 93,
-    "completeActiveLooks": 31,
-    "retainedCompleteMasters": 33,
-    "ownerRejectedLooks": 2,
-    "pendingCandidateNativeViews": 4,
-    "originalConcepts": 4,
-    "sourceBasedRegenerations": 27,
-    "digitallyRenderedLooks": 0,
-    "ownerArtisticApprovals": 0
-  },
-  "ownerRejectedLooks": 2,
+  "completeThreeViewLooks": 31,
+  "partialOrRetouchedLooks": 9,
+  "pendingLooks": 0,
+  "remainingLooks": 0,
+  "remainingOptionalViewsForStrictThreeViewSets": 14,
+  "selectedAvailableViews": 106,
   "ownerArtisticApprovals": 0,
-  "lastPhysicalMasterBeforeOwnerRejection": "evening-ref-02"
+  "ownerRejectedArchivedLooks": 2,
+  "statusCounts": {
+    "PRESERVED_COMPLETE": 31,
+    "RECOVERED_PARTIAL_OR_RETOUCHED": 9
+  },
+  "recoveredLooks": [
+    {
+      "id": "swimwear-ref-04",
+      "views": [
+        "front",
+        "editorial"
+      ],
+      "method": "retained-faithful-views"
+    },
+    {
+      "id": "evening-ref-02",
+      "views": [
+        "front",
+        "back"
+      ],
+      "method": "retained-faithful-views"
+    },
+    {
+      "id": "swimwear-ref-02",
+      "views": [
+        "front",
+        "back"
+      ],
+      "method": "retained-faithful-views"
+    },
+    {
+      "id": "swimwear-ref-05",
+      "views": [
+        "front"
+      ],
+      "method": "retained-faithful-views"
+    },
+    {
+      "id": "swimwear-ref-01",
+      "views": [
+        "front"
+      ],
+      "method": "edited-existing"
+    },
+    {
+      "id": "activewear-ref-09",
+      "views": [
+        "front",
+        "back"
+      ],
+      "method": "edited-existing"
+    },
+    {
+      "id": "swimwear-ref-03",
+      "views": [
+        "front"
+      ],
+      "method": "edited-existing"
+    },
+    {
+      "id": "swimwear-ref-06",
+      "views": [
+        "front"
+      ],
+      "method": "edited-existing"
+    },
+    {
+      "id": "swimwear-ref-07",
+      "views": [
+        "front"
+      ],
+      "method": "edited-existing"
+    }
+  ],
+  "unresolvedUsableLooks": [],
+  "nextAction": "Review PR; no merge or deployment performed. All 40 featured looks usable under the current flexible completion brief.",
+  "previousProgressSnapshot": "../womenswear-seamless-recovery/PRE-RECOVERY-PROGRESS.json",
+  "currentProductionReport": "../womenswear-seamless-recovery/TECHNICAL-AUDIT.json",
+  "historicalManifestNote": "Original candidate status, native assets and owner rejection records are preserved. recoveryPresentation records the selected new partial presentation for each of the nine unresolved historical slots.",
+  "limitations": [
+    "Generative missing-view requests were refused; no Back or Editorial was fabricated.",
+    "Images and masks are presentation studies, not verified construction, authorship or owner artistic approval."
+  ],
+  "verification": {
+    "recoveryBrowserAssertions": 906,
+    "preservedSetBrowserAssertions": 1862,
+    "historicalPhotographicAssertions": 438,
+    "continuityAssertions": 98,
+    "viewportMatrix": [
+      [
+        1440,
+        900
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "screenshots": 30
+  }
 }
