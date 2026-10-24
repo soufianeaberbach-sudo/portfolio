@@ -6401,7 +6401,39 @@
         "reviewNotes": "Moss unstructured two-button notch-lapel blazer with rounded patch pockets, light-blue open-neck shirt, cream tailored trousers and brown suede loafers. Soft shoulder and believable textured woven cloth; natural adult model and clear full-length Front.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1787950,
+        "nativeMode": "RGB",
+        "sha256": "47a52bae85e247853a42566a3640a92f799b250d9f7048e7b1e0bb1d5992d5d8",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-e3a11a33-5d26-4a6c-909c-d33ee602838e.png",
+        "generatedAt": "2026-10-24T00:23:43.516509+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-07-back.txt",
+        "promptSHA256": "d11b8fcded705c6d483b5c40deb40308dcdfa2abdfb5a0a539f5dd6d60747e67",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-07/back.png",
+        "exportSHA256": "e8f3dddf5fb14e09186e504843645b053ec6edb80fbf837468c96e19a8375b70",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-07/back-600.webp",
+        "previewSHA256": "b945d0824b5259d46b49f458003d998cbd7f4cec2915af7426c3736b6ce6ed64",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear of moss textured unstructured blazer and cream trousers; same dark curls, pale-blue collar/cuffs and brown suede loafers. Centre seam, two side vents, plausible sleeve pitch and clean tailored trouser drape.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -8043,8 +8075,15 @@
       "key": "mw-r2-tailoring-07:back",
       "look": "mw-r2-tailoring-07",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:23:43.520455+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-07:editorial",
@@ -8968,6 +9007,15 @@
       "at": "2026-10-24T00:23:37.671350+00:00",
       "notes": "Same adult model, black shawl-lapel tuxedo, white bib shirt, black bow tie/cummerbund and patent shoes. Controlled elegant walking pose with light lapel adjustment; coherent satin finish, readable outfit, full head and footwear in white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-07",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:23:43.520455+00:00",
+      "notes": "True rear of moss textured unstructured blazer and cream trousers; same dark curls, pale-blue collar/cuffs and brown suede loafers. Centre seam, two side vents, plausible sleeve pitch and clean tailored trouser drape.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8980,13 +9028,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 34,
-    "acceptedActivePhotographs": 110,
+    "acceptedActivePhotographs": 111,
     "incompleteLooks": 6,
     "completedMasters": 34,
     "unresolvedViews": [
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-06:back",
-      "mw-r2-tailoring-07:back",
       "mw-r2-tailoring-07:editorial",
       "mw-r2-tailoring-08:back",
       "mw-r2-tailoring-08:editorial",
