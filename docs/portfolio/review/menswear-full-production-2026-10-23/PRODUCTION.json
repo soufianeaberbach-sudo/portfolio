@@ -5651,7 +5651,39 @@
         "reviewNotes": "Genuine rear of taupe double-breasted suit; same brown wavy hair, ivory collar and brown loafers. Centre-back shaping, two side vents, sleeve buttons and cuffed trousers coherent with selected Front. Full-length neutral white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-02/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1785204,
+        "nativeMode": "RGB",
+        "sha256": "fdff78a35a0ec2904fe1e41aaf96d4517ef06b370440b4f4ce78abee9881e8b3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-4a71ecfc-dd85-421b-8a4a-b9330a673a40.png",
+        "generatedAt": "2026-10-24T00:14:55.069267+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-corrected-2026-2027/mw-r2-tailoring-02/front-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-02-editorial.txt",
+        "promptSHA256": "0a2600b894fbd81690c524a26ea9643787c24c27cae845990991d01643c6e943",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-02/editorial.png",
+        "exportSHA256": "6b9d66fc838c60de408351b38ace7cc57a37874fa56215f281947b3dcef50b22",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-02/editorial-600.webp",
+        "previewSHA256": "148ff3f39203b7176b0e14d79957d839d2563896372044fe1496c2e7e1f693dd",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same wavy-haired adult model and taupe six-button double-breasted peak-lapel suit, ivory open-neck shirt and brown loafers. Controlled forward walking pose with lapel adjustment, readable suit, natural anatomy and full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7291,8 +7323,15 @@
       "key": "mw-r2-tailoring-02:editorial",
       "look": "mw-r2-tailoring-02",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:14:55.080171+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-02/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-03:front",
@@ -8165,6 +8204,15 @@
       "at": "2026-10-24T00:13:24.844633+00:00",
       "notes": "Genuine rear of taupe double-breasted suit; same brown wavy hair, ivory collar and brown loafers. Centre-back shaping, two side vents, sleeve buttons and cuffed trousers coherent with selected Front. Full-length neutral white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-02/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-02",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:14:55.080171+00:00",
+      "notes": "Same wavy-haired adult model and taupe six-button double-breasted peak-lapel suit, ivory open-neck shirt and brown loafers. Controlled forward walking pose with lapel adjustment, readable suit, natural anatomy and full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-02/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8177,12 +8225,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 30,
-    "acceptedActivePhotographs": 95,
+    "acceptedActivePhotographs": 96,
     "incompleteLooks": 10,
     "completedMasters": 30,
     "unresolvedViews": [
       "mw-r2-tailoring-01:back",
-      "mw-r2-tailoring-02:editorial",
       "mw-r2-tailoring-03:back",
       "mw-r2-tailoring-03:editorial",
       "mw-r2-tailoring-04:front",
