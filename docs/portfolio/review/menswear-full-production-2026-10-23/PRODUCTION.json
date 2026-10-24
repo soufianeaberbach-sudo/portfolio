@@ -5503,7 +5503,39 @@
         "reviewNotes": "Modern navy hopsack two-piece suit has notch lapel, two-button stance with upper button fastened, credible chest shaping, natural light-padded shoulder, flap hips and chest welt. Light-blue open-neck shirt and brown leather derbies coherent; straight trousers and balanced woven drape, natural handsome adult casting.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1721386,
+        "nativeMode": "RGB",
+        "sha256": "c6d009f072a2833605abcdfdba7f9f9d9fbf2f01e1a423b9ee321d83fde0641e",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-e6c63bee-e6fe-4314-b82e-788b32317b16.png",
+        "generatedAt": "2026-10-24T00:15:47.720703+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-01-back.txt",
+        "promptSHA256": "6998d3cc028298c594d05a35a82c2b68c7ca67081e892651273426877b3d01ee",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/back.png",
+        "exportSHA256": "5fb120108df7e68e71b030508cb9b7beeb1269b8a2341f3aef99cce46538bf02",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/back-600.webp",
+        "previewSHA256": "ad08f61539f30df27d3a55f6b9c3484a2c9806e896b96640f04cc53e98b4a4fd",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear of navy hopsack two-piece suit; same brown wavy hair, pale blue shirt collar/cuffs and brown Derby shoes. Balanced shaped back, natural sleeve pitch, straight trouser drape, full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": {
         "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/editorial-v01-native.png",
         "nativeDimensions": [
@@ -7389,8 +7421,15 @@
       "key": "mw-r2-tailoring-01:back",
       "look": "mw-r2-tailoring-01",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:15:47.724667+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-01:editorial",
@@ -8353,6 +8392,15 @@
       "at": "2026-10-24T00:15:28.306446+00:00",
       "notes": "Genuine rear with same wavy hair, slate-blue relaxed wool suit and black Derby shoes. Centre-back seam, double vents and sleeve cuff buttons; wide straight trouser rear drape, complete framing and neutral white background.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-01",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:15:47.724667+00:00",
+      "notes": "True rear of navy hopsack two-piece suit; same brown wavy hair, pale blue shirt collar/cuffs and brown Derby shoes. Balanced shaped back, natural sleeve pitch, straight trouser drape, full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8365,11 +8413,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 32,
-    "acceptedActivePhotographs": 98,
+    "acceptedActivePhotographs": 99,
     "incompleteLooks": 8,
     "completedMasters": 32,
     "unresolvedViews": [
-      "mw-r2-tailoring-01:back",
       "mw-r2-tailoring-04:front",
       "mw-r2-tailoring-04:back",
       "mw-r2-tailoring-04:editorial",
