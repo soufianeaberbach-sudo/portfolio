@@ -58,6 +58,8 @@ jobs:
           node tests/menswear-content.mjs
           node tests/menswear-ai-collection.mjs --require-complete
           node tests/menswear-web-images.mjs
+          node tests/menswear-studio-background.mjs
+          node tests/menswear-studio-preservation.mjs
           node tests/final-photography.mjs
           node tests/womenswear-ten-looks.mjs
           node tests/fashion-source-integrity.mjs

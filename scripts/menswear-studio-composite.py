@@ -12,7 +12,7 @@ from PIL import Image
 from pymatting import estimate_alpha_cf
 
 
-def composite(source: Image.Image, segmentation: Image.Image):
+def composite(source: Image.Image, segmentation: Image.Image, foreground_constraints=None):
     rgb = np.asarray(source.convert('RGB'), dtype=np.uint8)
     probability = np.asarray(segmentation.convert('L'), dtype=np.float64) / 255
     assert rgb.shape[:2] == probability.shape
@@ -21,6 +21,13 @@ def composite(source: Image.Image, segmentation: Image.Image):
     core = ndi.binary_erosion(probability > .97, iterations=2)
     # Background certainty comes from semantic exclusion, never white brightness.
     outside = ~ndi.binary_dilation(probability > .02, iterations=2)
+    if foreground_constraints is not None:
+        # Independently verified pale garment detail, represented as foreground
+        # constraints only. No RGB pixels are painted, recoloured or generated.
+        protected = np.asarray(foreground_constraints, dtype=bool)
+        assert protected.shape == body.shape
+        core |= protected
+        outside &= ~ndi.binary_dilation(protected, iterations=3)
     trimap = np.full(body.shape, .5)
     trimap[outside] = 0
     trimap[core] = 1
