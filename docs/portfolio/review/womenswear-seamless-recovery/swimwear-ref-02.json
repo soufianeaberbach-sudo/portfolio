@@ -1,0 +1,77 @@
+{
+  "sourceIdentity": "swimwear-ref-02",
+  "identity": "ww-recovery-swimwear-ref-02-v1",
+  "recordedUTC": "2026-10-24T13:25:23.869689+00:00",
+  "availableViews": [
+    "front",
+    "back"
+  ],
+  "threeViewComplete": false,
+  "method": "retained-faithful-views",
+  "reviewNote": "Faithful silver triangle bikini V1 Front and Back retained after Editorial refusal. Complete figure, fine tie strings, natural proportions and subtle grounding preserved. Unrelated ochre redesign remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
+  "sourceSHA256": "050da9837144def2e521b69a3d86770ceec276666454821470603adc1ffa6750",
+  "outputs": {
+    "front": {
+      "inputPath": "public/portfolio/generated/ww-ai-swimwear-ref-02-v1/front-native.png",
+      "inputSHA256": "071eb164e820ca64b24193091feceaec40d83e233d0cfa34d0b4451fcd773ae1",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/front-native.png",
+      "nativeSHA256": "071eb164e820ca64b24193091feceaec40d83e233d0cfa34d0b4451fcd773ae1",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "nativeMode": "RGB",
+      "exportSHA256": "87331e40dca66179dcaaa75bac572c1f5f22ef402dfd935eb669f762efde9fb9",
+      "uniformScale": 1.5248618784530388,
+      "offset": [
+        72,
+        246
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/front-refined-alpha.png",
+        "alphaSHA256": "0f9fcd0980df7ba20048b03040ed3d3c6f1679205dbd79e0dd454dc99260657c",
+        "exportSHA256": "c87b70105b74ced176be34a0eb6f59dea4e80c549489ba3e252876a58fa0042e",
+        "scale": 1.7613046701260193,
+        "offset": [
+          -57,
+          97
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
+    },
+    "back": {
+      "inputPath": "public/portfolio/generated/ww-ai-swimwear-ref-02-v1/back-native.png",
+      "inputSHA256": "8295ba22345a271d6a85f0eff2897ff126e9d9d6bfa9904e43305b004db5e116",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/back-native.png",
+      "nativeSHA256": "8295ba22345a271d6a85f0eff2897ff126e9d9d6bfa9904e43305b004db5e116",
+      "nativeDimensions": [
+        1086,
+        1448
+      ],
+      "nativeMode": "RGB",
+      "exportSHA256": "8003e8b282a57169a39876404e1546f77b90dea04ec2101673176cd4073baf4a",
+      "uniformScale": 1.5248618784530388,
+      "offset": [
+        72,
+        246
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-02-v1/back-refined-alpha.png",
+        "alphaSHA256": "cd9a3c2729ef0261033bc1b1a81e9c58d47c54a07483c4b2566ba024ef961cb8",
+        "exportSHA256": "ed4b0cbc964e3da1dafef054e658afca66c561a491cc8d3d3ea8a6cd732a3965",
+        "scale": 1.7972768532526475,
+        "offset": [
+          -75,
+          96
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
+    }
+  },
+  "ownerArtisticApproval": false,
+  "integratedInBranch": true
+}

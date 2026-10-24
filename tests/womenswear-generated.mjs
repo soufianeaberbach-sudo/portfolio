@@ -25,22 +25,30 @@ try{
    check(await exhibition.locator(`.ww-rail [data-open-subject="${record.sourceIdentity}"]`).count()===0,'old reference is removed by slot remapping');
    await source.scrollIntoViewIfNeeded();await source.click();
    const reader=page.locator(`[data-ww-reader][data-subject="${record.id}"]`);await reader.waitFor({state:'visible'});
+   await page.waitForFunction(()=>!document.querySelector('.ww-match')&&!document.querySelector('[data-ww-moving]'));
    check(await reader.getAttribute('data-verified')==='no','AI presentation never becomes a verified project');
-   check((await reader.locator('.ww-reader-head').innerText()).includes('AI-GENERATED'),'provisional AI status is visible');
-   check(await reader.locator('[data-ww-view]').count()===4,'Front / Back / Editorial / Complete Original');
-   for(let view=0;view<4;view++){
-    const control=reader.locator(`[data-ww-view="${view}"]`);await control[width<500?'tap':'click']();
+   check((await reader.locator('.ww-reader-head').innerText()).includes(record.generationType==='background-retouch'?'AI-RETOUCHED':'AI-GENERATED'),'truthful AI provenance is visible');
+   const separate=record.photography?Object.entries(record.photography):null;
+   const count=separate?.length??4;
+   check(await reader.locator('[data-ww-view]').count()===(count===1?0:count),'only actual supplied views have controls');
+   for(let view=0;view<count;view++){
+    const control=reader.locator(`[data-ww-view="${view}"]`);if(count>1)await control[width<500?'tap':'click']();
     const panel=reader.locator(`[data-photo-view="${view}"]`);await panel.waitFor({state:'visible'});
     await panel.locator('img').evaluate(image=>image.decode());
-    check(await control.getAttribute('aria-pressed')==='true','selection matches visible view');
+    // Decode/visibility can resolve before the compositor paints the new view.
+    // Capture the selected photograph, not the previous frame's pixels.
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    if(count>1)check(await control.getAttribute('aria-pressed')==='true','selection matches visible view');
     const geometry=await panel.locator('[data-ww-photo]').evaluate(photo=>{
      const box=photo.getBoundingClientRect(),image=photo.querySelector('img'),frame=image.getBoundingClientRect();
      return {aspect:box.width/box.height,left:(box.left-frame.left)/frame.width,right:(box.right-frame.left)/frame.width,source:image.currentSrc,naturalWidth:image.naturalWidth};
     });
-    check(Math.abs(geometry.aspect-(view===3?2:2/3))<.002,'correct undistorted panel aspect');
-    check(Math.abs(geometry.left-(view===3?0:view/3))<.002&&Math.abs(geometry.right-(view===3?1:(view+1)/3))<.002,'exact Front / Back / Editorial thirds');
-    check(geometry.source.endsWith(record.image.src)&&geometry.naturalWidth===5400,'reader prepares actual full master');
-    await page.screenshot({path:`${out}/${record.id}-${view}-${width}.jpg`,quality:92});
+    const image=separate?separate[view][1]:record.image;
+    check(Math.abs(geometry.aspect-(separate?image.width/image.height:view===3?2:2/3))<.002,'correct undistorted panel aspect');
+    check(Math.abs(geometry.left-(separate||view===3?0:view/3))<.002&&Math.abs(geometry.right-(separate||view===3?1:(view+1)/3))<.002,'actual whole photograph or exact master panel');
+    check(geometry.source.endsWith(image.src)&&geometry.naturalWidth===image.width,'reader prepares actual full source');
+    check(!await panel.locator('[data-ww-photo]').evaluate(p=>p.dataset.surface==='plate'&&p.querySelector('img').currentSrc.includes('/recovery/')),'recovery has no legacy plate border');
+    if(process.env.GENERATION_CAPTURE!=='0'&&(!separate||[1440,390].includes(width)||record.sourceIdentity==='swimwear-ref-06'))await page.screenshot({path:`${out}/${record.id}-${view}-${width}.jpg`,quality:92});
    }
    await reader.locator('[data-rd-inspect]').click();await page.keyboard.press('+');
    check(await reader.evaluate(r=>r.hasAttribute('data-inspect')),'Look Closer remains functional');
@@ -52,7 +60,7 @@ try{
    const historicalImage=historical.locator('[data-photo-view="0"] img');await historicalImage.evaluate(image=>image.decode());
    check(!await historicalImage.evaluate(image=>image.currentSrc.includes('/generated/')),'historical URL still shows its original photography');
    check(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),'no document overflow');
-   results.push({width,height,id:record.id,views:4,sourceReturn:true,historicalSourcePreserved:true});
+   results.push({width,height,id:record.id,views:count,sourceReturn:true,historicalSourcePreserved:true});
   }
   check(errors.length===0,'no runtime errors: '+errors.join(';'));
   await context.close();console.log(width+' generated photography and historical-source checks passed');

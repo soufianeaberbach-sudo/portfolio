@@ -1,9 +1,26 @@
 /** Background correction adds new presentation assets; all prior source blobs stay exact. */
 import assert from 'node:assert/strict';import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 const baseline=JSON.parse(fs.readFileSync('docs/portfolio/review/menswear-studio-v2-2026-10-24/BASELINE-PRESERVATION.json'));
+// Later owner-authorized Womenswear recovery changes seven exact source/metadata
+// blobs. Keep every Menswear, original artwork and remaining source check strict.
+const recovery=JSON.parse(fs.readFileSync('tests/fixtures/womenswear-recovery-preservation.json'));
+assert.equal(recovery.baseline,baseline.baseline);
+// The subsequent owner directive replaces only three exact presentation blobs.
+// Keep the original recovery receipt intact and pin this finishing pass separately.
+const studio=JSON.parse(fs.readFileSync('tests/fixtures/studio-imagery-preservation.json'));
+assert.equal(studio.baseline,baseline.baseline);
+const studioPaths=new Set(['src/components/ExpertiseVisual.astro','src/pages/process.astro','src/data/womenswear-generated.json']);
+assert.deepEqual(new Set(Object.keys(studio.changes)),studioPaths);
 const raw=execFileSync('git',['ls-tree','-r','-z','HEAD'],{maxBuffer:16*1024*1024}).toString();
 const current=new Map(raw.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));let checks=0;
-for(const [path,oid]of Object.entries(baseline.paths)){
+for(const [path,baselineOid]of Object.entries(baseline.paths)){
+ const update=studio.changes[path]??recovery.changes[path];
+ if(update){
+  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path),'authorization cannot exempt Menswear/assets');
+  assert(!path.startsWith('public/'),'original photographic files remain immutable');
+  assert.equal(update.baselineSHA1,baselineOid,'authorization must identify the original baseline blob');
+ }
+ const oid=update?.authorizedSHA1??baselineOid;
  assert.equal(current.get(path),oid,'original Git blob changed: '+path);checks++;
  if(path.startsWith('src/')||path.startsWith('worker/')||['wrangler.jsonc','package.json','package-lock.json'].includes(path)){
   const bytes=fs.readFileSync(path),actual=createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');assert.equal(actual,oid,'protected working source changed: '+path);checks++;

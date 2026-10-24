@@ -6,8 +6,8 @@
  * carries the expertise. That separation is deliberate: annotations over a
  * photograph imply information the photograph does not actually prove.
  *
- * The four images are TEMPORARY PLACEHOLDERS and are not Soufiane's work.
- * See assets/source/expertise-temp/SOURCES.md. No layout geometry depends on
+ * Four new editorial studio illustrations, generated for these exact topics.
+ * Provenance: assets/source/studio-imagery-2026-10-24/. No layout geometry depends on
  * anything inside them, so replacing one is a single path change in STAGES
  * below plus the two files it names.
  *
@@ -30,7 +30,7 @@ export const STAGES: Stage[] = [
     n: '01',
     name: 'Design intent',
     file: '01-design-intent',
-    alt: 'An atelier worktable: a large garment sketch on board beside the same design draped in toile on a dress form, with fabric swatches and pattern paper.',
+    alt: 'An ecru jacket toile on a linen dress form, showing sculpted shoulder volume, a shaped sleeve and the drape of cotton twill.',
     position: '50% 50%',
   },
   {
@@ -38,7 +38,7 @@ export const STAGES: Stage[] = [
     n: '02',
     name: 'Fit system',
     file: '02-fit-system',
-    alt: 'A dress form carrying an in-progress toile with a measuring tape at the waist, beside a worktable holding a measurement sheet and graded pattern paper.',
+    alt: 'A bodice toile with center-front and waist balance stitching on a tailoring form, with a measuring tape and paper patterns.',
     position: '50% 50%',
   },
   {
@@ -46,7 +46,7 @@ export const STAGES: Stage[] = [
     n: '03',
     name: 'Technical translation',
     file: '03-technical-translation',
-    alt: 'One shirt design held across four technical representations on a studio desk: a flat drawing, cut paper pattern pieces, the digital pattern on screen and a technical specification sheet.',
+    alt: 'A kraft-paper sleeve pattern beside a sewn twill sleeve with its cuff opened to show the construction, and a transparent pattern ruler.',
     position: '50% 50%',
   },
   {
@@ -54,7 +54,7 @@ export const STAGES: Stage[] = [
     n: '04',
     name: 'Production control',
     file: '04-production-control',
-    alt: 'Two jackets side by side on a quality control table, a measuring tape laid across one of them, a checked inspection sheet in front and the rest of the production run on a rail behind.',
+    alt: 'Matching ecru overshirt cuffs aligned for inspection, one opened to show its seam finish, with a sewing gauge and a rail of repeated garments.',
     position: '50% 50%',
   },
 ];
@@ -66,12 +66,12 @@ interface Props {
 
 const { mode = 'single', stage = 1 } = Astro.props;
 const shown = mode === 'stage' ? STAGES : [STAGES[stage - 1]];
-const src = (file: string, w: 800 | 1400) => `/expertise-temp/${file}-${w}.webp`;
+const src = (file: string, w: 800 | 1400) => `/expertise-studio/${file}-${w}.webp`;
 ---
 
-<figure class:list={['exv', `exv--${mode}`]} data-active={mode === 'stage' ? '1' : String(stage)}>
+<figure class:list={['exv', `exv--${mode}`]} data-active={mode === 'stage' ? '01' : String(stage)}>
   <div class="exv__frame">
-    {shown.map((s, i) => (
+    {shown.map((s) => (
       <img
         class="exv__img"
         data-stage={s.n}
@@ -82,7 +82,7 @@ const src = (file: string, w: 800 | 1400) => `/expertise-temp/${file}-${w}.webp`
         height="1050"
         alt={s.alt}
         style={`object-position:${s.position}`}
-        loading={mode === 'stage' ? (i === 0 ? 'eager' : 'lazy') : stage === 1 ? 'eager' : 'lazy'}
+        loading={mode === 'stage' || stage === 1 ? 'eager' : 'lazy'}
         decoding="async"
       />
     ))}
@@ -103,7 +103,6 @@ const src = (file: string, w: 800 | 1400) => `/expertise-temp/${file}-${w}.webp`
     overflow: hidden;
     aspect-ratio: 4 / 3;
     background: var(--paper-bright);
-    border: 1px solid var(--line);
   }
 
   .exv__img { display: block; width: 100%; height: 100%; object-fit: cover; }

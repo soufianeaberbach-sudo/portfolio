@@ -533,7 +533,7 @@ try {
         readers: readers.map(r => r.dataset.subject),
         open: readers.filter(r => !r.hidden).length,
         invented: w.querySelectorAll('[data-st]').length,
-        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>p.textContent.includes('REFERENCE PHOTOGRAPHY')||p.textContent.includes('AI-GENERATED / PROVISIONAL')).length,
+        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL','AI-RETOUCHED / REFERENCE'].includes(p.textContent.trim())).length,
         ground: getComputedStyle(w).backgroundColor,
       };
     }, world);

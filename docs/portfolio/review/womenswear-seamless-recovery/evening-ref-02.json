@@ -1,0 +1,82 @@
+{
+  "sourceIdentity": "evening-ref-02",
+  "identity": "ww-recovery-evening-ref-02-v1",
+  "recordedUTC": "2026-10-24T13:24:55.637937+00:00",
+  "availableViews": [
+    "front",
+    "back"
+  ],
+  "threeViewComplete": false,
+  "method": "retained-faithful-views",
+  "reviewNote": "Faithful nude mesh column gown V1 Front and Back retained. Full train, hair, fingers and mesh edges preserved; Front RGB background refined with segmentation and Back native alpha retained. New Editorial refused; rejected Forest Fold remains inactive. Browser refinement uses clean alpha and consistent figure scale; first-pass and native files remain preserved.",
+  "sourceSHA256": "30a07d65654f71f97c62af52820c07e2fd28a84cdc799ddf5ef27937a5be99c1",
+  "outputs": {
+    "front": {
+      "inputPath": "public/portfolio/generated/ww-ai-evening-ref-02-v1/front-native.png",
+      "inputSHA256": "31e7f3aff69e7f35f82598143957a1127af03b5d69b10d615d281300d58302e2",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/front-native.png",
+      "nativeSHA256": "31e7f3aff69e7f35f82598143957a1127af03b5d69b10d615d281300d58302e2",
+      "nativeDimensions": [
+        1084,
+        1451
+      ],
+      "nativeMode": "RGB",
+      "exportSHA256": "1a66bd38eb23ce0503a447618baae55368f048f2c2a90dbc46cafe6fc95d78b0",
+      "uniformScale": 1.5276752767527675,
+      "offset": [
+        72,
+        241
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/front-refined-alpha.png",
+        "alphaSHA256": "7626f1c8f57838f7d357d8aba0b86ba59366da74048ecd16d93bdfb7585c1913",
+        "exportSHA256": "7cf3befa43ee8e6e92884d8ee89afc4fc47965e65e6f001b7f9c26603139351b",
+        "scale": 1.715523465703971,
+        "offset": [
+          -42,
+          117
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      }
+    },
+    "back": {
+      "inputPath": "public/portfolio/generated/ww-ai-evening-ref-02-v1/back-native.png",
+      "inputSHA256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-native.png",
+      "nativeSHA256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+      "nativeDimensions": [
+        1084,
+        1451
+      ],
+      "nativeMode": "RGBA",
+      "exportSHA256": "98d1179cbea3022b016e145f2d22f696841719f0674c5fdc6acb38f52f0d23e2",
+      "uniformScale": 1.5276752767527675,
+      "offset": [
+        72,
+        241
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false,
+      "refinement": {
+        "alphaAsset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-refined-alpha.png",
+        "alphaSHA256": "d973a07a4119accaaedb9bde6e329fd7788ee52c9aaa4183e7f3c9a17c5fff68",
+        "exportSHA256": "a04706d5d9f71d738a7ae3d75c16c97516f2e0c4a0ca9f8552e4e00dbed2d737",
+        "scale": 1.722987672226251,
+        "offset": [
+          -66,
+          95
+        ],
+        "reason": "Browser critique: remove visible RGB studio rectangles and normalize complete figure scale; keep all earlier files."
+      },
+      "finalPerimeter": {
+        "asset": "/portfolio/recovery/ww-recovery-evening-ref-02-v1/back-final.png",
+        "sha256": "e1253faa42ef8d996f376bb98943892c397d3c27329f60d6998fcfe2ac8bc038",
+        "change": "Only exterior 8px, removes native alpha<=1/255 noise; complete subject untouched; earlier files preserved."
+      }
+    }
+  },
+  "ownerArtisticApproval": false,
+  "integratedInBranch": true
+}

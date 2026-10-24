@@ -17,23 +17,14 @@ import Arrow from '../components/Arrow.astro';
  * Gate questions are stated as conditions to be met, never as acts performed
  * by a named party. No approval owner is asserted anywhere on this page.
  *
- * VISUALS — the three files under /process-temp/ are NEUTRAL HOLDING PLATES,
- * not photographs. They exist only so the layout and responsive behaviour can
- * be validated. Nothing is drawn inside them, and no copy on the page refers
- * to them, so the page never reads as unfinished. While a plate is in place
- * its `alt` stays empty and the frame is presentational — truthful, because a
- * flat plate conveys nothing. Replacing one is asset-only: drop both
- * renditions at the same paths and dimensions, then write the real `alt` (and
- * `position`, if the framing is not centre-weighted). No layout geometry
- * depends on image content. See assets/source/process-temp/SOURCES.md.
+ * Five newly generated editorial studio illustrations follow the actual
+ * decisions. They illustrate the workflow, not an asserted client project.
+ * Sources and prompts: assets/source/studio-imagery-2026-10-24/.
  */
 
 interface Visual {
   file: string;
   widths: [number, number];
-  ratio: string;
-  tall?: boolean;
-  /* Empty while the holding plate stands in. */
   alt: string;
   position: string;
 }
@@ -79,9 +70,8 @@ const stages: Stage[] = [
     output: 'Development direction',
     visual: {
       file: '01-brief',
-      widths: [900, 1500],
-      ratio: '3 / 2',
-      alt: '',
+      widths: [900, 1440],
+      alt: 'An overshirt pencil sketch beside three cotton swatches, a graphite pencil and folded ecru twill on a studio worktable.',
       position: '50% 50%',
     },
   },
@@ -97,6 +87,12 @@ const stages: Stage[] = [
     terms: ['Pattern architecture', 'Construction logic', 'Seam & assembly implication'],
     gate: 'Is the product technically buildable?',
     output: 'First technical build',
+    visual: {
+      file: '02-technical-build',
+      widths: [900, 1440],
+      alt: 'Paper body, sleeve and cuff patterns beside a sewn ecru sleeve sample and dressmaking shears on a cutting table.',
+      position: '50% 50%',
+    },
   },
   {
     n: '03',
@@ -111,10 +107,8 @@ const stages: Stage[] = [
     output: 'Validated fit direction',
     visual: {
       file: '03-validation',
-      widths: [720, 1120],
-      ratio: '4 / 5',
-      tall: true,
-      alt: '',
+      widths: [900, 1440],
+      alt: 'An overshirt toile on a tailoring form, with waist balance stitching and pins recording a side-seam fit correction.',
       position: '50% 50%',
     },
   },
@@ -136,6 +130,12 @@ const stages: Stage[] = [
     ],
     gate: 'Can the approved product be repeated across the required range?',
     output: 'Production specification',
+    visual: {
+      file: '04-specification',
+      widths: [900, 1440],
+      alt: 'Graduated sleeve patterns in three sizes beside a transparent ruler and an ecru fabric and button reference card.',
+      position: '50% 50%',
+    },
   },
   {
     n: '05',
@@ -156,15 +156,14 @@ const stages: Stage[] = [
     output: 'Controlled production handoff',
     visual: {
       file: '05-handoff',
-      widths: [900, 1500],
-      ratio: '3 / 2',
-      alt: '',
+      widths: [900, 1440],
+      alt: 'A finished ecru overshirt folded beside a technical folder and matching swatch, with repeated garments on a rail behind.',
       position: '50% 50%',
     },
   },
 ];
 
-const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
+const src = (file: string, w: number) => `/process-studio/${file}-${w}.webp`;
 ---
 
 <SiteLayout
@@ -246,22 +245,15 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
             )}
 
             {s.visual && (
-              <figure class:list={['pr-media', s.visual.tall && 'pr-media--tall']}>
-                {/* One ratio for every stage. The frames previously took a
-                    per-stage ratio from the data — 3/2 here, 4/5 there, plus a
-                    "tall" variant — so the five stages read as differently
-                    sized objects instead of one system. The sources still
-                    differ; object-fit: cover absorbs that without distorting
-                    anything. */}
+              <figure class="pr-media">
                 <div class="pr-media__frame">
                   <img
                     src={src(s.visual.file, s.visual.widths[1])}
                     srcset={`${src(s.visual.file, s.visual.widths[0])} ${s.visual.widths[0]}w, ${src(s.visual.file, s.visual.widths[1])} ${s.visual.widths[1]}w`}
-                    sizes={s.visual.tall ? '(min-width: 1200px) 25rem, 100vw' : '(min-width: 1200px) 52vw, 100vw'}
+                    sizes="(min-width: 1200px) 42rem, (min-width: 760px) 70vw, 90vw"
                     width={s.visual.widths[1]}
-                    height={Math.round(s.visual.widths[1] * (s.visual.tall ? 1.25 : 2 / 3))}
+                    height={s.visual.widths[1] * 2 / 3}
                     alt={s.visual.alt}
-                    role={s.visual.alt === '' ? 'presentation' : undefined}
                     style={`object-position:${s.visual.position}`}
                     loading={i === 0 ? 'eager' : 'lazy'}
                     decoding="async"
@@ -548,30 +540,14 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
   .pr-receive li { padding: .6rem 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: .95rem; }
 
   .pr-media { margin: clamp(1.75rem, 3vw, 2.75rem) 0 0; }
-  /* One ratio and one width for every stage that has a visual, so the three
-     read as the same object rather than three different ones — that was the
-     only Process change actually requested.
-     The frame is deliberately MODEST rather than full-column. The three assets
-     in /process-temp/ are holding plates: measured, they are 97.4% flat paper
-     colour with no imagery in them at all. At full column width a blank plate
-     becomes a large void that makes the stage look unfinished, which is
-     exactly the regression this pass is undoing. Sized like this it reads as a
-     reserved visual slot. It is not a fix — the three real photographs are
-     still outstanding — but it stops the placeholder dominating the stage. */
+  /* The complete sequence shares one photographic scale and intrinsic ratio. */
   .pr-media__frame {
-    aspect-ratio: 4 / 3;
-    width: min(100%, 26rem);
+    aspect-ratio: 3 / 2;
+    width: min(100%, 42rem);
     overflow: hidden;
-    border: 1px solid var(--line);
     background: var(--paper-bright);
   }
   .pr-media__frame img { width: 100%; height: 100%; object-fit: cover; }
-  /* The portrait frame is offset rather than stacked, so 03 does not compose
-     like 01 and 05. */
-  /* Deliberately no longer narrows or right-aligns one stage: that was the
-     other half of the inconsistency. Kept as a no-op so the data flag cannot
-     silently reintroduce it. */
-  .pr-media--tall { max-width: none; margin-left: 0; }
 
   /* DECISION — the dominant element, at the end of the stage, crossing the
      spine. The node is the single orange in the stage. */
@@ -684,7 +660,6 @@ const src = (file: string, w: number) => `/process-temp/${file}-${w}.webp`;
     }
     .pr-file__prior ul { display: flex; flex-wrap: wrap; gap: .5rem 2rem; }
     .pr-file__prior li { grid-template-columns: 1.6rem minmax(0, auto); }
-    .pr-media--tall { max-width: none; margin-left: 0; }
   }
 
   @media (max-width: 1080px) {

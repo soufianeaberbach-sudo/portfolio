@@ -1,3 +1,11 @@
+# Womenswear seamless recovery — 24 October 2026
+
+Current owner brief supersedes the historical production stop and three-view gate below. **40/40 usable featured looks:** 31 preserved full sets plus nine partial or retouched recoveries. No new redesigns or casting changes. [Current report](../womenswear-seamless-recovery/README.md) · [Actual active-state audit](../womenswear-seamless-recovery/TECHNICAL-AUDIT.json). Built-branch browser QA passes; no merge or deployment claimed.
+
+---
+
+The following is preserved historical production context.
+
 # Owner production stop — 23 October 2026
 
 **All image generation and independent creative production stopped.**

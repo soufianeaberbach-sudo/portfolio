@@ -1,0 +1,55 @@
+{
+  "sourceIdentity": "activewear-ref-09",
+  "identity": "ww-recovery-activewear-ref-09-v1",
+  "recordedUTC": "2026-10-24T13:30:01.585600+00:00",
+  "availableViews": [
+    "front",
+    "back"
+  ],
+  "threeViewComplete": false,
+  "method": "edited-existing",
+  "reviewNote": "Both source photographs recovered by non-generative foreground segmentation after Front generation and background-only retouch refusals. Original RGB preserved; light ivory mesh, bust/brief panels, hairband, fingers and white footwear remain intact. Reviewed on white, safely separated through the empty studio gap; minimal contact shadows, no rectangle.",
+  "sourceSHA256": "f7a4efc2761e426080f23834fc894ae85c6f42aa4c2f4902cd33741ea7a673ea",
+  "outputs": {
+    "front": {
+      "inputPath": ".qa-director/seamless-mask/activewear-ref-09-front.png",
+      "inputSHA256": "1b5f9b92e0be618dbcf909eedfab2bdd6052d58333ac8000b3283391a45d075f",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-activewear-ref-09-v1/front-native.png",
+      "nativeSHA256": "1b5f9b92e0be618dbcf909eedfab2bdd6052d58333ac8000b3283391a45d075f",
+      "nativeDimensions": [
+        808,
+        1867
+      ],
+      "nativeMode": "RGBA",
+      "exportSHA256": "5b1d14f6fba04870db2250e46f83f85f64e632a0ecbb26479726d666274f0b7a",
+      "uniformScale": 1.3616045845272207,
+      "offset": [
+        302,
+        71
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false
+    },
+    "back": {
+      "inputPath": ".qa-director/seamless-mask/activewear-ref-09-back.png",
+      "inputSHA256": "1677e9a770da9a55a4a185cf60a024bf1b006257365b39ec76b620369b14c03a",
+      "nativeAsset": "/portfolio/recovery/ww-recovery-activewear-ref-09-v1/back-native.png",
+      "nativeSHA256": "1677e9a770da9a55a4a185cf60a024bf1b006257365b39ec76b620369b14c03a",
+      "nativeDimensions": [
+        592,
+        1867
+      ],
+      "nativeMode": "RGBA",
+      "exportSHA256": "b272bcd6a17e378f16e7ddf0fce0d57b571b259515e133d7f0984d4979054b8b",
+      "uniformScale": 1.3616045845272207,
+      "offset": [
+        567,
+        68
+      ],
+      "resampled": true,
+      "nativeHighResolutionClaim": false
+    }
+  },
+  "ownerArtisticApproval": false,
+  "integratedInBranch": true
+}
