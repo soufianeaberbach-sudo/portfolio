@@ -6342,7 +6342,39 @@
         "reviewNotes": "Credible black evening tuxedo: shawl satin lapel, single-button jacket, white pleated-bib shirt, black bow tie and cummerbund, clean black trouser line and patent lace-up shoes. Natural commercial adult casting; complete head and shoes, balanced white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1593189,
+        "nativeMode": "RGB",
+        "sha256": "184d9595497e12800532fbc7ca107cf8db69224e29fa41df30b476f4a3937344",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-246b74b3-9c6d-4f4d-9e48-ef38e70c78b4.png",
+        "generatedAt": "2026-10-24T00:25:29.843970+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-06-back.txt",
+        "promptSHA256": "f064a1b5676fe1a7c48e3bb5f15bb165fa216a69a68966ce813eee6f64b65aa8",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/back.png",
+        "exportSHA256": "7ff5b03516c5629db24896fbb8b18015c82ad61726569e6b8f10dcf3ec958a3b",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/back-600.webp",
+        "previewSHA256": "010b8f6df849a841ef731cb94d3414d3af767cf01346f9988febe02764c1660f",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear of same adult model and black tuxedo outfit, white shirt collar/cuffs and black patent lace-up shoes. Satin rear collar, clean centre-back shaping, smooth formal sleeve pitch and unvented rear hem appropriate for evening tailoring; full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": {
         "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/editorial-v01-native.png",
         "nativeDimensions": [
@@ -8251,8 +8283,15 @@
       "key": "mw-r2-tailoring-06:back",
       "look": "mw-r2-tailoring-06",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:25:29.847461+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-06:editorial",
@@ -9300,6 +9339,15 @@
       "at": "2026-10-24T00:24:57.006340+00:00",
       "notes": "Same adult model and deep-green collarless tailored jacket/trouser outfit with ivory crew knit and black penny loafers. Four-button front retained with lower button partly covered by natural jacket-adjustment hand; elegant forward step, complete head and footwear, coherent compact woven texture.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-06",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:25:29.847461+00:00",
+      "notes": "True rear of same adult model and black tuxedo outfit, white shirt collar/cuffs and black patent lace-up shoes. Satin rear collar, clean centre-back shaping, smooth formal sleeve pitch and unvented rear hem appropriate for evening tailoring; full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9312,11 +9360,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 36,
-    "acceptedActivePhotographs": 116,
+    "acceptedActivePhotographs": 117,
     "incompleteLooks": 4,
     "completedMasters": 36,
     "unresolvedViews": [
-      "mw-r2-tailoring-06:back",
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:editorial",
       "mw-r2-tailoring-10:back"
