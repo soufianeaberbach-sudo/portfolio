@@ -6008,7 +6008,39 @@
         "reviewNotes": "Commercially desirable pale-oat linen tailoring, natural slub and soft drape. Two-button notch-lapel jacket worn open, patch hip pockets, white band-collar shirt, cuffed straight trousers and tan suede loafers. Natural brown-haired adult fashion model, clear Front and full-length white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1823769,
+        "nativeMode": "RGB",
+        "sha256": "30d7d93c871a86b774b3885928caed6310f86f6c34d6ea2b3c66dfd88ed464a3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-10b8790b-3ce4-49a0-ab90-be1afbbf90ac.png",
+        "generatedAt": "2026-10-24T00:20:40.948276+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-04-back.txt",
+        "promptSHA256": "53e64f8fa1aa9e687c3893b9b326afae7e6ee9759773ccb83ebfebd8b0d0b478",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/back.png",
+        "exportSHA256": "fdc76917a96db9c0bf2d8fee251b153fb64ed31e8c55efe09b21630f8a34e117",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/back-600.webp",
+        "previewSHA256": "9f6c8e2204d37898ef7cb644245323ef49c7cfaef9568273b5c00416a90c8642",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear; same brown hair, oat textured linen jacket and cuffed trousers, white band-collar shirt and tan suede loafers. Soft shoulder, centre-back shaping and twin side vents, natural linen creases and complete framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": {
         "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-v01-native.png",
         "nativeDimensions": [
@@ -7775,8 +7807,15 @@
       "key": "mw-r2-tailoring-04:back",
       "look": "mw-r2-tailoring-04",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:20:40.952423+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-04:editorial",
@@ -8748,6 +8787,15 @@
       "at": "2026-10-24T00:19:19.598360+00:00",
       "notes": "Dusty-olive V-neck waistcoat and matching pleated cuffed trousers over ivory open-neck shirt, brown Derby shoes. Six-button waistcoat with lower button unfastened, two welt pockets and convincing shaping. Natural adult model, full-length commercial Front, neutral white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-04",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:20:40.952423+00:00",
+      "notes": "True rear; same brown hair, oat textured linen jacket and cuffed trousers, white band-collar shirt and tan suede loafers. Soft shoulder, centre-back shaping and twin side vents, natural linen creases and complete framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8760,11 +8808,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 33,
-    "acceptedActivePhotographs": 106,
+    "acceptedActivePhotographs": 107,
     "incompleteLooks": 7,
     "completedMasters": 33,
     "unresolvedViews": [
-      "mw-r2-tailoring-04:back",
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-05:editorial",
       "mw-r2-tailoring-06:back",
