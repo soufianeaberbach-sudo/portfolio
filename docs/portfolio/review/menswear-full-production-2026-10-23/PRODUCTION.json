@@ -5976,11 +5976,41 @@
         "approval": "PENDING_OWNER",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1927580,
+        "nativeMode": "RGB",
+        "sha256": "350c01ccc86f05302bb3df3bc687f656d0d69025f6923663479436cd5e29623c",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-d77a3b45-5612-4a89-9067-5920465e1d3c.png",
+        "generatedAt": "2026-10-24T00:16:07.342099+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-04-front.txt",
+        "promptSHA256": "8669f6d91a33d6dcad9ca2da353b5a3f26cd167bafcf62cf4d30a6759c45f796",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/front.png",
+        "exportSHA256": "995d15ea08d3ee97b1f0d7dcf8ec4953fd711941a4284fac48d7dd59dc1fbf5f",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/front-600.webp",
+        "previewSHA256": "1909148e209170415a959837a186e6fca65498baa4343d1ab7803117bdd63d57",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Commercially desirable pale-oat linen tailoring, natural slub and soft drape. Two-button notch-lapel jacket worn open, patch hip pockets, white band-collar shirt, cuffed straight trousers and tan suede loafers. Natural brown-haired adult fashion model, clear Front and full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -7548,8 +7578,15 @@
       "key": "mw-r2-tailoring-04:front",
       "look": "mw-r2-tailoring-04",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:16:07.347046+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-04:back",
@@ -8423,6 +8460,15 @@
       "at": "2026-10-24T00:15:47.724667+00:00",
       "notes": "True rear of navy hopsack two-piece suit; same brown wavy hair, pale blue shirt collar/cuffs and brown Derby shoes. Balanced shaped back, natural sleeve pitch, straight trouser drape, full-length white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-04",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:16:07.347046+00:00",
+      "notes": "Commercially desirable pale-oat linen tailoring, natural slub and soft drape. Two-button notch-lapel jacket worn open, patch hip pockets, white band-collar shirt, cuffed straight trousers and tan suede loafers. Natural brown-haired adult fashion model, clear Front and full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8435,11 +8481,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 33,
-    "acceptedActivePhotographs": 99,
+    "acceptedActivePhotographs": 100,
     "incompleteLooks": 7,
     "completedMasters": 33,
     "unresolvedViews": [
-      "mw-r2-tailoring-04:front",
       "mw-r2-tailoring-04:back",
       "mw-r2-tailoring-04:editorial",
       "mw-r2-tailoring-05:front",
