@@ -3322,6 +3322,476 @@
       ],
       "status": "EXPORTED_PENDING_VISUAL_REVIEW",
       "exportSeconds": 37.83
+    },
+    {
+      "id": "mw-r2-casualwear-08",
+      "category": "m-streetwear",
+      "position": 8,
+      "views": {
+        "front": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-rtw-05/front-native.png",
+            "sha256": "8b0e6eafbae29dea48cf9ffa4dd09fe07278a38c7de94fc1c3be86fb48df3354",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/front.png",
+            "sha256": "f8834938429346e39c43071c69b105e90d9c97854eb5f50126d69af68153c238"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/front-native-size-white.png",
+            "bytes": 764949,
+            "sha256": "c7332eb9d3be1ea73684a5a54d024126a0cbf272e50b3b8b2fa5ce3c987877bc",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/front-segmentation.png",
+            "bytes": 42069,
+            "sha256": "3844e9cdaf99d24b4ca4509616c820dde0cd8873f51a79661cca6cc0a9f1b1a4",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/front-alpha.png",
+            "bytes": 44999,
+            "sha256": "4841a7cb5f8fd402374d54f8f54946d375a328cc57b7b01f0fd0bb7be9b1eeca",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/front-trimap.png",
+            "bytes": 12593,
+            "sha256": "02629b982cc7a7e5bc91534eb88cce1def73760ad81ffeaeecd7a639336374f3",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/front-shadow.png",
+            "bytes": 5943,
+            "sha256": "399004ead536a7d4d775cac39f836ac4f124d8589f1963958fa5d8d8efe3c872",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front.png",
+            "bytes": 1862573,
+            "sha256": "b8faf8aebd6b289dcd8d2b11e1bde36d4811de836b81e0a7a2aae127473fd566",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-600.webp",
+              "bytes": 175770,
+              "sha256": "222b3a64034f88dd3abf96dfecb3631612890adfeafee9a0466fb32635792723",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-1200.webp",
+              "bytes": 679304,
+              "sha256": "b544d26771ead2fe9f12adb93fdf1aaa6eb91760c6612ef9b8243f949f526b38",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-1800.webp",
+              "bytes": 1268952,
+              "sha256": "bd4d2feabe11906af79ba18246014323781ab1a96081dadf1efe70cef723a25c",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/front-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              278,
+              26,
+              740,
+              1435
+            ],
+            "foregroundFraction": 0.254347,
+            "preservedCorePixels": 380103,
+            "preservedLightCorePixels": 563,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1146214,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 27226,
+            "enclosedGapAreas": [
+              3653,
+              409
+            ],
+            "shadowPixels": 21278,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.013528
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        },
+        "back": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-rtw-05/back-native.png",
+            "sha256": "7d3783c4ec76857847e604db4f12d55c34f744924379af96544ab04b261aa729",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/back.png",
+            "sha256": "0e0fd1fcb3f97675a2199054470874057242a947a6f3d8485b129ffbc8c6e491"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/back-native-size-white.png",
+            "bytes": 698743,
+            "sha256": "4433fcb23145fc39bebd15f0656a48682e3d6ebd25d57a491504c05a7db2da0d",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/back-segmentation.png",
+            "bytes": 37789,
+            "sha256": "ed473b7b4bafac0eb8e41c3fd05cc81b6a9f0630ba124add8e460b6e6508b14a",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/back-alpha.png",
+            "bytes": 41749,
+            "sha256": "f3f31fbd0656f82bc6fe0b7a8d8740e3f6b1a49d3feb9d439fcbf52763991917",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/back-trimap.png",
+            "bytes": 11999,
+            "sha256": "0b3c687aafb7f1f049ecf73266c89c5e977cde0347db4decfb112d7b5a102bb3",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/back-shadow.png",
+            "bytes": 4541,
+            "sha256": "dc9d279d111ef5d7b187d27abca945f3a9aa2043acdd26c3def3a5521060fbd4",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back.png",
+            "bytes": 1693491,
+            "sha256": "8d978fc3a3769003ffcea3a113ac54c85339285ed7ff2526be3edf6b8520ed04",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-600.webp",
+              "bytes": 159846,
+              "sha256": "1c5932ff8a84e924944563fcb0682f2a73a4c0f445b2a2fb3604aacab21b6d72",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-1200.webp",
+              "bytes": 620826,
+              "sha256": "25ed5e041c90210680a6ca99c71cf121c7f816debeb2e0040eee96630f1f3cc4",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-1800.webp",
+              "bytes": 1160938,
+              "sha256": "7f8aa070ced781c3b0c8bd5b381eebfd234e7535552cb533e9725805ad7eb74c",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/back-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              280,
+              27,
+              742,
+              1422
+            ],
+            "foregroundFraction": 0.246463,
+            "preservedCorePixels": 368006,
+            "preservedLightCorePixels": 6,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1162232,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 25293,
+            "enclosedGapAreas": [
+              4256,
+              3702,
+              360,
+              341
+            ],
+            "shadowPixels": 16798,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.01068
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        },
+        "editorial": {
+          "originalNative": {
+            "path": "assets/source/menswear-original-2026-2027/mw26-rtw-05/editorial-native.png",
+            "sha256": "e4d7484bba58ca5c5d4e12ea71c74f24989082b7efe2ddfdc49425e73aa15595",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "originalPanel": {
+            "path": "public/portfolio/ai-concepts/menswear-2026-2027/mw26-rtw-05/editorial.png",
+            "sha256": "642798b41d936c19d929a1ddeac6665324d7443bcb7383e3465e07ffe11e01ba"
+          },
+          "correctedNativeSize": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/editorial-native-size-white.png",
+            "bytes": 657983,
+            "sha256": "005009fa9cf98945238820fdd00d4536f0fca01a832d8497620f9227af833e18",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "segmentation": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/editorial-segmentation.png",
+            "bytes": 34001,
+            "sha256": "abcd2e59a80c1d2dc9bcabdf4a8bc673a0c5656d54020631adb181d28fda8a38",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "alpha": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/editorial-alpha.png",
+            "bytes": 37424,
+            "sha256": "ea95caf47cf39464b2bc41f0e74205a9cc3298db38bd26e0bd5d45dce6eab57e",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "trimap": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/editorial-trimap.png",
+            "bytes": 12495,
+            "sha256": "4d0b1752a219c9a336fe8144bd0f462d6aca04dc66d2934d71e050beba92a097",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "shadow": {
+            "path": "assets/presentation/menswear-studio-v2/mw-r2-casualwear-08/editorial-shadow.png",
+            "bytes": 3290,
+            "sha256": "0bda9efed5bd4f7a85bc675d89832c18a707934465ac4892bf7a5c310fa1346a",
+            "dimensions": [
+              1024,
+              1536
+            ]
+          },
+          "panel": {
+            "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial.png",
+            "bytes": 1603740,
+            "sha256": "8f26332c2e5349f21564d90107bc2eca1136e3beca4aa79fdc42b611e22234e3",
+            "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial.png",
+            "dimensions": [
+              1800,
+              2700
+            ]
+          },
+          "exports": [
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-600.webp",
+              "bytes": 152422,
+              "sha256": "8567f52696b9832cf4f8becd91136c93449dec6d65be78a86467a8da3683cbcd",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-600.webp",
+              "dimensions": [
+                600,
+                900
+              ],
+              "width": 600,
+              "height": 900,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-1200.webp",
+              "bytes": 584738,
+              "sha256": "561ad2d397c04d775ed5fd9e4b2ea17a91355da8d75e8a05a76ff8659f62f384",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-1200.webp",
+              "dimensions": [
+                1200,
+                1800
+              ],
+              "width": 1200,
+              "height": 1800,
+              "lossless": true
+            },
+            {
+              "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-1800.webp",
+              "bytes": 1089742,
+              "sha256": "b9473fad048ae29e65de65aa72d089b56bbde2f906d5ea84e04c936340a80590",
+              "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/editorial-1800.webp",
+              "dimensions": [
+                1800,
+                2700
+              ],
+              "width": 1800,
+              "height": 2700,
+              "lossless": true
+            }
+          ],
+          "qa": {
+            "foregroundBounds": [
+              289,
+              23,
+              760,
+              1428
+            ],
+            "foregroundFraction": 0.225993,
+            "preservedCorePixels": 340176,
+            "preservedLightCorePixels": 425,
+            "coreMaxRGBDifference": 0,
+            "exposedBackgroundPixels": 1203393,
+            "nonWhiteExposedBackgroundPixels": 0,
+            "partialMattePixels": 20701,
+            "enclosedGapAreas": [
+              2196,
+              1516,
+              187,
+              26
+            ],
+            "shadowPixels": 7248,
+            "shadowMaxDarkness": 24,
+            "shadowFraction": 0.004608
+          },
+          "resampledExport": true,
+          "newNativePhotography": false,
+          "status": "EXPORTED_PENDING_VISUAL_REVIEW"
+        }
+      },
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master.png",
+        "bytes": 5154954,
+        "sha256": "e6d80ba1f75eec6fa6e600eabca7035eb921aba5ae3b1399c146ca30dd262846",
+        "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master.png",
+        "dimensions": [
+          5400,
+          2700
+        ]
+      },
+      "masterResponsive": [
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-900.webp",
+          "bytes": 127000,
+          "sha256": "091649b2a0f23e5bf986e5b8bab763c4c3b743e0744919fe61b7456263d7a754",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-900.webp",
+          "dimensions": [
+            900,
+            450
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-1800.webp",
+          "bytes": 495680,
+          "sha256": "7f5148d428d521b85c7e9a4e1134a37b6d7c2cd983c1682aec15639291e9d3c5",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-1800.webp",
+          "dimensions": [
+            1800,
+            900
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-2700.webp",
+          "bytes": 1118292,
+          "sha256": "c6bbb7b9256d264f8336efd53e3064fc8603848d944b3e795c4c3c42bb9361ae",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-2700.webp",
+          "dimensions": [
+            2700,
+            1350
+          ]
+        },
+        {
+          "path": "public/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-3600.webp",
+          "bytes": 1900262,
+          "sha256": "f9443e2e0f398887334cefd1140466e2b2664bbe265f49d6c77d87e8a4e8849b",
+          "src": "/portfolio/ai-concepts/menswear-studio-v2/mw-r2-casualwear-08/master-3600.webp",
+          "dimensions": [
+            3600,
+            1800
+          ]
+        }
+      ],
+      "status": "EXPORTED_PENDING_VISUAL_REVIEW",
+      "exportSeconds": 28.93
     }
   ],
   "failures": [
