@@ -1,0 +1,34 @@
+{
+  "premerge": {
+    "number": 49,
+    "head": "ad3133557547e97f9351315b93b1075cefc96b99",
+    "base": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+    "mergeable": true,
+    "draft": false,
+    "state": "open",
+    "changedFiles": 1763
+  },
+  "checks": [
+    {
+      "id": 120846586640,
+      "name": "Build and smoke test",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "ad3133557547e97f9351315b93b1075cefc96b99",
+      "url": "https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/40085196314/job/120846586640"
+    }
+  ],
+  "merge": {
+    "sha": "2c90815dda21ec6183e7e283f94935e2a49c793c",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  },
+  "main": {
+    "commit": "2c90815dda21ec6183e7e283f94935e2a49c793c",
+    "tree": "7fb3f87135d0fd6cff831bf3e481f30f7127690c",
+    "parents": [
+      "a806acf1d0da0df28b5e2c52aab468de577250ca",
+      "ad3133557547e97f9351315b93b1075cefc96b99"
+    ]
+  }
+}

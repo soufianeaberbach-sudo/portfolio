@@ -1,0 +1,625 @@
+{
+  "verifiedAt": "2026-10-24T13:02:38.548201+00:00",
+  "status": "PASS",
+  "url": "https://aberbach.co/portfolio/",
+  "pr": "https://github.com/soufianeaberbach-sudo/portfolio/pull/49",
+  "mergedMainCommit": "2c90815dda21ec6183e7e283f94935e2a49c793c",
+  "testedAndMergedTree": "7fb3f87135d0fd6cff831bf3e481f30f7127690c",
+  "cloudflare": {
+    "worker": "portfolio",
+    "version": "78a6dc5b-0bea-487e-8563-0213cd9aca65",
+    "build": "bf917867-9b2c-4396-982f-68ec9d4874ad",
+    "result": "SUCCESS"
+  },
+  "categories": {
+    "Casualwear": 10,
+    "Activewear": 10,
+    "Outerwear": 10,
+    "Tailoring": 10
+  },
+  "looks": 40,
+  "selectedViews": 120,
+  "masters": 40,
+  "all680LiveFileSHA256Matched": true,
+  "liveHTMLSHA256": "d9ecb73e023873945683da7700ce26089dc92d141455bc2c3b40a1c621683d45",
+  "liveHTMLCFRay": "a4f924715e7988f5-SJC",
+  "browserChecks": 1430,
+  "browserSuites": [
+    {
+      "name": "menswear-look-navigation",
+      "checks": 841,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/menswear-look-navigation.log",
+      "sha256": "dd08eb46739d7851efeedc8dc25de3cc0874c1a9954fa78180733ba452886e05",
+      "summary": "841 Menswear look-sequence, genuine-view and cinematic-origin checks passed"
+    },
+    {
+      "name": "menswear-presentation-seeks",
+      "checks": 264,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/menswear-presentation-seeks.log",
+      "sha256": "054a85fafc82136b1ce12f400bf8801cd2f9ee7e4e6992d040212973d55c55a1",
+      "summary": "264 endpoint/interruption/focus checks passed"
+    },
+    {
+      "name": "menswear-navigation",
+      "checks": 49,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/menswear-navigation.log",
+      "sha256": "076f1b714451f17139f1cad74251baf0e74915901801cc952c34abba0f7610e3",
+      "summary": "49 Menswear history, interruption, touch and fallback checks passed"
+    },
+    {
+      "name": "menswear-historical-access",
+      "checks": 32,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/menswear-historical-access.log",
+      "sha256": "1e24f19cf59eda7efdd0af44a10f2b7bd2be71fc48f655775fe9e7b40904761c",
+      "summary": "32 historical-list identity/context/history checks passed"
+    },
+    {
+      "name": "womenswear-continuity",
+      "checks": 98,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/womenswear-continuity.log",
+      "sha256": "7f8be8651384078573e540a2a2aeb61b3c08ad9a2ca0226a705649dcc5b76390",
+      "summary": "98 Womenswear continuity checks passed"
+    },
+    {
+      "name": "womenswear-route-origin",
+      "checks": 16,
+      "status": "PASS",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/womenswear-route-origin.log",
+      "sha256": "2192a34587d4666adf9a178a956f6a1539aae8a298c6a5e9862823dab93bb978",
+      "summary": "16 direct-route source identity checks passed"
+    }
+  ],
+  "screenshotCaptureChecks": 130,
+  "screenshots": [
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "2c1ecd120a36f3c137697b9a11a98251f61e99aeafc99efc9bb444ba95999f95"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "e9c72c4d7764e0a8afc353c993c79842b6e3f3167f10ae016e16e96cc1cf349c"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "cdfe06fb57e2154288fd31bda1ee21f857ae6b9c49bb4ddb2258f148702ec532"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "f4e637ec2f3b59404001082e6f717bc53382f8d3eb00c16c759e1305b7c404b7"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "68db4c4a5f93ffbe5bc6c5bf792729dc96ecd0f188c3e1cb5f6810bce6ad25eb"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/archive-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "6fc6d7150b065a51643b88cc8295c48f2ba5415e95376780ed591e74b773751b"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-motion-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "1138ef7785feceb7eac323b0713bf64dd6319a362fe062667bfe65fa3313946e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-motion-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "9aa081371b1c867ad7b144e10f49434c6354bf9ad30096bbd33a3b5df5c01028"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "cb6ade1e7685df74284c5d8647ff6a08355f394e9594c734a2514b7a96cfc14e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "1306e435675f7d4763c19f6f4b4a4cac74a42e0360c7a1749e8ab0d6c4aeb9e5"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "7caaa1221cbb3f5bf670b703e3c8ff345d1d022274e37879a764d4382be71d9c"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "f1d2c36fc05e427c21b9636867a97154967a57df187bf061f455343b2b195bbb"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "2a7d2d69a75f2145dc25d83581ca9e5d58c568dfc9c392565201860f6c972215"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-opening-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "582c45f85d30f97ceb5613cf1f510f522827826fcd00ff74aa8b8e86d3fc33f6"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-activewear-second-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "2f2e45a58e0034a19a2c00c8c003b52bf0c9c8f53921258684d3b0c42f3430ab"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-motion-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "49008b44d15be9b143783bf99c1e7346f6c5f4d21a08328e1ad2940f0609e739"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-motion-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "ab828b705d34f314df6914ff4049d5d6ffd8f8b4ac23591a3bb8175099f87a27"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "09d2ea56ea78228402a6aa20dfc6b93aeb92402c5755f5baefb72a09c14811ea"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "760827b6a4581d69f10a54b8735c4f45a1255de0bda64e8282bbd7fcbdfc8e4f"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "f975f08f84262c6870c45732739b31a0e2633a2ed67538e072354dd1a0bda0b7"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "68a68faa0078cc01b0c151a967112889c328f6b3cbad64c2815ef665a94a2fdc"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "95d1cd76e2c7859487636dd2026ad1fccd55026a7062b13b6dcadecfe52d073e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-opening-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "a6b7f6a58a4f07cd37b7255bcf5d8d01b7aa5d50c6365e068673848d761bf614"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-rtw-second-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "e22795413a6facf09bcbe6d23568748f2b2a31cb616a804f395bd8298bb9c81a"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-motion-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "abd6dd87a4a38b5dc2cc9d873163ce70d607e09624ea1ee4c0247c924924cc8e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-motion-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "5af09be1b4b6f80bac9470369dc65696bcb5b934fb02a82b459b7bf8108bf6cc"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "1338a21fe9db424c58458bcc60ad037ab54292246f279d6ead615df7901320be"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "3313c925e88157a58c65d389a05c073a741999a7216064546e3f2c8805f322bf"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "f1d9ea6ca6b1f8f2debea340786fc47838bf3487b373e00cce30d09b52b8a5b7"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "0103ff7723cd9a119a92d7984dfe60d946478457198ff4aa1ab9b002c0cb8051"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "ae68e3d1e644e73c004ec446cc7e2db3cb5dc28fb06e1f7ae35c2d1ba5343757"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-opening-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "3f85696b27cc437db9c08e7e0db363d0568f3486ffd0294718532c142c1e041e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-second-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "b2cd020c2fe496837a9683fc70569d8b2301cbd33dbc81668edab98ea527b69f"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-streetwear-second-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "6e34fb8ed8d95f07c39676ae8774734bfa09fcb04aa0901c2df3c4c56657b0d9"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-motion-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "a8c410b3dd3388d918e5b6ec9892abf7b3499382f001c13e702ef64e6dadefa0"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-motion-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "54de6033c2084cd89ed90808fa2661f6bc5204c8adbe31521a0c3cf412cc0bf2"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "3c7817c21b2d96d62edc1f63428565ca996cabd348efc6f35399752ab55953f2"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "d1954ec9c69db01f83853edd8727a1d6e2a65dba6223fc41162d14273c9d833e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "9bff4515cc1dcd9bcd05b785208a57a01ed502e6339e869e13022276f3d2eda6"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "89ef3ebff2212612a249073163591021bb26aaf473bf913c3cc1842106d15158"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "6f7f02d31165996ed912e66e220557f448b080c70d77f425083c35fa34cf6d46"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-opening-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "30130f8413ca833ee19c19f5a400f57f2a9d81872522282ebe8806a267aea4db"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-second-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "e9e0504bccdb3e3de227a57e697a1e1c1d6d72953e2c8235874b34c3e4f3b869"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/m-tailoring-second-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "15aba787bcfb7f37e1d97806bc5b97e13c715acacebd25e00d4654dce64671fa"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "1682fff35d9c1edc23c85f2aa0e7e425c9b8274dab1f3fe2563823a4dabf37ea"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "bbc84b07054ef759000251942aadc9680929e6ee9ed3c8640638d2cfca25b4d8"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "26c5320dd1fb26eff69a73dd49efd2a51b6c1ab2f868f79448228f84971f7e92"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "b0ea5953333dc3526a2b21ecf1de76d20a0cb4252ee79fbf4f9a33d585843f23"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "910033babcb73e6f42c41ef5ccee9f1b85ad3c2c6aef6f2c2972110d2f478d95"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-back-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "14468ff8eb9ca2fea323e3fd1c20b80422727fbb98e73de327759185fc8b7c91"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "65a7a8a63f4d7dea65ac0bab1e016a65e48e7ca9b141562afb8258ee9018cd5b"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "755bfe4c00db8a6be2dd4b0324d60daa2eb8e2cb8d6375c47c05adce734a0248"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "0ab78f017b84c244cf6af11c7b5dd0cedb7fa3a6e84a6a6f3a4bc46fd4c745bb"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "93eb79f5810b6104132425ef6a0d379e2b2a4588f3e21c986933438d4504a0d5"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "24a8a8cf775970e904b63e6fec5e8dae855ab10e427fe22976596117a0b1e4d0"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-editorial-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "05e5bf869960fa8542853467162a62daf531a5bfd50e3e020eee65fd17912d80"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-1024x768.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "151c93f69c7ff82c25d9496f4c90a55e4ad8d667cb34503c43961fa14cdb40e8"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-1366x768.png",
+      "dimensions": [
+        1366,
+        768
+      ],
+      "sha256": "be2f3e8e0eb71fc87faf19726523f53ce880d849432d13348db658f375b17ce9"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "c06d2120897dc51542f46a3123cb9a228af46e35d995e2344674f13e87d6f28e"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "7b9b3d9f2470bbd703702575ee70594b3a8a946eebfd44cf5d3f060705f3fe1a"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-430x932.png",
+      "dimensions": [
+        430,
+        932
+      ],
+      "sha256": "173c8d89ad81f170c28cf21d62b1cb98d6f8c9abb9d72923705462937a51fd5f"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/reader-front-768x1024.png",
+      "dimensions": [
+        768,
+        1024
+      ],
+      "sha256": "53a13361f63551fefb1f10bdd19e6672a317e6dbf4295331b08723c6557ee2d7"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/three-view-master.png",
+      "dimensions": [
+        1440,
+        720
+      ],
+      "sha256": "c36e2a701903fa56ae135426263e6856fb97f045cbe0e8772371d57162d9e79a"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/womenswear-1440x900.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sha256": "1bbe141b40c57c0c3b0308fe646167cc34a93b86ae18c7da918bfa60920488c2"
+    },
+    {
+      "path": "docs/portfolio/review/menswear-studio-v2-2026-10-24/live/screenshots/womenswear-390x844.png",
+      "dimensions": [
+        390,
+        844
+      ],
+      "sha256": "7c7873bc2adac6e741aa0e0b57349123e39120a3d2872f808fdc5e311860ed9e"
+    }
+  ],
+  "staticScreenshotsPixelIdenticalToReviewedBuild": 57,
+  "actualAnimatedHandoffsCaptured": 8,
+  "womenswearScreenshotComparison": [
+    {
+      "width": 1440,
+      "height": 900,
+      "changedColourChannels": 0,
+      "totalChannels": 3888000
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "changedColourChannels": 0,
+      "totalChannels": 987480
+    }
+  ],
+  "backgroundEvidence": "All live corrected panel, responsive and master bytes match the exact-white exports validated by the 6,812 pre-release/CI checks. Actual rendered screenshots at six sizes were inspected for photographic rectangles, floor gradients, damaged pale fabrics and grounding. No such defect was found.",
+  "historicalSubjectsWithPreservedSourceMapping": 108,
+  "womenswearAIIdentitiesWithPreservedMapping": 31,
+  "completedWorkRepeated": false,
+  "sourceImageOrApplicationChangesDuringLiveVerification": false,
+  "outstandingDefects": [],
+  "limits": [
+    "Chromium desktop/mobile emulation; native Safari and physical-device execution not performed."
+  ]
+}
