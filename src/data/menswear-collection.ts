@@ -2,6 +2,7 @@ import {menswear,referenceSubject,projectSubject} from './portfolio';
 import type{Subject,ImageAsset,ImageCredit,FinalViews}from'./portfolio';
 import sources from './menswear-references.json';
 import aiProduction from './menswear-ai-production.json';
+import webPhotographs from './menswear-web-images.json';
 export type MenswearCategory='m-streetwear'|'m-activewear'|'m-rtw'|'m-tailoring';
 export interface MenswearSlot {id:string;photography?:FinalViews;credit?:ImageCredit;projectId?:string;}
 // The stable pool is never reordered. Only this explicit edit determines the forty public slots.
@@ -47,7 +48,10 @@ export const menswearConcept=(id:string)=>aiProduction.selectedCompleteLooks.fin
 export function menswearPool(category:MenswearCategory):Subject[]{
  const historical=menswearHistoricalPool(category);
  const concepts=aiProduction.selectedCompleteLooks.filter(c=>c.category===category).map(c=>{
-  const image=(v:typeof c.views.front):ImageAsset=>({src:v.src,srcset:`${v.preview} 600w, ${v.src} 1800w`,width:v.width,height:v.height,alt:v.alt,front:1,views:1});
+  const image=(v:typeof c.views.front):ImageAsset=>{
+   const delivery=(webPhotographs.images as Record<string,{src:string;srcset:string}>)[v.src];
+   return{src:delivery?.src??v.src,srcset:delivery?.srcset??`${v.preview} 600w, ${v.src} 1800w`,width:v.width,height:v.height,alt:v.alt,front:1,views:1};
+  };
   const final:FinalViews={front:image(c.views.front),back:image(c.views.back),editorial:image(c.views.editorial)};
   const subject=projectSubject({id:c.id,gender:'menswear',marketCategory:category,title:c.title,garmentType:c.product,description:c.provenance,finalGarmentImage:final.front!,final},'menswear');
   const slot=menswearSlots[category].find(s=>s.id===c.id);

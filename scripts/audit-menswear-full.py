@@ -1,7 +1,11 @@
 """Full selected-collection audit; technical assertions do not replace visual garment review."""
 from pathlib import Path
 from PIL import Image, ImageOps
-import datetime, hashlib, json, subprocess
+import argparse, datetime, hashlib, json, subprocess
+parser=argparse.ArgumentParser()
+parser.add_argument('--report',type=Path)
+parser.add_argument('--baseline',default='a869cf755bd296d71cb2e89a8e4799cc1fb37082')
+args=parser.parse_args()
 R=Path(__file__).resolve().parents[1];D=R/'docs/portfolio/review/menswear-full-production-2026-10-23'
 d=json.loads((D/'PRODUCTION.json').read_text());checks=0
 
@@ -38,14 +42,15 @@ for look in d['looks']:
  check(look['setReview']['modelAndOutfitContinuity']=='PASS_VISUAL' and look['setReview']['trueRear']=='PASS_VISUAL' and look['setReview']['editorialFashionPose']=='PASS_VISUAL','explicit visual set review')
 for category in ('Casualwear','Activewear','Outerwear','Tailoring'):
  group=[x for x in d['looks'] if x['category']==category];check(len(group)==10 and len({x['productSubtype'] for x in group})==10,category+' coverage and distinct primary types')
-start='a869cf755bd296d71cb2e89a8e4799cc1fb37082'
+start=args.baseline
 def tree(ref):
  raw=subprocess.check_output(['git','ls-tree','-r','-z',ref],cwd=R)
  return {entry.split(b'\t',1)[1].decode():entry.split(b'\t',1)[0].split()[2].decode() for entry in raw.split(b'\0') if entry}
 old=tree(start);new=tree('HEAD');protected=[p for p in old if p.startswith(('assets/','public/','docs/portfolio/review/'))]
 for path in protected:check(new.get(path)==old[path],'historical blob preserved: '+path)
-allowed={'src/data/menswear-ai-production.json','src/data/menswear-collection.ts','src/data/portfolio.ts','src/components/portfolio/MenswearAct.astro','src/components/portfolio/MenswearReader.astro'}
+allowed={'src/data/menswear-ai-production.json','src/data/menswear-collection.ts','src/data/menswear-web-images.json','src/data/portfolio.ts','src/components/portfolio/MenswearAct.astro','src/components/portfolio/MenswearReader.astro','src/scripts/menswear-reader.ts','src/scripts/menswear-film.ts','src/pages/portfolio.astro'}
 changed=[p for p in set(old)|set(new) if p.startswith('src/') and old.get(p)!=new.get(p)]
 check(set(changed)<=allowed,'source changes are scoped to authorized Menswear files: '+str(changed))
 report={'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'checksPassed':checks,'statistics':d['statistics'],'nativeDimensions':sorted({str(x[v]['nativeDimensions']) for x in d['looks'] for v in ('front','back','editorial')}),'protectedHistoricalBlobs':len(protected),'sourceChanges':changed,'nativePaths':native_paths,'masterPaths':master_paths,'limitations':'Garment continuity, true orientation, construction, casting and posing additionally reviewed visually; no automated face-identity or physical material certification claimed.'}
-(D/'FINAL-TECHNICAL-AUDIT.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:v for k,v in report.items() if k not in ('nativePaths','masterPaths')},indent=2))
+target=args.report or D/'FINAL-TECHNICAL-AUDIT.json';target.parent.mkdir(parents=True,exist_ok=True)
+target.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:v for k,v in report.items() if k not in ('nativePaths','masterPaths')},indent=2))

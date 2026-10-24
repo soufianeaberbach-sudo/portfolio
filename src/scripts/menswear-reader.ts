@@ -153,6 +153,10 @@ export function initMenswear(root:HTMLElement){
   viewport.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!reader.hasAttribute('data-inspect'))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(distance)zoom=clamp(zoom*d/distance,1,5);distance=d;}else{x+=e.clientX-lastX;y+=e.clientY-lastY;}lastX=e.clientX;lastY=e.clientY;draw();});
   const release=(e:PointerEvent)=>{const start=pointers.get(e.pointerId);if(start&&!reader.hasAttribute('data-inspect')&&Math.abs(e.clientX-start.x)>45)select(requestedView+(e.clientX<start.x?1:-1));pointers.delete(e.pointerId);distance=0;const left=[...pointers.values()][0];if(left){lastX=left.x;lastY=left.y;}};viewport.addEventListener('pointerup',release);viewport.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);distance=0;});
   reader.addEventListener('keydown',e=>{if((e.target as HTMLElement).closest('a,input,textarea,select'))return;
+   if(!reader.hasAttribute('data-inspect')&&(e.key==='PageDown'||e.key==='PageUp')){
+    const next=reader.querySelector<HTMLAnchorElement>(`[data-mw-garment="${e.key==='PageDown'?'next':'previous'}"]`);
+    if(next){e.preventDefault();next.click();return;}
+   }
    if(reader.hasAttribute('data-inspect')){if(e.key.startsWith('Arrow')){e.preventDefault();x+=e.key==='ArrowLeft'?50:e.key==='ArrowRight'?-50:0;y+=e.key==='ArrowUp'?50:e.key==='ArrowDown'?-50:0;draw();}else if(['+','=','-','Home','0'].includes(e.key)){e.preventDefault();if(e.key==='Home'||e.key==='0'){zoom=1;x=y=0;}else zoom=clamp(zoom*(e.key==='-'?1/1.4:1.4),1,5);draw();}}
    else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();select(requestedView+(e.key==='ArrowRight'?1:-1));}
   });

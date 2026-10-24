@@ -2,7 +2,9 @@
 import assert from'node:assert/strict';import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';import{mkdirSync,readFileSync}from'node:fs';
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',b=await chromium.launch();let checks=0;const unblock=[];const check=(ok,label)=>{assert(ok,label);checks++;};
 const opening=JSON.parse(readFileSync('src/data/menswear-ai-production.json','utf8')).selectedCompleteLooks.find(x=>x.category==='m-rtw'&&x.position===1);
-const sourcePattern=opening?'**'+opening.views.front.src.replace('/front.png','/front*'):'**/pexels-16711124*';
+const delivery=JSON.parse(readFileSync('src/data/menswear-web-images.json','utf8')).images;
+const optimized=opening&&delivery[opening.views.front.src];
+const sourcePattern=optimized?(url=>url.pathname===opening.views.front.preview||url.pathname.startsWith(optimized.src.replace(/-1800\.webp$/,'-'))):opening?'**'+opening.views.front.src.replace('/front.png','/front*'):'**/pexels-16711124*';
 mkdirSync('.qa-director/photo-final',{recursive:true});
 try{for(const[width,height]of[[1440,900],[390,844]]){
  const c=await b.newContext({viewport:{width,height}});await installFonts(c);let release;const gate=new Promise(r=>{release=r;unblock.push(r);});

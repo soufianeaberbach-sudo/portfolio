@@ -34,7 +34,7 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
     </div></div>
     <section class="mw-archive" data-mw-archive aria-labelledby={`${r.id}-archive-title`}>
      <header><h3 id={`${r.id}-archive-title`}>The {r.direction.name.toLowerCase()} edit.</h3><p class="label">Ten looks / <span data-mw-rail-hint>Explore →</span></p></header>
-     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Swipe or use arrow keys to explore.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={s.views[0]?.image??s.cover} crop={s.views[0]?.crop??'whole'} sizes="(max-width:699px) 52vw, (max-width:1400px) 21vw, 310px"/><span class="label">{String(i+1).padStart(2,'0')}</span></a></li>)}</ol>
+     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Swipe or use arrow keys to explore.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={s.views[0]?.image??s.cover} crop={s.views[0]?.crop??'whole'} sizes="(max-width:699px) 52vw, (max-width:1400px) 21vw, 310px"/><span class="mw-look-caption"><span class="label">{String(i+1).padStart(2,'0')} / {s.title??s.id}</span>{menswearConcept(s.id)&&<span class="mw-look-product">{menswearConcept(s.id)!.product}</span>}</span></a></li>)}</ol>
      <p class="mw-provenance">Original AI fashion concepts are identified in their viewers. Preserved historical photographs retain their source credits. Material and construction descriptions express design intent.</p>
      <a class="mw-handoff" href={r.direction.next.startsWith('m-')?`#menswear/${r.direction.next}`:`#${r.direction.next}`} data-nav><span class="label">{index===3?'Next chapter':'Next world'}</span><span>{index===3?'Pattern Development':ranges[index+1].direction.name} ↗</span></a>
     </section>
@@ -50,6 +50,5 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
 </section>
 
 <style>
-/* Deliberate photographic apertures retain each native white studio field and textile colour. */
-.mw-camera [data-mw-ai="true"] > [data-door-source],.mw-archive [data-mw-ai="true"] :global(.mw-photo){outline:1px solid #e6e6e3;outline-offset:-1px}
+.mw-look-caption{display:block;width:100%;line-height:1.5}.mw-look-caption>.label{font-size:10px}.mw-look-product{display:block;font-size:11px;margin-top:5px;color:var(--muted)}
 </style>
