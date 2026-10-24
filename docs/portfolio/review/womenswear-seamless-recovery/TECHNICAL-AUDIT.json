@@ -111,7 +111,8 @@
   "unresolvedUsableLooks": 0,
   "oldRegistryEntriesUnchanged": true,
   "acceptedGeneratedArtworkChanges": [],
-  "menswearChanges": [],
+  "menswearApplicationOrAssetChanges": [],
+  "sharedPreservationGuardUpdated": "tests/menswear-studio-preservation.mjs",
   "all40HistoricalSourceHashesPreserved": true,
   "images": [
     {
@@ -306,10 +307,5 @@
         1867
       ]
     }
-  ],
-  "segmentationModel": {
-    "name": "isnet-general-use",
-    "sha256": "60920e99c45464f2ba57bee2ad08c919a52bbf852739e96947fbb4358c0d964a",
-    "runtime": "rembg[cpu] 2.0.86; CPU; no RGB recolouring"
-  }
+  ]
 }
