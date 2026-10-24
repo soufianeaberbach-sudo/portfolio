@@ -6333,11 +6333,41 @@
         "approval": "AUTONOMOUS_PRODUCTION_AUTHORIZED; FINAL_PERSONAL_ACCEPTANCE_PENDING",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1750007,
+        "nativeMode": "RGB",
+        "sha256": "b8d7b9da0685d42d7724ba6a5cd65995765972b25ee19c11ee4f9fe9a5cf4ae3",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-7adcb983-ee8e-4e74-9b03-88dbbcf74590.png",
+        "generatedAt": "2026-10-24T00:19:13.905797+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-08-front.txt",
+        "promptSHA256": "a9c8d91f0711b751228ee1618c64df821c16b24999805785e36f5fc49e8453f9",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/front.png",
+        "exportSHA256": "aaeab8cd58190cb3bf409d851ce37572b80dca6a6ac5d89cf6a9b30520ca8d06",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/front-600.webp",
+        "previewSHA256": "9e281c65f28f0f681db3167e9f9bce8627bcdc1bb5dd30022df5ba6c9ed17c0a",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "White formal point-collar shirt with burgundy tie, charcoal high-rise double-pleated trousers with side adjusters and cuffs, black penny loafers. Clean woven behavior, credible tailoring details, stylish natural young-adult casting and complete Front framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -7820,8 +7850,15 @@
       "key": "mw-r2-tailoring-08:front",
       "look": "mw-r2-tailoring-08",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:19:13.910707+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-08:back",
@@ -8656,6 +8693,15 @@
       "at": "2026-10-24T00:19:05.334357+00:00",
       "notes": "Same adult model, oat soft linen two-button jacket, white band-collar shirt, cuffed matching trousers and tan suede loafers. Natural diagonal step with one hand in trouser pocket; believable linen creases, clear outfit and full-length white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-08",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:19:13.910707+00:00",
+      "notes": "White formal point-collar shirt with burgundy tie, charcoal high-rise double-pleated trousers with side adjusters and cuffs, black penny loafers. Clean woven behavior, credible tailoring details, stylish natural young-adult casting and complete Front framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8668,7 +8714,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 33,
-    "acceptedActivePhotographs": 104,
+    "acceptedActivePhotographs": 105,
     "incompleteLooks": 7,
     "completedMasters": 33,
     "unresolvedViews": [
@@ -8679,7 +8725,6 @@
       "mw-r2-tailoring-06:editorial",
       "mw-r2-tailoring-07:back",
       "mw-r2-tailoring-07:editorial",
-      "mw-r2-tailoring-08:front",
       "mw-r2-tailoring-08:back",
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:front",
