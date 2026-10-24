@@ -23,27 +23,40 @@ def request(path,method='GET'):
 
 class Page(HTMLParser):
     def __init__(self):
-        super().__init__();self.readers={};self.current=None;self.doors=[];self.films=[]
+        super().__init__();self.readers={};self.current=None;self.doors=[];self.films=[];self.actors=[];self.actor=None;self.title=False
     def handle_starttag(self,tag,attrs):
         a=dict(attrs)
         if 'data-mw-film' in a:self.films.append(a['data-mw-film'])
         if 'data-mw-archive-door' in a:self.doors.append(a['data-mw-archive-door'])
+        if 'data-mw-actor' in a:
+            self.actor={'key':a['data-mw-actor'],'look':a['data-open-subject'],'category':self.films[-1]};self.actors.append(self.actor)
         if tag=='article' and ('data-mw-reader' in a or 'data-ww-reader' in a):
-            self.current=a['data-subject'];self.readers[self.current]={'category':a['data-of'],'ai':a.get('data-ai-concept'),'images':[],'lookLinks':[]}
+            self.current=a['data-subject'];self.readers[self.current]={'category':a['data-of'],'ai':a.get('data-ai-concept'),'name':'','images':[],'lookLinks':[]}
+        if self.current and tag=='h3':self.title=True
+        if self.actor is not None and tag=='img':self.actor['src']=a.get('src')
         if self.current and tag=='img':self.readers[self.current]['images'].append(a.get('src'))
         if self.current and 'data-mw-garment' in a:self.readers[self.current]['lookLinks'].append(a.get('href'))
     def handle_endtag(self,tag):
         if tag=='article':self.current=None
+        if tag=='a':self.actor=None
+        if tag=='h3':self.title=False
+    def handle_data(self,text):
+        if self.current and self.title:self.readers[self.current]['name']+=text
 
 status,headers,body=request('/portfolio/');assert status==200
 page=Page();page.feed(body.decode())
 assert page.films==['m-streetwear','m-activewear','m-rtw','m-tailoring']
 assert len(page.doors)==40 and len(set(page.doors))==40
 assert set(page.doors)=={x['id'] for x in catalog}
+by_id={x['id']:x for x in catalog}
+for actor in page.actors:
+    look=by_id[actor['look']]
+    assert actor['category']==look['category'] and actor['src']==delivery[look['views']['front']['src']]['src'],actor
+assert len(page.actors)==21
 selected=[]
 for look in catalog:
     r=page.readers[look['id']]
-    assert r['category']==look['category'] and r['ai']=='true' and len(r['lookLinks'])==2,look['id']
+    assert r['category']==look['category'] and r['ai']=='true' and r['name'].strip()==look['title'] and len(r['lookLinks'])==2,look['id']
     expected=[delivery[look['views'][v]['src']]['src'] for v in ('front','back','editorial')]
     assert r['images']==expected,(look['id'],r['images'])
     selected.extend(delivery[look['views'][v]['src']]['exports'][-1] for v in ('front','back','editorial'))
@@ -69,7 +82,7 @@ with ThreadPoolExecutor(max_workers=6) as pool:images=list(pool.map(verify_image
 with ThreadPoolExecutor(max_workers=6) as pool:masters=list(pool.map(verify_master,catalog))
 report={'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'url':urljoin(args.base,'/portfolio/'),
     'htmlSHA256':hashlib.sha256(body).hexdigest(),'httpStatus':status,'cfRay':headers.get('cf-ray'),
-    'categories':page.films,'featuredLooks':40,'selectedViewsMappedAndByteVerified':len(images),'mastersAvailable':len(masters),
+    'categories':page.films,'featuredLooks':40,'cinematicActorBindingsVerified':len(page.actors),'selectedViewsMappedAndByteVerified':len(images),'mastersAvailable':len(masters),
     'historicalSubjectsWithExactSourcePreserved':len(historical),'womenswearAIIdentitiesAndImagesPreserved':len(women),
     'imageFiles':images,'masters':masters,'method':'All 120 live delivery files downloaded and SHA256 matched; all forty live masters checked by HEAD. Master/native decoding and hashes additionally audited locally and in Git. No form submissions or remote mutations.'}
 args.report.parent.mkdir(parents=True,exist_ok=True);args.report.write_text(json.dumps(report,indent=2)+'\n')
