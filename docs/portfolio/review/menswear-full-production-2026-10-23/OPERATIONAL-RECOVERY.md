@@ -8,3 +8,7 @@ No image-generation refusal or provider error has occurred in the production att
 - Remote verification is repeated against the final selected native and master inventories, including any earlier receipt that skipped a non-materialized local path.
 
 - A managed runtime restart interrupted an in-flight six-request image batch. Five genuine native outputs survived in `/workspace/generated_images` and were recovered, visually inspected and registered without regeneration: Activewear 06 Back/Editorial, 07 Back/Editorial and 08 Front. Activewear 09 Front had no recoverable output and is retried as a runtime interruption, not a provider safety refusal. The Git checkpoint and production manifest survived intact.
+
+- An initial reader smoke run timed out after the earlier preview process was lost during the managed runtime restart. A fresh production build and preview resolved it; direct new-concept routes and three-view switching then passed. This was not an image-generation failure or a demonstrated router defect.
+
+- The final preview command initially omitted the supported telemetry-disable setting used by the build. Preview exited before opening port 4350, so two first browser invocations reported connection refused. Preview was restarted with `ASTRO_TELEMETRY_DISABLED=1`; browser suites are rerun only after confirming the server is listening. These setup failures are not counted as successful browser checks.

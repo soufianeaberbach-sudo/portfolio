@@ -5,7 +5,7 @@
   "executionAuthorization": "Latest owner instruction authorizes all forty looks, all views, autonomous selection, category mapping and working-branch integration without intermediate approvals. No merge/deploy.",
   "taxonomyAuthorized": true,
   "ownerPersonalArtisticAcceptance": "PENDING",
-  "currentPass": 1,
+  "currentPass": 3,
   "passes": {
     "1": "PRIMARY_PRODUCTION",
     "2": "INCOMPLETE_RECOVERY",
@@ -9597,5 +9597,27 @@
     "completedMasters": 40,
     "unresolvedViews": [],
     "failedGenerationAttempts": 3
-  }
+  },
+  "passResults": [
+    {
+      "pass": 1,
+      "stage": "PRIMARY_PRODUCTION",
+      "completedAt": "2026-10-24T00:27:17.093413+00:00",
+      "looks": 40,
+      "selectedViews": 120,
+      "unresolvedViews": []
+    },
+    {
+      "pass": 2,
+      "stage": "INCOMPLETE_RECOVERY",
+      "completedAt": "2026-10-24T00:27:17.093413+00:00",
+      "result": "All 120 required views present after primary production, including recovered interrupted Front and corrected shoe-detail candidates. No further generation needed; accepted images protected."
+    },
+    {
+      "pass": 3,
+      "stage": "FINAL_AUDIT",
+      "startedAt": "2026-10-24T00:27:17.093413+00:00",
+      "result": "Technical, remote integrity and browser audit in progress; results recorded in dedicated reports."
+    }
+  ]
 }
