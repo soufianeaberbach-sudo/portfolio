@@ -5504,7 +5504,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1731614,
+        "nativeMode": "RGB",
+        "sha256": "7ef756efb7c30b0352e87fcb27ce1c18aa477cc5276020bcee9e71e698733c36",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-3af46c0d-b4ce-4e97-8c28-264966d83175.png",
+        "generatedAt": "2026-10-24T00:13:19.220072+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-01-editorial.txt",
+        "promptSHA256": "72274aee5ba96d03b290d4d24f93c17a211897a03632831af203a443b54ae136",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/editorial.png",
+        "exportSHA256": "5101e49b235d9e9f765ac6e4f80762f04ccbbda65a3969c09df5e291ec77caaf",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-01/editorial-600.webp",
+        "previewSHA256": "1b48d84b92a5317e676042b9153a4d7a78b91d6613c690ce3e6a7096124b8506",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same brown wavy-haired adult model, navy two-button notch-lapel suit, pale blue open-neck shirt and brown Derby shoes. Natural forward step and cuff adjustment; full head and footwear; coherent wool drape and white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7192,8 +7224,15 @@
       "key": "mw-r2-tailoring-01:editorial",
       "look": "mw-r2-tailoring-01",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:13:19.223621+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-02:front",
@@ -8069,6 +8108,15 @@
       "at": "2026-10-24T00:09:14.985976+00:00",
       "notes": "Relaxed slate-blue wool-viscose suit clearly distinct from regular suit: broad soft shoulder, single lower button, wide notch lapel, jetted hips and wide straight full-length trousers. White fine crew knit and black derbies create contemporary occasion; natural young-adult casting and credible woven fall.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-01",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:13:19.223621+00:00",
+      "notes": "Same brown wavy-haired adult model, navy two-button notch-lapel suit, pale blue open-neck shirt and brown Derby shoes. Natural forward step and cuff adjustment; full head and footwear; coherent wool drape and white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-01/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8081,12 +8129,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 30,
-    "acceptedActivePhotographs": 93,
+    "acceptedActivePhotographs": 94,
     "incompleteLooks": 10,
     "completedMasters": 30,
     "unresolvedViews": [
       "mw-r2-tailoring-01:back",
-      "mw-r2-tailoring-01:editorial",
       "mw-r2-tailoring-02:back",
       "mw-r2-tailoring-02:editorial",
       "mw-r2-tailoring-03:back",
