@@ -6706,7 +6706,39 @@
         "reviewNotes": "Dusty-olive V-neck waistcoat and matching pleated cuffed trousers over ivory open-neck shirt, brown Derby shoes. Six-button waistcoat with lower button unfastened, two welt pockets and convincing shaping. Natural adult model, full-length commercial Front, neutral white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1813659,
+        "nativeMode": "RGB",
+        "sha256": "14bae2cbce2a4b85589bcec459fe0fb1af3277f981b4cef42867d795986237d5",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-d61233c4-9b09-4ba2-8163-0dd04123779e.png",
+        "generatedAt": "2026-10-24T00:24:45.610805+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-09-back.txt",
+        "promptSHA256": "e2c31212f398ef9f4749e0743ace9ce76d32b5105085832c31f37c121c6da520",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-09/back.png",
+        "exportSHA256": "d9ed26ea842cf9fea41f6c5354cf958712c59b12a84bcfd2d11f6c740fa8e5a8",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-09/back-600.webp",
+        "previewSHA256": "6b2e492da6ccfeda7282fed83cd115c0f32a2d73177556a60d8a7a0c4b0d4740",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear with same swept brown hair, olive waistcoat and cuffed trousers, ivory long-sleeve shirt and brown Derby shoes. Rear waistcoat centre seam, shaping darts and adjustable buckle strap; coherent rear trouser welt pockets and full-length framing.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -8260,8 +8292,15 @@
       "key": "mw-r2-tailoring-09:back",
       "look": "mw-r2-tailoring-09",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:24:45.615071+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-09:editorial",
@@ -9156,6 +9195,15 @@
       "at": "2026-10-24T00:24:24.907764+00:00",
       "notes": "Genuine rear; same brown swept hair, chocolate suit, ivory shirt collar/cuffs and brown Oxford shoes. Balanced rear jacket, centre-back seam and side-body shaping, natural sleeve pitch and straight woven trouser drape. Complete framing and neutral studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-09",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:24:45.615071+00:00",
+      "notes": "True rear with same swept brown hair, olive waistcoat and cuffed trousers, ivory long-sleeve shirt and brown Derby shoes. Rear waistcoat centre seam, shaping darts and adjustable buckle strap; coherent rear trouser welt pockets and full-length framing.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9168,14 +9216,13 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 36,
-    "acceptedActivePhotographs": 113,
+    "acceptedActivePhotographs": 114,
     "incompleteLooks": 4,
     "completedMasters": 36,
     "unresolvedViews": [
       "mw-r2-tailoring-06:back",
       "mw-r2-tailoring-08:back",
       "mw-r2-tailoring-08:editorial",
-      "mw-r2-tailoring-09:back",
       "mw-r2-tailoring-09:editorial",
       "mw-r2-tailoring-10:back",
       "mw-r2-tailoring-10:editorial"
