@@ -6622,7 +6622,39 @@
         "reviewNotes": "White formal point-collar shirt with burgundy tie, charcoal high-rise double-pleated trousers with side adjusters and cuffs, black penny loafers. Clean woven behavior, credible tailoring details, stylish natural young-adult casting and complete Front framing.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1719189,
+        "nativeMode": "RGB",
+        "sha256": "deccc9e512d0ed9599a9ba61ec3db9e73bccd81b513eaae4c9591ec1792b6fef",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5715c844-6b1a-40d2-b142-173cc987eb3a.png",
+        "generatedAt": "2026-10-24T00:24:51.490356+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-08-back.txt",
+        "promptSHA256": "c667e2e7883da43d7fce7534d30cab0217b035414192af9152b78ed3e25e1773",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/back.png",
+        "exportSHA256": "424bc3f52d661775e227b5a2f224dd13d4bb28662f18237e1227324b3d8d7562",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/back-600.webp",
+        "previewSHA256": "e74aae67c27269547375c7604e6e77e93877214bb9a30203924a0dd7b07ffbc4",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear-facing same adult model, white formal shirt, charcoal trousers with side adjusters and cuffs, black loafers. Shirt yoke, sleeve plackets/cuffs, rear darts and two buttoned trouser welt pockets rendered coherently; neutral white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -8264,8 +8296,15 @@
       "key": "mw-r2-tailoring-08:back",
       "look": "mw-r2-tailoring-08",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:24:51.494137+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-08:editorial",
@@ -9204,6 +9243,15 @@
       "at": "2026-10-24T00:24:45.615071+00:00",
       "notes": "True rear with same swept brown hair, olive waistcoat and cuffed trousers, ivory long-sleeve shirt and brown Derby shoes. Rear waistcoat centre seam, shaping darts and adjustable buckle strap; coherent rear trouser welt pockets and full-length framing.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-09/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-08",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:24:51.494137+00:00",
+      "notes": "Genuine rear-facing same adult model, white formal shirt, charcoal trousers with side adjusters and cuffs, black loafers. Shirt yoke, sleeve plackets/cuffs, rear darts and two buttoned trouser welt pockets rendered coherently; neutral white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9216,12 +9264,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 36,
-    "acceptedActivePhotographs": 114,
+    "acceptedActivePhotographs": 115,
     "incompleteLooks": 4,
     "completedMasters": 36,
     "unresolvedViews": [
       "mw-r2-tailoring-06:back",
-      "mw-r2-tailoring-08:back",
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:editorial",
       "mw-r2-tailoring-10:back",
