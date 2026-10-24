@@ -5786,7 +5786,39 @@
         "reviewNotes": "Relaxed slate-blue wool-viscose suit clearly distinct from regular suit: broad soft shoulder, single lower button, wide notch lapel, jetted hips and wide straight full-length trousers. White fine crew knit and black derbies create contemporary occasion; natural young-adult casting and credible woven fall.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1796041,
+        "nativeMode": "RGB",
+        "sha256": "a746f3df8f7351806a67159e4db2bf8e4d526a0fd1d4e26072006e35eafe5c69",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-c2af958c-1584-4e80-82ff-49e7942cf218.png",
+        "generatedAt": "2026-10-24T00:15:28.302491+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-03-back.txt",
+        "promptSHA256": "52de91ffd329afe148980eef0caf379634a680e9037a31e1c9d55f1a28219e65",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-03/back.png",
+        "exportSHA256": "19533b987b8d9671063e32da44724871e70e2058605e21732c3e4d2eb7626ef6",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-03/back-600.webp",
+        "previewSHA256": "617fd639678f1037b5db63534ecc31fc7c31b4dee3126f17ebe0ae87c93967ea",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear with same wavy hair, slate-blue relaxed wool suit and black Derby shoes. Centre-back seam, double vents and sleeve cuff buttons; wide straight trouser rear drape, complete framing and neutral white background.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": {
         "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-v01-native.png",
         "nativeDimensions": [
@@ -7405,8 +7437,15 @@
       "key": "mw-r2-tailoring-03:back",
       "look": "mw-r2-tailoring-03",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:15:28.306446+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-03:editorial",
@@ -8283,6 +8322,15 @@
       "at": "2026-10-24T00:15:22.295135+00:00",
       "notes": "Same adult model and slate-blue relaxed single-button suit, white crew tee and black Derby shoes. Natural fashion step and hand in trouser pocket. Broad soft shoulder and wide trouser silhouette remain coherent; full head and footwear.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-03",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:15:28.306446+00:00",
+      "notes": "Genuine rear with same wavy hair, slate-blue relaxed wool suit and black Derby shoes. Centre-back seam, double vents and sleeve cuff buttons; wide straight trouser rear drape, complete framing and neutral white background.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8295,12 +8343,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 31,
-    "acceptedActivePhotographs": 97,
+    "acceptedActivePhotographs": 98,
     "incompleteLooks": 9,
     "completedMasters": 31,
     "unresolvedViews": [
       "mw-r2-tailoring-01:back",
-      "mw-r2-tailoring-03:back",
       "mw-r2-tailoring-04:front",
       "mw-r2-tailoring-04:back",
       "mw-r2-tailoring-04:editorial",
