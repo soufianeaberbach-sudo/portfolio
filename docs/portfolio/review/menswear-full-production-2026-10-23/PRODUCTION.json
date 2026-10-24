@@ -6139,11 +6139,41 @@
         "approval": "AUTONOMOUS_PRODUCTION_AUTHORIZED; FINAL_PERSONAL_ACCEPTANCE_PENDING",
         "provenance": "Original AI fashion concept / visual exploration; no physical manufacture or client authorship claimed"
       },
-      "front": null,
+      "front": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/front-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1572309,
+        "nativeMode": "RGB",
+        "sha256": "952a6347cd864a67e4b370a6031e88fab2e6b43dc6fa55f10a725620d970f783",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-556943d1-2e9f-437c-ab38-148bcd6bdf5b.png",
+        "generatedAt": "2026-10-24T00:17:33.665015+00:00",
+        "referenceInputs": [],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-06-front.txt",
+        "promptSHA256": "69166593983794893111df9a90a06e795a8e606a6f7b1009d3d098fa9d2b18f8",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/front.png",
+        "exportSHA256": "d8f0042a66b576a1ced5c7feee91765d80274bbcc68d79a255c76e40804dc97c",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-06/front-600.webp",
+        "previewSHA256": "fe6e7bc4ba1ae77fb73e9caab87a6af74745659ce46d4f2207e4a4e338036154",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Credible black evening tuxedo: shawl satin lapel, single-button jacket, white pleated-bib shirt, black bow tie and cummerbund, clean black trouser line and patent lace-up shoes. Natural commercial adult casting; complete head and shoes, balanced white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "back": null,
       "editorial": null,
       "master": null,
-      "status": "PLANNED",
+      "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration"
     },
@@ -7665,8 +7695,15 @@
       "key": "mw-r2-tailoring-06:front",
       "look": "mw-r2-tailoring-06",
       "view": "front",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:17:33.668193+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/front-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-06:back",
@@ -8516,6 +8553,15 @@
       "at": "2026-10-24T00:17:28.036830+00:00",
       "notes": "Chocolate three-piece woven suit with distinct five-button waistcoat, open two-button notch-lapel jacket, ivory shirt and muted blue tie. Cohesive trouser rise and waistcoat coverage, brown Oxford shoes, natural young-adult model, full-length commercial Front.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-05/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-06",
+      "view": "front",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:17:33.668193+00:00",
+      "notes": "Credible black evening tuxedo: shawl satin lapel, single-button jacket, white pleated-bib shirt, black bow tie and cummerbund, clean black trouser line and patent lace-up shoes. Natural commercial adult casting; complete head and shoes, balanced white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-06/front-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8528,7 +8574,7 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 33,
-    "acceptedActivePhotographs": 101,
+    "acceptedActivePhotographs": 102,
     "incompleteLooks": 7,
     "completedMasters": 33,
     "unresolvedViews": [
@@ -8536,7 +8582,6 @@
       "mw-r2-tailoring-04:editorial",
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-05:editorial",
-      "mw-r2-tailoring-06:front",
       "mw-r2-tailoring-06:back",
       "mw-r2-tailoring-06:editorial",
       "mw-r2-tailoring-07:front",
