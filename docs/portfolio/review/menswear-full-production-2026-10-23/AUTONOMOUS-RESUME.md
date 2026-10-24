@@ -1,0 +1,9 @@
+# Production handoff
+
+All 40 looks / 120 selected views / 40 masters have been produced and saved on `feat/menswear-ai-photography-regeneration`. Do not regenerate selected work without a documented visual defect. `PRODUCTION.json` is the authoritative selected-view registry and full queue, with original bytes, true dimensions, SHA256, prompts, reference inputs, selection notes and failures. Final technical, browser and remote reports accompany the review package.
+
+Latest owner authority allows autonomous selection and working-branch integration without intermediate approvals. Owner personal artistic acceptance remains pending; no merge or deployment is authorized. Preserve all historical media, prior AI experiments and source identities.
+
+Use `scripts/menswear-full-production.py` for protected per-view registration and set assembly, `scripts/menswear-full-batch.py` for serialized reviewed selections, `scripts/audit-menswear-full.py` for full integrity/preservation checks, and `scripts/verify-menswear-full-remote.py` for native/master remote byte verification. Mutations/checkpoints must remain sequential. Rebuild portable artifacts with `build-menswear-full-review.py` and `build-menswear-full-pdf.py`. Previous native/export folders remain active for reviewed reused files; never assume all selected files live in the latest folder.
+
+Build with `ASTRO_TELEMETRY_DISABLED=1`. Use the existing Playwright dependency and font fixtures. The current managed environment has Chromium under `/tmp/aberbach-pw-browsers`; shell network/browser access requires the authorized network grant. Keep the full public tree and original/corrected/full Menswear source folders materialized in the sparse checkout. The final report documents actual results rather than assuming that any earlier test run is current.

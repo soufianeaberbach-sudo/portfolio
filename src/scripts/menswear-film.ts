@@ -37,8 +37,34 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
  if(world==='m-streetwear'){
   const cream=fit(6311316),city=fit(8505243,compact?.44:.26),roomWindow:SourceWindow=viewWindow(30599804),room=fit(30599804,.5,1,.5,roomWindow),hero=fit(17303564),puffer=fit(26936522);
   if(!photo(30599804).dataset.mwSeam){
-   // Unknown replacement photography gets complete primary shots, never the old wall crop.
-   const id=p<.46?6311316:p<1.46?8505243:p<2.46?30599804:p<3.46?17303564:26936522;draw(id,fit(id));
+   // New full-length studio portraits retain the authored camera journey.
+   // Move photographic planes instead of borrowing the historical wall seam.
+   const cast=[6311316,8505243,30599804,17303564,26936522],i=Math.min(3,Math.floor(p)),t=ease(p-i);
+   if(p>=4)draw(cast[4],fit(cast[4]));
+   else if(t===0)draw(cast[i],fit(cast[i]));
+   else if(compact){
+    const left=fit(cast[i],.25,.47),right=fit(cast[i+1],.75,.47);
+    if(t<.5){
+     const q=t*2;draw(cast[i],mix(fit(cast[i]),left,q),undefined,false);
+     if(q>.02)draw(cast[i+1],fit(cast[i+1],.75,Math.max(.01,.47*q)),undefined,false);
+    }else{
+     const q=(t-.5)*2;
+     if(q<.98)draw(cast[i],fit(cast[i],.25,Math.max(.01,.47*(1-q))),undefined,false);
+     draw(cast[i+1],mix(right,fit(cast[i+1]),q),undefined,q>.95);
+    }
+   }else{
+    const left=fit(cast[i],.27,.86),right=fit(cast[i+1],.73,.86);
+    if(t<.3)draw(cast[i],mix(fit(cast[i]),left,t/.3));
+    else if(t<.7){
+     draw(cast[i],left,undefined,false);
+     const entering=fit(cast[i+1],.73+(1-ease((t-.3)/.4))*.65,.86);
+     draw(cast[i+1],entering,undefined,false);
+    }else{
+     const q=ease((t-.7)/.3);
+     if(q<1)draw(cast[i],{...left,x:left.x-w*q},undefined,false);
+     draw(cast[i+1],mix(right,fit(cast[i+1]),q),undefined,q>.95);
+    }
+   }
   }else{
   const wall={x:w*(compact?.92:.64),y:-h*.78,w:h*2.1*(1200/1680),h:h*2.1};
   if(p<=1){

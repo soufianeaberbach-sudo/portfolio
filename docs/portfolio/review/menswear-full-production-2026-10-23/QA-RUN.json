@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-24T00:40:46.344112+00:00",
+  "checks": {
+    "technicalIntegrity": 3840,
+    "aiIdentityAndCoverage": 571,
+    "contentAndLicensing": 207,
+    "photographyConfiguration": 23,
+    "productionBrowser": 786,
+    "navigationTouchAndHistory": 49,
+    "archiveKeyboard": 10,
+    "historicalAccess": 32,
+    "resizeReturn": 12,
+    "presentationSeeks": 264,
+    "delayedAndFailedImages": 16,
+    "sixViewportCapture": 103,
+    "portableReview": 379,
+    "coldCategoryNavigation": 40,
+    "eightWorldNativeContract": 590,
+    "realThreePanelAndAlpha": 498
+  },
+  "siteSmoke": {
+    "passed": 303,
+    "failed": 0
+  },
+  "reviewScreenshots": 42,
+  "nativeRemoteChecks": 120,
+  "masterRemoteChecks": 40,
+  "scope": "Actual results; final smoke supersedes old-label/old-count assertions. Main production browser behavior was exercised after aperture refinement and before the nonvisual publication-marker correction. Final capture/smoke verify the corrected marker build.",
+  "sourceSHA256": {
+    "src/components/portfolio/MenswearAct.astro": "96dc90bdeadb8097fe35d972e60477aac2188c181e5d1e59795eed18fdf9fb19",
+    "src/components/portfolio/MenswearReader.astro": "9a3f34f55dc7cda40e0c937a497877b31c115a1c889dea5849ac7c6eda4a65f4",
+    "src/data/menswear-collection.ts": "08447c4d26abcb12b4390ca8ee61f6ae6f7e805e6df35ca037af55a12f53a725",
+    "src/data/portfolio.ts": "a788b94f35e0aaf68bae12ec12484fa9c2f9376e754c22def2021f933657b7ea",
+    "src/data/menswear-ai-production.json": "a5e33a9b93cbdc32e4dbfb98a3ebb584d07f0f9d91aebc066ef08a3eb133369c"
+  },
+  "totalChecksPassed": 7723,
+  "finalizedAt": "2026-10-24T00:44:05.286230+00:00",
+  "integratedCatalogSHA256": "a5e33a9b93cbdc32e4dbfb98a3ebb584d07f0f9d91aebc066ef08a3eb133369c",
+  "sharedSourceIntegrity": "PASS: 108 historical source fingerprints, original photographic blobs and 71 independent AI routes (31 existing Womenswear / 40 Menswear). Assertions in this noninstrumented guard are additional to the counted total.",
+  "ciRecovery": {
+    "firstRun": 40046600010,
+    "firstCommit": "b376d6f9913f2c6f87b76cd7eb7417c54a1c6080",
+    "actualFailure": "Shared source-integrity test expected 139 routes but now there are 179. Original 108-source fingerprint is unchanged. Separate Menswear AI IDs were missing from test accounting.",
+    "localRecovery": "Updated shared accounting, kept original fingerprints/blob assertions intact, adapted disposable photography fixtures to current concept slot IDs and retained separate legacy route assertions. All shared source, eight-world, category-navigation and three-panel suites pass.",
+    "latestRunStatus": "NEW_PR_RUN_TO_BE_RECORDED_IN_PR; no remote CI success claimed here"
+  }
+}

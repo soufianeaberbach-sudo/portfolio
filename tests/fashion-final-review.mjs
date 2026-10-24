@@ -1,7 +1,7 @@
 /** Actual Portfolio review. Raw captures stay ignored; publish only the selected evidence. */
 import assert from'node:assert/strict';import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';import{mkdirSync,writeFileSync}from'node:fs';
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',out=process.env.PHOTO_REVIEW_DIR||'.qa-director/correction/final';mkdirSync(out,{recursive:true});const b=await chromium.launch(),results=[];
-const names={casualwear:'Casualwear',activewear:'Activewear',evening:'Occasionwear',swimwear:'Swimwear','m-streetwear':'Streetwear','m-activewear':'Activewear','m-rtw':'Casualwear','m-tailoring':'Tailoring & Outerwear'};
+const names={casualwear:'Casualwear',activewear:'Activewear',evening:'Occasionwear',swimwear:'Swimwear','m-streetwear':'Casualwear','m-activewear':'Activewear','m-rtw':'Outerwear','m-tailoring':'Tailoring'};
 try{for(const[width,height]of[[1440,900],[390,844],[1366,768],[1024,768],[768,1024],[430,932]].filter(v=>!process.env.PHOTO_REVIEW_WIDTH||String(v[0])===process.env.PHOTO_REVIEW_WIDTH)){
  const video=false,c=await b.newContext({viewport:{width,height},isMobile:width<500,hasTouch:width<500,...(video?{recordVideo:{dir:out,size:{width,height}}}:{})});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  for(const[cat,name]of Object.entries(names).filter(([id])=>!process.env.PHOTO_REVIEW_CATEGORY||id===process.env.PHOTO_REVIEW_CATEGORY)){

@@ -1,0 +1,20 @@
+# Operational recovery log
+
+No image-generation refusal or provider error has occurred in the production attempts recorded so far. Generation outcomes are counted in PRODUCTION.json, separately from these local engineering issues.
+
+- Initial Astro build encountered an unavailable telemetry config directory. Re-running with the supported `ASTRO_TELEMETRY_DISABLED=1` environment option succeeded. No application defect was concealed.
+- Historical licensing tests first found assets absent from the sparse checkout. Extending the sparse checkout restored tracked historical files; no historical bytes or Git records changed.
+- That checkout refresh also excluded earlier locally present generated files that were outside its configured paths. Casualwear 09 master assembly stopped because the selected Front export was absent locally. All native/export files were already committed and remotely preserved. The checkout was expanded to include original, corrected and full Menswear generated asset directories, restoring exact Git bytes. Assembly and the saved selection batch resumed without image regeneration. The local copies being absent was not counted as an image-generation failure.
+- Remote verification is repeated against the final selected native and master inventories, including any earlier receipt that skipped a non-materialized local path.
+
+- A managed runtime restart interrupted an in-flight six-request image batch. Five genuine native outputs survived in `/workspace/generated_images` and were recovered, visually inspected and registered without regeneration: Activewear 06 Back/Editorial, 07 Back/Editorial and 08 Front. Activewear 09 Front had no recoverable output and is retried as a runtime interruption, not a provider safety refusal. The Git checkpoint and production manifest survived intact.
+
+- An initial reader smoke run timed out after the earlier preview process was lost during the managed runtime restart. A fresh production build and preview resolved it; direct new-concept routes and three-view switching then passed. This was not an image-generation failure or a demonstrated router defect.
+
+- The final preview command initially omitted the supported telemetry-disable setting used by the build. Preview exited before opening port 4350, so two first browser invocations reported connection refused. Preview was restarted with `ASTRO_TELEMETRY_DISABLED=1`; browser suites are rerun only after confirming the server is listening. These setup failures are not counted as successful browser checks.
+
+- A preliminary production-browser run overlapped the final aperture-style rebuild and later timed out locating scene controls in a new viewport context. It is not counted as a passed final test. The built assets were then frozen and the complete suite rerun against the stable preview; only that final result is included in QA.
+
+- The site-wide smoke suite first reported 300 passed / two failed: its expected Menswear labels still used the superseded taxonomy, and its total-reader assertion assumed only the fifty historical subjects. The assertions now check the explicitly authorized four labels, fifty preserved historical readers and the independent completed AI readers separately. The chapter publication marker is also explicit about AI concept preview status. This is a contract migration, not removal of historical-access checks. The final rerun is recorded in QA.
+
+- PR CI run 40046600010 at b376d6f passed build/backend/domain/production guards and site smoke, then reproduced the shared source-integrity accounting mismatch (179 actual routes versus 139 expected). The forty Menswear AI identities are now accounted for separately; the original 108-source fingerprint and all original photo-blob assertions still pass. The related eight-world and isolated three-panel fixture identities were migrated without changing historical routes. Local recovery suites passed (590 eight-world, 40 category-navigation and 498 three-panel checks). No new image production or garment regeneration was needed.

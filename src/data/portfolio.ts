@@ -500,8 +500,8 @@ const swim = buildCategory('swimwear', '05', 'Swimwear',
    -------------------------------------------------------------------------- */
 
 const menswearCategories: MarketCategory[] = [
-  buildCategory('m-streetwear', '01', 'Streetwear',
-    'Hoodies, oversized layers, loose denim and street-styled outfits.', [
+  buildCategory('m-streetwear', '01', 'Casualwear',
+    'Everyday denim, jersey, knitwear, shirting and casual coordinated outfits.', [
       ['jersey/6', bothViews('a cropped hooded sweatshirt worn with relaxed joggers')],
       ['jersey/5', bothViews('a gathered jersey top worn with wide-leg trousers')],
     ]),
@@ -511,14 +511,14 @@ const menswearCategories: MarketCategory[] = [
       ['sport/6', bothViews('a short-sleeved performance top with cropped leggings')],
       ['sport/10', bothViews('a long-sleeved performance set with contrast side stripes')],
     ]),
-  buildCategory('m-rtw', '03', 'Casualwear',
-    'T-shirts, shirts, knitwear and informal outfits, with a small number of dressier references.', [
+  buildCategory('m-rtw', '03', 'Outerwear',
+    'Distinct jackets and coats across light shells, denim, leather, insulation and wool.', [
       ['woven/2', bothViews('a cropped shirt worn with wide-leg trousers')],
       ['woven/5', bothViews('a printed shirt-jacket worn with wide-leg trousers')],
       ['jersey/8', bothViews('an off-shoulder knit top worn with tailored trousers')],
     ]),
-  buildCategory('m-tailoring', '04', 'Tailoring & Outerwear',
-    'Suits, jackets, waistcoats and an overcoat. Photographs show appearance, not internal construction.', [
+  buildCategory('m-tailoring', '04', 'Tailoring',
+    'Suits, blazers, formal separates and evening tailoring. Proposed construction is not physical development evidence.', [
       ['jersey/9', bothViews('a belted jacket with a wide sleeve worn with tailored trousers')],
       ['jersey/4', bothViews('a funnel-neck peplum jacket worn with slim trousers')],
     ]),

@@ -1,0 +1,20 @@
+# Previous eight pilots — corrected direction assessment
+
+Assessment date: 23 October 2026. Reviewed actual generated Front / Back / Editorial masters at checkpoint `89d0b56793c6518b99e47848bb4ec3125f0486fc`. Historical source photographs were not creative references. All previous native files, rejected attempts, masters, manifests and Git history remain unchanged.
+
+Technical completion and owner artistic acceptance are separate. None of the previous eight has owner approval. The assessment below supersedes their creative fit with the corrected brief without rewriting their original production records.
+
+| Archived concept | Proposed fit | Product and construction assessment | Casting and disposition |
+|---|---|---|---|
+| Offset · mw26-streetwear-03 | Outerwear 04, trucker | Commercial boxy denim jacket, considered matching jeans. Back yoke/panels and hem tabs visible, genuine walking Editorial. | Natural young-adult short afro; suitable commercial casting. **Candidate for later owner review**, no automatic inclusion. |
+| Transit · mw26-streetwear-05 | Casualwear 06, cargo | Cargo is clearly primary; articulated knee and bellows distinguish the trouser. Before any retention, reconcile planned snap count with visible flap hardware across views. | Natural young-adult dark hair; suitable. **Candidate pending review and continuity reconciliation.** |
+| Airline · mw26-activewear-02 | Activewear 02, running | Lightweight singlet, split shorts, genuine racerback and rear zip; Editorial resembles controlled running. Good sport-specific distinction. | Credible athletic adult, stronger musculature than a very lean distance runner but not a reason alone to reject. **Candidate pending owner.** |
+| Baseline · mw26-activewear-04 | Activewear 04, court | Court polo/shorts, coordinated trim and suitable lateral action. Product believable with reasonable movement ease. | Natural brown waves and young commercial appearance. **Candidate pending owner.** |
+| Strata · mw26-rtw-02 | Casualwear 03, knit polo | Textured polo and soft trousers broadly fit. Four-button placket differs from original target and would need locking if retained. | Shaved head/moustache was deliberately imposed for differentiation. **Do not carry selected casting into corrected collection.** Garment idea may be independently reconsidered; new Grain Front uses no archived image input. |
+| Solstice · mw26-rtw-05 | Casualwear 08, linen co-ord | Credible linen drape and real rear box pleat. Fisherman sandals have visible toe windows; record precisely if retained. | Natural young-adult wavy red hair, no artificial modification apparent. **Candidate pending owner**; natural hair colour alone is not a rejection reason. |
+| Axis · mw26-tailoring-01 | Tailoring 03, relaxed suit | Useful relaxed wool suit proposition, twin vents and balanced three-view design. Keep fit/crease details under review. | Deliberately platinum buzz casting arose from forced differentiation. **Do not carry selected casting into corrected collection.** Preserve all technical views; no automatic regeneration or inclusion. |
+| Rainline · mw26-tailoring-04 | Outerwear 09, trench | Distinct below-knee eight-button trench, storm shield, belt and cuff straps. Editorial hand partly covers front storm flap; Front shows it clearly. | Natural young-adult shoulder-length hair may suit product. **Candidate pending owner**, who may prefer another length, trim or hair direction. |
+
+Six garment/casting combinations remain review candidates. Two selected castings conflict with the correction. This does not constitute an owner rejection of every component or approval of the other six. No archived photo is counted as an active corrected-collection image. No technically successful archived view is regenerated during this assessment.
+
+The two previously rejected Front attempts remain archived as rejected technical attempts. They are not quietly resurrected as owner-approved garments. If the owner later retains an archived concept, record the decision, corrected-category assignment and any required change before producing or selecting further images.

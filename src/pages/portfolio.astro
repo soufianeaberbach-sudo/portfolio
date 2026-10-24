@@ -879,6 +879,9 @@ const split = (statement: string, word: string) => {
          ---------------------------------------------------------------- */
       let openSubject: HTMLElement | null = null;
       let subjectReturnTo: HTMLElement | null = null;
+      // Menswear look-to-look browsing keeps the exhibition door that began
+      // that journey. Historical and Womenswear identities remain independent.
+      const menswearReturnDoors = new Map<string, HTMLElement>();
       let readerKeyboard = false;
       root.addEventListener('keydown', () => { readerKeyboard = true; });
       root.addEventListener('pointerdown', () => { readerKeyboard = false; });
@@ -888,7 +891,10 @@ const split = (statement: string, word: string) => {
          opened by a click that never moved the focus — and by a pasted URL,
          where there is no door at all and nothing to return to. */
       for (const door of root.querySelectorAll<HTMLElement>('[data-open-subject]')) {
-        door.addEventListener('click', () => { subjectReturnTo = door; });
+        door.addEventListener('click', () => {
+          subjectReturnTo = door;
+          if (door.closest('[data-mw-world]') && door.dataset.openSubject) menswearReturnDoors.set(door.dataset.openSubject, door);
+        });
       }
 
       /* THE FRAME A DOOR STANDS FOR. A range door wraps its picture; a deck
@@ -1009,6 +1015,7 @@ const split = (statement: string, word: string) => {
           : null;
         if (!next) { closeSubject(); return; }
         if (openSubject === next) return;
+        const switchingMenswear = !!openSubject && !!mw?.owns(openSubject) && mw.owns(next);
         ww?.cancel();
         mw?.cancel();
         if (exiting === next) exiting = null;
@@ -1019,7 +1026,10 @@ const split = (statement: string, word: string) => {
         const active = document.activeElement as HTMLElement | null;
         // A direct/history photographic route has no door merely because another
         // garment's archive link still owns focus from a previous visit.
-        if (photographicReader(next) && subjectReturnTo?.dataset.openSubject !== id) subjectReturnTo = null;
+        if (photographicReader(next) && subjectReturnTo?.dataset.openSubject !== id) {
+          const origin = mw?.owns(next) && id ? menswearReturnDoors.get(id) : null;
+          subjectReturnTo = origin?.isConnected ? origin : null;
+        }
         if (!subjectReturnTo && active && world!.contains(active) && active.matches('[data-open-subject]')
           && (!mw?.owns(next) || active.dataset.openSubject === id)) {
           subjectReturnTo = active;
@@ -1035,7 +1045,7 @@ const split = (statement: string, word: string) => {
            hero and the garment all showing through each other at the start. */
         const source = subjectReturnTo && document.contains(subjectReturnTo) ? frameOf(subjectReturnTo) : null;
         if (photographicReader(next)) {
-          photographicReader(next)!.enter(next, source && shown(source) && source.querySelector('img') ? source : null, reduced() || readerKeyboard);
+          photographicReader(next)!.enter(next, source && shown(source) && source.querySelector('img') ? source : null, reduced() || readerKeyboard || switchingMenswear);
         } else if (source && shown(source) && !reduced() && !readerKeyboard) {
           subjectMotion = next.animate(
             [{ clipPath: insetOf(source) }, { clipPath: 'inset(0% 0% 0% 0%)' }],
@@ -1453,6 +1463,11 @@ const split = (statement: string, word: string) => {
           const hash = link.getAttribute('href') ?? '';
           if (!hash.startsWith('#')) return;
           event.preventDefault();
+          if (link.hasAttribute('data-mw-garment') && openSubject && mw?.owns(openSubject)) {
+            const origin = subjectReturnTo ?? menswearReturnDoors.get(openSubject.dataset.subject!);
+            const target = hash.split('/')[2];
+            if (origin?.isConnected && target) menswearReturnDoors.set(target, origin);
+          }
           go(hash === '#portfolio-index' ? '' : hash);
           /* A contents rail names the thing it points at. Tech Packs and
              Pattern Development are one column each, so the URL addresses the

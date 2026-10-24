@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: historical pool plus separate AI identities
+
+179 !== 139
+
+    at file:///workspace/portfolio-production/tests/fashion-source-integrity.mjs:4:313
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 179,
+  expected: 139,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
