@@ -4711,7 +4711,39 @@
         "reviewNotes": "True rear retains same hair, silver-grey puffer, padded stand collar, logical horizontal body/sleeve baffles, modest loft, charcoal trousers and black boot heels. Quilting and fabric volume credible with no false thermal claim.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1781652,
+        "nativeMode": "RGB",
+        "sha256": "e9da8e8714b6df6e9de4a921b1954937cf8e77b91ec125863076569a404def7d",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5630ffbf-da0f-497a-ad7c-6684d2737f75.png",
+        "generatedAt": "2026-10-24T00:03:58.167693+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-07-editorial.txt",
+        "promptSHA256": "11f2071bc74006d405838b3069636f7e3a41769729c5efd60b06aa1c9bf66efd",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-07/editorial.png",
+        "exportSHA256": "0d29293a9ca0b5b45e0a9a3d102babba8a9471cee6e2cf2af524d9b02d4f5c24",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-07/editorial-600.webp",
+        "previewSHA256": "b93b3f026f37c6cb77121f0df00c3594f151e6f76dc0d7d034d6b4044f829396",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model and complete puffer outfit, burgundy knit, charcoal pants and black lug boots. Relaxed forward step and one trouser-pocket hand, open puffer with credible compressible baffles and full garment readability.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -6666,8 +6698,15 @@
       "key": "mw-r2-outerwear-07:editorial",
       "look": "mw-r2-outerwear-07",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:03:58.173040+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-08:front",
@@ -7553,6 +7592,15 @@
       "at": "2026-10-24T00:03:50.514494+00:00",
       "notes": "True rear retains same hair, silver-grey puffer, padded stand collar, logical horizontal body/sleeve baffles, modest loft, charcoal trousers and black boot heels. Quilting and fabric volume credible with no false thermal claim.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-07",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:03:58.173040+00:00",
+      "notes": "Same adult model and complete puffer outfit, burgundy knit, charcoal pants and black lug boots. Relaxed forward step and one trouser-pocket hand, open puffer with credible compressible baffles and full garment readability.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7565,13 +7613,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 26,
-    "acceptedActivePhotographs": 84,
+    "acceptedActivePhotographs": 85,
     "incompleteLooks": 14,
     "completedMasters": 26,
     "unresolvedViews": [
       "mw-r2-outerwear-06:back",
       "mw-r2-outerwear-06:editorial",
-      "mw-r2-outerwear-07:editorial",
       "mw-r2-outerwear-08:back",
       "mw-r2-outerwear-08:editorial",
       "mw-r2-outerwear-10:back",
