@@ -5277,7 +5277,39 @@
         "reviewNotes": "Camel wool overcoat shows brushed melton body, structured natural shoulder, wide notch lapel, three-button front, chest welt and lower flaps. Black roll-neck, deep indigo straight denim and polished black boots refined. Actual selected length reads below knee rather than target mid-calf; record this visible refinement for companions. Natural commercial adult casting, full framing.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1838754,
+        "nativeMode": "RGB",
+        "sha256": "66d9d39cd9898e937fecf24ce7e6351c9ea5e9e9daf092a7b1bcd83eb57d1c5b",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-97aae6be-02a2-4fd0-adec-4d243da001a7.png",
+        "generatedAt": "2026-10-24T00:07:33.615128+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-10-back.txt",
+        "promptSHA256": "719d30090ac2e30998091406318076a28aee0b3cb9d0b0aa8c026419da683c8c",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-10/back.png",
+        "exportSHA256": "a66e80794027d8a85ff74cccc572d7a653b6923c23f868c8262488e939d5b3de",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-10/back-600.webp",
+        "previewSHA256": "671c4a89e59c172d2db0b0a454051bfa0ddffe19edf44550c0eb60cca4635736",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "True rear, same brown waves, camel brushed wool overcoat, structured shoulder and centre-back seam/walking vent. Below-knee length matches selected Front, dark indigo straight denim and black boot heels unchanged.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -6936,8 +6968,15 @@
       "key": "mw-r2-outerwear-10:back",
       "look": "mw-r2-outerwear-10",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:07:33.619381+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-10:editorial",
@@ -7789,6 +7828,15 @@
       "at": "2026-10-24T00:07:14.083013+00:00",
       "notes": "Same recognizable adult, navy parka with two chest zips/lower flaps and hood, oat knit, slate cargos and brown boots. Controlled walking pose with lower pocket hand, natural coat movement, no hidden primary silhouette.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-08/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-10",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:07:33.619381+00:00",
+      "notes": "True rear, same brown waves, camel brushed wool overcoat, structured shoulder and centre-back seam/walking vent. Below-knee length matches selected Front, dark indigo straight denim and black boot heels unchanged.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-10/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7801,12 +7849,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 28,
-    "acceptedActivePhotographs": 88,
+    "acceptedActivePhotographs": 89,
     "incompleteLooks": 12,
     "completedMasters": 28,
     "unresolvedViews": [
       "mw-r2-outerwear-06:back",
-      "mw-r2-outerwear-10:back",
       "mw-r2-outerwear-10:editorial",
       "mw-r2-tailoring-01:front",
       "mw-r2-tailoring-01:back",
