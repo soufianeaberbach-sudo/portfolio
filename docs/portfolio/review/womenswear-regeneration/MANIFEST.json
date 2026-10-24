@@ -9539,6 +9539,41 @@
           "editorial"
         ],
         "status": "BLOCKED_PROVIDER_MODERATION_OR_INDEPENDENT_REFERENCE_UNAVAILABLE"
+      },
+      "recoveryPresentation": {
+        "sourceIdentity": "swimwear-ref-06",
+        "identity": "ww-recovery-swimwear-ref-06-v1",
+        "recordedUTC": "2026-10-24T13:30:26.570999+00:00",
+        "availableViews": [
+          "front"
+        ],
+        "threeViewComplete": false,
+        "method": "edited-existing",
+        "reviewNote": "Existing source recovered by background-only segmentation after image generation and tool retouch refusals. Original garment/model/pose RGB retained, including fine straps, ties, hair, fingers and feet. Soft minimal contact shadow; full silhouette reviewed on seamless white. Front/primary only; no missing view invented.",
+        "sourceSHA256": "81679f869d3c5289f4b7d1c38cd159eec39a90fe469a49b53a9552e5dad7322a",
+        "outputs": {
+          "front": {
+            "inputPath": ".qa-director/seamless-mask/swimwear-ref-06-front.png",
+            "inputSHA256": "ad57ba074eb0e1a9ddb5d52908b678b39c1bfdce6d8af6e36f5b0f41bb64c55f",
+            "nativeAsset": "/portfolio/recovery/ww-recovery-swimwear-ref-06-v1/front-native.png",
+            "nativeSHA256": "ad57ba074eb0e1a9ddb5d52908b678b39c1bfdce6d8af6e36f5b0f41bb64c55f",
+            "nativeDimensions": [
+              1400,
+              1867
+            ],
+            "nativeMode": "RGBA",
+            "exportSHA256": "857bcf4cbd643412dc138c304ae12ca7238b77c3e6942ae18f29467ae5b77a5f",
+            "uniformScale": 1.3608247422680413,
+            "offset": [
+              -76,
+              56
+            ],
+            "resampled": true,
+            "nativeHighResolutionClaim": false
+          }
+        },
+        "ownerArtisticApproval": false,
+        "integratedInBranch": true
       }
     },
     {
