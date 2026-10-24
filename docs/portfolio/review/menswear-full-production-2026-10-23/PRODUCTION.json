@@ -6742,12 +6742,34 @@
         "reviewNotes": "Same adult model, white formal shirt, burgundy tie, charcoal double-pleated cuffed trousers with side adjusters and black penny loafers. Stylish natural cuff adjustment and diagonal step; plausible arms/hands, coherent cloth and full-length studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-08/master.png",
+        "sha256": "7c29df610aa367a594625c1e9d624d70acc85ee3231384b6b931bab22aad47c4",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "selectedDesignRefinements": {
         "hem": "Shirt tail tucked; straight tailored trousers with turned-up cuffs"
+      },
+      "setReview": {
+        "at": "2026-10-24T00:26:30.520512+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
       }
     },
     {
@@ -9499,10 +9521,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 38,
+    "completedLooks": 39,
     "acceptedActivePhotographs": 119,
-    "incompleteLooks": 2,
-    "completedMasters": 38,
+    "incompleteLooks": 1,
+    "completedMasters": 39,
     "unresolvedViews": [
       "mw-r2-tailoring-10:back"
     ],
