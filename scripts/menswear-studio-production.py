@@ -5,7 +5,7 @@ Model bytes are downloaded by rembg (public Apache-2.0 IS-Net); hashes are verif
 Never changes generation natives, historical normalized exports or old reports.
 """
 from pathlib import Path
-import argparse, datetime, hashlib, importlib.util, json, os, subprocess, time
+import argparse, datetime, hashlib, importlib.util, json, os, subprocess, time, urllib.request
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -40,6 +40,7 @@ def state():
         return json.loads(REGISTRY.read_text())
     return {'schemaVersion': 1, 'presentationVersion': VERSION,
         'baselineCommit': 'a806acf1d0da0df28b5e2c52aab468de577250ca',
+        'pipelineSHA256': {p.name: digest(p) for p in [Path(__file__),ROOT/'scripts/menswear-studio-composite.py',ROOT/'scripts/requirements-menswear-studio.txt']},
         'model': {'name': 'isnet-general-use', 'sha256': MODEL_HASH,
             'url': 'https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx',
             'upstream': 'https://github.com/xuebinqin/DIS', 'license': 'Apache-2.0'},
@@ -144,10 +145,20 @@ def checkpoint(look_id):
     paths=[str((PUBLIC/look_id).relative_to(ROOT)),str((EVIDENCE/look_id).relative_to(ROOT)),str(REGISTRY.relative_to(ROOT))]
     subprocess.run(['git','add','--',*paths],cwd=ROOT,check=True)
     subprocess.run(['git','commit','-q','-m','fix(menswear): preserve seamless studio set '+look_id],cwd=ROOT,check=True)
-    subprocess.run(['git','push','origin','HEAD:refs/heads/fix/menswear-seamless-studio-background'],cwd=ROOT,check=True)
+    subprocess.run(['git','-c','pack.window=0','push','origin','HEAD:refs/heads/fix/menswear-seamless-studio-background'],cwd=ROOT,check=True)
     sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     remote=subprocess.check_output(['git','ls-remote','origin','refs/heads/fix/menswear-seamless-studio-background'],cwd=ROOT,text=True).split()[0]
     assert sha==remote
+    look=next(x for x in state()['looks'] if x['id']==look_id)
+    # The remote master contains exactly the three corrected panels. Verify its
+    # real bytes at this immutable commit, in addition to Git's connectivity check.
+    req=urllib.request.Request('https://raw.githubusercontent.com/soufianeaberbach-sudo/portfolio/'+sha+'/'+look['master']['path'],headers={'User-Agent':'Aberbach-Studio-Correction/1.0'})
+    with urllib.request.urlopen(req,timeout=90) as response:
+        assert response.status==200
+        remote_hash=hashlib.sha256(response.read()).hexdigest()
+    assert remote_hash==look['master']['sha256'], 'remote master byte verification'
+    receipts=REVIEW/'receipts';receipts.mkdir(parents=True,exist_ok=True)
+    atomic(receipts/(look_id+'.json'),{'look':look_id,'commit':sha,'remoteMasterSHA256':remote_hash,'verified':True})
     print('REMOTE CHECKPOINT',look_id,sha,flush=True)
 
 
