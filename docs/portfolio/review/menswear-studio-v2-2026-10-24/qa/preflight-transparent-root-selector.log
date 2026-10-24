@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: page uses exact white
+    at check (file:///workspace/portfolio-studio-fix/tests/menswear-studio-capture.mjs:11:21)
+    at file:///workspace/portfolio-studio-fix/tests/menswear-studio-capture.mjs:21:266 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

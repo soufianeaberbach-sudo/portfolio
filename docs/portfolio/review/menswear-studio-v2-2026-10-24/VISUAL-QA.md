@@ -1,0 +1,21 @@
+# Visible assessment of the corrected Menswear presentation
+
+Reviewed actual full-resolution production-build screenshots after the native-size six-image trial, all 120 final views and eight targeted refinements. The historical live screenshots remain unchanged in `before/`. No fashion content, layout, typography or motion implementation was changed to achieve the effect.
+
+| Dimension | Actual visible finding and decision |
+| --- | --- |
+| Fashion hierarchy | In `local/m-streetwear-opening-1440x900.png`, the cream knit and denim remain the central fashion subject beside Presence; removal of the pale rectangle stops the photographic surface competing with the silhouette. The original title, numbering and model scale remain intact. |
+| Image integration | `WEBSITE-BEFORE-AFTER-desktop.png` shows the former vertical sides and floor patch disappearing into uninterrupted white. The 390-pixel Outerwear comparison shows the same result around burgundy sleeves and pale trousers. Hair, fingers and cuffs have continuous edges; no broad grey floor survives. In `local/three-view-master.png`, all three views share a continuous white field with no vertical panel joins. |
+| Composition | At 1024×768, Activewear's full figure and white shoes remain completely visible. At 1366×768, the running reader retains full body proportions and clear Front/Back/Editorial controls. No CSS crop, scale or positioning was changed. In the Dune Back reader at 768×1024, pale linen sleeves, hem, trouser cuffs and both shoes remain distinct against white. |
+| Rhythm | `local/m-streetwear-motion-390x844.png` captures both outgoing and incoming actors during the real camera handoff, with no two rectangular planes behind them. Desktop Outerwear's leather transition retains its existing timing and scale. The archive continues its horizontal editorial sequence; it has not become a replacement grid. |
+| Typography | Actual loaded project fonts retain the established title weight, monospace indexing and restrained product labels. The scope contains no font, copy or letter-spacing edits. In the 430-pixel tuxedo reader, provenance and control labels remain readable below the full-length figure. |
+| Interaction | Existing numbered scenes, ten-look rail, reader view switch, next/previous, keyboard close and return controls remain in their original places. The mobile archive exposes the following item naturally at its edge, preserving the horizontal exploration cue. Functional touch, history and focus checks are recorded separately, rather than inferred from screenshots. |
+| Mobile composition | In the actual 390×844 before/after comparison, the bomber, hands and complete footwear occupy the same locations, with a small grounding shadow replacing the grey floor rectangle. At 430×932, the moving tuxedo remains full-length with its pale cuffs intact. Archive and reader shots retain the existing mobile spacing and readable controls. |
+
+## Meaningful refinements following inspection
+
+The independent human mask exposed eight local weaknesses in the primary matte, principally white shoes, tracksuit panels, basketball piping and a tuxedo collar/cuff. These candidates were held before activation. Source / first matte / locally constrained matte comparisons in `refinement-details/` verify recovered original textile and sole details. All six affected final three-view sets were reinspected after refinement; unchanged views were reused, and rejected corrections remain archived. No subject RGB was painted or regenerated.
+
+Final visual decision: the corrected native and browser samples show continuous white surrounds, preserved pale fabrics, natural edges and understated grounding. Numerical whole-field checks support that decision across all 120 selections. The forty final three-view review plates remain available for closer inspection.
+
+Womenswear's desktop and mobile rendered screenshots are pixel-identical to the captured original live baseline: zero changed channels in 3,888,000 and 987,480 channels respectively. Native Safari/physical-device testing is outside this Chromium evidence; no claim is made for unexecuted platforms. Actual deployed verification follows only after the verified release is served.

@@ -1,0 +1,110 @@
+{
+  "checkedViews": 120,
+  "method": "Independent U2Net human foreground core versus final primary alpha; disagreements are review flags, not automatic foreground edits.",
+  "flags": [
+    {
+      "look": "mw-r2-casualwear-09",
+      "view": "back",
+      "independentCorePixelsAbsent": 6074,
+      "footRegionCorePixelsAbsent": 6065,
+      "bounds": [
+        357,
+        49,
+        660,
+        1413
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-activewear-02",
+      "view": "back",
+      "independentCorePixelsAbsent": 254,
+      "footRegionCorePixelsAbsent": 254,
+      "bounds": [
+        599,
+        1393,
+        648,
+        1402
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-activewear-05",
+      "view": "front",
+      "independentCorePixelsAbsent": 5241,
+      "footRegionCorePixelsAbsent": 670,
+      "bounds": [
+        363,
+        456,
+        656,
+        1425
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-activewear-05",
+      "view": "back",
+      "independentCorePixelsAbsent": 8232,
+      "footRegionCorePixelsAbsent": 976,
+      "bounds": [
+        335,
+        387,
+        667,
+        1322
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "back",
+      "independentCorePixelsAbsent": 2219,
+      "footRegionCorePixelsAbsent": 0,
+      "bounds": [
+        326,
+        52,
+        676,
+        974
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-activewear-09",
+      "view": "editorial",
+      "independentCorePixelsAbsent": 1835,
+      "footRegionCorePixelsAbsent": 22,
+      "bounds": [
+        381,
+        280,
+        676,
+        1425
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-outerwear-03",
+      "view": "back",
+      "independentCorePixelsAbsent": 8913,
+      "footRegionCorePixelsAbsent": 8907,
+      "bounds": [
+        364,
+        583,
+        687,
+        1415
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    },
+    {
+      "look": "mw-r2-tailoring-06",
+      "view": "back",
+      "independentCorePixelsAbsent": 1177,
+      "footRegionCorePixelsAbsent": 0,
+      "bounds": [
+        471,
+        176,
+        713,
+        802
+      ],
+      "decision": "REQUIRES_VISUAL_CLASSIFICATION"
+    }
+  ]
+}
