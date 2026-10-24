@@ -4428,7 +4428,39 @@
         "reviewNotes": "Earth-olive four-pocket field jacket with bellows chest flaps and lower double-entry pockets, covered centre zip/snap placket, adjustable cuffs and internal waist shaping. White Henley, black straight denim and sand suede boots coherent. Credible canvas body and natural young-adult casting.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "back": null,
+      "back": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-05/back-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1774752,
+        "nativeMode": "RGB",
+        "sha256": "39ffa705d665089e4562a70610cb54ba42c50c33d6c421cf89794179ed443e80",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-5135b7d5-ceb5-4f03-bf1a-002c5d3f0b13.png",
+        "generatedAt": "2026-10-24T00:03:20.353493+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-05/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-05-back.txt",
+        "promptSHA256": "c50e0e681632581035054ffe3330d6e06c93ef9a0036ac2ce082174693984af6",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-05/back.png",
+        "exportSHA256": "083c062a325c389fcf88b900ccab7354f7319bb88df97616060f11c1bb07b665",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-05/back-600.webp",
+        "previewSHA256": "f5eccea072857b8535248d94bca734e8f61c815ff793908d14093cda186c692b",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Genuine rear with same dark hair, olive canvas field jacket, rear yoke/centre seam, internal waist shaping and adjustable cuffs; black denim and sand suede boot heels. No front storage mistakenly repeated on back.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "editorial": null,
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
@@ -6457,8 +6489,15 @@
       "key": "mw-r2-outerwear-05:back",
       "look": "mw-r2-outerwear-05",
       "view": "back",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:03:20.357114+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-05/back-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-05:editorial",
@@ -7387,6 +7426,15 @@
       "at": "2026-10-24T00:02:59.608606+00:00",
       "notes": "Same model and sage Harrington, two-position stand collar, flap pockets, cream knit, navy chinos and white low-tops. Natural walking step and relaxed torso make commercially stylish Editorial without obscuring jacket.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-05",
+      "view": "back",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:03:20.357114+00:00",
+      "notes": "Genuine rear with same dark hair, olive canvas field jacket, rear yoke/centre seam, internal waist shaping and adjustable cuffs; black denim and sand suede boot heels. No front storage mistakenly repeated on back.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-05/back-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7399,11 +7447,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 25,
-    "acceptedActivePhotographs": 81,
+    "acceptedActivePhotographs": 82,
     "incompleteLooks": 15,
     "completedMasters": 25,
     "unresolvedViews": [
-      "mw-r2-outerwear-05:back",
       "mw-r2-outerwear-05:editorial",
       "mw-r2-outerwear-06:back",
       "mw-r2-outerwear-06:editorial",
