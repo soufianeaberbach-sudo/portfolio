@@ -1,6 +1,6 @@
 /** Actual rendered six-viewport evidence for the authorized forty-look AI collection. */
 import assert from'node:assert/strict';import fs from'node:fs/promises';import path from'node:path';import{chromium}from'playwright';import{installFonts,fontsReady}from'./fixtures/fonts.mjs';
-const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4350',out='docs/portfolio/review/menswear-full-production-2026-10-23/browser';await fs.mkdir(out,{recursive:true});
+const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4350',out=process.env.MENSWEAR_REVIEW_DIR||'docs/portfolio/review/menswear-full-production-2026-10-23/browser';await fs.mkdir(out,{recursive:true});
 const catalog=JSON.parse(await fs.readFile('src/data/menswear-ai-production.json','utf8')).selectedCompleteLooks;assert.equal(catalog.length,40);
 const worlds=['m-streetwear','m-activewear','m-rtw','m-tailoring'];const report={viewports:[],errors:[],checks:0};const check=(x,m)=>{assert(x,m);report.checks++};const b=await chromium.launch({args:['--no-sandbox']});
 try{for(const[width,height]of[[1440,900],[1366,768],[1024,768],[768,1024],[430,932],[390,844]]){

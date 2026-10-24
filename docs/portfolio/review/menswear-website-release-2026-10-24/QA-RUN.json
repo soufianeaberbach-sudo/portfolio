@@ -1,0 +1,52 @@
+{
+  "testedSourceCommit": "9b34b7721351af4554988005123a612383d39957",
+  "allLocalChecksPassed": true,
+  "countedChecks": {
+    "womenswear-route-origin": 16,
+    "garment-match-cut": 48,
+    "womenswear-continuity": 98,
+    "fashion-chapter-history": 20,
+    "fashion-eight-worlds": 590,
+    "fashion-navigation": 40,
+    "menswear-media-loading": 16,
+    "menswear-presentation-seeks": 264,
+    "menswear-resize-return": 12,
+    "menswear-historical-access": 32,
+    "menswear-archive-keyboard": 10,
+    "menswear-navigation": 49,
+    "menswear-production": 786,
+    "assetIntegrityAndPreservation": 4686,
+    "responsiveIntegrity": 1803,
+    "aiCollection": 571,
+    "menswearContent": 207,
+    "womenswearContent": 204,
+    "photographyConfig": 23,
+    "siteSmoke": 303,
+    "lookSequenceAndOrigin": 841,
+    "sixViewportCapture": 103
+  },
+  "totalCountedChecks": 10722,
+  "additionalSharedGuard": "108 original fingerprints and all original photographic Git blobs preserved; 71 independent AI routes correctly accounted for.",
+  "sourceSHA256": {
+    "src/components/portfolio/MenswearAct.astro": "c61b7409b5df03bf7d19b7e5a62d40d6cdfbf77eb604eff91272c77beea1b438",
+    "src/components/portfolio/MenswearReader.astro": "1713e7c62b32109c885e1976222f2df84d23d9605802c4b1d93f5be74f84f3e9",
+    "src/data/menswear-collection.ts": "93f8bd649ce3fe2d18d8683e0b13831061052c5f0ec5ae40145153474653ddc7",
+    "src/data/menswear-web-images.json": "69a012bacbef1e98b812ead0039724006979e0b711e526ddb13a4b5903237803",
+    "src/data/menswear-ai-production.json": "a5e33a9b93cbdc32e4dbfb98a3ebb584d07f0f9d91aebc066ef08a3eb133369c",
+    "src/scripts/menswear-reader.ts": "975373b16018f66dff5ac37f7d4b4d57d19ee0df386ec499aa661cbc0c184669",
+    "src/scripts/menswear-film.ts": "9543fc3fa521195f43834c4501bfd13aa812a78d24975addc6d639e7808060e3",
+    "src/pages/portfolio.astro": "3b59d46829622efb5551350bf7e680d06cbae4f5fe580d62dfdb82e6b4312364"
+  },
+  "sourceCI": {
+    "run": 40076247656,
+    "conclusion": "success"
+  },
+  "photographyGenerationPerformed": false,
+  "requiredNativeViews": 120,
+  "requiredMasters": 40,
+  "responsiveDeliveryExports": 240,
+  "originalPanelBytes": 410567799,
+  "fullWebPBytes": 26677152,
+  "byteReductionPercent": 93.5,
+  "limits": "Chromium emulation and font fixtures; real-device Safari and hardware projector rendering are unverified."
+}
