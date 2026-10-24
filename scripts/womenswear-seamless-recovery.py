@@ -45,12 +45,20 @@ def recover(source_id, files, retouched, note):
         native = out / (key + '-native.png')
         shutil.copy2(source, native)
         rgba = original.convert('RGBA')
-        # Retain the complete composition and alpha shadow. Never threshold
-        # whites, infer a garment mask, warp anatomy or crop photographic edges.
-        scale = min(1656 / rgba.width, 2484 / rgba.height)
+        # Normalize subject scale while retaining the entire alpha support.
+        alpha = rgba.getchannel('A')
+        body = alpha.point(lambda v: 255 if v >= 160 else 0).getbbox()
+        support = alpha.point(lambda v: 255 if v >= 3 else 0).getbbox()
+        left, top, right, bottom = body
+        sl, st, sr, sb = support
+        scale = min(1476 / (right-left), 2376 / (bottom-top), 1656 / (sr-sl), 2484 / (sb-st))
         resized = rgba.resize((round(rgba.width * scale), round(rgba.height * scale)), Image.Resampling.LANCZOS)
+        x = round(900 - (left+right) * scale / 2)
+        y = round(2538 - bottom * scale)
+        x = max(round(-sl*scale), min(x, round(1800-sr*scale)))
+        y = max(round(-st*scale), min(y, round(2700-sb*scale)))
         canvas = Image.new('RGBA', (1800, 2700), 'white')
-        offset = ((1800 - resized.width) // 2, (2700 - resized.height) // 2)
+        offset = (x, y)
         canvas.alpha_composite(resized, offset)
         rgb = canvas.convert('RGB')
         export = out / (key + '.png')
