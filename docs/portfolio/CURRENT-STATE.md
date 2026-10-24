@@ -4,6 +4,14 @@
 work. This snapshot must be refreshed when main, content or verified production
 changes; it is not a perpetual deployment certificate.
 
+## Menswear full-production candidate — 24 October 2026
+
+`feat/menswear-ai-photography-regeneration` now contains forty original AI concept looks with 120 selected Front/Back/Editorial photographs and forty masters. The latest owner brief authorizes autonomous selection and working-branch integration, superseding the earlier pilot approval gates. Public groups are Casualwear (`m-streetwear`), Activewear (`m-activewear`), Outerwear (`m-rtw`) and Tailoring (`m-tailoring`), ten positions each. Technical world IDs, cinematic presentation and route grammar remain stable.
+
+The forty new `mw-r2-…` identities are independent of all fifty preserved historical Menswear subjects, which keep their media, credits and deep links. Only complete sets enter the featured edit. Viewer text accurately identifies AI concepts and proposed materials/construction without physical manufacture or client claims. Womenswear source and assets are unchanged. Native files are 1024×1536; normalized 1800×2700 panels and 5400×2700 masters are resampled exports.
+
+The [full review package](review/menswear-full-production-2026-10-23/README.md) contains the actual forty-look contact sheet, all-view review PDF, portable interactive review, selected registry, construction plan, dated research and final technical/browser/remote reports. This is a review branch, not merged or deployed. Final personal owner artistic acceptance remains pending, separately from autonomous production selection.
+
 ## Authority and reading order
 
 1. Latest explicit user instructions.

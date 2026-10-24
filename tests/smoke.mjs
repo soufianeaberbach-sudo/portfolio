@@ -21,6 +21,7 @@ import { installFonts } from './fixtures/fonts.mjs';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const generatedPresentations=require('../src/data/womenswear-generated.json').filter(r=>r.integrated);
+const menswearConcepts=require('../src/data/menswear-ai-production.json').selectedCompleteLooks;
 
 const PORT = Number(process.env.SMOKE_PORT ?? 4321);
 const HOST = '127.0.0.1';
@@ -629,9 +630,9 @@ try {
     });
     check('menswear categories match the current retail-label order',
       JSON.stringify(men.cats) === JSON.stringify([
-        'Streetwear', 'Activewear', 'Casualwear', 'Tailoring & Outerwear',
+        'Casualwear', 'Activewear', 'Outerwear', 'Tailoring',
       ]), men.cats.join(' | '));
-    check('menswear is explicitly a reference preview', men.publication === 'reference-preview', men.publication);
+    check('menswear identifies original AI concept preview status', men.publication === 'ai-concept-preview', men.publication);
     check('menswear has a working visual gallery behind every category',
       men.garments === 40 && men.links === 4, `${men.garments} references / ${men.links} links`);
     check('no menswear category is left as a dead pending row', men.pending === 0, String(men.pending));
@@ -651,7 +652,8 @@ try {
     await p.waitForTimeout(700);
     check('four Menswear films and forty archive references',
       await p.locator('[data-mw-film]').count() === 4 && await p.locator('[data-mw-archive-door]').count() === 40);
-    check('all historical Menswear references remain routable', await p.locator('[data-mw-reader]').count() === 50);
+    check('all fifty historical Menswear references remain separately routable', await p.locator('[data-mw-reader][data-subject*="-pexels-"]').count() === 50);
+    check('completed AI concepts add independent Menswear readers', await p.locator('[data-mw-reader][data-ai-concept="true"]').count() === menswearConcepts.length && await p.locator('[data-mw-reader]').count() === 50 + menswearConcepts.length);
     check('no invented development stages in Menswear', await p.locator('[data-mw-world] .pf-plate,[data-mw-world] [data-reference-panel]').count() === 0);
     const stage = p.locator('[data-mw-scroll]');
     await stage.focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1100);

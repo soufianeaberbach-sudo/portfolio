@@ -9,9 +9,12 @@
 - [Production registry and exact 120-view queue](PRODUCTION.json)
 - [Authorized taxonomy and safe integration](TAXONOMY-AND-INTEGRATION.md)
 - [Dated commercial research](../menswear-direction-reset-2026-10-23/RESEARCH.md)
-- [Previous pilot assessment](../menswear-direction-reset-2026-10-23/PILOT-ASSESSMENT.md)
+- [Previous pilot assessment](../menswear-direction-reset-2026-10-23/PREVIOUS-PILOT-ASSESSMENT.md)
 - [Selected design refinements](SELECTED-DESIGN-REFINEMENTS.json)
 - [Technical integrity and source-preservation audit](FINAL-TECHNICAL-AUDIT.json)
+- [Remote native/master byte verification](FINAL-REMOTE-VERIFICATION.json)
+- [Executed QA and browser evidence](QA.md)
+- [Visual critique and refinements](VISUAL-QA.md)
 
 ## Selected collection
 
@@ -19,7 +22,7 @@ Every position has a distinct featured product identity and complete commerciall
 
 The existing cinematic presentation and viewer remain in place. Public labels use the authorized four groups while the four technical IDs and route grammar remain stable. The forty new AI identities are independent of fifty preserved historical subjects. Front is the cinematic primary; genuine Back and Editorial remain selectable in the viewer. Materials and construction are available as proposed design notes; inspection zoom remains supported.
 
-Six previously generated AI pilot sets and four reset Fronts were individually reviewed and retained where suitable. Two earlier pilot sets remain excluded. All prior pilot native files, masters, manifests, review records and history remain unchanged. Existing historical Menswear photographs were not used as creative or generation references. Womenswear source and assets are unchanged.
+98 selected photographs were newly generated in this production phase. Six previously generated AI pilot sets (18 photographs) and four reset Fronts were individually reviewed and retained where suitable, completing the 120 active selections. Two earlier pilot sets remain excluded. All prior pilot native files, masters, manifests, review records and history remain unchanged. Existing historical Menswear photographs were not used as creative or generation references. Womenswear source and assets are unchanged.
 
 ## Provenance and exports
 
