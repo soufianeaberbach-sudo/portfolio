@@ -4068,7 +4068,39 @@
         "reviewNotes": "True rear shows same natural brown hair, sage Harrington raglan sleeves and curved umbrella yoke, elastic side-back waist/cuffs, navy chinos and plain white shoe heels. Distinct credible lightweight blouson construction.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1699829,
+        "nativeMode": "RGB",
+        "sha256": "29226dd074ec43717b732c29366a8eaf4886537e70376b2387c3d8454d9c2b66",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-ed4bb12a-22de-46da-aba9-cdeddb38f76a.png",
+        "generatedAt": "2026-10-24T00:02:59.604185+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-03-editorial.txt",
+        "promptSHA256": "04d3a8c7c33bd9a1f5142d70284b4de6eaa3189c271014dae38f50a3b9fc1a7c",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/editorial.png",
+        "exportSHA256": "28f9507cc711a66f13306a2f9620401cfef1c0f98cc0b5c2bd9111c721905fab",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-03/editorial-600.webp",
+        "previewSHA256": "eac1dd6797eaa414745604e2738bfee367e0a5f811ed873983d4fe8743788c42",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same model and sage Harrington, two-position stand collar, flap pockets, cream knit, navy chinos and white low-tops. Natural walking step and relaxed torso make commercially stylish Editorial without obscuring jacket.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -6354,8 +6386,15 @@
       "key": "mw-r2-outerwear-03:editorial",
       "look": "mw-r2-outerwear-03",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:02:59.608606+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-04:front",
@@ -7317,6 +7356,15 @@
       "at": "2026-10-24T00:02:53.815474+00:00",
       "notes": "True rear shows same natural brown hair, sage Harrington raglan sleeves and curved umbrella yoke, elastic side-back waist/cuffs, navy chinos and plain white shoe heels. Distinct credible lightweight blouson construction.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-03",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:02:59.608606+00:00",
+      "notes": "Same model and sage Harrington, two-position stand collar, flap pockets, cream knit, navy chinos and white low-tops. Natural walking step and relaxed torso make commercially stylish Editorial without obscuring jacket.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-03/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7329,11 +7377,10 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 24,
-    "acceptedActivePhotographs": 80,
+    "acceptedActivePhotographs": 81,
     "incompleteLooks": 16,
     "completedMasters": 24,
     "unresolvedViews": [
-      "mw-r2-outerwear-03:editorial",
       "mw-r2-outerwear-05:back",
       "mw-r2-outerwear-05:editorial",
       "mw-r2-outerwear-06:back",
