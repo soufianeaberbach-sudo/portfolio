@@ -6852,7 +6852,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1750195,
+        "nativeMode": "RGB",
+        "sha256": "e9cd52a58b5cdc019e1f2b87616f847568978165c3d93fb489d4b1c66dc4345b",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-97e0db1a-22c9-4a34-b409-90b6e112689f.png",
+        "generatedAt": "2026-10-24T00:24:57.002996+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-10-editorial.txt",
+        "promptSHA256": "a67b1359db06227abdc2ef3431102fe25c2a820b99994c1a633b4155682096bf",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-10/editorial.png",
+        "exportSHA256": "7ed04ad078395e5b2bceadbf9066ca6d656c0f05337ad0d17ee90d77da45d978",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-10/editorial-600.webp",
+        "previewSHA256": "a009b0a18ad1e51a7b2b7760128711825df1f52ba0ad20f34b22a43afab2637f",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model and deep-green collarless tailored jacket/trouser outfit with ivory crew knit and black penny loafers. Four-button front retained with lower button partly covered by natural jacket-adjustment hand; elegant forward step, complete head and footwear, coherent compact woven texture.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -8373,8 +8405,15 @@
       "key": "mw-r2-tailoring-10:editorial",
       "look": "mw-r2-tailoring-10",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:24:57.006340+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/editorial-v01-native.png"
+        }
+      ]
     }
   ],
   "attempts": [
@@ -9252,6 +9291,15 @@
       "at": "2026-10-24T00:24:51.494137+00:00",
       "notes": "Genuine rear-facing same adult model, white formal shirt, charcoal trousers with side adjusters and cuffs, black loafers. Shirt yoke, sleeve plackets/cuffs, rear darts and two buttoned trouser welt pockets rendered coherently; neutral white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-08/back-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-10",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:24:57.006340+00:00",
+      "notes": "Same adult model and deep-green collarless tailored jacket/trouser outfit with ivory crew knit and black penny loafers. Four-button front retained with lower button partly covered by natural jacket-adjustment hand; elegant forward step, complete head and footwear, coherent compact woven texture.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-10/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -9264,15 +9312,14 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 36,
-    "acceptedActivePhotographs": 115,
+    "acceptedActivePhotographs": 116,
     "incompleteLooks": 4,
     "completedMasters": 36,
     "unresolvedViews": [
       "mw-r2-tailoring-06:back",
       "mw-r2-tailoring-08:editorial",
       "mw-r2-tailoring-09:editorial",
-      "mw-r2-tailoring-10:back",
-      "mw-r2-tailoring-10:editorial"
+      "mw-r2-tailoring-10:back"
     ],
     "failedGenerationAttempts": 3
   }
