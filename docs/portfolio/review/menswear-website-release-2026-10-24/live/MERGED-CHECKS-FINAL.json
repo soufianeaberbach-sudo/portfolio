@@ -1,0 +1,37 @@
+{
+  "mergeCommit": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+  "checks": [
+    {
+      "id": 120828370729,
+      "name": "Workers Builds: portfolio",
+      "head_sha": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://dash.cloudflare.com/61173cf1bd0cb1c3e23e3cd2cbadf7f2/workers/services/view/portfolio/production/builds/c8a7c02a-8838-46cf-8056-6056e41e4ff4",
+      "output": {
+        "title": "Workers Builds: portfolio",
+        "summary": "\nBuild ID: [c8a7c02a-8838-46cf-8056-6056e41e4ff4](https://dash.cloudflare.com/61173cf1bd0cb1c3e23e3cd2cbadf7f2/workers/services/view/portfolio/production/builds/c8a7c02a-8838-46cf-8056-6056e41e4ff4)\nScript: [portfolio](https://dash.cloudflare.com/61173cf1bd0cb1c3e23e3cd2cbadf7f2/workers/services/view/portfolio/production)\nVersion ID: 24e865fc-0e30-490b-9f8e-a77cb1bec828\n",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/soufianeaberbach-sudo/portfolio/check-runs/120828370729/annotations"
+      },
+      "completed_at": "2026-10-24T08:40:52Z"
+    },
+    {
+      "id": 120827642381,
+      "name": "Build and smoke test",
+      "head_sha": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/40078740582/job/120827642381",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/soufianeaberbach-sudo/portfolio/check-runs/120827642381/annotations"
+      },
+      "completed_at": "2026-10-24T08:46:08Z"
+    }
+  ]
+}
