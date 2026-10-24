@@ -7079,14 +7079,36 @@
         "reviewNotes": "Same adult model and deep-green collarless tailored jacket/trouser outfit with ivory crew knit and black penny loafers. Four-button front retained with lower button partly covered by natural jacket-adjustment hand; elegant forward step, complete head and footwear, coherent compact woven texture.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-10/master.png",
+        "sha256": "5a1be659d8de5e52df6ee11016b204691ad9c0dcb0dd92730a506a236b09c8b6",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
       "selectedDesignRefinements": {
         "pockets": "Chest welt and two lower double-welt pockets; trousers side entries and rear welts",
         "fastenings": "Four tonal front buttons/buttonholes; jacket worn open; trouser hook and zip",
         "hem": "Seat-covering jacket with rounded lower front corners; blind trouser hem"
+      },
+      "setReview": {
+        "at": "2026-10-24T00:26:50.569357+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
       }
     }
   ],
@@ -9569,10 +9591,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 39,
+    "completedLooks": 40,
     "acceptedActivePhotographs": 120,
-    "incompleteLooks": 1,
-    "completedMasters": 39,
+    "incompleteLooks": 0,
+    "completedMasters": 40,
     "unresolvedViews": [],
     "failedGenerationAttempts": 3
   }
