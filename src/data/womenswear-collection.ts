@@ -1,10 +1,12 @@
-import type {FinalViews,ImageCredit,MarketCategory,Subject} from './portfolio';
+import type {FinalViews,ImageAsset,ImageCredit,MarketCategory,Subject} from './portfolio';
 import {projectSubject,referenceSubject} from './portfolio';
 import {exhibitionImage} from './womenswear-exhibition';
 import additions from './womenswear-references.json';
 import generated from './womenswear-generated.json';
 const externalReferences=additions.map(r=>({...r,image:{...r.image,views:1 as const}}));
-const generatedReferences=generated.filter(r=>r.integrated).map(r=>({...r,image:{...r.image,views:3 as const,thirdView:'editorial' as const}}));
+// Recovery records may contain only a Front or independently supplied views.
+// Never promote a partial presentation into a fictitious three-panel master.
+const generatedReferences=generated.filter(r=>r.integrated).map(r=>({...r,image:r.image as ImageAsset}));
 /** New presentations have their own identities; historical routes retain original pixels. */
 export const generatedPresentation=(id:string)=>generatedReferences.find(r=>r.id===id);
 export const featuredIdentity=(sourceId:string)=>generatedReferences.find(r=>r.sourceIdentity===sourceId)?.id??sourceId;
@@ -57,7 +59,12 @@ export function referenceCollection(category:MarketCategory,world:string):Subjec
  const references=[...category.references,...externalReferences.filter(r=>r.category===category.id),...generatedReferences.filter(r=>r.category===category.id)];
  return references.map(reference=>{
   let subject=referenceSubject({...reference,image:exhibitionImage(reference.image)},world,category.id);
-  const presentation=generatedPresentation(subject.id);if(presentation)subject={...subject,caption:presentation.caption};
+  const presentation=generatedPresentation(subject.id);
+  if(presentation){
+   if('photography' in presentation&&presentation.photography)
+    subject=slotPhotographs(subject,{id:subject.id,photography:presentation.photography as FinalViews});
+   subject={...subject,caption:presentation.caption};
+  }
   if(additions.some(r=>r.id===reference.id))subject={...subject,views:subject.views.map(v=>({...v,label:'Primary photograph'}))};
   const slot=collectionSlots[category.id]?.find(s=>s.id===subject.id);
   return slot?slotPhotographs(subject,slot):subject;
