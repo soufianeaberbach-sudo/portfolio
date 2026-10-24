@@ -6009,7 +6009,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1851895,
+        "nativeMode": "RGB",
+        "sha256": "3b9d465dafe1f337ad22db19bc0e280d2ea8fac0604add32fd42c3c10e917e42",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-580d586b-d6da-4330-a2ff-5f0a0f216de0.png",
+        "generatedAt": "2026-10-24T00:19:05.329545+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-04-editorial.txt",
+        "promptSHA256": "c9492a90a4144af8df6c18c7975bc7a003b4591af4d8a9de7f46976ab6c5d950",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/editorial.png",
+        "exportSHA256": "df515178fa73e045b17f3f4037c1ead96a90620dfea871a77f09de2f544d8b7d",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-600.webp",
+        "previewSHA256": "6b16fc3bf53b993c09bc934a256f8502b56013862846dd140a6177bf748f0e65",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model, oat soft linen two-button jacket, white band-collar shirt, cuffed matching trousers and tan suede loafers. Natural diagonal step with one hand in trouser pocket; believable linen creases, clear outfit and full-length white studio.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7690,8 +7722,15 @@
       "key": "mw-r2-tailoring-04:editorial",
       "look": "mw-r2-tailoring-04",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:19:05.334357+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-05:front",
@@ -8608,6 +8647,15 @@
       "at": "2026-10-24T00:17:39.442164+00:00",
       "notes": "Moss unstructured two-button notch-lapel blazer with rounded patch pockets, light-blue open-neck shirt, cream tailored trousers and brown suede loafers. Soft shoulder and believable textured woven cloth; natural adult model and clear full-length Front.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-07/front-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-04",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:19:05.334357+00:00",
+      "notes": "Same adult model, oat soft linen two-button jacket, white band-collar shirt, cuffed matching trousers and tan suede loafers. Natural diagonal step with one hand in trouser pocket; believable linen creases, clear outfit and full-length white studio.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-04/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8620,12 +8668,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 33,
-    "acceptedActivePhotographs": 103,
+    "acceptedActivePhotographs": 104,
     "incompleteLooks": 7,
     "completedMasters": 33,
     "unresolvedViews": [
       "mw-r2-tailoring-04:back",
-      "mw-r2-tailoring-04:editorial",
       "mw-r2-tailoring-05:back",
       "mw-r2-tailoring-05:editorial",
       "mw-r2-tailoring-06:back",
