@@ -5787,7 +5787,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1802610,
+        "nativeMode": "RGB",
+        "sha256": "37662a11512f283f46f9484123e2e0b691cb188568dd68971cbc77b4c845c061",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-217dd422-ab05-4b88-9026-7d063a3e00c3.png",
+        "generatedAt": "2026-10-24T00:15:22.291403+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/front-v01-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-tailoring-03-editorial.txt",
+        "promptSHA256": "bee8e853b51726000d23f2a032b83d7f603ba172abcbe774f802c287699b8269",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-03/editorial.png",
+        "exportSHA256": "f8340b6f50542b2682ba12ac2d70521289ef4708b9b0f3821e9e8a74471c1916",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-600.webp",
+        "previewSHA256": "04c2c228ae47460de0048313857ee9f2b42d56976d46adaf43c8c2bbd1ef2cd5",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same adult model and slate-blue relaxed single-button suit, white crew tee and black Derby shoes. Natural fashion step and hand in trouser pocket. Broad soft shoulder and wide trouser silhouette remain coherent; full head and footwear.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -7380,8 +7412,15 @@
       "key": "mw-r2-tailoring-03:editorial",
       "look": "mw-r2-tailoring-03",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:15:22.295135+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-tailoring-04:front",
@@ -8235,6 +8274,15 @@
       "at": "2026-10-24T00:14:55.080171+00:00",
       "notes": "Same wavy-haired adult model and taupe six-button double-breasted peak-lapel suit, ivory open-neck shirt and brown loafers. Controlled forward walking pose with lapel adjustment, readable suit, natural anatomy and full-length white studio.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-02/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-tailoring-03",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:15:22.295135+00:00",
+      "notes": "Same adult model and slate-blue relaxed single-button suit, white crew tee and black Derby shoes. Natural fashion step and hand in trouser pocket. Broad soft shoulder and wide trouser silhouette remain coherent; full head and footwear.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-tailoring-03/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -8247,13 +8295,12 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 31,
-    "acceptedActivePhotographs": 96,
+    "acceptedActivePhotographs": 97,
     "incompleteLooks": 9,
     "completedMasters": 31,
     "unresolvedViews": [
       "mw-r2-tailoring-01:back",
       "mw-r2-tailoring-03:back",
-      "mw-r2-tailoring-03:editorial",
       "mw-r2-tailoring-04:front",
       "mw-r2-tailoring-04:back",
       "mw-r2-tailoring-04:editorial",
