@@ -5684,11 +5684,33 @@
         "reviewNotes": "Same wavy-haired adult model and taupe six-button double-breasted peak-lapel suit, ivory open-neck shirt and brown loafers. Controlled forward walking pose with lapel adjustment, readable suit, natural anatomy and full-length white studio.",
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
-      "master": null,
-      "status": "VIEWS_IN_PROGRESS",
+      "master": {
+        "path": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-tailoring-02/master.png",
+        "sha256": "390d7375b6222c20f1a2470f79bf13ec8b05a950edf4cc8e08e57ebb6f5523a3",
+        "dimensions": [
+          5400,
+          2700
+        ],
+        "panelOrder": [
+          "front",
+          "back",
+          "editorial"
+        ],
+        "disclosure": "Three genuinely separate generated portraits, uniformly resampled. Export geometry is not native photographic detail."
+      },
+      "status": "COMPLETE_AUTONOMOUS_SELECTION",
       "ownerArtisticAcceptance": "PENDING",
       "provenance": "Original AI fashion concept / visual exploration",
-      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance."
+      "autonomousReview": "Existing reset Front re-reviewed: commercial product, natural young-adult casting, credible visible construction and complete framing. Retained; agent selection, not final owner acceptance.",
+      "setReview": {
+        "at": "2026-10-24T00:15:13.486625+00:00",
+        "modelAndOutfitContinuity": "PASS_VISUAL",
+        "trueRear": "PASS_VISUAL",
+        "editorialFashionPose": "PASS_VISUAL",
+        "notes": "Reviewed same adult model, complete outfit, hair/grooming, footwear, primary construction, neutral white studio and full-length framing. Genuine rear and separate natural fashion Editorial. Visible details described per selected view; no physical textile or manufacture claim.",
+        "ownerArtisticAcceptance": "PENDING",
+        "limitations": "Visual assessment only; no physical fit, hidden construction or material/performance testing."
+      }
     },
     {
       "id": "mw-r2-tailoring-03",
@@ -8224,10 +8246,10 @@
   "statistics": {
     "targetLooks": 40,
     "targetViews": 120,
-    "completedLooks": 30,
+    "completedLooks": 31,
     "acceptedActivePhotographs": 96,
-    "incompleteLooks": 10,
-    "completedMasters": 30,
+    "incompleteLooks": 9,
+    "completedMasters": 31,
     "unresolvedViews": [
       "mw-r2-tailoring-01:back",
       "mw-r2-tailoring-03:back",
