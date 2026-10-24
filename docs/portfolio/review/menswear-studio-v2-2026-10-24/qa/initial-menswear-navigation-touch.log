@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: real touch scroll explores the archive
+    at check (file:///workspace/portfolio-studio-fix/tests/menswear-navigation.mjs:2:128)
+    at file:///workspace/portfolio-studio-fix/tests/menswear-navigation.mjs:17:598
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:502:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

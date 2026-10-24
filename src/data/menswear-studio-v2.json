@@ -21450,5 +21450,14 @@
       "resolution": "RESOLVED: sparse checkout expanded; original export retained and remotely verified",
       "resolvedCommit": "3fa1b56ac29d16fff6f7535768571b4201e2ab7d"
     }
-  ]
+  ],
+  "currentPipelineSHA256": {
+    "menswear-studio-production.py": "bd671a28b2dbb66ca4f96bb8bd22f4f84aab5cc41b3dbfa6d3b9bf5616e37f8f",
+    "menswear-studio-composite.py": "99aef701724e66226ca641dcedb093cd4c1713299aa08edddfbd1cbc99bcc25c",
+    "menswear-studio-refine.py": "b5def547e9e11adedee5a5261c0d10d7a3e4ae045dcd33764bd5fbff6cc40d5f",
+    "menswear-studio-secondary.py": "b6afdf3b27d8db19459a378d8b3a3ef1e4b05f20d5f59e7940eb6c9f5ff1fc21",
+    "requirements-menswear-studio.txt": "03708b279049339736b4b886bcc97f67653c8f58decd157855d753462cbb8567"
+  },
+  "pipelineVersionNotes": "pipelineSHA256 retains the exact original primary-production code. The compositor subsequently gained optional foreground constraints for the eight local R02 refinements, whose individual records carry their exact processing hashes. currentPipelineSHA256 identifies the final reproducible tools; the default primary algorithm is unchanged.",
+  "primaryPipelineCommit": "ea699d2e37dc1152a59ec15bd28af527144e0723"
 }

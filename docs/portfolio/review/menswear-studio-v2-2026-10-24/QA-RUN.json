@@ -1,0 +1,219 @@
+{
+  "checkedAt": "2026-10-24T10:14:54.747216+00:00",
+  "status": "PASS",
+  "looks": 40,
+  "views": 120,
+  "masters": 40,
+  "categories": {
+    "Casualwear": 10,
+    "Activewear": 10,
+    "Outerwear": 10,
+    "Tailoring": 10
+  },
+  "build": "PASS; 11 pages",
+  "suites": [
+    {
+      "suite": "menswear-production",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-production.log",
+      "summary": "786 Menswear production checks passed",
+      "sha256": "7d98f31c7b7f75739b0a30e78c70f55e9e70bb44a34a08050ff78e47f3bb8c1d",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-look-navigation",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-look-navigation.log",
+      "summary": "841 Menswear look-sequence, genuine-view and cinematic-origin checks passed",
+      "sha256": "dd08eb46739d7851efeedc8dc25de3cc0874c1a9954fa78180733ba452886e05",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-navigation",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-navigation.log",
+      "summary": "49 Menswear history, interruption, touch and fallback checks passed",
+      "sha256": "076f1b714451f17139f1cad74251baf0e74915901801cc952c34abba0f7610e3",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-resize-return",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-resize-return.log",
+      "summary": "12 cross-breakpoint source-return checks passed",
+      "sha256": "15a1a83fca6cd1a25eec9f2d69b4189dbaf83a5422b023647b6be55e83fbc67f",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-presentation-seeks",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-presentation-seeks.log",
+      "summary": "264 endpoint/interruption/focus checks passed",
+      "sha256": "054a85fafc82136b1ce12f400bf8801cd2f9ee7e4e6992d040212973d55c55a1",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-historical-access",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-historical-access.log",
+      "summary": "32 historical-list identity/context/history checks passed",
+      "sha256": "1e24f19cf59eda7efdd0af44a10f2b7bd2be71fc48f655775fe9e7b40904761c",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-archive-keyboard",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-archive-keyboard.log",
+      "summary": "10 archive keyboard propagation checks passed",
+      "sha256": "d15ada2d4e0cc740b69defdb1a3b3b6fd7c1829ef86d59011b6cc877b6252395",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-media-loading",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-media-loading.log",
+      "summary": "16 Menswear delayed/failed-media checks passed",
+      "sha256": "39854db0d192a1c160b37e6c8dff96b18a2e8c076b781142c9de589e8cdddf82",
+      "status": "PASS"
+    },
+    {
+      "suite": "fashion-navigation",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/fashion-navigation.log",
+      "summary": "40 cold category/navigation checks passed",
+      "sha256": "d68f818c56309ca3139ae465b7ed1dfeeed461a58b7dde2f1c4788e1ba7b3438",
+      "status": "PASS"
+    },
+    {
+      "suite": "fashion-eight-worlds",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/fashion-eight-worlds.log",
+      "summary": "590 owner-contract acceptance checks passed",
+      "sha256": "4392a567f275dda739779caeac2ac4915f8ef5a16c8e125da2ceafe9f800a00b",
+      "status": "PASS"
+    },
+    {
+      "suite": "fashion-chapter-history",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/fashion-chapter-history.log",
+      "summary": "20 bare-chapter Back/Forward/Escape checks passed",
+      "sha256": "6a99b4cb6bc28d19dd420dbf1fd425fd43899b92f9e932940adb0cc1d2515829",
+      "status": "PASS"
+    },
+    {
+      "suite": "womenswear-continuity",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/womenswear-continuity.log",
+      "summary": "98 Womenswear continuity checks passed",
+      "sha256": "7f8be8651384078573e540a2a2aeb61b3c08ad9a2ca0226a705649dcc5b76390",
+      "status": "PASS"
+    },
+    {
+      "suite": "garment-match-cut",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/garment-match-cut.log",
+      "summary": "48 measured WAAPI return-midpoint checks passed",
+      "sha256": "8661077d319499ade9645dc66da070570042d1878c75c313cad19c40a3e612a9",
+      "status": "PASS"
+    },
+    {
+      "suite": "womenswear-route-origin",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/womenswear-route-origin.log",
+      "summary": "16 direct-route source identity checks passed",
+      "sha256": "2192a34587d4666adf9a178a956f6a1539aae8a298c6a5e9862823dab93bb978",
+      "status": "PASS"
+    },
+    {
+      "suite": "three-panel-photography",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/three-panel-photography.log",
+      "summary": "498 real-Portfolio three-panel/alpha browser checks passed",
+      "sha256": "8dd3f74d3dbd27cd00816362089dff3d001c4f6aa4f39ffd509552042c20e3a3",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-ai-collection",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-ai-collection.log",
+      "summary": "571 Menswear AI identity, coverage and active-view checks passed",
+      "sha256": "3fbe3697fd04532544b8dc00ab41d849ac98ea5efed0f3b3f8b5138d4af613d8",
+      "status": "PASS"
+    },
+    {
+      "suite": "menswear-content",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/menswear-content.log",
+      "summary": "207 Menswear identity, licensing and replacement checks passed",
+      "sha256": "3d6d8e7a1f2172d759ea0b61d14954268d18a73af28bf0ae6e10ffb2f5f4bdc6",
+      "status": "PASS"
+    },
+    {
+      "suite": "womenswear-ten-looks",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/womenswear-ten-looks.log",
+      "summary": "204 ten-look identity, licensing and replacement checks passed",
+      "sha256": "2ad6c398d869816a5f478d83a05862a08265b91a7f9bf584300b8a8264c87937",
+      "status": "PASS"
+    },
+    {
+      "suite": "final-photography",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/final-photography.log",
+      "summary": "23 final-photography configuration checks passed",
+      "sha256": "6143d0e3dca332da3b4507f68c942784f93a143c028dc236bfa1ba4526024a3a",
+      "status": "PASS"
+    },
+    {
+      "suite": "fashion-source-integrity",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/fashion-source-integrity.log",
+      "summary": "108 original source fingerprints preserved; 8 worlds \u00d7 10 unique looks; all original assets unchanged; 71 separate AI presentations",
+      "sha256": "4e9ff551128c690750f00bc77ac4f0d5697f576338f99ab234e6dadbcfcbe6cf",
+      "status": "PASS"
+    },
+    {
+      "suite": "web-images",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/web-images.log",
+      "summary": "2883 Menswear responsive-source integrity checks passed; 34% fewer bytes at 1800px",
+      "sha256": "3b67d645857a5c006d323e4ca09757acd85c2dd13a1f7574dd1b25206d8b1d3c",
+      "status": "PASS"
+    },
+    {
+      "suite": "preservation",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/preservation.log",
+      "summary": "4849 total protected-source and correction-evidence integrity checks passed; 1733 unique SHA256-verified evidence files",
+      "sha256": "97fa6c3a21e08ea37ebe0082a7166c20009be6eb35e3a46ce17d51300168de3a",
+      "status": "PASS"
+    },
+    {
+      "suite": "background",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/background.log",
+      "summary": "{\"checks\":6812,\"looks\":40,\"views\":120,\"masters\":40,\"protectedPixels\":42812811,\"protectedLightPixels\":3785266,\"exactWhiteBackgroundPixels\":141215106}",
+      "sha256": "d6a5684f3df03a23ab8bf72080c6af7e62aeb643e0115249ec54588a4fbff527",
+      "status": "PASS"
+    },
+    {
+      "suite": "smoke",
+      "log": "docs/portfolio/review/menswear-studio-v2-2026-10-24/qa/smoke.log",
+      "summary": "npm notice",
+      "sha256": "aaaa6db9b323ae0545936dfb62be682b4d7158888cae58feefdfacb9bb7d9679",
+      "status": "PASS"
+    }
+  ],
+  "renderedScreenshots": 65,
+  "viewportSizes": [
+    "1440x900",
+    "1366x768",
+    "1024x768",
+    "768x1024",
+    "430x932",
+    "390x844"
+  ],
+  "realAnimatedHandoffs": 8,
+  "womenswearPixelDifference": {
+    "desktop": 0,
+    "mobile": 0
+  },
+  "remoteSelectedFilesSHA256Verified": 680,
+  "nativeRegeneration": false,
+  "applicationLayoutCSSMotionChanges": false,
+  "diagnostics": [
+    {
+      "stage": "initial touch browser regression",
+      "result": "One archive swipe assertion failed. The original log is retained. The entire unchanged test passed on rerun, 49 assertions. No application code or test assertion was changed."
+    },
+    {
+      "stage": "three-panel launch preflight",
+      "result": "Initial invocation omitted PLAYWRIGHT_BROWSERS_PATH. Pointing it to the existing browser installation resolved launch; 498 original assertions passed without test changes."
+    },
+    {
+      "stage": "new screenshot background assertion",
+      "result": "Initial selector measured a transparent wrapper; it now measures the actually painted white frame. No CSS change."
+    }
+  ],
+  "limitations": [
+    "Chromium browser emulation; native Safari and physical devices not executed.",
+    "Deployment is independently verified after merge; this local record does not itself prove release."
+  ]
+}
