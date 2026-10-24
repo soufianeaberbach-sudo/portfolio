@@ -4598,7 +4598,39 @@
         "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
       },
       "back": null,
-      "editorial": null,
+      "editorial": {
+        "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-v01-native.png",
+        "nativeDimensions": [
+          1024,
+          1536
+        ],
+        "nativeBytes": 1679699,
+        "nativeMode": "RGB",
+        "sha256": "abaef353ce63e3cae7eed21ca96f6b40fa3c3f3442330d262031bb3867166309",
+        "tool": "OpenAI image_gen.imagegen",
+        "toolOutputPath": "/workspace/generated_images/exec-766caa47-aad0-45e0-bf20-a4eeb3accd55.png",
+        "generatedAt": "2026-10-24T00:07:02.816739+00:00",
+        "referenceInputs": [
+          "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/front-v02-native.png"
+        ],
+        "promptPath": "docs/portfolio/review/menswear-full-production-2026-10-23/prompts/mw-r2-outerwear-06-editorial.txt",
+        "promptSHA256": "4e3a08f6a82d582d6e1b18c32690d3e08f112cc29ddcd8c10fed85d2dd1e2220",
+        "exportPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-06/editorial.png",
+        "exportSHA256": "a3fc4eeb22dac3442524659309451b8053cd2232fb81905991dd1bd6434878d6",
+        "previewPath": "public/portfolio/ai-concepts/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-600.webp",
+        "previewSHA256": "ea9a7b691d19ecac5ac88cbaaf9bdb254f1d7ed94eb630bd0ca741b925290c59",
+        "exportDimensions": [
+          1800,
+          2700
+        ],
+        "uniformScale": 1.7578125,
+        "resampled": true,
+        "nativeHighResolutionClaim": false,
+        "agentSelection": "SELECTED_AUTONOMOUS",
+        "ownerArtisticAcceptance": "PENDING",
+        "reviewNotes": "Same curly-haired adult and corrected plain grey trail shoes, cobalt hooded shell, grey tee and navy straight pants. Natural walking step and pocket hand, light ripstop movement credible; outfit clearly visible, no conspicuous shoe marks return.",
+        "provenance": "Original AI fashion concept / visual exploration; no physical development or client manufacturing claimed"
+      },
       "master": null,
       "status": "VIEWS_IN_PROGRESS",
       "ownerArtisticAcceptance": "PENDING",
@@ -6685,8 +6717,15 @@
       "key": "mw-r2-outerwear-06:editorial",
       "look": "mw-r2-outerwear-06",
       "view": "editorial",
-      "state": "PENDING",
-      "attempts": []
+      "state": "SELECTED",
+      "attempts": [
+        {
+          "pass": 1,
+          "outcome": "SELECTED",
+          "at": "2026-10-24T00:07:02.820633+00:00",
+          "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-v01-native.png"
+        }
+      ]
     },
     {
       "key": "mw-r2-outerwear-07:front",
@@ -7623,6 +7662,15 @@
       "at": "2026-10-24T00:03:58.173040+00:00",
       "notes": "Same adult model and complete puffer outfit, burgundy knit, charcoal pants and black lug boots. Relaxed forward step and one trouser-pocket hand, open puffer with credible compressible baffles and full garment readability.",
       "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-07/editorial-v01-native.png"
+    },
+    {
+      "look": "mw-r2-outerwear-06",
+      "view": "editorial",
+      "pass": 1,
+      "outcome": "SELECTED",
+      "at": "2026-10-24T00:07:02.820633+00:00",
+      "notes": "Same curly-haired adult and corrected plain grey trail shoes, cobalt hooded shell, grey tee and navy straight pants. Natural walking step and pocket hand, light ripstop movement credible; outfit clearly visible, no conspicuous shoe marks return.",
+      "nativePath": "assets/source/menswear-full-2026-2027/mw-r2-outerwear-06/editorial-v01-native.png"
     }
   ],
   "archivedNotSelected": [
@@ -7635,12 +7683,11 @@
     "targetLooks": 40,
     "targetViews": 120,
     "completedLooks": 27,
-    "acceptedActivePhotographs": 85,
+    "acceptedActivePhotographs": 86,
     "incompleteLooks": 13,
     "completedMasters": 27,
     "unresolvedViews": [
       "mw-r2-outerwear-06:back",
-      "mw-r2-outerwear-06:editorial",
       "mw-r2-outerwear-08:back",
       "mw-r2-outerwear-08:editorial",
       "mw-r2-outerwear-10:back",
