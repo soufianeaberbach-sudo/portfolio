@@ -1,0 +1,825 @@
+{
+  "slot": 4,
+  "id": "AB-TP-04",
+  "slug": "04-woven-dress",
+  "title": "Woven Dress",
+  "subtitle": "Blue / ivory diagonal stripe / open back / gathered skirt",
+  "version": "0.1",
+  "date": "2026-10-25",
+  "status": "PROPOSED DEVELOPMENT SPECIFICATION — SAMPLE VALIDATION REQUIRED",
+  "source": "assets/source/WOMENSWEAR - WOVEN/4.png",
+  "web": "/portfolio/woven/4-1400.webp",
+  "sourceIdentity": "rtw-ref-04",
+  "colour": "#adc4d4",
+  "fit": "Close upper body with 4 cm bust ease, shaped long upper section and softly gathered midi lower skirt.",
+  "sizes": [
+    "34",
+    "36",
+    "38",
+    "40",
+    "42"
+  ],
+  "baseSize": "38",
+  "market": "Adult Womenswear / EU-labelled development range; no UK conversion implied",
+  "bodyBasis": {
+    "34": {
+      "bust": 84,
+      "waist": 66,
+      "hip": 90
+    },
+    "36": {
+      "bust": 88,
+      "waist": 70,
+      "hip": 94
+    },
+    "38": {
+      "bust": 92,
+      "waist": 74,
+      "hip": 98
+    },
+    "40": {
+      "bust": 96,
+      "waist": 78,
+      "hip": 102
+    },
+    "42": {
+      "bust": 100,
+      "waist": 82,
+      "hip": 106
+    }
+  },
+  "stature": 168,
+  "bom": [
+    {
+      "id": "F01",
+      "item": "Printed woven shell",
+      "specification": "PROPOSED drapey stable plain weave, 130–170 g/m²; diagonal engineered print; shrinkage trial",
+      "composition": "TBD; viscose/cotton blend option",
+      "colour": "Blue / ivory; lab dips and print strike-off TBD",
+      "placement": "Upper body, skirt, neck closure loops",
+      "quantity": "2.40–2.80",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "F02",
+      "item": "Upper-body lining",
+      "specification": "PROPOSED lightweight breathable woven lining 65–90 g/m²; no bulk at back opening",
+      "composition": "TBD; viscose lining option",
+      "colour": "Ivory",
+      "placement": "Upper front/back sections only",
+      "quantity": "0.75–0.90",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "I01",
+      "item": "Stabilizing fusible tape",
+      "specification": "10 mm lightweight straight-grain tape; trial peel/strike-through",
+      "composition": "TBD",
+      "colour": "Ivory concealed",
+      "placement": "Neck, armholes, back opening, zip area",
+      "quantity": "2.5–3.0",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "Z01",
+      "item": "Invisible zipper",
+      "specification": "PROPOSED closed-end concealed coil No.3, 22 cm chain; no face topstitch over coil",
+      "composition": "TBD",
+      "colour": "Match blue/ivory ground",
+      "placement": "CB below open-back lower edge",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "B01",
+      "item": "Rear-neck buttons",
+      "specification": "Two 8 mm covered/tonal shank buttons; actual material TBD",
+      "composition": "TBD",
+      "colour": "Ivory",
+      "placement": "Rear neck bridge",
+      "quantity": 2,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "T01",
+      "item": "Sewing thread",
+      "specification": "Polyester Tex 18–24; Nm 65–75 sharp needle trial",
+      "composition": "PROPOSED polyester",
+      "colour": "Match ground",
+      "placement": "301 seams / understitch / hem; 504 edge finish",
+      "quantity": "180–230",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L01",
+      "item": "ID / size and care set",
+      "specification": "Neutral development ID; fibre, care and origin text withheld pending verification",
+      "composition": "TBD",
+      "colour": "Neutral",
+      "placement": "Inside wearer-left upper lining seam",
+      "quantity": 1,
+      "unit": "set",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "PK01",
+      "item": "Protective sleeve",
+      "specification": "Fold with tissue at open back and gathers; fit actual folded sample",
+      "composition": "TBD",
+      "colour": "Unprinted",
+      "placement": "One dress",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    }
+  ],
+  "operations": [
+    {
+      "id": "C01",
+      "view": "front",
+      "feature": "Neck / armhole clean finish",
+      "point": [
+        250,
+        91
+      ],
+      "method": "Stabilize seam line I01; join shell to upper lining at neck and armholes, 8 mm SA / 301, 2.2–2.5 mm. Clip curves, grade allowances, understitch lining 2 mm where accessible. No visible neckline topstitch.",
+      "bom": [
+        "F01",
+        "F02",
+        "I01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C02",
+      "view": "front",
+      "feature": "Localized side-front gathers",
+      "point": [
+        151,
+        248
+      ],
+      "method": "PROPOSED 12 cm seam segment centred on waist at each side-front; source confirms gathers but not exact symmetry. Two temporary 301 gathering rows at 4 and 6 mm inside 10 mm SA; distribute fullness, join side seam at 2.5 mm stitch, remove exposed gathering threads.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C03",
+      "view": "front",
+      "feature": "Low skirt join",
+      "point": [
+        250,
+        359
+      ],
+      "method": "Gather lower skirt evenly into low horizontal upper-body seam. Proposed lower-skirt/upper-join seam-line ratio 1.45; seam SA 10 mm / 301 at 2.5 mm. 504-neaten allowance together downward; no gathers trapped into zipper.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C04",
+      "view": "front",
+      "feature": "Midi hem",
+      "point": [
+        250,
+        641
+      ],
+      "method": "Narrow 10 + 10 mm double-turn hem / 301, 2.5 mm. Relax hanging dress 24 h before levelling; press without stretching diagonal print. Hem is not blind-stitched in this issue.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C05",
+      "view": "back",
+      "feature": "Open-back edge / upper lining",
+      "point": [
+        323,
+        201
+      ],
+      "method": "Stay I01 to back opening seam line before handling. Bag opening with F02, 8 mm SA / 301, 2.2 mm; clip/grade and understitch where possible. No unsupported elastic or boning. Confirm opening does not gape in movement.",
+      "bom": [
+        "F01",
+        "F02",
+        "I01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C06",
+      "view": "back",
+      "feature": "Two-button neck bridge",
+      "point": [
+        250,
+        83
+      ],
+      "method": "Two B01 at rear bridge, proposed 12 mm vertical spacing. Make 2 mm finished self-fabric rouleau loops, each 12 mm finished projection, captured in 8 mm seam. Hand overcast shank attachment to reinforced shell/lining; no claimed machine hand-lockstitch.",
+      "bom": [
+        "F01",
+        "F02",
+        "I01",
+        "B01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C07",
+      "view": "back",
+      "feature": "CB invisible zip",
+      "point": [
+        250,
+        335
+      ],
+      "method": "Z01 22 cm chain starts 10 mm below open-back lower edge. CB SA 15 mm; stabilize 10 mm tape. Stitch tape close to unrolled coil with concealed-zip foot, 301 / 2.5 mm. Join CB below stop; lining turned and hand slipstitched to tape clear of coil.",
+      "bom": [
+        "F01",
+        "F02",
+        "I01",
+        "Z01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C08",
+      "view": "back",
+      "feature": "Stripe / lining control",
+      "point": [
+        319,
+        359
+      ],
+      "method": "Match stripe phase at CB and low skirt seam where repeat permits; no false continuous-stripe guarantee before strike-off. Upper lining lower edge free, neatened 504, swing-tacked at side seams; L01 in lining side.",
+      "bom": [
+        "F01",
+        "F02",
+        "L01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    }
+  ],
+  "poms": [
+    {
+      "id": "A",
+      "name": "SNP to finished hem",
+      "method": "From shoulder-neck seam intersection straight down front, garment flat without stretching gathers.",
+      "unit": "cm",
+      "base": 120,
+      "grade": 1,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          205,
+          78
+        ],
+        [
+          205,
+          650
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 118,
+        "36": 119,
+        "38": 120,
+        "40": 121,
+        "42": 122
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "B",
+      "name": "Bust width",
+      "method": "25 mm below underarm, edge to edge, gathers settled but not stretched.",
+      "unit": "cm",
+      "base": 48,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          135,
+          178
+        ],
+        [
+          365,
+          178
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 44,
+        "36": 46,
+        "38": 48,
+        "40": 50,
+        "42": 52
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "C",
+      "name": "Waist width",
+      "method": "At marked waist datum 40 cm below SNP, relaxed edge to edge.",
+      "unit": "cm",
+      "base": 40,
+      "grade": 2,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          155,
+          257
+        ],
+        [
+          345,
+          257
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 36,
+        "36": 38,
+        "38": 40,
+        "40": 42,
+        "42": 44
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "D",
+      "name": "Hip width",
+      "method": "20 cm below waist datum, edge to edge across upper section.",
+      "unit": "cm",
+      "base": 53,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          126,
+          344
+        ],
+        [
+          374,
+          344
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 49,
+        "36": 51,
+        "38": 53,
+        "40": 55,
+        "42": 57
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "E",
+      "name": "Low skirt join width",
+      "method": "Upper section at horizontal skirt attachment seam, relaxed flat.",
+      "unit": "cm",
+      "base": 54,
+      "grade": 2,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          120,
+          359
+        ],
+        [
+          380,
+          359
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 50,
+        "36": 52,
+        "38": 54,
+        "40": 56,
+        "42": 58
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "F",
+      "name": "Hem sweep width",
+      "method": "Flatten lower skirt without stretching; finished hem edge to edge.",
+      "unit": "cm",
+      "base": 80,
+      "grade": 3,
+      "tolerance": 1,
+      "view": "front",
+      "points": [
+        [
+          70,
+          650
+        ],
+        [
+          430,
+          650
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 74,
+        "36": 77,
+        "38": 80,
+        "40": 83,
+        "42": 86
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "G",
+      "name": "Front neck width",
+      "method": "Between shoulder-neck seam intersections, neckline at seam line.",
+      "unit": "cm",
+      "base": 20,
+      "grade": 0.4,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          205,
+          78
+        ],
+        [
+          295,
+          78
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 19.2,
+        "36": 19.6,
+        "38": 20.0,
+        "40": 20.4,
+        "42": 20.8
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "H",
+      "name": "Front neck drop",
+      "method": "Vertical from line joining SNPs to CF neckline seam.",
+      "unit": "cm",
+      "base": 7.5,
+      "grade": 0.2,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          250,
+          78
+        ],
+        [
+          250,
+          112
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 7.1,
+        "36": 7.3,
+        "38": 7.5,
+        "40": 7.7,
+        "42": 7.9
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "I",
+      "name": "Back opening height",
+      "method": "CB: upper edge of open-back cutout to lower edge; exclude neck bridge.",
+      "unit": "cm",
+      "base": 36,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          250,
+          113
+        ],
+        [
+          250,
+          292
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 35.0,
+        "36": 35.5,
+        "38": 36.0,
+        "40": 36.5,
+        "42": 37.0
+      },
+      "diagram": "pom-back-1.svg",
+      "label": [
+        266,
+        265
+      ]
+    },
+    {
+      "id": "J",
+      "name": "Back opening maximum width",
+      "method": "Maximum horizontal clear opening between finished edges.",
+      "unit": "cm",
+      "base": 28,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          174,
+          200
+        ],
+        [
+          326,
+          200
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 27.0,
+        "36": 27.5,
+        "38": 28.0,
+        "40": 28.5,
+        "42": 29.0
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "K",
+      "name": "Armhole straight depth",
+      "method": "From shoulder-armhole junction to underarm base straight, not contour length.",
+      "unit": "cm",
+      "base": 20,
+      "grade": 0.5,
+      "tolerance": 0.4,
+      "view": "back",
+      "points": [
+        [
+          333,
+          90
+        ],
+        [
+          365,
+          177
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 19.0,
+        "36": 19.5,
+        "38": 20.0,
+        "40": 20.5,
+        "42": 21.0
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "L",
+      "name": "Lower-skirt length",
+      "method": "From low skirt joining seam to finished hem at CF.",
+      "unit": "cm",
+      "base": 58,
+      "grade": 0.5,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          250,
+          359
+        ],
+        [
+          250,
+          650
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 57.0,
+        "36": 57.5,
+        "38": 58.0,
+        "40": 58.5,
+        "42": 59.0
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "M",
+      "name": "CB zip chain length",
+      "method": "Actual coil top stop to bottom stop with garment open, exclude tape.",
+      "unit": "cm",
+      "base": 22,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "back",
+      "points": [
+        [
+          250,
+          302
+        ],
+        [
+          250,
+          411
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 22,
+        "36": 22,
+        "38": 22,
+        "40": 22,
+        "42": 22
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "N",
+      "name": "Gathered side segment length",
+      "method": "Finished seam segment at waist; between matching gather notches.",
+      "unit": "cm",
+      "base": 12,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          143,
+          218
+        ],
+        [
+          152,
+          278
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 12,
+        "36": 12,
+        "38": 12,
+        "40": 12,
+        "42": 12
+      },
+      "diagram": "pom-front-1.svg"
+    }
+  ],
+  "details": [
+    [
+      "open-back",
+      "Open-back / lining section",
+      "8 mm clean-finished shell/lining seam with 10 mm stay tape; understitch where accessible, no exposed face stitch."
+    ],
+    [
+      "gather",
+      "Low skirt / side gather control",
+      "Lower skirt ratio 1.45 seam line; temporary 4/6 mm rows inside 10 mm seam. Side-front gather segment 12 cm proposed."
+    ],
+    [
+      "zip-loop",
+      "CB zip and rear-neck closure",
+      "22 cm invisible chain below opening; two 8 mm buttons at neck bridge; self loops. Coil remains free of lining stitches."
+    ]
+  ],
+  "pattern": [
+    "Front upper section ×1 on fold (side gathering allowance proposed); upper backs ×2, lower skirt front/back ×1 each (CB opening continued for zip); upper lining front ×1/back ×2; two self-loop strips.",
+    "Stripe direction is printed diagonal on straight grain in this proposal; no extra diagonal panel seams. Confirm actual fabric repeat before cutting.",
+    "Do not invent princess seams or front darts; shape through side seams/gather allowance and back sections. Walk gathered/ungathered seam lengths separately.",
+    "Lower skirt seam-line circumference 108 × 1.45 = 156.6 cm base before seam allowances; hem expands to 160 cm full. This is a proposed pattern target, not marker evidence."
+  ],
+  "assembly": [
+    "Test shell/lining shrinkage and print transfer; approve stripe strike-off.",
+    "Cut single layer for stripe matching; mark SNP, waist, gather segments and low seam.",
+    "Apply stay tape; prepare two neck loops and bridge reinforcement.",
+    "Join upper shell and lining using burrito/accessible shoulder sequence; clean neck, armholes and open back.",
+    "Gather side-front segments, close shell sides and lining sides independently.",
+    "Gather lower skirt into upper section; insert CB invisible zipper and close CB below.",
+    "Finish lining to zip tape, free lower lining edge and swing tacks.",
+    "Hang 24 h, level hem, narrow-turn stitch; attach buttons/labels, cool and inspect."
+  ],
+  "qc": [
+    "Open-back edge lies flat with arms forward; no stretching or lining roll.",
+    "Two buttons/loops align without neck strain; zip opens sufficient dressing aperture.",
+    "Gathers evenly distributed at low seam; no stray gathering stitches visible.",
+    "Stripe alignment target assessed against actual repeat; no accidental slant seams.",
+    "Check bust/waist/hip ease and sitting mobility; lower skirt hangs level after relaxation."
+  ],
+  "risks": [
+    "Material identity is untested; stable woven proposal may need side-gather/ease adjustment during toile fit.",
+    "Open-back stability and dressing aperture require sample fitting; no support/boning performance claimed.",
+    "Stripe repeat may materially increase fabric consumption and prevent perfect seam matching."
+  ],
+  "evidence": [
+    "CONFIRMED in source: sleeveless round front neck, large rounded open back, two small rear-neck buttons, visible CB zip below opening, low horizontal skirt join and gathered lower skirt.",
+    "Diagonal stripes are surface pattern, not diagonal construction seams. Source shows localized side-front gathering; arms conceal exact endpoints.",
+    "Woven classification is PROPOSED from appearance and folder context; no fibre or fabric test confirms it."
+  ],
+  "assumptions": [
+    "PROPOSED lightweight stable woven with engineered diagonal print, cut on straight grain. Do not infer bias cutting from stripe direction.",
+    "Propose lined upper section with neckline/open-back stabilization, no boning. Lower skirt unlined in this issue, subject to opacity trial.",
+    "Side-front gathering distributed over a proposed 12 cm waist-level seam segment; fullness ratio and precise location require toile validation."
+  ],
+  "consumption": "ESTIMATE: shell 2.40–2.80 m at 150 cm usable width, EU 38, one-way diagonal print, 20% matching/cutting reserve; front/back upper sections + gathered lower skirt + neck opening facings. Upper lining 0.75–0.90 m at 140 cm. Stripe repeat unknown: estimate may increase after matching marker. No approved print/yield claim.",
+  "care": "TBD: fibre identity, component compatibility, care testing, country of origin and destination-market legal review. Do not print generic care symbols.",
+  "labels": "PROPOSED: neutral development ID + EU size; 35 × 12 mm soft ID label, ends turned 5 mm and secured with 301. No third-party logo or manufacturer claim. Placement: inside left upper lining side seam.",
+  "packaging": "PROPOSED: fold only after cooling; use unprinted recyclable protective sleeve sized to the actual folded sample. Bag material, gauge and dimensions TBD after packing trial. One garment per sleeve; no invented approved bag size.",
+  "revision": [
+    {
+      "version": "0.1",
+      "date": "2026-10-25",
+      "change": "Initial source-referenced development specification; no physical sample, marker or fit validation",
+      "status": "PROPOSED / sampling review"
+    }
+  ],
+  "pomGroups": [
+    {
+      "file": "pom-front-1.svg",
+      "view": "front",
+      "ids": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "N"
+      ]
+    },
+    {
+      "file": "pom-front-2.svg",
+      "view": "front",
+      "ids": [
+        "E",
+        "F",
+        "G",
+        "H",
+        "L"
+      ]
+    },
+    {
+      "file": "pom-back-1.svg",
+      "view": "back",
+      "ids": [
+        "I",
+        "J",
+        "K",
+        "M"
+      ]
+    }
+  ]
+}

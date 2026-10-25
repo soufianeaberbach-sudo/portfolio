@@ -1,0 +1,935 @@
+{
+  "slot": 2,
+  "id": "AB-TP-02",
+  "slug": "02-tailored-trouser",
+  "title": "Tailored Trouser",
+  "subtitle": "Oatmeal wide leg / single pleat / rear welt pockets",
+  "version": "0.1",
+  "date": "2026-10-25",
+  "status": "PROPOSED DEVELOPMENT SPECIFICATION — SAMPLE VALIDATION REQUIRED",
+  "source": "assets/source/WOMENSWEAR - WOVEN/2.png",
+  "web": "/portfolio/woven/2-1400.webp",
+  "sourceIdentity": "rtw-ref-02",
+  "colour": "#c4bdab",
+  "fit": "High waist with 4 cm waist ease and 8 cm seat ease at base EU 38; full wide leg.",
+  "sizes": [
+    "34",
+    "36",
+    "38",
+    "40",
+    "42"
+  ],
+  "baseSize": "38",
+  "market": "Adult Womenswear / EU-labelled development range; no UK conversion implied",
+  "bodyBasis": {
+    "34": {
+      "bust": 84,
+      "waist": 66,
+      "hip": 90
+    },
+    "36": {
+      "bust": 88,
+      "waist": 70,
+      "hip": 94
+    },
+    "38": {
+      "bust": 92,
+      "waist": 74,
+      "hip": 98
+    },
+    "40": {
+      "bust": 96,
+      "waist": 78,
+      "hip": 102
+    },
+    "42": {
+      "bust": 100,
+      "waist": 82,
+      "hip": 106
+    }
+  },
+  "stature": 168,
+  "bom": [
+    {
+      "id": "F01",
+      "item": "Shell woven suiting",
+      "specification": "PROPOSED drapey stable twill/plain suiting, 220–280 g/m²; no stretch required",
+      "composition": "TBD; wool blend or viscose-rich suiting option",
+      "colour": "Oatmeal / lab dip TBD",
+      "placement": "Front/back legs, waistband, fly, welts",
+      "quantity": "1.80–2.10",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "F02",
+      "item": "Pocketing",
+      "specification": "PROPOSED dense smooth pocketing, 100–130 g/m², preshrunk with shell",
+      "composition": "TBD; cotton/polyester option",
+      "colour": "Match pale oatmeal",
+      "placement": "Side and rear pocket bags",
+      "quantity": "0.40–0.50",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "I01",
+      "item": "Fusible support",
+      "specification": "Light woven fusible; compatibility/peel and temperature trial required",
+      "composition": "TBD",
+      "colour": "Ivory",
+      "placement": "Outer waistband, fly, welt openings",
+      "quantity": "0.20–0.30",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "Z01",
+      "item": "Fly zipper",
+      "specification": "PROPOSED closed-end nylon coil No.3, 18 cm chain; matching tape",
+      "composition": "TBD nylon coil/polyester tape",
+      "colour": "Match oatmeal",
+      "placement": "Centre-front fly",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "H01",
+      "item": "Hook and bar",
+      "specification": "PROPOSED flat trouser hook/bar set, sew-on, 12 mm width; nickel status TBD",
+      "composition": "TBD metal",
+      "colour": "Concealed",
+      "placement": "Waistband extension",
+      "quantity": 1,
+      "unit": "set",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "T01",
+      "item": "Sewing thread",
+      "specification": "Core-spun polyester Tex 24–30; Nm 80–90 sharp needle after trial",
+      "composition": "PROPOSED polyester",
+      "colour": "Match oatmeal",
+      "placement": "301 seams / 504 edge finish / 103 hem",
+      "quantity": "180–230",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L01",
+      "item": "ID / size and care set",
+      "specification": "35 × 12 mm neutral ID/size plus care label with unverified content withheld",
+      "composition": "TBD",
+      "colour": "Neutral",
+      "placement": "Inside left waistband / left pocketing",
+      "quantity": 1,
+      "unit": "set",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "PK01",
+      "item": "Protective sleeve",
+      "specification": "Fit folded pressed sample; no hard crease across pocket area",
+      "composition": "TBD",
+      "colour": "Unprinted",
+      "placement": "One garment",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    }
+  ],
+  "operations": [
+    {
+      "id": "C01",
+      "view": "front",
+      "feature": "Waistband / concealed closure",
+      "point": [
+        250,
+        90
+      ],
+      "method": "Finished waistband 4 cm. Fuse outer band I01; join outer to waist 10 mm SA / 301 at 2.5 mm. Inner lower edge turn under and stitch in ditch. Wearer-left overlap extension 30 mm, H01 concealed; no visible extra button.",
+      "bom": [
+        "F01",
+        "I01",
+        "H01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C02",
+      "view": "front",
+      "feature": "Fly assembly",
+      "point": [
+        254,
+        167
+      ],
+      "method": "Use Z01 18 cm chain with separate fly facing and doubled shield. CF SA 15 mm. Stitch tape to facing/underlap at 301 / 2.5 mm; shield separates coil from skin. Fly topstitch 30 mm from CF on overlap only; reinforce base clear of coil.",
+      "bom": [
+        "F01",
+        "I01",
+        "Z01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C03",
+      "view": "front",
+      "feature": "Pleat and side pocket",
+      "point": [
+        170,
+        151
+      ],
+      "method": "One forward pleat per front, fold toward CF; proposed 3 cm total intake, baste at waist inside 10 mm SA. Slant side pocket 16 cm opening; attach pocketing 10 mm / 301, understitch 2 mm from seam; bartack both opening ends.",
+      "bom": [
+        "F01",
+        "F02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C04",
+      "view": "front",
+      "feature": "Leg joining and pressed line",
+      "point": [
+        121,
+        446
+      ],
+      "method": "Outseam 15 mm / 301, 2.8 mm; inseam 10 mm / 301, 2.8 mm. 504-neaten edges separately and press open. Press centre leg crease from grainline, not a stitched panel seam.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C05",
+      "view": "back",
+      "feature": "Rear welt pockets",
+      "point": [
+        179,
+        174
+      ],
+      "method": "PROPOSED double welt: opening 12 × 1 cm finished, 0.5 cm each lip. Fuse opening, 10 mm sewing allowance around welt unit; 301 / 2.2 mm. Cut corners accurately, secure triangles; pocket bag depth 16 cm, 10 mm / 301 + 504.",
+      "bom": [
+        "F01",
+        "F02",
+        "I01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C06",
+      "view": "back",
+      "feature": "Darts / centre back",
+      "point": [
+        250,
+        225
+      ],
+      "method": "PROPOSED one dart per back: 2 cm intake × 9 cm long at EU 38. Sew 301 / 2.5 mm taper without backtack at tip; tie ends. CB/rise 15 mm SA, 301 / 2.5 mm, reinforce crotch curve with second row inside SA; press open above curve.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C07",
+      "view": "back",
+      "feature": "Blind hem",
+      "point": [
+        345,
+        642
+      ],
+      "method": "Finished 4 cm hem allowance. 504-neaten raw edge; turn once, secure with 103 blindhemming, pick up minimal face fibres. Avoid seam allowance ridge; press through cloth after heat trial.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C08",
+      "view": "back",
+      "feature": "Final waistband / pocket control",
+      "point": [
+        300,
+        103
+      ],
+      "method": "Secure hook/bar to fused extension with concealed hand overcast stitches through support; do not call hand sewing a machine lockstitch. Pocket bags anchored at waist; L01 inside left waistband clear of closure.",
+      "bom": [
+        "H01",
+        "I01",
+        "F02",
+        "L01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    }
+  ],
+  "poms": [
+    {
+      "id": "A",
+      "name": "Waist closed",
+      "method": "Fasten H01/zip; align waistband edges; measure straight across top without stretching.",
+      "unit": "cm",
+      "base": 39,
+      "grade": 2,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          145,
+          75
+        ],
+        [
+          355,
+          75
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 35,
+        "36": 37,
+        "38": 39,
+        "40": 41,
+        "42": 43
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "B",
+      "name": "Hip width",
+      "method": "20 cm below top waistband, parallel to waist; smooth pleats closed.",
+      "unit": "cm",
+      "base": 53,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          128,
+          188
+        ],
+        [
+          372,
+          188
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 49,
+        "36": 51,
+        "38": 53,
+        "40": 55,
+        "42": 57
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "C",
+      "name": "Front rise incl. waistband",
+      "method": "Tape follows CF curve from waistband top to inseam intersection.",
+      "unit": "cm",
+      "base": 31,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          250,
+          75
+        ],
+        [
+          250,
+          298
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 75 L250 220 Q251 274 250 298",
+      "status": "PROPOSED",
+      "values": {
+        "34": 30.0,
+        "36": 30.5,
+        "38": 31.0,
+        "40": 31.5,
+        "42": 32.0
+      },
+      "diagram": "pom-front-1.svg",
+      "label": [
+        266,
+        258
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Outseam incl. waistband",
+      "method": "Along side seam from waistband top to finished hem.",
+      "unit": "cm",
+      "base": 109,
+      "grade": 0.5,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          355,
+          75
+        ],
+        [
+          405,
+          650
+        ]
+      ],
+      "kind": "contour",
+      "path": "M355 75 Q379 164 378 245 L405 650",
+      "status": "PROPOSED",
+      "values": {
+        "34": 108.0,
+        "36": 108.5,
+        "38": 109.0,
+        "40": 109.5,
+        "42": 110.0
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "E",
+      "name": "Inseam",
+      "method": "Along inseam from crotch intersection to finished hem.",
+      "unit": "cm",
+      "base": 79,
+      "grade": 0,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          250,
+          298
+        ],
+        [
+          225,
+          650
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 298 Q236 331 233 420 L225 650",
+      "status": "PROPOSED",
+      "values": {
+        "34": 79,
+        "36": 79,
+        "38": 79,
+        "40": 79,
+        "42": 79
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "F",
+      "name": "Thigh width",
+      "method": "25 mm below crotch; perpendicular to grain, outside edge to inseam.",
+      "unit": "cm",
+      "base": 33,
+      "grade": 1.2,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          119,
+          325
+        ],
+        [
+          243,
+          325
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 30.6,
+        "36": 31.8,
+        "38": 33.0,
+        "40": 34.2,
+        "42": 35.4
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "G",
+      "name": "Knee width",
+      "method": "35 cm down inseam from crotch; perpendicular to grain.",
+      "unit": "cm",
+      "base": 27.5,
+      "grade": 0.8,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          108,
+          470
+        ],
+        [
+          230,
+          470
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 25.9,
+        "36": 26.7,
+        "38": 27.5,
+        "40": 28.3,
+        "42": 29.1
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "H",
+      "name": "Leg opening",
+      "method": "Lay one leg flat without tension; measure edge to edge along the finished hem, perpendicular to leg grain.",
+      "unit": "cm",
+      "base": 27,
+      "grade": 0.7,
+      "tolerance": 0.4,
+      "view": "front",
+      "points": [
+        [
+          95,
+          650
+        ],
+        [
+          225,
+          650
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 25.6,
+        "36": 26.3,
+        "38": 27.0,
+        "40": 27.7,
+        "42": 28.4
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "I",
+      "name": "Back rise incl. waistband",
+      "method": "Tape follows CB curve, waistband top to crotch intersection.",
+      "unit": "cm",
+      "base": 42,
+      "grade": 0.7,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          250,
+          70
+        ],
+        [
+          250,
+          298
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 70 C245 130 242 230 250 298",
+      "status": "PROPOSED",
+      "values": {
+        "34": 40.6,
+        "36": 41.3,
+        "38": 42.0,
+        "40": 42.7,
+        "42": 43.4
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "J",
+      "name": "Waistband finished height",
+      "method": "At side away from extension, top edge to waist seam.",
+      "unit": "cm",
+      "base": 4,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "back",
+      "points": [
+        [
+          355,
+          75
+        ],
+        [
+          360,
+          101
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 4,
+        "36": 4,
+        "38": 4,
+        "40": 4,
+        "42": 4
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "K",
+      "name": "Rear pocket opening",
+      "method": "Between finished opening ends; excludes bartacks.",
+      "unit": "cm",
+      "base": 12,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "back",
+      "points": [
+        [
+          144,
+          174
+        ],
+        [
+          212,
+          174
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 12,
+        "36": 12,
+        "38": 12,
+        "40": 12,
+        "42": 12
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "L",
+      "name": "Rear pocket drop",
+      "method": "Top waistband edge to welt opening at pocket centre, vertically.",
+      "unit": "cm",
+      "base": 14,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          178,
+          75
+        ],
+        [
+          178,
+          174
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 14,
+        "36": 14,
+        "38": 14,
+        "40": 14,
+        "42": 14
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "M",
+      "name": "Side pocket opening",
+      "method": "Along finished slant opening between reinforcement points.",
+      "unit": "cm",
+      "base": 16,
+      "grade": 0.3,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          148,
+          108
+        ],
+        [
+          129,
+          205
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 15.4,
+        "36": 15.7,
+        "38": 16.0,
+        "40": 16.3,
+        "42": 16.6
+      },
+      "diagram": "pom-front-3.svg"
+    },
+    {
+      "id": "N",
+      "name": "Fly chain length",
+      "method": "Actual closed zipper chain, from top stop to bottom stop; exclude tape.",
+      "unit": "cm",
+      "base": 18,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "front",
+      "points": [
+        [
+          255,
+          107
+        ],
+        [
+          255,
+          224
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 18,
+        "36": 18,
+        "38": 18,
+        "40": 18,
+        "42": 18
+      },
+      "diagram": "pom-front-3.svg"
+    },
+    {
+      "id": "O",
+      "name": "Pleat intake per front",
+      "method": "Unfold pleat at waist seam: difference between unfolded and folded seam-line length.",
+      "unit": "cm",
+      "base": 3,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "front",
+      "points": [
+        [
+          176,
+          101
+        ],
+        [
+          196,
+          101
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 3,
+        "36": 3,
+        "38": 3,
+        "40": 3,
+        "42": 3
+      },
+      "diagram": "pom-front-3.svg"
+    },
+    {
+      "id": "P",
+      "name": "Back dart length",
+      "method": "Waist seam to dart tip along dart centre; excludes waistband.",
+      "unit": "cm",
+      "base": 9,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          198,
+          101
+        ],
+        [
+          198,
+          160
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 9,
+        "36": 9,
+        "38": 9,
+        "40": 9,
+        "42": 9
+      },
+      "diagram": "pom-back-2.svg"
+    },
+    {
+      "id": "Q",
+      "name": "Hem turn depth",
+      "method": "Inside back leg: finished fold to neatened raw hem edge.",
+      "unit": "cm",
+      "base": 4,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "back",
+      "points": [
+        [
+          345,
+          624
+        ],
+        [
+          345,
+          650
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 4,
+        "36": 4,
+        "38": 4,
+        "40": 4,
+        "42": 4
+      },
+      "diagram": "pom-back-2.svg"
+    }
+  ],
+  "details": [
+    [
+      "fly",
+      "Fly / waistband closure",
+      "18 cm closed-end coil; separate facing and shield; 30 mm overlap extension; hook/bar concealed."
+    ],
+    [
+      "welt",
+      "Double-welt pocket",
+      "12 × 1 cm opening; two 5 mm lips; fused opening; corner triangles secured to welts; 16 cm bag depth."
+    ],
+    [
+      "pleat",
+      "Front pleat / pocket interface",
+      "3 cm total pleat intake folded toward CF; side pocket bag caught to waist, avoiding pleat bulk."
+    ],
+    [
+      "tailored-hem",
+      "Blind hem / pressed seam",
+      "4 cm turn with 504 edge neatening; 103 minimal face pickup; outseam allowances pressed open."
+    ]
+  ],
+  "pattern": [
+    "Front legs ×2 mirrored incl. 3 cm pleat intake; back legs ×2 mirrored incl. dart; outer/inner waistband each ×2 shaped halves; fly facing ×1, shield ×1 doubled; side pocket bags ×4, rear bags ×4, welt strips ×4.",
+    "Front pleat intake 3 cm + back dart intake 2 cm per side are proposed seam-line shaping. Reconcile waist seam after closing darts/pleats to waistband seam length including extension.",
+    "Leg grain through knee/hem crease. Walk inseam/outseam; retain 15 mm outseam/CB for sampling adjustment. No belt loops."
+  ],
+  "assembly": [
+    "Relax and shrink-test shell/pocketing; fuse-test I01 before bulk cutting.",
+    "Cut on straight grain; mark pleat, dart, welt box and zipper stops.",
+    "Fuse welt areas; make back darts then double welts and bags.",
+    "Prepare front slant pockets; baste pleats closed within waist allowance.",
+    "Assemble fly facing, Z01 and shield; complete fly curve stitching.",
+    "Close side/inseams; close rise; edge-neaten and press.",
+    "Attach outer/inner waistband; install H01, anchor pocket bags and labels.",
+    "Set leg length, blind hem, press grainline creases and cool before POM check."
+  ],
+  "qc": [
+    "Rear welts level and equal; lips total 10 mm, no open corner holes.",
+    "Zip slides freely; shield covers coil; H01 aligns without waist step.",
+    "Pleats release cleanly; pocket bags cannot hang below pleat or pull waist.",
+    "Check seat/rise in sitting trial, no horizontal drag or inseam roping.",
+    "Creases track grain; hem edges equal, no face blind-stitch showthrough."
+  ],
+  "risks": [
+    "Pocket and dart geometry is proposed from exterior appearance, not a measured production pattern.",
+    "Fly handedness, extension and hook/bar require sample confirmation.",
+    "Shell/fusing/pocketing shrinkage mismatch can distort waist and welt openings."
+  ],
+  "evidence": [
+    "CONFIRMED in source: separate waistband, covered front closure area, one visible pleat per front, wide legs, rear horizontal welt-like openings and pressed leg lines.",
+    "Fly zip, hook/bar, pocket bags, dart intake and internal waistband construction are PROPOSED; reference is exterior photography only.",
+    "No belt loops or rear pocket buttons visible: none specified. Shirt in source is excluded."
+  ],
+  "assumptions": [
+    "PROPOSED adult womenswear tailored construction with a waistband fly opening and hook/bar extension. Handedness must be confirmed at first sample; illustration uses wearer-left overlap.",
+    "Rear opening engineered as double welt pockets. Source does not prove number of welt lips or pocket-bag depth.",
+    "Use a stable woven suiting option, not stretch-knit negative ease. No full lining is required in this proposal."
+  ],
+  "consumption": "ESTIMATE: shell 1.80–2.10 m at 150 cm usable width, EU 38; paired front/back legs + waistband + fly facings + welts, straight grain, no nap. Assumes two lengthwise leg rows/nesting, 12% cutting/shrink reserve. Pocketing 0.40–0.50 m at 140 cm; fusing 0.20–0.30 m at 90 cm. Directional/nap fabric increases yield; verify marker.",
+  "care": "TBD: fibre identity, component compatibility, care testing, country of origin and destination-market legal review. Do not print generic care symbols.",
+  "labels": "PROPOSED: neutral development ID + EU size; 35 × 12 mm soft ID label, ends turned 5 mm and secured with 301. No third-party logo or manufacturer claim. Placement: inside left waistband and pocketing.",
+  "packaging": "PROPOSED: fold only after cooling; use unprinted recyclable protective sleeve sized to the actual folded sample. Bag material, gauge and dimensions TBD after packing trial. One garment per sleeve; no invented approved bag size.",
+  "revision": [
+    {
+      "version": "0.1",
+      "date": "2026-10-25",
+      "change": "Initial source-referenced development specification; no physical sample, marker or fit validation",
+      "status": "PROPOSED / sampling review"
+    }
+  ],
+  "pomGroups": [
+    {
+      "file": "pom-front-1.svg",
+      "view": "front",
+      "ids": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "file": "pom-front-2.svg",
+      "view": "front",
+      "ids": [
+        "E",
+        "F",
+        "G",
+        "H"
+      ]
+    },
+    {
+      "file": "pom-front-3.svg",
+      "view": "front",
+      "ids": [
+        "M",
+        "N",
+        "O"
+      ]
+    },
+    {
+      "file": "pom-back-1.svg",
+      "view": "back",
+      "ids": [
+        "I",
+        "J",
+        "K",
+        "L"
+      ]
+    },
+    {
+      "file": "pom-back-2.svg",
+      "view": "back",
+      "ids": [
+        "P",
+        "Q"
+      ]
+    }
+  ]
+}
