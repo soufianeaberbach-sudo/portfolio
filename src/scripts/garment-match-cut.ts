@@ -6,12 +6,18 @@ export const cancelGarmentMatchCut=()=>{cancelCurrent?.();};
 export function garmentMatchCut(reader:HTMLElement,source:HTMLElement,entering:boolean,instant:boolean,finished:()=>void){
  cancelCurrent?.();
  if(instant){finished();return;}
+ const identity=source.closest<HTMLElement>('[data-open-subject]')?.dataset.openSubject;
+ if(identity&&identity!==reader.dataset.subject){finished();return;}
  const box=source.getBoundingClientRect();
  if(!box.width||!box.height){finished();return;}
  const pct=(n:number,of:number)=>`${Math.max(0,Math.min(100,n/of*100))}%`;
  const crop=`inset(${pct(box.top,innerHeight)} ${pct(innerWidth-box.right,innerWidth)} ${pct(innerHeight-box.bottom,innerHeight)} ${pct(box.left,innerWidth)})`;
  const full='inset(0% 0% 0% 0%)';
- const animation=reader.animate(entering?[{clipPath:crop},{clipPath:full}]:[{clipPath:full,opacity:1},{clipPath:crop,opacity:0}],{duration:entering?320:220,easing:'cubic-bezier(.22,.68,.18,1)'});
- const cancel=()=>{animation.cancel();if(cancelCurrent===cancel)cancelCurrent=null;};cancelCurrent=cancel;
+ const oldVisibility=source.style.visibility;
+ source.style.visibility='hidden';
+ // Keep this plane opaque throughout return; a fade overlays a static Front
+ // body on the different Fashion pose underneath and produces a ghost.
+ const animation=reader.animate(entering?[{clipPath:crop},{clipPath:full}]:[{clipPath:full},{clipPath:crop}],{duration:entering?320:220,easing:'cubic-bezier(.22,.68,.18,1)'});
+ const cancel=()=>{animation.cancel();source.style.visibility=oldVisibility;if(cancelCurrent===cancel)cancelCurrent=null;};cancelCurrent=cancel;
  animation.onfinish=()=>{cancel();finished();};
 }
