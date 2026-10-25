@@ -12,6 +12,7 @@ import '../styles/portfolio-cinematic.css';
 import '../styles/portfolio-womenswear.css';
 import '../styles/womenswear-cinematic.css';
 import '../styles/menswear-cinematic.css';
+import '../styles/portfolio-exhibition-flow.css';
 import type { Subject } from '../data/portfolio';
 
 /* The development-only story lab renders this page with one internal test
@@ -1450,7 +1451,7 @@ const split = (statement: string, word: string) => {
       };
 
       root.addEventListener('pf:menswear-orientation',event=>{if(openWorld?.dataset.world==='menswear'&&!openSubject){window.history.replaceState(history.state,'',(event as CustomEvent<string>).detail);lastSyncedHash=window.location.hash;}});
-      root.addEventListener('pf:world-handoff',event=>{if(openWorld?.dataset.world==='menswear'&&!openSubject)go((event as CustomEvent<string>).detail);});
+      root.addEventListener('pf:world-handoff',event=>{if(openWorld&&['womenswear','menswear'].includes(openWorld.dataset.world??'')&&!openSubject)go((event as CustomEvent<string>).detail);});
 
       /* The covers and the category links are real anchors so every level is
          reachable with the script gone. With the script running we take the
@@ -1509,7 +1510,8 @@ const split = (statement: string, word: string) => {
         if (openSubject) {
           if (photographicReader(openSubject)) readerKeyboard = true;
           if (openSubject.hasAttribute('data-inspect')) {
-            openSubject.querySelector<HTMLElement>('[data-rd-inspect]')?.click();
+            if(openSubject.querySelector('[data-garment-inspection]'))openSubject.dispatchEvent(new CustomEvent('pf:photo-fit'));
+            else openSubject.querySelector<HTMLElement>('[data-rd-inspect]')?.click();
             return;
           }
           const { world, category } = parseHash();

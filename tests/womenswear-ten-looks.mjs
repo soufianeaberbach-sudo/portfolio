@@ -24,7 +24,7 @@ for(const ref of added){
 }
 const base=pool[0],image=(name,width=1200,height=1800)=>({src:`/fixture-only/${name}.webp`,srcset:'',width,height,alt:`TEST ONLY ${name}`,front:1,views:1});
 const two={...image('two-up',1800,1200),views:2,front:.48};
-for(const[final,keys]of [[{composite:two},['front','back','original']],[{composite:{...two,separable:false}},['front']],[{front:image('front'),back:image('back')},['front','back']],[{front:image('front'),back:image('back'),side:image('side',900,2200)},['front','back','side']],[{front:image('front'),back:image('back'),editorial:image('fashion',2400,1200),details:[{image:image('detail')}]},['front','back','editorial','detail']]]){
+for(const[final,keys]of [[{composite:two},['front','back']],[{composite:{...two,separable:false}},['reference']],[{front:image('front'),back:image('back')},['front','back']],[{front:image('front'),back:image('back'),side:image('side',900,2200)},['front','back','side']],[{front:image('front'),back:image('back'),editorial:image('fashion',2400,1200),details:[{image:image('detail')}]},['front','back','editorial','detail']]]){
  const resolved=slotPhotographs(base,{id:base.id,photography:final});check(resolved.id===base.id&&resolved.category===base.category&&!resolved.verified,'photo replacement preserves URL and truthful status');check(JSON.stringify(finalPhotographs(resolved).map(v=>v.key))===JSON.stringify(keys),'replacement renders precisely supplied views');check(resolved.caption===resolved.cover.alt,'replacement does not retain the previous garment description');
 }
 console.log(`${checks} ten-look identity, licensing and replacement checks passed`);

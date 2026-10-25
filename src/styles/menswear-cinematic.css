@@ -61,22 +61,7 @@
 .mw-reader:focus{outline:none}
 .mw-reader-head{height:78px;padding:0 clamp(20px,3.2vw,56px);display:flex;align-items:center;justify-content:space-between;gap:20px}
 .mw-reader-head a{font-size:12px}.mw-reader-head span{font-size:10px}
-.mw-reader-floor{height:calc(100dvh - 78px);min-height:450px;position:relative;display:flex;flex-direction:column;align-items:center;padding:12px 20px 20px}
-.mw-reader-target{position:relative;flex:1;min-height:0;width:100%;display:grid;place-items:center;overflow:hidden;touch-action:pan-y}
-.mw-reader-target>[data-mw-view-panel]{width:100%;height:100%;display:grid;place-items:center}
-.mw-reader-target>[hidden]{display:none!important}
-.mw-reader-target .mw-photo{height:100%;width:auto;max-width:92vw;max-height:calc((92vw)/var(--photo-aspect));transform-origin:center;touch-action:inherit}
-.mw-reader-caption{position:absolute;left:3.2%;top:24%;max-width:21%;z-index:2;pointer-events:none}
-.mw-reader-caption h3{font:400 13px/1.65 var(--body);margin-bottom:12px;max-width:250px}
-.mw-reader-caption a{font:10px/1.6 var(--mono);color:var(--muted);pointer-events:auto}
-.mw-reader-views{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:20px;padding-top:20px;min-height:55px;font:10px var(--mono);text-transform:uppercase}
-.mw-reader-views button{min-width:44px;min-height:44px;font:inherit;text-transform:uppercase}.mw-reader-views [aria-pressed=true]{color:var(--mw-blue)}
-.mw-zoom:not([hidden]){display:flex;align-items:center;justify-content:center;gap:20px;min-height:44px;font:10px var(--mono)}.mw-zoom button{min-width:44px;min-height:44px}
-.mw-reader-status{font:10px/1.4 var(--mono);text-align:center;margin:0;min-height:14px}
-.mw-reader[data-inspect] .mw-reader-target{touch-action:none;cursor:grab}.mw-reader[data-inspect] .mw-reader-caption{display:none}
-.mw-match{position:fixed;z-index:1000;pointer-events:none;overflow:hidden;contain:paint}.mw-match img{position:absolute;max-width:none;object-fit:fill}
-.mw-world[data-moving] .mw-reader-target .mw-photo{visibility:hidden}
-@media(max-width:1000px){.mw-header h2{display:none}.mw-mode{display:none}.mw-reader-caption{max-width:18%}.mw-reader-caption h3{font-size:11px}.mw-controls [data-mw-fullscreen]{position:static}.mw-controls{gap:12px}.mw-reader-caption a{font-size:9px}}
+@media(max-width:1000px){.mw-header h2{display:none}.mw-mode{display:none}.mw-controls [data-mw-fullscreen]{position:static}.mw-controls{gap:12px}}
 @media(max-width:699px),(max-width:1023px) and (orientation:portrait){
  .mw-header{height:68px;min-height:68px;padding:0 20px;gap:12px}.mw-header a,.mw-header button{font-size:11px}.mw-header-actions{gap:18px}
  .mw-worlds{top:62px}.mw-worlds a{padding:14px 0;min-height:48px}
@@ -84,7 +69,7 @@
  .mw-film-title,.mw-film[data-mw-film=m-activewear] .mw-film-title{top:14px;left:20px!important;bottom:auto!important;max-width:80%}.mw-film-title p{font-size:9px;margin:0 0 8px}.mw-film-title h3{font-size:39px;letter-spacing:-.055em}
  .mw-camera{inset:90px 0 24px}.mw-scene-caption{bottom:7px;font-size:9px;right:20px}
  .mw-archive{padding:30px 20px;min-height:calc(100dvh - 132px)}.mw-archive>header{display:block}.mw-archive h3{font-size:34px}.mw-archive header p{margin-top:14px;font-size:10px}.mw-rail{gap:18px}.mw-rail li{flex-basis:52vw}.mw-rail .mw-photo{height:34vh;max-width:52vw}.mw-provenance{font-size:11px;margin:18px 0}.mw-handoff{margin-top:20px}.mw-handoff .label{font-size:9px}
- .mw-reader-head{height:64px;padding:0 20px}.mw-reader-head span{font-size:9px}.mw-reader-floor{height:calc(100dvh - 64px);min-height:460px;padding:0 14px 12px}.mw-reader-caption{position:static;max-width:none;width:100%;padding:0 6px 10px;pointer-events:auto}.mw-reader-caption h3{font-size:11px;line-height:1.4;max-width:none;margin:0 0 3px}.mw-reader-caption a{font-size:9px}.mw-reader-target .mw-photo{max-height:calc(92vw/var(--photo-aspect))}.mw-reader-views{gap:12px;font-size:10px;padding-top:10px;min-height:50px}.mw-zoom:not([hidden]){gap:8px;flex-wrap:wrap}.mw-zoom a{font-size:9px}.mw-reader-status{font-size:9px}.mw-reader[data-inspect] .mw-reader-caption{display:none}
+ .mw-reader-head{height:64px;padding:0 20px}.mw-reader-head span{font-size:9px}
 }
 /* Readable, complete and linked if JavaScript is unavailable. */
 .pf:not(.pf--js) .mw-exhibition{height:auto}.pf:not(.pf--js) .mw-header,.pf:not(.pf--js) .mw-controls,.pf:not(.pf--js) .mw-worlds{display:none}.pf:not(.pf--js) .mw-film{display:block}.pf:not(.pf--js) .mw-experience{height:auto;overflow:visible}.pf:not(.pf--js) .mw-walkway{height:auto}.pf:not(.pf--js) .mw-frame{height:auto;min-height:0;padding:24px}.pf:not(.pf--js) .mw-film-title{position:static;max-width:none}.pf:not(.pf--js) .mw-camera{display:none}.pf:not(.pf--js) .mw-scene-caption{display:none}.pf:not(.pf--js) .mw-reader:not(:target){display:none}.pf:not(.pf--js) .mw-reader:target{display:block!important}
@@ -92,7 +77,6 @@
 
 .mw-chapter-links{display:flex;flex-wrap:wrap;gap:18px;padding-top:12px}.mw-chapter-links a{display:inline;padding:8px 0;font:10px var(--mono)}
 
-.mw-reader[data-wide] .mw-reader-caption{position:static;max-width:800px;width:100%;padding:0 12px 12px}.mw-reader[data-wide] .mw-reader-caption h3{max-width:none;font-size:11px;margin:0 0 4px}
 
 /* Opaque chapter entry: a transparent world transition ghosted cover models
    through the new photograph. The existing cover artwork remains untouched. */

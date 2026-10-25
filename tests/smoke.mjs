@@ -670,8 +670,8 @@ try {
     await source.click(); await p.waitForTimeout(800);
     const reader = p.locator('[data-mw-reader]:not([hidden])');
     check('an archive photograph opens its own routed reader', await reader.getAttribute('data-subject') === id && (await p.evaluate(() => location.hash)).endsWith('/'+id));
-    await reader.locator('[data-rd-inspect]').click();
-    check('Menswear Look Closer inspects the source', await reader.getAttribute('data-inspect') !== null);
+    await reader.locator('[data-photo-pair] [data-photo-viewport]').first().click();
+    check('Menswear photograph itself is the inspection target', await reader.getAttribute('data-inspect') !== null);
     await p.keyboard.press('Escape');
     check('Escape leaves inspection before leaving the garment', await reader.count() === 1 && await reader.getAttribute('data-inspect') === null);
     await p.keyboard.press('Escape'); await p.waitForTimeout(650);
@@ -729,7 +729,8 @@ try {
         ground: getComputedStyle(rd).backgroundColor,
         backTo: rd.querySelector('[data-subject-close]').getAttribute('href'),
         garment: Math.round(img.getBoundingClientRect().height),
-        views: rd.querySelectorAll('[data-ww-view]').length,
+        views: rd.querySelectorAll('[data-photo-pair] [data-photo-panel]').length,
+        fitted: [...rd.querySelectorAll('[data-photo-pair] [data-photo-viewport]')].every(v=>{const p=v.firstElementChild.getBoundingClientRect(),r=v.getBoundingClientRect();return p.width<=r.width+1&&p.height<=r.height+1;}),
         travel: rd.hasAttribute('data-travel'),
         stages: rd.querySelectorAll('.pf-rd__stage-item').length,
         pending: ['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL'].includes(rd.querySelector('.ww-reader-head p')?.textContent),
@@ -739,38 +740,25 @@ try {
     check('choosing it opens that garment, and the URL says which',
       entered.open && entered.hash === `#womenswear/rtw/${before.id}`, entered.hash);
     check('focus moves into the garment', entered.focusInside);
-    check('THE GARMENT IS ACTUALLY BIGGER than the cell it came from',
-      entered.garment > before.thumb * 1.8 && entered.garment > 450,
+    check('the complete Front and Back fit their inspection areas',
+      entered.fitted && entered.garment > 350,
       `${before.thumb}px in the range, ${entered.garment}px entered`);
     check('it is still Womenswear, on the chapter\'s own ground',
       entered.ground === 'rgb(255, 255, 255)', entered.ground);
     check('and the way out goes back to the territory, not to the portfolio',
       entered.backTo === '#womenswear/casualwear', entered.backTo);
     check('both garment views remain available',
-      !entered.travel && entered.views === (generatedPresentations.some(r=>r.id===before.id)?4:3), JSON.stringify({ travel: entered.travel, views: entered.views }));
+      !entered.travel && entered.views === 2, JSON.stringify({ travel: entered.travel, views: entered.views }));
     check('no development stage is invented for an unverified frame',
       entered.verified === 'no' && entered.stages === 0 && entered.pending,
       JSON.stringify(entered));
 
-    const back = p.locator(`[data-subject="${before.id}"] [data-ww-view="1"]`);
-    await back.focus(); await p.keyboard.press('Enter'); await photoReady(p.locator(`[data-subject="${before.id}"]`),1);
-    check('the back view can be selected by keyboard', await back.getAttribute('aria-pressed') === 'true');
-
-    /* LOOKING CLOSER: the same pixels, larger. */
-    await p.evaluate((id) => document.querySelector(`[data-subject="${id}"] [data-rd-inspect]`).click(), before.id);
-    await p.waitForTimeout(500);
-    const closer = await p.evaluate((id) => {
-      const rd = document.querySelector(`[data-subject="${id}"]`);
-      const img = rd.querySelector('[data-photo-view]:not([hidden]) [data-ww-photo]');
-      return {
-        on: rd.hasAttribute('data-inspect'),
-        pressed: rd.querySelector('[data-rd-inspect]').getAttribute('aria-pressed'),
-        scale: new DOMMatrixReadOnly(getComputedStyle(img).transform).a,
-        height: Math.round(rd.querySelector('[data-photo-view]:not([hidden]) [data-ww-photo]').getBoundingClientRect().height),
-      };
-    }, before.id);
-    check('the garment can be inspected closer than life size',
-      closer.on && closer.pressed === 'true' && closer.scale >= 1.7, JSON.stringify(closer));
+    const back = p.locator(`[data-subject="${before.id}"] [data-photo-panel="back"] [data-photo-viewport]`);
+    await back.focus(); await p.keyboard.press('Enter');
+    check('the already-visible back photograph is keyboard zoomable', await back.getAttribute('aria-pressed') === 'true');
+    const closer = await back.evaluate(e=>({on:e.closest('[data-subject]').hasAttribute('data-inspect'),scale:new DOMMatrixReadOnly(getComputedStyle(e.firstElementChild).transform).a}));
+    check('the actual Back photograph enlarges independently',closer.on&&closer.scale>=1.7,JSON.stringify(closer));
+    check('zooming Back leaves Front fitted',await p.locator(`[data-subject="${before.id}"] [data-photo-panel="front"] [data-photo-viewport]`).getAttribute('aria-pressed')==='false');
 
     /* ESCAPE GIVES BACK ONE THING AT A TIME: inspection, the garment, the
        territory, the chapter. */
@@ -803,28 +791,15 @@ try {
     await c.close();
   }
 
-  // The scoped reader preserves touch access to the genuine back and front.
+  // Both real views remain naturally reachable on mobile; no view menu.
   {
-    const c = await ctxWithFonts({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-    const p = await c.newPage();
-    await p.goto(BASE + '/portfolio/#womenswear/rtw/rtw-ref-01', { waitUntil: 'load' });
-    const reader = p.locator('[data-subject="rtw-ref-01"]');
-    const stage = reader.locator('[data-ww-target]');
-    await stage.dispatchEvent('pointerdown', { pointerId: 1, pointerType: 'touch', clientX: 260, clientY: 300 });
-    await stage.dispatchEvent('pointerup', { pointerId: 1, pointerType: 'touch', clientX: 100, clientY: 300 });
-    await p.waitForTimeout(300);
-    check('mobile horizontal gesture selects the back view',
-      await reader.locator('[data-ww-view="1"]').getAttribute('aria-pressed') === 'true');
-    await reader.locator('[data-rd-inspect]').click();
-    await p.waitForTimeout(300);
-    check('looking closer preserves the selected back view',
-      await reader.locator('[data-ww-view="1"]').getAttribute('aria-pressed') === 'true');
-    await reader.locator('[data-rd-inspect]').click();
-    await reader.locator('[data-ww-view="0"]').click();
-    await p.waitForTimeout(300);
-    check('front control returns to the first view',
-      await reader.locator('[data-ww-view="0"]').getAttribute('aria-pressed') === 'true'
-      && await reader.locator('[data-photo-view]:not([hidden]) [data-ww-photo]').getAttribute('data-side') === 'front');
+    const c=await ctxWithFonts({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+    const p=await c.newPage();await p.goto(BASE+'/portfolio/#womenswear/rtw/rtw-ref-01');
+    const reader=p.locator('[data-subject="rtw-ref-01"]'),front=reader.locator('[data-photo-panel=front] [data-photo-viewport]'),back=reader.locator('[data-photo-panel=back] [data-photo-viewport]');
+    check('mobile has both Front and Back in the natural document flow',await front.isVisible()&&await back.isVisible());
+    await back.scrollIntoViewIfNeeded();await back.tap();check('touch enlarges the actual Back photograph',await back.getAttribute('aria-pressed')==='true');
+    check('touch Back inspection leaves Front fitted',await front.getAttribute('aria-pressed')==='false');
+    await reader.locator('[data-photo-panel=back] [data-photo-fit]').tap();check('mobile Fit restores only the Back photograph',await back.getAttribute('aria-pressed')==='false');
     await c.close();
   }
 

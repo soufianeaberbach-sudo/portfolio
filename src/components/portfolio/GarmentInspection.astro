@@ -1,0 +1,31 @@
+---
+import '../../styles/photo-inspection.css';
+import type {Subject} from '../../data/portfolio';
+import {finalPhotographs} from '../../data/final-photography';
+import FinalPhoto from './FinalPhoto.astro';
+import MenswearPhoto from './MenswearPhoto.astro';
+interface Props {subject:Subject; gender:'womenswear'|'menswear';}
+const {subject,gender}=Astro.props,photos=finalPhotographs(subject);
+const primary=photos.filter(p=>p.key==='front'||p.key==='back');
+const main=primary.length?primary:photos.slice(0,1),extra=photos.filter(p=>!main.includes(p));
+const missing=['front','back'].filter(key=>!photos.some(p=>p.key===key)).map(key=>key==='front'?'Front':'Back');
+---
+<div class="garment-inspection" data-garment-inspection>
+ <div class="garment-inspection__pair" data-photo-pair>
+  {main.map((photo,i)=><figure class="garment-inspection__figure" data-photo-panel={photo.key} data-photo-view={gender==='womenswear'?i:undefined} data-mw-view-panel={gender==='menswear'?i:undefined}>
+   <figcaption><span class="label">{photo.label}</span><div class="garment-inspection__tools" aria-label={`${photo.label} zoom controls`}><button type="button" data-photo-zoom="out" aria-label={`Zoom out ${photo.label}`}>−</button><button type="button" data-photo-fit aria-label={`Fit ${photo.label}`}>Fit</button><button type="button" data-photo-zoom="in" aria-label={`Zoom in ${photo.label}`}>+</button></div></figcaption>
+   <button type="button" class="garment-inspection__viewport" data-photo-viewport aria-label={`Zoom ${photo.label} photograph`} aria-pressed="false" aria-describedby={`${subject.id}-${i}-photo-help`}>
+    {gender==='womenswear'?<FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/>:<MenswearPhoto image={photo.image} crop={photo.crop}/>}
+   </button>
+   <p class="garment-inspection__help" id={`${subject.id}-${i}-photo-help`}>Click / pinch to zoom · drag / arrow keys to pan<span data-photo-status role="status" aria-live="polite"></span></p>
+  </figure>)}
+ </div>
+ {missing.length>0&&<p class="garment-inspection__missing">{missing.length===2?'Separate Front and Back photographs are':`A separate ${missing[0]} photograph is`} not available for this reference.</p>}
+ {extra.length>0&&<div class="garment-inspection__additional" aria-label="Additional garment photographs">{extra.map((photo,i)=><figure class="garment-inspection__figure" data-photo-panel={photo.key}>
+  <figcaption><span class="label">{photo.label}</span><div class="garment-inspection__tools" aria-label={`${photo.label} zoom controls`}><button type="button" data-photo-zoom="out" aria-label={`Zoom out ${photo.label}`}>−</button><button type="button" data-photo-fit aria-label={`Fit ${photo.label}`}>Fit</button><button type="button" data-photo-zoom="in" aria-label={`Zoom in ${photo.label}`}>+</button></div></figcaption>
+  <button type="button" class="garment-inspection__viewport" data-photo-viewport aria-label={`Zoom ${photo.label} photograph`} aria-pressed="false" aria-describedby={`${subject.id}-additional-${i}-photo-help`}>
+   {gender==='womenswear'?<FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/>:<MenswearPhoto image={photo.image} crop={photo.crop}/>}
+  </button>
+  <p class="garment-inspection__help" id={`${subject.id}-additional-${i}-photo-help`}>Click / pinch to zoom · drag / arrow keys to pan<span data-photo-status role="status" aria-live="polite"></span></p>
+ </figure>)}</div>}
+</div>

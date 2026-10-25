@@ -34,20 +34,8 @@
 .ww-reader-head{height:3.5rem;padding:0 var(--ww-edge);display:flex;justify-content:space-between;align-items:center;gap:1rem;}
 .ww-reader-head a{display:flex;align-items:center;min-height:44px;text-decoration:none;color:var(--ink);font-size:.625rem;}
 .ww-reader-head p{font-size:.625rem;color:var(--muted);margin:0;}
-.ww-reader-floor{height:calc(100svh - 3.5rem);position:relative;overflow:hidden;}
-.ww-reader-image{--photo-h:calc(100svh - 8.5rem);position:absolute;top:.3rem;left:61%;transform:translateX(-50%);touch-action:pan-y;}
-.ww-reader-copy{position:absolute;top:30%;left:var(--ww-edge);width:25%;z-index:2;}
-.ww-reader-copy h3{font-size:clamp(1rem,1.6vw,1.5rem);line-height:1.25;font-weight:500;letter-spacing:-.025em;margin:0;}
-.ww-reader-copy p{font-size:.75rem;line-height:1.5;color:var(--muted);margin:1rem 0 0;max-width:27ch;}
-.ww-reader-controls{position:absolute;left:var(--ww-edge);bottom:1rem;display:flex;align-items:center;gap:1.4rem;z-index:3;}
-.ww-reader-controls button{min-width:44px;min-height:44px;padding:.5rem 0;background:none;border:0;color:var(--ink);font-size:.65rem;cursor:pointer;}
-.ww-reader-controls button[aria-pressed='true']{color:#c7020c;}
-.ww-reader-controls>span{font-size:.58rem;color:var(--muted);}
 
-.ww-reader[data-inspect] .ww-reader-image{touch-action:none;cursor:move;}
-.ww-reader[data-inspect] .ww-reader-copy{opacity:0;pointer-events:none;}
 .ww-reader :is(a,button):focus-visible{outline:2px solid #c7020c;outline-offset:4px;}
-.ww-match{position:fixed;z-index:350;pointer-events:none;transform-origin:top left;margin:0;}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){
  .ww-title h3{font-size:clamp(3rem,14vw,6rem);}
  .ww-exhibition[data-enhanced] .ww-camera{height:var(--mobile-journey);}
@@ -62,30 +50,15 @@
  .ww-reader-head{height:3.2rem;}
  .ww-reader-head a{font-size:.625rem;}
  .ww-reader-head p{font-size:.625rem;}
- .ww-reader-floor{height:calc(100svh - 3.2rem);}
- .ww-reader-image{--photo-h:calc(100svh - 15rem);left:50%;top:.1rem;}
- .ww-reader-copy{top:auto;bottom:6.2rem;left:var(--ww-edge);width:calc(100% - 2*var(--ww-edge));}
- .ww-reader-copy h3{font-size:.88rem;max-width:38ch;}
- .ww-reader-copy p{font-size:.69rem;margin:.45rem 0 0;max-width:none;}
- .ww-reader-controls{gap:1.2rem;bottom:.65rem;}
- .ww-reader-controls>span{font-size:.6rem;white-space:nowrap;}
  .ww-shot{font-size:.52rem!important;}
 }
 /* Server-rendered resting composition also works if enhancement is unavailable. */
 .pf:not(.pf--js) .ww-reader[hidden]:target{display:block;position:relative;inset:auto;}
-.pf:not(.pf--js) .ww-reader .ww-reader-controls{display:none;}
 @media(prefers-reduced-motion:reduce){.ww-exhibition *{scroll-behavior:auto!important;}}
 
-.ww-zoom-tools{position:absolute;right:var(--ww-edge);bottom:1rem;display:flex;align-items:center;gap:1rem;z-index:4;}
-.ww-zoom-tools[hidden]{display:none;}
-.ww-zoom-tools button,.ww-zoom-tools a{border:0;background:#fff;min-width:44px;min-height:44px;font-family:var(--mono);font-size:.62rem;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;}
-.ww-source-status{position:absolute;right:var(--ww-edge);bottom:4rem;font-size:.64rem;background:#fff;margin:0;color:var(--muted);}
-@media(max-width:767px),(max-width:1023px) and (orientation:portrait){.ww-zoom-tools{bottom:4rem;left:var(--ww-edge);right:auto;gap:.6rem;}.ww-source-status{bottom:7rem;right:var(--ww-edge);font-size:.6rem;}.ww-reader[data-inspect] .ww-reader-copy{visibility:hidden;}}
 /* The complete-source pairs must fit a phone's width as well as its height. */
 .ww-photo{--render-h:min(var(--photo-h,50svh),calc((var(--photo-max-width,100vw - 2*var(--ww-edge,1.2rem)))/(var(--aspect)*var(--window))));height:var(--render-h);width:calc(var(--render-h)*var(--aspect)*var(--window));}
 .ww-exhibition:not([data-enhanced]) .ww-actor:not(:first-child){display:none;}
-.pf:not(.pf--js) .ww-reader .ww-photo{--window:1!important;clip-path:none!important;}
-.pf:not(.pf--js) .ww-reader .ww-photo img{transform:none!important;}
 .ww-exhibition:not([data-enhanced]) .ww-stage{min-height:calc(100svh - var(--bar-h));display:grid;grid-template-columns:1.2fr 1fr;align-items:center;}
 .ww-exhibition:not([data-enhanced]) .ww-title{padding:2rem var(--ww-edge);}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){
@@ -93,27 +66,17 @@
  .ww-exhibition:not([data-enhanced]) .ww-title{padding:1.5rem var(--ww-edge) 1rem;}
  .ww-exhibition:not([data-enhanced]) .ww-actor:first-child{--photo-h:calc(100svh - 18rem);}
 }
-.ww-reader[data-inspect] .ww-reader-floor::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5.5rem;background:#fff;z-index:2;pointer-events:none;}
-.ww-source-status{z-index:4;}
-@media(max-width:767px),(max-width:1023px) and (orientation:portrait){.ww-reader[data-inspect] .ww-reader-floor::after{height:8.5rem;}}
 
 /* The photograph crosses the copy's field during the measured cut. The return
    remains available; focusing a control settles entry immediately. */
-.ww-reader[data-ww-moving] :is(.ww-reader-copy,.ww-reader-controls,.ww-zoom-tools){opacity:0;pointer-events:none;}
 
 /* The final-photo reader consumes any authentic Subject.views configuration. */
 [data-photo-view][hidden]{display:none;}
-.ww-reader-controls{flex-wrap:wrap;right:var(--ww-edge);gap:.5rem 1.2rem;}
-.ww-reader-controls button{white-space:nowrap;}
-.ww-reader-controls [data-ww-view]{font-size:.6rem;}
-.ww-reader-controls>span{white-space:normal;}
 .ww-rail--pair{justify-content:center;overflow:visible;gap:clamp(2rem,10vw,12rem);}
 .ww-rail--pair a{--photo-h:45svh;}
 .ww-exhibition[data-ww-exhibition='evening'] .ww-title h3{font-size:clamp(3.3rem,7vw,7.5rem);}
 .pf-act:has(.ww-exhibition) .pf-act__end{padding-top:2rem;}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){
- .ww-reader-controls{gap:.1rem .8rem;}
- .ww-reader-controls [data-ww-view]{font-size:.625rem;}
  .ww-exhibition[data-ww-exhibition='evening'] .ww-title h3{font-size:12vw;}
  .ww-rail--pair{gap:1.4rem;}
  .ww-rail--pair a{--photo-h:30svh;}
@@ -123,15 +86,10 @@
    edge makes that real source surface intentional; no pixels are retouched. */
 .ww-photo[data-surface='plate']::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px #11110f12;pointer-events:none;}
 
-.ww-reader-image{--photo-max-width:calc(64vw - 2*var(--ww-edge));}
-@media(max-width:767px),(max-width:1023px) and (orientation:portrait){.ww-reader-image{--photo-max-width:calc(100vw - 2*var(--ww-edge));}}
-@media(max-width:767px),(max-width:1023px) and (orientation:portrait){.ww-reader-copy{bottom:7.5rem;}}
 /* Inspection keeps the selected view legible while making room for zoom tools. */
 .ww-reader[data-inspect] [data-ww-view][aria-pressed='false']{display:none;}
 .ww-photo-credit a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px;}
-.ww-reader-copy .ww-photo-credit{font-size:.68rem;line-height:1.4;}
 @media(max-width:767px),(max-width:1023px) and (orientation:portrait){
- .ww-reader:has(.ww-photo-credit) .ww-reader-copy{bottom:6.5rem;}
 }
 
 /* Secondary historical access is separate from the four ten-look exhibitions. */

@@ -1,0 +1,21 @@
+/* The complete edits continue in the same vertical exhibition as the films.
+   No cards, fixed image crops, horizontal gate or mandatory scene navigation. */
+.ww-rail,.mw-rail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:clamp(40px,7vw,110px) clamp(24px,5vw,80px);overflow:visible;scroll-snap-type:none;padding:30px 0 50px}
+.ww-rail>a,.mw-rail>li{width:100%;min-width:0;flex:auto;display:flex;justify-content:center;scroll-snap-align:none}
+.ww-rail>a:nth-child(5n+2),.mw-rail>li:nth-child(5n+2){padding-top:clamp(30px,8svh,90px)}
+.ww-rail>a:nth-child(5n+3),.mw-rail>li:nth-child(5n+3){grid-column:1/-1}
+.ww-rail .ww-photo{--photo-h:min(64svh,calc((44vw - 2rem)/(var(--aspect)*var(--window))))}
+.ww-rail>a:nth-child(5n+3) .ww-photo{--photo-h:min(78svh,calc((88vw - 2rem)/(var(--aspect)*var(--window))))}
+.mw-rail a{width:100%;max-width:none;gap:16px}
+.mw-rail .mw-photo{height:min(64svh,calc((44vw - 2rem)/var(--photo-aspect)));max-width:none}
+.mw-rail>li:nth-child(5n+3) .mw-photo{height:min(78svh,calc((88vw - 2rem)/var(--photo-aspect)))}
+.mw-rail .mw-look-caption{max-width:40ch;text-align:center}
+.ww-archive-cue{display:flex;gap:10px;font-size:10px;color:var(--muted)}
+.ww-rail--pair{gap:clamp(24px,5vw,80px)}
+@media(max-width:699px){
+ .ww-rail,.mw-rail{grid-template-columns:minmax(0,1fr);gap:40px;padding:18px 0 32px}
+ .ww-rail>a:nth-child(n),.mw-rail>li:nth-child(n){grid-column:auto;padding-top:0}
+ .ww-rail .ww-photo,.ww-rail>a:nth-child(5n+3) .ww-photo{--photo-h:min(72svh,calc((100vw - 2*var(--ww-edge))/(var(--aspect)*var(--window))))}
+ .mw-rail .mw-photo,.mw-rail>li:nth-child(5n+3) .mw-photo{height:min(72svh,calc((100vw - 40px)/var(--photo-aspect)));max-width:none}
+ .mw-rail .mw-look-caption{font-size:10px}
+}
