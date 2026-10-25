@@ -23,6 +23,10 @@ Front/primary only. No rejected redesign is reactivated. Menswear and all origin
 source/generated artwork remain unchanged. This is a review branch, not a merge
 or production deployment. [Actual recovery report and screenshots](review/womenswear-seamless-recovery/README.md).
 
+## Tech Pack development samples — 25 October 2026
+
+The owner-authorized technical correction branch replaces the five blank six-page demo records with five ten-page Development Samples: cropped shirt, stripe legging, slip maxi dress, tapered trouser and pullover hoodie. The approved page system, garment artwork and existing document reader are retained. Fifty corrected PNGs, five lossless image PDFs, first-page previews and an element-level audit are provided. This is a branch handoff until the merge and live deployment are independently verified; see [technical audit and verification](../techpack-audit-2026-10-25/README.md).
+
 ## Authority and reading order
 
 1. Latest explicit user instructions.
