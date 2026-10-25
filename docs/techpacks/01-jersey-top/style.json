@@ -1,0 +1,710 @@
+{
+  "slot": 1,
+  "id": "AB-TP-01",
+  "slug": "01-jersey-top",
+  "title": "Jersey Top",
+  "subtitle": "Olive off-shoulder top / asymmetric folded band",
+  "version": "0.1",
+  "date": "2026-10-25",
+  "status": "PROPOSED DEVELOPMENT SPECIFICATION — SAMPLE VALIDATION REQUIRED",
+  "source": "assets/source/JERSEY & KNITS/8.png",
+  "web": "/portfolio/jersey/8-1400.webp",
+  "sourceIdentity": "rtw-ref-15",
+  "colour": "#727957",
+  "fit": "Soft body blouson above a close lower band; slim long sleeves; off-shoulder upper band.",
+  "sizes": [
+    "34",
+    "36",
+    "38",
+    "40",
+    "42"
+  ],
+  "baseSize": "38",
+  "market": "Adult Womenswear / EU-labelled development range; no UK conversion implied",
+  "bodyBasis": {
+    "34": {
+      "bust": 84,
+      "waist": 66,
+      "hip": 90
+    },
+    "36": {
+      "bust": 88,
+      "waist": 70,
+      "hip": 94
+    },
+    "38": {
+      "bust": 92,
+      "waist": 74,
+      "hip": 98
+    },
+    "40": {
+      "bust": 96,
+      "waist": 78,
+      "hip": 102
+    },
+    "42": {
+      "bust": 100,
+      "waist": 82,
+      "hip": 106
+    }
+  },
+  "stature": 168,
+  "bom": [
+    {
+      "id": "F01",
+      "item": "Main jersey",
+      "specification": "PROPOSED stable fine-gauge double jersey, 220–260 g/m²; ≥40% crosswise / ≥20% length extension without damage",
+      "composition": "TBD; viscose-rich blend with elastane is a sampling option",
+      "colour": "Olive / source-relative; lab dip TBD",
+      "placement": "Body, sleeves, upper/lower bands, tab",
+      "quantity": "1.25–1.55",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "T01",
+      "item": "Sewing thread",
+      "specification": "Core-spun polyester Tex 24 needle; soft textured polyester looper option; tune needle Nm 70–80 ballpoint",
+      "composition": "PROPOSED polyester",
+      "colour": "Match olive",
+      "placement": "All joins and hems",
+      "quantity": "120–160",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L01",
+      "item": "Development ID / size",
+      "specification": "Soft 35 × 12 mm label; neutral AB-TP-01 / EU size; not retail brand artwork",
+      "composition": "TBD label base",
+      "colour": "Neutral",
+      "placement": "Inner left side seam, 60 mm above lower-band seam",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L02",
+      "item": "Composition/care label",
+      "specification": "Content pending fibre and care verification; no preprinted wool/cotton claim",
+      "composition": "TBD",
+      "colour": "Neutral",
+      "placement": "Inner left side seam below ID label",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "PK01",
+      "item": "Protective sleeve",
+      "specification": "Unprinted; dimensions/gauge pending folded sample",
+      "composition": "TBD",
+      "colour": "Clear or paper",
+      "placement": "One folded garment",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    }
+  ],
+  "operations": [
+    {
+      "id": "C01",
+      "view": "front",
+      "feature": "Folded upper band / tab",
+      "point": [
+        350,
+        153
+      ],
+      "method": "Cut band with greatest stretch around body; fold double. Join short ends away from tab, 6 mm SA, 514 four-thread overedge, 2.8–3.0 mm stitch. Tab captures localized front folds at wearer left; secure to band only with concealed 301, no visible decorative tack.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C02",
+      "view": "front",
+      "feature": "Concealed low set-in sleeve",
+      "point": [
+        126,
+        200
+      ],
+      "method": "Join sleeve cap to body under band, 6 mm SA using 514, 2.8–3.0 mm. Match front/back cap notches; zero woven-style cap ease. Band must cover junction when worn. Fit trial required.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C03",
+      "view": "front",
+      "feature": "Sleeve hem",
+      "point": [
+        65,
+        469
+      ],
+      "method": "Turn 20 mm; 406 two-needle coverseam, 4 mm needle gauge, 3 mm stitch. Catch raw edge inside. Test extension; no lockstitch-only load-bearing hem.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C04",
+      "view": "front",
+      "feature": "Lower folded band",
+      "point": [
+        250,
+        386
+      ],
+      "method": "Close band ring at left side, 6 mm SA / 514. Fold wrong sides together and attach to relaxed body, distributing slight fullness evenly; proposed seam-line band/body ratio 0.90 at EU 38, adjust after recovery trial.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C05",
+      "view": "back",
+      "feature": "Back band continuity",
+      "point": [
+        250,
+        166
+      ],
+      "method": "Plain folded band across back; do not add centre-back body seam. Align band join to left body side; conceal joining seam within folded construction. Press with low tension and test temperature.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C06",
+      "view": "back",
+      "feature": "Underarm and side seam",
+      "point": [
+        375,
+        290
+      ],
+      "method": "Close underarm/side in one continuous pass where band sequence allows; superimposed join, 6 mm SA, 514, 3 mm stitch. Secure ends into band/hem. No seam twisting.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C07",
+      "view": "back",
+      "feature": "Inner seam comfort",
+      "point": [
+        136,
+        320
+      ],
+      "method": "Keep overedge allowance toward back; use differential feed to avoid waviness. Trial seam extension ≥40% without stitch break; recover flat after 30 min.",
+      "bom": [
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C08",
+      "view": "back",
+      "feature": "Identification labels",
+      "point": [
+        139,
+        355
+      ],
+      "method": "Catch L01/L02 in wearer-left side seam with smooth edges away from skin. Position 60 mm above lower-band join. Care content remains TBD; do not attach unverified retail care artwork.",
+      "bom": [
+        "L01",
+        "L02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    }
+  ],
+  "poms": [
+    {
+      "id": "A",
+      "name": "Body length from upper-band top",
+      "method": "Front centre: relaxed upper edge to lower hem, straight vertically; band unfolded only as worn.",
+      "unit": "cm",
+      "base": 45,
+      "grade": 0.5,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          250,
+          142
+        ],
+        [
+          250,
+          414
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 44.0,
+        "36": 44.5,
+        "38": 45.0,
+        "40": 45.5,
+        "42": 46.0
+      },
+      "diagram": "pom-front-1.svg",
+      "label": [
+        265,
+        342
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Bust width",
+      "method": "Flatten without stretching; 25 mm below lowest underarm junction, edge to edge.",
+      "unit": "cm",
+      "base": 48,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          130,
+          254
+        ],
+        [
+          370,
+          254
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 44,
+        "36": 46,
+        "38": 48,
+        "40": 50,
+        "42": 52
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "C",
+      "name": "Lower-band opening",
+      "method": "Bottom folded edge, relaxed, edge to edge.",
+      "unit": "cm",
+      "base": 40,
+      "grade": 1.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          137,
+          412
+        ],
+        [
+          363,
+          412
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 37.0,
+        "36": 38.5,
+        "38": 40.0,
+        "40": 41.5,
+        "42": 43.0
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "D",
+      "name": "Upper opening width",
+      "method": "Upper-band top edge laid flat without tab distortion, edge to edge.",
+      "unit": "cm",
+      "base": 45,
+      "grade": 1.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          110,
+          155
+        ],
+        [
+          390,
+          137
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 42.0,
+        "36": 43.5,
+        "38": 45.0,
+        "40": 46.5,
+        "42": 48.0
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "E",
+      "name": "Sleeve outer length",
+      "method": "Straight from the concealed low-cap junction beneath the band to outer finished sleeve edge; no curved tape path.",
+      "unit": "cm",
+      "base": 48,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          125,
+          191
+        ],
+        [
+          28,
+          474
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 47.0,
+        "36": 47.5,
+        "38": 48.0,
+        "40": 48.5,
+        "42": 49.0
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "F",
+      "name": "Bicep width",
+      "method": "Sleeve laid flat, 25 mm below concealed armhole base, perpendicular to sleeve grain.",
+      "unit": "cm",
+      "base": 15.5,
+      "grade": 0.6,
+      "tolerance": 0.4,
+      "view": "front",
+      "points": [
+        [
+          48,
+          254
+        ],
+        [
+          124,
+          267
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 14.3,
+        "36": 14.9,
+        "38": 15.5,
+        "40": 16.1,
+        "42": 16.7
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "G",
+      "name": "Sleeve opening",
+      "method": "Finished sleeve edge perpendicular to sleeve grain; no extension.",
+      "unit": "cm",
+      "base": 9,
+      "grade": 0.3,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          28,
+          474
+        ],
+        [
+          74,
+          480
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 8.4,
+        "36": 8.7,
+        "38": 9.0,
+        "40": 9.3,
+        "42": 9.6
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "H",
+      "name": "Lower-band finished depth",
+      "method": "At centre back from attachment seam to folded bottom edge.",
+      "unit": "cm",
+      "base": 6,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          250,
+          377
+        ],
+        [
+          250,
+          412
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 6,
+        "36": 6,
+        "38": 6,
+        "40": 6,
+        "42": 6
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "I",
+      "name": "Upper-band finished depth",
+      "method": "At centre back, folded top to lower band edge, exclude seam allowance.",
+      "unit": "cm",
+      "base": 10,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          250,
+          132
+        ],
+        [
+          250,
+          190
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 10,
+        "36": 10,
+        "38": 10,
+        "40": 10,
+        "42": 10
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "J",
+      "name": "Across back body",
+      "method": "25 mm below underarm junction; match bust measuring level.",
+      "unit": "cm",
+      "base": 48,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "back",
+      "points": [
+        [
+          130,
+          254
+        ],
+        [
+          370,
+          254
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 44,
+        "36": 46,
+        "38": 48,
+        "40": 50,
+        "42": 52
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "K",
+      "name": "Front tab finished width",
+      "method": "Measure crosswise on finished tab, excluding folded seam allowance.",
+      "unit": "cm",
+      "base": 4,
+      "grade": 0,
+      "tolerance": 0.2,
+      "view": "front",
+      "points": [
+        [
+          347,
+          133
+        ],
+        [
+          373,
+          133
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 4,
+        "36": 4,
+        "38": 4,
+        "40": 4,
+        "42": 4
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "L",
+      "name": "Underarm to body hem",
+      "method": "Wearer-right side: lowest sleeve junction to lower folded hem.",
+      "unit": "cm",
+      "base": 29,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          370,
+          239
+        ],
+        [
+          363,
+          412
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 28.0,
+        "36": 28.5,
+        "38": 29.0,
+        "40": 29.5,
+        "42": 30.0
+      },
+      "diagram": "pom-back-1.svg"
+    }
+  ],
+  "details": [
+    [
+      "upper-band",
+      "Upper band and gathered tab",
+      "Folded self band; tab attachment hidden inside. Proposed concealed sleeve junction, no exposed shoulder seam."
+    ],
+    [
+      "stretch-hem",
+      "Sleeve hem / 406 coverseam",
+      "20 mm turn; 4 mm needle gauge; preserve crosswise extension. Stitch formation is not a flatseam."
+    ],
+    [
+      "lower-band",
+      "Lower band attachment",
+      "Folded self band; proposed 0.90 seam-line ratio to body, verify after relaxation. No separate elastic specified."
+    ]
+  ],
+  "pattern": [
+    "Front ×1 on fold; back ×1 on fold; sleeves ×2 mirrored; upper band ×1 cut across stretch (piece/length trial); lower band ×1; tab ×1. These are proposed pattern components, not existing measured patterns.",
+    "Match sleeve cap/armhole lengths with no cap gathering; walk low-cap seam and notch front/back separately.",
+    "Tab gathering only at wearer-left front band; do not gather back band. Body fullness is absorbed at lower band; no invented body darts."
+  ],
+  "assembly": [
+    "Relax knit 24 h; test extension, recovery and dimensional change before cutting.",
+    "Cut mirrored sleeves; mark band join, tab centre and low-armhole balance points.",
+    "Prepare upper band ring and tab; pretest tab fold bulk.",
+    "Join low sleeve caps to open body; close underarms and side seams.",
+    "Apply upper band to concealed neckline/cap edge; secure tab from inside.",
+    "Attach folded lower band; coverseam sleeve hems; attach development labels.",
+    "Steam without stretching; cool flat 24 h before measurement."
+  ],
+  "qc": [
+    "Upper band lies level at back; front tab on wearer left; no accidental twisted band.",
+    "Reach trial: arms forward/raised, neckline remains comfortable; no sleeve-cap strain.",
+    "406 hems stretch without pop; 514 seams no tunnelling or grinning.",
+    "Check bust and bands after 24 h relaxation; all POMs within listed tolerances."
+  ],
+  "risks": [
+    "Unverified knit recovery may cause neckline slip; do not solve by an unrecorded elastic addition.",
+    "Off-shoulder fit must be checked against actual upper-arm/chest dimensions and movement.",
+    "Shrinkage and tab bulk may change band length; revise after first prototype."
+  ],
+  "evidence": [
+    "CONFIRMED in reference: olive colour family, long fitted sleeves, broad folded upper band, gathered tab on wearer-left front, plain folded band across back, lower body band.",
+    "Knit classification is a development interpretation supported by the portfolio knit reference; fibre, knit structure and elastic performance are untested.",
+    "No closure, pocket or exposed shoulder seam is visible. Back vertical shadows are folds, not specified panel seams."
+  ],
+  "assumptions": [
+    "PROPOSED cut-and-sew jersey engineering, not a claim that an original fully-fashioned knitting pattern exists.",
+    "Upper sleeve/body junction is hidden by the folded band: use a low set-in sleeve with concealed cap seam; verify reach and band stability on body.",
+    "No separate inserted elastic at neckline in this issue. If recovery fails, revise BOM and upper-band construction together."
+  ],
+  "consumption": "ESTIMATE: 1.25–1.55 m shell at 150 cm usable width, EU 38, non-directional knit, body pair + sleeve pair + long folded upper band + lower band + tab. Preliminary nesting: sleeves beside body where width permits; 15% cutting/shrink reserve. Verify after pattern, relaxation and marker; not an approved yield.",
+  "care": "TBD: fibre identity, component compatibility, care testing, country of origin and destination-market legal review. Do not print generic care symbols.",
+  "labels": "PROPOSED: neutral development ID + EU size; 35 × 12 mm soft ID label, ends turned 5 mm and secured with 301. No third-party logo or manufacturer claim. Placement: inner left side, 60 mm above band.",
+  "packaging": "PROPOSED: fold only after cooling; use unprinted recyclable protective sleeve sized to the actual folded sample. Bag material, gauge and dimensions TBD after packing trial. One garment per sleeve; no invented approved bag size.",
+  "revision": [
+    {
+      "version": "0.1",
+      "date": "2026-10-25",
+      "change": "Initial source-referenced development specification; no physical sample, marker or fit validation",
+      "status": "PROPOSED / sampling review"
+    }
+  ],
+  "pomGroups": [
+    {
+      "file": "pom-front-1.svg",
+      "view": "front",
+      "ids": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "file": "pom-front-2.svg",
+      "view": "front",
+      "ids": [
+        "E",
+        "F",
+        "G",
+        "K"
+      ]
+    },
+    {
+      "file": "pom-back-1.svg",
+      "view": "back",
+      "ids": [
+        "H",
+        "I",
+        "J",
+        "L"
+      ]
+    }
+  ]
+}

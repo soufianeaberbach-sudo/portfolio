@@ -23,6 +23,15 @@ jobs:
 
       - run: npm run build
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Technical document integrity and engineering cross-references
+        run: |
+          python -m pip install -r scripts/techpacks/requirements.txt
+          npm run test:techpacks
+
       # Validates worker/index.ts and wrangler.jsonc without deploying or
       # needing any Cloudflare credential.
       - name: Validate Worker configuration
@@ -82,6 +91,7 @@ jobs:
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-historical-access.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-archive-keyboard.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/fashion-chapter-history.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/techpacks.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/womenswear-route-origin.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-media-loading.mjs
           node tests/three-panel-photography.mjs

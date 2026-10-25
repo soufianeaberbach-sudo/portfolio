@@ -1,0 +1,833 @@
+{
+  "slot": 5,
+  "id": "AB-TP-05",
+  "slug": "05-hooded-sweatshirt",
+  "title": "Hooded Sweatshirt",
+  "subtitle": "Burgundy cropped raglan / drawcord hood / rib trims",
+  "version": "0.1",
+  "date": "2026-10-25",
+  "status": "PROPOSED DEVELOPMENT SPECIFICATION — SAMPLE VALIDATION REQUIRED",
+  "source": "assets/source/JERSEY & KNITS/6.png",
+  "web": "/portfolio/jersey/6-1400.webp",
+  "sourceIdentity": "streetwear-ref-02",
+  "colour": "#73323c",
+  "fit": "Relaxed cropped body, full raglan sleeves, gathered into close rib cuffs and waistband.",
+  "sizes": [
+    "34",
+    "36",
+    "38",
+    "40",
+    "42"
+  ],
+  "baseSize": "38",
+  "market": "Adult Womenswear / EU-labelled development range; no UK conversion implied",
+  "bodyBasis": {
+    "34": {
+      "bust": 84,
+      "waist": 66,
+      "hip": 90
+    },
+    "36": {
+      "bust": 88,
+      "waist": 70,
+      "hip": 94
+    },
+    "38": {
+      "bust": 92,
+      "waist": 74,
+      "hip": 98
+    },
+    "40": {
+      "bust": 96,
+      "waist": 78,
+      "hip": 102
+    },
+    "42": {
+      "bust": 100,
+      "waist": 82,
+      "hip": 106
+    }
+  },
+  "stature": 168,
+  "bom": [
+    {
+      "id": "F01",
+      "item": "Sweatshirt shell",
+      "specification": "PROPOSED loopback or brushed sweatshirt knit 300–340 g/m²; ≥20% cross extension",
+      "composition": "TBD; cotton-rich polyester blend option",
+      "colour": "Burgundy / lab dip TBD",
+      "placement": "Body, raglan sleeves, outer/inner hood",
+      "quantity": "1.70–2.00",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "F02",
+      "item": "Rib trim",
+      "specification": "PROPOSED 2×2 rib, 300–360 g/m²; ≥60% usable extension and recovery compatible with F01",
+      "composition": "TBD; elastane-supported rib option",
+      "colour": "Match burgundy",
+      "placement": "Waistband and cuffs",
+      "quantity": "0.25–0.35",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "D01",
+      "item": "Drawcord",
+      "specification": "PROPOSED round 5 mm soft cord, no metal aglets; heat/knotted ends after material trial",
+      "composition": "TBD",
+      "colour": "Match burgundy",
+      "placement": "Hood channel",
+      "quantity": 1.25,
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "I01",
+      "item": "Exit reinforcement",
+      "specification": "Soft fusible knit patches 25 × 25 mm; peel/strike-through trial",
+      "composition": "TBD",
+      "colour": "Concealed",
+      "placement": "Two hood drawcord exits",
+      "quantity": 2,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "N01",
+      "item": "Neck seam tape",
+      "specification": "10 mm soft jersey tape, compatible extension; no hard woven binding",
+      "composition": "TBD",
+      "colour": "Match burgundy",
+      "placement": "Inside back neck / hood join",
+      "quantity": 0.3,
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "T01",
+      "item": "Sewing thread",
+      "specification": "Polyester Tex 30 needle and soft looper; Nm 80–90 ballpoint after ply trial",
+      "composition": "PROPOSED polyester",
+      "colour": "Match burgundy",
+      "placement": "514 joins / 301 hood, channel and neck tape",
+      "quantity": "180–230",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L01",
+      "item": "ID / size and care set",
+      "specification": "Neutral development identity; retail care content withheld",
+      "composition": "TBD",
+      "colour": "Neutral",
+      "placement": "Inside back neck tape / left side seam",
+      "quantity": 1,
+      "unit": "set",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "PK01",
+      "item": "Protective sleeve",
+      "specification": "Hood folded inward without crushing cord; size to cooled sample",
+      "composition": "TBD",
+      "colour": "Unprinted",
+      "placement": "One sweatshirt",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    }
+  ],
+  "operations": [
+    {
+      "id": "C01",
+      "view": "front",
+      "feature": "Raglan sleeve joining",
+      "point": [
+        150,
+        190
+      ],
+      "method": "Front/back raglan seam 6 mm SA / 514 four-thread overedge, 3 mm stitch. Match neck and underarm notches; no set-in armhole or separate shoulder seam. Optional cover row not specified; visible source seam lines represented only.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C02",
+      "view": "front",
+      "feature": "Hood channel and exits",
+      "point": [
+        250,
+        175
+      ],
+      "method": "Self-lined hood, 10 mm bagged face-edge SA / 301, 3 mm. Channel stitch 25 mm from finished opening, 301 / 3 mm, keeping needle out of cord. Two 8 mm stitched buttonholes on I01 reinforcement, centres 18 mm above neckline and 18 mm from CF edge; no metal eyelets.",
+      "bom": [
+        "F01",
+        "I01",
+        "D01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C03",
+      "view": "front",
+      "feature": "Folded hem rib",
+      "point": [
+        250,
+        390
+      ],
+      "method": "Finish 8 cm band; ring join 6 mm / 514. Proposed seam-line rib/body attachment ratio 0.80 (80/100 cm base). Quarter-match and distribute body fullness; 6 mm / 514, 3 mm stitch; recovery trial before approval.",
+      "bom": [
+        "F02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C04",
+      "view": "front",
+      "feature": "Rib cuffs",
+      "point": [
+        65,
+        465
+      ],
+      "method": "Finish 7 cm cuff, proposed seam-line cuff/sleeve-opening ratio 0.75. Close cuff ring / 6 mm 514; fold and attach evenly without tucks. Do not stretch body sleeve during pressing.",
+      "bom": [
+        "F02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C05",
+      "view": "back",
+      "feature": "Two-piece self-lined hood",
+      "point": [
+        250,
+        235
+      ],
+      "method": "Outer and inner hood each two mirrored halves. Join CB curve 10 mm SA / 301, 3 mm, press allowances apart on ham. Bag outer/inner face; turn, channel stitch. No unsupported third centre strip.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C06",
+      "view": "back",
+      "feature": "Hood-to-neck seam / tape",
+      "point": [
+        250,
+        183
+      ],
+      "method": "Hood neck seam 10 mm / 514 at 3 mm; match CF, CB and raglan junctions. Cover inside back seam with N01, 301 / 3 mm, secure only to allowance/inside where possible to avoid invented face topstitch.",
+      "bom": [
+        "F01",
+        "N01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C07",
+      "view": "back",
+      "feature": "Continuous underarm / side",
+      "point": [
+        372,
+        290
+      ],
+      "method": "Close from sleeve cuff to lower body edge, 6 mm SA / 514, 3 mm. Match raglan seam intersections; allowance toward back. Rib rings attached after body closure.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C08",
+      "view": "back",
+      "feature": "Cord / label control",
+      "point": [
+        270,
+        211
+      ],
+      "method": "Thread D01 through channel after stitching. Proposed cut 125 cm, knot ends; aim equal exposed lengths with hood open. L01 on neck tape and inner left side. Adult market/cord entrapment review before production.",
+      "bom": [
+        "D01",
+        "N01",
+        "L01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    }
+  ],
+  "poms": [
+    {
+      "id": "A",
+      "name": "CB body length excl. hood",
+      "method": "From CB hood/neck attachment seam to finished rib hem vertically.",
+      "unit": "cm",
+      "base": 46,
+      "grade": 0.5,
+      "tolerance": 0.7,
+      "view": "back",
+      "points": [
+        [
+          250,
+          176
+        ],
+        [
+          250,
+          427
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 45.0,
+        "36": 45.5,
+        "38": 46.0,
+        "40": 46.5,
+        "42": 47.0
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "B",
+      "name": "Bust width",
+      "method": "25 mm below underarm raglan junction, edge to edge relaxed.",
+      "unit": "cm",
+      "base": 54,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          130,
+          315
+        ],
+        [
+          370,
+          315
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 50,
+        "36": 52,
+        "38": 54,
+        "40": 56,
+        "42": 58
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "C",
+      "name": "Hem-band opening relaxed",
+      "method": "Folded lower rib edge flat, no extension.",
+      "unit": "cm",
+      "base": 40,
+      "grade": 1.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          145,
+          427
+        ],
+        [
+          355,
+          427
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 37.0,
+        "36": 38.5,
+        "38": 40.0,
+        "40": 41.5,
+        "42": 43.0
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "D",
+      "name": "Neck-to-cuff raglan length",
+      "method": "From front neckline/raglan seam intersection along outer sleeve to finished cuff.",
+      "unit": "cm",
+      "base": 69,
+      "grade": 0.7,
+      "tolerance": 0.7,
+      "view": "front",
+      "points": [
+        [
+          204,
+          173
+        ],
+        [
+          43,
+          485
+        ]
+      ],
+      "kind": "contour",
+      "path": "M204 173 Q120 178 72 211 Q28 300 20 360 L43 485",
+      "status": "PROPOSED",
+      "values": {
+        "34": 67.6,
+        "36": 68.3,
+        "38": 69.0,
+        "40": 69.7,
+        "42": 70.4
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "E",
+      "name": "Bicep width",
+      "method": "25 mm below raglan underarm junction perpendicular to sleeve grain.",
+      "unit": "cm",
+      "base": 23,
+      "grade": 0.8,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          28,
+          300
+        ],
+        [
+          124,
+          320
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 21.4,
+        "36": 22.2,
+        "38": 23.0,
+        "40": 23.8,
+        "42": 24.6
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "F",
+      "name": "Cuff opening relaxed",
+      "method": "Folded cuff edge perpendicular to sleeve grain.",
+      "unit": "cm",
+      "base": 8.5,
+      "grade": 0.3,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          43,
+          485
+        ],
+        [
+          83,
+          494
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 7.9,
+        "36": 8.2,
+        "38": 8.5,
+        "40": 8.8,
+        "42": 9.1
+      },
+      "diagram": "pom-front-2.svg",
+      "label": [
+        43,
+        520
+      ]
+    },
+    {
+      "id": "G",
+      "name": "Cuff finished depth",
+      "method": "Along sleeve from cuff attachment seam to fold.",
+      "unit": "cm",
+      "base": 7,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          69,
+          448
+        ],
+        [
+          62,
+          489
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 7,
+        "36": 7,
+        "38": 7,
+        "40": 7,
+        "42": 7
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "H",
+      "name": "Hem-band finished depth",
+      "method": "At CB, attachment seam to folded lower edge.",
+      "unit": "cm",
+      "base": 8,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          250,
+          382
+        ],
+        [
+          250,
+          427
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 8,
+        "36": 8,
+        "38": 8,
+        "40": 8,
+        "42": 8
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "I",
+      "name": "Hood height",
+      "method": "Hood laid on side, neck seam base to crown vertically; exclude SA.",
+      "unit": "cm",
+      "base": 35,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "hood",
+      "points": [
+        [
+          180,
+          400
+        ],
+        [
+          238,
+          115
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 34.0,
+        "36": 34.5,
+        "38": 35.0,
+        "40": 35.5,
+        "42": 36.0
+      },
+      "diagram": "pom-hood-1.svg",
+      "dimensionX": 155,
+      "label": [
+        124,
+        265
+      ]
+    },
+    {
+      "id": "J",
+      "name": "Hood depth",
+      "method": "Hood laid on side, face edge to back curve at mid-height.",
+      "unit": "cm",
+      "base": 27,
+      "grade": 0.3,
+      "tolerance": 0.5,
+      "view": "hood",
+      "points": [
+        [
+          200,
+          240
+        ],
+        [
+          370,
+          240
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 26.4,
+        "36": 26.7,
+        "38": 27.0,
+        "40": 27.3,
+        "42": 27.6
+      },
+      "diagram": "pom-hood-1.svg"
+    },
+    {
+      "id": "K",
+      "name": "Hood face opening length",
+      "method": "One side from face/neck point to crown along finished face curve.",
+      "unit": "cm",
+      "base": 38,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "hood",
+      "points": [
+        [
+          180,
+          400
+        ],
+        [
+          238,
+          115
+        ]
+      ],
+      "kind": "contour",
+      "path": "M180 400 Q168 260 193 176 Q210 124 238 115",
+      "status": "PROPOSED",
+      "values": {
+        "34": 37.0,
+        "36": 37.5,
+        "38": 38.0,
+        "40": 38.5,
+        "42": 39.0
+      },
+      "diagram": "pom-hood-1.svg"
+    },
+    {
+      "id": "L",
+      "name": "Cord cut length",
+      "method": "Loose component straight without tension, tip to tip before knotting.",
+      "unit": "cm",
+      "base": 125,
+      "grade": 0,
+      "tolerance": 1,
+      "view": "hood",
+      "points": [
+        [
+          100,
+          490
+        ],
+        [
+          400,
+          490
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 125,
+        "36": 125,
+        "38": 125,
+        "40": 125,
+        "42": 125
+      },
+      "diagram": "pom-hood-1.svg"
+    },
+    {
+      "id": "M",
+      "name": "Underarm to hem",
+      "method": "Side seam from raglan underarm junction to folded bottom rib edge.",
+      "unit": "cm",
+      "base": 27,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          372,
+          290
+        ],
+        [
+          355,
+          427
+        ]
+      ],
+      "kind": "vertical",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 26.0,
+        "36": 26.5,
+        "38": 27.0,
+        "40": 27.5,
+        "42": 28.0
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "N",
+      "name": "Body width at band join",
+      "method": "Body side edge to side edge directly above rib attachment, gathers gently opened without stretching knit.",
+      "unit": "cm",
+      "base": 50,
+      "grade": 2,
+      "tolerance": 0.7,
+      "view": "back",
+      "points": [
+        [
+          134,
+          382
+        ],
+        [
+          366,
+          382
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 46,
+        "36": 48,
+        "38": 50,
+        "40": 52,
+        "42": 54
+      },
+      "diagram": "pom-back-1.svg",
+      "label": [
+        292,
+        373
+      ]
+    }
+  ],
+  "details": [
+    [
+      "hood",
+      "Hood pieces / channel / exit",
+      "Two outer + two inner mirrored hood halves. 25 mm face channel; stitched exits reinforced with 25 mm patches; no eyelets."
+    ],
+    [
+      "rib",
+      "Rib ring / attachment",
+      "8 cm hem / 7 cm cuff; proposed 0.80 hem and 0.75 cuff seam-line ratios; no inserted waist elastic."
+    ],
+    [
+      "raglan",
+      "Raglan and inside-neck finish",
+      "6 mm raglan join / 514; 10 mm hood attachment; soft 10 mm tape covers back seam allowance."
+    ]
+  ],
+  "pattern": [
+    "Front ×1 on fold, back ×1 on fold, raglan sleeves ×2 mirrored, outer hood halves ×2, inner hood halves ×2, rib hem band ×1, rib cuffs ×2. PROPOSED components, no measured pattern claim.",
+    "Walk front/back raglan lengths independently; place notches clear of underarm; retain sleeve pitch.",
+    "Hood neck seam length must equal completed neckline excluding overlap; face channel must clear lining and cord exits.",
+    "Rib ratios at base: hem 80/100 = 0.80; cuff seam-line ring 18/24 = 0.75 (opening is narrower after shaping). Refit using actual rib recovery; do not apply same ratio blindly to every size."
+  ],
+  "assembly": [
+    "Relax shell/rib; wash and recovery-test together; approve compatible shrinkage.",
+    "Cut body/sleeves and mirrored hood halves; fuse exit patches.",
+    "Make stitched hood exits; join outer/inner CB hood curves.",
+    "Bag face edge, turn and form channel before inserting cord.",
+    "Join raglan sleeves; close underarms/sides with matched junctions.",
+    "Attach hood; cover inside back neck seam with soft tape/ID.",
+    "Prepare and attach rib rings; insert cord and knot ends.",
+    "Steam lightly, cool/relax flat and inspect cropped balance and hood drape."
+  ],
+  "qc": [
+    "Raglan neck/underarm junctions align; no twisted sleeves or cap-ease tucks.",
+    "Hood back curve smooth; lining not hanging beyond face; cord runs free.",
+    "Buttonhole exits do not tear; no hidden unlisted eyelets.",
+    "Rib seams recover after extension; shell not scalloped at attachment.",
+    "Neck-to-cuff and CB length within tolerance after 24 h relaxation."
+  ],
+  "risks": [
+    "Rib/shrink mismatch may collapse cropped hem or constrict cuff; ratios are trial values.",
+    "Self-lined hood weight may pull neckline back; assess on fit model.",
+    "Cord length and exits need destination-market adult safety review; no youth compliance claim."
+  ],
+  "evidence": [
+    "CONFIRMED in source: burgundy hooded sweatshirt, front/back raglan lines, drawcord, cropped gathered body, rib-look hem band and cuffs.",
+    "No kangaroo pocket, zipper or metal eyelet is visible; none specified. Joggers and shoes excluded.",
+    "Hood internal layers, cord channel and rib structure are PROPOSED; source does not show inside construction."
+  ],
+  "assumptions": [
+    "PROPOSED two-piece hood with self lining (four shell-shaped pieces total); no centre panel added.",
+    "Drawcord exits through reinforced stitched buttonholes, not assumed metal eyelets.",
+    "Rib is proposed 2×2 matching knit; exact shell/rib composition, recovery and shrinkage remain unverified. Adult garment only; market cord review pending."
+  ],
+  "consumption": "ESTIMATE: shell 1.70–2.00 m at 150 cm usable width, EU 38, non-directional sweatshirt knit, body pair + sleeve pair + four hood panels (self-lined); 15% cutting/shrink reserve. Rib 0.25–0.35 m at 100 cm open width, band/cuffs across stretch. Verify actual marker, nap and laundering shrinkage.",
+  "care": "TBD: fibre identity, component compatibility, care testing, country of origin and destination-market legal review. Do not print generic care symbols.",
+  "labels": "PROPOSED: neutral development ID + EU size; 35 × 12 mm soft ID label, ends turned 5 mm and secured with 301. No third-party logo or manufacturer claim. Placement: inside back neck tape plus left side seam.",
+  "packaging": "PROPOSED: fold only after cooling; use unprinted recyclable protective sleeve sized to the actual folded sample. Bag material, gauge and dimensions TBD after packing trial. One garment per sleeve; no invented approved bag size.",
+  "revision": [
+    {
+      "version": "0.1",
+      "date": "2026-10-25",
+      "change": "Initial source-referenced development specification; no physical sample, marker or fit validation",
+      "status": "PROPOSED / sampling review"
+    }
+  ],
+  "pomGroups": [
+    {
+      "file": "pom-front-1.svg",
+      "view": "front",
+      "ids": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "file": "pom-front-2.svg",
+      "view": "front",
+      "ids": [
+        "F",
+        "G"
+      ]
+    },
+    {
+      "file": "pom-back-1.svg",
+      "view": "back",
+      "ids": [
+        "A",
+        "H",
+        "M",
+        "N"
+      ]
+    },
+    {
+      "file": "pom-hood-1.svg",
+      "view": "hood",
+      "ids": [
+        "I",
+        "J",
+        "K",
+        "L"
+      ]
+    }
+  ]
+}

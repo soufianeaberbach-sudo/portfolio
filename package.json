@@ -13,7 +13,10 @@
     "test:worker": "node tests/worker.mjs",
     "test:domain": "node tests/domain.mjs",
     "verify:production": "node scripts/verify-production.mjs",
-    "test:production": "node --test tests/production-verification.mjs"
+    "test:production": "node --test tests/production-verification.mjs",
+    "techpacks:build": "python3 scripts/techpacks/layout.py && node scripts/techpacks/render.mjs && python3 scripts/techpacks/validate.py",
+    "test:techpacks": "python3 -m unittest discover -s scripts/techpacks -p \"test_*.py\" && python3 scripts/techpacks/validate.py",
+    "test:techpacks:browser": "node tests/techpacks.mjs"
   },
   "devDependencies": {
     "astro": "^5.16.6",

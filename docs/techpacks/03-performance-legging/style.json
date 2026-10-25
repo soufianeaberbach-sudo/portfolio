@@ -1,0 +1,803 @@
+{
+  "slot": 3,
+  "id": "AB-TP-03",
+  "slug": "03-performance-legging",
+  "title": "Performance Legging",
+  "subtitle": "Red high waist / white contrast side panels",
+  "version": "0.1",
+  "date": "2026-10-25",
+  "status": "PROPOSED DEVELOPMENT SPECIFICATION — SAMPLE VALIDATION REQUIRED",
+  "source": "assets/source/SPORTSWEAR & ACTIVEWEAR/8.png",
+  "web": "/portfolio/sport/8-1400.webp",
+  "sourceIdentity": "activewear-ref-08",
+  "colour": "#bd2636",
+  "fit": "Close fit with proposed 13.5% waist and 14.3% hip negative ease at EU 38; not a tested compression claim.",
+  "sizes": [
+    "34",
+    "36",
+    "38",
+    "40",
+    "42"
+  ],
+  "baseSize": "38",
+  "market": "Adult Womenswear / EU-labelled development range; no UK conversion implied",
+  "bodyBasis": {
+    "34": {
+      "bust": 84,
+      "waist": 66,
+      "hip": 90
+    },
+    "36": {
+      "bust": 88,
+      "waist": 70,
+      "hip": 94
+    },
+    "38": {
+      "bust": 92,
+      "waist": 74,
+      "hip": 98
+    },
+    "40": {
+      "bust": 96,
+      "waist": 78,
+      "hip": 102
+    },
+    "42": {
+      "bust": 100,
+      "waist": 82,
+      "hip": 106
+    }
+  },
+  "stature": 168,
+  "bom": [
+    {
+      "id": "F01",
+      "item": "Red performance knit",
+      "specification": "PROPOSED compact interlock, 240–280 g/m²; ≥65% crosswise and ≥40% length extension; ≤5% residual growth after agreed recovery trial",
+      "composition": "TBD; polyamide/elastane or polyester/elastane option",
+      "colour": "Red / lab dip TBD",
+      "placement": "Legs, rear yokes, two-layer waistband, gusset",
+      "quantity": "1.00–1.20",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "F02",
+      "item": "White contrast knit",
+      "specification": "Same weight/extension/recovery class as F01; opacity/colour migration trial mandatory",
+      "composition": "TBD; match F01 base",
+      "colour": "White / match standard TBD",
+      "placement": "Both side panels",
+      "quantity": "0.25–0.35",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "E01",
+      "item": "Waist elastic",
+      "specification": "10 mm soft knitted elastic; ≥70% usable extension without damage; 62 cm finished ring, cut 64 cm incl. 2 cm overlap at EU 38",
+      "composition": "TBD elastomer/textile",
+      "colour": "Red or white concealed",
+      "placement": "Inside waistband top fold",
+      "quantity": 0.65,
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "T01",
+      "item": "Stretch seam thread",
+      "specification": "Polyester needle Tex 24, soft textured polyester loopers; ballpoint Nm 75–80 trial",
+      "composition": "PROPOSED polyester",
+      "colour": "Match red / white by panel",
+      "placement": "514 joints / 406 hems",
+      "quantity": "160–210",
+      "unit": "m",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "L01",
+      "item": "Heat-transfer ID/size + care",
+      "specification": "PROPOSED low-temperature soft transfer; migration/stretch trials; care content pending",
+      "composition": "TBD transfer system",
+      "colour": "Neutral",
+      "placement": "Inside CB waistband, below top elastic",
+      "quantity": 1,
+      "unit": "set",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "PK01",
+      "item": "Protective sleeve",
+      "specification": "Keep red/white surfaces separated during damp transit test; fold after cooling",
+      "composition": "TBD",
+      "colour": "Unprinted",
+      "placement": "One legging",
+      "quantity": 1,
+      "unit": "pc",
+      "supplier": "TBD — no supplier nominated",
+      "status": "PROPOSED"
+    }
+  ],
+  "operations": [
+    {
+      "id": "C01",
+      "view": "front",
+      "feature": "Double-layer waistband",
+      "point": [
+        250,
+        102
+      ],
+      "method": "Join waistband rings at CB with 6 mm SA / 514, 3 mm stitch. Enclose E01 at folded top without twisting. Finished height 9 cm. Attach lower band edge to legs, 6 mm SA / 514; quarters matched, no feed distortion.",
+      "bom": [
+        "F01",
+        "E01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C02",
+      "view": "front",
+      "feature": "Contrast side-panel joins",
+      "point": [
+        360,
+        298
+      ],
+      "method": "Superimposed seam 6 mm SA, 514 four-thread overedge, 3 mm stitch, allowance toward red. Optional seam-cover row is not specified in this issue; do not call this flatlock. Match hip/knee/hem notches on both colours.",
+      "bom": [
+        "F01",
+        "F02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C03",
+      "view": "front",
+      "feature": "Proposed gusset",
+      "point": [
+        250,
+        295
+      ],
+      "method": "Diamond gusset F01, finished tip-to-tip 12 × 7 cm at base size. Insert with 6 mm SA / 514, 2.8 mm; needle-down pivot without cutting tip. Orient greatest stretch across body; no visible exterior outline claimed from source.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C04",
+      "view": "front",
+      "feature": "Ankle hems",
+      "point": [
+        180,
+        648
+      ],
+      "method": "Turn 20 mm, 406 two-needle coverseam / 4 mm gauge, 3 mm stitch. Needle thread tension must allow ≥40% seam extension without pop. No gripper or zip.",
+      "bom": [
+        "F01",
+        "F02",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C05",
+      "view": "back",
+      "feature": "Curved rear yoke",
+      "point": [
+        300,
+        175
+      ],
+      "method": "PROPOSED seam mapping of visible rear curve. Join yoke to back leg 6 mm SA / 514, 3 mm; match across CB. No darts. Check curve sits below waistband and does not create seat pressure ridge.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C06",
+      "view": "back",
+      "feature": "Rise / inseam mobility",
+      "point": [
+        250,
+        253
+      ],
+      "method": "CB/CF and inseams 6 mm SA / 514, 2.8–3 mm. Gusset inserted before final inseam closure; no four-seam pile at crotch. Stretch test every seam direction after conditioning.",
+      "bom": [
+        "F01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C07",
+      "view": "back",
+      "feature": "Waist elastic joining",
+      "point": [
+        250,
+        77
+      ],
+      "method": "Overlap E01 ends 20 mm; secure with two 304 zigzag rows, 3 mm width × 2 mm length. Proposed ring 62 cm relaxed; working circumference must reach ≥100 cm without damage or stitch break.",
+      "bom": [
+        "E01",
+        "T01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    },
+    {
+      "id": "C08",
+      "view": "back",
+      "feature": "ID / surface integrity",
+      "point": [
+        285,
+        125
+      ],
+      "method": "Apply L01 inside CB on waistband inner layer before closing, below elastic. Transfer temperature/dwell TBD by supplier trial. No reproduction of the photographed sports logo.",
+      "bom": [
+        "L01"
+      ],
+      "status": "PROPOSED method / source-visible feature unless noted"
+    }
+  ],
+  "poms": [
+    {
+      "id": "A",
+      "name": "Waist relaxed",
+      "method": "Top edge flat, 24 h relaxed, no tension.",
+      "unit": "cm",
+      "base": 32,
+      "grade": 1.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          150,
+          70
+        ],
+        [
+          350,
+          70
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 29.0,
+        "36": 30.5,
+        "38": 32.0,
+        "40": 33.5,
+        "42": 35.0
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "B",
+      "name": "Waist extended minimum",
+      "method": "Extend uniformly until 100 cm full circumference at base size without damage; value is half of minimum pass-over target, not maximum stretch.",
+      "unit": "cm",
+      "base": 50,
+      "grade": 2,
+      "tolerance": 0,
+      "view": "components",
+      "points": [
+        [
+          100,
+          490
+        ],
+        [
+          400,
+          490
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 46,
+        "36": 48,
+        "38": 50,
+        "40": 52,
+        "42": 54
+      },
+      "diagram": "pom-components-1.svg"
+    },
+    {
+      "id": "C",
+      "name": "Hip width relaxed",
+      "method": "20 cm below waistband top, parallel to waist.",
+      "unit": "cm",
+      "base": 42,
+      "grade": 1.7,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          132,
+          195
+        ],
+        [
+          368,
+          195
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 38.6,
+        "36": 40.3,
+        "38": 42.0,
+        "40": 43.7,
+        "42": 45.4
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "D",
+      "name": "Front rise incl. waistband",
+      "method": "Follow CF from band top to gusset front/crotch junction; contour, not straight chord.",
+      "unit": "cm",
+      "base": 27,
+      "grade": 0.5,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          250,
+          70
+        ],
+        [
+          250,
+          295
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 70 L250 220 Q251 267 250 295",
+      "status": "PROPOSED",
+      "values": {
+        "34": 26.0,
+        "36": 26.5,
+        "38": 27.0,
+        "40": 27.5,
+        "42": 28.0
+      },
+      "diagram": "pom-front-1.svg",
+      "label": [
+        266,
+        252
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Inseam",
+      "method": "From crotch datum at gusset centre to finished hem along inseam; include half gusset longitudinal contribution.",
+      "unit": "cm",
+      "base": 72,
+      "grade": 0,
+      "tolerance": 0.5,
+      "view": "front",
+      "points": [
+        [
+          250,
+          295
+        ],
+        [
+          215,
+          650
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 295 Q239 350 234 430 L215 650",
+      "status": "PROPOSED",
+      "values": {
+        "34": 72,
+        "36": 72,
+        "38": 72,
+        "40": 72,
+        "42": 72
+      },
+      "diagram": "pom-front-1.svg"
+    },
+    {
+      "id": "F",
+      "name": "Thigh width",
+      "method": "25 mm below crotch datum, perpendicular to grain.",
+      "unit": "cm",
+      "base": 25.5,
+      "grade": 1,
+      "tolerance": 0.4,
+      "view": "front",
+      "points": [
+        [
+          132,
+          320
+        ],
+        [
+          244,
+          320
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 23.5,
+        "36": 24.5,
+        "38": 25.5,
+        "40": 26.5,
+        "42": 27.5
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "G",
+      "name": "Knee width",
+      "method": "32 cm below crotch along inseam; width perpendicular to leg grain.",
+      "unit": "cm",
+      "base": 16.5,
+      "grade": 0.6,
+      "tolerance": 0.4,
+      "view": "front",
+      "points": [
+        [
+          153,
+          465
+        ],
+        [
+          229,
+          465
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 15.3,
+        "36": 15.9,
+        "38": 16.5,
+        "40": 17.1,
+        "42": 17.7
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "H",
+      "name": "Leg opening",
+      "method": "Lay one leg flat without tension; measure edge to edge along the finished hem, perpendicular to leg grain.",
+      "unit": "cm",
+      "base": 10.5,
+      "grade": 0.4,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          165,
+          650
+        ],
+        [
+          215,
+          650
+        ]
+      ],
+      "kind": "half-flat",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 9.7,
+        "36": 10.1,
+        "38": 10.5,
+        "40": 10.9,
+        "42": 11.3
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "I",
+      "name": "Back rise incl. waistband",
+      "method": "Follow CB curve band top to gusset centre/crotch datum.",
+      "unit": "cm",
+      "base": 34,
+      "grade": 0.7,
+      "tolerance": 0.5,
+      "view": "back",
+      "points": [
+        [
+          250,
+          65
+        ],
+        [
+          250,
+          295
+        ]
+      ],
+      "kind": "contour",
+      "path": "M250 65 C245 125 239 236 250 295",
+      "status": "PROPOSED",
+      "values": {
+        "34": 32.6,
+        "36": 33.3,
+        "38": 34.0,
+        "40": 34.7,
+        "42": 35.4
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "J",
+      "name": "Waistband finished height",
+      "method": "At side, top fold to lower attachment seam.",
+      "unit": "cm",
+      "base": 9,
+      "grade": 0,
+      "tolerance": 0.3,
+      "view": "back",
+      "points": [
+        [
+          350,
+          70
+        ],
+        [
+          361,
+          140
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 9,
+        "36": 9,
+        "38": 9,
+        "40": 9,
+        "42": 9
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "K",
+      "name": "Outseam incl. waistband",
+      "method": "Along outer leg/panel centre from top to hem.",
+      "unit": "cm",
+      "base": 99,
+      "grade": 0.5,
+      "tolerance": 0.7,
+      "view": "back",
+      "points": [
+        [
+          350,
+          70
+        ],
+        [
+          335,
+          650
+        ]
+      ],
+      "kind": "contour",
+      "path": "M350 70 Q378 190 367 300 Q347 475 335 650",
+      "status": "PROPOSED",
+      "values": {
+        "34": 98.0,
+        "36": 98.5,
+        "38": 99.0,
+        "40": 99.5,
+        "42": 100.0
+      },
+      "diagram": "pom-back-1.svg"
+    },
+    {
+      "id": "L",
+      "name": "Contrast panel width at knee",
+      "method": "Across white panel at knee datum, finished seam to seam.",
+      "unit": "cm",
+      "base": 7,
+      "grade": 0.2,
+      "tolerance": 0.3,
+      "view": "front",
+      "points": [
+        [
+          151,
+          465
+        ],
+        [
+          183,
+          465
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 6.6,
+        "36": 6.8,
+        "38": 7.0,
+        "40": 7.2,
+        "42": 7.4
+      },
+      "diagram": "pom-front-2.svg"
+    },
+    {
+      "id": "M",
+      "name": "Gusset finished length",
+      "method": "Removed flat component: front tip to rear tip on seam line.",
+      "unit": "cm",
+      "base": 12,
+      "grade": 0.2,
+      "tolerance": 0.3,
+      "view": "components",
+      "points": [
+        [
+          250,
+          210
+        ],
+        [
+          250,
+          390
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 11.6,
+        "36": 11.8,
+        "38": 12.0,
+        "40": 12.2,
+        "42": 12.4
+      },
+      "diagram": "pom-components-1.svg",
+      "label": [
+        266,
+        350
+      ]
+    },
+    {
+      "id": "N",
+      "name": "Gusset finished width",
+      "method": "Removed flat component: widest side tip to opposite tip on seam line.",
+      "unit": "cm",
+      "base": 7,
+      "grade": 0.2,
+      "tolerance": 0.3,
+      "view": "components",
+      "points": [
+        [
+          195,
+          300
+        ],
+        [
+          305,
+          300
+        ]
+      ],
+      "kind": "component",
+      "path": null,
+      "status": "PROPOSED",
+      "values": {
+        "34": 6.6,
+        "36": 6.8,
+        "38": 7.0,
+        "40": 7.2,
+        "42": 7.4
+      },
+      "diagram": "pom-components-1.svg",
+      "label": [
+        208,
+        286
+      ]
+    }
+  ],
+  "details": [
+    [
+      "waist-elastic",
+      "Waistband / elastic section",
+      "Double self layer; 10 mm elastic inside top fold; 20 mm overlap; passage target checked at 100 cm full base circumference."
+    ],
+    [
+      "gusset",
+      "Proposed diamond gusset",
+      "12 × 7 cm finished seam-line component; 6 mm SA added outside; stretch direction across width."
+    ],
+    [
+      "panel-hem",
+      "Panel join / coverseam hem",
+      "514 superimposed panel join, allowances toward red; 20 mm turned hem secured with 406. No false flatlock claim."
+    ]
+  ],
+  "pattern": [
+    "Front legs ×2, back legs ×2, rear yokes ×2, contrast panels ×2 mirrored, outer/inner waistband each ×1, gusset ×1. All PROPOSED; walk curved yoke seam and gusset interfaces.",
+    "Greatest stretch around hip/waist; align red/white stretch axes. No pocket, zip or logo artwork.",
+    "Base waist 64/74 cm = −13.5%; hip 84/98 = −14.3%. These are development ratios, not measured compression; approve fit after material tests."
+  ],
+  "assembly": [
+    "Condition knit 24 h; compare red/white extension and laundering response.",
+    "Cut mirrored panels/yokes, mark knee/hip/gusset notches and stretch direction.",
+    "Join rear yokes, then contrast panels to front/back legs.",
+    "Join rise; insert diamond gusset; close remaining inseams without stacked crotch bulk.",
+    "Join elastic and waistband rings; apply transfer to inner band after heat trial.",
+    "Enclose elastic; attach double waistband with quarter matching.",
+    "Coverseam hems; cool and relax before fit/measurement."
+  ],
+  "qc": [
+    "White panel opacity at squat and wet condition; no red dye migration.",
+    "Five cycles to 50% extension, hold 10 s each; after 30 min recovery residual growth ≤5% as proposed screening method, not a certified standard.",
+    "Waist passes 100 cm full base circumference without damage; returns to relaxed POM within tolerance after 30 min.",
+    "Seams extend ≥40% without pop; no tunnelling or gusset tip holes.",
+    "Left/right panel widths and knee notches match; no twisted leg after wash trial."
+  ],
+  "risks": [
+    "Negative ease cannot be released for production without actual fabric force/extension/recovery and wearer tests.",
+    "Rear yoke/gusset are proposed and may need remapping after physical sample.",
+    "Sublimation/migration and transfer damage must be assessed on selected red/white fabrics."
+  ],
+  "evidence": [
+    "CONFIRMED in source: red leggings, deep red waistband, wide white side panels, curved rear seam lines and ankle-length hem. Sports bra and footwear are excluded.",
+    "No pocket is visible; no pocket specified. Source logo is excluded from all new production artwork; ABERBACH credits documentation only.",
+    "Gusset and top-waist elastic are PROPOSED internal development decisions, not visible confirmed components."
+  ],
+  "assumptions": [
+    "PROPOSED front/back legs with separate contrast side panels and small diamond gusset for mobility; shape requires fit trial.",
+    "Waistband is proposed double self fabric with 10 mm elastic at top inside fold; stretch must allow garment to pass 98 cm base hip.",
+    "Curved rear line engineered as a yoke seam only as a proposal; source appearance does not prove seam section."
+  ],
+  "consumption": "ESTIMATE: red shell 1.00–1.20 m at 150 cm usable width; white contrast 0.25–0.35 m at 150 cm, EU 38. Paired legs/yokes + two-layer waistband + gusset; greatest stretch around body; non-directional; 15% relaxation/cutting reserve. Contrast nested in separate colour marker. Verify marker and shrinkage before costing.",
+  "care": "TBD: fibre identity, component compatibility, care testing, country of origin and destination-market legal review. Do not print generic care symbols.",
+  "labels": "PROPOSED: 35 × 12 mm soft ID/size heat transfer inside CB waistband below the elastic, plus compatible care transfer with content withheld until verified. Confirm temperature, dwell, migration and stretch before application. No sewn 301 label or third-party logo.",
+  "packaging": "PROPOSED: fold only after cooling; use unprinted recyclable protective sleeve sized to the actual folded sample. Bag material, gauge and dimensions TBD after packing trial. One garment per sleeve; no invented approved bag size.",
+  "revision": [
+    {
+      "version": "0.1",
+      "date": "2026-10-25",
+      "change": "Initial source-referenced development specification; no physical sample, marker or fit validation",
+      "status": "PROPOSED / sampling review"
+    }
+  ],
+  "pomGroups": [
+    {
+      "file": "pom-front-1.svg",
+      "view": "front",
+      "ids": [
+        "A",
+        "C",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "file": "pom-front-2.svg",
+      "view": "front",
+      "ids": [
+        "F",
+        "G",
+        "H",
+        "L"
+      ]
+    },
+    {
+      "file": "pom-back-1.svg",
+      "view": "back",
+      "ids": [
+        "I",
+        "J",
+        "K"
+      ]
+    },
+    {
+      "file": "pom-components-1.svg",
+      "view": "components",
+      "ids": [
+        "B",
+        "M",
+        "N"
+      ]
+    }
+  ]
+}
