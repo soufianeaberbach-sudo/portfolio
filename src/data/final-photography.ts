@@ -1,5 +1,5 @@
 import type {ImageAsset,Subject,SubjectView} from './portfolio';
-export interface Photograph extends Omit<SubjectView,'key'> {key:SubjectView['key']|'original';}
+export interface Photograph extends Omit<SubjectView,'key'> {key:SubjectView['key']|'reference';}
 /** Three-panel geometry is opt-in and validates the standard 2:1 master. */
 export const threePanel=(image:ImageAsset)=>image.views===3&&image.separable!==false&&image.width>0&&image.height>0&&image.width===2*image.height;
 export const separable=(image:ImageAsset)=>threePanel(image)||(image.views===2&&image.separable!==false&&image.front>0&&image.front<1);
@@ -19,9 +19,19 @@ export function finalPhotographs(subject:Subject):Photograph[]{
  for(const supplied of subject.views){
   const crop=supplied.crop!=='whole'&&(!separable(supplied.image)||(supplied.crop==='third'&&!threePanel(supplied.image)))?'whole':supplied.crop;
   const token=`${supplied.image.src}:${crop}`;if(seen.has(token))continue;seen.add(token);
-  views.push({...supplied,crop,label:crop==='whole'&&(supplied.image.views??1)>1?'Complete original':supplied.label});
+  const inseparable=crop==='whole'&&(supplied.image.views??1)>1;
+  views.push({...supplied,crop,key:inseparable?'reference':supplied.key,label:inseparable?'Source photograph':supplied.key==='editorial'&&supplied.label!=='Third view'?'Fashion':supplied.label});
  }
- if(!views.length)views.push({key:'original',label:'Complete original',image:subject.cover,crop:'whole'});
- for(const v of [...views])if(v.crop!=='whole'&&!views.some(other=>other.image.src===v.image.src&&other.crop==='whole'))views.push({key:'original',label:'Complete original',image:v.image,crop:'whole'});
- return views;
+ // Keep an inseparable historical photograph only when it is the actual
+ // available evidence. Never add a redundant multi-panel master as a view.
+ const individual=views.filter(v=>v.key!=='reference');
+ if(individual.length)return individual;
+ return views.length?views.slice(0,1):[{key:'reference',label:'Available photograph',image:subject.cover,crop:'whole'}];
+}
+
+/** Exhibition curation is independent of the technical inspection order. */
+export function exhibitionPhotograph(subject:Subject):Photograph{
+ const photos=finalPhotographs(subject);
+ return photos.find(p=>p.key==='editorial'&&p.label!=='Third view')
+  ??photos.find(p=>p.key==='front')??photos.find(p=>p.key==='back')??photos[0];
 }

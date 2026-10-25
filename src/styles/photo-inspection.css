@@ -1,0 +1,41 @@
+/* One viewing area per photograph. The original chapter type, ink and accents remain. */
+.pf-rd__subject.ww-reader .ww-reader-head,.mw-reader .mw-reader-head{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #11110f15}
+.pf-rd__subject.ww-reader .ww-reader-floor,.mw-reader .mw-reader-floor{height:auto;min-height:0;overflow:visible;display:block;padding:clamp(20px,3vw,44px) clamp(18px,4vw,64px) 32px}
+.pf-rd__subject.ww-reader .ww-reader-copy,.mw-reader .mw-reader-caption{position:static;top:auto;left:auto;width:auto;max-width:75ch;padding:0 0 24px;pointer-events:auto;opacity:1}
+.pf-rd__subject.ww-reader .ww-reader-copy h3,.mw-reader .mw-reader-caption h3{font:500 clamp(20px,2vw,30px)/1.18 var(--display);letter-spacing:-.035em;max-width:none;margin:0 0 8px}
+.pf-rd__subject.ww-reader .ww-reader-copy p{max-width:none;margin:8px 0 0;line-height:1.5}
+.pf-rd__subject.ww-reader .ww-reader-copy .ww-photo-credit{font:11px/1.5 var(--body);color:var(--muted)}
+.garment-inspection{--inspection-accent:#c7020c;width:100%}
+.mw-reader .garment-inspection{--inspection-accent:#2d81de}
+.garment-inspection__pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,64px);align-items:start}
+.garment-inspection__pair:has(>.garment-inspection__figure:only-child){grid-template-columns:minmax(0,760px);justify-content:center}
+.garment-inspection__figure{margin:0;min-width:0}
+.garment-inspection__figure figcaption{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #11110f24;margin-bottom:12px;min-height:44px;position:sticky;top:var(--inspection-head,64px);z-index:3;background:#fff}
+.garment-inspection__figure figcaption>.label{font-size:11px;letter-spacing:.09em}
+.garment-inspection__tools{display:flex;align-items:center;gap:4px}
+.garment-inspection .garment-inspection__tools button{font:11px var(--mono);min-width:44px;min-height:44px;border:0;padding:6px;background:none;color:var(--ink);cursor:pointer}
+.garment-inspection .garment-inspection__tools button:first-child,.garment-inspection .garment-inspection__tools button:last-child{font-size:18px}
+.garment-inspection .garment-inspection__viewport{display:grid;place-items:center;position:relative;width:100%;height:clamp(340px,calc(100svh - 18rem),900px);margin:0;padding:0;min-width:0;border:0;background:#fff;overflow:hidden;touch-action:pan-y;cursor:zoom-in;isolation:isolate;container-type:size}
+.garment-inspection .garment-inspection__viewport[data-zoomed]{touch-action:none;cursor:grab}
+.garment-inspection .garment-inspection__viewport[data-zoomed]:active{cursor:grabbing}
+.garment-inspection .garment-inspection__viewport :is(.ww-photo,.mw-photo){flex:none;max-width:none;max-height:none;margin:0;pointer-events:none;transform-origin:center center;user-select:none}
+.garment-inspection__viewport .ww-photo{--photo-h:min(100cqh,calc(100cqw/(var(--aspect)*var(--window))))}
+.garment-inspection__viewport .mw-photo{height:min(100cqh,calc(100cqw/var(--photo-aspect)));width:auto}
+.pf:not(.pf--js) .garment-inspection__tools,.pf:not(.pf--js) .garment-inspection__help{display:none}
+.garment-inspection__help{font:10px/1.6 var(--mono);color:var(--muted);margin:10px 0 0}
+.garment-inspection__additional{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,64px);margin-top:48px}
+.garment-inspection__additional:has(>.garment-inspection__figure:only-child){grid-template-columns:minmax(0,760px);justify-content:center}
+.garment-inspection__missing{font:12px/1.6 var(--body);color:var(--muted);margin:24px 0}
+.garment-inspection :is(button,[tabindex]):focus-visible{outline:2px solid var(--inspection-accent);outline-offset:3px}
+.mw-reader .mw-concept-notes{padding:0;max-width:75ch;margin:28px 0 0}
+.mw-reader .mw-concept-notes details[open]{max-height:none;overflow:visible}
+.mw-reader .mw-look-nav{margin-top:28px;flex-wrap:wrap}
+.ww-reader-provenance{max-width:75ch;font:11px/1.6 var(--body);color:var(--muted);margin:28px 0 0}
+.ww-reader-provenance a{color:inherit}
+@media(max-width:899px){
+ .garment-inspection__pair,.garment-inspection__additional{grid-template-columns:minmax(0,1fr);gap:30px}
+ .garment-inspection .garment-inspection__viewport{height:min(68svh,680px);min-height:280px}
+ .garment-inspection__additional{margin-top:30px}
+ .pf-rd__subject.ww-reader .ww-reader-copy,.mw-reader .mw-reader-caption{padding-bottom:16px}
+ .garment-inspection__help{font-size:9px}
+}

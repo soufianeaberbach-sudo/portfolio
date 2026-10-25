@@ -2,7 +2,7 @@
 import type{GarmentWorld}from'../../data/portfolio';
 import{menswearPool,menswearDisplayed,menswearActorSubject,menswearConcept}from'../../data/menswear-collection';
 import type{MenswearCategory}from'../../data/menswear-collection';
-import{photoRegion,photoSizes}from'../../data/final-photography';
+import{photoRegion,photoSizes,exhibitionPhotograph}from'../../data/final-photography';
 import{menswearDirections,menswearWindows}from'../../data/menswear-direction';
 import MenswearPhoto from'./MenswearPhoto.astro';
 import MenswearReader from'./MenswearReader.astro';
@@ -22,19 +22,19 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
     <div class="mw-walkway"><div class="mw-frame" data-mw-frame>
      <header class="mw-film-title"><p class="label">{r.number} / {r.direction.name}</p><h3 id={`${r.id}-heading`}>{r.direction.title}</h3></header>
      <div class="mw-camera" data-mw-camera>
-      {r.direction.cast.map(photo=>{const subject=menswearActorSubject(r.id,photo,r.display),primary=subject.views[0],image=primary?.image??subject.cover;
+      {r.direction.cast.map(photo=>{const subject=menswearActorSubject(r.id,photo,r.display),primary=exhibitionPhotograph(subject),image=primary.image;
        const original=image.src.match(new RegExp(`/pexels-${photo}\\.(webp|jpg)$`));
        const[start,end]=photoRegion(image,primary?.crop??'whole');
        const window=original&&menswearWindows[photo]?menswearWindows[photo]:[start,0,end-start,1];
-       return (<a href={`#menswear/${r.id}/${subject.id}`} data-nav data-open-subject={subject.id} data-mw-actor={photo} data-mw-ai={menswearConcept(subject.id)?'true':undefined} data-mw-original={original?'true':'false'} data-mw-window={window.join(',')} data-mw-mobile-window={original&&photo===30599804?'0.46,0.25,0.54,0.75':window.join(',')} data-mw-seam={original&&photo===30599804?'0.5':undefined} aria-label={`Inspect ${subject.cover.alt}`}><span data-door-source><img src={image.src} srcset={image.srcset} sizes={photoSizes(image,primary?.crop??'whole','(max-width:767px) 95vw, 60vw')} width={image.width} height={image.height} alt={image.alt} loading="lazy" decoding="async"/></span></a>);})}
+       return (<a href={`#menswear/${r.id}/${subject.id}`} data-nav data-open-subject={subject.id} data-mw-actor={photo} data-exhibition-view={primary.key} data-fashion-fallback={primary.key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(subject.id)?'true':undefined} data-mw-original={original?'true':'false'} data-mw-window={window.join(',')} data-mw-mobile-window={original&&photo===30599804?'0.46,0.25,0.54,0.75':window.join(',')} data-mw-seam={original&&photo===30599804?'0.5':undefined} aria-label={`Inspect ${subject.cover.alt}`}><span data-door-source><img src={image.src} srcset={image.srcset} sizes={photoSizes(image,primary?.crop??'whole','(max-width:767px) 95vw, 60vw')} width={image.width} height={image.height} alt={image.alt} loading="lazy" decoding="async"/></span></a>);})}
       {[0,1].map(n=><div class="mw-wing" data-mw-wing={n} aria-hidden="true"><img alt=""/></div>)}
      </div>
      <p class="mw-media-status" data-mw-media-status role="status" hidden>Photograph unavailable. Open the ten-look edit to continue.</p>
      <span class="mw-scene-caption label" data-mw-scene-caption>{r.direction.scenes[0]}</span>
     </div></div>
     <section class="mw-archive" data-mw-archive aria-labelledby={`${r.id}-archive-title`}>
-     <header><h3 id={`${r.id}-archive-title`}>The {r.direction.name.toLowerCase()} edit.</h3><p class="label">Ten looks / <span data-mw-rail-hint>Explore →</span></p></header>
-     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Swipe or use arrow keys to explore.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={s.views[0]?.image??s.cover} crop={s.views[0]?.crop??'whole'} sizes="(max-width:699px) 52vw, (max-width:1400px) 21vw, 310px"/><span class="mw-look-caption"><span class="label">{String(i+1).padStart(2,'0')} / {s.title??s.id}</span>{menswearConcept(s.id)&&<span class="mw-look-product">{menswearConcept(s.id)!.product}</span>}</span></a></li>)}</ol>
+     <header><h3 id={`${r.id}-archive-title`}>The {r.direction.name.toLowerCase()} edit.</h3><p class="label">Ten looks / <span data-mw-rail-hint>Scroll to explore ↓</span></p></header>
+     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Scroll down through every look.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-exhibition-view={exhibitionPhotograph(s).key} data-fashion-fallback={exhibitionPhotograph(s).key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={exhibitionPhotograph(s).image} crop={exhibitionPhotograph(s).crop} sizes="(max-width:699px) 92vw, 48vw"/><span class="mw-look-caption"><span class="label">{String(i+1).padStart(2,'0')} / {s.title??s.id}</span>{menswearConcept(s.id)&&<span class="mw-look-product">{menswearConcept(s.id)!.product}</span>}</span></a></li>)}</ol>
      <p class="mw-provenance">Original AI fashion concepts are identified in their viewers. Preserved historical photographs retain their source credits. Material and construction descriptions express design intent.</p>
      <a class="mw-handoff" href={r.direction.next.startsWith('m-')?`#menswear/${r.direction.next}`:`#${r.direction.next}`} data-nav><span class="label">{index===3?'Next chapter':'Next world'}</span><span>{index===3?'Pattern Development':ranges[index+1].direction.name} ↗</span></a>
     </section>

@@ -3,8 +3,8 @@ import assert from'node:assert/strict';import{chromium}from'playwright';import{i
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4431',b=await chromium.launch();let checks=0;const unblock=[];const check=(ok,label)=>{assert(ok,label);checks++;};
 const opening=JSON.parse(readFileSync('src/data/menswear-ai-production.json','utf8')).selectedCompleteLooks.find(x=>x.category==='m-rtw'&&x.position===1);
 const delivery=JSON.parse(readFileSync('src/data/menswear-web-images.json','utf8')).images;
-const optimized=opening&&delivery[opening.views.front.src];
-const sourcePattern=optimized?(url=>url.pathname===opening.views.front.preview||url.pathname.startsWith(optimized.src.replace(/-1800\.webp$/,'-'))):opening?'**'+opening.views.front.src.replace('/front.png','/front*'):'**/pexels-16711124*';
+const optimized=opening&&delivery[opening.views.editorial.src];
+const sourcePattern=optimized?(url=>url.pathname===opening.views.editorial.preview||url.pathname.startsWith(optimized.src.replace(/-1800\.webp$/,'-'))):opening?'**'+opening.views.editorial.src.replace('/editorial.png','/editorial*'):'**/pexels-16711124*';
 mkdirSync('.qa-director/photo-final',{recursive:true});
 try{for(const[width,height]of[[1440,900],[390,844]]){
  const c=await b.newContext({viewport:{width,height}});await installFonts(c);let release;const gate=new Promise(r=>{release=r;unblock.push(r);});
@@ -19,4 +19,14 @@ try{for(const[width,height]of[[1440,900],[390,844]]){
  check(!await frame.evaluate(e=>e.hasAttribute('aria-busy')),`${width}: decoded opening clears its busy state`);check(await p.locator('[data-mw-film][data-current] [data-mw-actor="16711124"] img').getAttribute('fetchpriority')==='high',`${width}: opening photograph prioritized`);await c.close();
  const failed=await b.newContext({viewport:{width,height}});await installFonts(failed);await failed.route(sourcePattern,route=>route.abort());const q=await failed.newPage();await q.goto(base+'/portfolio/#menswear/m-rtw');await fontsReady(q);const failure=q.locator('[data-mw-film][data-current] [data-mw-media-status]');await failure.waitFor({state:'visible'});
  check((await failure.textContent()).includes('Photograph unavailable'),`${width}: failed source retains the existing recovery message`);await q.locator('[data-mw-archive-open]').click();check(await q.locator('[data-mw-film][data-current] [data-mw-archive-door]').count()===10,`${width}: archive remains accessible after failure`);await failed.close();
-}console.log(`${checks} Menswear delayed/failed-media checks passed`);}finally{for(const release of unblock)release();await b.close();}
+}
+if(opening){
+ const back=delivery[opening.views.back.src],pattern=back?(url=>url.pathname.startsWith(back.src.replace(/-1800\.webp$/,'-'))):'**'+opening.views.back.src;
+ const c=await b.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});await installFonts(c);let release;const gate=new Promise(r=>{release=r;unblock.push(r);});await c.route(pattern,async route=>{await gate;await route.continue();});const p=await c.newPage();
+ await p.goto(base+`/portfolio/#menswear/${opening.category}/${opening.id}`,{waitUntil:'domcontentloaded'});await fontsReady(p);const reader=p.locator('[data-mw-reader]:not([hidden])'),front=reader.locator('[data-photo-panel=front] img'),backPanel=reader.locator('[data-photo-panel=back]');await front.evaluate(im=>im.decode());
+ check(await backPanel.locator('[data-photo-status]').textContent().then(s=>s.includes('Loading photograph')),'pending Back has local loading feedback');
+ check(await backPanel.locator('[data-photo-viewport]').getAttribute('aria-busy')==='true','pending Back exposes its own busy state');
+ check(await front.evaluate(im=>im.naturalWidth>0),'Front remains available while Back is delayed');
+ await p.keyboard.press('Escape');await reader.waitFor({state:'hidden'});check(await p.locator('[data-mw-reader]:not([hidden])').count()===0,'delayed Back never traps reader return');release();await p.waitForTimeout(200);check(await p.locator('[data-mw-reader]:not([hidden])').count()===0,'late Back completion does not reopen reader');await c.close();
+}
+console.log(`${checks} Menswear delayed/failed-media checks passed`);}finally{for(const release of unblock)release();await b.close();}

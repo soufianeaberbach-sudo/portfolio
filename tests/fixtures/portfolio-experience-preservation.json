@@ -1,0 +1,51 @@
+{
+  "baseline": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+  "implementationBaseline": "2534e904a63eed2c2a3520371262e243e121428a",
+  "ownerDirective": "25 October 2026: Fashion-first Womenswear/Menswear; paired Front/Back with independent zoom; remove redundant composite views; native continuous scrolling. Preserve masters and unrelated design.",
+  "changes": {
+    "src/components/portfolio/FinalPhotoReader.astro": {
+      "baselineSHA1": "a753655ebe1bc7730dfd495ffa95780f30598025",
+      "authorizedSHA1": "6ff0a323908ddfa5727bf3a831a032cfbf7c7302"
+    },
+    "src/components/portfolio/MenswearAct.astro": {
+      "baselineSHA1": "afef1244d8d18f1b671f5f4b86b431a238d02b86",
+      "authorizedSHA1": "514656cb58f272dd3e5587ef3f3be872b7cb12f0"
+    },
+    "src/components/portfolio/MenswearReader.astro": {
+      "baselineSHA1": "b5dd1383e92940c610ad7e2c8ed4f3678e2b89b4",
+      "authorizedSHA1": "c6f7ce528a7cc560d4f363845b7303881d0d4f19"
+    },
+    "src/components/portfolio/WomenswearExhibition.astro": {
+      "baselineSHA1": "9f5d7be2d9067bb60b6d41002a2614c8bf3b0fe3",
+      "authorizedSHA1": "269a93353f8d5aa64449d61fbacfdd6f1ee59e02"
+    },
+    "src/data/final-photography.ts": {
+      "baselineSHA1": "fc66681161c18d08527e382d1d2fc874889c2b65",
+      "authorizedSHA1": "2c0f9bd428278304c475f690260c30599f5ce875"
+    },
+    "src/pages/portfolio.astro": {
+      "baselineSHA1": "2153a4344e5784e8b0a5214c383a27d57ac74d45",
+      "authorizedSHA1": "dbe3f8cc6ad3564bf3a5fd28e57d86f2243fa949"
+    },
+    "src/scripts/garment-match-cut.ts": {
+      "baselineSHA1": "8de5bb7fe41ddc715d12d038edaea15db92f486c",
+      "authorizedSHA1": "7bf0c07fcb802b3691d3a9763acb58c5ac1602d4"
+    },
+    "src/scripts/menswear-reader.ts": {
+      "baselineSHA1": "46c910c24083aedbdfcea142e416b4341a997e33",
+      "authorizedSHA1": "5995e68dfe82575e63358a01e3930adca4a93bcc"
+    },
+    "src/scripts/womenswear-reader.ts": {
+      "baselineSHA1": "37903df28ba601a80bbd79e318156ee9402e090d",
+      "authorizedSHA1": "9fde3d5aed9c22da784467e34a0833921fbac16c"
+    },
+    "src/styles/menswear-cinematic.css": {
+      "baselineSHA1": "a14cab67ead828e4f5e03aebe1c9ff6333fb21d7",
+      "authorizedSHA1": "fc4726f2d8a28b33cb4b06c20e17b78e4103a72f"
+    },
+    "src/styles/womenswear-cinematic.css": {
+      "baselineSHA1": "db209accca739c7361b5f51964598ce005a6d279",
+      "authorizedSHA1": "54929a93ed70b08c4ba07cae619cef9df64d8db0"
+    }
+  }
+}
