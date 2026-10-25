@@ -4,6 +4,14 @@
 work. This snapshot must be refreshed when main, content or verified production
 changes; it is not a perpetual deployment certificate.
 
+## Active Portfolio experience refinement — 25 October 2026
+
+Latest main was freshly verified as `2534e904a63eed2c2a3520371262e243e121428a`, the merged/deployed ten-page Tech Pack release. Main already contains the four-world Womenswear edit and forty-look Menswear concept edit; the older candidate/deployment statements below are dated history, not the current implementation baseline.
+
+The owner's current brief explicitly replaces front-only exhibition priority with **Fashion first**, changes garment readers to **Front and Back together** with independent photo zoom, removes redundant public Complete Original views, and requires native continuous scrolling through all looks/worlds and into the following chapter. Existing opening, covers, photography masters, source identities, credits, chapter identities and navigation remain protected. These specific instructions supersede the older presentation contract in the historical sections below.
+
+`feat/portfolio-fashion-first-inspection` implements that scoped candidate from latest main. The current owner brief governs these corrective functional changes; publication follows the ongoing task’s previously authorized PR/CI/main-branch Workers Builds workflow, with source, merge and live verification recorded separately. This dated source note does not certify a live deployment. The five audited Tech Packs remain intact; no additional page correction was specified in this brief. See the [actual implementation and review](review/portfolio-experience-2026-10-25/README.md).
+
 ## Menswear full-production candidate — 24 October 2026
 
 `feat/menswear-ai-photography-regeneration` now contains forty original AI concept looks with 120 selected Front/Back/Editorial photographs and forty masters. The latest owner brief authorizes autonomous selection and working-branch integration, superseding the earlier pilot approval gates. Public groups are Casualwear (`m-streetwear`), Activewear (`m-activewear`), Outerwear (`m-rtw`) and Tailoring (`m-tailoring`), ten positions each. Technical world IDs, cinematic presentation and route grammar remain stable.
