@@ -1930,7 +1930,8 @@ const split = (statement: string, word: string) => {
               const description = document.createElement('p');
               description.textContent = 'Document preview. Open the PDF in your device reader for all pages.';
               const mobileLink = link.cloneNode(true);
-              mobile.append(description, mobileLink);
+              mobileLink.textContent = 'Open PDF';
+              mobile.append(description, mobileLink, document.createTextNode(' / '));
               const mobileDownload = document.createElement('a');
               mobileDownload.href = href;
               mobileDownload.download = href.split('/').pop() ?? '';
