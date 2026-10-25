@@ -7,7 +7,7 @@
  * photograph imply information the photograph does not actually prove.
  *
  * Four new editorial studio illustrations, generated for these exact topics.
- * Provenance: assets/source/studio-imagery-2026-10-24/. No layout geometry depends on
+ * Provenance: assets/source/studio-reset-2026-10-24/. No layout geometry depends on
  * anything inside them, so replacing one is a single path change in STAGES
  * below plus the two files it names.
  *
@@ -30,7 +30,7 @@ export const STAGES: Stage[] = [
     n: '01',
     name: 'Design intent',
     file: '01-design-intent',
-    alt: 'An ecru jacket toile on a linen dress form, showing sculpted shoulder volume, a shaped sleeve and the drape of cotton twill.',
+    alt: 'A designer supports a length of charcoal-blue wool crepe by hand to evaluate its weight and natural drape.',
     position: '50% 50%',
   },
   {
@@ -38,7 +38,7 @@ export const STAGES: Stage[] = [
     n: '02',
     name: 'Fit system',
     file: '02-fit-system',
-    alt: 'A bodice toile with center-front and waist balance stitching on a tailoring form, with a measuring tape and paper patterns.',
+    alt: 'A fitter pinches excess cotton at the side waist of an unfinished bodice toile on a tailoring form to assess ease.',
     position: '50% 50%',
   },
   {
@@ -46,7 +46,7 @@ export const STAGES: Stage[] = [
     n: '03',
     name: 'Technical translation',
     file: '03-technical-translation',
-    alt: 'A kraft-paper sleeve pattern beside a sewn twill sleeve with its cuff opened to show the construction, and a transparent pattern ruler.',
+    alt: 'A patternmaker lifts the wrist edge of a single hanging paper sleeve pattern to review its cut geometry.',
     position: '50% 50%',
   },
   {
@@ -54,8 +54,8 @@ export const STAGES: Stage[] = [
     n: '04',
     name: 'Production control',
     file: '04-production-control',
-    alt: 'Matching ecru overshirt cuffs aligned for inspection, one opened to show its seam finish, with a sewing gauge and a rail of repeated garments.',
-    position: '50% 50%',
+    alt: 'A quality controller lifts the fabric beside an enclosed side seam in a finished navy shirt to inspect the stitching.',
+    position: '60% 50%',
   },
 ];
 
@@ -66,7 +66,7 @@ interface Props {
 
 const { mode = 'single', stage = 1 } = Astro.props;
 const shown = mode === 'stage' ? STAGES : [STAGES[stage - 1]];
-const src = (file: string, w: 800 | 1400) => `/expertise-studio/${file}-${w}.webp`;
+const src = (file: string, w: 800 | 1400) => `/expertise-reset/${file}-${w}.webp`;
 ---
 
 <figure class:list={['exv', `exv--${mode}`]} data-active={mode === 'stage' ? '01' : String(stage)}>
