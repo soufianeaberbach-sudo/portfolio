@@ -857,23 +857,23 @@ try {
         previewWidths: list.map((el) => Math.round(el.querySelector('.pf-doc__page').getBoundingClientRect().width)),
         numbers: list.map((el) => el.querySelector('.pf-doc__num').textContent.trim()),
         opens: list.map((el) => el.querySelector('[data-open-pdf]')?.getAttribute('href') ?? ''),
-        stamps: list.filter((el) => /demo/i.test(el.querySelector('.pf-doc__stamp')?.textContent ?? '')).length,
+        stamps: list.filter((el) => /Development Sample/i.test(el.querySelector('.pf-doc__stamp')?.textContent ?? '')).length,
         carousel: w.querySelectorAll('.pf-folio, .pf-library__pile, [data-dossier]').length,
       };
     });
-    check('five demo documents', docs.count === 5, String(docs.count));
+    check('five development documents', docs.count === 5, String(docs.count));
     check('the documents run one below another',
       docs.stacked && new Set(docs.lefts).size === 1, `${docs.lefts.join(',')} stacked ${docs.stacked}`);
     check('the numbering runs 01 to 05', docs.numbers.join(',') === '01,02,03,04,05', docs.numbers.join(','));
     check('each shows its own first page, large',
-      docs.previews.every((src) => /\/demo\/techpacks\/demo-\d\d-[a-z-]+-p1\.webp$/.test(src))
+      docs.previews.every((src) => /\/techpacks\/previews\/AB-[WM]-[A-Z]{2}-\d{2}-cover-1200\.webp$/.test(src))
       && docs.previewWidths.every((w) => w >= 400),
       `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.previewWidths.join(',')}`);
-    check('each is marked a demo', docs.stamps === 5, String(docs.stamps));
+    check('each is marked a Development Sample', docs.stamps === 5, String(docs.stamps));
     check('each offers its own PDF',
-      docs.opens.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.opens.join(' '));
+      docs.opens.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf$/.test(href)), docs.opens.join(' '));
     check('every document preview is itself clickable',
-      docs.previewLinks.every((href) => /^\/demo\/techpacks\/demo-\d\d-[a-z-]+\.pdf$/.test(href)), docs.previewLinks.join(' '));
+      docs.previewLinks.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf$/.test(href)), docs.previewLinks.join(' '));
     check('the rejected folio/carousel interface is gone', docs.carousel === 0, String(docs.carousel));
 
     check('no PDF byte is fetched when the chapter opens', pdfRequests.length === 0, pdfRequests.join(','));
@@ -906,7 +906,7 @@ try {
        click, and that the embed points at the real document — is asserted
        above. */
     check('no document was fetched beyond the one that was opened',
-      pdfRequests.every((url) => /demo-01/.test(url)), pdfRequests.join(','));
+      pdfRequests.every((url) => /AB-W-SH-01/.test(url)), pdfRequests.join(','));
 
     await p.keyboard.press('Escape');
     await p.waitForTimeout(500);
@@ -1096,8 +1096,8 @@ try {
       html.includes('No authorship of photographed garments is claimed'));
     check('all four current Womenswear worlds are server-rendered',
       JSON.stringify(await p.locator('[data-act-link] .pf-act__label').allTextContents()) === JSON.stringify(['Casualwear', 'Activewear', 'Occasionwear', 'Swimwear']));
-    check('the demo documents are declared as demos without the script',
-      html.includes('Demo — interface prototype') || html.includes('Demo &#8212; interface prototype'));
+    check('development status is declared without the script',
+      html.includes('Development Sample') && !html.includes('Production-ready technical documentation'));
     check('Menswear exposes forty photographic links without process placeholders',
       await p.locator('[data-mw-archive-door]').count() === 40 && await p.locator('[data-mw-world] .pf-plate').count() === 0);
     check('all five supplied development recordings are server-rendered without players',

@@ -1854,7 +1854,7 @@ const split = (statement: string, word: string) => {
       /* ---- 3. the PDF reader ------------------------------------------- */
       /* Not one byte of any document is fetched with the page. The <iframe> is
          created by the click that asks for it and destroyed when the reader
-         closes, so five demo packs cost nothing until one is opened. */
+         closes, so the five packs cost nothing until one is opened. */
       const closeReader = (world: HTMLElement) => {
         const reader = world.querySelector<HTMLDialogElement>('[data-reader]');
         if (!reader || reader.hidden) return;
@@ -1931,11 +1931,22 @@ const split = (statement: string, word: string) => {
               description.textContent = 'Document preview. Open the PDF in your device reader for all pages.';
               const mobileLink = link.cloneNode(true);
               mobile.append(description, mobileLink);
+              const mobileDownload = document.createElement('a');
+              mobileDownload.href = href;
+              mobileDownload.download = href.split('/').pop() ?? '';
+              mobileDownload.textContent = 'Download PDF';
+              mobileDownload.dataset.readerMobileDownload = '';
+              mobile.append(mobileDownload);
               mount.replaceChildren(mobile);
             }
             if (title) title.textContent = opener.dataset.docTitle ?? '';
             const tab = reader.querySelector<HTMLAnchorElement>('[data-reader-tab]');
             if (tab) tab.href = href;
+            const download = reader.querySelector<HTMLAnchorElement>('[data-reader-download]');
+            if (download) {
+              download.href = href;
+              download.download = href.split('/').pop() ?? '';
+            }
             reader.dataset.openerId = opener.id;
             reader.hidden = false;
             reader.showModal();
