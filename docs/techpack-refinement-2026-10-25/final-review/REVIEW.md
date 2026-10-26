@@ -137,3 +137,20 @@ PR55 must remain draft and unmerged while the three required genuine photographs
 are unresolved. The candidate has not been deployed; the current public site and
 PDF URLs must not be described as serving this revision. Physical iOS Safari is
 also not verified by Chromium mobile emulation.
+
+## CI continuation
+
+The first continuation run at `dd1984b` passed build, backend/domain checks, the new
+PNG/PDF/path verifier, smoke, 915 reader checks, 1,321 content checks, 946 Portfolio
+checks, 4,849 preservation checks, 49 Menswear navigation checks, 841 look-sequence
+checks, 12 responsive-return checks and 98 Womenswear continuity checks. It then
+failed in `garment-match-cut.mjs`: an animation found in one browser call had
+finished before the next call tried to pause it.
+
+The test now arms a mutation observer before the action and captures/pauses the
+actual clip animation in that event turn. This retains the same 48 midpoint,
+opacity, exact return, paired-image and interruption assertions. Production
+animation controllers, keyframes and durations are unchanged. The corrected test
+passes all 48 assertions both normally and with `MATCH_CUT_QA_SLOWMO_MS=180`, which
+deliberately delays browser operations. Both logs are retained. The latest PR55 check status is
+the authority for the final CI outcome; the failed run is not a release result.
