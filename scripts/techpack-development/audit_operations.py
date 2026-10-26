@@ -1,8 +1,8 @@
 """A disposition for every old numbered operation, including consolidated/retained notes."""
-from completion import PREVIOUS,G
+from credibility import PREVIOUS,G
 MAPS={
 1:{'front':['F1','F2','F3','F5','B2','F6','F7','F4','F3','F1/F4'],'back':['Material grain note','F1','F4','F5','B1','B2/F6','B3','F7','B4','Removed generic packing/fit check']},
-2:{'front':['F1','F2','F3','F4','F5','F6','F7','F8','B3','F8'],'back':['F1/B2','B1','B2','F4/F5','F6','F7','Removed absence-of-feature filler','F8','B3','B4']},
+2:{'front':['F1','F2','F3','F4','F5','Removed unsupported diamond insert','F6','F7','B3','F7'],'back':['F1/B2','B1','B2','F4/F5','Removed unsupported rear gusset tip','F6','Removed absence-of-feature filler','F7','B3','B4']},
 3:{'front':['F1','F2','F3','F4','F5','F6','F7','F8','F8','F7'],'back':['B1','B2','B3','B4','B5','B3','F5','F8','B6','B7']},
 4:{'front':['F1','F2','F3','F4','Retained flat-front/grain identity on cover/POM','F5','F6','F7','F8','F8'],'back':['B1','B2','B3','B4','F5','F1','Removed general seat-balance filler','F7','F8','B5/B6']},
 5:{'front':['F1','F2','F3','F4','Retained clean-front identity on cover','F5','F6','F7','F4','Material nap/shrinkage target in BOM'],'back':['B1','B2','B1','Retained plain-back identity on cover','F3','F4','F5','F6','B3','B4']}}

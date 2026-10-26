@@ -34,7 +34,23 @@ export function paintMenswear(frame:HTMLElement,position:number,reduced:boolean,
  const world=frame.closest<HTMLElement>('[data-mw-film]')!.dataset.mwFilm;
  frame.style.background='#fff';frame.style.color='var(--ink)';
  const wings=[...frame.querySelectorAll<HTMLElement>('[data-mw-wing]')];for(const n of wings)n.style.display='none';
- if(world==='m-streetwear'){
+ const leads=nodes.filter(n=>n.hasAttribute('data-mw-lead')).sort((a,b)=>Number(a.dataset.mwLead)-Number(b.dataset.mwLead)).map(n=>Number(n.dataset.mwActor));
+ if(leads.length===3){
+  // Three commercial silhouettes, with held full frames and a short comparison.
+  // Existing historical compositions below remain available for original media.
+  const pair=p<2?0:1,a=leads[pair],b=leads[pair+1],phase=p-pair*2;
+  if(p>=4)draw(leads[2],fit(leads[2]));
+  else if(compact)draw(phase<.5?a:b,fit(phase<.5?a:b));
+  else if(phase<=1){
+   const t=ease(phase),left=fit(a,.26,.86),right=fit(b,.74,.86);
+   draw(a,mix(fit(a),left,Math.min(1,t*3)));
+   if(t>.3)draw(b,{...right,x:right.x+w*(1-ease((t-.3)/.7))},undefined,t>.98);
+  }else{
+   const t=ease(phase-1),left=fit(a,.26,.86),right=fit(b,.74,.86);
+   if(t<1)draw(a,{...left,x:left.x-w*t},undefined,t<.02);
+   draw(b,mix(right,fit(b),t));
+  }
+ }else if(world==='m-streetwear'){
   const cream=fit(6311316),city=fit(8505243,compact?.44:.26),roomWindow:SourceWindow=viewWindow(30599804),room=fit(30599804,.5,1,.5,roomWindow),hero=fit(17303564),puffer=fit(26936522);
   if(!photo(30599804).dataset.mwSeam){
    // New full-length studio portraits retain the authored camera journey.

@@ -5,6 +5,7 @@ import {directions} from '../../data/womenswear-direction';
 import {exhibitionPhotograph} from '../../data/final-photography';
 import {featuredIdentity,generatedPresentation} from '../../data/womenswear-collection';
 import FinalPhoto from './FinalPhoto.astro';
+import EditRailControls from './EditRailControls.astro';
 interface Props{subjects:Subject[];world:string;category:string;}
 const{subjects,world,category}=Astro.props,direction=directions[category];
 const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===featuredIdentity(part.id));return subject?[{...part,subject,photo:exhibitionPhotograph(subject)}]:[];});
@@ -19,13 +20,14 @@ const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.nex
     {cast.map(({subject,role,photo})=><a class="ww-actor" data-ww-actor={role} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} href={door(subject)} data-nav data-open-subject={subject.id}
       aria-label={`Inspect ${garmentCopy(subject).title}`} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
    </div>
+   <button class="edit-browse label" type="button" data-edit-browse>Browse the edit ↓</button>
    <p class="ww-shot label" data-ww-shot aria-hidden="true">{direction.desktop[0].label}</p>
   </div>
  </div>
  <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
-  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>Explore the complete edit.</p></div>
-  <p class="ww-archive-cue label" aria-hidden="true">SCROLL TO EXPLORE <span>↓</span></p>
-  <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name}. Scroll down through every look.`}>
+  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><a class="edit-next label" href={next} data-nav>Next / {direction.next.name} ↗</a></div>
+  <EditRailControls name={direction.name}/>
+  <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name}. Swipe horizontally or use arrow keys to explore all ten looks.`}>
    {subjects.map(subject=>{const photo=exhibitionPhotograph(subject);return <a href={door(subject)} data-nav data-open-subject={subject.id} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} draggable="false" aria-label={`Inspect ${garmentCopy(subject).title}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 92vw, 48vw"/></a>})}
   </div>
   <a class="ww-handoff label" href={next} data-nav><span>CONTINUE</span><b>{direction.next.name}</b><span aria-hidden="true">↗</span></a>

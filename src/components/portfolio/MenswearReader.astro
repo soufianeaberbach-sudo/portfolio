@@ -1,6 +1,6 @@
 ---
 import type{Subject}from'../../data/portfolio';
-import{menswearCredit,menswearConcept,menswearSlots}from'../../data/menswear-collection';
+import{menswearCredit,menswearConcept,menswearDisplayed}from'../../data/menswear-collection';
 import type{MenswearCategory}from'../../data/menswear-collection';
 import{menswearDirections}from'../../data/menswear-direction';
 import {garmentCopy} from '../../data/garment-copy';
@@ -9,7 +9,7 @@ import GarmentInspection from'./GarmentInspection.astro';
 interface Props{subject:Subject;}
 const{subject}=Astro.props,credit=menswearCredit(subject.id),concept=menswearConcept(subject.id),direction=menswearDirections[subject.category as keyof typeof menswearDirections];
 const copy=garmentCopy(subject);
-const sequence=menswearSlots[subject.category as MenswearCategory],at=sequence.findIndex(x=>x.id===subject.id);
+const sequence=menswearDisplayed(subject.category as MenswearCategory),at=sequence.findIndex(x=>x.id===subject.id);
 const neighbor=(delta:number)=>menswearConcept(sequence[(at+delta+sequence.length)%sequence.length].id);
 ---
 <article class="pf-rd__subject mw-reader" data-mw-reader data-ai-concept={concept?'true':undefined} data-subject={subject.id} data-of={subject.category} id={`menswear/${subject.category}/${subject.id}`} data-verified={subject.verified?'yes':'no'} hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby={`${subject.id}-title`}>

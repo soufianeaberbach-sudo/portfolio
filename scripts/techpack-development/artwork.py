@@ -1,5 +1,5 @@
 """Internal artwork replacement only; approved page geometry and table grid remain."""
-from completion import *
+from credibility import *
 ASSETS=Path(__file__).resolve().parents[2]/'public/techpacks/materials'
 CREDITS='https://aberbach.co/techpacks/material-credits/'
 
@@ -39,7 +39,7 @@ FUNCS[0]=cover_refined
 # Cell references intentionally repeat only for self-fabric components.
 IMAGES={
 1:['main-01',None,'woven-fusible','buttons-01','thread-01','woven-tape'],
-2:['main-02','main-02','main-02','stripe-tape','thread-02','waist-elastic'],
+2:['main-02','main-02',None,'stripe-tape','thread-02','waist-elastic'],
 3:['main-03','dress-lining','woven-fusible','dress-concealed-zip','ring-slider','thread-03'],
 4:['main-04','trouser-pocketing','woven-fusible','trouser-coil-zip','buttons-04','thread-04'],
 5:['main-05','main-05','hoodie-rib','woven-tape','thread-05','clear-stay']}
@@ -56,7 +56,7 @@ def bom_refined(p,g):
   name=IMAGES[g['id']][j]
   if name:
    image(p,ASSETS/(name+'.png'),(89,a+4,197,b-13))
-   caption='REP. VISUALIZATION' if name in VISUALS else ('SLIDER / REP. PHOTO' if name=='ring-slider' else ('SELF / REP. PHOTO' if j in [1,2] and name==f'main-{g["id"]:02}' else 'REP. PHOTO'))
+   caption='SLIDER' if name=='ring-slider' else ('SELF FABRIC' if j in [1,2] and name==f'main-{g["id"]:02}' else 'MATERIAL REFERENCE')
    txt(p,caption,143,b-5,6.8,'r',align='center')
   else:txt(p,'—',143,(a+b)/2+3,12,align='center')
  txt(p,'Reference images / colour treatments / licences: aberbach.co/techpacks/material-credits/',492,582,6.9,'r',(1,1,1),'center')

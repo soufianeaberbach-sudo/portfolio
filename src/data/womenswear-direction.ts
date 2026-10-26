@@ -8,23 +8,25 @@ export interface Direction {
  cast:{id:string;role:string;reason:string}[]; desktop:Shot[]; mobile:Shot[];
 }
 const p=(x:number,scale=1,floor=.97,opacity=1):Pose=>({x,scale,floor,opacity});
+const leadDirection=(id:string,name:string,title:string[],number:string,leads:string[],next:{id:string;name:string}):Direction=>({
+ id,name,title,number,next,length:235,mobileLength:220,
+ cast:leads.map((id,i)=>({id,role:i?'second':'lead',reason:'Owner-selected category hook; complete existing photograph.'})),
+ desktop:[
+  {at:0,label:'SELECTED / 01',poses:{lead:p(.68,.88),second:p(1.5,.96,.97,0)}},
+  {at:.2,label:'SILHOUETTE',poses:{lead:p(.55,1)}},
+  {at:.56,label:'SELECTED / 02',poses:{lead:p(-.7,.96,.97,0),second:p(.53,1)}},
+  {at:1,label:'EXPLORE THE EDIT',poses:{second:p(.53,1)}}],
+ mobile:[
+  {at:0,label:'SELECTED / 01',poses:{lead:p(.55,.90),second:p(1.5,.96,.97,0)}},
+  {at:.2,label:'SILHOUETTE',poses:{lead:p(.51,1)}},
+  {at:.56,label:'SELECTED / 02',poses:{lead:p(-.8,.96,.97,0),second:p(.51,1)}},
+  {at:1,label:'EXPLORE THE EDIT',poses:{second:p(.51,1)}}],
+});
 export const directions:Record<string,Direction>={
- casualwear:{id:'casualwear',name:'Casualwear',title:['CASUAL—','WEAR'],number:'01',next:{id:'activewear',name:'ACTIVEWEAR'},length:340,mobileLength:290,
-  cast:[{id:'rtw-ref-02',role:'shirt',reason:'Cropped pink shirting and wide trousers establish the everyday line.'},{id:'streetwear-ref-02',role:'hood',reason:'Burgundy jersey brings a compact, grounded street silhouette.'},{id:'streetwear-ref-05',role:'olive',reason:'Relaxed olive shirting connects the two source pools through proportion.'},{id:'streetwear-ref-04',role:'utility',reason:'Black utility volume resolves the edit with an open, full silhouette.'}],
-  desktop:[{at:0,label:'THE EVERYDAY LINE',poses:{shirt:p(.66,.88),hood:p(1.5,1,.97,0),olive:p(.5,1,2.1,0),utility:p(.5,1,2.1,0)}},{at:.18,label:'PROPORTION',poses:{shirt:p(.57,1)}},{at:.40,label:'SOFT STRUCTURE',poses:{shirt:p(.27,.94),hood:p(.72,1)}},{at:.63,label:'RELAXED LINE',poses:{shirt:p(-.7,.94,.97,0),hood:p(1.7,1,.97,0),olive:p(.50,1)}},{at:.86,label:'VOLUME / PRESENCE',poses:{olive:p(.5,1,-.25,0),utility:p(.50,1)}},{at:1,label:'CASUALWEAR',poses:{utility:p(.50,1)}}],
-  mobile:[{at:0,label:'THE EVERYDAY LINE',poses:{shirt:p(.57,.78),hood:p(1.5,1,.97,0),olive:p(.5,1,2.1,0),utility:p(.5,1,2.1,0)}},{at:.18,label:'PROPORTION',poses:{shirt:p(.50,1)}},{at:.41,label:'SOFT STRUCTURE',poses:{shirt:p(-.7,1,.97,0),hood:p(.50,1)}},{at:.64,label:'RELAXED LINE',poses:{hood:p(.5,1,-.25,0),olive:p(.50,1)}},{at:.88,label:'VOLUME / PRESENCE',poses:{olive:p(.5,1,-.25,0),utility:p(.50,1)}},{at:1,label:'CASUALWEAR',poses:{utility:p(.50,1)}}]},
- activewear:{id:'activewear',name:categoryLabel('activewear'),title:['ACTIVE—','WEAR'],number:'02',next:{id:'evening',name:'OCCASIONWEAR'},length:310,mobileLength:270,
-  cast:[{id:'activewear-ref-08',role:'red',reason:'The red colourblocked set and stepping stance establish a precise diagonal.'},{id:'activewear-ref-04',role:'black',reason:'Black cropped leggings and racerback make a sharp length contrast.'},{id:'activewear-ref-01',role:'white',reason:'White separates repeat the red stripe as a visual relay, not a claimed collection.'},{id:'activewear-ref-07',role:'flare',reason:'The brown ribbed set opens the leg into a flare, resolving the precise stripe passage through a genuinely different silhouette.'}],
-  desktop:[{at:0,label:'ENERGY / PRECISION',poses:{red:p(.68,.84),black:p(.28,.97,2.1,0),white:p(.73,.98,2.1,0),flare:p(1.5,1,.97,0)}},{at:.19,label:'DIRECTION',poses:{red:p(.63,1)}},{at:.43,label:'THE RELAY',poses:{red:p(.74,.91),black:p(.28,1)}},{at:.67,label:'CONTRAST',poses:{red:p(.74,.9,.20,0),black:p(.30,1),white:p(.72,1)}},{at:.82,label:'LINE / RELEASE',poses:{black:p(.28,.94,-.2,0),white:p(.25,.96),flare:p(.72,1)}},{at:1,label:'ACTIVEWEAR',poses:{white:p(.25,.96),flare:p(.72,1)}}],
-  mobile:[{at:0,label:'ENERGY / PRECISION',poses:{red:p(.60,.76),black:p(.50,.98,2.1,0),white:p(1.5,.99,.97,0),flare:p(.51,1,2.1,0)}},{at:.19,label:'DIRECTION',poses:{red:p(.51,1)}},{at:.46,label:'THE RELAY',poses:{red:p(.51,.96,-.2,0),black:p(.51,1)}},{at:.69,label:'CONTRAST',poses:{black:p(-.6,.97,.97,0),white:p(.51,1)}},{at:.91,label:'LINE / RELEASE',poses:{white:p(.51,.98,-.25,0),flare:p(.51,1)}},{at:1,label:'ACTIVEWEAR',poses:{flare:p(.51,1)}}]},
- evening:{id:'evening',name:categoryLabel('evening'),title:['OCCASION—','WEAR'],number:'03',next:{id:'swimwear',name:categoryLabel('swimwear').toUpperCase()},length:420,mobileLength:350,
-  cast:[{id:'evening-ref-04',role:'black',reason:'The black sequinned column establishes ceremony with a complete, narrow silhouette.'},{id:'evening-ref-11',role:'champagne',reason:'The champagne calf-length column changes length and surface against the long black gown.'},{id:'evening-ref-03',role:'navy',reason:'The navy lace tiering gives the final long silhouette a different fall without repeating the black column.'}],
-  desktop:[{at:0,label:'THE LONG SILHOUETTE',poses:{black:p(.67,.87),champagne:p(1.45,.98,.97,0),navy:p(.72,.99,2.1,0)}},{at:.20,label:'CEREMONY',poses:{black:p(.62,1)}},{at:.45,label:'LINE / FALL',poses:{black:p(.29,.96),champagne:p(.72,1)}},{at:.69,label:'A DIFFERENT FALL',poses:{black:p(-.6,.94,.97,0),champagne:p(1.6,.94,.97,0),navy:p(.52,1)}},{at:.86,label:'OCCASIONWEAR',poses:{navy:p(.52,1)}},{at:1,label:'OCCASIONWEAR',poses:{navy:p(.52,1)}}],
-  mobile:[{at:0,label:'THE LONG SILHOUETTE',poses:{black:p(.56,.80),champagne:p(.51,1,2.1,0),navy:p(.51,1,2.1,0)}},{at:.20,label:'CEREMONY',poses:{black:p(.51,1)}},{at:.47,label:'LINE / FALL',poses:{black:p(.51,.97,-.2,0),champagne:p(.51,1)}},{at:.75,label:'A DIFFERENT FALL',poses:{champagne:p(.51,.95,-.2,0),navy:p(.51,1)}},{at:1,label:'OCCASIONWEAR',poses:{navy:p(.51,1)}}]},
- swimwear:{id:'swimwear',name:categoryLabel('swimwear'),title:['SWIMWEAR'],number:'04',next:{id:'menswear',name:'MENSWEAR'},length:290,mobileLength:260,
-  cast:[{id:'swimwear-ref-06',role:'blue',reason:'The blue ring-front one-piece gives the release one clear focal point.'},{id:'swimwear-ref-08',role:'black',reason:'The black cut-out one-piece brings a graphic counterpoint.'},{id:'swimwear-ref-05',role:'silver',reason:'The silver halter silhouette introduces a cooler interval before the final one-piece.'},{id:'swimwear-ref-10',role:'ivory',reason:'The white cut-out one-piece changes colour, stance and photographic atmosphere for a distinct final release. It is a single, licensed reference, not a related project.'}],
-  desktop:[{at:0,label:'LIGHT / FORM',poses:{blue:p(.68,.84),black:p(-.6,.92,.97,0),silver:p(1.6,.92,.97,0),ivory:p(.53,1,2.1,0)}},{at:.23,label:'CLARITY',poses:{blue:p(.54,1)}},{at:.55,label:'OPEN INTERVALS',poses:{blue:p(.65,.98),black:p(.25,.98)}},{at:.73,label:'SILVER / LIGHT',poses:{blue:p(1.7,.98,.97,0),black:p(-.8,.98,.97,0),silver:p(.50,1)}},{at:.95,label:'THE LAST LIGHT',poses:{silver:p(.50,1,-.25,0),ivory:p(.53,1)}},{at:1,label:'SWIMWEAR',poses:{ivory:p(.53,1)}}],
-  mobile:[{at:0,label:'LIGHT / FORM',poses:{blue:p(.55,.75),black:p(1.6,.98,.97,0),silver:p(1.6,.98,.97,0),ivory:p(.50,1,2.1,0)}},{at:.22,label:'CLARITY',poses:{blue:p(.51,1)}},{at:.52,label:'CONTRAST',poses:{blue:p(-.8,.96,.97,0),black:p(.51,1)}},{at:.73,label:'SILVER / LIGHT',poses:{black:p(-.8,.96,.97,0),silver:p(.51,1)}},{at:.95,label:'THE LAST LIGHT',poses:{silver:p(.51,1,-.25,0),ivory:p(.50,1)}},{at:1,label:'SWIMWEAR',poses:{ivory:p(.50,1)}}]}
+ casualwear:leadDirection('casualwear','Casualwear',['CASUAL—','WEAR'],'01',['rtw-ref-03','streetwear-ref-01'],{id:'activewear',name:'ACTIVEWEAR'}),
+ activewear:leadDirection('activewear',categoryLabel('activewear'),['ACTIVE—','WEAR'],'02',['activewear-ref-01','activewear-ref-08'],{id:'evening',name:'OCCASIONWEAR'}),
+ evening:leadDirection('evening',categoryLabel('evening'),['OCCASION—','WEAR'],'03',['evening-ref-01','evening-ref-05'],{id:'swimwear',name:'SWIMWEAR'}),
+ swimwear:leadDirection('swimwear','Swimwear',['SWIMWEAR'],'04',['swimwear-ref-01','swimwear-ref-08'],{id:'menswear',name:'MENSWEAR'}),
 };
 /** Existing source-qualified empty-gap windows; source metadata remains authoritative. */
 export const photoFrames:Record<string,{source:string;front:[number,number];back:[number,number];single?:boolean}>= {

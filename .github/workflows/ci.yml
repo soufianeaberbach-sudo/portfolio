@@ -57,6 +57,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check -r scripts/techpack-development/requirements.txt
           python scripts/techpack-development/verify_documents.py > /tmp/techpack-document-verification.json
+          python scripts/techpack-development/verify_credibility.py
 
       # Uses the Playwright pinned in devDependencies, so the browser build
       # always matches the package the tests import. No temporary npx package.
@@ -86,6 +87,7 @@ jobs:
           TECHPACK_QA_URL=http://127.0.0.1:4457 node tests/techpacks.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/portfolio-content.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/portfolio-experience.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/business-browsing.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-look-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-resize-return.mjs

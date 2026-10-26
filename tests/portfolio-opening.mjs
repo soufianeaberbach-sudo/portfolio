@@ -660,7 +660,7 @@ try {
     check('and the first thing in it is a garment, not an interface',
       await page.evaluate(() => {
         const scene = document.querySelector('[data-territory="casualwear"] .ww-stage');
-        const img = scene.querySelector('.ww-actor[data-ww-actor=shirt] .ww-photo img');
+        const img = scene.querySelector('[data-ww-exhibition=casualwear] .ww-actor:first-child .ww-photo img');
         const box = img.getBoundingClientRect();
         return box.height > window.innerHeight * 0.8 && box.top < window.innerHeight * 0.2;
       }));
@@ -669,8 +669,8 @@ try {
        width, and on a tall screen it sits under it in its own band. */
     check('and no type is set across the garment',
       await page.evaluate(() => {
-        const img = document.querySelector('.ww-actor[data-ww-actor=shirt] .ww-photo img').getBoundingClientRect();
-        const win = document.querySelector('.ww-actor[data-ww-actor=shirt] .ww-photo').getBoundingClientRect();
+        const img = document.querySelector('[data-ww-exhibition=casualwear] .ww-actor:first-child .ww-photo img').getBoundingClientRect();
+        const win = document.querySelector('[data-ww-exhibition=casualwear] .ww-actor:first-child .ww-photo').getBoundingClientRect();
         /* The visible part of the photograph is the window, not the whole
            image: the rest is clipped. */
         const shown = { left: win.left, right: win.right, top: win.top, bottom: win.bottom };

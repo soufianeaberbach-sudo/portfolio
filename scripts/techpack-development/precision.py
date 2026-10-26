@@ -44,11 +44,12 @@ def measurements_fixed(p,g):
  # All sixteen data rows retain the existing coordinates, borders, shading and typography.
  measurements(p,g)
  # The former empty table cells become a deliberate, full-width notes field.
- rect(p,(23.4,402.84,818.4,560.04),(1,1,1),None,0)
- line(p,(23.4,402.84),(818.4,402.84),BLACK,.96)
- txt(p,'MEASUREMENT NOTES',35,420,10.5,'b')
+ notes_top=402.84 if len(g['pom'])==16 else 123+len(g['pom'])*17.52
+ rect(p,(23.4,notes_top,818.4,560.04),(1,1,1),None,0)
+ line(p,(23.4,notes_top),(818.4,notes_top),BLACK,.96)
+ txt(p,'MEASUREMENT NOTES',35,notes_top+17.16,10.5,'b')
  lines=['All values in cm; half widths are edge to edge. Sample size is marked [SAMPLE].']+NOTES[g['id']]+['Development Sample: proposed dimensions; review fit and seam stretch before size-set approval.']
- y=429
+ y=notes_top+26.16
  for t in lines:
   ls=wrapped(t,764,9.5)
   for z in ls:txt(p,z,36,y+10,9.5);y+=12
@@ -105,33 +106,24 @@ def diagram_fixed(p,g):
  elif i==2:
   d('f',(.18,.015),(.82,.015),'A');d('b',(.045,.194),(.955,.194),'B')
   follow(p,rs['b'],[(1.01,.015),(1.055,.19),(1.04,.45),(.97,.70),(.91,.985)],'C',(1.17,.59))
-  follow(p,rs['b'],[(.45,.30),(.43,.55),(.37,.80),(.34,.985)],'D',(.39,.67))
-  for v in ['f','b']:
-   pts=[at(rs[v],z) for z in [(.50,.265),(.45,.30),(.50,.335),(.55,.30),(.50,.265)]]
-   sh=p.new_shape()
-   for a,b in zip(pts,pts[1:]):sh.draw_line(a,b)
-   sh.finish(color=(.5,.5,.5),width=.45,dashes='[2 2] 0');sh.commit()
+  follow(p,rs['b'],[(.50,.26),(.43,.55),(.37,.80),(.34,.985)],'D',(.39,.67))
   for v,lab,xoff in [('f','E',-.08),('b','F',.09)]:
-   r=rs[v];follow(p,r,[(.50,.015),(.50,.15),(.50,.265),(.50,.30)],lab,(.50+xoff,.18));datum(v,(.50,.30),'X')
+   follow(p,rs[v],[(.50,.015),(.50,.15),(.50,.235),(.50,.26)],lab,(.50+xoff,.18))
+   datum(v,(.50,.26),'CROTCH')
   d('f',(.09,.327),(.46,.327),'G');d('f',(.16,.65),(.42,.65),'H');d('f',(.17,.985),(.35,.985),'I');vert('f',.015,.105,.18,'J')
-  # Finished gusset and hem details remain in the approved left/right drawing margins.
-  pts=[(430,447),(448,477),(430,507),(412,477)]
-  for a,b in zip(pts,pts[1:]+pts[:1]):line(p,a,b)
-  datumtxt='X';txt(p,'X',430,479,8,'b',RED,'center');dim(p,(459,447),(459,507),'K',(9,0));dim(p,(412,521),(448,521),'L')
-  txt(p,'INTERNAL GUSSET',430,541,7.5,'b',align='center')
   rect(p,(49,346,111,436),(1,1,1))
   for xx in [57,75,93]:rect(p,(xx,348,xx+10,434),(.72,.1,.16),BLACK,.4)
-  dim(p,(57,337),(67,337),'M');dim(p,(67,448),(75,448),'N');txt(p,'STRIPE DETAIL',80,464,8,'b',align='center')
-  rect(p,(759,411,780,456),(1,1,1));line(p,(759,447),(780,447));dim(p,(792,447),(792,456),'O',(8,0))
-  rect(p,(47,196,119,211),(1,1,1));line(p,(47,202),(119,202),BLACK,.4);dim(p,(47,219),(119,219),'P');txt(p,'EXTENDED WAIST',83,237,7.5,'b',align='center');txt(p,'MEASURE FLAT',83,249,7.5,align='center')
+  dim(p,(57,337),(67,337),'K');dim(p,(67,448),(75,448),'L');txt(p,'STRIPE DETAIL',80,464,8,'b',align='center')
+  rect(p,(759,411,780,456),(1,1,1));line(p,(759,447),(780,447));dim(p,(792,447),(792,456),'M',(8,0))
+  rect(p,(47,196,119,211),(1,1,1));line(p,(47,202),(119,202),BLACK,.4);dim(p,(47,219),(119,219),'N');txt(p,'EXTENDED WAIST',83,237,7.5,'b',align='center');txt(p,'MEASURE FLAT',83,249,7.5,align='center')
  elif i==3:
-  r=rs['f'];datum('f',(.28,.01),'STRAP TOP');vert('f',.01,.985,1.22,'A')
-  line(p,at(r,(.28,.01)),at(r,(1.22,.01)),RED,.3)
+  r=rs['f'];q=at(r,(.28,.082));p.draw_circle(q,1,color=RED,fill=RED);txt(p,'BODICE APEX',q[0]-5,q[1]-7,7,'r',RED,'right');vert('f',.082,.985,1.22,'A')
+  line(p,at(r,(.28,.082)),at(r,(1.22,.082)),RED,.3)
   d('f',(.225,.16),(.775,.16),'B');d('f',(.26,.225),(.74,.225),'C');d('f',(.30,.335),(.70,.335),'D');d('b',(.21,.48),(.79,.48),'E');d('f',(.03,.985),(.97,.985),'F')
   # Separate neckline points, not the underbust baseline.
-  vert('f',.01,.178,-.10,'I',(-9,0));line(p,at(r,(-.10,.178)),at(r,(.50,.178)),RED,.3)
-  vert('b',.01,.215,-.10,'J',(-9,0));line(p,at(rs['b'],(-.10,.215)),at(rs['b'],(.50,.215)),RED,.3)
-  vert('f',.01,.182,1.08,'K');line(p,at(r,(.50,.182)),at(r,(1.08,.182)),RED,.3)
+  vert('f',.082,.178,-.10,'I',(-9,0));line(p,at(r,(-.10,.178)),at(r,(.50,.178)),RED,.3)
+  vert('b',.082,.215,-.10,'J',(-9,0));line(p,at(rs['b'],(-.10,.215)),at(rs['b'],(.50,.215)),RED,.3)
+  vert('f',.082,.182,1.08,'K');line(p,at(r,(.50,.182)),at(r,(1.08,.182)),RED,.3)
   vert('b',.219,.438,.50,'L');vert('b',.225,.36,.36,'M');d('f',(.28,.082),(.72,.082),'O');d('b',(.31,.185),(.69,.185),'P')
   rect(p,(58,267,73,339),(1,1,1));dim(p,(58,254),(73,254),'H');dim(p,(87,267),(87,339),'G',(8,0))
   txt(p,'FINISHED STRAP',73,358,7.5,'b',align='center');txt(p,'PATH UNFOLDED',73,369,7.5,align='center')
@@ -166,7 +158,7 @@ def diagram_fixed(p,g):
   sh=p.new_shape();sh.draw_bezier((675,490),(684,501),(698,501),(707,490));sh.finish(color=BLACK,width=.7);sh.commit()
   line(p,(675,490),(707,490),(.5,.5,.5),.3);dim(p,(719,490),(719,498),'O',(9,0));txt(p,'BACK NECK',691,530,8,'b',align='center')
  # Concise method key in the same bottom drawing margin as the baseline.
- key={1:'HPS = BODY NECK/SHOULDER JOIN; COLLAR EXCLUDED. A–P: PAGE 09. DIAGRAMS NOT TO SCALE.',2:'DASHED = INTERNAL GUSSET. E/F TO X; D FROM SIDE CORNER. A–P: PAGE 09. NOT TO SCALE.',3:'I = FRONT V; J = BACK V; K = CF EMPIRE APEX. G IS THE UNFOLDED STRAP PATH. A–P: PAGE 09.',4:'E/F FOLLOW CF/CB SEAMS TO CROTCH; C/D FOLLOW LEG SEAMS. A–P: PAGE 09. NOT TO SCALE.',5:'HPS AND NECK DROPS ARE BODY SEAM DATUMS WITH HOOD LIFTED. A–P: PAGE 09. NOT TO SCALE.'}[i]
+ key={1:'HPS = BODY NECK/SHOULDER JOIN; COLLAR EXCLUDED. A–P: PAGE 09. DIAGRAMS NOT TO SCALE.',2:'E/F FOLLOW RISE SEAMS; D FROM CROTCH INTERSECTION. A–N: PAGE 09. NOT TO SCALE.',3:'A / I / J / K: FRONT BODICE APEX LEVEL, STRAP EXCLUDED. G: SEPARATE STRAP PATH. A–P: PAGE 09.',4:'E/F FOLLOW CF/CB SEAMS TO CROTCH; C/D FOLLOW LEG SEAMS. A–P: PAGE 09. NOT TO SCALE.',5:'HPS AND NECK DROPS ARE BODY SEAM DATUMS WITH HOOD LIFTED. A–P: PAGE 09. NOT TO SCALE.'}[i]
  txt(p,key,421,564 if i in [1,5] else 555,8,align='center')
 
 FUNCS[8]=measurements_fixed;FUNCS[9]=diagram_fixed

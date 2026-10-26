@@ -18,7 +18,7 @@ try{
    await page.goto(base+'/portfolio/#womenswear/casualwear');await fontsReady(page);
    const reader=page.locator(`[data-subject="${target.id}"]`);
    await reader.locator('img').first().evaluate(image=>{image.loading='eager';return image.decode();});
-   await page.locator('[data-ww-actor=shirt]').click();
+   const clickedDoor=page.locator(`[data-ww-exhibition=casualwear] .ww-rail [data-open-subject="${clicked}"]`);await clickedDoor.scrollIntoViewIfNeeded();await clickedDoor.click();
    await page.waitForFunction(id=>{const reader=document.querySelector(`[data-subject="${id}"]`);return !reader.hidden&&!reader.hasAttribute('data-ww-moving');},clicked);
    await page.evaluate(id=>location.hash='#womenswear/rtw/'+id,target.id);
    await reader.waitFor({state:'visible'});

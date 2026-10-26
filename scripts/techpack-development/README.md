@@ -10,7 +10,7 @@ run the render pipeline merely to resume work or verify an unchanged document.**
 `specs.py` preserves the initial demonstration specifications. `revisions.py` and
 `precision.py` apply the prior audit. `completion.py` contains the current
 garment-specific operation sets, leader/POM corrections and reconciled values.
-`artwork.py` inserts the licensed photographs and label proofs inside the existing
+`credibility.py` applies the 26 October owner corrections: no invented leggings insert, independent dress body/strap datums, and targeted construction clarifications. `artwork.py` inserts the licensed photographs and label proofs inside the existing
 page regions. Read the final specifications in
 `docs/techpack-refinement-2026-10-25/engineering-specifications.json`; do not mistake
 an intentionally retained historical entry in `specs.py` for the final output.
@@ -83,5 +83,4 @@ and source-integrity checks.
   specifications, page/PDF hashes, pixel comparisons and reader-copy source hashes.
 - `.qa-director/completion/documents/` is disposable render/text/round-trip QA.
 - These are development demonstrations. Material photographs are representative,
-  not tested supplier swatches. Three trim references remain explicitly disclosed
-  visualizations; they must not be described as genuine product photography.
+  not tested supplier swatches. Three trim references are accepted representative visualizations under the 26 October brief; their distinction remains in the credit metadata. They must not be described as genuine product photography.

@@ -29,12 +29,17 @@ const completion=JSON.parse(fs.readFileSync('tests/fixtures/portfolio-completion
 assert.equal(completion.baseline,baseline.baseline);
 const completionPaths=new Set(['src/components/portfolio/FinalPhotoReader.astro','src/components/portfolio/MenswearAct.astro','src/components/portfolio/MenswearReader.astro','src/components/portfolio/TechPackWorld.astro','src/components/portfolio/WomenswearAct.astro','src/components/portfolio/WomenswearExhibition.astro','src/data/portfolio.ts','src/pages/portfolio.astro']);
 assert.deepEqual(new Set(Object.keys(completion.changes)),completionPaths);
+// The current owner brief changes curation and browsing only; pin exact source blobs.
+const business=JSON.parse(fs.readFileSync('tests/fixtures/business-browsing-preservation.json'));
+assert.equal(business.baseline,baseline.baseline);
+const businessPaths=new Set(['src/components/portfolio/MenswearAct.astro','src/components/portfolio/MenswearReader.astro','src/components/portfolio/WomenswearExhibition.astro','src/data/menswear-collection.ts','src/data/menswear-direction.ts','src/data/womenswear-collection.ts','src/data/womenswear-direction.ts','src/scripts/menswear-film.ts']);
+assert.deepEqual(new Set(Object.keys(business.changes)),businessPaths);
 const raw=execFileSync('git',['ls-tree','-r','-z','HEAD'],{maxBuffer:16*1024*1024}).toString();
 const current=new Map(raw.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));let checks=0;
 for(const [path,baselineOid]of Object.entries(baseline.paths)){
- const update=completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
+ const update=business.changes[path]??completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
  if(update){
-  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path),'authorization must name an exact owner-scoped source path');
+  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path)||businessPaths.has(path),'authorization must name an exact owner-scoped source path');
   assert(!path.startsWith('public/'),'original photographic files remain immutable');
   assert.equal(update.baselineSHA1,baselineOid,'authorization must identify the original baseline blob');
  }
