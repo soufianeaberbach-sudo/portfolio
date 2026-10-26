@@ -1,0 +1,145 @@
+▲ [WARNING] Proxy environment variables detected. We'll use your proxy for fetch requests.
+
+
+
+ ⛅️ wrangler 4.127.1
+────────────────────
+[custom build] Running: npm run build
+[custom build]
+[custom build] > soufiane-portfolio@1.0.0 build
+[custom build] > astro build
+[custom build]
+[custom build]
+[custom build] 10:20:36 [content] Syncing content
+[custom build]
+[custom build] 10:20:36 [content] Synced content
+[custom build]
+[custom build] 10:20:36 [types] Generated 49ms
+[custom build] 10:20:36 [build] output: "static"
+[custom build] 10:20:36 [build] mode: "static"
+[custom build]
+[custom build] 10:20:36 [build] directory: /workspace/portfolio/dist/
+[custom build] 10:20:36 [build] Collecting build info...
+[custom build] 10:20:36 [build] ✓ Completed in 66ms.
+[custom build]
+[custom build] 10:20:36 [build] Building static entrypoints...
+[custom build]
+[custom build] 10:20:50 [vite] ✓ built in 13.69s
+[custom build]
+[custom build] 10:20:50 [build] ✓ Completed in 13.73s.
+[custom build]
+[custom build]  building client (vite)
+[custom build]
+[custom build] 10:20:50 [vite] transforming...
+[custom build]
+[custom build] 10:20:51 [vite] ✓ 29 modules transformed.
+[custom build]
+[custom build] 10:20:51 [vite] rendering chunks...
+[custom build]
+[custom build] 10:20:51 [vite] computing gzip size...
+[custom build]
+[custom build] 10:20:51 [vite] dist/_astro/portfolio.astro_astro_type_script_index_1_lang.C50PCUit.js    7.35 kB │ gzip:  2.53 kB
+[custom build] 10:20:51 [vite] dist/_astro/ScrollTrigger.C8IefbVz.js                                   114.87 kB │ gzip: 45.46 kB
+[custom build]
+[custom build] 10:20:51 [vite] dist/_astro/portfolio.astro_astro_type_script_index_0_lang.BSQaHCw7.js  164.39 kB │ gzip: 37.14 kB
+[custom build] 10:20:51 [vite] ✓ built in 628ms
+[custom build]
+[custom build]
+[custom build]  generating static routes
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/404.astro
+[custom build]
+[custom build] 10:20:51   └─ /404.html
+[custom build]  (+9ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/before-we-start.astro
+[custom build]
+[custom build] 10:20:51   └─ /before-we-start/index.html
+[custom build]  (+3ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/contact/sent.astro
+[custom build]
+[custom build] 10:20:51   └─ /contact/sent/index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/contact.astro
+[custom build]
+[custom build] 10:20:51   └─ /contact/index.html
+[custom build]  (+3ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/experience.astro
+[custom build]
+[custom build] 10:20:51   └─ /experience/index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/expertise.astro
+[custom build]
+[custom build] 10:20:51   └─ /expertise/index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/index.astro
+[custom build] 10:20:51   └─ /index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/lab/[story].astro
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/portfolio.astro
+[custom build]
+[custom build] 10:20:51   └─ /portfolio/index.html
+[custom build]  (+44ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/privacy.astro
+[custom build] 10:20:51   └─ /privacy/index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/process.astro
+[custom build]
+[custom build] 10:20:51   └─ /process/index.html
+[custom build]  (+2ms)
+[custom build]
+[custom build] 10:20:51 λ src/pages/robots.txt.ts
+[custom build] 10:20:51   └─ /robots.txt
+[custom build]  (+1ms)
+[custom build]
+[custom build] 10:20:51 λ src/pages/sitemap.xml.ts
+[custom build]
+[custom build] 10:20:51   └─ /sitemap.xml
+[custom build]  (+1ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/techpacks/material-credits.astro
+[custom build] 10:20:51   └─ /techpacks/material-credits/index.html
+[custom build]  (+3ms)
+[custom build]
+[custom build] 10:20:51 ▶ src/pages/working-terms.astro
+[custom build] 10:20:51   └─ /working-terms/index.html
+[custom build]  (+1ms)
+[custom build]
+[custom build] 10:20:51 ✓ Completed in 104ms.
+[custom build]
+[custom build]
+[custom build] 10:20:51 [build] 12 page(s) built in 14.61s
+[custom build] 10:20:51 [build] Complete!
+[custom build]
+[custom build] npm notice
+[custom build] npm notice New major version of npm available! 11.9.0 -> 12.2.1
+[custom build] npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+[custom build] npm notice To update run: npm install -g npm@12.2.1
+[custom build] npm notice
+[custom build]
+✨ Read 2736 files from the assets directory /workspace/portfolio/dist
+Total Upload: 19.85 KiB / gzip: 6.42 KiB
+Your Worker has access to the following bindings:
+Binding                                                      Resource
+env.ASSETS                                                   Assets
+env.BRIEF_TO ("soufianeaberbach@gmail.com")                  Environment Variable
+env.BRIEF_FROM ("brief@aberbach.co")                         Environment Variable
+env.TURNSTILE_HOSTNAMES ("aberbach.co,www.aberbach.co")      Environment Variable
+
+--dry-run: exiting now.
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
