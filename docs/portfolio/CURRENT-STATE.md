@@ -4,6 +4,10 @@
 work. This snapshot must be refreshed when main, content or verified production
 changes; it is not a perpetual deployment certificate.
 
+## PR55 business-viewing continuation — 26 October 2026
+
+The owner's latest brief supersedes the requirement to expose all eighty looks through a full vertical sequence. Two preferred Womenswear hooks and three commercial Menswear highlights now lead into compact horizontal ten-look edits; native vertical scrolling and direct category links reach later worlds. All identities, photographs, Fashion-first selection, paired inspection, zoom and internal Tech Pack reading are preserved. Credible representative trim renderings are explicitly accepted; the former three-photo sourcing blocker no longer applies. The unsupported leggings gusset and strap-dependent dress body measurement are corrected. [Current scoped review and evidence](review/business-focused-2026-10-26/REVIEW.md). This is PR55 source, not a merge or verified live release.
+
 ## Active Portfolio experience refinement — 25 October 2026
 
 Latest main was freshly verified as `2534e904a63eed2c2a3520371262e243e121428a`, the merged/deployed ten-page Tech Pack release. Main already contains the four-world Womenswear edit and forty-look Menswear concept edit; the older candidate/deployment statements below are dated history, not the current implementation baseline.

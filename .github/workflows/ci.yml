@@ -88,6 +88,7 @@ jobs:
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/portfolio-content.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/portfolio-experience.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/business-browsing.mjs
+          PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/business-touch.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-look-navigation.mjs
           PORTFOLIO_QA_URL=http://127.0.0.1:4457 node tests/menswear-resize-return.mjs

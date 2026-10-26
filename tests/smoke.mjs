@@ -712,7 +712,7 @@ try {
       };
     });
     check('a cell in the range is a real link to that garment',
-      before.href===`#womenswear/rtw/${generatedPresentations.find(r=>r.sourceIdentity==='rtw-ref-02')?.id??'rtw-ref-02'}` && before.href.endsWith('/'+before.id), before.href);
+      before.href===`#womenswear/rtw/${generatedPresentations.find(r=>r.sourceIdentity==='rtw-ref-03')?.id??'rtw-ref-03'}` && before.href.endsWith('/'+before.id), before.href);
 
     await p.evaluate(() => document.querySelector('[data-territory="casualwear"] .ww-rail a').click());
     await p.waitForTimeout(900);
