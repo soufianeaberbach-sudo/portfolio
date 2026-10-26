@@ -533,7 +533,7 @@ try {
         readers: readers.map(r => r.dataset.subject),
         open: readers.filter(r => !r.hidden).length,
         invented: w.querySelectorAll('[data-st]').length,
-        pending: [...w.querySelectorAll('[data-ww-reader][data-verified="no"] .ww-reader-head p')].filter(p=>['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL','AI-RETOUCHED / REFERENCE'].includes(p.textContent.trim())).length,
+        pending: w.querySelectorAll('[data-ww-reader][data-verified="no"] details[data-garment-provenance]').length,
         ground: getComputedStyle(w).backgroundColor,
       };
     }, world);
@@ -733,7 +733,7 @@ try {
         fitted: [...rd.querySelectorAll('[data-photo-pair] [data-photo-viewport]')].every(v=>{const p=v.firstElementChild.getBoundingClientRect(),r=v.getBoundingClientRect();return p.width<=r.width+1&&p.height<=r.height+1;}),
         travel: rd.hasAttribute('data-travel'),
         stages: rd.querySelectorAll('.pf-rd__stage-item').length,
-        pending: ['REFERENCE PHOTOGRAPHY','AI-GENERATED / PROVISIONAL'].includes(rd.querySelector('.ww-reader-head p')?.textContent),
+        pending: !!rd.querySelector('details[data-garment-provenance]'),
         verified: rd.dataset.verified,
       };
     }, before.id);
@@ -841,14 +841,14 @@ try {
       docs.stacked && new Set(docs.lefts).size === 1, `${docs.lefts.join(',')} stacked ${docs.stacked}`);
     check('the numbering runs 01 to 05', docs.numbers.join(',') === '01,02,03,04,05', docs.numbers.join(','));
     check('each shows its own first page, large',
-      docs.previews.every((src) => /\/techpacks\/previews\/AB-[WM]-[A-Z]{2}-\d{2}-cover-1200\.webp$/.test(src))
+      docs.previews.every((src) => /\/techpacks\/previews\/AB-[WM]-[A-Z]{2}-\d{2}-cover-1200\.webp\?v=[0-9a-f]{12}$/.test(src))
       && docs.previewWidths.every((w) => w >= 400),
       `${docs.previews.map((s) => s.split('/').pop()).join(' ')} @ ${docs.previewWidths.join(',')}`);
     check('each is marked a Development Sample', docs.stamps === 5, String(docs.stamps));
     check('each offers its own PDF',
-      docs.opens.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf$/.test(href)), docs.opens.join(' '));
+      docs.opens.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf\?v=[0-9a-f]{12}$/.test(href)), docs.opens.join(' '));
     check('every document preview is itself clickable',
-      docs.previewLinks.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf$/.test(href)), docs.previewLinks.join(' '));
+      docs.previewLinks.every((href) => /^\/techpacks\/AB-[WM]-[A-Z]{2}-\d{2}-[A-Za-z-]+-Tech-Pack\.pdf\?v=[0-9a-f]{12}$/.test(href)), docs.previewLinks.join(' '));
     check('the rejected folio/carousel interface is gone', docs.carousel === 0, String(docs.carousel));
 
     check('no PDF byte is fetched when the chapter opens', pdfRequests.length === 0, pdfRequests.join(','));
@@ -857,38 +857,30 @@ try {
     await p.waitForTimeout(900);
     const reader = await p.evaluate(() => {
       const r = document.querySelector('[data-reader]');
-      const obj = r.querySelector('object');
       return {
         open: !r.hidden,
         embeds: r.querySelectorAll('object, iframe').length,
-        data: obj?.getAttribute('data') ?? '',
-        type: obj?.getAttribute('type') ?? '',
-        fallback: !!obj?.querySelector('a[href$=".pdf"]'),
+        pages: r.querySelectorAll('.tp-reader-page').length,
+        firstSource: r.querySelector('.tp-reader-page img')?.dataset.src ?? '',
+        optionalPDF: !!r.querySelector('[data-reader-tab][href*=".pdf"]') && !!r.querySelector('[data-reader-download][download]'),
         title: r.querySelector('[data-reader-title]')?.textContent.trim() ?? '',
         closes: r.querySelectorAll('[data-reader-close]').length,
         covers: Math.round(r.getBoundingClientRect().height) >= 890,
       };
     });
-    check('clicking a document opens the reader', reader.open && reader.embeds === 1, JSON.stringify(reader));
-    check('the reader holds the real PDF', /\.pdf$/.test(reader.data) && reader.type === 'application/pdf', reader.data);
-    check('the reader offers a fallback for browsers without a PDF viewer', reader.fallback);
+    check('clicking a document opens the internal page reader', reader.open && reader.embeds === 0 && reader.pages === 10, JSON.stringify(reader));
+    check('the reader uses the selected final page images', /AB-W-SH-01.*page-01.*\.png\?v=/.test(reader.firstSource), reader.firstSource);
+    check('Open and Download PDF remain optional', reader.optionalPDF);
     check('the reader names the document', reader.title.length > 0, reader.title);
     check('the reader fills the screen and can be closed', reader.covers && reader.closes === 1);
-    /* Only the pre-click assertion is a real one. Headless Chromium ships no
-       PDF viewer, so it does not fetch a document it cannot render; whether
-       the bytes arrive after the click is a property of the browser, not of
-       this page. What this page controls — that nothing is requested until the
-       click, and that the embed points at the real document — is asserted
-       above. */
-    check('no document was fetched beyond the one that was opened',
-      pdfRequests.every((url) => /AB-W-SH-01/.test(url)), pdfRequests.join(','));
+    check('reading does not request any PDF', pdfRequests.length === 0, pdfRequests.join(','));
 
     await p.keyboard.press('Escape');
     await p.waitForTimeout(500);
-    check('Escape closes the reader and tears the embed down',
+    check('Escape closes the reader and releases page images',
       await p.evaluate(() => {
         const r = document.querySelector('[data-reader]');
-        return r.hidden && r.querySelectorAll('object, iframe').length === 0;
+        return r.hidden && r.querySelectorAll('.tp-reader-page,object,iframe').length === 0;
       }));
     check('and the chapter is still open',
       await p.evaluate(() => document.querySelector('[data-world="tech-packs"]').hasAttribute('data-open')));

@@ -19,3 +19,6 @@
  .mw-rail .mw-photo,.mw-rail>li:nth-child(5n+3) .mw-photo{height:min(72svh,calc((100vw - 40px)/var(--photo-aspect)));max-width:none}
  .mw-rail .mw-look-caption{font-size:10px}
 }
+
+/* Garment descriptions are editorial copy, independent of image metadata. */
+.ww-reader-copy .garment-description,.mw-reader-caption .garment-description{font-size:clamp(11px,.85vw,13px);line-height:1.5;color:var(--muted);margin:.4rem 0;max-width:62ch}

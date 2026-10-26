@@ -1,4 +1,5 @@
 ---
+import {garmentCopy} from '../../data/garment-copy';
 import type {Subject} from '../../data/portfolio';
 import {directions} from '../../data/womenswear-direction';
 import {exhibitionPhotograph} from '../../data/final-photography';
@@ -16,16 +17,16 @@ const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.nex
    <header class="ww-title" data-ww-title><p class="label">WOMENSWEAR / <b>{direction.number}</b></p><h3 class="display" id={`${world}-${category}-title`}>{direction.title.map((line,i)=><>{i>0&&<br/>}{line}</>)}</h3></header>
    <div class="ww-cast">
     {cast.map(({subject,role,photo})=><a class="ww-actor" data-ww-actor={role} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} href={door(subject)} data-nav data-open-subject={subject.id}
-      aria-label={`Enter reference: ${subject.cover.alt}`} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
+      aria-label={`Inspect ${garmentCopy(subject).title}`} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
    </div>
    <p class="ww-shot label" data-ww-shot aria-hidden="true">{direction.desktop[0].label}</p>
   </div>
  </div>
  <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
-  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>{subjects.some(s=>generatedPresentation(s.id))?'Provisional AI presentation studies alongside retained references. No garment authorship or production claim.':'Explore the complete edit.'}</p></div>
+  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><p>Explore the complete edit.</p></div>
   <p class="ww-archive-cue label" aria-hidden="true">SCROLL TO EXPLORE <span>↓</span></p>
   <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name}. Scroll down through every look.`}>
-   {subjects.map(subject=>{const photo=exhibitionPhotograph(subject);return <a href={door(subject)} data-nav data-open-subject={subject.id} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} draggable="false" aria-label={`Enter reference: ${subject.cover.alt}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 92vw, 48vw"/></a>})}
+   {subjects.map(subject=>{const photo=exhibitionPhotograph(subject);return <a href={door(subject)} data-nav data-open-subject={subject.id} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} draggable="false" aria-label={`Inspect ${garmentCopy(subject).title}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 92vw, 48vw"/></a>})}
   </div>
   <a class="ww-handoff label" href={next} data-nav><span>CONTINUE</span><b>{direction.next.name}</b><span aria-hidden="true">↗</span></a>
  </section>

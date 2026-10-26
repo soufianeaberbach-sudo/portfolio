@@ -1,0 +1,20 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import images from '../../../public/techpacks/materials/material-credits.json';
+---
+<SiteLayout title="Tech Pack material image credits — ABERBACH" description="Sources, colour treatments and licences for the representative material and component images in the ABERBACH Development Sample tech packs." marker="SA-TECHPACK-MATERIAL-CREDITS-R2" page="techpack-credits" footerCallout={false}>
+ <main class="material-credits" id="main-content">
+  <a class="label" href="/portfolio/#tech-packs">← Tech Packs</a>
+  <h1>Material image credits</h1>
+  <p>Reference images illustrate textile structure and component form. Photographs may be cropped or colour-retouched to coordinate with the development colourway. They are not approved physical swatches or supplier endorsements.</p>
+  <p>Four trims use explicitly identified component visualizations: red stretch tape, clear shoulder elastic, ring/slider set and white knitted waistband elastic. Woven-label proofs are manufacturer-style visualizations; printed labels and packaging are ABERBACH artwork.</p>
+  <p>Each photograph derivative retains the licence listed below. Share-alike terms apply to that image derivative. <a href="/techpacks/materials/material-credits.json">Download the source and licence register</a>.</p>
+  <ol>{images.map(image=><li id={image.id}>
+   <img src={image.url} alt={`${image.id}: ${image.kind}`} width="240" height="180" loading="lazy" decoding="async"/>
+   <div><h2>{image.id}</h2><p>{image.title} · {image.kind}</p><p>{image.author} · {image.licenseUrl?<a href={image.licenseUrl} target="_blank" rel="noopener">{image.license}</a>:image.license}</p><p>{image.changes}</p><p>{image.source.startsWith('https://')?<a href={image.source} target="_blank" rel="noopener">Original source ↗</a>:image.source} · <a href={image.url} download>Image derivative</a></p></div>
+  </li>)}</ol>
+ </main>
+</SiteLayout>
+<style>
+.material-credits{max-width:1100px;margin:auto;padding:clamp(100px,12vh,180px) 24px 80px}.material-credits>p{max-width:80ch;line-height:1.65;font-size:14px;margin:1rem 0}.material-credits h1{font-size:clamp(30px,5vw,55px);margin:2rem 0}.material-credits ol{list-style:none;padding:0;margin-top:3rem}.material-credits li{border-top:1px solid var(--line);padding:1.5rem 0;display:grid;grid-template-columns:240px 1fr;gap:2rem}.material-credits img{width:240px;height:180px;object-fit:contain;background:white}.material-credits h2{font:13px var(--mono);margin:0 0 .8rem}.material-credits li p{font-size:12px;line-height:1.6;overflow-wrap:anywhere;margin:.4rem 0}.material-credits a{text-decoration:underline;text-underline-offset:3px}@media(max-width:599px){.material-credits li{grid-template-columns:1fr;gap:1rem}}
+</style>

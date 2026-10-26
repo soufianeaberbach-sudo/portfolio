@@ -13,6 +13,7 @@ import '../styles/portfolio-womenswear.css';
 import '../styles/womenswear-cinematic.css';
 import '../styles/menswear-cinematic.css';
 import '../styles/portfolio-exhibition-flow.css';
+import '../styles/techpack-reader.css';
 import type { Subject } from '../data/portfolio';
 
 /* The development-only story lab renders this page with one internal test
@@ -48,7 +49,7 @@ const split = (statement: string, word: string) => {
 
 <SiteLayout
   title="Portfolio — Soufiane Aberbach"
-  description="Womenswear and menswear product development, production-ready tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
+  description="Womenswear and menswear product development, garment-development tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
   marker="SA-PORTFOLIO-V8"
   page="portfolio"
   noindex={!!lab}
@@ -808,6 +809,7 @@ const split = (statement: string, word: string) => {
        level and a reload lands where the visitor was.
        -------------------------------------------------------------------- */
       import{editorialWorld}from'../data/womenswear-collection';
+      import { initTechPackReaders } from '../scripts/techpack-reader';
       import { initWomenswear } from '../scripts/womenswear-reader';
       import { initMenswear } from '../scripts/menswear-reader';
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
@@ -1853,115 +1855,8 @@ const split = (statement: string, word: string) => {
         render(queue);
       }
 
-      /* ---- 3. the PDF reader ------------------------------------------- */
-      /* Not one byte of any document is fetched with the page. The <iframe> is
-         created by the click that asks for it and destroyed when the reader
-         closes, so the five packs cost nothing until one is opened. */
-      const closeReader = (world: HTMLElement) => {
-        const reader = world.querySelector<HTMLDialogElement>('[data-reader]');
-        if (!reader || reader.hidden) return;
-        reader.querySelector<HTMLElement>('[data-reader-mount]')?.replaceChildren();
-        reader.close();
-        reader.hidden = true;
-        world.classList.remove('pf-world--reading');
-        const back = reader.dataset.openerId
-          ? world.querySelector<HTMLElement>(`#${reader.dataset.openerId}`)
-          : null;
-        back?.focus({ preventScroll: true });
-        const savedScroll = Number(reader.dataset.scrollTop ?? 0);
-        world.scrollTop = savedScroll;
-        /* Chromium restores a modal dialog's scroll target after close() on
-           its next rendering step. Reapply the chapter position afterwards,
-           so closing never nudges the dossier list. */
-        requestAnimationFrame(() => {
-          world.scrollTop = savedScroll;
-          requestAnimationFrame(() => { world.scrollTop = savedScroll; });
-        });
-        window.setTimeout(() => { world.scrollTop = savedScroll; }, 80);
-      };
-
-      for (const world of worlds.values()) {
-        const reader = world.querySelector<HTMLDialogElement>('[data-reader]');
-        if (!reader) continue;
-        const mount = reader.querySelector<HTMLElement>('[data-reader-mount]')!;
-        const title = reader.querySelector<HTMLElement>('[data-reader-title]');
-
-        for (const opener of world.querySelectorAll<HTMLElement>('[data-open-pdf]')) {
-          /* Pointer activation focuses the document before `click`, and that
-             focus may scroll a long folio row into a different alignment.
-             Capture the origin before focus so Close returns to the exact
-             reading position the visitor selected from. */
-          opener.addEventListener('pointerdown', () => {
-            reader.dataset.scrollTop = String(world.scrollTop);
-          });
-          opener.addEventListener('click', (event) => {
-            const href = opener.getAttribute('href');
-            if (!href) return;
-            if ((event as MouseEvent).metaKey || (event as MouseEvent).ctrlKey) return;
-            /* Inline PDF viewing is unreliable on phones — iOS renders one
-               page and will not scroll it — so below this width the anchor is
-               left alone and the document opens in its own tab. */
-            event.preventDefault();
-            if ((event as MouseEvent).detail === 0 || !reader.dataset.scrollTop) {
-              reader.dataset.scrollTop = String(world.scrollTop);
-            }
-            /* <object> rather than <iframe>: when a browser has no PDF
-               viewer the object's own fallback content renders in its place,
-               so the visitor gets a working link instead of a blank panel. */
-            const frame = document.createElement('object');
-            frame.data = href;
-            frame.type = 'application/pdf';
-            frame.setAttribute('aria-label', opener.dataset.docTitle ?? 'Technical pack');
-            const fallback = document.createElement('p');
-            fallback.className = 'pf-reader__fallback';
-            const link = document.createElement('a');
-            link.href = href;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.textContent = 'Open this document in a new tab';
-            fallback.append('This browser cannot display a PDF inline. ', link);
-            const preview = opener.querySelector('img');
-            if (preview) fallback.prepend(preview.cloneNode(true));
-            frame.append(fallback);
-            mount.replaceChildren(frame);
-            if (window.matchMedia('(max-width: 899px)').matches) {
-              const mobile = document.createElement('div');
-              mobile.className = 'pf-reader-mobile';
-              const cover = opener.querySelector('img');
-              if (cover) mobile.append(cover.cloneNode(true));
-              const description = document.createElement('p');
-              description.textContent = 'Document preview. Open the PDF in your device reader for all pages.';
-              const mobileLink = link.cloneNode(true);
-              mobileLink.textContent = 'Open PDF';
-              mobile.append(description, mobileLink, document.createTextNode(' / '));
-              const mobileDownload = document.createElement('a');
-              mobileDownload.href = href;
-              mobileDownload.download = href.split('/').pop() ?? '';
-              mobileDownload.textContent = 'Download PDF';
-              mobileDownload.dataset.readerMobileDownload = '';
-              mobile.append(mobileDownload);
-              mount.replaceChildren(mobile);
-            }
-            if (title) title.textContent = opener.dataset.docTitle ?? '';
-            const tab = reader.querySelector<HTMLAnchorElement>('[data-reader-tab]');
-            if (tab) tab.href = href;
-            const download = reader.querySelector<HTMLAnchorElement>('[data-reader-download]');
-            if (download) {
-              download.href = href;
-              download.download = href.split('/').pop() ?? '';
-            }
-            reader.dataset.openerId = opener.id;
-            reader.hidden = false;
-            reader.showModal();
-            reader.querySelector<HTMLElement>('[data-reader-close]')?.focus({ preventScroll: true });
-            world.classList.add('pf-world--reading');
-          });
-        }
-
-        reader.querySelector<HTMLElement>('[data-reader-close]')
-          ?.addEventListener('click', () => closeReader(world));
-        reader.addEventListener('cancel', (event) => { event.preventDefault(); closeReader(world); });
-      }
+      /* The image-backed document reader shares this chapter's close/return lifecycle. */
+      const closeReader = initTechPackReaders();
 
       /* ---- 4. video slots: no player before a click --------------------- */
       for (const world of worlds.values()) {

@@ -1,4 +1,6 @@
 import {separable} from './final-photography';
+import pageImages from './techpack-pages.json';
+import documentRevisions from './techpack-revisions.json';
 /* Portfolio V6 — the whole taxonomy, in one typed place.
  *
  * TWO KINDS OF CONTENT, AND THE LINE BETWEEN THEM
@@ -260,6 +262,7 @@ export interface TechPack {
   pdfUrl?: string;
   coverImage?: ImageAsset;
   pageCount?: number;
+  revision?: string;
   scope?: string[];
   /* An interface prototype rather than a document. Demo packs exist so the
      folio viewer can be designed against something that actually opens; every
@@ -572,15 +575,16 @@ const developmentPack = (
   id, styleCode, title, garmentType, gender, description,
   category: gender === 'womenswear' ? 'Womenswear' : 'Menswear',
   status: 'development-sample',
-  pdfUrl: `/techpacks/${filename}.pdf`,
+  pdfUrl: `/techpacks/${filename}.pdf?v=${documentRevisions[styleCode as keyof typeof documentRevisions].pdf}`,
+  revision: documentRevisions[styleCode as keyof typeof documentRevisions].revision,
   coverImage: {
-    src: `/techpacks/previews/${styleCode}-cover-1200.webp`,
-    srcset: `/techpacks/previews/${styleCode}-cover-600.webp 600w, /techpacks/previews/${styleCode}-cover-1200.webp 1200w`,
+    src: `/techpacks/previews/${styleCode}-cover-1200.webp?v=${documentRevisions[styleCode as keyof typeof documentRevisions].previews['1200']}`,
+    srcset: `/techpacks/previews/${styleCode}-cover-600.webp?v=${documentRevisions[styleCode as keyof typeof documentRevisions].previews['600']} 600w, /techpacks/previews/${styleCode}-cover-1200.webp?v=${documentRevisions[styleCode as keyof typeof documentRevisions].previews['1200']} 1200w`,
     width: 1200, height: 848,
     alt: `Cover page of ${styleCode}, ${title}: ${gender} Development Sample tech pack with fabric swatches and front/back technical flats.`,
     front: 1,
   },
-  pageCount: 10,
+  pageCount: pageImages[styleCode as keyof typeof pageImages].length,
   scope: ['Technical flats', 'Materials and trims', 'Construction callouts', 'Colorways', 'Labels and packaging', 'Measurements and POM diagrams'],
 });
 
