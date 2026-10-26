@@ -62,7 +62,12 @@ z=Image.open(SOURCE/'commons-140.jpg').convert('RGB');w,h=z.size;z=z.crop((w*.20
 z=Image.open(SOURCE/'commons-63.jpg').convert('RGB');w,h=z.size;z=z.crop((w*.52,0,w,h));save('trouser-coil-zip',recolor(z,'#8b9c80'),63,changes='Right-hand nylon coil zipper only, cropped and colour-retouched; source photograph is public domain; no supplier endorsement is implied. No end-construction or size authentication claimed.')
 # Explicitly disclosed component visualizations for exact trims without usable licensed photography.
 v=Image.open(SOURCE/'component-visualizations.png').convert('RGB');w,h=v.size
-for name,bb in [('stripe-tape',(0,0,w/3,h)),('clear-stay',(w/3,0,w*2/3,h)),('ring-slider',(w*2/3,0,w,h))]:save(name,v.crop(bb),'OpenAI image-generation tool',kind='component visualization',changes='AI-generated representative component visualization; not genuine supplier/product photography. Width/material/performance governed by the written development specification.')
+for name,bb in [('stripe-tape',(0,0,w/3,h)),('clear-stay',(w/3,0,w*2/3,h))]:save(name,v.crop(bb),'OpenAI image-generation tool',kind='component visualization',changes='AI-generated representative component visualization; not genuine supplier/product photography. Width/material/performance governed by the written development specification.')
+# Genuine coated-metal slider, photographed installed on a strap. Show the actual
+# component family without pretending the photograph authenticates a 6 mm sample
+# or depicts the companion ring. Keep the original photographed geometry/colour.
+slider=Image.open(SOURCE/'commons-84.jpg').convert('RGB').crop((290,475,1160,1130))
+save('ring-slider',slider,84,changes='Cropped genuine installed coated-metal strap-slider photograph; original colour and geometry retained. Shows slider family only, not the companion ring or an authenticated 6 mm opening. The written 6 mm development opening governs; no supplier, nickel-release or physical-sample approval is claimed.')
 e=Image.open(SOURCE/'elastic-visualization.png').convert('RGB');save('waist-elastic',e,'OpenAI image-generation tool',kind='component visualization',changes='AI-generated representative 8 mm flat knitted elastic visualization; not genuine product photography or supplier approval.')
 # Label proofs: exact physical proportions and legible typography on a woven/printed substrate visualization.
 def textile(w,h,satin=False):

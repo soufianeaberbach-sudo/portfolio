@@ -13,4 +13,9 @@
 
 .tp-reader-page[aria-busy=true]::before{content:'Loading page…';position:absolute;top:45%;left:0;width:100%;text-align:center;color:#777;font:12px var(--mono);pointer-events:none}
 
+/* Fit/zoom measures the new width synchronously. The global reduced-motion
+   duration otherwise enables a tiny transition on width and padding, leaving
+   scroll positioning based on the old page geometry. Keep this stack immediate. */
+.tp-reader-pages{transition:none!important}
+
 @media(max-width:599px){.tp-reader-tools{gap:.05rem}.tp-reader-tools input{width:2.8rem}}

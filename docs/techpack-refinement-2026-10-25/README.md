@@ -43,9 +43,13 @@ links. All document identities and displayed order remain unchanged.
 
 ## Document corrections
 
-All five documents retain ten pages and the approved template. P02 is fabric/trim
+All five documents retain ten pages and the approved template. The latest scoped
+continuation and remaining asset blockers are in [final review](final-review/REVIEW.md).
+P02 is fabric/trim
 BOM; P03 labels/packaging BOM; P04/P05 construction; P07 labels; P08 packaging;
-P09 measurements; P10 POM. Nine unaffected PNGs remain byte-identical to baseline.
+P09 measurements; P10 POM. Eight unaffected PNGs remain byte-identical to the
+original PR54 baseline; 45 PNGs and all ten covers remain byte-identical to the
+saved `24fecfee` candidate after the latest pass.
 The detailed audit is [audit-matrix.csv](audit-matrix.csv), with final specifications
 in [engineering-specifications.json](engineering-specifications.json).
 
@@ -97,10 +101,13 @@ ASTM/ISO text or certified machine trials is claimed.
 
 ## Remaining limitations and release gate
 
-Four exact trim references still use clearly labelled generated visualizations:
-6mm stripe tape, 8mm flat elastic, 6mm clear stay tape, and 6mm ring/slider hardware.
-These do not fulfill the request for genuine product photographs. The material
-credit register and BOM distinguish them from real photographic references.
+Three exact trim references still use clearly labelled generated visualizations:
+6mm stripe tape, 8mm flat elastic and 6mm clear stay tape. These do not fulfill the
+request for genuine product photographs. The hardware visualization has been
+replaced by a genuine licensed installed-slider photograph, with its original
+colour and geometry retained. It illustrates the component family; the photograph
+does not authenticate a 6mm opening, low-nickel finish or companion ring. The
+material credit register and BOM distinguish photographs from visualizations.
 The woven-label manufacturer-style proof is also a disclosed visualization.
 Thread images are genuine licensed cone photographs with colour retouching, not
 physically authenticated thread samples. Physical iOS Safari remains untested.
@@ -121,7 +128,12 @@ the checkpoint's 887 reader, 1,321 content, 946 Portfolio and 305 smoke checks.
 See [local verification](evidence/local-verification.json) and [logs](evidence/logs/).
 Screenshot review and reproduction instructions are now complete.
 
-Keep PR55 in draft while genuine replacements for the four trim visualizations,
+The final POM pass removes closing chords from ten curved measurement paths,
+clarifies the shirt's collar-stand and sleeve datums and corrects the hoodie's
+dropped-shoulder/sleeve starting points. Measurements and original flats remain
+unchanged. See [final review](final-review/REVIEW.md) for details and current evidence.
+
+Keep PR55 in draft while genuine replacements for the three trim visualizations,
 final CI and release verification remain outstanding. Do not substitute passing
 CI for actual live verification. No merge, deployment or live publication is
 claimed in this report.

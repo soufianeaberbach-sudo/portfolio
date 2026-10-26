@@ -66,7 +66,9 @@ def follow(p,r,pts,lab,pos):
  ps=[at(r,z) for z in pts]
  sh=p.new_shape()
  for a,b in zip(ps,ps[1:]):sh.draw_line(a,b)
- sh.finish(color=RED,width=.65);sh.commit();ends(p,ps[1],ps[0],False);ends(p,ps[-2],ps[-1],False)
+ # A measurement path is open. PyMuPDF otherwise closes the polyline, adding
+ # an unintended straight chord from hem/cuff/crotch back to the start point.
+ sh.finish(color=RED,width=.65,closePath=False);sh.commit();ends(p,ps[1],ps[0],False);ends(p,ps[-2],ps[-1],False)
  txt(p,lab,*at(r,pos),10,'b',RED,'center')
 
 def diagram_fixed(p,g):
@@ -86,16 +88,20 @@ def diagram_fixed(p,g):
   # Witnesses locate the length datum and hem; do not include collar height.
   line(p,at(r,(.63,.07)),at(r,(1.13,.07)),RED,.3);line(p,at(r,(.75,.635)),at(r,(1.13,.635)),RED,.3)
   d('b',(.205,.14),(.795,.14),'B');d('f',(.245,.51),(.755,.51),'C');d('f',(.245,.635),(.755,.635),'D')
-  follow(p,rs['b'],[(.205,.14),(.14,.42),(.06,.76),(.025,.97)],'E',(.10,.68))
+  follow(p,rs['b'],[(.20,.14),(.145,.275),(.075,.54),(.035,.80),(.027,.88),(.016,.965)],'E',(.10,.68))
   d('b',(.09,.565),(.235,.59),'F');vert('f',.07,.48,.84,'G')
   d('b',(.02,.955),(.14,.977),'H');d('b',(.08,.89),(.055,.98),'I',(10,0))
-  vert('f',.07,.153,.50,'K');vert('b',.015,.06,.635,'M')
+  vert('f',.07,.153,.50,'K')
   d('f',(.275,.325),(.44,.325),'N');vert('f',.325,.505,.285,'O');d('f',(.48,.55),(.523,.55),'P')
   # Short back neck drop is shown with the collar lifted, not through the collar fall.
   txt(p,'BACK NECK / COLLAR LIFTED',608,487,8,'b',align='center')
   sh=p.new_shape();sh.draw_bezier((581,499),(595,511),(621,511),(635,499));sh.finish(color=BLACK,width=.7);sh.commit()
   line(p,(581,499),(635,499),(.5,.5,.5),.3);dim(p,(581,518),(635,518),'J');dim(p,(649,499),(649,508),'L',(10,0))
   txt(p,'L: HPS LEVEL TO BODY NECK SEAM',608,532,7.5,align='center')
+  # The visible back collar profile is the collar fall, not the separate stand.
+  # A finished-stand detail makes M executable without altering the approved flat.
+  sh=p.new_shape();sh.draw_bezier((126,501),(154,495),(181,495),(202,501));sh.draw_line((202,501),(202,518));sh.draw_bezier((202,518),(181,512),(154,512),(126,518));sh.draw_line((126,518),(126,501));sh.finish(color=BLACK,width=.7);sh.commit()
+  dim(p,(216,501),(216,518),'M',(10,0));txt(p,'COLLAR STAND / FINISHED',166,539,8,'b',align='center')
  elif i==2:
   d('f',(.18,.015),(.82,.015),'A');d('b',(.045,.194),(.955,.194),'B')
   follow(p,rs['b'],[(1.01,.015),(1.055,.19),(1.04,.45),(.97,.70),(.91,.985)],'C',(1.17,.59))
@@ -143,8 +149,8 @@ def diagram_fixed(p,g):
   rect(p,(391,469,455,493),(1,1,1));line(p,(391,478),(455,478));dim(p,(470,469),(470,493),'J',(9,0));txt(p,'WAISTBAND',423,521,8,'b',align='center')
  elif i==5:
   r=rs['f'];datum('f',(.29,.15),'HPS');vert('f',.15,.96,1.11,'A');line(p,at(r,(.29,.15)),at(r,(1.11,.15)),RED,.3)
-  d('f',(.23,.535),(.78,.535),'B');d('b',(.20,.28),(.80,.28),'C')
-  follow(p,rs['b'],[(.20,.28),(.12,.49),(.055,.76),(.045,.975)],'D',(.10,.70));d('b',(.06,.57),(.23,.60),'E');vert('f',.15,.50,.84,'F')
+  d('f',(.23,.535),(.78,.535),'B');d('b',(.137,.288),(.870,.288),'C')
+  follow(p,rs['b'],[(.137,.288),(.095,.39),(.052,.54),(.020,.74),(.023,.84),(.044,.913),(.059,.985)],'D',(.10,.70));d('b',(.06,.57),(.23,.60),'E');vert('f',.15,.50,.84,'F')
   d('f',(.23,.96),(.78,.96),'G');d('b',(.05,.975),(.17,.99),'H');vert('b',.895,.98,.10,'I');vert('f',.89,.96,.73,'J')
   # M is shown on the body neckline inset with the hood lifted.
   # Existing enlarged cuff/hood area: use body-neck seams with hood lifted.

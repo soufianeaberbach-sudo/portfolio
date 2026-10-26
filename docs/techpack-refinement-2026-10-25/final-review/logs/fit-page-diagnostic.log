@@ -1,0 +1,72 @@
+before {
+  top: 1035,
+  offset: 1035,
+  stack: 16,
+  page: '2',
+  imageY: 148.921875,
+  height: 1014.734375,
+  visible: [ 133.1875, 900 ],
+  width: 1400,
+  zoom: '1.000',
+  css: {
+    width: '1400px',
+    transition: '1e-05s',
+    scrollBehavior: 'auto',
+    stackWidth: '1400px',
+    anim: []
+  }
+}
+click {
+  top: 1035,
+  offset: 1035,
+  stack: 16,
+  page: '2',
+  imageY: 148.921875,
+  height: 1014.734375,
+  visible: [ 133.1875, 900 ],
+  width: 1400,
+  zoom: '0.726',
+  css: {
+    width: '1017.04px',
+    transition: '1e-05s',
+    scrollBehavior: 'auto',
+    stackWidth: '1400px',
+    anim: [ [Object], [Object] ]
+  }
+}
+settled {
+  top: 1035,
+  offset: 764,
+  stack: 16,
+  page: '2',
+  imageY: -121.828125,
+  height: 743.984375,
+  visible: [ 133.1875, 900 ],
+  width: 1017,
+  zoom: '0.726',
+  css: {
+    width: '1017.04px',
+    transition: '1e-05s',
+    scrollBehavior: 'auto',
+    stackWidth: '1017.03px',
+    anim: []
+  }
+}
+no-size-transition {
+  top: 764,
+  offset: 764,
+  stack: 16,
+  page: '2',
+  imageY: 149.171875,
+  height: 743.984375,
+  visible: [ 133.1875, 900 ],
+  width: 1017,
+  zoom: '0.726',
+  css: {
+    width: '1017.04px',
+    transition: 'none',
+    scrollBehavior: 'auto',
+    stackWidth: '1017.03px',
+    anim: []
+  }
+}

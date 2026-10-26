@@ -2453,5 +2453,89 @@
     "related_pages": "04,05,09",
     "severity": "MAJOR",
     "correction_completed": true
+  },
+  {
+    "style_code": "AB-W-DR-03",
+    "page": 2,
+    "element": "Installed slider photographic reference",
+    "existing_specification": "Generated ring/slider component visualization.",
+    "problem": "An actual installed-slider reference is appropriate to the adjuster family. The photograph does not authenticate the 6 mm opening, companion ring or low-nickel finish; the written development specification governs.",
+    "corrected_specification": "Genuine CC BY-SA 4.0 coated-metal slider photograph; caption identifies slider only.",
+    "technical_rationale": "An actual installed-slider reference is appropriate to the adjuster family. The photograph does not authenticate the 6 mm opening, companion ring or low-nickel finish; the written development specification governs.",
+    "related_pages": "02",
+    "severity": "MINOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-W-SH-01",
+    "page": 10,
+    "element": "M stand height / E sleeve measurement path",
+    "existing_specification": "M spans the visible back collar profile; E cuts inside the sleeve instead of following its outer edge.",
+    "problem": "The collar fall is not the separate 2.5 cm stand. A defined component detail and edge-following path remove ambiguous measurement geometry.",
+    "corrected_specification": "Show M on a separate finished collar-stand detail; trace E from shoulder seam along sleeve outer edge to cuff end.",
+    "technical_rationale": "The collar fall is not the separate 2.5 cm stand. A defined component detail and edge-following path remove ambiguous measurement geometry.",
+    "related_pages": "04,09",
+    "severity": "MAJOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-M-HD-05",
+    "page": 10,
+    "element": "C shoulder / D sleeve starting points",
+    "existing_specification": "C/D start at normalized (0.20,0.28), inside the body above the dropped-armhole seam.",
+    "problem": "Across-shoulder and sleeve length require the actual dropped-shoulder seam point. Retain the sample C=56 cm and D=59 cm values.",
+    "corrected_specification": "C spans the actual upper sleeve/body seam junctions; D starts at that junction and follows the sleeve outer edge to cuff end.",
+    "technical_rationale": "Across-shoulder and sleeve length require the actual dropped-shoulder seam point. Retain the sample C=56 cm and D=59 cm values.",
+    "related_pages": "04,09",
+    "severity": "MAJOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-W-SH-01",
+    "page": 10,
+    "element": "Open curved measurement paths",
+    "existing_specification": "PyMuPDF Shape.finish defaults to closePath=True, adding a straight closing chord to each multi-segment sleeve, leg or rise measurement.",
+    "problem": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "corrected_specification": "Keep every edge-following measurement polyline open; retain only the intended curved path and its endpoint arrowheads.",
+    "technical_rationale": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "related_pages": "09",
+    "severity": "MAJOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-W-LG-02",
+    "page": 10,
+    "element": "Open curved measurement paths",
+    "existing_specification": "PyMuPDF Shape.finish defaults to closePath=True, adding a straight closing chord to each multi-segment sleeve, leg or rise measurement.",
+    "problem": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "corrected_specification": "Keep every edge-following measurement polyline open; retain only the intended curved path and its endpoint arrowheads.",
+    "technical_rationale": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "related_pages": "09",
+    "severity": "MAJOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-M-TR-04",
+    "page": 10,
+    "element": "Open curved measurement paths",
+    "existing_specification": "PyMuPDF Shape.finish defaults to closePath=True, adding a straight closing chord to each multi-segment sleeve, leg or rise measurement.",
+    "problem": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "corrected_specification": "Keep every edge-following measurement polyline open; retain only the intended curved path and its endpoint arrowheads.",
+    "technical_rationale": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "related_pages": "09",
+    "severity": "MAJOR",
+    "correction_completed": true
+  },
+  {
+    "style_code": "AB-M-HD-05",
+    "page": 10,
+    "element": "Open curved measurement paths",
+    "existing_specification": "PyMuPDF Shape.finish defaults to closePath=True, adding a straight closing chord to each multi-segment sleeve, leg or rise measurement.",
+    "problem": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "corrected_specification": "Keep every edge-following measurement polyline open; retain only the intended curved path and its endpoint arrowheads.",
+    "technical_rationale": "A closed polygon creates a second apparent measurement line and obscures the intended seam-following method. This changes geometry only, not any specified measurement.",
+    "related_pages": "09",
+    "severity": "MAJOR",
+    "correction_completed": true
   }
 ]

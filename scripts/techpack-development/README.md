@@ -46,11 +46,25 @@ python scripts/techpack-development/export_revision.py --only AB-W-SH-01
 python scripts/techpack-development/build_reader_previews.py
 ```
 
+For a correction confined to specific pages, pass `--pages 2` (or a comma-separated
+list) together with `--only`. The exporter verifies and retains all unselected
+PNGs against their existing receipts, rebuilds only that PDF, and leaves cover
+previews untouched unless page 1 changed. For example, the installed-slider
+photograph update uses `--only AB-W-DR-03 --pages 2`.
+
+Verify existing deliverables without rendering or changing anything:
+
+```sh
+python scripts/techpack-development/verify_documents.py
+```
+
 The second command skips reader copies whose source hash has not changed. Use
 `build_artwork.py` only when component imagery/artwork itself changes; it rebuilds
 the material derivatives and credit register, so it is unnecessary for text/POM
-corrections. The four generated trim images and woven-label proof are saved
-inputs; a generation service is not required to reproduce their current placement.
+corrections. Three remaining generated trim images and the woven-label proof are
+saved inputs; a generation service is not required to reproduce their current
+placement. The installed-slider image is a genuine licensed photograph with its
+original colour and geometry preserved; it is not a verified 6 mm product sample.
 
 `export_revision.py` preserves deliberately unchanged PNGs byte-for-byte. It
 exports corrected pages at 3508 × 2480, packages the exact PNG pixels into ten-page
@@ -69,5 +83,5 @@ and source-integrity checks.
   specifications, page/PDF hashes, pixel comparisons and reader-copy source hashes.
 - `.qa-director/completion/documents/` is disposable render/text/round-trip QA.
 - These are development demonstrations. Material photographs are representative,
-  not tested supplier swatches. Four trim references remain explicitly disclosed
+  not tested supplier swatches. Three trim references remain explicitly disclosed
   visualizations; they must not be described as genuine product photography.

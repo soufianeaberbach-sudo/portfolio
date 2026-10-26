@@ -46,6 +46,18 @@ jobs:
       - name: Read-only production checker tests
         run: npm run test:production
 
+      - name: Set up document verification
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/techpack-development/requirements.txt
+
+      - name: Verify PNG, PDF and measurement-path integrity
+        run: |
+          python -m pip install --disable-pip-version-check -r scripts/techpack-development/requirements.txt
+          python scripts/techpack-development/verify_documents.py > /tmp/techpack-document-verification.json
+
       # Uses the Playwright pinned in devDependencies, so the browser build
       # always matches the package the tests import. No temporary npx package.
       - name: Install Chromium for Playwright

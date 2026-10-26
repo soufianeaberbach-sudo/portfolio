@@ -43,7 +43,7 @@ IMAGES={
 3:['main-03','dress-lining','woven-fusible','dress-concealed-zip','ring-slider','thread-03'],
 4:['main-04','trouser-pocketing','woven-fusible','trouser-coil-zip','buttons-04','thread-04'],
 5:['main-05','main-05','hoodie-rib','woven-tape','thread-05','clear-stay']}
-VISUALS={'stripe-tape','clear-stay','ring-slider','waist-elastic'}
+VISUALS={'stripe-tape','clear-stay','waist-elastic'}
 def bom_refined(p,g):
  txt(p,'FABRICS',421,109,12,'b',(1,1,1),'center');txt(p,'TRIMS',421,354,12,'b',(1,1,1),'center')
  xs=[23.5,83.4,203.4,398.4,503.4,608.4,713.4,818.4]
@@ -56,12 +56,13 @@ def bom_refined(p,g):
   name=IMAGES[g['id']][j]
   if name:
    image(p,ASSETS/(name+'.png'),(89,a+4,197,b-13))
-   caption='REP. VISUALIZATION' if name in VISUALS else ('SELF / REP. PHOTO' if j in [1,2] and name==f'main-{g["id"]:02}' else 'REP. PHOTO')
+   caption='REP. VISUALIZATION' if name in VISUALS else ('SLIDER / REP. PHOTO' if name=='ring-slider' else ('SELF / REP. PHOTO' if j in [1,2] and name==f'main-{g["id"]:02}' else 'REP. PHOTO'))
    txt(p,caption,143,b-5,6.8,'r',align='center')
   else:txt(p,'—',143,(a+b)/2+3,12,align='center')
  txt(p,'Reference images / colour treatments / licences: aberbach.co/techpacks/material-credits/',492,582,6.9,'r',(1,1,1),'center')
  finding(g,2,'Materials, trims and industrial thread imagery','Swatch reused for other materials; schematic trim and thread icons.',IMAGES[g['id']],'Use distinct appropriate material references and a real photographed cone with coordinating colour retouching. Disclose exact trim visualizations rather than mislabeling them as genuine photography.','01,03,06,07','MINOR')
 FUNCS[1]=bom_refined
+finding(G[2],2,'Installed slider photographic reference','Generated ring/slider component visualization.','Genuine CC BY-SA 4.0 coated-metal slider photograph; caption identifies slider only.','An actual installed-slider reference is appropriate to the adjuster family. The photograph does not authenticate the 6 mm opening, companion ring or low-nickel finish; the written development specification governs.','02','MINOR')
 # Main label attachment leaves both end folds available for the hangtag string.
 # Care artwork shows the same composition as each cover, including separate hoodie rib.
 for g in G:

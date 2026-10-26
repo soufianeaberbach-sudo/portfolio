@@ -5,13 +5,21 @@ from artwork import *
 from audit_operations import operation_review
 import hashlib,shutil,csv,subprocess,argparse
 import numpy as np
-PARSER=argparse.ArgumentParser();PARSER.add_argument('--only',default=None);PARSER.add_argument('--baseline',type=Path,default=Path(__file__).resolve().parents[2]/'.qa-director/completion/baseline');ARGS=PARSER.parse_args()
+PARSER=argparse.ArgumentParser();PARSER.add_argument('--only',default=None);PARSER.add_argument('--pages',help='Comma-separated affected page numbers; requires --only. Other PNGs and unaffected cover previews remain untouched.');PARSER.add_argument('--baseline',type=Path,default=Path(__file__).resolve().parents[2]/'.qa-director/completion/baseline');ARGS=PARSER.parse_args()
+SELECTED=None
+if ARGS.pages:
+ if not ARGS.only:PARSER.error('--pages requires --only')
+ try:SELECTED={int(n) for n in ARGS.pages.split(',')}
+ except ValueError:PARSER.error('--pages must contain comma-separated page numbers')
+ if not SELECTED or not SELECTED.issubset(set(range(1,11))):PARSER.error('--pages must be within 1–10')
+if ARGS.only and ARGS.only not in {g['code'] for g in G}:PARSER.error('Unknown style code')
 ROOT=Path(__file__).resolve().parents[2];WEB=ROOT/'public/techpacks';QA=ROOT/'.qa-director/completion/documents';QA.mkdir(parents=True,exist_ok=True)
 RECEIPTS=ROOT/'docs/techpack-refinement-2026-10-25';RECEIPTS.mkdir(parents=True,exist_ok=True)
 PDFNAMES=['AB-W-SH-01-Cropped-Two-Pocket-Shirt-Tech-Pack','AB-W-LG-02-High-Rise-Stripe-Legging-Tech-Pack','AB-W-DR-03-Gathered-Bust-Slip-Maxi-Dress-Tech-Pack','AB-M-TR-04-Flat-Front-Tapered-Trouser-Tech-Pack','AB-M-HD-05-Clean-Front-Pullover-Hoodie-Tech-Pack']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 PNG=[];PDF=[];MANIFEST=[];PAGES={};REVISIONS={}
 if ARGS.only:
+ saved_png={(r['style'],r['page']):r for r in json.loads((RECEIPTS/'png-verification.json').read_text())}
  PNG=[r for r in json.loads((RECEIPTS/'png-verification.json').read_text()) if r['style']!=ARGS.only]
  PDF=[r for r in json.loads((RECEIPTS/'pdf-verification.json').read_text()) if r['style']!=ARGS.only]
  MANIFEST=[r for r in json.loads((RECEIPTS/'document-manifest.json').read_text()) if r['styleCode']!=ARGS.only]
@@ -23,8 +31,11 @@ for g,pdfname in zip(G,PDFNAMES):
  textdir=QA/g['code'];textdir.mkdir(exist_ok=True)
  for n,fn in enumerate(FUNCS,1):
   name=f'garment-{g["id"]:02}-page-{n:02}-{NAMES[n-1]}.png';dest=folder/name;baseline=ARGS.baseline/'pages'/g['code']/name
+  if SELECTED is not None and n not in SELECTED:
+   record=saved_png[(g['code'],n)];assert sha(dest)==record['sha256'],'Unselected page differs from saved receipt: '+str(dest)
+   PNG.append(record);destinations.append(dest);continue
   # Pages with no new correction remain byte-for-byte copies of the published source.
-  unchanged=(n==6 and g['id']!=2) or (n==9 and g['id']!=2) or (n==10 and g['id']==4)
+  unchanged=SELECTED is None and ((n==6 and g['id']!=2) or (n==9 and g['id']!=2) or (n==10 and g['id']==4))
   doc,p=shell(g,n);fn(p,g);text=p.get_text();(textdir/f'page-{n:02}.txt').write_text(text)
   assert '\ufffd' not in text
   if unchanged:shutil.copy2(baseline,dest)
@@ -59,7 +70,9 @@ for g,pdfname in zip(G,PDFNAMES):
  opened.close();PDF.append(dict(style=g['code'],filename=pdf.name,pages=10,bytes=pdf.stat().st_size,sha256=sha(pdf),page_checks=checks))
  cover=Image.open(destinations[0]);previews={}
  for w in [600,1200]:
-  preview=WEB/'previews'/f'{g["code"]}-cover-{w}.webp';cover.resize((w,round(cover.height*w/cover.width)),Image.Resampling.LANCZOS).save(preview,quality=94,method=6);previews[str(w)]=sha(preview)
+  preview=WEB/'previews'/f'{g["code"]}-cover-{w}.webp'
+  if SELECTED is None or 1 in SELECTED:cover.resize((w,round(cover.height*w/cover.width)),Image.Resampling.LANCZOS).save(preview,quality=94,method=6)
+  previews[str(w)]=sha(preview)
  rows=[x for x in PNG if x['style']==g['code']];revision=hashlib.sha256(''.join(x['sha256'] for x in rows).encode()).hexdigest()[:12]
  PAGES[g['code']]=[x['file']+'?v='+x['sha256'][:12] for x in rows]
  REVISIONS[g['code']]=dict(revision=revision,pdf=sha(pdf)[:12],previews={w:h[:12] for w,h in previews.items()},frontCallouts=len(g['front']),backCallouts=len(g['back']),pageCount=10)
@@ -77,4 +90,4 @@ for name,data in [('png-verification',PNG),('pdf-verification',PDF),('document-m
 with (RECEIPTS/'audit-matrix.csv').open('w') as f:
  w=csv.DictWriter(f,fieldnames=list(REVIEW[0]));w.writeheader();w.writerows(REVIEW)
 (ROOT/'src/data/techpack-pages.json').write_text(json.dumps(PAGES,indent=2)+'\n');(ROOT/'src/data/techpack-revisions.json').write_text(json.dumps(REVISIONS,indent=2)+'\n')
-print('PASS: 50 PNGs, 5 x 10-page PDFs, all 50 embedded pixels identical and every PDF page rendered/compared.',flush=True)
+print('PASS: '+('updated '+ARGS.only+'; ten embedded pages verified/rendered; other documents retained' if ARGS.only else '50 PNGs, five ten-page PDFs; all embedded pages verified/rendered')+'.',flush=True)
