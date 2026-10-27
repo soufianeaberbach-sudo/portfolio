@@ -1,0 +1,65 @@
+
+> soufiane-portfolio@1.0.0 build
+> astro build
+
+08:47:03 [content] Syncing content
+08:47:03 [content] Synced content
+08:47:03 [types] Generated 45ms
+08:47:03 [build] output: "static"
+08:47:03 [build] mode: "static"
+08:47:03 [build] directory: /workspace/portfolio/dist/
+08:47:03 [build] Collecting build info...
+08:47:03 [build] ✓ Completed in 79ms.
+08:47:03 [build] Building static entrypoints...
+08:47:06 [vite] ✓ built in 2.71s
+08:47:06 [build] ✓ Completed in 2.74s.
+
+ building client (vite)
+08:47:06 [vite] transforming...
+08:47:06 [vite] ✓ 29 modules transformed.
+08:47:06 [vite] rendering chunks...
+08:47:06 [vite] computing gzip size...
+08:47:06 [vite] dist/_astro/portfolio.astro_astro_type_script_index_1_lang.C50PCUit.js    7.35 kB │ gzip:  2.53 kB
+08:47:06 [vite] dist/_astro/ScrollTrigger.C8IefbVz.js                                   114.87 kB │ gzip: 45.46 kB
+08:47:06 [vite] dist/_astro/portfolio.astro_astro_type_script_index_0_lang.BSQaHCw7.js  164.39 kB │ gzip: 37.14 kB
+08:47:06 [vite] ✓ built in 607ms
+
+ generating static routes
+08:47:06 ▶ src/pages/404.astro
+08:47:06   └─ /404.html (+10ms)
+08:47:06 ▶ src/pages/before-we-start.astro
+08:47:06   └─ /before-we-start/index.html (+3ms)
+08:47:06 ▶ src/pages/contact/sent.astro
+08:47:06   └─ /contact/sent/index.html (+2ms)
+08:47:06 ▶ src/pages/contact.astro
+08:47:06   └─ /contact/index.html (+3ms)
+08:47:06 ▶ src/pages/experience.astro
+08:47:06   └─ /experience/index.html (+2ms)
+08:47:06 ▶ src/pages/expertise.astro
+08:47:06   └─ /expertise/index.html (+2ms)
+08:47:06 ▶ src/pages/index.astro
+08:47:06   └─ /index.html (+2ms)
+08:47:06 ▶ src/pages/lab/[story].astro
+08:47:06 ▶ src/pages/portfolio.astro
+08:47:06   └─ /portfolio/index.html (+41ms)
+08:47:06 ▶ src/pages/privacy.astro
+08:47:06   └─ /privacy/index.html (+2ms)
+08:47:06 ▶ src/pages/process.astro
+08:47:06   └─ /process/index.html (+2ms)
+08:47:06 λ src/pages/robots.txt.ts
+08:47:06   └─ /robots.txt (+1ms)
+08:47:06 λ src/pages/sitemap.xml.ts
+08:47:06   └─ /sitemap.xml (+0ms)
+08:47:06 ▶ src/pages/techpacks/material-credits.astro
+08:47:06   └─ /techpacks/material-credits/index.html (+1ms)
+08:47:06 ▶ src/pages/working-terms.astro
+08:47:06   └─ /working-terms/index.html (+1ms)
+08:47:06 ✓ Completed in 97ms.
+
+08:47:06 [build] 12 page(s) built in 3.63s
+08:47:06 [build] Complete!
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

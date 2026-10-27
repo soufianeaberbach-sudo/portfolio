@@ -37,10 +37,18 @@ export function menswearHistoricalPool(category:MenswearCategory):Subject[]{
   return{...subject,cover,caption:cover.alt,views:parsed.views};
  });
 }
+/** Three clear commercial silhouettes before the full edit. Positions are source bindings, not ranks. */
+export const menswearLeadPositions:Record<MenswearCategory,number[]>={
+ 'm-streetwear':[1,2,5], // denim, boxy tee, jersey co-ord
+ 'm-activewear':[1,2,8], // gym, running, outdoor performance
+ 'm-rtw':[1,2,9], // bomber, leather jacket, trench
+ 'm-tailoring':[1,2,6], // single-breasted, double-breasted, tuxedo
+};
 export const menswearDisplayed=(category:MenswearCategory,pool=menswearPool(category))=>{
  const found=menswearSlots[category].map(slot=>pool.find(s=>s.id===slot.id));
  if(found.length!==10||found.some(s=>!s)||new Set(found.map(s=>s!.id)).size!==10)throw new Error(`Invalid ten-look Menswear edit ${category}`);
- return found as Subject[];
+ const leads=menswearLeadPositions[category].map(n=>found[n-1]!);
+ return [...leads,...found.filter(s=>!leads.includes(s!))] as Subject[];
 };
 
 // New concepts have their own identities. Historical Pexels subjects keep original media and credits.
@@ -65,5 +73,5 @@ export function menswearPool(category:MenswearCategory):Subject[]{
 export function menswearActorSubject(category:MenswearCategory,motionKey:number,display=menswearDisplayed(category)){
  const position=edit[category].indexOf(motionKey);
  if(position<0||!display[position])throw new Error(`Missing Menswear actor binding ${category}/${motionKey}`);
- return display[position];
+ return display.find(s=>s.id===menswearSlots[category][position].id)!;
 }

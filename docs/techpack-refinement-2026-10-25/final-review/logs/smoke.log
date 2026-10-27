@@ -1,0 +1,356 @@
+
+> soufiane-portfolio@1.0.0 test:smoke
+> node tests/smoke.mjs
+
+
+routes and overflow
+  ok   / responds 200
+  ok   /expertise/ responds 200
+  ok   /portfolio/ responds 200
+  ok   /process/ responds 200
+  ok   /experience/ responds 200
+  ok   /contact/ responds 200
+  ok   /privacy/ responds 200
+  ok   /working-terms/ responds 200
+  ok   /before-we-start/ responds 200
+  ok   no horizontal overflow / @ 390
+  ok   no horizontal overflow /expertise/ @ 390
+  ok   no horizontal overflow /portfolio/ @ 390
+  ok   no horizontal overflow /process/ @ 390
+  ok   no horizontal overflow /experience/ @ 390
+  ok   no horizontal overflow /contact/ @ 390
+  ok   no horizontal overflow /privacy/ @ 390
+  ok   no horizontal overflow /working-terms/ @ 390
+  ok   no horizontal overflow /before-we-start/ @ 390
+  ok   no horizontal overflow / @ 430
+  ok   no horizontal overflow /expertise/ @ 430
+  ok   no horizontal overflow /portfolio/ @ 430
+  ok   no horizontal overflow /process/ @ 430
+  ok   no horizontal overflow /experience/ @ 430
+  ok   no horizontal overflow /contact/ @ 430
+  ok   no horizontal overflow /privacy/ @ 430
+  ok   no horizontal overflow /working-terms/ @ 430
+  ok   no horizontal overflow /before-we-start/ @ 430
+  ok   no horizontal overflow / @ 768
+  ok   no horizontal overflow /expertise/ @ 768
+  ok   no horizontal overflow /portfolio/ @ 768
+  ok   no horizontal overflow /process/ @ 768
+  ok   no horizontal overflow /experience/ @ 768
+  ok   no horizontal overflow /contact/ @ 768
+  ok   no horizontal overflow /privacy/ @ 768
+  ok   no horizontal overflow /working-terms/ @ 768
+  ok   no horizontal overflow /before-we-start/ @ 768
+  ok   no horizontal overflow / @ 1024
+  ok   no horizontal overflow /expertise/ @ 1024
+  ok   no horizontal overflow /portfolio/ @ 1024
+  ok   no horizontal overflow /process/ @ 1024
+  ok   no horizontal overflow /experience/ @ 1024
+  ok   no horizontal overflow /contact/ @ 1024
+  ok   no horizontal overflow /privacy/ @ 1024
+  ok   no horizontal overflow /working-terms/ @ 1024
+  ok   no horizontal overflow /before-we-start/ @ 1024
+  ok   no horizontal overflow / @ 1440
+  ok   no horizontal overflow /expertise/ @ 1440
+  ok   no horizontal overflow /portfolio/ @ 1440
+  ok   no horizontal overflow /process/ @ 1440
+  ok   no horizontal overflow /experience/ @ 1440
+  ok   no horizontal overflow /contact/ @ 1440
+  ok   no horizontal overflow /privacy/ @ 1440
+  ok   no horizontal overflow /working-terms/ @ 1440
+  ok   no horizontal overflow /before-we-start/ @ 1440
+
+mobile menu
+  ok   menu opens
+  ok   menu background is opaque
+  ok   menu closes
+
+portfolio sequence
+  ok   exactly four top-level chapters
+  ok   chapter "womenswear" exists
+  ok   chapter "menswear" exists
+  ok   chapter "tech-packs" exists
+  ok   chapter "3d-simulation" exists
+  ok   the journey is four covers and an ending, with no screen between them
+  ok   four chapter covers, in the running order
+  ok   Development comes before Tech Packs
+  ok   every cover is headlined by its chapter name
+  ok   the chapter name is the cover's largest type, by a clear margin
+  ok   chapter 03 is named Development on its cover
+  ok   no name is cut off by the frame
+  ok   and no name is cut off by its own box, which a cover's clip follows
+  ok   each chapter states what it sells in one sentence
+  ok   exactly one word of each statement is coloured, and it is the capability
+  ok   every chapter colours that word with its own token
+  ok   the coloured word is large text, so a faithful garment colour can carry it
+  ok   every cover offers one way in, into its own chapter
+  ok   every cover is image-led
+  ok   every cover records its image source
+  ok   no cover is drawn as a card
+  ok   every cover sets its type in the same place
+  ok   the oversized chapter index is gone
+  ok   the four contents rails are gone
+  ok   the edge position rail is gone
+  ok   the per-cover register is gone
+  ok   one control carries the position, and lists the four chapters
+  ok   it is closed until it is asked for
+  ok   nothing else in the journey numbers a chapter
+  ok   the old narrower name is gone from the sequence
+  ok   the reference disclaimer never appears on a cover
+  ok   a chapter colour is a signal, never a surface
+  ok   the ending resolves the story in one line
+  ok   it carries the site's one coloured word
+  ok   it is not another chapter directory
+  ok   and it offers the brief
+  ok   no iframe or object exists before anything is asked for
+  ok   no YouTube embed URL in the served markup
+  ok   no video carries a src before play
+  ok   no UNKNOWN / N-A / TODO on the public UI
+  ok   no orange underline sits beneath portfolio text at rest
+
+portfolio chapter covers at 390
+  ok   390: the menswear cover keeps its type inside the gutters
+  ok   390: the menswear cover sets its type clear of the plate
+  ok   390: the menswear cover fills the frame edge to edge
+  ok   390: the 3d-simulation cover keeps its type inside the gutters
+  ok   390: the 3d-simulation cover sets its type clear of the plate
+  ok   390: the 3d-simulation cover fills the frame edge to edge
+  ok   390: the tech-packs cover keeps its type inside the gutters
+  ok   390: the tech-packs cover sets its type clear of the plate
+  ok   390: the tech-packs cover fills the frame edge to edge
+  ok   no horizontal overflow in the 390 chapter index
+
+portfolio chapter covers at 430
+  ok   430: the menswear cover keeps its type inside the gutters
+  ok   430: the menswear cover sets its type clear of the plate
+  ok   430: the menswear cover fills the frame edge to edge
+  ok   430: the 3d-simulation cover keeps its type inside the gutters
+  ok   430: the 3d-simulation cover sets its type clear of the plate
+  ok   430: the 3d-simulation cover fills the frame edge to edge
+  ok   430: the tech-packs cover keeps its type inside the gutters
+  ok   430: the tech-packs cover sets its type clear of the plate
+  ok   430: the tech-packs cover fills the frame edge to edge
+  ok   no horizontal overflow in the 430 chapter index
+
+portfolio navigation hierarchy
+  ok   the chapter opens
+  ok   background is inert
+  ok   focus starts inside the chapter
+  ok   the four public worlds have the required order
+  ok   every category remains reachable from the control
+  ok   40 displayed garments have readers; all excluded and replaced historical IDs retain direct readers
+  ok   readers stay closed until requested
+  ok   no process evidence is fabricated
+  ok   white photographs share the exhibition ground
+  ok   the control opens the five territories
+  ok   choosing a territory names it in the URL
+  ok   choosing a territory closes the control
+  ok   the act stays one screen
+  ok   the territory arrives on its own slate, in the frame
+  ok   the control reports which territory is being read
+  ok   Escape closes the territory list and leaves the chapter open
+  ok   Escape from a territory steps up to the portfolio index
+  ok   Escape from the act leaves the chapter
+  ok   background inert released
+  ok   focus restored to the cover that opened it
+  ok   world navigation moves directly to another world
+  ok   all four worlds remain accessible inside a chapter
+  ok   world navigation marks the current chapter
+  ok   menswear categories match the current retail-label order
+  ok   menswear identifies original AI concept preview status
+  ok   menswear has a working visual gallery behind every category
+  ok   no menswear category is left as a dead pending row
+
+Menswear cinematic presentation
+  ok   four Menswear films and forty archive references
+  ok   all fifty historical Menswear references remain separately routable
+  ok   completed AI concepts add independent Menswear readers
+  ok   no invented development stages in Menswear
+  ok   keyboard advances the composed film
+  ok   keyboard returns to the opening composition
+  ok   presenter can jump directly to the payoff
+  ok   Escape safely exits presentation before the chapter
+  ok   an archive photograph opens its own routed reader
+  ok   Menswear photograph itself is the inspection target
+  ok   Escape leaves inspection before leaving the garment
+  ok   closing a garment restores the actual archive occurrence
+  ok   Womenswear remains an honest reference preview
+  ok   Womenswear provenance remains readable and in its ending
+  ok   Womenswear has no invented reference project profile
+  ok   Menswear imagery has no card decoration
+
+womenswear — the garment
+  ok   a cell in the range is a real link to that garment
+  ok   choosing it opens that garment, and the URL says which
+  ok   focus moves into the garment
+  ok   the complete Front and Back fit their inspection areas
+  ok   it is still Womenswear, on the chapter's own ground
+  ok   and the way out goes back to the territory, not to the portfolio
+  ok   both garment views remain available
+  ok   no development stage is invented for an unverified frame
+  ok   the already-visible back photograph is keyboard zoomable
+  ok   the actual Back photograph enlarges independently
+  ok   zooming Back leaves Front fitted
+  ok   Escape releases the inspection first
+  ok   then the garment, landing back in the territory it came from
+  ok   and the focus is back on the frame the visitor chose
+  ok   a garment can be linked to and reloaded straight into
+  ok   and it uses the shared reader
+  ok   mobile has both Front and Back in the natural document flow
+  ok   touch enlarges the actual Back photograph
+  ok   touch Back inspection leaves Front fitted
+  ok   mobile Fit restores only the Back photograph
+
+portfolio tech packs
+  ok   five development documents
+  ok   the documents run one below another
+  ok   the numbering runs 01 to 05
+  ok   each shows its own first page, large
+  ok   each is marked a Development Sample
+  ok   each offers its own PDF
+  ok   every document preview is itself clickable
+  ok   the rejected folio/carousel interface is gone
+  ok   no PDF byte is fetched when the chapter opens
+  ok   clicking a document opens the internal page reader
+  ok   the reader uses the selected final page images
+  ok   Open and Download PDF remain optional
+  ok   the reader names the document
+  ok   the reader fills the screen and can be closed
+  ok   reading does not request any PDF
+  ok   Escape closes the reader and releases page images
+  ok   and the chapter is still open
+  ok   no statement that technical packs are withheld from publication
+
+portfolio 3D simulation
+  ok   exactly five supplied recordings are published
+  ok   the exact five supplied YouTube ids are used in order
+  ok   every recording has its localized YouTube poster
+  ok   no player exists before a click, while all play controls do
+  ok   the local home-page clip is not used as a library video
+  ok   the rejected hero-plus-film-strip interface is gone
+  ok   no privacy-enhanced player is requested before play
+  ok   a click creates exactly one privacy-enhanced iframe
+  ok   a published session frame is 16:9
+  ok   the whole chapter is ink
+  ok   the top bar belongs to the dark world
+  ok   the type is paper on ink
+  ok   there is no paper gap between the videos
+  ok   the chapter type is paper throughout
+  ok   orange is a signal, never a surface
+  ok   nothing in the dark world is drawn as a card
+  ok   the chapter heading is Pattern Development
+  ok   the navigation label matches
+  ok   the descriptor names the whole development arc
+
+reduced motion
+  ok   reduced motion directly selects a complete Menswear composition
+  ok   reduced motion leaves no photographic match-cut clone
+  ok   reveal blocks visible without scrolling
+  ok   all exhibition garments remain visible without motion
+  ok   no exhibition scroll pinning reserves empty screens
+
+portfolio without JavaScript
+  ok   all four chapters are in the served HTML
+  ok   the non-authorship disclaimer is server-rendered
+  ok   all four current Womenswear worlds are server-rendered
+  ok   development status is declared without the script
+  ok   Menswear exposes forty photographic links without process placeholders
+  ok   all five supplied development recordings are server-rendered without players
+  ok   garment images are laid out without the script
+
+Home portrait treatment
+  ok   Home renders one portrait image
+  ok   the rejected mirrored portrait shadow is absent
+  ok   the portrait keeps meaningful alternative text
+
+contact form validation
+  ok   required fields report errors
+  ok   did not navigate away
+  ok   endpoint contract intact
+  ok   field names match the Worker contract
+
+reference upload control
+  ok   upload input exists and is a file input
+  ok   it posts as the field the Worker reads
+  ok   it is not display:none, so it stays focusable
+  ok   its label points at it
+  ok   it is described by the hint and the error slot
+  ok   it has a file-type error slot
+  ok   accept lists the four launch formats
+  ok   accept offers no Office format
+  ok   accept offers no executable type
+  ok   the hint states the size limit
+  ok   the hint names only PDF and images
+  ok   nothing is shown as chosen on load
+  ok   the chosen row announces politely
+  ok   the link is presented as the alternative
+  ok   the chosen filename becomes visible
+  ok   the file size becomes visible
+  ok   a valid file raises no error
+  ok   remove clears the selection
+  ok   remove returns focus to the control
+  ok   an oversized file is refused in the page
+  ok   and nothing typed is lost
+
+Turnstile reset on failed submission
+  ok   reset exactly once after a server error
+  ok   reset target is exactly "#brief-turnstile"
+  ok   reset exactly once after a field error
+  ok   field-error reset target is exactly "#brief-turnstile"
+  ok   reset exactly once after a network failure
+  ok   network-failure reset target is exactly "#brief-turnstile"
+  ok   NOT reset after a successful submission
+  ok   success still replaces the form
+  ok   no Turnstile widget without a build-time site key
+  ok   failed submit throws nothing when Turnstile is absent
+  ok   the failure is still reported to the visitor
+
+real Turnstile widget markup
+  ok   site-key build succeeded
+  ok   widget renders when a site key is present
+  ok   widget id is "brief-turnstile"
+  ok   widget has data-action="contact_brief"
+  ok   widget keeps the implicit-render cf-turnstile class
+  ok   widget keeps its styling hook
+  ok   widget carries a data-sitekey
+  ok   widget sits inside the brief form
+  ok   "#brief-turnstile" resolves to that widget
+  ok   implicit-render api.js is loaded
+  ok   real widget: reset called exactly once on failure
+  ok   real widget: reset target is exactly "#brief-turnstile"
+  ok   real widget: successful submission does NOT reset
+  ok   real widget: success still replaces the form
+
+direct contact hierarchy
+  ok   three direct routes are offered
+  ok   email is a mailto link
+  ok   phone is a tel link
+  ok   WhatsApp is a wa.me link
+  ok   the number is readable text, not icon-only
+  ok   and it is printed once, not as two giant rows
+  ok   direct contact is set larger than the platform links
+  ok   the platform group appears exactly once
+  ok   the old three-equal-column grid is gone
+  ok   the business credential is present
+  ok   B2B invoicing is called out
+  ok   the credential headline outranks the platform links
+  ok   no orange underline sits beneath text at rest
+  ok   Contact follows direct → brief → business → proof → platforms
+
+privacy page
+  ok   footer links to /privacy/
+  ok   /privacy/ responds 200
+  ok   KV expiry and upload retention target distinguished
+
+story lab stays out of production
+  ok   /lab/hero/ is not built
+  ok   /lab/featured/ is not built
+  ok   /lab/supporting/ is not built
+  ok   the public portfolio carries no lab fixture
+  ok   and no garment there has a story it did not supply
+
+305 passed, 0 failed
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

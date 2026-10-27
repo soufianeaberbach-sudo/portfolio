@@ -1,0 +1,644 @@
+
+> soufiane-portfolio@1.0.0 test:worker
+> node tests/worker.mjs
+
+
+1. valid submission, no Turnstile configured
+  ok   responds 200
+  ok   reports ok
+  ok   returns a reference id
+  ok   success response is no-store
+  ok   exactly one brief persisted
+  ok   stored key matches returned reference
+  ok   stored name matches submission
+  ok   stored email matches submission
+  ok   stored stage matches submission
+  ok   stored message matches submission
+  ok   stored link matches submission
+  ok   stored record has receivedAt
+  ok   brief TTL is the 90-day retention
+  ok   raw IP is NOT stored
+  ok   no userAgent stored
+  ok   no country stored
+  ok   honeypot field not stored
+  ok   timing stamp not stored
+  ok   rate-limit key written
+  ok   rate-limit key holds no raw IP
+  ok   rate-limit TTL is one hour
+  ok   Resend was called
+  ok   Reply-To equals the submitted email
+  ok   subject contains the stage
+  ok   subject contains the name
+  ok   sends from BRIEF_FROM
+  ok   sends to BRIEF_TO
+  ok   email body carries the reference
+  ok   no undelivered record on success
+  ok   ASSETS never served the API route
+
+native form post succeeds with a redirect, not JSON
+  ok   responds 303
+  ok   redirects to the sent page
+  ok   brief still persisted
+
+native form post from a foreign origin is rejected
+  ok   responds 400
+  ok   nothing persisted
+  ok   answers HTML, not JSON
+
+2. invalid email
+  ok   responds 400
+  ok   names the email field
+  ok   does not claim success
+  ok   error response is no-store
+  ok   nothing persisted
+  ok   no email attempted
+
+3. invalid stage
+  ok   responds 400
+  ok   names the stage field
+  ok   nothing persisted
+
+4. message too short
+  ok   responds 400
+  ok   names the message field
+  ok   nothing persisted
+
+validation also rejects a non-http link
+  ok   responds 400
+  ok   names the link field
+  ok   nothing persisted
+
+5. honeypot filled
+  ok   responds 400
+  ok   does not claim success
+  ok   nothing persisted
+  ok   no email attempted
+
+6. too-fast submission
+  ok   responds 400
+  ok   flagged as automated
+  ok   nothing persisted
+
+6b. an absent timing stamp is not treated as spam by itself
+  ok   responds 200
+  ok   reports ok
+
+7. rate limit
+  ok   responds 429
+  ok   does not claim success
+  ok   nothing persisted
+  ok   no email attempted
+
+8. missing KV binding
+  ok   responds 503
+  ok   does NOT claim success
+  ok   points at the direct email route
+  ok   no email attempted with nowhere to persist
+
+9. KV write failure
+  ok   responds 502
+  ok   does NOT claim success
+  ok   no reference id handed out
+  ok   nothing persisted
+  ok   no email sent for an unsaved brief
+
+10. Resend failure after successful KV persistence
+  ok   still responds 200 — receipt was guaranteed by persistence
+  ok   reports ok
+  ok   brief IS preserved
+  ok   preserved brief is readable
+  ok   brief TTL is the 90-day retention
+  ok   undelivered record written
+  ok   undelivered record keyed by the same reference
+  ok   undelivered record has the 90-day TTL
+  ok   undelivered record holds no raw IP
+  ok   delivery was retried once before giving up
+  ok   both attempts carry an Idempotency-Key
+  ok   both attempts use the SAME key
+  ok   the key derives from the brief reference
+  ok   the key contains the brief id
+  ok   the retry payload is byte-identical
+  ok   the key carries no secret
+
+10c. different briefs get different idempotency keys
+  ok   submission 1 key matches its own reference
+  ok   submission 2 key matches its own reference
+  ok   submission 3 key matches its own reference
+  ok   three submissions produced three distinct keys
+
+10d. a delivery that succeeds first time is not retried
+  ok   exactly one attempt
+  ok   it still carries an Idempotency-Key
+  ok   the API key is sent as a bearer token, not in the idempotency key
+
+10b. email is skipped, not failed, when Resend is unconfigured
+  ok   responds 200
+  ok   brief preserved
+  ok   no outbound request attempted
+  ok   gap recorded as undelivered
+
+11. Turnstile secret enabled + missing token
+  ok   rejects
+  ok   does not claim success
+  ok   nothing persisted
+  ok   siteverify not even called without a token
+  ok   secret does not leak into the response
+
+11b. a form-urlencoded post cannot skip Turnstile
+  ok   rejects
+  ok   nothing persisted
+  ok   secret does not leak into the HTML error
+
+12. Turnstile invalid token
+  ok   rejects
+  ok   siteverify was consulted
+  ok   nothing persisted
+  ok   secret does not leak into the response
+
+13. Turnstile siteverify network failure fails CLOSED
+  ok   rejects rather than waving through
+  ok   does not claim success
+  ok   nothing persisted
+
+13b. Turnstile non-ok siteverify response fails CLOSED
+  ok   rejects
+  ok   nothing persisted
+
+13c. a valid token is accepted and the secret is sent only to Cloudflare
+  ok   responds 200
+  ok   brief persisted
+  ok   siteverify called
+  ok   Resend called
+  ok   Turnstile secret not sent to Resend
+  ok   Resend key not sent to Cloudflare
+  ok   no secret in the stored brief
+  ok   no secret in the response body
+
+a malformed JSON body is a client error, not a server fault
+  ok   body null responds 400
+  ok   body null does not claim success
+  ok   body null persists nothing
+  ok   body "a string" responds 400
+  ok   body "a string" does not claim success
+  ok   body "a string" persists nothing
+  ok   body [] responds 400
+  ok   body [] does not claim success
+  ok   body [] persists nothing
+  ok   body 123 responds 400
+  ok   body 123 does not claim success
+  ok   body 123 persists nothing
+  ok   body true responds 400
+  ok   body true does not claim success
+  ok   body true persists nothing
+
+unparseable JSON is a client error too
+  ok   responds 400
+  ok   does not claim success
+
+frontend and Worker agree on the stage list
+  ok   stage list found in BriefForm
+  ok   BriefForm declares five stages
+  ok   Worker accepts the rendered stage "Idea / reference"
+  ok   Worker accepts the rendered stage "In development"
+  ok   Worker accepts the rendered stage "Fit / sample"
+  ok   Worker accepts the rendered stage "Pre-production"
+  ok   Worker accepts the rendered stage "Production issue"
+
+13d. Turnstile context: success alone is not enough
+  ok   accepted: success + correct action + allowed hostname
+  ok     persisted
+  ok   accepted: the second allowed hostname
+  ok     persisted
+  ok   accepted: hostname differing only in case
+  ok     persisted
+  ok   rejected: wrong action
+  ok     persisted nothing
+  ok   rejected: missing action
+  ok     persisted nothing
+  ok   rejected: wrong hostname
+  ok     persisted nothing
+  ok   rejected: hostname not on the list
+  ok     persisted nothing
+  ok   rejected: missing hostname
+  ok     persisted nothing
+  ok   rejected: localhost
+  ok     persisted nothing
+  ok   rejected: 127.0.0.1
+  ok     persisted nothing
+
+13e. a missing hostname allowlist fails CLOSED
+  ok   allowlist unset rejects
+  ok   allowlist unset does not claim success
+  ok   allowlist unset persists nothing
+  ok   allowlist unset does not spend the token
+  ok   allowlist empty string rejects
+  ok   allowlist empty string does not claim success
+  ok   allowlist empty string persists nothing
+  ok   allowlist empty string does not spend the token
+  ok   allowlist only separators rejects
+  ok   allowlist only separators does not claim success
+  ok   allowlist only separators persists nothing
+  ok   allowlist only separators does not spend the token
+  ok   allowlist only loopback names rejects
+  ok   allowlist only loopback names does not claim success
+  ok   allowlist only loopback names persists nothing
+  ok   allowlist only loopback names does not spend the token
+
+13f. the allowlist is not consulted before Turnstile is enabled
+  ok   responds 200 with no secret configured
+  ok   no siteverify call
+
+13g. the widget action in BriefForm matches the Worker
+  ok   BriefForm declares a data-action
+  ok   BriefForm action is "contact_brief"
+  ok   the Worker accepts the action BriefForm sends
+
+13h. the hostname allowlist matches wrangler.jsonc
+  ok   wrangler.jsonc declares TURNSTILE_HOSTNAMES
+  ok   it matches what these tests assert against
+  ok   it contains no loopback name
+
+www -> apex redirect (secondary net behind the Cloudflare rule)
+  ok   www root redirects 301
+  ok   to the apex root
+  ok   path is preserved
+  ok   query string is preserved
+  ok   the match is case-insensitive
+  ok   the apex is NOT redirected — no loop
+  ok   the apex is served from ASSETS
+  ok   www.example.com is NOT redirected
+  ok   www.example.com gets no Location
+  ok   www.aberbach.co.evil.example is NOT redirected
+  ok   www.aberbach.co.evil.example gets no Location
+  ok   aberbach.co.evil.example is NOT redirected
+  ok   aberbach.co.evil.example gets no Location
+  ok   portfolio.workers.dev is NOT redirected
+  ok   portfolio.workers.dev gets no Location
+  ok   staging.aberbach.co is NOT redirected
+  ok   staging.aberbach.co gets no Location
+  ok   POST /api/brief on www is NOT redirected
+  ok   and gets no Location header
+  ok   GET /api/brief on www still answers 405, not a redirect
+  ok   www/api/ is not redirected
+  ok   www/api/brief is not redirected
+  ok   www/api/anything is not redirected
+
+the documented Cloudflare rule carries the same /api/ carve-out
+  ok   a Cloudflare match expression is documented
+  ok   it pins the exact www host
+  ok   it excludes the /api/ prefix
+  ok   the rule is documented as a 301
+  ok   query-string preservation is documented
+
+the Turnstile hostname allowlist is the new domain
+  ok   allowlist is aberbach.co,www.aberbach.co
+  ok   allowlist carries no old website domain
+  ok   BRIEF_FROM is on the owned domain
+  ok   BRIEF_FROM is not a gmail sender
+  ok   BRIEF_TO is the public Gmail mailbox
+  ok   BRIEF_TO is not the dotted display form
+
+U1. accepted types are stored in R2, never in KV
+  ok   tech-pack.pdf accepted
+  ok   tech-pack.pdf reports ok
+  ok   tech-pack.pdf echoes the filename back
+  ok   tech-pack.pdf stored exactly once in R2
+  ok   tech-pack.pdf key is namespaced by reference
+  ok   tech-pack.pdf key does not contain the sender filename
+  ok   tech-pack.pdf key ends with the real extension
+  ok   tech-pack.pdf R2 metadata carries the display name
+  ok   tech-pack.pdf KV holds only a pointer
+  ok   tech-pack.pdf KV record has no byte payload
+  ok   tech-pack.pdf label recorded as PDF
+  ok   tech-pack.pdf email names the file
+  ok   tech-pack.pdf email carries the storage key
+  ok   fitting.jpg accepted
+  ok   fitting.jpg reports ok
+  ok   fitting.jpg echoes the filename back
+  ok   fitting.jpg stored exactly once in R2
+  ok   fitting.jpg key is namespaced by reference
+  ok   fitting.jpg key does not contain the sender filename
+  ok   fitting.jpg key ends with the real extension
+  ok   fitting.jpg R2 metadata carries the display name
+  ok   fitting.jpg KV holds only a pointer
+  ok   fitting.jpg KV record has no byte payload
+  ok   fitting.jpg label recorded as JPEG image
+  ok   fitting.jpg email names the file
+  ok   fitting.jpg email carries the storage key
+  ok   sketch.png accepted
+  ok   sketch.png reports ok
+  ok   sketch.png echoes the filename back
+  ok   sketch.png stored exactly once in R2
+  ok   sketch.png key is namespaced by reference
+  ok   sketch.png key does not contain the sender filename
+  ok   sketch.png key ends with the real extension
+  ok   sketch.png R2 metadata carries the display name
+  ok   sketch.png KV holds only a pointer
+  ok   sketch.png KV record has no byte payload
+  ok   sketch.png label recorded as PNG image
+  ok   sketch.png email names the file
+  ok   sketch.png email carries the storage key
+  ok   reference.webp accepted
+  ok   reference.webp reports ok
+  ok   reference.webp echoes the filename back
+  ok   reference.webp stored exactly once in R2
+  ok   reference.webp key is namespaced by reference
+  ok   reference.webp key does not contain the sender filename
+  ok   reference.webp key ends with the real extension
+  ok   reference.webp R2 metadata carries the display name
+  ok   reference.webp KV holds only a pointer
+  ok   reference.webp KV record has no byte payload
+  ok   reference.webp label recorded as WebP image
+  ok   reference.webp email names the file
+  ok   reference.webp email carries the storage key
+
+U2. oversized files are rejected
+  ok   rejects over the 10 MB ceiling
+  ok   names the file field so the UI can point at it
+  ok   the message states the limit
+  ok   nothing stored in R2
+  ok   nothing persisted in KV
+  ok   no email attempted
+
+U3. executables and scripts are rejected
+  ok   payload.exe rejected (extension not on the allowlist)
+  ok   payload.exe nothing stored
+  ok   payload.exe does not claim success
+  ok   script.js rejected (extension not on the allowlist)
+  ok   script.js nothing stored
+  ok   script.js does not claim success
+  ok   run.sh rejected (extension not on the allowlist)
+  ok   run.sh nothing stored
+  ok   run.sh does not claim success
+  ok   install.bat rejected (extension not on the allowlist)
+  ok   install.bat nothing stored
+  ok   install.bat does not claim success
+  ok   thing.cmd rejected (extension not on the allowlist)
+  ok   thing.cmd nothing stored
+  ok   thing.cmd does not claim success
+  ok   app.apk rejected (extension not on the allowlist even though it is a ZIP)
+  ok   app.apk nothing stored
+  ok   app.apk does not claim success
+  ok   disk.dmg rejected (extension not on the allowlist)
+  ok   disk.dmg nothing stored
+  ok   disk.dmg does not claim success
+  ok   archive.zip rejected (bare archives are deliberately excluded)
+  ok   archive.zip nothing stored
+  ok   archive.zip does not claim success
+  ok   spec.docx rejected (ZIP container proves nothing about the document)
+  ok   spec.docx nothing stored
+  ok   spec.docx does not claim success
+  ok   costing.xlsx rejected (ZIP container proves nothing about the document)
+  ok   costing.xlsx nothing stored
+  ok   costing.xlsx does not claim success
+  ok   lookbook.pptx rejected (ZIP container proves nothing about the document)
+  ok   lookbook.pptx nothing stored
+  ok   lookbook.pptx does not claim success
+  ok   legacy.doc rejected (OLE2 container can carry macros)
+  ok   legacy.doc nothing stored
+  ok   legacy.doc does not claim success
+  ok   legacy.xls rejected (OLE2 container can carry macros)
+  ok   legacy.xls nothing stored
+  ok   legacy.xls does not claim success
+  ok   legacy.ppt rejected (OLE2 container can carry macros)
+  ok   legacy.ppt nothing stored
+  ok   legacy.ppt does not claim success
+  ok   payload.pdf rejected (extension says PDF, bytes say MZ executable)
+  ok   payload.pdf nothing stored
+  ok   payload.pdf does not claim success
+  ok   sketch.png rejected (renamed executable)
+  ok   sketch.png nothing stored
+  ok   sketch.png does not claim success
+
+U4. a declared type that contradicts the extension is rejected
+  ok   rejected
+  ok   nothing stored
+
+U4b. an empty or absent Content-Type is tolerated when the bytes agree
+  ok   accepted on its bytes
+  ok   stored
+
+U5. an empty file is rejected
+  ok   rejected
+  ok   named as a file problem
+  ok   nothing stored
+
+U6. storage failure refuses the brief rather than half-accepting it
+  ok   responds 502
+  ok   does NOT claim success
+  ok   no reference handed out
+  ok   nothing persisted in KV — no brief claiming a missing file
+  ok   no email sent
+  ok   the message says nothing was lost
+
+U7. an attachment with no bucket bound is refused, not silently dropped
+  ok   responds 503
+  ok   names the file field
+  ok   nothing persisted
+  ok   no email claiming receipt
+
+U8. filename sanitization
+  ok   "../../etc/passwd.pdf" accepted (path traversal stripped)
+  ok     stored as "passwd.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+  ok   "..\windows\system32\x.pdf" accepted (windows separators stripped)
+  ok     stored as "x.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+  ok   "  leading spaces.pdf" accepted (leading whitespace trimmed)
+  ok     stored as "leading spaces.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+  ok   "a"b<c>d|e.pdf" accepted (shell and markup characters neutralised)
+  ok     stored as "a_b_c_d_e.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+  ok   "tech\npack.pdf" accepted (newline removed — no email header injection)
+  ok     stored as "techpack.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+  ok   "résumé croquis.pdf" accepted (non-ASCII replaced, spacing kept)
+  ok     stored as "r_sum_ croquis.pdf"
+  ok     no newline or control character survives
+  ok     no path separator survives
+  ok     key has no path segment from the name
+
+U6b. R2 succeeds but KV fails — the object is rolled back, not orphaned
+  ok   the upload did reach R2
+  ok   responds 502
+  ok   does NOT claim success
+  ok   no reference handed out
+  ok   nothing persisted in KV
+  ok   no email sent
+  ok   the object was deleted
+  ok   the deleted key is the one just written
+  ok   the bucket is empty afterwards
+
+U6c. a failed rollback still tells the sender the truth
+  ok   still responds 502
+  ok   still does not claim success
+  ok   the rollback was attempted
+  ok   the response does not claim the rollback worked
+  ok   no email sent
+  ok   nothing persisted
+
+U6d. nothing is deleted when there was no upload to roll back
+  ok   responds 502
+  ok   no put and no delete
+
+U6e. a successful brief never deletes its own upload
+  ok   responds 200
+  ok   no delete attempted
+  ok   the object is still there
+  ok   and the brief points at it
+
+U3b. the launch allowlist is exactly the four verifiable formats
+  ok   exactly five entries (jpg and jpeg both map to JPEG)
+  ok   the set is pdf/jpg/jpeg/png/webp
+  ok   doc is not accepted
+  ok   docx is not accepted
+  ok   xls is not accepted
+  ok   xlsx is not accepted
+  ok   ppt is not accepted
+  ok   pptx is not accepted
+  ok   zip is not accepted
+  ok   the accept attribute lists the same four formats
+  ok   the accept attribute offers no Office format
+  ok   the client-side list agrees
+
+U9. duplicate filenames do not collide
+  ok   submission 1 kept the display name
+  ok   submission 2 kept the display name
+  ok   submission 3 kept the display name
+  ok   three identical filenames produced three distinct keys
+
+U10. submitting without a file still works, both ways
+  ok   multipart without a file responds 200
+  ok   no R2 object written
+  ok   KV records file: null
+  ok   the response reports no file
+  ok   email shows File: —
+  ok   JSON submission still responds 200
+  ok   JSON submission needs no bucket
+
+U11. the optional reference link still works alongside uploads
+  ok   link and file together are accepted
+  ok   the link is recorded
+  ok   the file is recorded
+  ok   the email shows both
+  ok   link-only submission still works
+
+U12. field validation still runs on a multipart submission
+  ok   invalid email still rejected
+  ok   still names the email field
+  ok   the file was NOT stored for an invalid brief
+
+U13. Turnstile still governs a multipart submission
+  ok   multipart with no token is rejected
+  ok   no file stored for an unverified submission
+  ok   siteverify not called without a token
+  ok   a verified multipart submission is accepted
+  ok   and the file is stored
+  ok   an invalid token still rejects a multipart submission
+  ok   nothing stored
+
+U14. the spam screens still run on a multipart submission
+  ok   honeypot still rejects
+  ok   no file stored
+  ok   timing screen still rejects
+  ok   no file stored
+
+U15. an extra file part cannot smuggle a second upload
+  ok   accepted, on the one known field only
+  ok   exactly one object stored
+  ok   the stored object is the legitimate one
+
+U16. no upload route is exposed for reading files back
+  ok   GET /api/files/x does not serve a stored object
+  ok   GET /api/files/x returns no file bytes
+  ok   GET /api/brief/file does not serve a stored object
+  ok   GET /api/brief/file returns no file bytes
+  ok   GET /briefs/abc/def.pdf does not serve a stored object
+  ok   GET /briefs/abc/def.pdf returns no file bytes
+  ok   GET /api/upload does not serve a stored object
+  ok   GET /api/upload returns no file bytes
+
+14. GET /api/brief
+  ok   responds 405
+  ok   answers JSON, not the 404 page
+  ok   405 is no-store
+  ok   ASSETS was not consulted
+
+15. unexpected API exception
+  ok   JSON caller gets 500
+  ok   500 body is JSON and not ok
+  ok   500 is no-store
+  ok   500 does not overclaim persistence outcome
+  ok   native caller gets an HTML 500
+  ok   HTML 500 is no-store
+  ok   scripted multipart keeps JSON on unexpected errors
+  ok   exception NEVER becomes a static asset response
+  ok   nothing persisted by a faulted request
+  ok   crypto restored for later assertions
+
+non-API routes still reach the static site
+  ok   served by ASSETS
+  ok   asset body returned
+
+all formats reject supplied foreign origins before any persistence
+  ok   foreign-header case 1 rejects with 400
+  ok   case 1 retains scripted JSON error
+  ok   case 1 changes no KV keys, even rate counters
+  ok   case 1 stores no upload and sends no email
+  ok   foreign-header case 2 rejects with 400
+  ok   case 2 retains scripted JSON error
+  ok   case 2 changes no KV keys, even rate counters
+  ok   case 2 stores no upload and sends no email
+  ok   foreign-header case 3 rejects with 400
+  ok   case 3 retains scripted JSON error
+  ok   case 3 changes no KV keys, even rate counters
+  ok   case 3 stores no upload and sends no email
+  ok   foreign-header case 4 rejects with 400
+  ok   case 4 retains scripted JSON error
+  ok   case 4 changes no KV keys, even rate counters
+  ok   case 4 stores no upload and sends no email
+  ok   foreign-header case 5 rejects with 400
+  ok   case 5 retains scripted JSON error
+  ok   case 5 changes no KV keys, even rate counters
+  ok   case 5 stores no upload and sends no email
+  ok   foreign-header case 6 rejects with 400
+  ok   case 6 retains scripted JSON error
+  ok   case 6 changes no KV keys, even rate counters
+  ok   case 6 stores no upload and sends no email
+  ok   missing Origin/Referer retains existing caller compatibility
+
+actual stream size is bounded before parsing, regardless of declared length
+  ok   oversized stream (no length) receives 413
+  ok   size error preserves file field and no-store contract
+  ok   producer is cancelled without reading the unbounded stream
+  ok   no KV/R2 writes or outbound request
+  ok   oversized stream (20) receives 413
+  ok   size error preserves file field and no-store contract
+  ok   producer is cancelled without reading the unbounded stream
+  ok   no KV/R2 writes or outbound request
+  ok   declared oversized request is rejected before reading
+
+request boundary and full-size browser multipart remain supported
+  ok   exact 11 MiB request is parsed and accepted
+  ok   one byte over total ceiling is rejected
+  ok   10 MiB file plus browser multipart framing is accepted
+  ok   full-size file persists privately with matching metadata
+  ok   extra multipart parts count toward the total limit
+
+509 passed, 0 failed
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

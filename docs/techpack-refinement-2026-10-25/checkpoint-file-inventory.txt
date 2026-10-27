@@ -1,0 +1,272 @@
+ M .github/workflows/ci.yml
+ M public/techpacks/AB-M-HD-05-Clean-Front-Pullover-Hoodie-Tech-Pack.pdf
+ M public/techpacks/AB-M-TR-04-Flat-Front-Tapered-Trouser-Tech-Pack.pdf
+ M public/techpacks/AB-W-DR-03-Gathered-Bust-Slip-Maxi-Dress-Tech-Pack.pdf
+ M public/techpacks/AB-W-LG-02-High-Rise-Stripe-Legging-Tech-Pack.pdf
+ M public/techpacks/AB-W-SH-01-Cropped-Two-Pocket-Shirt-Tech-Pack.pdf
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-01-cover-sheet.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-02-bill-of-materials.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-03-labels-packaging-bom.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-04-front-callouts.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-05-back-callouts.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-07-label-specifications.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-08-packaging-specifications.png
+ M public/techpacks/pages/AB-M-HD-05/garment-05-page-10-point-of-measurement-diagram.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-01-cover-sheet.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-02-bill-of-materials.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-03-labels-packaging-bom.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-04-front-callouts.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-05-back-callouts.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-07-label-specifications.png
+ M public/techpacks/pages/AB-M-TR-04/garment-04-page-08-packaging-specifications.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-01-cover-sheet.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-02-bill-of-materials.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-03-labels-packaging-bom.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-04-front-callouts.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-05-back-callouts.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-07-label-specifications.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-08-packaging-specifications.png
+ M public/techpacks/pages/AB-W-DR-03/garment-03-page-10-point-of-measurement-diagram.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-01-cover-sheet.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-02-bill-of-materials.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-03-labels-packaging-bom.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-04-front-callouts.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-05-back-callouts.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-06-colorways.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-07-label-specifications.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-08-packaging-specifications.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-09-measurement-specification.png
+ M public/techpacks/pages/AB-W-LG-02/garment-02-page-10-point-of-measurement-diagram.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-01-cover-sheet.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-02-bill-of-materials.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-03-labels-packaging-bom.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-04-front-callouts.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-05-back-callouts.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-07-label-specifications.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-08-packaging-specifications.png
+ M public/techpacks/pages/AB-W-SH-01/garment-01-page-10-point-of-measurement-diagram.png
+ M public/techpacks/previews/AB-M-HD-05-cover-1200.webp
+ M public/techpacks/previews/AB-M-HD-05-cover-600.webp
+ M public/techpacks/previews/AB-M-TR-04-cover-1200.webp
+ M public/techpacks/previews/AB-M-TR-04-cover-600.webp
+ M public/techpacks/previews/AB-W-DR-03-cover-1200.webp
+ M public/techpacks/previews/AB-W-DR-03-cover-600.webp
+ M public/techpacks/previews/AB-W-LG-02-cover-1200.webp
+ M public/techpacks/previews/AB-W-LG-02-cover-600.webp
+ M public/techpacks/previews/AB-W-SH-01-cover-1200.webp
+ M public/techpacks/previews/AB-W-SH-01-cover-600.webp
+ M src/components/portfolio/FinalPhotoReader.astro
+ M src/components/portfolio/MenswearAct.astro
+ M src/components/portfolio/MenswearReader.astro
+ M src/components/portfolio/TechPackWorld.astro
+ M src/components/portfolio/WomenswearAct.astro
+ M src/components/portfolio/WomenswearExhibition.astro
+ M src/data/portfolio.ts
+ M src/pages/portfolio.astro
+ M src/styles/portfolio-exhibition-flow.css
+ M tests/menswear-look-navigation.mjs
+ M tests/menswear-studio-preservation.mjs
+ M tests/smoke.mjs
+ M tests/techpacks.mjs
+?? docs/techpack-refinement-2026-10-25/audit-matrix.csv
+?? docs/techpack-refinement-2026-10-25/audit-matrix.json
+?? docs/techpack-refinement-2026-10-25/document-manifest.json
+?? docs/techpack-refinement-2026-10-25/engineering-specifications.json
+?? docs/techpack-refinement-2026-10-25/pdf-verification.json
+?? docs/techpack-refinement-2026-10-25/png-verification.json
+?? docs/techpack-refinement-2026-10-25/pr54-preservation.json
+?? docs/techpack-refinement-2026-10-25/reader-previews.json
+?? public/techpacks/materials/brand-transfer.png
+?? public/techpacks/materials/buttons-01.png
+?? public/techpacks/materials/buttons-04.png
+?? public/techpacks/materials/care-AB-M-HD-05.png
+?? public/techpacks/materials/care-AB-M-TR-04.png
+?? public/techpacks/materials/care-AB-W-DR-03.png
+?? public/techpacks/materials/care-AB-W-LG-02.png
+?? public/techpacks/materials/care-AB-W-SH-01.png
+?? public/techpacks/materials/clear-stay.png
+?? public/techpacks/materials/dress-concealed-zip.png
+?? public/techpacks/materials/dress-lining.png
+?? public/techpacks/materials/hangtag-back-AB-M-HD-05.png
+?? public/techpacks/materials/hangtag-back-AB-M-TR-04.png
+?? public/techpacks/materials/hangtag-back-AB-W-DR-03.png
+?? public/techpacks/materials/hangtag-back-AB-W-LG-02.png
+?? public/techpacks/materials/hangtag-back-AB-W-SH-01.png
+?? public/techpacks/materials/hangtag-front.png
+?? public/techpacks/materials/hoodie-rib.png
+?? public/techpacks/materials/main-01.png
+?? public/techpacks/materials/main-02.png
+?? public/techpacks/materials/main-03.png
+?? public/techpacks/materials/main-04.png
+?? public/techpacks/materials/main-05.png
+?? public/techpacks/materials/material-credits.json
+?? public/techpacks/materials/ring-slider.png
+?? public/techpacks/materials/size-pip.png
+?? public/techpacks/materials/size-transfer.png
+?? public/techpacks/materials/sticker-AB-M-HD-05.png
+?? public/techpacks/materials/sticker-AB-M-TR-04.png
+?? public/techpacks/materials/sticker-AB-W-DR-03.png
+?? public/techpacks/materials/sticker-AB-W-LG-02.png
+?? public/techpacks/materials/sticker-AB-W-SH-01.png
+?? public/techpacks/materials/stripe-tape.png
+?? public/techpacks/materials/thread-01.png
+?? public/techpacks/materials/thread-02.png
+?? public/techpacks/materials/thread-03.png
+?? public/techpacks/materials/thread-04.png
+?? public/techpacks/materials/thread-05.png
+?? public/techpacks/materials/trouser-coil-zip.png
+?? public/techpacks/materials/trouser-pocketing.png
+?? public/techpacks/materials/waist-elastic.png
+?? public/techpacks/materials/woven-fusible.png
+?? public/techpacks/materials/woven-main-label.png
+?? public/techpacks/materials/woven-tape.png
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-01-cover-sheet-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-02-bill-of-materials-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-03-labels-packaging-bom-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-04-front-callouts-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-05-back-callouts-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-06-colorways-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-07-label-specifications-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-08-packaging-specifications-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-09-measurement-specification-1600.webp
+?? public/techpacks/reader/AB-M-HD-05/garment-05-page-10-point-of-measurement-diagram-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-01-cover-sheet-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-02-bill-of-materials-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-03-labels-packaging-bom-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-04-front-callouts-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-05-back-callouts-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-06-colorways-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-07-label-specifications-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-08-packaging-specifications-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-09-measurement-specification-1600.webp
+?? public/techpacks/reader/AB-M-TR-04/garment-04-page-10-point-of-measurement-diagram-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-01-cover-sheet-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-02-bill-of-materials-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-03-labels-packaging-bom-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-04-front-callouts-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-05-back-callouts-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-06-colorways-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-07-label-specifications-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-08-packaging-specifications-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-09-measurement-specification-1600.webp
+?? public/techpacks/reader/AB-W-DR-03/garment-03-page-10-point-of-measurement-diagram-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-01-cover-sheet-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-02-bill-of-materials-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-03-labels-packaging-bom-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-04-front-callouts-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-05-back-callouts-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-06-colorways-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-07-label-specifications-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-08-packaging-specifications-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-09-measurement-specification-1600.webp
+?? public/techpacks/reader/AB-W-LG-02/garment-02-page-10-point-of-measurement-diagram-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-01-cover-sheet-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-02-bill-of-materials-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-03-labels-packaging-bom-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-04-front-callouts-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-05-back-callouts-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-06-colorways-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-07-label-specifications-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-08-packaging-specifications-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-09-measurement-specification-1600.webp
+?? public/techpacks/reader/AB-W-SH-01/garment-01-page-10-point-of-measurement-diagram-1600.webp
+?? scripts/techpack-development/.gitignore
+?? scripts/techpack-development/artwork.py
+?? scripts/techpack-development/assets/CIDFont+F1.ttf
+?? scripts/techpack-development/assets/CIDFont+F2.ttf
+?? scripts/techpack-development/assets/approved-flat-02-back-cw01.png
+?? scripts/techpack-development/assets/approved-flat-02-back-cw02.png
+?? scripts/techpack-development/assets/approved-flat-02-back-cw03.png
+?? scripts/techpack-development/assets/approved-flat-02-back.png
+?? scripts/techpack-development/assets/flat-01-back-cw01.png
+?? scripts/techpack-development/assets/flat-01-back-cw02.png
+?? scripts/techpack-development/assets/flat-01-back-cw03.png
+?? scripts/techpack-development/assets/flat-01-back.png
+?? scripts/techpack-development/assets/flat-01-front-cw01.png
+?? scripts/techpack-development/assets/flat-01-front-cw02.png
+?? scripts/techpack-development/assets/flat-01-front-cw03.png
+?? scripts/techpack-development/assets/flat-01-front.png
+?? scripts/techpack-development/assets/flat-02-back-cw01.png
+?? scripts/techpack-development/assets/flat-02-back-cw02.png
+?? scripts/techpack-development/assets/flat-02-back-cw03.png
+?? scripts/techpack-development/assets/flat-02-back.png
+?? scripts/techpack-development/assets/flat-02-front-cw01.png
+?? scripts/techpack-development/assets/flat-02-front-cw02.png
+?? scripts/techpack-development/assets/flat-02-front-cw03.png
+?? scripts/techpack-development/assets/flat-02-front.png
+?? scripts/techpack-development/assets/flat-03-back-cw01.png
+?? scripts/techpack-development/assets/flat-03-back-cw02.png
+?? scripts/techpack-development/assets/flat-03-back-cw03.png
+?? scripts/techpack-development/assets/flat-03-back.png
+?? scripts/techpack-development/assets/flat-03-front-cw01.png
+?? scripts/techpack-development/assets/flat-03-front-cw02.png
+?? scripts/techpack-development/assets/flat-03-front-cw03.png
+?? scripts/techpack-development/assets/flat-03-front.png
+?? scripts/techpack-development/assets/flat-04-back-cw01.png
+?? scripts/techpack-development/assets/flat-04-back-cw02.png
+?? scripts/techpack-development/assets/flat-04-back-cw03.png
+?? scripts/techpack-development/assets/flat-04-back.png
+?? scripts/techpack-development/assets/flat-04-front-cw01.png
+?? scripts/techpack-development/assets/flat-04-front-cw02.png
+?? scripts/techpack-development/assets/flat-04-front-cw03.png
+?? scripts/techpack-development/assets/flat-04-front.png
+?? scripts/techpack-development/assets/flat-05-back-cw01.png
+?? scripts/techpack-development/assets/flat-05-back-cw02.png
+?? scripts/techpack-development/assets/flat-05-back-cw03.png
+?? scripts/techpack-development/assets/flat-05-back.png
+?? scripts/techpack-development/assets/flat-05-front-cw01.png
+?? scripts/techpack-development/assets/flat-05-front-cw02.png
+?? scripts/techpack-development/assets/flat-05-front-cw03.png
+?? scripts/techpack-development/assets/flat-05-front.png
+?? scripts/techpack-development/assets/source-photographs/commons-134.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-135.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-136.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-140.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-141.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-152.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-174.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-19.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-63.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-77.jpg
+?? scripts/techpack-development/assets/source-photographs/commons-metadata.json
+?? scripts/techpack-development/assets/source-photographs/component-visualizations.png
+?? scripts/techpack-development/assets/source-photographs/crepe_satin.jpg
+?? scripts/techpack-development/assets/source-photographs/crepe_satin.json
+?? scripts/techpack-development/assets/source-photographs/denim_fabric_03.jpg
+?? scripts/techpack-development/assets/source-photographs/denim_fabric_03.json
+?? scripts/techpack-development/assets/source-photographs/elastic-visualization.png
+?? scripts/techpack-development/assets/source-photographs/knitted_fleece.jpg
+?? scripts/techpack-development/assets/source-photographs/knitted_fleece.json
+?? scripts/techpack-development/assets/source-photographs/polyhaven-metadata.json
+?? scripts/techpack-development/assets/source-photographs/rough_linen.jpg
+?? scripts/techpack-development/assets/source-photographs/rough_linen.json
+?? scripts/techpack-development/assets/source-photographs/stretch_poplin.jpg
+?? scripts/techpack-development/assets/source-photographs/stretch_poplin.json
+?? scripts/techpack-development/assets/source-photographs/woven-label-visualization.png
+?? scripts/techpack-development/assets/swatch-01.png
+?? scripts/techpack-development/assets/swatch-02.png
+?? scripts/techpack-development/assets/swatch-03.png
+?? scripts/techpack-development/assets/swatch-04.png
+?? scripts/techpack-development/assets/swatch-05.png
+?? scripts/techpack-development/audit_operations.py
+?? scripts/techpack-development/build_artwork.py
+?? scripts/techpack-development/build_reader_previews.py
+?? scripts/techpack-development/completion.py
+?? scripts/techpack-development/export_revision.py
+?? scripts/techpack-development/precision.py
+?? scripts/techpack-development/render.py
+?? scripts/techpack-development/requirements.txt
+?? scripts/techpack-development/revisions.py
+?? scripts/techpack-development/specs.py
+?? scripts/techpack-development/template.pdf
+?? src/components/portfolio/GarmentProvenance.astro
+?? src/data/garment-copy.json
+?? src/data/garment-copy.ts
+?? src/data/techpack-page-previews.json
+?? src/data/techpack-pages.json
+?? src/data/techpack-revisions.json
+?? src/pages/techpacks/material-credits.astro
+?? src/scripts/techpack-reader.ts
+?? src/styles/techpack-reader.css
+?? tests/fixtures/portfolio-completion-preservation.json
+?? tests/portfolio-content.mjs

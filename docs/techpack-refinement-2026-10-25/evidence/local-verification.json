@@ -1,0 +1,120 @@
+{
+  "candidateCommit": "586f9a558b4c8e6f805d451ad5aa23d0ffc70b6e",
+  "date": "2026-10-26",
+  "allFinalLocalRegressionsPassed": true,
+  "remainingRegressions": [
+    {
+      "test": "menswear-navigation",
+      "exit_code": 0,
+      "seconds": 47.39,
+      "initial_exit_code": 1,
+      "initial_failure": "Scene-control locator timeout; unchanged test passed on retry.",
+      "retry_log": "menswear-navigation-retry.log",
+      "retry_passed": true,
+      "result": "49 Menswear history, interruption, touch and fallback checks passed"
+    },
+    {
+      "test": "menswear-look-navigation",
+      "exit_code": 0,
+      "seconds": 42.08,
+      "result": "841 Menswear look-sequence, genuine-view and cinematic-origin checks passed"
+    },
+    {
+      "test": "menswear-resize-return",
+      "exit_code": 0,
+      "seconds": 13.45,
+      "result": "12 cross-breakpoint source-return checks passed"
+    },
+    {
+      "test": "womenswear-continuity",
+      "exit_code": 0,
+      "seconds": 49.21,
+      "result": "98 Womenswear continuity checks passed"
+    },
+    {
+      "test": "garment-match-cut",
+      "exit_code": 0,
+      "seconds": 10.65,
+      "result": "48 paired-reader transition/midpoint/return checks passed"
+    },
+    {
+      "test": "fashion-navigation",
+      "exit_code": 0,
+      "seconds": 12.95,
+      "result": "40 cold category/navigation checks passed"
+    },
+    {
+      "test": "fashion-eight-worlds",
+      "exit_code": 0,
+      "seconds": 122.66,
+      "result": "617 owner-contract acceptance checks passed"
+    },
+    {
+      "test": "menswear-presentation-seeks",
+      "exit_code": 0,
+      "seconds": 42.92,
+      "result": "264 endpoint/interruption/focus checks passed"
+    },
+    {
+      "test": "menswear-historical-access",
+      "exit_code": 0,
+      "seconds": 5.61,
+      "result": "32 historical-list identity/context/history checks passed"
+    },
+    {
+      "test": "menswear-archive-keyboard",
+      "exit_code": 0,
+      "seconds": 2.0,
+      "result": "10 vertical-archive keyboard checks passed"
+    },
+    {
+      "test": "fashion-chapter-history",
+      "exit_code": 0,
+      "seconds": 4.72,
+      "result": "20 bare-chapter Back/Forward/Escape checks passed"
+    },
+    {
+      "test": "womenswear-route-origin",
+      "exit_code": 0,
+      "seconds": 4.69,
+      "result": "16 direct-route source identity checks passed"
+    },
+    {
+      "test": "menswear-media-loading",
+      "exit_code": 0,
+      "seconds": 6.62,
+      "result": "21 Menswear delayed/failed-media checks passed"
+    },
+    {
+      "test": "three-panel-photography",
+      "exit_code": 0,
+      "seconds": 19.04,
+      "result": "234 paired three-panel, source geometry, alpha, failure and independent inspection checks passed"
+    }
+  ],
+  "backend": [
+    {
+      "test": "worker",
+      "exit_code": 0
+    },
+    {
+      "test": "domain",
+      "exit_code": 0
+    },
+    {
+      "test": "production",
+      "exit_code": 0
+    },
+    {
+      "test": "worker-dry-run",
+      "exit_code": 0
+    }
+  ],
+  "preservationChecks": 4849,
+  "smokeChecks": 305,
+  "readerChecks": 887,
+  "garmentContentChecks": 1321,
+  "portfolioExperienceChecks": 946,
+  "deploymentAttempted": false,
+  "liveCandidateVerified": false
+}

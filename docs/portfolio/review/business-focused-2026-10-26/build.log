@@ -1,0 +1,61 @@
+
+> soufiane-portfolio@1.0.0 build
+> astro build
+
+22:57:05 [vite] Re-optimizing dependencies because vite config has changed
+22:57:05 [content] Syncing content
+22:57:05 [content] Synced content
+22:57:05 [types] Generated 103ms
+22:57:05 [build] output: "static"
+22:57:05 [build] mode: "static"
+22:57:05 [build] directory: /workspace/current/dist/
+22:57:05 [build] Collecting build info...
+22:57:05 [build] ✓ Completed in 130ms.
+22:57:05 [build] Building static entrypoints...
+22:57:07 [vite] ✓ built in 2.31s
+22:57:07 [build] ✓ Completed in 2.34s.
+
+ building client (vite) 
+22:57:07 [vite] transforming...
+22:57:08 [vite] ✓ 30 modules transformed.
+22:57:08 [vite] rendering chunks...
+22:57:08 [vite] computing gzip size...
+22:57:08 [vite] dist/_astro/portfolio.astro_astro_type_script_index_1_lang.C50PCUit.js    7.35 kB │ gzip:  2.53 kB
+22:57:08 [vite] dist/_astro/ScrollTrigger.C8IefbVz.js                                   114.87 kB │ gzip: 45.46 kB
+22:57:08 [vite] dist/_astro/portfolio.astro_astro_type_script_index_0_lang.Uq_PrUhQ.js  159.95 kB │ gzip: 35.95 kB
+22:57:08 [vite] ✓ built in 504ms
+
+ generating static routes 
+22:57:08 ▶ src/pages/404.astro
+22:57:08   └─ /404.html (+10ms) 
+22:57:08 ▶ src/pages/before-we-start.astro
+22:57:08   └─ /before-we-start/index.html (+3ms) 
+22:57:08 ▶ src/pages/contact/sent.astro
+22:57:08   └─ /contact/sent/index.html (+1ms) 
+22:57:08 ▶ src/pages/contact.astro
+22:57:08   └─ /contact/index.html (+4ms) 
+22:57:08 ▶ src/pages/experience.astro
+22:57:08   └─ /experience/index.html (+2ms) 
+22:57:08 ▶ src/pages/expertise.astro
+22:57:08   └─ /expertise/index.html (+2ms) 
+22:57:08 ▶ src/pages/index.astro
+22:57:08   └─ /index.html (+2ms) 
+22:57:08 ▶ src/pages/lab/[story].astro
+22:57:08 ▶ src/pages/portfolio.astro
+22:57:08   └─ /portfolio/index.html (+44ms) 
+22:57:08 ▶ src/pages/privacy.astro
+22:57:08   └─ /privacy/index.html (+2ms) 
+22:57:08 ▶ src/pages/process.astro
+22:57:08   └─ /process/index.html (+2ms) 
+22:57:08 λ src/pages/robots.txt.ts
+22:57:08   └─ /robots.txt (+1ms) 
+22:57:08 λ src/pages/sitemap.xml.ts
+22:57:08   └─ /sitemap.xml (+1ms) 
+22:57:08 ▶ src/pages/techpacks/material-credits.astro
+22:57:08   └─ /techpacks/material-credits/index.html (+1ms) 
+22:57:08 ▶ src/pages/working-terms.astro
+22:57:08   └─ /working-terms/index.html (+1ms) 
+22:57:08 ✓ Completed in 97ms.
+
+22:57:08 [build] 12 page(s) built in 3.13s
+22:57:08 [build] Complete!

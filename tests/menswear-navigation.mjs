@@ -3,9 +3,9 @@ const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4393',b=await chromiu
 try{for(const reduced of[false,true]){
  const c=await b.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:reduced?'reduce':'no-preference'});await installFonts(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'/portfolio/#menswear/m-streetwear');await fontsReady(p);
  for(let n=0;n<3;n++){
-  await p.locator('[data-mw-scene="4"]').click();await p.waitForTimeout(80);await p.locator('[data-mw-scene="1"]').click();await p.waitForTimeout(60);await p.locator('[data-mw-scene="3"]').click();await p.waitForTimeout(1100);
-  check(await p.locator('[data-mw-scene="3"]').getAttribute('aria-pressed')==='true','latest interrupted scene wins');
-  const source=p.locator('[data-mw-film][data-current] [data-mw-actor="17303564"]');await source.click();await p.waitForTimeout(40);await p.keyboard.press('Escape');await p.waitForTimeout(60);await source.evaluate(e=>e.click());await p.waitForTimeout(650);
+  await p.locator('[data-mw-scene="4"]').click();await p.waitForTimeout(80);await p.locator('[data-mw-scene="1"]').click();await p.waitForTimeout(60);await p.locator('[data-mw-scene="4"]').click();await p.waitForTimeout(1100);
+  check(await p.locator('[data-mw-scene="4"]').getAttribute('aria-pressed')==='true','latest interrupted scene wins');
+  const source=p.locator('[data-mw-film][data-current] [data-mw-actor="26936522"]');await source.click();await p.waitForTimeout(40);await p.keyboard.press('Escape');await p.waitForTimeout(60);await source.evaluate(e=>e.click());await p.waitForTimeout(650);
   const reader=p.locator('[data-mw-reader]:not([hidden])');check(await reader.count()===1,'latest rapid entry owns the reader');
   await p.setViewportSize({width:430,height:932});await p.waitForTimeout(100);await p.keyboard.press('Escape');await p.waitForTimeout(650);check(await source.evaluate(e=>e===document.activeElement),'resized source occurrence restores focus');check(await p.locator('.mw-match').count()===0,'no abandoned WAAPI clone');
   await p.setViewportSize({width:390,height:844});await p.waitForTimeout(100);

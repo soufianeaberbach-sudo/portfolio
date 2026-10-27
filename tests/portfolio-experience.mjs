@@ -1,5 +1,5 @@
 /** Current owner contract: Fashion exhibition, paired real views, independent inspection,
- * native vertical traversal, immutable identities and graceful missing photographs. */
+ * native vertical category traversal and controlled horizontal edits, immutable identities and graceful missing photographs. */
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';import path from 'node:path';import {build} from 'esbuild';import {chromium} from 'playwright';import {installFonts,fontsReady} from './fixtures/fonts.mjs';
 const base=process.env.PORTFOLIO_QA_URL||'http://127.0.0.1:4339',out=process.env.EXPERIENCE_QA_DIR||'.qa-director/portfolio-refinement/final';await fs.mkdir(out,{recursive:true});
 const compiled=await build({stdin:{contents:"export{womenswear,menswear}from'./src/data/portfolio';export*from'./src/data/womenswear-collection';export*from'./src/data/menswear-collection';export*from'./src/data/final-photography';",resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});const d=await import('data:text/javascript;base64,'+Buffer.from(compiled.outputFiles[0].text).toString('base64'));
@@ -58,7 +58,7 @@ try{
   }
   check(worlds.has('womenswear')&&worlds.has('menswear'),width+': native scroll crosses fashion chapters');
   check(await p.locator('[data-world="3d-simulation"]').evaluate(e=>e.hasAttribute('data-open')),width+': continuous scrolling reaches Development');
-  (await p.evaluate(()=>[...window.__experienceSeen])).forEach(id=>seen.add(id));const missed=featured.filter(s=>!seen.has(s.id));await fs.writeFile(path.join(out,`native-scroll-${width}.json`),JSON.stringify({gestures,seen:[...seen],chapters:[...worlds],missing:missed.map(s=>s.id)},null,2));check(!missed.length,width+': all 80 garments seen in vertical flow; missing '+missed.map(s=>s.id).join(','));check(await p.locator('[data-ww-reader]:not([hidden]),[data-mw-reader]:not([hidden])').count()===0,width+': exhibition gestures do not accidentally open garments');
+  (await p.evaluate(()=>[...window.__experienceSeen])).forEach(id=>seen.add(id));const missed=featured.filter(s=>!seen.has(s.id));await fs.writeFile(path.join(out,`native-scroll-${width}.json`),JSON.stringify({gestures,seen:[...seen],chapters:[...worlds],missing:missed.map(s=>s.id)},null,2));const leads=[...d.womenswearWorlds.map(w=>d.displayedCollection(w.id,wwPool)[0]),...d.menswear.categories.map(c=>d.menswearDisplayed(c.id)[0])];check(leads.every(s=>seen.has(s.id)),width+': category leads encountered in native flow; remaining looks available in horizontal edits');check(await p.locator('[data-ww-reader]:not([hidden]),[data-mw-reader]:not([hidden])').count()===0,width+': exhibition gestures do not accidentally open garments');
   await fs.writeFile(path.join(out,`native-scroll-${width}.json`),JSON.stringify({gestures,seen:[...seen],chapters:[...worlds]},null,2));await c.close();
  }
  check(!errors.length,'no browser runtime errors: '+errors.join(';'));

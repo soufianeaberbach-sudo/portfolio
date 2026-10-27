@@ -1,0 +1,23 @@
+---
+interface Props { name: string; }
+const {name}=Astro.props;
+---
+<div class="edit-rail-controls">
+ <p class="label">Browse all ten <span>· Swipe or use arrows</span></p>
+ <div><button type="button" data-edit-step="-1" aria-label={`Previous ${name} looks`}>←</button><button type="button" data-edit-step="1" aria-label={`More ${name} looks`}>→</button></div>
+</div>
+<script>
+ for(const section of document.querySelectorAll<HTMLElement>('.ww-exhibition,.mw-film')){
+  const rail=section.querySelector<HTMLElement>('.ww-rail,.mw-rail');if(!rail)continue;
+  for(const button of section.querySelectorAll<HTMLButtonElement>('[data-edit-step]'))button.addEventListener('click',()=>rail.scrollBy({left:Number(button.dataset.editStep)*rail.clientWidth*.8,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'}));
+  rail.addEventListener('keydown',event=>{
+   if(event.target!==rail||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+   event.preventDefault();
+   if(event.key==='Home'||event.key==='End'){
+    const links=[...rail.querySelectorAll<HTMLAnchorElement>('a')];(event.key==='Home'?links[0]:links.at(-1))?.focus({preventScroll:true});
+    rail.scrollTo({left:event.key==='Home'?0:rail.scrollWidth,behavior:'instant'});
+   }else rail.scrollBy({left:(event.key==='ArrowLeft'?-1:1)*rail.clientWidth*.65,behavior:'instant'});
+  });
+  section.querySelector('[data-edit-browse]')?.addEventListener('click',()=>{section.querySelector<HTMLElement>('.ww-archive,.mw-archive')?.scrollIntoView({block:'start',behavior:'instant'});rail.focus({preventScroll:true});});
+ }
+</script>

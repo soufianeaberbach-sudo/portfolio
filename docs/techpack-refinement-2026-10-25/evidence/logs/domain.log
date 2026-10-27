@@ -1,0 +1,174 @@
+
+> soufiane-portfolio@1.0.0 test:domain
+> node tests/domain.mjs
+
+
+source carries no old website domain
+  ok   no old website domain anywhere in source (935 files scanned)
+       1 deliberate mention(s): tests/worker.mjs:841
+
+the public contact email is exactly the chosen form
+  ok   src/components/BriefForm.astro uses soufianeaberbach@gmail.com
+  ok   src/components/BriefForm.astro does not use the dotted form
+  ok   src/pages/contact.astro uses soufianeaberbach@gmail.com
+  ok   src/pages/contact.astro does not use the dotted form
+  ok   src/pages/privacy.astro uses soufianeaberbach@gmail.com
+  ok   src/pages/privacy.astro does not use the dotted form
+  ok   wrangler.jsonc uses soufianeaberbach@gmail.com
+  ok   wrangler.jsonc does not use the dotted form
+  ok   the dotted display form appears nowhere in source
+  ok   BRIEF_TO is soufianeaberbach@gmail.com
+  ok   BRIEF_FROM is still brief@aberbach.co
+  ok   BRIEF_FROM is not the public address
+
+configured origin
+  ok   astro.config site is https://aberbach.co
+  ok   site has no trailing slash
+  ok   site is the apex, not www
+  ok   site is https
+
+built pages canonicalize to the apex
+  ok   / canonical is https://aberbach.co/
+  ok   / og:url matches the canonical
+  ok   / carries no old domain
+  ok   / canonical is not www
+  ok   /expertise/ canonical is https://aberbach.co/expertise/
+  ok   /expertise/ og:url matches the canonical
+  ok   /expertise/ carries no old domain
+  ok   /expertise/ canonical is not www
+  ok   /portfolio/ canonical is https://aberbach.co/portfolio/
+  ok   /portfolio/ og:url matches the canonical
+  ok   /portfolio/ carries no old domain
+  ok   /portfolio/ canonical is not www
+  ok   /process/ canonical is https://aberbach.co/process/
+  ok   /process/ og:url matches the canonical
+  ok   /process/ carries no old domain
+  ok   /process/ canonical is not www
+  ok   /experience/ canonical is https://aberbach.co/experience/
+  ok   /experience/ og:url matches the canonical
+  ok   /experience/ carries no old domain
+  ok   /experience/ canonical is not www
+  ok   /contact/ canonical is https://aberbach.co/contact/
+  ok   /contact/ og:url matches the canonical
+  ok   /contact/ carries no old domain
+  ok   /contact/ canonical is not www
+  ok   /privacy/ canonical is https://aberbach.co/privacy/
+  ok   /privacy/ og:url matches the canonical
+  ok   /privacy/ carries no old domain
+  ok   /privacy/ canonical is not www
+  ok   /before-we-start/ canonical is https://aberbach.co/before-we-start/
+  ok   /before-we-start/ og:url matches the canonical
+  ok   /before-we-start/ carries no old domain
+  ok   /before-we-start/ canonical is not www
+  ok   /working-terms/ canonical is https://aberbach.co/working-terms/
+  ok   /working-terms/ og:url matches the canonical
+  ok   /working-terms/ carries no old domain
+  ok   /working-terms/ canonical is not www
+
+built mailto links use the chosen address
+  ok   /contact/ renders at least one mailto link
+  ok   /contact/ mailto links all use soufianeaberbach@gmail.com
+  ok   /contact/ shows no dotted address anywhere
+  ok   /privacy/ renders at least one mailto link
+  ok   /privacy/ mailto links all use soufianeaberbach@gmail.com
+  ok   /privacy/ shows no dotted address anywhere
+  ok   the no-JavaScript fallback carries the chosen address
+
+built social image is absolute on the apex
+  ok   og:image is absolute on the new origin
+  ok   twitter:image matches og:image
+
+structured data uses the new website origin
+  ok   JSON-LD block present on the home page
+  ok   graph has exactly Person, ProfessionalService and WebSite
+  ok   WebSite @id and url use the apex
+  ok   WebSite publisher references the existing Person
+  ok   no SearchAction without a search feature
+  ok   Person @id is on the apex
+  ok   Person url is the apex
+  ok   Person image is on the apex
+  ok   Service @id is on the apex
+  ok   Service url is the apex
+  ok   Service provider points at the Person
+  ok   no old domain in the whole graph
+  ok   no fabricated "areaServed" in structured data
+  ok   no fabricated "aggregateRating" in structured data
+  ok   no fabricated "AggregateRating" in structured data
+  ok   no fabricated "review" in structured data
+  ok   no fabricated "Review" in structured data
+  ok   no fabricated "award" in structured data
+  ok   no fabricated "hasCredential" in structured data
+  ok   no fabricated "Offer" in structured data
+  ok   sameAs is still the four real profiles
+
+sitemap
+  ok   no old domain in the sitemap
+  ok   lists exactly 9 URLs
+  ok   lists exactly the English routes
+  ok   every URL is https on the apex
+  ok   no www URL
+  ok   no duplicates
+  ok   sitemap excludes /contact/sent
+  ok   sitemap excludes /404
+  ok   sitemap excludes /fr/
+  ok   sitemap excludes /es/
+  ok   sitemap excludes /ar/
+
+robots.txt
+  ok   no old domain in robots.txt
+  ok   declares https://aberbach.co/sitemap.xml
+  ok   still allows crawling
+  ok   disallows nothing
+
+noindex routes stayed noindex
+  ok   /contact/sent is noindex
+  ok   /contact/sent carries no old domain
+  ok   /404 is noindex
+  ok   /404 carries no old domain
+
+trust pages build, remain indexable and share navigation
+  ok   /privacy/ is in the route manifest
+  ok   /privacy/ has one main heading
+  ok   /privacy/ is not noindex
+  ok   /privacy/ has a description and social metadata
+  ok   /privacy/ footer links to /privacy/
+  ok   /privacy/ footer links to /before-we-start/
+  ok   /privacy/ footer links to /working-terms/
+  ok   /working-terms/ is in the route manifest
+  ok   /working-terms/ has one main heading
+  ok   /working-terms/ is not noindex
+  ok   /working-terms/ has a description and social metadata
+  ok   /working-terms/ footer links to /privacy/
+  ok   /working-terms/ footer links to /before-we-start/
+  ok   /working-terms/ footer links to /working-terms/
+  ok   /before-we-start/ is in the route manifest
+  ok   /before-we-start/ has one main heading
+  ok   /before-we-start/ is not noindex
+  ok   /before-we-start/ has a description and social metadata
+  ok   /before-we-start/ footer links to /privacy/
+  ok   /before-we-start/ footer links to /before-we-start/
+  ok   /before-we-start/ footer links to /working-terms/
+
+Phase A added no multilingual routes and no trackers
+  ok   no /fr/ route exists yet
+  ok   no /es/ route exists yet
+  ok   no /ar/ route exists yet
+  ok   no /it/ route exists yet
+  ok   no googletagmanager on the home page
+  ok   no google-analytics on the home page
+  ok   no gtag( on the home page
+  ok   no connect.facebook.net on the home page
+  ok   no snap.licdn.com on the home page
+  ok   no clarity.ms on the home page
+  ok   no hotjar on the home page
+  ok   no plausible on the home page
+  ok   no umami on the home page
+  ok   no hreflang alternates yet
+  ok   html lang is still en
+
+138 passed, 0 failed
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

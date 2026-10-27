@@ -70,11 +70,19 @@ export function referenceCollection(category:MarketCategory,world:string):Subjec
   return slot?slotPhotographs(subject,slot):subject;
  });
 }
+/** Owner-selected hooks; historical source arrays and identities stay intact. */
+export const womenswearLeads:Record<string,string[]>={
+ casualwear:['rtw-ref-03','streetwear-ref-01'],
+ activewear:['activewear-ref-01','activewear-ref-08'],
+ evening:['evening-ref-01','evening-ref-05'],
+ swimwear:['swimwear-ref-01','swimwear-ref-08'],
+};
 export function displayedCollection(category:string,pool:Subject[]):Subject[] {
  const selection=editorialSlots[editorialWorld(category)];
  if(!selection)return pool;
  const edit=selection.map(slot=>pool.find(s=>s.id===slot.id));
  if(edit.some(s=>!s)||new Set(selection.map(s=>s.id)).size!==10||selection.length!==10)
   throw new Error(`Incomplete ten-look collection: ${category}`);
- return edit as Subject[];
+ const leads=womenswearLeads[editorialWorld(category)]?.map(featuredIdentity)??[];
+ return [...leads.map(id=>edit.find(s=>s!.id===id)!),...edit.filter(s=>!leads.includes(s!.id))] as Subject[];
 }
