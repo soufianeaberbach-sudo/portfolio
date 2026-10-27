@@ -1,10 +1,10 @@
 {
-  "authorization": "27 October 2026 Contact scrolling QA for the owner-authorized PR #57 repair: correct only the visually hidden upload input selector specificity and zero minimum height. The generic field width caused horizontal overflow after reveal animations. Preserve all form fields, upload behavior, visible design, unrelated sources, photographic assets and technical documents.",
+  "authorization": "27 October 2026 owner-authorized Contact QA in PR #57: correct only the visually hidden upload input selector/minimum height and center client/server validation error focus clear of the fixed header in Safari. Preserve all form fields, upload behavior, visible design, unrelated sources, photographic assets and technical documents.",
   "baseline": "a806acf1d0da0df28b5e2c52aab468de577250ca",
   "changes": {
     "src/components/BriefForm.astro": {
       "baselineSHA1": "0b2f0b9a5385fb38dcebe6d3622ad8a9ed3fab4e",
-      "authorizedSHA1": "c5b3af83fc358ead57f58393335ac58de423a582"
+      "authorizedSHA1": "a8b132c097ee3079766bf36b26c996d60fbaddb9"
     }
   }
 }

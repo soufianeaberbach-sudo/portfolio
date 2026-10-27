@@ -85,7 +85,7 @@ export async function contactResponsive({ browser, base, check, installFonts, ev
       if (mobile || tablet) {
         await page.setViewportSize({ width, height: 360 });
         for (const selector of ['#bf-name', '#bf-email', '#bf-message', '#bf-link']) {
-          await page.locator(selector).focus();
+          await page.locator(selector).tap();
           await page.waitForTimeout(150);
           const focus = await page.locator(selector).evaluate((el) => {
             const r = el.getBoundingClientRect();
@@ -96,6 +96,19 @@ export async function contactResponsive({ browser, base, check, installFonts, ev
           });
           check(`${label} ${selector} is focusable and visible in reduced viewport`, focus.active && focus.visible && focus.size >= 16, JSON.stringify(focus));
         }
+        // The actual validation path moves focus programmatically. Safari's
+        // default focus scroll used to put the first error behind the header.
+        await page.locator('[data-submit]').tap();
+        await page.waitForTimeout(250);
+        const errorFocus = await page.locator('#bf-name').evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          const header = document.querySelector('header').getBoundingClientRect();
+          return { active: document.activeElement === el, top: r.top, bottom: r.bottom,
+            headerBottom: header.bottom, height: innerHeight, invalid: el.getAttribute('aria-invalid') };
+        });
+        check(`${label} validation error clears the fixed header`, errorFocus.active && errorFocus.invalid === 'true' &&
+          errorFocus.top >= Math.max(0, errorFocus.headerBottom) && errorFocus.bottom <= errorFocus.height, JSON.stringify(errorFocus));
+        if (evidenceDir) await page.screenshot({ path: join(evidenceDir, `contact-${width}-validation.png`), scale: 'css' });
       }
       results.push({ width, engine: browser.browserType().name(), samples });
     } finally {

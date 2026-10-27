@@ -532,6 +532,14 @@ const email = 'soufianeaberbach@gmail.com';
     const errorFor = (name) => form.querySelector(`[data-err="${name}"]`);
     const controlFor = (name) => form.querySelector(`[name="${name}"]`);
 
+    function focusError(control) {
+      if (!control) return;
+      /* Safari's native error focus can land above the viewport, behind the
+         returning fixed header. Center the control in the visible page. */
+      control.focus({ preventScroll: true });
+      control.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }
+
     function clearErrors() {
       form.querySelectorAll('[data-err]').forEach((el) => {
         el.hidden = true;
@@ -740,7 +748,7 @@ const email = 'soufianeaberbach@gmail.com';
           const control = showFieldError(name, message);
           if (!first) first = name === 'stage' ? form.querySelector('[name="stage"]') : control;
         });
-        first?.focus();
+        focusError(first);
         return;
       }
 
@@ -809,7 +817,7 @@ const email = 'soufianeaberbach@gmail.com';
       if (payload.field) {
         showFieldError(payload.field, payload.error || 'Please check this field.');
         const control = payload.field === 'stage' ? form.querySelector('[name="stage"]') : controlFor(payload.field);
-        control?.focus();
+        focusError(control);
         return;
       }
 

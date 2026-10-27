@@ -45,18 +45,18 @@ const contactLayout=JSON.parse(fs.readFileSync('tests/fixtures/contact-layout-pr
 assert.equal(contactLayout.baseline,baseline.baseline);
 const contactLayoutPaths=new Set(['src/pages/contact.astro']);
 assert.deepEqual(new Set(Object.keys(contactLayout.changes)),contactLayoutPaths);
-// Scrolling QA found the hidden upload control inherited .field input's full
-// width after reveal transforms ended. Pin only that selector-specific fix.
-const contactUpload=JSON.parse(fs.readFileSync('tests/fixtures/contact-upload-preservation.json'));
-assert.equal(contactUpload.baseline,baseline.baseline);
-const contactUploadPaths=new Set(['src/components/BriefForm.astro']);
-assert.deepEqual(new Set(Object.keys(contactUpload.changes)),contactUploadPaths);
+// Contact QA found hidden-input overflow and error focus behind the header.
+// Pin only that exact component correction; every other source stays locked.
+const contactForm=JSON.parse(fs.readFileSync('tests/fixtures/contact-form-preservation.json'));
+assert.equal(contactForm.baseline,baseline.baseline);
+const contactFormPaths=new Set(['src/components/BriefForm.astro']);
+assert.deepEqual(new Set(Object.keys(contactForm.changes)),contactFormPaths);
 const raw=execFileSync('git',['ls-tree','-r','-z','HEAD'],{maxBuffer:16*1024*1024}).toString();
 const current=new Map(raw.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));let checks=0;
 for(const [path,baselineOid]of Object.entries(baseline.paths)){
- const update=contactLayout.changes[path]??contactUpload.changes[path]??contact.changes[path]??business.changes[path]??completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
+ const update=contactLayout.changes[path]??contactForm.changes[path]??contact.changes[path]??business.changes[path]??completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
  if(update){
-  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path)||businessPaths.has(path)||contactPaths.has(path)||contactLayoutPaths.has(path)||contactUploadPaths.has(path),'authorization must name an exact owner-scoped source path');
+  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path)||businessPaths.has(path)||contactPaths.has(path)||contactLayoutPaths.has(path)||contactFormPaths.has(path),'authorization must name an exact owner-scoped source path');
   assert(!path.startsWith('public/'),'original photographic files remain immutable');
   assert.equal(update.baselineSHA1,baselineOid,'authorization must identify the original baseline blob');
  }
