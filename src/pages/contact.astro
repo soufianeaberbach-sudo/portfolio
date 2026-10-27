@@ -418,6 +418,11 @@ const faqs = [
     .ct-faq { grid-template-columns: minmax(0, 1fr); }
     .ct-hero__aside { max-width: 38rem; }
     .ct-brief__intro, .ct-brief__form { grid-column: 1; }
+    /* Once the columns stack, the sticky editorial intro must return to normal
+       document flow. Otherwise its large title and numbered steps remain on
+       top of the inputs as the visitor scrolls down the form (iOS especially). */
+    .ct-brief__intro { position: static; top: auto; align-self: auto; }
+    .ct-brief__grid { row-gap: clamp(2rem, 5vw, 3rem); }
     .ct-workspace__figure { width: calc(100% + var(--gutter)); margin-left: 0; }
     .ct-workspace__figure figcaption { position: static; width: min(100%, 34rem); margin: 1.5rem 0 0; }
     .ct-workspace__figure figcaption > span:nth-child(2) { color: var(--ink-soft); }
