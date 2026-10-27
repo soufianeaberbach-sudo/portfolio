@@ -17,6 +17,7 @@ import { join, extname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { installFonts } from './fixtures/fonts.mjs';
+import { contactResponsive } from './contact-responsive.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -1123,36 +1124,10 @@ try {
     await c.close();
   }
 
-  // ---- Contact intro never covers form fields when stacked on mobile/tablet
-  console.log('\ncontact mobile intro / form separation');
-  {
-    for (const width of [390, 430, 768]) {
-      const c = await ctxWithFonts({ viewport: { width, height: 844 } });
-      const p = await c.newPage();
-      await p.route('**://fonts.googleapis.com/**', (r) => r.abort());
-      await p.goto(BASE + '/contact/', { waitUntil: 'domcontentloaded' });
-      const state = await p.evaluate(() => {
-        const intro = document.querySelector('.ct-brief__intro');
-        const form = document.querySelector('.ct-brief__form');
-        const a = intro.getBoundingClientRect();
-        const b = form.getBoundingClientRect();
-        document.documentElement.style.scrollBehavior = 'auto';
-        form.scrollIntoView({ block: 'start', behavior: 'instant' });
-        const after = intro.getBoundingClientRect();
-        const formAfter = form.getBoundingClientRect();
-        return {
-          position: getComputedStyle(intro).position,
-          flowGap: b.top - a.bottom,
-          afterScrollGap: formAfter.top - after.bottom,
-          columns: getComputedStyle(document.querySelector('.ct-brief__grid')).gridTemplateColumns,
-        };
-      });
-      check(`Contact ${width}px intro is not sticky`, state.position === 'static', state.position);
-      check(`Contact ${width}px intro clears form`, state.flowGap >= 24 && state.afterScrollGap >= 24,
-        `initial ${state.flowGap}px; after scroll ${state.afterScrollGap}px`);
-      await c.close();
-    }
-  }
+  // ---- Contact intro and upload control stay safe throughout scrolling
+  console.log('\ncontact responsive scrolling and focus');
+  await contactResponsive({ browser, base: BASE, check, installFonts,
+    evidenceDir: process.env.CONTACT_QA_DIR });
 
   // ---- the upload control is present, usable and honestly labelled
   console.log('\nreference upload control');

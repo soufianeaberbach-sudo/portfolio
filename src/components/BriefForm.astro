@@ -358,9 +358,11 @@ const email = 'soufianeaberbach@gmail.com';
 
   /* Visually hidden but focusable: display:none would take it out of the tab
      order and hide it from assistive tech. */
-  .bf__file-input {
+  /* Outrank .field input: its 100% width otherwise expands this absolute
+     control beyond the page once the reveal transform finishes. */
+  .bf__attach > .bf__file-input {
     position: absolute;
-    width: 1px; height: 1px;
+    width: 1px; height: 1px; min-height: 0;
     padding: 0; margin: -1px;
     overflow: hidden;
     clip-path: inset(50%);
