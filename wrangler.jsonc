@@ -56,7 +56,21 @@
     // still refuses every other hostname on earth. Narrow to the apex alone
     // once the redirect has been verified stable in production.
     "TURNSTILE_HOSTNAMES": "aberbach.co,www.aberbach.co"
-  }
+  },
+  // Real production resources, created in Cloudflare dashboard on 27 Oct 2026.
+  // Keep preview environments isolated from customer data before enabling preview submissions.
+  "kv_namespaces": [
+    {
+      "binding": "BRIEFS",
+      "id": "ed126be0d3d44342b0873639bdd1eb63"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BRIEF_FILES",
+      "bucket_name": "portfolio-brief-files"
+    }
+  ]
   // ── ACTIVATION ───────────────────────────────────────────────────────────
   // KV is required for receipt; R2 is required for an attached file. Without
   // Resend, receipt can still succeed with an undelivered marker. Full
