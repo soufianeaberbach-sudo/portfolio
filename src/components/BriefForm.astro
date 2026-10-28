@@ -358,9 +358,11 @@ const email = 'soufianeaberbach@gmail.com';
 
   /* Visually hidden but focusable: display:none would take it out of the tab
      order and hide it from assistive tech. */
-  .bf__file-input {
+  /* Outrank .field input: its 100% width otherwise expands this absolute
+     control beyond the page once the reveal transform finishes. */
+  .bf__attach > .bf__file-input {
     position: absolute;
-    width: 1px; height: 1px;
+    width: 1px; height: 1px; min-height: 0;
     padding: 0; margin: -1px;
     overflow: hidden;
     clip-path: inset(50%);
@@ -529,6 +531,14 @@ const email = 'soufianeaberbach@gmail.com';
 
     const errorFor = (name) => form.querySelector(`[data-err="${name}"]`);
     const controlFor = (name) => form.querySelector(`[name="${name}"]`);
+
+    function focusError(control) {
+      if (!control) return;
+      /* Safari's native error focus can land above the viewport, behind the
+         returning fixed header. Center the control in the visible page. */
+      control.focus({ preventScroll: true });
+      control.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }
 
     function clearErrors() {
       form.querySelectorAll('[data-err]').forEach((el) => {
@@ -738,7 +748,7 @@ const email = 'soufianeaberbach@gmail.com';
           const control = showFieldError(name, message);
           if (!first) first = name === 'stage' ? form.querySelector('[name="stage"]') : control;
         });
-        first?.focus();
+        focusError(first);
         return;
       }
 
@@ -807,7 +817,7 @@ const email = 'soufianeaberbach@gmail.com';
       if (payload.field) {
         showFieldError(payload.field, payload.error || 'Please check this field.');
         const control = payload.field === 'stage' ? form.querySelector('[name="stage"]') : controlFor(payload.field);
-        control?.focus();
+        focusError(control);
         return;
       }
 

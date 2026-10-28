@@ -17,6 +17,7 @@ import { join, extname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { installFonts } from './fixtures/fonts.mjs';
+import { contactResponsive } from './contact-responsive.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -1122,6 +1123,11 @@ try {
     check('field names match the Worker contract', form.names === 'company,email,file,link,message,name,stage,t,website', form.names);
     await c.close();
   }
+
+  // ---- Contact intro and upload control stay safe throughout scrolling
+  console.log('\ncontact responsive scrolling and focus');
+  await contactResponsive({ browser, base: BASE, check, installFonts,
+    evidenceDir: process.env.CONTACT_QA_DIR });
 
   // ---- the upload control is present, usable and honestly labelled
   console.log('\nreference upload control');
