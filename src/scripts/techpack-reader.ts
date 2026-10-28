@@ -1,3 +1,6 @@
+import {clientLocale,terms} from '../i18n/portfolio-terms';
+import {current as readerCopy} from '../i18n/portfolio-current';
+import {fill} from '../i18n/dict';
 /** Image-backed reader: mounts one selected document, never a browser PDF plug-in. */
 export function initTechPackReaders() {
   const closers = new WeakMap<HTMLElement, () => void>();
@@ -34,7 +37,7 @@ export function initTechPackReaders() {
           if (link.hasAttribute('data-reader-download')) link.download = door.pathname.split('/').pop()!;
         }
         dialog.hidden = false; dialog.showModal(); world.classList.add('pf-world--reading');
-        dispose = mountDocument(mount, dialog, pages, JSON.parse(door.dataset.pagePreviews || '[]'), door.dataset.docTitle || 'Technical pack');
+        dispose = mountDocument(mount, dialog, pages, JSON.parse(door.dataset.pagePreviews || '[]'), door.dataset.docTitle || terms[clientLocale()].runtime.technicalPack);
         dialog.querySelector<HTMLElement>('[data-reader-close]')?.focus({ preventScroll: true });
       });
     }
@@ -44,21 +47,22 @@ export function initTechPackReaders() {
 
 function mountDocument(mount: HTMLElement, dialog: HTMLDialogElement, pages: string[], previews: string[], title: string) {
   const abort = new AbortController(), signal = abort.signal;
-  const tools = document.createElement('div'); tools.className = 'tp-reader-tools'; tools.setAttribute('role', 'toolbar'); tools.setAttribute('aria-label', 'Document controls');
-  tools.innerHTML = `<label>Page <input data-tp-page type="number" min="1" max="${pages.length}" value="1" aria-label="Go to page" inputmode="numeric"></label><span> / ${pages.length}</span><span class="tp-reader-tools__space"></span><button type="button" data-tp-out aria-label="Zoom out">−</button><output data-tp-zoom aria-label="Zoom level">100%</output><button type="button" data-tp-in aria-label="Zoom in">+</button><button type="button" data-tp-width>Fit width</button><button type="button" data-tp-fit>Fit page</button>`;
-  const scroll = document.createElement('div'); scroll.className = 'tp-reader-scroll'; scroll.tabIndex = 0; scroll.setAttribute('aria-label', `${title}, ${pages.length} pages. Scroll to read; plus and minus to zoom, 0 to fit width.`);
+  const t=readerCopy[clientLocale()];
+  const tools = document.createElement('div'); tools.className = 'tp-reader-tools'; tools.setAttribute('role', 'toolbar'); tools.setAttribute('aria-label', t.documentControls);
+  tools.innerHTML = `<label>${t.page} <input data-tp-page type="number" min="1" max="${pages.length}" value="1" aria-label="${t.goToPage}" inputmode="numeric"></label><span> / ${pages.length}</span><span class="tp-reader-tools__space"></span><button type="button" data-tp-out aria-label="${t.zoomOutPlain}">−</button><output data-tp-zoom aria-label="${t.zoomLevel}">100%</output><button type="button" data-tp-in aria-label="${t.zoomInPlain}">+</button><button type="button" data-tp-width>${t.fitWidth}</button><button type="button" data-tp-fit>${t.fitPage}</button>`;
+  const scroll = document.createElement('div'); scroll.className = 'tp-reader-scroll'; scroll.tabIndex = 0; scroll.setAttribute('aria-label', fill(t.readerHelp,{title,n:pages.length}));
   const stack = document.createElement('div'); stack.className = 'tp-reader-pages';
   const figures = pages.map((src, i) => {
     const figure = document.createElement('figure'); figure.className = 'tp-reader-page'; figure.dataset.page = String(i + 1);
-    const img = document.createElement('img'); img.width = 3508; img.height = 2480; img.alt = `${title} — page ${i + 1} of ${pages.length}`; img.decoding = 'async';
+    const img = document.createElement('img'); img.width = 3508; img.height = 2480; img.alt = fill(t.pageAlt,{title,n:i+1,total:pages.length}); img.decoding = 'async';
     img.loading = i < 2 ? 'eager' : 'lazy'; img.dataset.src = src; img.dataset.preview = previews[i] || src;
     figure.setAttribute('aria-busy', 'true');
 
-    const caption = document.createElement('figcaption'); caption.textContent = `Page ${i + 1} / ${pages.length}`;
+    const caption = document.createElement('figcaption'); caption.textContent = `${t.page} ${i + 1} / ${pages.length}`;
     const error = document.createElement('p'); error.className = 'tp-reader-error'; error.hidden = true;
-    const retry = document.createElement('button'); retry.type = 'button'; retry.textContent = 'Retry page';
+    const retry = document.createElement('button'); retry.type = 'button'; retry.textContent = t.retry;
     retry.addEventListener('click', () => { error.hidden = true; img.removeAttribute('srcset'); img.src = src; }, { signal });
-    error.append('This page could not load. ', retry);
+    error.append(t.pageError, retry);
     img.addEventListener('error', () => { if (img.hasAttribute('src')) { error.hidden = false; figure.setAttribute('aria-busy', 'false'); } }, { signal });
     img.addEventListener('load', () => { error.hidden = true; figure.setAttribute('aria-busy', 'false'); }, { signal });
     figure.append(img, caption, error); stack.append(figure); return figure;

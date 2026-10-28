@@ -51,12 +51,34 @@ const contactForm=JSON.parse(fs.readFileSync('tests/fixtures/contact-form-preser
 assert.equal(contactForm.baseline,baseline.baseline);
 const contactFormPaths=new Set(['src/components/BriefForm.astro']);
 assert.deepEqual(new Set(Object.keys(contactForm.changes)),contactFormPaths);
+// The 28 October owner brief authorizes EN/FR/ES display-copy integration and
+// compact CV downloads on current main. The receipt pins the exact final blobs,
+// identifies both the original preservation baseline and the latest main blob,
+// and cannot exempt photographs, backend, runtime credentials or garment data.
+const localization=JSON.parse(fs.readFileSync('tests/fixtures/localization-preservation.json'));
+assert.equal(localization.baseline,baseline.baseline);
+assert.equal(localization.parentMain,'6a487817cd4a585c5140547aa9b74e2b8c6dac35');
+const localizationPaths=new Set(["package.json", "src/components/BriefForm.astro", "src/components/ExpertiseVisual.astro", "src/components/References.astro", "src/components/SiteFooter.astro", "src/components/SiteHeader.astro", "src/components/SocialLinks.astro", "src/components/portfolio/FinalPhoto.astro", "src/components/portfolio/FinalPhotoReader.astro", "src/components/portfolio/MenswearAct.astro", "src/components/portfolio/MenswearPhoto.astro", "src/components/portfolio/MenswearReader.astro", "src/components/portfolio/SimulationWorld.astro", "src/components/portfolio/TechPackWorld.astro", "src/components/portfolio/WomenswearAct.astro", "src/components/portfolio/WomenswearExhibition.astro", "src/components/portfolio/WorldNavigation.astro", "src/data/site-routes.mjs", "src/layouts/SiteLayout.astro", "src/layouts/TrustLayout.astro", "src/pages/404.astro", "src/pages/before-we-start.astro", "src/pages/contact.astro", "src/pages/contact/sent.astro", "src/pages/experience.astro", "src/pages/expertise.astro", "src/pages/index.astro", "src/pages/portfolio.astro", "src/pages/privacy.astro", "src/pages/process.astro", "src/pages/sitemap.xml.ts", "src/pages/working-terms.astro", "src/scripts/menswear-film.ts", "src/scripts/menswear-reader.ts", "src/scripts/womenswear-exhibition.ts", "src/styles/global.css"]);
+assert.deepEqual(new Set(Object.keys(localization.changes)),localizationPaths);
+const latestLocalizationPaths=new Set(["astro.config.mjs", "src/components/portfolio/EditRailControls.astro", "src/components/portfolio/GarmentInspection.astro", "src/components/portfolio/GarmentProvenance.astro", "src/pages/techpacks/material-credits.astro", "src/scripts/photo-inspection.ts", "src/scripts/techpack-reader.ts"]);
+assert.deepEqual(new Set(Object.keys(localization.currentMainChanges)),latestLocalizationPaths);
+const mainTree=execFileSync('git',['ls-tree','-r','-z',localization.parentMain],{maxBuffer:16*1024*1024}).toString();
+const mainBlobs=new Map(mainTree.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));
+for(const [path,update]of Object.entries({...localization.changes,...localization.currentMainChanges})){
+ assert(path.startsWith('src/')||['package.json','astro.config.mjs'].includes(path),'localization authorization is presentation source only');
+ assert(!path.startsWith('src/data/')||path==='src/data/site-routes.mjs','garment data remains immutable');
+ assert.equal(update.previousMainSHA1,mainBlobs.get(path),'localization receipt must name the authoritative current main blob: '+path);
+ assert.notEqual(update.authorizedSHA1,update.previousMainSHA1,'receipt must record an actual localization change: '+path);
+}
+
 const raw=execFileSync('git',['ls-tree','-r','-z','HEAD'],{maxBuffer:16*1024*1024}).toString();
 const current=new Map(raw.split('\0').filter(Boolean).map(line=>{const [meta,path]=line.split('\t');return[path,meta.split(' ')[2]]}));let checks=0;
 for(const [path,baselineOid]of Object.entries(baseline.paths)){
- const update=contactLayout.changes[path]??contactForm.changes[path]??contact.changes[path]??business.changes[path]??completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
+ const priorUpdate=contactLayout.changes[path]??contactForm.changes[path]??contact.changes[path]??business.changes[path]??completion.changes[path]??experience.changes[path]??techpack.changes[path]??studio.changes[path]??recovery.changes[path];
+ const update=localization.changes[path]??priorUpdate;
+ if(localization.changes[path]) assert.equal(update.previousMainSHA1,priorUpdate?.authorizedSHA1??baselineOid,'localization must extend the preserved approved main source: '+path);
  if(update){
-  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path)||businessPaths.has(path)||contactPaths.has(path)||contactLayoutPaths.has(path)||contactFormPaths.has(path),'authorization must name an exact owner-scoped source path');
+  assert(path.includes('womenswear')||path==='src/components/portfolio/FinalPhotoReader.astro'||studioPaths.has(path)||techpackPaths.has(path)||experiencePaths.has(path)||completionPaths.has(path)||businessPaths.has(path)||contactPaths.has(path)||contactLayoutPaths.has(path)||contactFormPaths.has(path)||localizationPaths.has(path),'authorization must name an exact owner-scoped source path');
   assert(!path.startsWith('public/'),'original photographic files remain immutable');
   assert.equal(update.baselineSHA1,baselineOid,'authorization must identify the original baseline blob');
  }
@@ -64,6 +86,20 @@ for(const [path,baselineOid]of Object.entries(baseline.paths)){
  assert.equal(current.get(path),oid,'original Git blob changed: '+path);checks++;
  if(path.startsWith('src/')||path.startsWith('worker/')||['wrangler.jsonc','package.json','package-lock.json'].includes(path)){
   const bytes=fs.readFileSync(path),actual=createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');assert.equal(actual,oid,'protected working source changed: '+path);checks++;
+ }
+}
+
+// Also lock sources and photographs added AFTER the historical preservation
+// snapshot. Latest main is authoritative for all post-Claude work. New i18n
+// modules/CVs are additions; none of the existing asset blobs gets an exemption.
+for(const [path,mainOid]of mainBlobs){
+ if(!path.startsWith('src/')&&!path.startsWith('public/')&&!path.startsWith('worker/')&&!['astro.config.mjs','wrangler.jsonc','package.json','package-lock.json'].includes(path))continue;
+ const update=localization.changes[path]??localization.currentMainChanges[path];
+ const oid=update?.authorizedSHA1??mainOid;
+ assert.equal(current.get(path),oid,'authoritative latest-main source or asset changed: '+path);checks++;
+ if(!path.startsWith('public/')){
+  const bytes=fs.readFileSync(path),actual=createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+  assert.equal(actual,oid,'authoritative latest-main working source changed: '+path);checks++;
  }
 }
 console.log(checks+' original asset, report, Womenswear and application-source preservation checks passed');

@@ -66,6 +66,10 @@ jobs:
 
       - run: npm run test:smoke
 
+      - run: npm run test:i18n
+
+      - run: npm run test:cv
+
       - name: Menswear photographic content contracts
         run: |
           node tests/menswear-content.mjs

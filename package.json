@@ -13,7 +13,9 @@
     "test:worker": "node tests/worker.mjs",
     "test:domain": "node tests/domain.mjs",
     "verify:production": "node scripts/verify-production.mjs",
-    "test:production": "node --test tests/production-verification.mjs"
+    "test:production": "node --test tests/production-verification.mjs",
+    "test:i18n": "node tests/i18n.mjs",
+    "test:cv": "node tests/cv.mjs"
   },
   "devDependencies": {
     "astro": "^5.16.6",

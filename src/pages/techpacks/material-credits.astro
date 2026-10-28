@@ -1,17 +1,25 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getLocale, localizePath } from '../../i18n/locales';
+import { materialCredits } from '../../i18n/pages/material-credits';
 import images from '../../../public/techpacks/materials/material-credits.json';
+const locale = getLocale(Astro.url);
+const t = materialCredits[locale];
+const kind = (value: string) => t.kinds[value as keyof typeof t.kinds];
+const change = (value: string) => t.changes[value as keyof typeof t.changes];
+const source = (value: string) => t.sources[value as keyof typeof t.sources] ?? value;
+const licence = (value: string) => t.licenceNames[value as keyof typeof t.licenceNames] ?? value;
 ---
-<SiteLayout title="Tech Pack material image credits — ABERBACH" description="Sources, colour treatments and licences for the representative material and component images in the ABERBACH Development Sample tech packs." marker="SA-TECHPACK-MATERIAL-CREDITS-R2" page="techpack-credits" footerCallout={false}>
+<SiteLayout title={t.title} description={t.description} marker="SA-TECHPACK-MATERIAL-CREDITS-R2" page="techpack-credits" footerCallout={false}>
  <main class="material-credits" id="main-content">
-  <a class="label" href="/portfolio/#tech-packs">← Tech Packs</a>
-  <h1>Material image credits</h1>
-  <p>Reference images illustrate textile structure and component form. Photographs may be cropped or colour-retouched to coordinate with the development colourway. They are not approved physical swatches or supplier endorsements.</p>
-  <p>Three trims use explicitly identified component visualizations: red stretch tape, clear shoulder elastic and white knitted waistband elastic. The strap-adjuster image is a genuine photograph of an installed coated-metal slider; it illustrates the component family, not an authenticated 6 mm sample or its companion ring. Woven-label proofs are manufacturer-style visualizations; printed labels and packaging are ABERBACH artwork.</p>
-  <p>Each photograph derivative retains the licence listed below. Share-alike terms apply to that image derivative. <a href="/techpacks/materials/material-credits.json">Download the source and licence register</a>.</p>
+  <a class="label" href={localizePath('/portfolio/#tech-packs', locale)}>{t.back}</a>
+  <h1>{t.heading}</h1>
+  <p>{t.intro}</p>
+  <p>{t.components}</p>
+  <p>{t.licences} <a href="/techpacks/materials/material-credits.json">{t.register}</a>.</p>
   <ol>{images.map(image=><li id={image.id}>
-   <img src={image.url} alt={`${image.id}: ${image.kind}`} width="240" height="180" loading="lazy" decoding="async"/>
-   <div><h2>{image.id}</h2><p>{image.title} · {image.kind}</p><p>{image.author} · {image.licenseUrl?<a href={image.licenseUrl} target="_blank" rel="noopener">{image.license}</a>:image.license}</p><p>{image.changes}</p><p>{image.source.startsWith('https://')?<a href={image.source} target="_blank" rel="noopener">Original source ↗</a>:image.source} · <a href={image.url} download>Image derivative</a></p></div>
+   <img src={image.url} alt={`${image.id}: ${kind(image.kind)}`} width="240" height="180" loading="lazy" decoding="async"/>
+   <div><h2>{image.id}</h2><p><span lang="en">{image.title}</span> · {kind(image.kind)}</p><p>{image.author} · {image.licenseUrl?<a href={image.licenseUrl} target="_blank" rel="noopener">{licence(image.license)}</a>:licence(image.license)}</p><p>{change(image.changes)}</p><p>{image.source.startsWith('https://')?<a href={image.source} target="_blank" rel="noopener">{t.original}</a>:source(image.source)} · <a href={image.url} download>{t.derivative}</a></p></div>
   </li>)}</ol>
  </main>
 </SiteLayout>

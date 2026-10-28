@@ -1,4 +1,7 @@
 ---
+import { getLocale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+import { fill } from '../i18n/dict';
 /* Exported so a page can render its own presentation of the same
    destinations. The markup and styles below are unchanged and still assume a
    dark ground: .social-links__mark paints its glyph in var(--paper), which is
@@ -14,11 +17,12 @@ export const profiles = [
   { name: 'Upwork', mark: 'up', href: 'https://www.upwork.com/freelancers/~01d3553078e04b156f?mp_source=share' },
   { name: 'Freelancer', mark: 'freelancer', href: 'https://www.freelancer.com/u/soufianeaberbach?frm=soufianeaberbach&sb=t' },
 ];
+const t = ui[getLocale(Astro.url)];
 ---
 
-<nav class="social-links" aria-label="Professional profiles">
+<nav class="social-links" aria-label={t.footer.profiles}>
   {profiles.map((profile) => (
-    <a href={profile.href} target="_blank" rel="noopener noreferrer" aria-label={`${profile.name} profile (opens in a new tab)`}>
+    <a href={profile.href} target="_blank" rel="noopener noreferrer" aria-label={fill(t.profileLabel, { name: profile.name })}>
       <span class="social-links__mark" aria-hidden="true">{profile.mark}</span>
     </a>
   ))}

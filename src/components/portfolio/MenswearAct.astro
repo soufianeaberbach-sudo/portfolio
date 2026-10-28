@@ -1,5 +1,4 @@
 ---
-import {garmentCopy} from '../../data/garment-copy';
 import type{GarmentWorld}from'../../data/portfolio';
 import{menswearPool,menswearDisplayed,menswearActorSubject,menswearConcept}from'../../data/menswear-collection';
 import type{MenswearCategory}from'../../data/menswear-collection';
@@ -9,16 +8,31 @@ import MenswearPhoto from'./MenswearPhoto.astro';
 import MenswearReader from'./MenswearReader.astro';
 import WorldNavigation from'./WorldNavigation.astro';
 import EditRailControls from './EditRailControls.astro';
+import {getLocale} from '../../i18n/locales';
+import {pf,localizeChapter} from '../../i18n/portfolio';
+import {chapters} from '../../data/portfolio';
+import {categoryName,term,terms} from '../../i18n/portfolio-terms';
+import {fill} from '../../i18n/dict';
+import {current} from '../../i18n/portfolio-current';
+import {localizedGarmentCopy} from '../../i18n/garment-copy';
+import {garmentAlt} from '../../i18n/garments';
+
 interface Props{world:GarmentWorld;}
 const{world}=Astro.props;
-const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=menswearPool(id),display=menswearDisplayed(id,pool);return{...c,id,pool,display,direction:menswearDirections[id]};});
+/* Words in the page's language: direction names, titles and scene captions,
+   garment descriptions and controls. Cast, windows, ids and URLs are shared. */
+const locale=getLocale(Astro.url),t=pf[locale].men,rt=terms[locale].runtime;
+const now=current[locale];
+const copy=(subject:import('../../data/portfolio').Subject)=>localizedGarmentCopy(subject,locale);
+const chapterTitle=(id:string)=>localizeChapter(chapters.find(c=>c.id===id)!,locale).title;
+const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=menswearPool(id),display=menswearDisplayed(id,pool),source=menswearDirections[id];return{...c,id,pool,display,direction:{...source,name:categoryName(locale,id),title:term(locale,'menTitles',source.title),scenes:source.scenes.map(scene=>term(locale,'scenes',scene))}};});
 ---
 <section class="pf-world mw-world" id="menswear" data-world="menswear" data-mw-world data-publication="ai-concept-preview" tabindex="-1" aria-labelledby="menswear-title">
  <WorldNavigation current="menswear"/>
  <div class="mw-exhibition">
-  <header class="mw-header"><a href="#portfolio-index" data-nav data-world-close>← Portfolio</a><h2 id="menswear-title" class="label">02 / Menswear</h2><div class="mw-header-actions"><button data-mw-worlds-toggle aria-expanded="false">Worlds <span aria-hidden="true">+</span></button><button data-mw-present aria-pressed="false">Present</button><button data-mw-archive-open>10 looks</button></div></header>
-  <nav class="mw-worlds" data-mw-worlds hidden aria-label="Menswear worlds">{ranges.map(r=><a href={`#menswear/${r.id}`} data-nav data-mw-world-link={r.id}><small>{r.number}</small><span>{r.direction.name}</span><i>{r.direction.title}</i></a>)}<div class="mw-chapter-links"><a href="#womenswear" data-nav>Womenswear</a><a href="#3d-simulation" data-nav>Development</a><a href="#tech-packs" data-nav>Tech Packs</a></div></nav>
-  <div class="mw-scroll" data-mw-scroll data-mw-experience tabindex="0" aria-label="Menswear continuous exhibition. Scroll through four worlds; scene controls and Presentation Mode are optional.">
+  <header class="mw-header"><a href="#portfolio-index" data-nav data-world-close>{t.back}</a><h2 id="menswear-title" class="label">02 / {terms[locale].worlds.menswear}</h2><div class="mw-header-actions"><button data-mw-worlds-toggle aria-expanded="false">{t.worlds} <span aria-hidden="true">+</span></button><button data-mw-present aria-pressed="false">{t.present}</button><button data-mw-archive-open>{t.looks}</button></div></header>
+  <nav class="mw-worlds" data-mw-worlds hidden aria-label={t.worldsLabel}>{ranges.map(r=><a href={`#menswear/${r.id}`} data-nav data-mw-world-link={r.id}><small>{r.number}</small><span>{r.direction.name}</span><i>{r.direction.title}</i></a>)}<div class="mw-chapter-links"><a href="#womenswear" data-nav>{chapterTitle('womenswear')}</a><a href="#3d-simulation" data-nav>{chapterTitle('3d-simulation')}</a><a href="#tech-packs" data-nav>{chapterTitle('tech-packs')}</a></div></nav>
+  <div class="mw-scroll" data-mw-scroll data-mw-experience tabindex="0" aria-label={t.scrollLabel}>
   {ranges.map((r,index)=><article class="mw-film" id={`menswear/${r.id}`} data-mw-film={r.id} aria-labelledby={`${r.id}-heading`}>
    <div class="mw-experience">
     <div class="mw-walkway"><div class="mw-frame" data-mw-frame>
@@ -29,25 +43,25 @@ const ranges=world.categories.map(c=>{const id=c.id as MenswearCategory,pool=men
        const original=image.src.match(new RegExp(`/pexels-${photo}\\.(webp|jpg)$`));
        const[start,end]=photoRegion(image,primary?.crop??'whole');
        const window=original&&menswearWindows[photo]?menswearWindows[photo]:[start,0,end-start,1];
-       return (<a href={`#menswear/${r.id}/${subject.id}`} data-nav data-open-subject={subject.id} data-mw-actor={photo} data-mw-lead={lead>=0?lead:undefined} data-exhibition-view={primary.key} data-fashion-fallback={primary.key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(subject.id)?'true':undefined} data-mw-original={original?'true':'false'} data-mw-window={window.join(',')} data-mw-mobile-window={original&&photo===30599804?'0.46,0.25,0.54,0.75':window.join(',')} data-mw-seam={original&&photo===30599804?'0.5':undefined} aria-label={`Inspect ${garmentCopy(subject).title}`}><span data-door-source><img src={image.src} srcset={image.srcset} sizes={photoSizes(image,primary?.crop??'whole','(max-width:767px) 95vw, 60vw')} width={image.width} height={image.height} alt={image.alt} loading="lazy" decoding="async"/></span></a>);})}
+       return (<a href={`#menswear/${r.id}/${subject.id}`} data-nav data-open-subject={subject.id} data-mw-actor={photo} data-mw-lead={lead>=0?lead:undefined} data-exhibition-view={primary.key} data-fashion-fallback={primary.key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(subject.id)?'true':undefined} data-mw-original={original?'true':'false'} data-mw-window={window.join(',')} data-mw-mobile-window={original&&photo===30599804?'0.46,0.25,0.54,0.75':window.join(',')} data-mw-seam={original&&photo===30599804?'0.5':undefined} aria-label={fill(t.inspect,{alt:copy(subject).title})}><span data-door-source><img src={image.src} srcset={image.srcset} sizes={photoSizes(image,primary?.crop??'whole','(max-width:767px) 95vw, 60vw')} width={image.width} height={image.height} alt={garmentAlt(image.alt,locale)} loading="lazy" decoding="async"/></span></a>);})}
       {[0,1].map(n=><div class="mw-wing" data-mw-wing={n} aria-hidden="true"><img alt=""/></div>)}
      </div>
-     <p class="mw-media-status" data-mw-media-status role="status" hidden>Photograph unavailable. Open the ten-look edit to continue.</p>
+     <p class="mw-media-status" data-mw-media-status role="status" hidden>{rt.filmUnavailable}</p>
      <span class="mw-scene-caption label" data-mw-scene-caption>{r.direction.scenes[0]}</span>
     </div></div>
     <section class="mw-archive" data-mw-archive aria-labelledby={`${r.id}-archive-title`}>
-     <header><h3 id={`${r.id}-archive-title`}>The {r.direction.name.toLowerCase()} edit.</h3><p class="label">Ten looks / <span data-mw-rail-hint>Swipe to explore →</span></p></header>
+     <header><h3 id={`${r.id}-archive-title`}>{fill(t.edit,{name:r.direction.name.toLocaleLowerCase(locale)})}</h3><p class="label">{t.tenLooks} <span data-mw-rail-hint>{rt.explore}</span></p></header>
      <EditRailControls name={r.direction.name}/>
-     <ol class="mw-rail" tabindex="0" aria-label={`${r.direction.name}: ten looks. Swipe horizontally or use arrow keys to explore all ten looks.`}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-exhibition-view={exhibitionPhotograph(s).key} data-fashion-fallback={exhibitionPhotograph(s).key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={exhibitionPhotograph(s).image} crop={exhibitionPhotograph(s).crop} sizes="(max-width:699px) 92vw, 48vw"/><span class="mw-look-caption"><span class="label">{String(i+1).padStart(2,'0')} / {garmentCopy(s).title}</span></span></a></li>)}</ol>
+     <ol class="mw-rail" tabindex="0" aria-label={fill(now.rail,{name:r.direction.name})}>{r.display.map((s,i)=><li><a href={`#menswear/${r.id}/${s.id}`} data-nav data-open-subject={s.id} data-mw-archive-door={s.id} data-exhibition-view={exhibitionPhotograph(s).key} data-fashion-fallback={exhibitionPhotograph(s).key!=='editorial'?'true':undefined} data-mw-ai={menswearConcept(s.id)?'true':undefined}><MenswearPhoto image={exhibitionPhotograph(s).image} crop={exhibitionPhotograph(s).crop} sizes="(max-width:699px) 92vw, 48vw"/><span class="mw-look-caption"><span class="label">{String(i+1).padStart(2,'0')} / {copy(s).title}</span></span></a></li>)}</ol>
 
-     <a class="mw-handoff" href={r.direction.next.startsWith('m-')?`#menswear/${r.direction.next}`:`#${r.direction.next}`} data-nav><span class="label">{index===3?'Next chapter':'Next world'}</span><span>{index===3?'Pattern Development':ranges[index+1].direction.name} <svg class="edit-handoff-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span></a>
+     <a class="mw-handoff" href={r.direction.next.startsWith('m-')?`#menswear/${r.direction.next}`:`#${r.direction.next}`} data-nav><span class="label">{index===3?t.nextChapter:t.nextWorld}</span><span>{index===3?t.patternDevelopment:ranges[index+1].direction.name} <svg class="edit-handoff-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span></a>
     </section>
    </div>
   </article>)}
-  <details class="mw-all-references" data-mw-all-references><summary class="label">Full reference collection / {ranges.reduce((n,r)=>n+r.pool.filter(s=>!menswearConcept(s.id)).length,0)} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved; historical entries may share an original photograph.</p><ul>{ranges.flatMap(r=>r.pool.filter(s=>!menswearConcept(s.id)).map(s=><li><a href={`#menswear/${s.category}/${s.id}`} data-nav data-open-subject={s.id} data-mw-reference-door>{s.id} — {garmentCopy(s).title}</a></li>))}</ul></details>
-  <p class="mw-flow-exit label" data-mw-flow-exit>Continue scrolling / Pattern Development ↓</p>
+  <details class="mw-all-references" data-mw-all-references><summary class="label">{fill(t.fullCollection,{n:ranges.reduce((n,r)=>n+r.pool.filter(s=>!menswearConcept(s.id)).length,0)})}</summary><p>{t.fullNote}</p><ul>{ranges.flatMap(r=>r.pool.filter(s=>!menswearConcept(s.id)).map(s=><li><a href={`#menswear/${s.category}/${s.id}`} data-nav data-open-subject={s.id} data-mw-reference-door>{s.id} — {copy(s).title}</a></li>))}</ul></details>
+  <p class="mw-flow-exit label" data-mw-flow-exit>{t.flowExit}</p>
   </div>
-  <footer class="mw-controls"><button data-mw-prev aria-label="Previous composed scene">←</button><ol aria-label="Composed scenes">{[0,1,2,3,4].map(n=><li><button data-mw-scene={n} aria-label={`Scene ${n+1}`} aria-pressed={n===0?'true':'false'}>{String(n+1).padStart(2,'0')}</button></li>)}</ol><button data-mw-next aria-label="Next composed scene">→</button><p class="mw-mode label" data-mw-mode>Scroll to explore</p><button data-mw-fullscreen hidden aria-label="Toggle fullscreen">Fullscreen ↗</button></footer>
+  <footer class="mw-controls"><button data-mw-prev aria-label={t.prev}>←</button><ol aria-label={t.scenes}>{[0,1,2,3,4].map(n=><li><button data-mw-scene={n} aria-label={fill(t.scene,{n:n+1})} aria-pressed={n===0?'true':'false'}>{String(n+1).padStart(2,'0')}</button></li>)}</ol><button data-mw-next aria-label={t.next}>→</button><p class="mw-mode label" data-mw-mode>{t.mode}</p><button data-mw-fullscreen hidden aria-label={t.fullscreen}>{t.fullscreenButton}</button></footer>
   <p class="mw-live sr-only" data-mw-live aria-live="polite"></p>
  </div>
  {ranges.flatMap(r=>r.pool.map(subject=><MenswearReader subject={subject}/>))}

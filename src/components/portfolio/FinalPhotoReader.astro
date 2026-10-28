@@ -1,19 +1,23 @@
 ---
+import {getLocale} from '../../i18n/locales';
+import {pf} from '../../i18n/portfolio';
+import {categoryName} from '../../i18n/portfolio-terms';
+import {localizedGarmentCopy} from '../../i18n/garment-copy';
 import type{Subject,ImageCredit}from'../../data/portfolio';
 import{directions}from'../../data/womenswear-direction';
 import{editorialWorld,generatedPresentation}from'../../data/womenswear-collection';
-import {garmentCopy} from '../../data/garment-copy';
 import GarmentProvenance from './GarmentProvenance.astro';
 import GarmentInspection from'./GarmentInspection.astro';
 interface Props{subject:Subject;world:string;credit?:ImageCredit;}
 const{subject,world,credit}=Astro.props,category=directions[editorialWorld(subject.category)];
-const copy=garmentCopy(subject);
+const locale=getLocale(Astro.url);
+const copy=localizedGarmentCopy(subject,locale);
 const presentation=generatedPresentation(subject.id);
 const retouched=presentation?.generationType==='background-retouch';
 ---
 <article class="pf-rd__subject ww-reader" data-ww-reader data-subject={subject.id} data-of={subject.category} data-editorial={category.id} data-role={subject.role} data-verified={subject.verified?'yes':'no'} id={`${world}/${subject.category}/${subject.id}`} aria-labelledby={`${subject.id}-rd-title`} tabindex="-1" hidden>
- <header class="ww-reader-head"><a class="label" href={`#${world}/${category.id}`} data-nav data-subject-close>← {category.name.toUpperCase()}</a></header>
- <section class="ww-reader-floor" aria-label="The complete garment">
+ <header class="ww-reader-head"><a class="label" href={`#${world}/${category.id}`} data-nav data-subject-close>← {categoryName(locale,category.id).toLocaleUpperCase(locale)}</a></header>
+ <section class="ww-reader-floor" aria-label={pf[locale].reader.garment}>
   <div class="ww-reader-copy"><h3 id={`${subject.id}-rd-title`}>{copy.title}</h3><p class="garment-description" data-garment-description>{copy.description}</p></div>
   <GarmentInspection subject={subject} gender="womenswear"/>
   <GarmentProvenance subject={subject} credit={credit} generated={!!presentation&&!retouched} retouched={retouched} interpretedBack={presentation?.backInterpreted} sourceHref={presentation?`#${world}/${subject.category}/${presentation.sourceIdentity}`:undefined}/>
