@@ -1,13 +1,17 @@
 ---
+import {getLocale} from '../../i18n/locales';
+import {current} from '../../i18n/portfolio-current';
 import type { Subject, ImageCredit } from '../../data/portfolio';
 interface Props { subject: Subject; credit?: ImageCredit; generated?: boolean; retouched?: boolean; interpretedBack?: boolean; sourceHref?: string; }
 const { subject, credit, generated, retouched, interpretedBack, sourceHref } = Astro.props;
+const t=current[getLocale(Astro.url)];
+const sourceLabel=(source:string)=>(t.sources as Record<string,string>)[source]??source;
 ---
 <details class="garment-provenance" data-garment-provenance>
-  <summary>Source &amp; provenance</summary>
-  {credit && <p>{credit.sourcePage ? <a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer ?? credit.source} ↗</a> : credit.source}</p>}
-  <p>{retouched ? 'AI-retouched background of the reference photograph. Garment authorship and construction are unverified.' : generated ? 'AI-generated visual study. No physical sample, fit validation or manufactured ABERBACH garment is claimed.' : subject.verified ? 'Supplied garment photography.' : 'Reference photography. Garment authorship is not attributed to ABERBACH.'} {interpretedBack && 'The rear view is an interpreted presentation rather than verified construction.'}</p>
-  {sourceHref && <a href={sourceHref} data-nav data-open-subject={sourceHref.split('/').pop()}>View preserved source reference ↗</a>}
+  <summary>{t.source}</summary>
+  {credit && <p>{credit.sourcePage ? <a href={credit.sourcePage} target="_blank" rel="noopener">{credit.photographer ?? sourceLabel(credit.source)} ↗</a> : sourceLabel(credit.source)}</p>}
+  <p>{retouched ? t.retouched : generated ? t.generated : subject.verified ? t.supplied : t.reference} {interpretedBack && t.interpreted}</p>
+  {sourceHref && <a href={sourceHref} data-nav data-open-subject={sourceHref.split('/').pop()}>{t.sourceLink}</a>}
 </details>
 <style>
 .garment-provenance{position:relative;max-width:55rem;margin:1rem auto;padding:0 1.25rem;font-size:.7rem;line-height:1.5;color:var(--muted)}

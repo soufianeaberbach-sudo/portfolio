@@ -1,4 +1,6 @@
 ---
+import {getLocale} from '../../i18n/locales';
+import {garmentAlt} from '../../i18n/garments';
 import type {ImageAsset,SubjectView} from '../../data/portfolio';
 import {separable,threePanel,photoSizes} from '../../data/final-photography';
 import {photoFrames} from '../../data/womenswear-direction';
@@ -16,5 +18,5 @@ const inset=Math.max(0,(aperture-(view[1]-view[0]))/2/aperture)*100;
 ---
 <span class="ww-photo" data-ww-photo data-door-source data-split={split} data-front={bounds.front.join(',')} data-back={bounds.back.join(',')} data-third={bounds.third?.join(',')} data-surface={/\/portfolio\/(evening|swim|temporary-v21)\//.test(image.src)?'plate':undefined} data-side={crop==='third'&&triple?'third':crop==='back'?'back':split===1?'whole':'front'}
  style={`--aspect:${image.width/image.height};--window:${aperture};--view:${crop==='third'&&triple?2:crop==='back'?1:0};clip-path:inset(0 ${inset}%);`}>
- <img src={image.src} srcset={image.srcset} sizes={photoSizes(image,crop,sizes)} width={image.width} height={image.height} alt={image.alt} style={`transform:translateX(${offset*100}%)`} loading={eager?'eager':'lazy'} decoding="async"/>
+ <img src={image.src} srcset={image.srcset} sizes={photoSizes(image,crop,sizes)} width={image.width} height={image.height} alt={garmentAlt(image.alt,getLocale(Astro.url))} style={`transform:translateX(${offset*100}%)`} loading={eager?'eager':'lazy'} decoding="async"/>
 </span>

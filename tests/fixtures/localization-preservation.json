@@ -1,0 +1,217 @@
+{
+  "baseline": "a806acf1d0da0df28b5e2c52aab468de577250ca",
+  "parentMain": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
+  "authorization": "28 October 2026 explicit owner brief: reconcile French and Spanish localization from current main, remove Arabic website localization, translate all display text without changing immutable content/API identities, and add compact matching-language CV downloads. The exact source blobs below preserve current Portfolio interactions, photography, Contact backend and Cloudflare bindings. No asset or backend exemptions.",
+  "changes": {
+    "package.json": {
+      "baselineSHA1": "ecf5922b57efbe988b4686861f51740099c67bc5",
+      "previousMainSHA1": "ecf5922b57efbe988b4686861f51740099c67bc5",
+      "authorizedSHA1": "22a7f671dac1d824599804d7923f15eec511d9d3"
+    },
+    "src/components/BriefForm.astro": {
+      "baselineSHA1": "0b2f0b9a5385fb38dcebe6d3622ad8a9ed3fab4e",
+      "previousMainSHA1": "a8b132c097ee3079766bf36b26c996d60fbaddb9",
+      "authorizedSHA1": "ea47620f6ffe1cbd4c42b3aba80a28021fa005fd"
+    },
+    "src/components/ExpertiseVisual.astro": {
+      "baselineSHA1": "142c803e6279dd497919421d58aefa826696067c",
+      "previousMainSHA1": "2b30bb307faa4ec127fe2bf82417372928304a43",
+      "authorizedSHA1": "dcbec77395f5bca145ca8a380c65199d195b663f"
+    },
+    "src/components/References.astro": {
+      "baselineSHA1": "0b123786fa8e4b046c926593c6b457d1923f2a3e",
+      "previousMainSHA1": "0b123786fa8e4b046c926593c6b457d1923f2a3e",
+      "authorizedSHA1": "4cd23522287be2dc072bcfeef6cad3997b818a11"
+    },
+    "src/components/SiteFooter.astro": {
+      "baselineSHA1": "178bc3d5e544ba83d9ba3c1b72eefd5b8f016919",
+      "previousMainSHA1": "178bc3d5e544ba83d9ba3c1b72eefd5b8f016919",
+      "authorizedSHA1": "74eaba8caacdfa1e952e1aa516e95a7a5136c724"
+    },
+    "src/components/SiteHeader.astro": {
+      "baselineSHA1": "5a5d0c6ea1ae9c656ca1a8b88c16ad4a703eb284",
+      "previousMainSHA1": "5a5d0c6ea1ae9c656ca1a8b88c16ad4a703eb284",
+      "authorizedSHA1": "fb01b512acf2a54832b4f22ed970006b9a54816c"
+    },
+    "src/components/SocialLinks.astro": {
+      "baselineSHA1": "98adc5777cc15a871936377dc611e99770e4ad74",
+      "previousMainSHA1": "98adc5777cc15a871936377dc611e99770e4ad74",
+      "authorizedSHA1": "4a93d1dc50400b1c10636467c51e4dc7881d1df0"
+    },
+    "src/components/portfolio/FinalPhoto.astro": {
+      "baselineSHA1": "5cfec3b4db17d988b1e2a019b16eb85109049a88",
+      "previousMainSHA1": "5cfec3b4db17d988b1e2a019b16eb85109049a88",
+      "authorizedSHA1": "29bf14c0a1216ed3a7ae433fd749dd521f555d53"
+    },
+    "src/components/portfolio/FinalPhotoReader.astro": {
+      "baselineSHA1": "a753655ebe1bc7730dfd495ffa95780f30598025",
+      "previousMainSHA1": "54992fbb1dd179ce4f209dd2e1bb346cd2578b55",
+      "authorizedSHA1": "c5b3caa0c173472d0d4efbd20e84b13719fb1543"
+    },
+    "src/components/portfolio/MenswearAct.astro": {
+      "baselineSHA1": "afef1244d8d18f1b671f5f4b86b431a238d02b86",
+      "previousMainSHA1": "a145be90bb760f7a857d65b4929f25c308ef8632",
+      "authorizedSHA1": "033c99a45e17a0ba8317392af43e28b9aa41b859"
+    },
+    "src/components/portfolio/MenswearPhoto.astro": {
+      "baselineSHA1": "3d1eb9d675ab23958052ddd52e1db877b6272114",
+      "previousMainSHA1": "3d1eb9d675ab23958052ddd52e1db877b6272114",
+      "authorizedSHA1": "7b20da36a87c1f6fa1c87e3db0a6138cb9fe64bc"
+    },
+    "src/components/portfolio/MenswearReader.astro": {
+      "baselineSHA1": "b5dd1383e92940c610ad7e2c8ed4f3678e2b89b4",
+      "previousMainSHA1": "adcf209c8576d9839b7e00c4bfe47ea63ffa2e97",
+      "authorizedSHA1": "0f0370edd3941d64dd34dbe56f4fc012555e12e3"
+    },
+    "src/components/portfolio/SimulationWorld.astro": {
+      "baselineSHA1": "95136f76fc1cf70691ab1523dad496df3f2dc3c7",
+      "previousMainSHA1": "95136f76fc1cf70691ab1523dad496df3f2dc3c7",
+      "authorizedSHA1": "56d5519718eb248184ff10814f1e41896ad83c94"
+    },
+    "src/components/portfolio/TechPackWorld.astro": {
+      "baselineSHA1": "a8dd0d26305be6f2e3117851608550aa88a92876",
+      "previousMainSHA1": "1ba88955a863eddecdfca89d2647b72ea0f63f69",
+      "authorizedSHA1": "120c654d4459d1294e0134203ecd199679959503"
+    },
+    "src/components/portfolio/WomenswearAct.astro": {
+      "baselineSHA1": "ba0eb98e56af5f26377df3b9f58aa9d46638a00d",
+      "previousMainSHA1": "dc591cd50978552f9190a3b6f68372930c648b1d",
+      "authorizedSHA1": "d2e08fb407393564a2a3ac837c7980cabf9023c8"
+    },
+    "src/components/portfolio/WomenswearExhibition.astro": {
+      "baselineSHA1": "9f5d7be2d9067bb60b6d41002a2614c8bf3b0fe3",
+      "previousMainSHA1": "951cdd7ebe5b66a51640ae31a6478974827fc368",
+      "authorizedSHA1": "2a3b86e44ba75c7ba74d1d55f2267fbd6b3b4eb1"
+    },
+    "src/components/portfolio/WorldNavigation.astro": {
+      "baselineSHA1": "9e6d994b41a4486fb761b578f5863528e339cb83",
+      "previousMainSHA1": "9e6d994b41a4486fb761b578f5863528e339cb83",
+      "authorizedSHA1": "92d00d1a236cfda0140e765f395329d7efd0ba1e"
+    },
+    "src/data/site-routes.mjs": {
+      "baselineSHA1": "b77de968e427cb4ae66dea9a02d235da60f0ae41",
+      "previousMainSHA1": "b77de968e427cb4ae66dea9a02d235da60f0ae41",
+      "authorizedSHA1": "fa05d395577e7ee97dc5ff0a3669b90aa2d9ac64"
+    },
+    "src/layouts/SiteLayout.astro": {
+      "baselineSHA1": "54858e651940a3133acb1955f662c47a711040c0",
+      "previousMainSHA1": "54858e651940a3133acb1955f662c47a711040c0",
+      "authorizedSHA1": "4a1858c2594ce92e05709aa7961d76b40ba2a476"
+    },
+    "src/layouts/TrustLayout.astro": {
+      "baselineSHA1": "248a693c2d3705a25ea9e0c8cb9e25df7262d511",
+      "previousMainSHA1": "248a693c2d3705a25ea9e0c8cb9e25df7262d511",
+      "authorizedSHA1": "9538ac4132d90286f0af4ae5b78588a6d584a61c"
+    },
+    "src/pages/404.astro": {
+      "baselineSHA1": "8d5aaf994498dd873cac319aadf3af5342369ec2",
+      "previousMainSHA1": "8d5aaf994498dd873cac319aadf3af5342369ec2",
+      "authorizedSHA1": "9561e6be183752602a30ea2b544d7e047c245de5"
+    },
+    "src/pages/before-we-start.astro": {
+      "baselineSHA1": "1a0df1bcb4d62616c8d6fbcf37dd74a7225e5611",
+      "previousMainSHA1": "1a0df1bcb4d62616c8d6fbcf37dd74a7225e5611",
+      "authorizedSHA1": "4ecea617aacb1a29d9077ae20068030efb4d84a8"
+    },
+    "src/pages/contact.astro": {
+      "baselineSHA1": "8252ac153ea2034546da9275ba8c9e880356a6c4",
+      "previousMainSHA1": "0cab1b63bc06a667ab7dec9290640a6c634ba36d",
+      "authorizedSHA1": "f92b4afb3e089a4f5d3d42e5f45931dc6cb96940"
+    },
+    "src/pages/contact/sent.astro": {
+      "baselineSHA1": "d9f6465c4a904df5151999b1a75e2debdd941031",
+      "previousMainSHA1": "d9f6465c4a904df5151999b1a75e2debdd941031",
+      "authorizedSHA1": "8cecc450c97542f39df4f02c617c8dab7580d7bf"
+    },
+    "src/pages/experience.astro": {
+      "baselineSHA1": "06c2be825317d21666605f1da8d0864bbb2c6ccb",
+      "previousMainSHA1": "06c2be825317d21666605f1da8d0864bbb2c6ccb",
+      "authorizedSHA1": "288b4b2b3870075b3341e5c8593377ad6df0653b"
+    },
+    "src/pages/expertise.astro": {
+      "baselineSHA1": "e0bdfbc7f6a184a0141fb8b66dd4160bd3a78534",
+      "previousMainSHA1": "e0bdfbc7f6a184a0141fb8b66dd4160bd3a78534",
+      "authorizedSHA1": "8133c7322f629f9fdf9ba0286950ba6c3a7ce9de"
+    },
+    "src/pages/index.astro": {
+      "baselineSHA1": "8b75c1714353aa171fda4ea9078e57787036bbdb",
+      "previousMainSHA1": "8b75c1714353aa171fda4ea9078e57787036bbdb",
+      "authorizedSHA1": "96ee7b19854ae853297a7f8f5069f657640c1f48"
+    },
+    "src/pages/portfolio.astro": {
+      "baselineSHA1": "2153a4344e5784e8b0a5214c383a27d57ac74d45",
+      "previousMainSHA1": "c35ee479681d18b66a5ae8414577f9fe8dcb7c52",
+      "authorizedSHA1": "df9e2f451fd846bdb03359744d966440b84fcd7d"
+    },
+    "src/pages/privacy.astro": {
+      "baselineSHA1": "f57b9f79072ad5d431920a505b68f27b514375b1",
+      "previousMainSHA1": "f57b9f79072ad5d431920a505b68f27b514375b1",
+      "authorizedSHA1": "77310bd5dcb71f7f4acd283f72d1c91573676722"
+    },
+    "src/pages/process.astro": {
+      "baselineSHA1": "8c6fe1ce2300d6b72ef0cf67f81712f0019919f4",
+      "previousMainSHA1": "694923871f644674ecaa015ec50b6002f373bc75",
+      "authorizedSHA1": "f38620751b424577dde03a548a1044ee8f6ae639"
+    },
+    "src/pages/sitemap.xml.ts": {
+      "baselineSHA1": "7fb2dd1855cdc5732668507f15f09da4ddc6e8d2",
+      "previousMainSHA1": "7fb2dd1855cdc5732668507f15f09da4ddc6e8d2",
+      "authorizedSHA1": "f4fb3f7226f21290b74298b6e65e3a2e37e2c778"
+    },
+    "src/pages/working-terms.astro": {
+      "baselineSHA1": "271dccadc7b8786047c39b75d132443635772b73",
+      "previousMainSHA1": "271dccadc7b8786047c39b75d132443635772b73",
+      "authorizedSHA1": "1eed47c71f7e60fbaa6c8aca70fe1479ef18f2aa"
+    },
+    "src/scripts/menswear-film.ts": {
+      "baselineSHA1": "7ab6a9cf22c84d3d12803671d70c5ac23fd77bfa",
+      "previousMainSHA1": "b86a13b6f9c3ec8a6e13d1af711e8dd46883833b",
+      "authorizedSHA1": "88f728cea6739deb2cfb2888857adf374a2f72a7"
+    },
+    "src/scripts/menswear-reader.ts": {
+      "baselineSHA1": "46c910c24083aedbdfcea142e416b4341a997e33",
+      "previousMainSHA1": "5995e68dfe82575e63358a01e3930adca4a93bcc",
+      "authorizedSHA1": "de3a094afd1757d99a3d851bedc3817d2a0ab133"
+    },
+    "src/scripts/womenswear-exhibition.ts": {
+      "baselineSHA1": "768923ef66959bdcd895b03b696cc28eae0640e5",
+      "previousMainSHA1": "768923ef66959bdcd895b03b696cc28eae0640e5",
+      "authorizedSHA1": "a97c05d00a7a295b2652f3e9230dede91b13a603"
+    },
+    "src/styles/global.css": {
+      "baselineSHA1": "01751b7f3f60a9cd62e36d92c2c251b4a372a2d8",
+      "previousMainSHA1": "01751b7f3f60a9cd62e36d92c2c251b4a372a2d8",
+      "authorizedSHA1": "4e63bc52ca37990d2e4a9fdb43db5ec87d1723b4"
+    }
+  },
+  "currentMainChanges": {
+    "astro.config.mjs": {
+      "previousMainSHA1": "f685b01e7030f55b82885160dd0bbc91c1d0601b",
+      "authorizedSHA1": "6f6391a6c6e5a90a007959db6f9fa4cb5fe3b328"
+    },
+    "src/components/portfolio/EditRailControls.astro": {
+      "previousMainSHA1": "9104063b78f435db82234cbbd5b99f8ab14a0892",
+      "authorizedSHA1": "1ed0d27c57e6589f0f53962ad533195c76e7fbb8"
+    },
+    "src/components/portfolio/GarmentInspection.astro": {
+      "previousMainSHA1": "a980dd92350a47cee7c0377d44ebaf4a7d0b882c",
+      "authorizedSHA1": "94b466476eaffc21a900382efe410a51799e81ad"
+    },
+    "src/components/portfolio/GarmentProvenance.astro": {
+      "previousMainSHA1": "56c8c9e6c6d486f74f05e65a8a0d39f0819ab145",
+      "authorizedSHA1": "4012e34a2489a0ac5f1b046c2ab7914e3a10eb6c"
+    },
+    "src/pages/techpacks/material-credits.astro": {
+      "previousMainSHA1": "0e1f9106b60bc8d404c5fee95a78c57a975755d9",
+      "authorizedSHA1": "97abae4da1d32bbedd35086a60486bec9f93075d"
+    },
+    "src/scripts/photo-inspection.ts": {
+      "previousMainSHA1": "7e0ff4139d7d95f9ea950c1aa2bc3aacb2b1593a",
+      "authorizedSHA1": "840fc6b9b177673933b7a85a45d0d06db3be5b42"
+    },
+    "src/scripts/techpack-reader.ts": {
+      "previousMainSHA1": "23d2c93acb47ec0ed00fe92dd495ead1d2474852",
+      "authorizedSHA1": "b589241b7f26391ff70387e9ff9e56433c0af179"
+    }
+  }
+}

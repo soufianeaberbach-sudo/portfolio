@@ -1,6 +1,10 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Arrow from '../../components/Arrow.astro';
+import { getLocale, localizePath } from '../../i18n/locales';
+import { misc } from '../../i18n/pages/misc';
+const locale = getLocale(Astro.url);
+const t = misc[locale].sent;
 
 /* Success page for the no-JavaScript path only.
  *
@@ -13,8 +17,8 @@ import Arrow from '../../components/Arrow.astro';
 ---
 
 <SiteLayout
-  title="Brief received — Soufiane Aberbach"
-  description="Your development brief has been received."
+  title={t.title}
+  description={t.description}
   marker="SA-CONTACT-SENT-V1"
   page="contact"
   noindex={true}
@@ -22,15 +26,12 @@ import Arrow from '../../components/Arrow.astro';
   <!-- BUILD-MARKER: SA-CONTACT-SENT-V1 -->
   <section class="sent section-shell">
     <div class="sent__inner">
-      <p class="eyebrow">Contact / brief received</p>
-      <h1 class="display sent__title">That’s everything<br />needed to <em>start</em>.</h1>
-      <p class="sent__line">
-        The brief has been received. The reply comes back to the email address you
-        gave, in writing, with an honest scope and a realistic next step.
-      </p>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h1 class="display sent__title" set:html={t.heading} />
+      <p class="sent__line">{t.line}</p>
       <div class="sent__routes">
-        <a class="button" href="/portfolio/">See the work <span><Arrow /></span></a>
-        <a class="sent__home" href="/">Back to the start <span><Arrow /></span></a>
+        <a class="button" href={localizePath('/portfolio/', locale)}>{t.work} <span><Arrow /></span></a>
+        <a class="sent__home" href={localizePath('/', locale)}>{t.home} <span><Arrow /></span></a>
       </div>
     </div>
   </section>

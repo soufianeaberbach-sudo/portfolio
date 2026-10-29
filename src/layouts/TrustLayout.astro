@@ -1,6 +1,8 @@
 ---
 import SiteLayout from './SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import { getLocale, localizePath } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 interface Props {
   title: string;
   description: string;
@@ -10,25 +12,27 @@ interface Props {
   contents: { id: string; label: string }[];
 }
 const { title, description, heading, intro, marker, contents } = Astro.props;
+const locale = getLocale(Astro.url);
+const t = ui[locale];
 ---
 <SiteLayout title={title} description={description} marker={marker} page="trust" footerCallout={false}>
   <article class="trust section-shell">
     <header class="trust__head">
-      <p class="eyebrow">Project information</p>
+      <p class="eyebrow">{t.trustShell.eyebrow}</p>
       <h1 class="display trust__title">{heading}</h1>
       <p class="trust__intro">{intro}</p>
     </header>
     <div class="trust__grid">
-      <nav class="trust__contents" aria-label="On this page">
-        <p class="label">On this page</p>
+      <nav class="trust__contents" aria-label={t.trustShell.onThisPage}>
+        <p class="label">{t.trustShell.onThisPage}</p>
         <ol>{contents.map(({ id, label }) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
       </nav>
       <div class="trust__body">
         <slot />
         <div class="trust__next">
-          <p class="label">Your next step</p>
-          <p>A sketch, a reference or a clear question is enough to begin.</p>
-          <a class="button button--signal" href="/contact/#brief">Start a brief <span><Arrow /></span></a>
+          <p class="label">{t.trustShell.nextLabel}</p>
+          <p>{t.trustShell.nextLine}</p>
+          <a class="button button--signal" href={localizePath('/contact/#brief', locale)}>{t.startBrief} <span><Arrow /></span></a>
         </div>
       </div>
     </div>
