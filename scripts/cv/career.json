@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "verifiedAgainst": {
     "commit": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
     "date": "2026-10-28",
@@ -9,7 +9,7 @@
       "src/pages/contact.astro",
       "src/pages/portfolio.astro"
     ],
-    "ownerBrief": "CV redesign brief in this conversation: current Ava Marie role in Tangier; 11+ years; Photoshop, Excel and Amazigh confirmed by owner."
+    "ownerBrief": "Final creative rebuild brief: 12+ years since February 2014, eight systems, Arabic/Amazigh/French/English. Specific responsibilities are not assigned to employers without evidence."
   },
   "name": "Soufiane Aberbach",
   "website": "https://aberbach.co",
@@ -22,13 +22,13 @@
     "Optitex",
     "Adobe Illustrator",
     "Adobe Photoshop",
-    "Excel"
+    "Microsoft Excel"
   ],
   "workingLanguages": [
     "ar",
-    "en",
+    "zgh",
     "fr",
-    "zgh"
+    "en"
   ],
   "roles": [
     {
@@ -48,22 +48,16 @@
       },
       "scope": {
         "en": [
-          "Develop womenswear and menswear from creative direction through pattern, fit and technical-package preparation.",
-          "Translate silhouette and construction intent into patterns, graded sizes and factory-facing specifications.",
-          "Refine fit and proportion through sampling and 3D review; communicate clear corrections for production."
+          "Fashion design and product development, informed by industrial CAD, quality and production experience."
         ],
         "fr": [
-          "Développer la mode femme et homme, de la direction créative au patron, au bien-aller et au dossier technique.",
-          "Traduire la silhouette et les choix de montage en patrons, gradations et spécifications pour l’usine.",
-          "Affiner bien-aller et proportions par le prototypage et la revue 3D ; transmettre des corrections précises à la production."
+          "Design de mode et développement produit, éclairés par l’expérience en CAO industrielle, qualité et production."
         ],
         "es": [
-          "Desarrollar moda femenina y masculina desde la dirección creativa hasta el patrón, el ajuste y la ficha técnica.",
-          "Traducir silueta y criterios de confección en patrones, tallas escaladas y especificaciones para la fábrica.",
-          "Refinar ajuste y proporción mediante muestras y revisión 3D; comunicar correcciones precisas a producción."
+          "Diseño de moda y desarrollo de producto, apoyados en experiencia de CAD industrial, calidad y producción."
         ]
       },
-      "scopeSource": "Draft functional scope derived from owner-confirmed specializations and verified job functions; specific employer attribution is pending owner clarification. No named client, garment order, management scale or commercial result is asserted."
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     },
     {
       "id": "lariconf-cad",
@@ -77,19 +71,16 @@
       },
       "scope": {
         "en": [
-          "Develop and adjust digital garment patterns for technical product development.",
-          "Connect pattern geometry, grading and construction requirements in the CAD workflow."
+          "Fashion-focused CAD development and technical product understanding."
         ],
         "fr": [
-          "Développer et ajuster les patrons numériques du produit.",
-          "Relier géométrie, gradation et exigences de montage dans le travail en CAO."
+          "Développement mode en CAO et compréhension technique du produit."
         ],
         "es": [
-          "Desarrollar y ajustar patrones digitales para el desarrollo técnico del producto.",
-          "Conectar geometría del patrón, escalado y requisitos de confección en el trabajo CAD."
+          "Desarrollo de moda en CAD y conocimiento técnico del producto."
         ]
       },
-      "scopeSource": "Draft functional scope derived from owner-confirmed specializations and verified job functions; specific employer attribution is pending owner clarification. No named client, garment order, management scale or commercial result is asserted."
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     },
     {
       "id": "loratex-cad",
@@ -103,19 +94,16 @@
       },
       "scope": {
         "en": [
-          "Supervise CAD development and the technical consistency of patterns and size sets.",
-          "Coordinate pattern-development information for a clear hand-off to production."
+          "CAD development supervision; a broader view of technical consistency."
         ],
         "fr": [
-          "Superviser le développement CAO : cohérence des patrons et des gammes de tailles.",
-          "Coordonner les informations de patronage pour la transmission en production."
+          "Supervision du développement CAO ; une vision transversale de la cohérence technique."
         ],
         "es": [
-          "Supervisar el desarrollo CAD y la coherencia técnica de patrones y series de tallas.",
-          "Coordinar la información de patronaje para un traspaso claro a producción."
+          "Supervisión del desarrollo CAD; una visión transversal de la coherencia técnica."
         ]
       },
-      "scopeSource": "Draft functional scope derived from owner-confirmed specializations and verified job functions; specific employer attribution is pending owner clarification. No named client, garment order, management scale or commercial result is asserted."
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     },
     {
       "id": "loratex-planning",
@@ -129,15 +117,16 @@
       },
       "scope": {
         "en": [
-          "Production planning and coordination."
+          "Production sequence and coordination."
         ],
         "fr": [
-          "Planification et coordination de la production."
+          "Enchaînement et coordination de la production."
         ],
         "es": [
-          "Planificación y coordinación de producción."
+          "Secuencia y coordinación de producción."
         ]
-      }
+      },
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     },
     {
       "id": "roadtex-quality",
@@ -151,15 +140,16 @@
       },
       "scope": {
         "en": [
-          "Quality control and production follow-up."
+          "Quality standards and production control."
         ],
         "fr": [
-          "Contrôle qualité et suivi de production."
+          "Standards qualité et maîtrise de la production."
         ],
         "es": [
-          "Control de calidad y seguimiento de producción."
+          "Estándares de calidad y control de producción."
         ]
-      }
+      },
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     },
     {
       "id": "loratex-operations",
@@ -173,58 +163,49 @@
       },
       "scope": {
         "en": [
-          "Operations and warehouse coordination."
+          "Material flow and operational coordination."
         ],
         "fr": [
-          "Coordination des opérations et de l’entrepôt."
+          "Flux de matières et coordination opérationnelle."
         ],
         "es": [
-          "Coordinación de operaciones y almacén."
+          "Flujo de materiales y coordinación operativa."
         ]
-      }
+      },
+      "scopeSource": "Verified job title and published career perspective only. This is context, not a claimed project/deliverable or detailed employer responsibility."
     }
   ],
   "editions": {
     "en": {
-      "edition": "CURRICULUM VITAE / ENGLISH",
+      "edition": "CURRICULUM VITAE / EN",
       "documentLabel": "Professional curriculum vitae",
       "location": "Tangier, Morocco",
       "profileLabel": "Profile",
-      "expertiseLabel": "Core expertise",
+      "expertiseLabel": "Professional scope",
       "softwareLabel": "Software",
       "languagesLabel": "Working languages",
-      "languages": "Arabic · English · French · Amazigh",
+      "languages": "Arabic · Amazigh · French · English",
       "experienceLabel": "Experience",
       "present": "Present",
       "footer": "Fashion design / Product development",
-      "summary": "Senior Fashion Designer & Product Developer with 11+ years across fashion and manufacturing. Combines creative design, pattern engineering and fit development to prepare production-ready garments. Works across womenswear and menswear, connecting sampling, 3D review and clear technical documentation for the factory.",
+      "summary": "Senior Fashion Designer & Product Developer with 12+ years across fashion and manufacturing. Connects womenswear and menswear design with pattern engineering, garment construction and fit. Brings creative intent, digital development and factory requirements into the same decisions, identifying technical issues before production hand-off.",
       "skills": [
         {
-          "heading": "Product development",
+          "heading": "Design → product",
           "items": [
-            "Womenswear & menswear",
-            "Concept to production readiness"
+            "Silhouette, proportion and material behaviour translated into executable construction."
           ]
         },
         {
-          "heading": "Pattern & fit",
+          "heading": "Pattern → fit",
           "items": [
-            "Industrial pattern engineering",
-            "Grading · fit refinement"
+            "Balance, ease, grading and tolerances resolved across the size range."
           ]
         },
         {
-          "heading": "Technical design",
+          "heading": "Sample → production",
           "items": [
-            "Technical flats · tech packs",
-            "Construction · measurements"
-          ]
-        },
-        {
-          "heading": "3D & CAD",
-          "items": [
-            "CLO3D garment simulation",
-            "Digital pattern development"
+            "3D review, fit corrections, technical flats and clear production specifications."
           ]
         }
       ],
@@ -232,51 +213,38 @@
         "Senior Fashion Designer",
         "& Product Developer"
       ],
-      "earlierLabel": "Earlier experience",
-      "exposureLabel": "Selected programme exposure",
-      "exposureNote": "Through manufacturing work; no direct employment or brand endorsement is implied.",
-      "positioning": "Fashion design · Pattern engineering · Production readiness"
+      "foundationLabel": "Manufacturing foundations · Planning / Quality / Operations"
     },
     "fr": {
-      "edition": "CURRICULUM VITÆ / FRANÇAIS",
+      "edition": "CURRICULUM VITÆ / FR",
       "documentLabel": "Curriculum vitæ professionnel",
       "location": "Tanger, Maroc",
       "profileLabel": "Profil",
-      "expertiseLabel": "Expertise métier",
+      "expertiseLabel": "Champ d’expertise",
       "softwareLabel": "Logiciels",
       "languagesLabel": "Langues de travail",
-      "languages": "Arabe · Anglais · Français · Amazigh",
+      "languages": "Arabe · Amazigh · Français · Anglais",
       "experienceLabel": "Expérience",
       "present": "Aujourd’hui",
       "footer": "Design de mode / Développement produit",
-      "summary": "Designer de mode senior et développeur produit, avec plus de 11 ans entre mode et production. Associe création, patronage industriel et mise au point du bien-aller pour préparer la mise en production. Mode femme et homme : prototypage, revue 3D et documentation technique claire pour l’usine.",
+      "summary": "Designer de mode senior et développeur produit, avec plus de 12 ans entre mode et production. Relie la création femme et homme au patronage industriel, au montage et au bien-aller. Réunit intention créative, développement numérique et exigences de l’usine pour anticiper les problèmes techniques avant la mise en production.",
       "skills": [
         {
-          "heading": "Développement produit",
+          "heading": "Création → produit",
           "items": [
-            "Mode femme & homme",
-            "Du concept à la production"
+            "Silhouette, proportions et matières traduites en solutions de montage réalisables."
           ]
         },
         {
-          "heading": "Patronage & bien-aller",
+          "heading": "Patron → bien-aller",
           "items": [
-            "Patronage industriel",
-            "Gradation · mise au point"
+            "Équilibre, aisance, gradation et tolérances maîtrisés dans la gamme de tailles."
           ]
         },
         {
-          "heading": "Conception technique",
+          "heading": "Prototype → usine",
           "items": [
-            "Dessins à plat · dossiers techniques",
-            "Montage · mesures"
-          ]
-        },
-        {
-          "heading": "3D & CAO",
-          "items": [
-            "Simulation du vêtement CLO3D",
-            "Développement numérique des patrons"
+            "Revue 3D, corrections de bien-aller, dessins à plat et spécifications de production claires."
           ]
         }
       ],
@@ -284,51 +252,38 @@
         "Designer de mode senior",
         "& développeur produit"
       ],
-      "earlierLabel": "Expériences antérieures",
-      "exposureLabel": "Programmes de marques — sélection",
-      "exposureNote": "Dans le cadre de travaux de production ; sans emploi direct auprès de ces marques ni recommandation de leur part.",
-      "positioning": "Design de mode · Patronage industriel · Mise en production"
+      "foundationLabel": "Fondations industrielles · Planification / Qualité / Opérations"
     },
     "es": {
-      "edition": "CURRÍCULUM / ESPAÑOL",
+      "edition": "CURRÍCULUM / ES",
       "documentLabel": "Currículum profesional",
       "location": "Tánger, Marruecos",
       "profileLabel": "Perfil",
-      "expertiseLabel": "Especialidades",
+      "expertiseLabel": "Ámbito profesional",
       "softwareLabel": "Software",
       "languagesLabel": "Idiomas de trabajo",
-      "languages": "Árabe · Inglés · Francés · Amazigh",
+      "languages": "Árabe · Amazigh · Francés · Inglés",
       "experienceLabel": "Experiencia",
       "present": "Actualidad",
       "footer": "Diseño de moda / Desarrollo de producto",
-      "summary": "Diseñador de moda sénior y desarrollador de producto con más de 11 años entre moda y producción. Combina diseño, patronaje industrial y desarrollo del ajuste para preparar prendas para producción. Moda femenina y masculina: muestras, revisión 3D y documentación técnica clara para la fábrica.",
+      "summary": "Diseñador de moda sénior y desarrollador de producto con más de 12 años entre moda y producción. Conecta diseño femenino y masculino con patronaje industrial, confección y ajuste. Integra intención creativa, desarrollo digital y requisitos de fábrica para detectar problemas técnicos antes del traspaso a producción.",
       "skills": [
         {
-          "heading": "Desarrollo de producto",
+          "heading": "Diseño → producto",
           "items": [
-            "Moda femenina y masculina",
-            "Del concepto a producción"
+            "Silueta, proporción y tejido traducidos en soluciones de confección realizables."
           ]
         },
         {
-          "heading": "Patronaje y ajuste",
+          "heading": "Patrón → ajuste",
           "items": [
-            "Patronaje industrial",
-            "Escalado · refinamiento del ajuste"
+            "Equilibrio, holgura, escalado y tolerancias resueltos en la serie de tallas."
           ]
         },
         {
-          "heading": "Diseño técnico",
+          "heading": "Muestra → fábrica",
           "items": [
-            "Dibujos en plano · fichas técnicas",
-            "Confección · medidas"
-          ]
-        },
-        {
-          "heading": "3D y CAD",
-          "items": [
-            "Simulación de prendas en CLO3D",
-            "Desarrollo digital de patrones"
+            "Revisión 3D, correcciones de ajuste, dibujos técnicos y especificaciones claras."
           ]
         }
       ],
@@ -336,26 +291,31 @@
         "Diseñador de moda sénior",
         "y desarrollador de producto"
       ],
-      "earlierLabel": "Experiencia anterior",
-      "exposureLabel": "Programas de marcas — selección",
-      "exposureNote": "A través de la actividad productiva; no implica empleo directo con las marcas ni su respaldo.",
-      "positioning": "Diseño de moda · Patronaje industrial · Preparación para producción"
+      "foundationLabel": "Base industrial · Planificación / Calidad / Operaciones"
     }
   },
-  "experienceYearsMinimum": 11,
-  "selectedProgrammeExposure": [
-    "Zara",
-    "Bershka",
-    "Mango",
-    "ASOS",
-    "River Island",
-    "Fashion Nova"
-  ],
+  "experienceYearsMinimum": 12,
   "contentPolicy": {
     "employersAndDates": "Current Experience page; unchanged.",
-    "responsibilities": "Career-wide capabilities from the owner brief and Expertise page. Employer-specific tasks require attribution; role scope below is conservative, derived from verified job functions.",
+    "responsibilities": "Previous unapproved employer-specific task bullets removed. Concise role context follows verified job functions and published Experience perspective; specific technical capabilities are career-wide, sourced from Expertise and owner brief. Named projects, duties, metrics and management scale remain unclaimed.",
     "brands": "Selected from current Home programme exposure; never employers, direct clients or endorsements.",
     "softwareAndLanguages": "Six tools and three languages from site; Photoshop, Excel and Amazigh added from owner confirmation in this brief.",
     "omitted": "Education, certifications, revenue, production volumes, team sizes, proficiency ratings and unsupported named client contracts."
+  },
+  "authoritativeSource": {
+    "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+    "status": "pending-full-profile-export",
+    "checked": "2026-10-29",
+    "directAccess": "HTTP 999",
+    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people’s posts/reactions excluded.",
+    "unverifiedSections": [
+      "Full About",
+      "Employment titles and exact dates",
+      "Employer responsibilities",
+      "Education qualifications",
+      "Certifications",
+      "Skills"
+    ],
+    "requiredInput": "Owner LinkedIn-exported PDF or screenshots of full sections"
   }
 }

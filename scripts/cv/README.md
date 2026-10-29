@@ -1,75 +1,86 @@
-# ABERBACH editorial CV system — redesign draft
+# ABERBACH — Editorial Precision CV master
 
-The prior CV design is unapproved and superseded by this rebuild. The existing
-six public downloads remain untouched until the owner supplies the original
-color portrait and the new image masters pass review. This is not a completed
-replacement release yet.
+The selected design is Concept A / Fashion Editorial, reconstructed from an
+image-generation composition study, then refined with accurate editable type.
+The old CV directions are unapproved. Final release is blocked pending the
+owner's original color portrait and complete LinkedIn career source.
 
-## Sources
+## Authoritative content and real assets
 
-- `career.json`: shared six-role chronology, EN/FR/ES text, grouped expertise,
-  eight tools and four actual working languages. Photoshop, Excel and Amazigh
-  are owner-confirmed additions in the redesign brief. No proficiency ratings,
-  degrees, certifications, team sizes, named contracts or metrics were added.
-- Main employers/titles/dates remain verified against Experience. Detailed role
-  bullets are draft functional descriptions derived from the owner's declared
-  specialties and verified job functions. Precise employer attribution is pending
-  clarification and must be reviewed before release; source flags retain that
-  distinction rather than presenting assumptions as evidence.
-- Selected brand names come from the current Home programme-exposure list. Their
-  qualifier explicitly excludes direct employment and endorsement.
-- `template.html`: editable A4 grid, content-first chronology, natural-color
-  portrait frame, white paper and restrained Aberbach orange. The previous
-  grayscale filters are removed.
-- `portrait.png`: currently the **old monochrome derivative only**. The original
-  color attachment is no longer present in this workspace. Never colorize it to
-  invent the original colors. Replace it only from the owner's actual photo.
+`career.json` schema 3 records the exact EN/FR/ES data and its verification state.
+The primary source is the owner's LinkedIn profile. Direct access returned HTTP
+999; the public index only exposes a truncated About and incomplete experience /
+education. Therefore `authoritativeSource.status` is pending, not verified.
+Six historical roles/dates from the site are provisional until comparison with
+the full profile export. Education, qualifications and certifications are not
+inferred. Previous speculative employer-duty bullets have been removed.
 
-## Image-first production
+After receiving the owner's exported profile PDF or complete screenshots:
+compare every role, date and description, record the evidence, rewrite naturally
+in all three languages, and mark the data verified only when the actual source
+has been inspected. Current 12+ years is derived from February 2014–October 2026;
+there are no current 11+ year statements in the master data. Eight tools and
+Arabic/Amazigh/French/English come from the owner brief. Spanish is an edition,
+not a claimed spoken language. Ambiguous brand exposure is omitted.
 
-Use existing Playwright and committed font fixtures. No generated typography,
-external font request or new application dependency is required. Python print
-requirements are in `requirements.txt`.
+`template.html` faithfully implements the selected visual direction: filled /
+outlined name contrast, asymmetric portrait, dated chronology and lower-page
+professional scope. Brand colors and Archivo/Inter/JetBrains Mono match the site.
+
+The SA. markup uses the real span + orange-dot construction. Its CSS is read
+verbatim from `src/styles/global.css`. With root16px and the existing font files,
+it measures exactly36.15625×31.1875CSSpx, as on the site. Export waits for font
+settling; the independent verifier compares these source proportions.
+
+`construction-detail.png` is an exact crop of the existing AB-W-SH-01 technical
+flat. `construction-detail-source.json` pins the source hash and crop; verification
+checks pixel equality. It is a discreet construction signature, never evidence of
+employment, a named project or a fictional new pattern.
+
+`portrait.png` still contains only the old monochrome derivative. It is never
+used for final production or synthetically recolored. The original photo must be
+reattached. Original attachments stay outside public/; a shared natural-color
+crop is prepared without changing facial geometry or adding generated detail.
+
+## Image-first release
+
+Use the pinned Playwright/browser and committed font fixtures, with the existing
+Pillow/PyMuPDF requirements. No external font download or new app package.
 
 ```sh
+# Only after complete career-source verification and receipt of the real photo:
 node scripts/cv/render.mjs --prepare-portrait /path/to/original-color-photo.jpg
-```
-
-The supplied file stays outside public/. Browser cropping creates the shared
-portrait derivative without facial alteration or grayscale treatment. Inspect
-that derivative and the actual PNG editions at native 2480×3508 resolution.
-Color validation rejects monochrome input. PNGs carry 300 DPI metadata; geometry
-checks reject clipped text, footer collisions or missing fonts. The release
-layout manifest is written only for a real color render.
-
-After visual PNG inspection:
-
-```sh
+# Inspect all three native 2480×3508 PNGs, content and portrait before conversion.
 python3 scripts/cv/finalize.py
 npm run test:cv
 ```
 
-Finalization preserves the reviewed PNG pixels on exact 210×297mm PDF pages,
-with searchable source text and working contact links underneath. It rejects
-layout previews. Independent verification checks chronology, all eight tools,
-four spoken languages, qualified brand exposure, portrait color/consistency,
-printer margins, page dimensions and decoded PNG/PDF pixel equality.
+Render creates 300 DPI PNG masters first. It rejects unverified primary career
+content and monochrome photo input. `export-layout.json` is written only for a
+real release render. PDF conversion rejects previews/unverified career records;
+the exact reviewed PNG covers a 210×297mm page with searchable source text and
+contact links retained underneath. Independent QA checks white margins, chronology,
+three publication languages, four spoken languages, eight tools, SA. proportions,
+authentic construction pixels, natural photo color/consistency and exact PDF
+raster fidelity. Searchability does not establish PDF/UA certification.
 
-Final file paths stay unchanged:
-`public/cv/Soufiane-Aberbach-CV-{EN,FR,ES}.{png,pdf}`. The Experience component
-already provides current-language PDF downloads and all six alternate options.
+Final paths remain `public/cv/Soufiane-Aberbach-CV-{EN,FR,ES}.{png,pdf}`.
+The Experience download controls are reused unchanged. The old six files are
+preserved until new release masters are actually ready; no placeholder is served.
 
-## Composition review without the missing photograph
+## Marked design proofs
 
 ```sh
-CV_OUTPUT_DIR=.qa-director/cv-rebuild/draft \
-CV_QA_DIR=.qa-director/cv-rebuild/draft \
+CV_OUTPUT_DIR=.qa-director/cv-final/preview \
+CV_QA_DIR=.qa-director/cv-final/preview \
 node scripts/cv/render.mjs --layout-preview
-python3 scripts/cv/verify.py --layout-preview-dir .qa-director/cv-rebuild/draft
+python3 scripts/cv/verify.py --layout-preview-dir .qa-director/cv-final/preview
 ```
 
-This substitutes an explicit COLOR PORTRAIT PENDING panel when only the old
-monochrome source is available. Preview mode cannot target public/. It is for
-layout review only and never passes release verification or final PDF creation.
-`CHROMIUM_PATH` can select an appropriate installed browser when the repository's
-pinned Playwright browser is unavailable.
+Preview mode is barred from public/. It labels the portrait area and footer as
+pending, and can never pass release PDF conversion. It proves composition only.
+Use `CHROMIUM_PATH` solely for an appropriate fallback browser; exact-brand QA
+uses the repository's pinned browser and fonts.
+
+Concepts, full-size proofs, source-access audit and critique are in
+[the creative review](../../docs/cv-final-2026-10-29/REVIEW.md).

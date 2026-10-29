@@ -2,6 +2,7 @@
 """Independent CV source, image and print checks. Drafts never pass release QA."""
 import argparse
 import json
+import hashlib
 import re
 from pathlib import Path
 import fitz
@@ -15,9 +16,14 @@ args = parser.parse_args()
 preview = bool(args.layout_preview_dir)
 OUT = ROOT / args.layout_preview_dir if preview else ROOT / 'public/cv'
 layout_path = OUT / 'layout-report.json' if preview else ROOT / 'scripts/cv/export-layout.json'
-assert DATA['schemaVersion'] == 2
+assert DATA['schemaVersion'] == 3
+provenance=json.loads((ROOT/'scripts/cv/construction-detail-source.json').read_text())
+source=ROOT/provenance['source']
+assert hashlib.sha256(source.read_bytes()).hexdigest()==provenance['sourceSHA256']
+with Image.open(source) as original,Image.open(ROOT/'scripts/cv/construction-detail.png') as detail:
+    assert original.crop(tuple(provenance['cropPixels'])).tobytes()==detail.tobytes(),'Construction signature differs from source geometry'
 assert set(DATA['editions']) == {'en', 'fr', 'es'}
-assert DATA['workingLanguages'] == ['ar', 'en', 'fr', 'zgh']
+assert DATA['workingLanguages'] == ['ar', 'zgh', 'fr', 'en']
 assert len(DATA['software']) == 8 and len(set(DATA['software'])) == 8
 chronology = [('Ava Marie','2022-05',None),('Lariconf','2021-06','2022-05'),('Loratex','2018-09','2021-05'),('Loratex','2017-09','2018-09'),('Roadtex','2016-02','2017-08'),('Loratex','2014-02','2016-01')]
 assert [(r['company'],r['start'],r['end']) for r in DATA['roles']] == chronology
@@ -25,8 +31,9 @@ for role in DATA['roles']:
     assert set(role['title']) == {'en','fr','es'} and set(role['scope']) == {'en','fr','es'}
     assert len({len(role['scope'][l]) for l in DATA['editions']}) == 1
     assert all(s.strip() for l in DATA['editions'] for s in role['scope'][l])
-assert len(DATA['roles'][0]['scope']['en']) == 3
-assert all(len(DATA['roles'][i]['scope']['en']) == 2 for i in [1,2])
+assert all(len(role['scope']['en']) >= 1 for role in DATA['roles'])
+assert DATA['experienceYearsMinimum']==12
+if not preview:assert DATA['authoritativeSource']['status']=='verified','Full LinkedIn source verification is required before release'
 assert layout_path.exists(), 'Natural-color release master has not been rendered. Original color portrait required.'
 layout = json.loads(layout_path.read_text())
 assert len(layout) == 3
@@ -34,7 +41,11 @@ normalize = lambda text: re.sub(r'\s+',' ',text.replace('-\n','-')).strip()
 portrait_reference = None
 for row in layout:
     lang = row['locale'];stem = row['stem'];g = row['geometry']
+    assert row['sourceSHA256']==hashlib.sha256((ROOT/'scripts/cv/career.json').read_bytes()).hexdigest()
+    assert row['portraitSHA256']==hashlib.sha256((ROOT/'scripts/cv/portrait.png').read_bytes()).hexdigest()
     assert row['layoutPreview'] is preview
+    if not preview:assert row['careerVerified']
+    assert abs(g['brand']['width']-36.15625)<.05 and abs(g['brand']['height']-31.1875)<.05,'SA. proportions differ from site reference'
     assert not g['clipped'] and g['lastRoleBottom'] <= g['footerTop']-15
     with Image.open(OUT / (stem+'.png')) as raw:
         assert raw.size == (2480,3508)
@@ -61,8 +72,7 @@ for row in layout:
                 assert normalize(role['title'][lang]) in text
             assert all(tool in text for tool in DATA['software'])
             assert DATA['editions'][lang]['languages'] in text
-            assert all(brand in text for brand in DATA['selectedProgrammeExposure'])
-            assert normalize(DATA['editions'][lang]['exposureNote']) in text
+            assert '11+' not in text and ('12+' in text or '12 ans' in text or '12 años' in text)
             assert text.index('Ava Marie') < text.index('Lariconf') < text.index('Roadtex') and text.count('Loratex')==3
             assert 'Spanish' not in text and 'Espagnol' not in text and 'Español' not in text
             assert page.get_links()

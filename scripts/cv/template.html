@@ -1,87 +1,22 @@
 <!doctype html>
 <html lang="{{locale}}">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Soufiane Aberbach — {{edition}}</title>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Soufiane Aberbach — {{edition}}</title>
 <style>
 {{fonts}}
-:root { --ink:#171816; --muted:#60635e; --accent:#D45F36; --line:#d7d9d4; --display:Archivo,Arial,sans-serif; --body:Inter,Arial,sans-serif; }
-* { box-sizing:border-box; }
-html,body { margin:0; padding:0; background:#fff; color:var(--ink); }
-body { font-family:var(--body); font-size:12px; -webkit-font-smoothing:antialiased; }
-a { color:inherit; text-decoration:none; }
-.sheet { position:relative; width:210mm; height:297mm; padding:40px 46px 43px; background:#fff; overflow:hidden; }
-.masthead { display:flex; justify-content:space-between; gap:20px; padding-bottom:14px; border-bottom:1px solid var(--line); font-size:8px; line-height:1.4; font-weight:550; letter-spacing:1.35px; text-transform:uppercase; }
-.masthead__brand { color:var(--accent); font-family:var(--display); font-weight:750; letter-spacing:1.5px; }
-.masthead__edition { color:var(--muted); }
-.identity { display:grid; grid-template-columns:minmax(0,1fr) 111px; gap:27px; margin-top:25px; align-items:start; }
-.identity__copy { padding-top:4px; }
-.name { font-family:var(--display); font-size:43px; line-height:1.06; font-weight:650; letter-spacing:-1.65px; margin:0 0 12px; white-space:nowrap; }
-.title { font-family:var(--display); font-size:19px; font-weight:550; line-height:1.2; letter-spacing:-.25px; margin:0; max-width:470px; }
-.title span { display:block; }
-.positioning { color:var(--muted); font-size:10px; line-height:1.5; margin:13px 0 0; }
-.portrait { display:block; width:111px; height:138px; object-fit:cover; object-position:50% 35%; }
-.portrait-frame { margin:0; padding-bottom:7px; border-bottom:2px solid var(--accent); }
-.contact { display:flex; flex-wrap:wrap; gap:5px 17px; margin:12px 0 0; font-size:10px; line-height:1.5; color:var(--muted); font-style:normal; }
-.contact__location { color:var(--ink); }
-.intro { border-top:1px solid var(--ink); margin-top:12px; padding-top:16px; }
-.summary { font-size:12.2px; line-height:1.65; margin:0; letter-spacing:-.08px; }
-.columns { display:grid; grid-template-columns:minmax(0,1fr) 190px; gap:30px; margin-top:20px; }
-.experience { min-width:0; }
-.sidebar { padding-left:22px; border-left:1px solid var(--line); }
-.section-title { font-size:9px; line-height:1.4; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 17px; color:var(--ink); }
-.role { margin:0 0 16px; break-inside:avoid; }
-.role__header { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
-.role__company { font-family:var(--display); font-size:16px; font-weight:650; line-height:1.25; letter-spacing:-.2px; margin:0; }
-.role__meta { font-size:9px; line-height:1.4; color:var(--muted); white-space:nowrap; margin:0; }
-.role__title { font-size:12px; line-height:1.4; font-weight:550; margin:4px 0 0; }
-.role--current .role__company { color:var(--ink); font-size:19px; }
-.role--current .role__title { font-weight:650; }
-.role__location { font-weight:400; font-size:10px; color:var(--muted); }
-.role__bullets { padding-left:13px; margin:8px 0 0; font-size:11.65px; line-height:1.55; color:#41453f; }
-.role__bullets li { padding-left:1px; margin:0 0 4px; }
-.role__bullets li::marker { color:var(--accent); font-size:8px; }
-.earlier { border-top:1px solid var(--line); padding-top:14px; margin-top:3px; }
-.earlier .section-title { margin-bottom:10px; font-size:8px; color:var(--muted); }
-.role--early { margin-bottom:8px; }
-.role--early .role__company { font-size:12px; font-family:var(--body); font-weight:600; }
-.role--early .role__title { font-size:10.75px; margin-top:2px; font-weight:450; color:#41453f; }
-.skill-group { margin-bottom:15px; }
-.skill-group h3 { font-size:11px; line-height:1.4; font-weight:650; margin:0 0 5px; }
-.skill-group p { font-size:11px; line-height:1.6; color:var(--muted); margin:0; }
-.tools { padding-top:14px; border-top:1px solid var(--line); margin-top:17px; }
-.tools .section-title,.languages .section-title { margin-bottom:10px; }
-.tools p { margin:0; font-size:11px; line-height:1.75; color:#41453f; }
-.languages { margin-top:18px; }
-.languages p { font-size:11px; line-height:1.6; margin:0; color:#41453f; }
-.exposure { position:absolute; bottom:66px; left:46px; right:46px; border-top:1px solid var(--line); padding-top:12px; }
-.exposure .section-title { font-size:8px; margin-bottom:7px; color:var(--muted); }
-.exposure__brands { font-family:var(--display); font-size:11px; font-weight:550; line-height:1.5; margin:0; letter-spacing:.05px; }
-.exposure__note { font-size:8px; line-height:1.5; margin:5px 0 0; color:var(--muted); }
-.footer { position:absolute; bottom:40px; left:46px; right:46px; display:flex; justify-content:space-between; align-items:center; font-size:7px; line-height:1.5; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase; }
-.footer__signature { color:var(--ink); }
-html[data-render='png'],html[data-render='png'] body { width:2480px; height:3508px; overflow:hidden; }
-html[data-render='png'] .sheet { transform:scale(3.1246031746); transform-origin:top left; }
-@page { size:A4; margin:0; }
-@media print { html,body { width:210mm; height:297mm; } .sheet { transform:none!important; } * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
-</style>
-</head>
-<body>
-<main class="sheet" aria-label="{{documentLabel}}">
-  <div class="masthead"><span class="masthead__brand">ABERBACH.CO</span><span class="masthead__edition">{{edition}}</span></div>
-  <header class="identity">
-    <div class="identity__copy"><h1 class="name">Soufiane Aberbach</h1><p class="title">{{displayTitle}}</p><p class="positioning">{{positioning}}</p></div>
-    <figure class="portrait-frame"><img class="portrait" src="{{portrait}}" alt="Soufiane Aberbach"></figure>
-  </header>
-  <address class="contact"><span class="contact__location">{{location}}</span><a href="https://aberbach.co">aberbach.co</a><a href="mailto:{{email}}">{{email}}</a></address>
-  <section class="intro" aria-label="{{profileLabel}}"><p class="summary">{{summary}}</p></section>
-  <div class="columns">
-    <div class="experience"><section><h2 class="section-title">{{experienceLabel}}</h2>{{roles}}</section><section class="earlier"><h2 class="section-title">{{earlierLabel}}</h2>{{earlierRoles}}</section></div>
-    <aside class="sidebar"><section><h2 class="section-title">{{expertiseLabel}}</h2>{{skills}}</section><section class="tools"><h2 class="section-title">{{softwareLabel}}</h2><p>{{software}}</p></section><section class="languages"><h2 class="section-title">{{languagesLabel}}</h2><p>{{languages}}</p></section></aside>
-  </div>
-  <section class="exposure"><h2 class="section-title">{{exposureLabel}}</h2><p class="exposure__brands">{{brands}}</p><p class="exposure__note">{{exposureNote}}</p></section>
-  <footer class="footer"><span class="footer__signature">{{footer}}</span><span>01 / 01</span></footer>
-</main>
-</body>
-</html>
+:root{font-size:16px;--ink:#11110F;--muted:#6E6D64;--soft:#383832;--signal:#D45F36;--line:#d7d7d1;--display:Archivo,Arial,sans-serif;--body:Inter,Arial,sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}html,body{margin:0;padding:0;color:var(--ink);background:#fff}body{font-family:var(--body);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}.sheet{position:relative;width:210mm;height:297mm;padding:38px 46px 42px;background:#fff;overflow:hidden}
+{{brandCSS}}
+.brand{line-height:1.5}
+.masthead{display:flex;align-items:center;gap:20px;height:36px}.masthead__rule{height:1px;background:var(--line);flex:1}.construction{position:absolute;right:0;top:9px;width:34px;height:auto;opacity:.48;display:block}.edition{font:8px/1.5 var(--mono);letter-spacing:1px;color:var(--muted);text-align:right}.identity{display:grid;grid-template-columns:minmax(0,1fr) 145px;gap:30px;margin-top:18px;align-items:start}.name{font-family:var(--display);font-size:52px;line-height:.92;font-weight:850;letter-spacing:-3.1px;margin:0 0 14px;font-variation-settings:'wdth' 110}.name span{display:block}.name__outline{color:transparent;-webkit-text-stroke:1px var(--ink);font-variation-settings:'wdth' 100}.title{font-family:var(--display);font-size:17px;line-height:1.25;font-weight:600;letter-spacing:-.25px;margin:0;max-width:460px}.title span{display:inline}.title span+span:before{content:" "}.portrait-frame{margin:0;position:relative}.portrait{display:block;width:145px;height:150px;object-fit:cover;object-position:50% 34%}.portrait-frame:after{content:'';position:absolute;bottom:0;left:-9px;width:2px;height:28px;background:var(--signal)}.contact{font-style:normal;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;font-size:10px;line-height:1.6;color:var(--soft);margin-top:15px}.contact__location{color:var(--muted)}.intro{margin-top:16px;border-top:1px solid var(--ink);padding-top:15px}.summary{font-size:12.2px;line-height:1.6;letter-spacing:-.08px;margin:0}.section-title{font:500 8.5px/1.5 var(--mono);letter-spacing:1.6px;text-transform:uppercase;margin:0;color:var(--muted)}.experience{margin-top:18px}.experience>.section-title{margin-bottom:13px}.chronology{position:relative}.chronology:before{content:'';position:absolute;left:102px;top:3px;bottom:6px;width:1px;background:var(--line)}.role{display:grid;grid-template-columns:104px minmax(0,1fr);gap:23px;margin:0 0 12px;break-inside:avoid;position:relative}.role--current:before{content:'';position:absolute;left:99.5px;top:5px;width:6px;height:6px;border-radius:50%;background:var(--signal)}.role__meta{font:9px/1.65 var(--mono);color:var(--muted);margin:0;padding-right:14px}.role__meta time{display:block}.role__meta .to{display:block}.role__meta .to time{display:inline}.role__company{font-family:var(--display);font-size:15px;line-height:1.2;letter-spacing:-.3px;font-weight:650;margin:0}.role--current .role__company{font-size:18px}.role__location{font:10px/1.4 var(--body);color:var(--muted)}.role__title{font-size:11.7px;line-height:1.45;font-weight:550;margin:3px 0 0}.role--current .role__title{font-weight:650}.role__scope{font-size:11.6px;line-height:1.5;color:var(--soft);margin:5px 0 0;max-width:550px}.foundation{margin:10px 0 9px 127px;font:8px/1.5 var(--mono);color:var(--muted);letter-spacing:.15px}.role__bullets{margin:5px 0 0;padding-left:14px;font-size:11.6px;line-height:1.5;color:var(--soft)}.role__bullets li{margin-bottom:3px}.role__bullets li::marker{color:var(--signal)}.role--early{margin-bottom:10px}.role--early .role__company{font-size:12px}.role--early .role__title{font-size:11px;line-height:1.4;margin-top:2px}.role--early .role__scope{font-size:10.5px;margin-top:2px;color:var(--muted)}.expertise{position:relative;border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.expertise>.section-title{margin-bottom:22px}.skill-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px}.skill-group h3{font:600 11px/1.45 var(--body);margin:0 0 5px;color:var(--ink)}.skill-group p{font-size:11.2px;line-height:1.55;color:var(--soft);margin:0}.systems{display:grid;grid-template-columns:1.8fr 1fr;gap:27px;border-top:1px solid var(--line);margin-top:10px;padding-top:12px}.systems .section-title{margin-bottom:7px}.systems p{font-size:10.6px;line-height:1.65;margin:0;color:var(--soft)}.footer{position:absolute;bottom:39px;left:46px;right:46px;display:flex;align-items:center;justify-content:space-between;gap:20px;font:7px/1.5 var(--mono);letter-spacing:1px;color:var(--muted);text-transform:uppercase}.footer a{color:var(--ink)}
+html[data-render='png'],html[data-render='png'] body{width:2480px;height:3508px;overflow:hidden}html[data-render='png'] .sheet{transform:scale(3.1246031746);transform-origin:top left}@page{size:A4;margin:0}@media print{html,body{width:210mm;height:297mm}.sheet{transform:none!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head>
+<body><main class="sheet" aria-label="{{documentLabel}}">
+<div class="masthead"><a class="brand" href="https://aberbach.co" aria-label="Soufiane Aberbach"><span>SA</span><i aria-hidden="true"></i></a><span class="masthead__rule" aria-hidden="true"></span><span class="edition">{{edition}}<br>2026 / A4</span></div>
+<header class="identity"><div><h1 class="name"><span>Soufiane</span><span class="name__outline">Aberbach</span></h1><p class="title">{{displayTitle}}</p></div><figure class="portrait-frame"><img class="portrait" src="{{portrait}}" alt="Soufiane Aberbach"></figure></header>
+<address class="contact"><span class="contact__location">{{location}}</span><a href="https://aberbach.co">aberbach.co</a><a href="mailto:{{email}}">{{email}}</a><a href="https://www.linkedin.com/in/soufiane-aberbach-6799b7155">LinkedIn</a></address>
+<section class="intro" aria-label="{{profileLabel}}"><p class="summary">{{summary}}</p></section>
+<section class="experience"><h2 class="section-title">{{experienceLabel}}</h2><div class="chronology">{{roles}}</div></section>
+<section class="expertise"><img class="construction" src="{{construction}}" alt="" aria-hidden="true"><h2 class="section-title">{{expertiseLabel}}</h2><div class="skill-grid">{{skills}}</div></section>
+<div class="systems"><section><h2 class="section-title">{{softwareLabel}}</h2><p>{{software}}</p></section><section class="languages"><h2 class="section-title">{{languagesLabel}}</h2><p>{{languages}}</p></section></div>
+<footer class="footer"><a href="https://aberbach.co">ABERBACH.CO</a><span>{{footer}}</span><span>01 / 01</span></footer>
+</main></body></html>

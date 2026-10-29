@@ -1,5 +1,7 @@
 # CV editorial rebuild — work in progress
 
+> Superseded creative direction. Current concept studies and source audit: [Editorial Precision](../cv-final-2026-10-29/REVIEW.md).
+
 Base: `37180aec58636b4373e0823fa4cc285a43688d12` from unmerged PR #58.
 Current main was rechecked and remains `6a48781`. This branch depends on the
 existing EN/FR/ES implementation; the proposed diff concerns the CV system only.

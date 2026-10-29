@@ -1,0 +1,206 @@
+{
+  "status": "Concept proofs only. Final six exports blocked by missing full LinkedIn source and original color portrait.",
+  "selectedConcept": "A \u2014 Fashion Editorial",
+  "primarySource": {
+    "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+    "status": "pending-full-profile-export",
+    "checked": "2026-10-29",
+    "directAccess": "HTTP 999",
+    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people\u2019s posts/reactions excluded.",
+    "unverifiedSections": [
+      "Full About",
+      "Employment titles and exact dates",
+      "Employer responsibilities",
+      "Education qualifications",
+      "Certifications",
+      "Skills"
+    ],
+    "requiredInput": "Owner LinkedIn-exported PDF or screenshots of full sections"
+  },
+  "build": {
+    "passed": true,
+    "pages": 36
+  },
+  "i18n": {
+    "passed": 691,
+    "failed": 0
+  },
+  "layout": [
+    {
+      "locale": "en",
+      "stem": "Soufiane-Aberbach-CV-EN",
+      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
+      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "layoutPreview": true,
+      "careerVerified": false,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 1073.015625,
+        "lastRoleBottom": 1011.671875,
+        "languagesBottom": 1011.671875,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 40.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 40.40625,
+          "right": 82.15625,
+          "bottom": 71.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 602.6875,
+          "y": 92,
+          "width": 145,
+          "height": 150
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "JetBrains Mono",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "fr",
+      "stem": "Soufiane-Aberbach-CV-FR",
+      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
+      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "layoutPreview": true,
+      "careerVerified": false,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 1073.015625,
+        "lastRoleBottom": 992.15625,
+        "languagesBottom": 992.15625,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 40.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 40.40625,
+          "right": 82.15625,
+          "bottom": 71.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 602.6875,
+          "y": 92,
+          "width": 145,
+          "height": 150
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "JetBrains Mono",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "es",
+      "stem": "Soufiane-Aberbach-CV-ES",
+      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
+      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "layoutPreview": true,
+      "careerVerified": false,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 1073.015625,
+        "lastRoleBottom": 992.15625,
+        "languagesBottom": 992.15625,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 40.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 40.40625,
+          "right": 82.15625,
+          "bottom": 71.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 602.6875,
+          "y": 92,
+          "width": 145,
+          "height": 150
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "JetBrains Mono",
+            "status": "loaded"
+          }
+        ]
+      }
+    }
+  ],
+  "releaseGuards": [
+    {
+      "check": "unverified-career-release",
+      "expectedRefusalVerified": true
+    },
+    {
+      "check": "public-preview",
+      "expectedRefusalVerified": true
+    },
+    {
+      "check": "unverified-preview-pdf",
+      "expectedRefusalVerified": true
+    }
+  ],
+  "publicOrWebsiteSourceChanges": false,
+  "technicalMotif": "Exact source crop, SHA256/pixels verified by scripts/cv/verify.py",
+  "SAIdentity": "Exact source CSS/font/markup; dimensions36.15625\u00d731.1875CSSpx; verified on all3proofs"
+}
