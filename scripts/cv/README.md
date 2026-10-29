@@ -1,56 +1,75 @@
-# ABERBACH CV production
+# ABERBACH editorial CV system — redesign draft
 
-Three language editions of one factual career record and one A4 layout.
+The prior CV design is unapproved and superseded by this rebuild. The existing
+six public downloads remain untouched until the owner supplies the original
+color portrait and the new image masters pass review. This is not a completed
+replacement release yet.
 
-- `career.json`: verified employers, dates, translated titles, competencies,
-  software, actual working languages and public contact. English is factual
-  authority; the source commit and pages are recorded in this file.
-- `template.html`: editable deterministic layout. Archivo and Inter are embedded
-  from the existing committed font fixtures; no network fonts are required.
-- `portrait.png`: **processed derivative** of the owner-supplied photograph,
-  cropped and rendered in monochrome by the browser. The original attachment is
-  not copied into the repository or the public site. No generated portrait,
-  facial changes, background replacement or invented image detail is used.
-- `render.mjs`: typesets real text, checks font loading and page geometry,
-  produces 2480 × 3508 PNGs with 300 DPI metadata, and retains searchable HTML
-  text sources in ignored `.qa-director/cv/`.
-- `finalize.py`: converts each reviewed image into an exact 210 × 297 mm PDF.
-  The approved image covers the page; tagged text from the same HTML is retained
-  underneath for searching/copying and contact links. It verifies the PDF image
-  decodes to exactly the same RGB pixels as the approved PNG. This is a real
-  image-to-PDF conversion, without re-typesetting or a visual redesign.
-- `verify.py`: independent delivered-file checks: exact dimensions, resolution,
-  white print margins, portrait consistency, all six career positions, real
-  software/languages, searchable PDF text, working PDF links and pixel equality.
+## Sources
 
-## Reproduce
+- `career.json`: shared six-role chronology, EN/FR/ES text, grouped expertise,
+  eight tools and four actual working languages. Photoshop, Excel and Amazigh
+  are owner-confirmed additions in the redesign brief. No proficiency ratings,
+  degrees, certifications, team sizes, named contracts or metrics were added.
+- Main employers/titles/dates remain verified against Experience. Detailed role
+  bullets are draft functional descriptions derived from the owner's declared
+  specialties and verified job functions. Precise employer attribution is pending
+  clarification and must be reviewed before release; source flags retain that
+  distinction rather than presenting assumptions as evidence.
+- Selected brand names come from the current Home programme-exposure list. Their
+  qualifier explicitly excludes direct employment and endorsement.
+- `template.html`: editable A4 grid, content-first chronology, natural-color
+  portrait frame, white paper and restrained Aberbach orange. The previous
+  grayscale filters are removed.
+- `portrait.png`: currently the **old monochrome derivative only**. The original
+  color attachment is no longer present in this workspace. Never colorize it to
+  invent the original colors. Replace it only from the owner's actual photo.
 
-Use the repository's existing Node/Playwright install. Install the print helpers
-in a Python environment (`python3 -m pip install -r scripts/cv/requirements.txt`).
+## Image-first production
+
+Use existing Playwright and committed font fixtures. No generated typography,
+external font request or new application dependency is required. Python print
+requirements are in `requirements.txt`.
 
 ```sh
-node scripts/cv/render.mjs
-# Inspect all three PNGs at native resolution before final PDF production.
+node scripts/cv/render.mjs --prepare-portrait /path/to/original-color-photo.jpg
+```
+
+The supplied file stays outside public/. Browser cropping creates the shared
+portrait derivative without facial alteration or grayscale treatment. Inspect
+that derivative and the actual PNG editions at native 2480×3508 resolution.
+Color validation rejects monochrome input. PNGs carry 300 DPI metadata; geometry
+checks reject clipped text, footer collisions or missing fonts. The release
+layout manifest is written only for a real color render.
+
+After visual PNG inspection:
+
+```sh
 python3 scripts/cv/finalize.py
-node tests/cv.mjs
+npm run test:cv
 ```
 
-Use `CHROMIUM_PATH` only when the existing Playwright browser is unavailable and
-an appropriate local Chromium is already installed. `CV_OUTPUT_DIR` and
-`CV_QA_DIR` can point to alternative repository-relative production/review
-folders. The independent delivered-file test always checks `public/cv/`.
+Finalization preserves the reviewed PNG pixels on exact 210×297mm PDF pages,
+with searchable source text and working contact links underneath. It rejects
+layout previews. Independent verification checks chronology, all eight tools,
+four spoken languages, qualified brand exposure, portrait color/consistency,
+printer margins, page dimensions and decoded PNG/PDF pixel equality.
 
-To prepare a replacement **owner-authorized** portrait, supply its local path:
+Final file paths stay unchanged:
+`public/cv/Soufiane-Aberbach-CV-{EN,FR,ES}.{png,pdf}`. The Experience component
+already provides current-language PDF downloads and all six alternate options.
+
+## Composition review without the missing photograph
 
 ```sh
-node scripts/cv/render.mjs --prepare-portrait /path/to/owner-portrait.jpg
+CV_OUTPUT_DIR=.qa-director/cv-rebuild/draft \
+CV_QA_DIR=.qa-director/cv-rebuild/draft \
+node scripts/cv/render.mjs --layout-preview
+python3 scripts/cv/verify.py --layout-preview-dir .qa-director/cv-rebuild/draft
 ```
 
-This updates only the cropped monochrome derivative, then renders the editions.
-Review the real identity/crop before running final PDF production. The default
-render requires no access to the original attachment.
-
-The source retains the owner's real Arabic/French/English working languages.
-Spanish publication does not create a Spanish-proficiency claim. Education,
-certifications, metrics, employer responsibilities and proficiency levels are
-omitted because the verified source does not establish them.
+This substitutes an explicit COLOR PORTRAIT PENDING panel when only the old
+monochrome source is available. Preview mode cannot target public/. It is for
+layout review only and never passes release verification or final PDF creation.
+`CHROMIUM_PATH` can select an appropriate installed browser when the repository's
+pinned Playwright browser is unavailable.

@@ -6,20 +6,82 @@
 <title>Soufiane Aberbach — {{edition}}</title>
 <style>
 {{fonts}}
-:root{--ink:#161616;--muted:#626262;--accent:#D45F36;--line:#d9d9d9;--display:Archivo,'Arial',sans-serif;--body:Inter,'Arial',sans-serif}
-*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:var(--ink)}body{font-family:var(--body);font-size:12px;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}.sheet{position:relative;width:210mm;height:297mm;background:#fff;overflow:hidden;padding:44px 51px 40px}.masthead{display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:1.8px;font-weight:650}.masthead__brand{font-family:var(--display);font-weight:800;letter-spacing:1.2px}.masthead__edition{font-size:8px;color:var(--muted);letter-spacing:1.1px}.identity{margin-top:28px;display:grid;grid-template-columns:1fr 139px;gap:24px;align-items:start}.name{font-family:var(--display);font-size:58px;line-height:.96;letter-spacing:-2.6px;font-weight:750;margin:0 0 17px}.name span{display:block}.title span{display:block}.title{font-family:var(--display);font-size:18px;font-weight:600;line-height:1.25;letter-spacing:-.3px;max-width:430px;margin:0}.portrait{width:139px;height:183px;object-fit:cover;object-position:center 31%;filter:grayscale(1);display:block}.portrait-frame{position:relative}.portrait-frame:after{content:'';position:absolute;bottom:-7px;left:0;background:var(--accent);width:23px;height:3px}.contact{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:10px;color:var(--muted);margin-top:24px;line-height:1.5;letter-spacing:.05px}.contact__location{color:var(--ink)}.intro{border-top:1.2px solid var(--ink);margin-top:23px;padding-top:17px}.summary{font-size:12px;line-height:1.65;margin:0;max-width:656px;letter-spacing:-.05px}.columns{margin-top:30px;display:grid;grid-template-columns:193px 1fr;gap:36px}.section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;margin:0 0 24px;display:flex;align-items:center;gap:10px}.section-title:before{content:'';width:15px;height:2px;background:var(--accent);flex:none}.skill-group{margin:0 0 17px}.skill-group h3{font-size:10.75px;font-weight:650;line-height:1.4;margin:0 0 7px}.skill-group p{font-size:11.25px;color:var(--muted);line-height:1.58;margin:0}.tools{border-top:1px solid var(--line);padding-top:17px;margin-top:20px}.tools .section-title{margin-bottom:15px}.tools p{font-size:11.25px;line-height:1.8;margin:0;color:var(--muted)}.languages{margin-top:18px}.languages .section-title{margin-bottom:11px}.languages p{font-size:11.25px;line-height:1.6;color:var(--muted);margin:0}.experience .section-title{margin-bottom:21px}.role{margin-bottom:23px;break-inside:avoid}.role:last-child{margin-bottom:0}.role__meta{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted);letter-spacing:.25px;line-height:1.5;margin-bottom:5px}.role--current .role__meta:before{content:'';width:5px;height:5px;border-radius:100%;background:var(--accent);display:block}.role__company{font-family:var(--display);font-size:18px;line-height:1.1;letter-spacing:-.4px;margin:0 0 4px;font-weight:650}.role--current .role__company{font-size:24px;letter-spacing:-.5px}.role__title{font-size:11.5px;line-height:1.4;font-weight:550;margin:0;max-width:405px}.role--current .role__title{font-size:12px;font-weight:650;line-height:1.4}.role__scope{font-size:10px;color:var(--muted);line-height:1.6;margin:8px 0 0;max-width:400px}.footer{position:absolute;bottom:39px;left:51px;right:51px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px;font-size:8px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted)}.footer__signature{font-family:var(--display);font-weight:600;letter-spacing:1px;color:var(--ink)}
-html[data-render='png'],html[data-render='png'] body{width:2480px;height:3508px;overflow:hidden}html[data-render='png'] .sheet{transform:scale(3.1246031746);transform-origin:top left}
-@page{size:A4;margin:0}@media print{html,body{width:210mm;height:297mm}.sheet{transform:none!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+:root { --ink:#171816; --muted:#60635e; --accent:#D45F36; --line:#d7d9d4; --display:Archivo,Arial,sans-serif; --body:Inter,Arial,sans-serif; }
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:#fff; color:var(--ink); }
+body { font-family:var(--body); font-size:12px; -webkit-font-smoothing:antialiased; }
+a { color:inherit; text-decoration:none; }
+.sheet { position:relative; width:210mm; height:297mm; padding:40px 46px 43px; background:#fff; overflow:hidden; }
+.masthead { display:flex; justify-content:space-between; gap:20px; padding-bottom:14px; border-bottom:1px solid var(--line); font-size:8px; line-height:1.4; font-weight:550; letter-spacing:1.35px; text-transform:uppercase; }
+.masthead__brand { color:var(--accent); font-family:var(--display); font-weight:750; letter-spacing:1.5px; }
+.masthead__edition { color:var(--muted); }
+.identity { display:grid; grid-template-columns:minmax(0,1fr) 111px; gap:27px; margin-top:25px; align-items:start; }
+.identity__copy { padding-top:4px; }
+.name { font-family:var(--display); font-size:43px; line-height:1.06; font-weight:650; letter-spacing:-1.65px; margin:0 0 12px; white-space:nowrap; }
+.title { font-family:var(--display); font-size:19px; font-weight:550; line-height:1.2; letter-spacing:-.25px; margin:0; max-width:470px; }
+.title span { display:block; }
+.positioning { color:var(--muted); font-size:10px; line-height:1.5; margin:13px 0 0; }
+.portrait { display:block; width:111px; height:138px; object-fit:cover; object-position:50% 35%; }
+.portrait-frame { margin:0; padding-bottom:7px; border-bottom:2px solid var(--accent); }
+.contact { display:flex; flex-wrap:wrap; gap:5px 17px; margin:12px 0 0; font-size:10px; line-height:1.5; color:var(--muted); font-style:normal; }
+.contact__location { color:var(--ink); }
+.intro { border-top:1px solid var(--ink); margin-top:12px; padding-top:16px; }
+.summary { font-size:12.2px; line-height:1.65; margin:0; letter-spacing:-.08px; }
+.columns { display:grid; grid-template-columns:minmax(0,1fr) 190px; gap:30px; margin-top:20px; }
+.experience { min-width:0; }
+.sidebar { padding-left:22px; border-left:1px solid var(--line); }
+.section-title { font-size:9px; line-height:1.4; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 17px; color:var(--ink); }
+.role { margin:0 0 16px; break-inside:avoid; }
+.role__header { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.role__company { font-family:var(--display); font-size:16px; font-weight:650; line-height:1.25; letter-spacing:-.2px; margin:0; }
+.role__meta { font-size:9px; line-height:1.4; color:var(--muted); white-space:nowrap; margin:0; }
+.role__title { font-size:12px; line-height:1.4; font-weight:550; margin:4px 0 0; }
+.role--current .role__company { color:var(--ink); font-size:19px; }
+.role--current .role__title { font-weight:650; }
+.role__location { font-weight:400; font-size:10px; color:var(--muted); }
+.role__bullets { padding-left:13px; margin:8px 0 0; font-size:11.65px; line-height:1.55; color:#41453f; }
+.role__bullets li { padding-left:1px; margin:0 0 4px; }
+.role__bullets li::marker { color:var(--accent); font-size:8px; }
+.earlier { border-top:1px solid var(--line); padding-top:14px; margin-top:3px; }
+.earlier .section-title { margin-bottom:10px; font-size:8px; color:var(--muted); }
+.role--early { margin-bottom:8px; }
+.role--early .role__company { font-size:12px; font-family:var(--body); font-weight:600; }
+.role--early .role__title { font-size:10.75px; margin-top:2px; font-weight:450; color:#41453f; }
+.skill-group { margin-bottom:15px; }
+.skill-group h3 { font-size:11px; line-height:1.4; font-weight:650; margin:0 0 5px; }
+.skill-group p { font-size:11px; line-height:1.6; color:var(--muted); margin:0; }
+.tools { padding-top:14px; border-top:1px solid var(--line); margin-top:17px; }
+.tools .section-title,.languages .section-title { margin-bottom:10px; }
+.tools p { margin:0; font-size:11px; line-height:1.75; color:#41453f; }
+.languages { margin-top:18px; }
+.languages p { font-size:11px; line-height:1.6; margin:0; color:#41453f; }
+.exposure { position:absolute; bottom:66px; left:46px; right:46px; border-top:1px solid var(--line); padding-top:12px; }
+.exposure .section-title { font-size:8px; margin-bottom:7px; color:var(--muted); }
+.exposure__brands { font-family:var(--display); font-size:11px; font-weight:550; line-height:1.5; margin:0; letter-spacing:.05px; }
+.exposure__note { font-size:8px; line-height:1.5; margin:5px 0 0; color:var(--muted); }
+.footer { position:absolute; bottom:40px; left:46px; right:46px; display:flex; justify-content:space-between; align-items:center; font-size:7px; line-height:1.5; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase; }
+.footer__signature { color:var(--ink); }
+html[data-render='png'],html[data-render='png'] body { width:2480px; height:3508px; overflow:hidden; }
+html[data-render='png'] .sheet { transform:scale(3.1246031746); transform-origin:top left; }
+@page { size:A4; margin:0; }
+@media print { html,body { width:210mm; height:297mm; } .sheet { transform:none!important; } * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
 </style>
 </head>
 <body>
 <main class="sheet" aria-label="{{documentLabel}}">
-<div class="masthead"><span class="masthead__brand">ABERBACH.CO</span><span class="masthead__edition">{{edition}}</span></div>
-<header class="identity"><div><h1 class="name"><span>SOUFIANE</span><span>ABERBACH</span></h1><p class="title">{{displayTitle}}</p></div><div class="portrait-frame"><img class="portrait" src="{{portrait}}" alt="Soufiane Aberbach"></div></header>
-<address class="contact" style="font-style:normal"><span class="contact__location">{{location}}</span><a href="https://aberbach.co">aberbach.co</a><a href="mailto:{{email}}">{{email}}</a></address>
-<section class="intro" aria-label="{{profileLabel}}"><p class="summary">{{summary}}</p></section>
-<div class="columns"><aside><section><h2 class="section-title">{{expertiseLabel}}</h2>{{skills}}</section><section class="tools"><h2 class="section-title">{{softwareLabel}}</h2><p>{{software}}</p></section><section class="languages"><h2 class="section-title">{{languagesLabel}}</h2><p>{{languages}}</p></section></aside><section class="experience"><h2 class="section-title">{{experienceLabel}}</h2>{{roles}}</section></div>
-<footer class="footer"><span class="footer__signature">{{footer}}</span><span>01 / 01</span></footer>
+  <div class="masthead"><span class="masthead__brand">ABERBACH.CO</span><span class="masthead__edition">{{edition}}</span></div>
+  <header class="identity">
+    <div class="identity__copy"><h1 class="name">Soufiane Aberbach</h1><p class="title">{{displayTitle}}</p><p class="positioning">{{positioning}}</p></div>
+    <figure class="portrait-frame"><img class="portrait" src="{{portrait}}" alt="Soufiane Aberbach"></figure>
+  </header>
+  <address class="contact"><span class="contact__location">{{location}}</span><a href="https://aberbach.co">aberbach.co</a><a href="mailto:{{email}}">{{email}}</a></address>
+  <section class="intro" aria-label="{{profileLabel}}"><p class="summary">{{summary}}</p></section>
+  <div class="columns">
+    <div class="experience"><section><h2 class="section-title">{{experienceLabel}}</h2>{{roles}}</section><section class="earlier"><h2 class="section-title">{{earlierLabel}}</h2>{{earlierRoles}}</section></div>
+    <aside class="sidebar"><section><h2 class="section-title">{{expertiseLabel}}</h2>{{skills}}</section><section class="tools"><h2 class="section-title">{{softwareLabel}}</h2><p>{{software}}</p></section><section class="languages"><h2 class="section-title">{{languagesLabel}}</h2><p>{{languages}}</p></section></aside>
+  </div>
+  <section class="exposure"><h2 class="section-title">{{exposureLabel}}</h2><p class="exposure__brands">{{brands}}</p><p class="exposure__note">{{exposureNote}}</p></section>
+  <footer class="footer"><span class="footer__signature">{{footer}}</span><span>01 / 01</span></footer>
 </main>
 </body>
 </html>

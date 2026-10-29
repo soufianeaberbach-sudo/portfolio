@@ -1,0 +1,140 @@
+{
+  "status": "draft awaiting original color photograph; job-specific attribution clarification pending",
+  "build": {
+    "passed": true,
+    "pages": 36
+  },
+  "i18n": {
+    "passed": 691,
+    "failed": 0
+  },
+  "layout": [
+    {
+      "locale": "en",
+      "stem": "Soufiane-Aberbach-CV-EN",
+      "layoutPreview": true,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 991.828125,
+        "lastRoleBottom": 975.09375,
+        "languagesBottom": 896.4375,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "portrait": {
+          "x": 636.6875,
+          "y": 91.1875,
+          "width": 111,
+          "height": 138
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "fr",
+      "stem": "Soufiane-Aberbach-CV-FR",
+      "layoutPreview": true,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 991.828125,
+        "lastRoleBottom": 975.09375,
+        "languagesBottom": 914.03125,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "portrait": {
+          "x": 636.6875,
+          "y": 91.1875,
+          "width": 111,
+          "height": 138
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "es",
+      "stem": "Soufiane-Aberbach-CV-ES",
+      "layoutPreview": true,
+      "portraitColor": {
+        "fraction": 0,
+        "width": 435,
+        "height": 573
+      },
+      "geometry": {
+        "footerTop": 991.828125,
+        "lastRoleBottom": 975.09375,
+        "languagesBottom": 931.625,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "portrait": {
+          "x": 636.6875,
+          "y": 91.1875,
+          "width": 111,
+          "height": 138
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          }
+        ]
+      }
+    }
+  ],
+  "guards": [
+    {
+      "check": "monochrome-release-guard",
+      "passed": true,
+      "expectedRefusal": "Original color portrait required"
+    },
+    {
+      "check": "public-preview-guard",
+      "passed": true,
+      "expectedRefusal": "Layout previews must stay outside public"
+    },
+    {
+      "check": "preview-pdf-guard",
+      "passed": true,
+      "expectedRefusal": "Final PDF requires reviewed natural-color PNG editions"
+    }
+  ],
+  "publicAssetsChanged": false,
+  "websiteBackendOrPortfolioSourcesChanged": false
+}

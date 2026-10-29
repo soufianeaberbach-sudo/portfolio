@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / os.getenv('CV_OUTPUT_DIR', 'public/cv')
 QA = ROOT / os.getenv('CV_QA_DIR', '.qa-director/cv')
 A4 = fitz.Rect(0, 0, 210 / 25.4 * 72, 297 / 25.4 * 72)
+layout = json.loads((QA / 'layout-report.json').read_text())
+assert len(layout) == 3 and all(not r.get('layoutPreview', True) and r['portraitColor']['fraction'] >= .03 for r in layout), 'Final PDF requires reviewed natural-color PNG editions; draft previews cannot be published.'
 report = []
 for locale in ['EN', 'FR', 'ES']:
     stem = f'Soufiane-Aberbach-CV-{locale}'
@@ -47,7 +49,7 @@ for locale in ['EN', 'FR', 'ES']:
         assert abs(p.rect.width - A4.width) < .001
         assert abs(p.rect.height - A4.height) < .001
         text = p.get_text()
-        assert all(word in text for word in ['SOUFIANE', 'ABERBACH', 'Ava Marie', 'Lariconf', 'Roadtex', '2014', '2022'])
+        assert all(word in text for word in ['Soufiane', 'Aberbach', 'Ava Marie', 'Lariconf', 'Roadtex', '2014', '2022'])
         raster = [i for i in p.get_images() if i[2:4] == (2480, 3508)]
         assert len(raster) == 1
         pix = fitz.Pixmap(final, raster[0][0])
