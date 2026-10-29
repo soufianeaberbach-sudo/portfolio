@@ -153,14 +153,14 @@ export const home = defineDict(
         'especialista en escalado',
         'desarrollador de simulación 3D',
         'autor de fichas técnicas',
-        'técnico de producción',
+        'técnico de seguimiento de producción',
       ],
       rolesSentence:
         'Diseñador de moda, desarrollador de producto, patronista, especialista en escalado de tallas, desarrollador de simulación 3D, autor de fichas técnicas y técnico de seguimiento de producción.',
       portraitAlt: 'Soufiane Aberbach, sentado, dibujando en una tableta',
       positioning: {
         eyebrow: 'Enfoque',
-        title: 'El error caro se comete <em>antes</em> de la costura.',
+        title: 'El error más caro ocurre <em>antes</em> de coser.',
         body: [
           'Muchas pruebas de ajuste interminables, pérdidas de tejido y retrasos en las muestras nacen de decisiones tomadas antes de cortar el primer metro.',
           'Esa decisión es el trabajo: definir el patrón, validar el ajuste y convertir una intención en instrucciones que una fábrica pueda repetir.',

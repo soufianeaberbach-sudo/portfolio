@@ -28,7 +28,7 @@ patternmaking, **gradation** for grading, **bien-aller** for garment fit,
 **tombé** for drape, **aisance** for ease and **dossier technique** for a tech
 pack. Spanish uses **patronaje**, **escalado**, **ajuste**, **caída**, **holgura**
 and **ficha técnica**, respectively. Technical context and approved professional
-seniority remain intact. Existing FR uses professional “vous”; existing ES uses
+seniority remain intact. The Spanish Home headline was refined from literal “error caro / costura” to “El error más caro ocurre antes de coser”, and the rotating production role now matches its full source meaning, “técnico de seguimiento de producción”. Existing FR uses professional “vous”; existing ES uses
 a consistent direct “tú” register for visitors.
 
 The five Process and four Expertise alt descriptions describe the actual current

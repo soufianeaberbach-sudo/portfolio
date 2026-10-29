@@ -28,7 +28,7 @@ import { indexableRoutes, localizedRoutes, siteLocales, localizedPath } from '..
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const DIST = join(ROOT, 'dist');
+const DIST = process.env.I18N_DIST ? join(ROOT, process.env.I18N_DIST) : join(ROOT, 'dist');
 const ORIGIN = 'https://aberbach.co';
 const EVIDENCE = process.env.I18N_SCREENSHOTS;
 if (EVIDENCE) await mkdir(EVIDENCE, { recursive: true });

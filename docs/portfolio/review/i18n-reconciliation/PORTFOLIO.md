@@ -40,3 +40,47 @@ locales are LTR. Arabic maps, RTL arrows and Arabic-specific code are excluded.
   import was renamed `readerCopy`; final QA must use the rebuilt bundle.
 - Final browser results and actual screenshots are recorded by the release
   report, separately from these implementation observations.
+
+## Final targeted browser evidence
+
+All 18 language/viewport combinations passed: EN, FR, ES at 390×844, 430×932,
+768×1024, 1024×768, 1440×900 and 1920×1080. This produced 72 actual captures and
+126 recorded functional check groups, with zero browser runtime errors. Each
+combination exercised real loaded Front/Back photographs, independent Front and
+Back zoom, Fit, Escape return, five available Tech Packs, the mounted ten-page
+image reader, close behavior and document-width safety.
+
+The final candidate at preview port 4460 additionally passed eight explicit
+checks across FR and ES: current source provenance labels, current shot labels,
+document controls and intentionally failed image requests producing localized
+error/retry controls. Those checks used the final compiled candidate after the
+reader dictionary alias correction and short-label reconciliation.
+
+Actual render critique:
+
+- **Fashion hierarchy / image integration:** FR1440 Menswear keeps full Front
+  and Back silhouettes on white grounds. The type remains subordinate and no
+  crop, background, ordering or photograph was altered.
+- **Composition / typography:** the FR390 garment heading and description fit
+  the existing measure; help text wraps to two readable lines. The ES430 title,
+  description and Delantero/Ajustar controls fit without clipping.
+- **Rhythm:** chapter and garment return affordances remain in their established
+  positions. The translated Tech Packs chapter retains its document-first
+  column and spacing.
+- **Interaction / mobile:** independent zoom and Fit preserve the other photo's
+  state. Desktop presents both complete frames; mobile keeps the established
+  stacked inspection order. The longer FR document Fit controls wrap into a
+  second toolbar row without overlap at phone width.
+- **Technical documents:** the final FR1440 reader shows the complete first
+  technical page at Fit page, with translated surrounding controls. Source
+  engineering documents retain their original English artwork and exact files.
+
+Selected screenshots are retained in
+`../i18n-cv/screenshots/portfolio/`; full temporary captures remain under
+`.qa-director/i18n-portfolio/`. The machine record is
+[portfolio-browser-results.json](portfolio-browser-results.json), with final
+short-label/failure-state checks in
+[portfolio-final-label-results.json](portfolio-final-label-results.json).
+
+This is browser emulation. It does not establish physical iPhone Safari or
+Android device testing, production deployment, or owner artistic approval.

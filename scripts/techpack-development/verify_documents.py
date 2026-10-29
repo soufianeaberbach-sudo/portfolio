@@ -6,6 +6,7 @@ from pathlib import Path
 import hashlib
 import json
 import sys
+import subprocess
 import fitz
 from PIL import Image
 
@@ -82,8 +83,31 @@ for row in json.loads((PUBLIC / 'techpacks/materials/material-credits.json').rea
     assert sha(url_path(row['url'])) == row['sha256']
     assert row['license'] and row['source'] and row['changes']
 
+# The owner authorized display-copy localization of these three exact PR54
+# sources. Preserve the original SHA256 record, prove it matches current main,
+# and require the final localized Git blob pinned by the common source receipt.
+# Every other foundation file and all fifty PNG/PDF pages remain exact.
+localized_pr54 = {
+    'src/components/portfolio/GarmentInspection.astro',
+    'src/scripts/photo-inspection.ts',
+    'src/scripts/menswear-reader.ts',
+}
+receipt = json.loads((ROOT / 'tests/fixtures/localization-preservation.json').read_text())
+assert receipt['parentMain'] == '6a487817cd4a585c5140547aa9b74e2b8c6dac35'
+localized_foundations = []
 for row in read('pr54-preservation.json'):
-    assert sha(ROOT / row['file']) == row['sha256']
+    path = row['file']
+    if sha(ROOT / path) == row['sha256']:
+        continue
+    assert path in localized_pr54, 'Unapproved PR54 foundation change: ' + path
+    update = (receipt['changes'] | receipt['currentMainChanges'])[path]
+    original = subprocess.check_output(['git', 'show', receipt['parentMain'] + ':' + path], cwd=ROOT)
+    assert hashlib.sha256(original).hexdigest() == row['sha256'], 'Original foundation proof changed: ' + path
+    git_blob = lambda b: hashlib.sha1(('blob ' + str(len(b)) + chr(0)).encode() + b).hexdigest()
+    assert git_blob(original) == update['previousMainSHA1'], 'Localization baseline differs: ' + path
+    assert git_blob((ROOT / path).read_bytes()) == update['authorizedSHA1'], 'Localized source differs from exact receipt: ' + path
+    localized_foundations.append(path)
+assert set(localized_foundations) == localized_pr54
 
 sys.path.insert(0, str(ROOT / 'scripts/techpack-development'))
 import artwork
@@ -101,6 +125,7 @@ for g in [artwork.G[0],artwork.G[1],artwork.G[3],artwork.G[4]]:
                                      allOpen=True,noClosingChord=True))
 
 print(json.dumps(dict(pdfs=5, pages=50, readingCopies=50,
-                     pr54FoundationFilesUnchanged=True,
+                     pr54FoundationFilesPreservedExceptAuthorizedLocalization=True,
+                     localizedPR54Sources=localized_foundations,
                      artworkRegenerated=False, pageChecks=checks,
                      sourceMeasurementPaths=open_path_checks), indent=2))
