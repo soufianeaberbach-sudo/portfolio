@@ -12,6 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Exact-source receipts compare against the approved pre-localization
+      # main tree. A shallow PR checkout does not include that commit. Fetch
+      # only this pinned baseline; existing photographs remain shared objects.
+      - name: Fetch approved source-preservation baseline
+        run: git fetch --no-tags --depth=1 origin 6a487817cd4a585c5140547aa9b74e2b8c6dac35
+
       # Node 22 is what the project is developed against and what Astro 5 and
       # Wrangler 4 both support.
       - uses: actions/setup-node@v4
@@ -37,7 +43,7 @@ jobs:
       # Fails if the old website domain reappears in source or in the built
       # output — canonical, og:url, structured data, sitemap, robots or the
       # Turnstile hostname allowlist. Also asserts the public contact address
-      # is still present, and that no locale route or tracker has crept in.
+      # is still present, and that only EN/FR/ES routes and no trackers ship.
       - name: Domain and canonical guard
         run: npm run test:domain
 
