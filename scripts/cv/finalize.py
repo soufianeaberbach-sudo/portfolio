@@ -18,18 +18,22 @@ QA = ROOT / os.getenv('CV_QA_DIR', '.qa-director/cv')
 A4 = fitz.Rect(0, 0, 210 / 25.4 * 72, 297 / 25.4 * 72)
 parser=argparse.ArgumentParser()
 parser.add_argument('--proof',action='store_true',help='Unpublished review PDFs outside public/ only; never authorizes release')
-proof=parser.parse_args().proof
+parser.add_argument('--locale',choices=['en','fr','es'],help='Explicit single-edition review/export')
+args=parser.parse_args()
+proof=args.proof
 if proof: assert not OUT.resolve().is_relative_to((ROOT/'public').resolve()), 'Proof PDFs must remain outside public/'
 layout = json.loads((QA / 'layout-report.json').read_text())
 portrait = json.loads((ROOT / 'scripts/cv/portrait-source.json').read_text())
-assert len(layout) == 3 and all(r.get('layoutPreview') is proof and r.get('careerVerified',False) and r['portraitColor']['fraction'] >= .03 for r in layout), 'PDF source does not match the requested review/release state.'
-if not proof: assert all(r['linkedinVerified'] for r in layout), 'Final PDFs require complete primary-source verification or explicit owner release authorization.'
+expected={args.locale} if args.locale else {'en','fr','es'}
+assert len(layout)==len(expected) and {r['locale'] for r in layout}==expected and all(r.get('layoutPreview') is proof and r.get('careerVerified',False) and r['portraitColor']['fraction'] >= .03 for r in layout), 'PDF source does not match the requested edition/review state.'
+if not proof: assert all(r['ownerVisualApproved'] for r in layout), 'Final PDFs require the requested owner visual review.'
 assert all(r['sourceSHA256']==hashlib.sha256((ROOT/'scripts/cv/career.json').read_bytes()).hexdigest() and r['portraitSHA256']==hashlib.sha256((ROOT/'scripts/cv'/portrait['file']).read_bytes()).hexdigest() for r in layout), 'Stale career or portrait source; render and inspect fresh PNG masters first.'
 assert all(all(hashlib.sha256((ROOT/'scripts/cv'/file).read_bytes()).hexdigest()==sha for file,sha in r['productionSources'].items()) for r in layout),'Production artwork/layout changed after rendering'
 review=json.loads((QA/'image-review.json').read_text())
 assert all(review[r['locale']]['pngSHA256']==hashlib.sha256((OUT/(r['stem']+'.png')).read_bytes()).hexdigest() and review[r['locale']]['fullResolutionInspected'] for r in layout),'All PNG images must be visually reviewed before PDF conversion'
 report = []
-for locale in ['EN', 'FR', 'ES']:
+for row in layout:
+    locale=row['locale'].upper()
     stem = f'Soufiane-Aberbach-CV-{locale}'
     png = OUT / f'{stem}.png'
     with Image.open(png) as image:

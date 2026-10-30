@@ -1,5 +1,5 @@
 /* Deterministic A4 CV production: source text -> browser PNG -> matching PDF.
-   Original portrait RGB + generated background-removal alpha; real editable text. */
+   Original crisp portrait; canonical owner data; editable approved-model adaptation. */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -12,24 +12,25 @@ const DIR = fileURLToPath(new URL('./', import.meta.url));
 const OUT = resolve(ROOT, process.env.CV_OUTPUT_DIR || 'public/cv');
 const QA = resolve(ROOT, process.env.CV_QA_DIR || '.qa-director/cv');
 const layoutPreview = process.argv.includes('--layout-preview');
+const localeIndex=process.argv.indexOf('--locale');
+const requestedLocales=localeIndex>=0?[process.argv[localeIndex+1]]:['en','fr','es'];
+if(requestedLocales.some(l=>!['en','fr','es'].includes(l)))throw new Error('Supported CV locales: en, fr, es.');
 if (layoutPreview && OUT.startsWith(resolve(ROOT, 'public'))) throw new Error('Layout previews must stay outside public/.');
 const sourceBytes=await readFile(join(DIR,'career.json'));
 const sourceSHA256=createHash('sha256').update(sourceBytes).digest('hex');
 const data=JSON.parse(sourceBytes.toString('utf8'));
 const template = await readFile(join(DIR, 'template.html'), 'utf8');
 const productionSources={};
-for(const file of ['template.html','portrait-cutout.png','atelier-dress-form.png','fonts/BodoniModa.ttf'])productionSources[file]=createHash('sha256').update(await readFile(join(DIR,file))).digest('hex');
+for(const file of ['template.html','render.mjs','fashion-signature.svg'])productionSources[file]=createHash('sha256').update(await readFile(join(DIR,file))).digest('hex');
 const portraitSource = JSON.parse(await readFile(join(DIR, 'portrait-source.json'), 'utf8'));
 const portraitPath = join(DIR, portraitSource.file);
 const portraitBytes = await readFile(portraitPath);
 const portraitSHA256 = createHash('sha256').update(portraitBytes).digest('hex');
 if (portraitSHA256 !== portraitSource.sourceSHA256) throw new Error('Portrait differs from the owner attachment recorded in portrait-source.json.');
-const portraitMaskPath=join(DIR,portraitSource.maskFile);
-const portraitMaskSHA256=createHash('sha256').update(await readFile(portraitMaskPath)).digest('hex');
-if(portraitMaskSHA256!==portraitSource.maskSHA256)throw new Error('Portrait background-removal mask has changed.');
-const contentVerified=data.contentVerification?.status==='verified-owner-site-facts-only' && data.roles.every(r=>r.factSource==='owner-confirmed-and-current-site' && Object.values(r.scope).every(lines=>lines.length===0));
+const contentVerified=data.authoritativeSource?.status==='owner-confirmed'&&data.contentVerification?.status==='owner-confirmed-canonical' && data.roles.every(r=>r.factSource==='owner-confirmed-and-current-site' && Object.values(r.scope).every(lines=>lines.length===0));
 if(!contentVerified&&!layoutPreview)throw new Error('Unverified career claims cannot be released. Inspect the primary source or restrict content to documented owner/site facts.');
-if(!layoutPreview&&data.authoritativeSource?.status!=='verified')throw new Error('Full LinkedIn source or explicit owner release authorization required before public CV replacement.');
+if(!data.workflow?.englishVisualApproved&&requestedLocales.some(l=>l!=='en'))throw new Error('Render and review the English master before producing French or Spanish. Use --locale en.');
+if(!layoutPreview&&!requestedLocales.every(l=>data.workflow?.approvedLocales?.includes(l)))throw new Error('Owner visual review is required before replacing public CV files.');
 const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const imageURI = async (file) => 'data:image/' + (file.endsWith('.png') ? 'png' : 'jpeg') + ';base64,' + (await readFile(file)).toString('base64');
 const fontSpecs = [
@@ -41,7 +42,6 @@ for (const [family, weight, file] of fontSpecs) {
   const binary = await readFile(join(ROOT, 'tests/fixtures/fonts', file));
   fonts += `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-stretch:75% 125%;src:url(data:font/woff2;base64,${binary.toString('base64')}) format('woff2');font-display:block}`;
 }
-fonts+=`@font-face{font-family:'Bodoni Moda';font-style:normal;font-weight:400 900;src:url(data:font/ttf;base64,${(await readFile(join(DIR,'fonts/BodoniModa.ttf'))).toString('base64')}) format('truetype');font-display:block}`;
 // Record 300 DPI as PNG pHYs metadata without resampling a single pixel.
 const printResolution = async (path) => {
   const png = await readFile(path);
@@ -70,14 +70,13 @@ try {
   await probe.close();
   if(color.fraction<.03)throw new Error('Original color portrait required. Monochrome portrait input is prohibited, including in design proofs.');
   if(layoutPreview){
-    console.log('DRAFT layout preview: full LinkedIn source verification pending; owner’s original color portrait integrated. Not final downloadable assets.');
+    console.log('English master for owner visual review; canonical data and original unmodified color portrait. No public asset replacement.');
   }
   const report = [];
   const siteCSS=await readFile(join(ROOT,'src/styles/global.css'),'utf8');
   const brandCSS=siteCSS.match(/\.brand \{[^}]+\}/)[0]+'\n'+siteCSS.match(/\.brand i \{[^}]+\}/)[0];
-  const atelier=await imageURI(join(DIR,'atelier-dress-form.png'));
-  const portraitMask=await imageURI(portraitMaskPath);
-  for (const locale of ['en', 'fr', 'es']) {
+  const fashionSignature=await readFile(join(DIR,'fashion-signature.svg'),'utf8');
+  for (const locale of requestedLocales) {
     const t = data.editions[locale];
     const month = (iso) => {
       if (!iso) return t.present;
@@ -89,13 +88,14 @@ try {
       };
       return names[locale][Number(m) - 1] + ' ' + year;
     };
-    const renderRole=(role,i)=>`<article class="role ${i===0?'role--current':''} ${i>2?'role--early':''}" data-role="${role.id}"><h3 class="role__company">${escape(role.company)}${role.location?` <span class="role__location">· ${escape(role.location[locale])}</span>`:''}</h3><p class="role__title">${escape(role.title[locale])}</p><p class="role__meta"><time datetime="${role.start}">${escape(month(role.start))}</time> — ${role.end?`<time datetime="${role.end}">${escape(month(role.end))}</time>`:escape(t.present)}</p></article>`;
+    const renderRole=(role,i)=>`<article class="role ${i===0?'role--current':''}" data-role="${role.id}"><div class="role__head"><h3 class="role__company">${escape(role.company)}${role.location?` <span class="role__location">· ${escape(role.location[locale])}</span>`:''}</h3><p class="role__meta"><time datetime="${role.start}">${escape(month(role.start))}</time> – ${role.end?`<time datetime="${role.end}">${escape(month(role.end))}</time>`:escape(t.present)}</p></div><p class="role__title">${escape(role.title[locale])}</p></article>`;
     const roles=data.roles.map(renderRole).join('');
-    const skills = t.skills.map((g) => `<div class="skill-group"><h3>${escape(g.heading)}</h3><p>${g.items.map(escape).join('<br>')}</p></div>`).join('');
+    const expertise=t.expertiseItems.map(s=>`<li>${escape(s)}</li>`).join('');
     const displayTitle = t.displayTitle.map((line) => `<span>${escape(line)}</span>`).join('');
-    const software=[[0,1],[2,3,4],[5,7],[6]].map(indices=>indices.map(i=>`<span class="tool">${escape(data.software[i])}</span>`).join(' · ')).join('<br>');
-    const fields = { ...t, displayTitle, locale, title: data.roles[0].title[locale], email: data.email, roles, skills, fonts, brandCSS, atelier, portrait, portraitMask, practice:t.practice.map(p=>`<p>${escape(p)}</p>`).join(''), software };
-    const raw = new Set(['displayTitle', 'fonts', 'brandCSS', 'atelier', 'roles', 'skills', 'software', 'portrait', 'portraitMask','practice']);
+    const software=data.software.map(s=>`<li>${escape(s)}</li>`).join('');
+    const languages=t.languageItems.map(s=>`<li>${escape(s)}</li>`).join('');
+    const fields = { ...t, displayTitle, locale, title: data.roles[0].title[locale], email: data.email, roles, expertise, fonts, brandCSS, fashionSignature, portrait, languages, practice:t.practice.map(p=>`<p>${escape(p)}</p>`).join(''), software };
+    const raw = new Set(['displayTitle', 'fonts', 'brandCSS', 'fashionSignature', 'roles', 'expertise', 'software', 'portrait', 'languages','practice']);
     const html = template.replace(/\{\{(\w+)\}\}/g, (_, key) => {
       if (!(key in fields)) throw new Error('Missing template field: ' + key);
       return raw.has(key) ? fields[key] : escape(fields[key]);
@@ -112,8 +112,10 @@ try {
       const photo = document.querySelector('.portrait').getBoundingClientRect();
       const text = [...document.querySelectorAll('h1,h2,h3,p,a,time,span,li')].filter((n) => n.textContent.trim());
       const clipped = text.filter((n) => { const r = n.getBoundingClientRect(); return r.left < 40 || r.right > sheet.width - 40 || r.bottom > footer.top && !n.closest('.footer') ; }).map((n) => n.textContent.trim());
-      const atelier=document.querySelector('.atelier').getBoundingClientRect();
-      return { footerTop: footer.top, lastRoleBottom: lastRole.bottom, languagesBottom: languages.bottom, sheet: {width:sheet.width,height:sheet.height}, clipped, brand:document.querySelector('.brand').getBoundingClientRect().toJSON(), portrait:{x:photo.x,y:photo.y,width:photo.width,height:photo.height}, atelier:{x:atelier.x,y:atelier.y,width:atelier.width,height:atelier.height}, fonts: [...document.fonts].map((f) => ({ family: f.family, status: f.status })) };
+      const signature=document.querySelector('.fashion-signature').getBoundingClientRect();
+      const photoStyle=getComputedStyle(document.querySelector('.portrait'));
+      const copyRight=Math.max(...[...document.querySelectorAll('.role__head,.role__title,.practice p')].map(n=>n.getBoundingClientRect().right));
+      return { footerTop: footer.top, lastRoleBottom: lastRole.bottom, languagesBottom: languages.bottom, sheet: {width:sheet.width,height:sheet.height}, clipped, copyRight, brand:document.querySelector('.brand').getBoundingClientRect().toJSON(), portrait:{x:photo.x,y:photo.y,width:photo.width,height:photo.height,filter:photoStyle.filter,maskImage:photoStyle.maskImage}, signature:{x:signature.x,y:signature.y,width:signature.width,height:signature.height,opacity:getComputedStyle(document.querySelector('.fashion-signature g')).opacity}, fonts: [...document.fonts].map((f) => ({ family: f.family, status: f.status })) };
     });
     if (geometry.clipped.length || geometry.lastRoleBottom > geometry.footerTop - 15 || geometry.languagesBottom > geometry.footerTop - 15 || geometry.fonts.some((f) => f.status !== 'loaded')) throw new Error(`${locale}: layout QA failed: ${JSON.stringify(geometry)}`);
     await writeFile(join(QA, `${stem}.html`), html);
@@ -124,7 +126,7 @@ try {
     // PDF production happens only after the image review, via finalize.py.
     await p.evaluate(() => { delete document.documentElement.dataset.render; });
     await p.pdf({ path: join(QA, `${stem}-text.pdf`), width: '210mm', height: '297mm', margin: {top:0,left:0,right:0,bottom:0}, printBackground: true, preferCSSPageSize: true, tagged: true, outline: true });
-    report.push({locale, stem, sourceSHA256, portraitSHA256, portraitMaskSHA256, productionSources, layoutPreview, careerVerified:contentVerified, linkedinVerified:data.authoritativeSource?.status==='verified', portraitColor:color, geometry});
+    report.push({locale, stem, sourceSHA256, portraitSHA256, productionSources, layoutPreview, careerVerified:contentVerified, linkedinVerified:false, ownerVisualApproved:data.workflow.approvedLocales.includes(locale), portraitColor:color, geometry});
     await p.close();
     console.log(`${stem}: PNG 2480 × 3508 @ 300 DPI; searchable source retained for final PDF.`);
   }

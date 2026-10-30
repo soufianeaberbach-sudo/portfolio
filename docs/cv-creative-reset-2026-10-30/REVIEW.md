@@ -1,5 +1,7 @@
 # ABERBACH — Fashion Editorial creative reset
 
+**Historical direction, superseded:** the owner has supplied a specific approved model. See the [current English model adaptation](../cv-approved-model-en-2026-10-30/REVIEW.md).
+
 **Unpublished review editions, not released website CVs.** Continues draft PR #59
 on `feat/cv-editorial-rebuild`, based on multilingual PR #58. The owner rejected
 the preceding composition; it is superseded, not cosmetically restyled.

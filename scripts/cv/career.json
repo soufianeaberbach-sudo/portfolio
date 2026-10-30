@@ -1,15 +1,15 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "verifiedAgainst": {
     "commit": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
-    "date": "2026-10-28",
+    "date": "2026-10-30",
     "sources": [
       "src/pages/experience.astro",
       "src/pages/expertise.astro",
       "src/pages/contact.astro",
       "src/pages/portfolio.astro"
     ],
-    "ownerBrief": "Final creative rebuild brief: 12+ years since February 2014, eight systems, Arabic/Amazigh/French/English. Specific responsibilities are not assigned to employers without evidence."
+    "ownerBrief": "Latest approved-model adaptation brief supplies canonical identity, verbatim summary, six expertise areas, eight tools, four spoken languages and exact six-role chronology. LinkedIn fallback is explicitly authorized."
   },
   "name": "Soufiane Aberbach",
   "website": "https://aberbach.co",
@@ -183,10 +183,24 @@
         "Senior Fashion Designer",
         "& Product Developer"
       ],
-      "practiceLabel": "Development practice",
+      "practiceLabel": "Development focus",
       "practice": [
-        "Translating silhouettes into patterns, fit corrections and workable garment construction.",
-        "Connecting design and manufacturing through technical flats, measurements, tolerances, bills of materials and assembly details."
+        "Pattern development, grading and fit correction, supported by CAD and 3D workflows.",
+        "Technical flats, tech packs and construction details for sample and production follow-up."
+      ],
+      "expertiseItems": [
+        "Fashion Design & Product Development",
+        "Pattern Making & Grading",
+        "Fit & Construction",
+        "CAD / 3D",
+        "Technical Flats & Tech Packs",
+        "Womenswear & Menswear"
+      ],
+      "languageItems": [
+        "Arabic",
+        "Amazigh",
+        "French",
+        "English"
       ]
     },
     "fr": {
@@ -285,24 +299,21 @@
     "omitted": "Education, certifications, revenue, production volumes, team sizes, proficiency ratings and unsupported named client contracts."
   },
   "authoritativeSource": {
-    "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
-    "status": "pending-full-profile-export",
-    "checked": "2026-10-30",
-    "directAccess": "HTTP 999 rechecked 2026-10-30; full profile unavailable",
-    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people’s posts/reactions excluded.",
-    "unverifiedSections": [
-      "Full About",
-      "Employment titles and exact dates",
-      "Employer responsibilities",
-      "Education qualifications",
-      "Certifications",
-      "Skills"
-    ],
-    "requiredInput": "Owner LinkedIn-exported PDF or screenshots of full sections"
+    "kind": "owner-canonical-fallback",
+    "status": "owner-confirmed",
+    "date": "2026-10-30",
+    "scope": "Identity, exact English title, contact, verbatim summary, six expertise areas, eight tools, four spoken languages and all six role titles/dates supplied explicitly in latest owner brief.",
+    "externalLinkedIn": {
+      "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+      "status": "inaccessible",
+      "httpStatus": 999,
+      "completeProfileVerified": false
+    },
+    "omitted": "Unverified education, certifications, achievements, employer-specific responsibilities and proficiency levels."
   },
   "contentVerification": {
-    "status": "verified-owner-site-facts-only",
-    "basis": "Latest owner instruction permits conservative factual content when exact LinkedIn descriptions are unavailable. Six employers/titles/dates are explicitly supplied in the original and final creative briefs and agree with the current Experience source. Career-wide capabilities, eight tools and four spoken languages are explicitly owner-confirmed and supported by Expertise/portfolio.",
+    "status": "owner-confirmed-canonical",
+    "basis": "Latest owner explicitly supplies canonical fallback data when LinkedIn is incomplete. All identity fields, summary, expertise, software, languages and role chronology use this exact source. Supporting focus copy is career-wide, not employer-specific.",
     "excluded": [
       "Employer-specific duties and achievements",
       "Unverified education and certifications",
@@ -311,5 +322,11 @@
     ],
     "linkedinComplete": false,
     "reviewDate": "2026-10-30"
+  },
+  "workflow": {
+    "stage": "english-master-visual-review",
+    "englishVisualApproved": false,
+    "approvedLocales": [],
+    "direction": "Faithful adaptation of the attached approved orange geometric two-column model. No new concept."
   }
 }
