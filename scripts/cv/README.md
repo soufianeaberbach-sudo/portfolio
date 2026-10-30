@@ -2,14 +2,15 @@
 
 The selected design is Concept A / Fashion Editorial, reconstructed from an
 image-generation composition study, then refined with accurate editable type.
-The old CV directions are unapproved. Final release is blocked pending the
-owner's original color portrait and complete LinkedIn career source.
+The old CV directions are unapproved. The owner's original color portrait was
+recovered from the new 2026-10-30 attachment and integrated into all three proofs.
+Final release is blocked only by the missing complete LinkedIn career source.
 
 ## Authoritative content and real assets
 
 `career.json` schema 3 records the exact EN/FR/ES data and its verification state.
 The primary source is the owner's LinkedIn profile. Direct access returned HTTP
-999; the public index only exposes a truncated About and incomplete experience /
+999, rechecked on 2026-10-30; the public index only exposes a truncated About and incomplete experience /
 education. Therefore `authoritativeSource.status` is pending, not verified.
 Six historical roles/dates from the site are provisional until comparison with
 the full profile export. Education, qualifications and certifications are not
@@ -37,10 +38,14 @@ flat. `construction-detail-source.json` pins the source hash and crop; verificat
 checks pixel equality. It is a discreet construction signature, never evidence of
 employment, a named project or a fictional new pattern.
 
-`portrait.png` still contains only the old monochrome derivative. It is never
-used for final production or synthetically recolored. The original photo must be
-reattached. Original attachments stay outside public/; a shared natural-color
-crop is prepared without changing facial geometry or adding generated detail.
+`portrait.jpg` is the owner's actual 1166×1280 color attachment, byte for byte.
+`portrait-source.json` records its hash, dimensions and treatment. No exposure,
+color, skin, facial geometry or generated detail has been changed. The supplied
+photograph already has strong natural lighting; its original color is retained.
+Framing is entirely a CSS layout crop, shared across editions. This source is
+outside public/; visitors receive only the composed document. The unused gray
+source has been removed. The renderer refuses any source-hash mismatch or
+monochrome input, including for design proofs.
 
 ## Image-first release
 
@@ -48,8 +53,8 @@ Use the pinned Playwright/browser and committed font fixtures, with the existing
 Pillow/PyMuPDF requirements. No external font download or new app package.
 
 ```sh
-# Only after complete career-source verification and receipt of the real photo:
-node scripts/cv/render.mjs --prepare-portrait /path/to/original-color-photo.jpg
+# Only after complete career-source verification:
+node scripts/cv/render.mjs
 # Inspect all three native 2480×3508 PNGs, content and portrait before conversion.
 python3 scripts/cv/finalize.py
 npm run test:cv
@@ -77,8 +82,9 @@ node scripts/cv/render.mjs --layout-preview
 python3 scripts/cv/verify.py --layout-preview-dir .qa-director/cv-final/preview
 ```
 
-Preview mode is barred from public/. It labels the portrait area and footer as
-pending, and can never pass release PDF conversion. It proves composition only.
+Preview mode is barred from public/. It uses the real color photo and labels the
+footer as pending LinkedIn verification. It can never pass release PDF conversion.
+It proves composition and portrait integration, not professional-source approval.
 Use `CHROMIUM_PATH` solely for an appropriate fallback browser; exact-brand QA
 uses the repository's pinned browser and fonts.
 

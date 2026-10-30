@@ -16,8 +16,9 @@ OUT = ROOT / os.getenv('CV_OUTPUT_DIR', 'public/cv')
 QA = ROOT / os.getenv('CV_QA_DIR', '.qa-director/cv')
 A4 = fitz.Rect(0, 0, 210 / 25.4 * 72, 297 / 25.4 * 72)
 layout = json.loads((QA / 'layout-report.json').read_text())
+portrait = json.loads((ROOT / 'scripts/cv/portrait-source.json').read_text())
 assert len(layout) == 3 and all(not r.get('layoutPreview', True) and r.get('careerVerified',False) and r['portraitColor']['fraction'] >= .03 for r in layout), 'Final PDF requires verified career content and reviewed natural-color PNG editions; previews cannot be published.'
-assert all(r['sourceSHA256']==hashlib.sha256((ROOT/'scripts/cv/career.json').read_bytes()).hexdigest() and r['portraitSHA256']==hashlib.sha256((ROOT/'scripts/cv/portrait.png').read_bytes()).hexdigest() for r in layout), 'Stale career or portrait source; render and inspect fresh PNG masters first.'
+assert all(r['sourceSHA256']==hashlib.sha256((ROOT/'scripts/cv/career.json').read_bytes()).hexdigest() and r['portraitSHA256']==hashlib.sha256((ROOT/'scripts/cv'/portrait['file']).read_bytes()).hexdigest() for r in layout), 'Stale career or portrait source; render and inspect fresh PNG masters first.'
 report = []
 for locale in ['EN', 'FR', 'ES']:
     stem = f'Soufiane-Aberbach-CV-{locale}'

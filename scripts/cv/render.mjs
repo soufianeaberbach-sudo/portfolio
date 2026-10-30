@@ -1,5 +1,5 @@
 /* Deterministic A4 CV production: source text -> browser PNG -> matching PDF.
-   No model-generated text or imagery. See README.md for the portrait workflow. */
+   The owner's original color image is composed without pixel alteration. */
 import { createHash } from 'node:crypto';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -17,6 +17,11 @@ const sourceBytes=await readFile(join(DIR,'career.json'));
 const sourceSHA256=createHash('sha256').update(sourceBytes).digest('hex');
 const data=JSON.parse(sourceBytes.toString('utf8'));
 const template = await readFile(join(DIR, 'template.html'), 'utf8');
+const portraitSource = JSON.parse(await readFile(join(DIR, 'portrait-source.json'), 'utf8'));
+const portraitPath = join(DIR, portraitSource.file);
+const portraitBytes = await readFile(portraitPath);
+const portraitSHA256 = createHash('sha256').update(portraitBytes).digest('hex');
+if (portraitSHA256 !== portraitSource.sourceSHA256) throw new Error('Portrait differs from the owner attachment recorded in portrait-source.json.');
 const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const imageURI = async (file) => 'data:image/' + (file.endsWith('.png') ? 'png' : 'jpeg') + ';base64,' + (await readFile(file)).toString('base64');
 const fontSpecs = [
@@ -45,17 +50,7 @@ const browser = await chromium.launch({ ...(process.env.CHROMIUM_PATH ? { execut
 try {
   await mkdir(OUT, { recursive: true });
   await mkdir(QA, { recursive: true });
-  const preparationIndex = process.argv.indexOf('--prepare-portrait');
-  if (preparationIndex >= 0) {
-    const original = resolve(process.argv[preparationIndex + 1]);
-    const p = await browser.newPage({ viewport: { width: 620, height: 770 }, deviceScaleFactor: 1 });
-    await p.setContent(`<style>*{margin:0}img{display:block;width:620px;height:770px;object-fit:cover;object-position:center 31%;}</style><img src="${await imageURI(original)}">`);
-    await p.locator('img').evaluate((img) => img.decode());
-    await p.screenshot({ path: join(DIR, 'portrait.png') });
-    await p.close();
-    console.log('Prepared a cropped natural-color derivative; original was not copied into the repository.');
-  }
-  let portrait = await imageURI(join(DIR, 'portrait.png'));
+  let portrait = await imageURI(portraitPath);
   const probe = await browser.newPage();
   await probe.setContent(`<img src="${portrait}">`);
   const color = await probe.locator('img').evaluate(async img => {
@@ -66,13 +61,11 @@ try {
   });
   await probe.close();
   if(data.authoritativeSource?.status!=='verified'&&!layoutPreview)throw new Error('Full LinkedIn career verification required before release. Provide the exported profile PDF or complete screenshots.');
-  if(color.fraction<.03&&!layoutPreview)throw new Error('Original color portrait required. The retained image is monochrome. Use --layout-preview with a non-public output directory only for composition review.');
+  if(color.fraction<.03)throw new Error('Original color portrait required. Monochrome portrait input is prohibited, including in design proofs.');
   if(layoutPreview){
-    if(color.fraction<.03)portrait='data:image/svg+xml;base64,'+Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="620" height="770"><rect width="620" height="770" fill="#efefeb"/><text x="310" y="365" text-anchor="middle" font-family="Arial" font-size="34" fill="#6b6d66">COLOR PORTRAIT</text><text x="310" y="414" text-anchor="middle" font-family="Arial" font-size="28" fill="#6b6d66">PENDING</text></svg>').toString('base64');
-    console.log('DRAFT layout preview: portrait and employer-scope attribution are pending owner input. Not final downloadable assets.');
+    console.log('DRAFT layout preview: full LinkedIn source verification pending; owner’s original color portrait integrated. Not final downloadable assets.');
   }
   const report = [];
-  const portraitSHA256=createHash('sha256').update(await readFile(join(DIR,'portrait.png'))).digest('hex');
   const siteCSS=await readFile(join(ROOT,'src/styles/global.css'),'utf8');
   const brandCSS=siteCSS.match(/\.brand \{[^}]+\}/)[0]+'\n'+siteCSS.match(/\.brand i \{[^}]+\}/)[0];
   const construction=await imageURI(join(DIR,'construction-detail.png'));
@@ -92,7 +85,7 @@ try {
     const roles=data.roles.map((role,i)=>(i===3?`<p class="foundation">${escape(t.foundationLabel)}</p>`:'')+renderRole(role,i)).join('');
     const skills = t.skills.map((g) => `<div class="skill-group"><h3>${escape(g.heading)}</h3><p>${g.items.map(escape).join('<br>')}</p></div>`).join('');
     const displayTitle = t.displayTitle.map((line) => `<span>${escape(line)}</span>`).join('');
-    const proofFooter={en:'Concept proof · career source / color portrait pending',fr:'Épreuve · source CV / portrait couleur en attente',es:'Prueba · fuente del CV / retrato a color pendientes'};
+    const proofFooter={en:'Design proof · LinkedIn verification pending',fr:'Épreuve · vérification LinkedIn en attente',es:'Prueba · verificación de LinkedIn pendiente'};
     const fields = { ...t, footer:layoutPreview?proofFooter[locale]:t.footer, displayTitle, locale, title: data.roles[0].title[locale], email: data.email, roles, skills, fonts, brandCSS, construction, portrait, software: [data.software.slice(0,5),data.software.slice(5)].map((line) => line.map(escape).join(' · ')).join('<br>') };
     const raw = new Set(['displayTitle', 'fonts', 'brandCSS', 'construction', 'roles', 'skills', 'software', 'portrait']);
     const html = template.replace(/\{\{(\w+)\}\}/g, (_, key) => {

@@ -47,7 +47,8 @@ fictional grading system, decorative ruler or new technical drawing is used.
 ## Professional content and LinkedIn verification
 
 The owner has designated [LinkedIn](https://www.linkedin.com/in/soufiane-aberbach-6799b7155)
-as the primary professional source. Direct access returned HTTP 999. A search
+as the primary professional source. Direct access returned HTTP 999, confirmed
+again on 2026-10-30 after the owner's latest instruction. A search
 reader exposed an indexed public version, but its About is truncated and most
 professional fields are hidden. Reactions and posts by other people are excluded.
 
@@ -76,12 +77,20 @@ PDF production reject the pending career-verification state.
 
 ## Portrait status
 
-Accessible attachment directories were inspected. No new original color image
-was available. Only the previous gray derivative remains; its actual pixels were
-checked as monochrome. It is not recolored, refined into a different face or
-passed off as the new photograph. The owner must attach the original color file.
-Proofs show an explicit pending frame and marked footer. No final portrait QA or
-six replacement exports are claimed, and no placeholder is copied into public/.
+The new 2026-10-30 attachment has now been recovered and inspected. The actual
+1166×1280 RGB photograph is stored as `scripts/cv/portrait.jpg`, outside public/.
+Its bytes match the supplied JPEG exactly; `portrait-source.json` records the
+SHA256. The obsolete grayscale source has been removed. No generative retouch,
+recoloring, reshaping, age change or synthetic facial detail was applied. The
+original photograph already provides warm natural light and a clear expression.
+
+The portrait is integrated with the selected editorial window using CSS
+`object-fit:cover; object-position:50% 34%`. This only frames the original image;
+it does not change its pixels or facial structure. The full hairline, glasses,
+eyes and chin remain visible. All three rendered portrait windows are identical,
+and independent checks require actual color in both source and rendered image.
+Proof footers now identify the sole pending input: full LinkedIn verification.
+No placeholders or unverified replacement exports have been copied to public/.
 
 ## Actual visual critique and refinement
 
@@ -98,8 +107,12 @@ removed. Type was not globally shrunk. The motif was moved out of the masthead
 to avoid reading as a second pasted logo. Final proof checks show no clipping,
 correct accents, matching brand geometry and white printer-safe margins.
 
-The technical source crop remains proportional and unmodified. No opinion about
-final portrait integration is possible until the actual photograph is supplied.
+The technical source crop remains proportional and unmodified. On 2026-10-30,
+all three complete proofs were inspected again at native resolution with the
+actual color photograph. The warm portrait supplies a controlled color presence;
+its size supports the name and professional title rather than competing with
+the chronology. Facial features remain intact inside the crop. EN/FR/ES headings,
+accented characters, margins, footer and date rail remain clear, with no overlap.
 Content remains subject to full-profile verification, not visual approval alone.
 
 ## Proofs and verification
@@ -115,6 +128,15 @@ Independent checks cover 2480×3508, 300 DPI, white margins, six provisional rol
 three edition keys, four spoken languages, eight tools, logo proportions,
 construction-source pixels, portrait-frame consistency and overflow. Actual
 source access and layout metrics are recorded in [verification.json](verification.json).
-Release verification, natural-color photo review and PNG/PDF fidelity remain
-blocked by the two missing primary inputs. Existing public download paths and
-site controls are unchanged.
+Composition, source integrity and natural-color portrait integration have been
+checked. Final career verification and release PNG/PDF fidelity remain blocked
+by the missing LinkedIn export. Existing public download paths and site controls
+are unchanged. The proof content is provisional, not an approved professional CV.
+
+On 2026-10-30, the site build passed with 36 pages and the localization suite
+passed 691 checks with zero failures using the pinned browser. The independent
+three-edition proof checks passed. Expected refusals of unverified release,
+public preview output and preview-to-final PDF conversion were also exercised.
+No final CV release test or new PDF accessibility approval is claimed while the
+primary source remains inaccessible. `public/`, `src/`, `worker/` and Cloudflare
+configuration have no changes relative to the preceding creative checkpoint.

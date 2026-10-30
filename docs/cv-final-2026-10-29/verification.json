@@ -1,12 +1,12 @@
 {
-  "status": "Concept proofs only. Final six exports blocked by missing full LinkedIn source and original color portrait.",
-  "selectedConcept": "A \u2014 Fashion Editorial",
+  "status": "Reviewed color-photo design proofs only. Final six exports blocked by missing complete LinkedIn source.",
+  "selectedConcept": "A — Fashion Editorial",
   "primarySource": {
     "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
     "status": "pending-full-profile-export",
-    "checked": "2026-10-29",
-    "directAccess": "HTTP 999",
-    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people\u2019s posts/reactions excluded.",
+    "checked": "2026-10-30",
+    "directAccess": "HTTP 999 rechecked 2026-10-30; full profile unavailable",
+    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people’s posts/reactions excluded.",
     "unverifiedSections": [
       "Full About",
       "Employment titles and exact dates",
@@ -19,24 +19,27 @@
   },
   "build": {
     "passed": true,
-    "pages": 36
+    "pages": 36,
+    "checked": "2026-10-30"
   },
   "i18n": {
     "passed": 691,
-    "failed": 0
+    "failed": 0,
+    "checked": "2026-10-30",
+    "browser": "Repository-pinned Playwright Chromium 1194"
   },
   "layout": [
     {
       "locale": "en",
       "stem": "Soufiane-Aberbach-CV-EN",
-      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
-      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "sourceSHA256": "240a1dd21f58084c241373069132f720ed65d600de2c44f6b8c3b4b0bafde947",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
       "layoutPreview": true,
       "careerVerified": false,
       "portraitColor": {
-        "fraction": 0,
-        "width": 435,
-        "height": 573
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
       },
       "geometry": {
         "footerTop": 1073.015625,
@@ -82,14 +85,14 @@
     {
       "locale": "fr",
       "stem": "Soufiane-Aberbach-CV-FR",
-      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
-      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "sourceSHA256": "240a1dd21f58084c241373069132f720ed65d600de2c44f6b8c3b4b0bafde947",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
       "layoutPreview": true,
       "careerVerified": false,
       "portraitColor": {
-        "fraction": 0,
-        "width": 435,
-        "height": 573
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
       },
       "geometry": {
         "footerTop": 1073.015625,
@@ -135,14 +138,14 @@
     {
       "locale": "es",
       "stem": "Soufiane-Aberbach-CV-ES",
-      "sourceSHA256": "9dcce9220c9a580930694d7c49b85e6505473d4ba2e8763bba2c901f921c7648",
-      "portraitSHA256": "341be3c6900d9594345d53c569f808b1773bd846b672db531a349e3cb724131f",
+      "sourceSHA256": "240a1dd21f58084c241373069132f720ed65d600de2c44f6b8c3b4b0bafde947",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
       "layoutPreview": true,
       "careerVerified": false,
       "portraitColor": {
-        "fraction": 0,
-        "width": 435,
-        "height": 573
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
       },
       "geometry": {
         "footerTop": 1073.015625,
@@ -202,5 +205,34 @@
   ],
   "publicOrWebsiteSourceChanges": false,
   "technicalMotif": "Exact source crop, SHA256/pixels verified by scripts/cv/verify.py",
-  "SAIdentity": "Exact source CSS/font/markup; dimensions36.15625\u00d731.1875CSSpx; verified on all3proofs"
+  "SAIdentity": "Exact source CSS/font/markup; dimensions36.15625×31.1875CSSpx; verified on all3proofs",
+  "checked": "2026-10-30",
+  "portraitProvenance": {
+    "file": "portrait.jpg",
+    "source": "Owner color photograph attached on 2026-10-30",
+    "sourceSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+    "pixelSize": [
+      1166,
+      1280
+    ],
+    "treatment": "Exact original JPEG bytes. No retouching, recoloring, resynthesis or facial modification. The document uses object-fit:cover and object-position:50% 34% for layout framing only.",
+    "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph."
+  },
+  "visualReview": {
+    "fullSizeEditions": [
+      "EN",
+      "FR",
+      "ES"
+    ],
+    "pixelSize": [
+      2480,
+      3508
+    ],
+    "dpi": 300,
+    "faceAndHairlineIntact": true,
+    "portraitPixelsIdenticalAcrossEditions": true,
+    "noClipping": true,
+    "professionalCopyApproved": false,
+    "finalPDFsProduced": false
+  }
 }

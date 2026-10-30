@@ -10,6 +10,11 @@ from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = json.loads((ROOT / 'scripts/cv/career.json').read_text())
+PORTRAIT = json.loads((ROOT / 'scripts/cv/portrait-source.json').read_text())
+portrait_bytes = (ROOT / 'scripts/cv' / PORTRAIT['file']).read_bytes()
+assert hashlib.sha256(portrait_bytes).hexdigest() == PORTRAIT['sourceSHA256'], 'Owner portrait source has changed'
+with Image.open(ROOT / 'scripts/cv' / PORTRAIT['file']) as photo:
+    assert list(photo.size) == PORTRAIT['pixelSize'] and photo.mode == 'RGB'
 parser = argparse.ArgumentParser()
 parser.add_argument('--layout-preview-dir', help='Inspect draft PNG composition only; does not approve release exports')
 args = parser.parse_args()
@@ -42,7 +47,7 @@ portrait_reference = None
 for row in layout:
     lang = row['locale'];stem = row['stem'];g = row['geometry']
     assert row['sourceSHA256']==hashlib.sha256((ROOT/'scripts/cv/career.json').read_bytes()).hexdigest()
-    assert row['portraitSHA256']==hashlib.sha256((ROOT/'scripts/cv/portrait.png').read_bytes()).hexdigest()
+    assert row['portraitSHA256']==PORTRAIT['sourceSHA256']
     assert row['layoutPreview'] is preview
     if not preview:assert row['careerVerified']
     assert abs(g['brand']['width']-36.15625)<.05 and abs(g['brand']['height']-31.1875)<.05,'SA. proportions differ from site reference'
@@ -56,7 +61,7 @@ for row in layout:
         box=(round(p['x']*scale)+4,round(p['y']*scale)+4,round((p['x']+p['width'])*scale)-4,round((p['y']+p['height'])*scale)-4)
         photo=im.crop(box);pixels=list(zip(*(photo.getchannel(c).tobytes() for c in 'RGB')))
         color=sum(max(px)-min(px)>12 for px in pixels)/len(pixels)
-        if not preview: assert color >= .03 and row['portraitColor']['fraction'] >= .03, 'Monochrome portrait is prohibited'
+        assert color >= .03 and row['portraitColor']['fraction'] >= .03, 'Monochrome portrait is prohibited'
         if portrait_reference is None:portrait_reference=photo.tobytes()
         else:assert photo.tobytes()==portrait_reference,'Inconsistent portrait across editions'
         expected_pixels=im.tobytes()
@@ -76,5 +81,5 @@ for row in layout:
             assert text.index('Ava Marie') < text.index('Lariconf') < text.index('Roadtex') and text.count('Loratex')==3
             assert 'Spanish' not in text and 'Espagnol' not in text and 'Español' not in text
             assert page.get_links()
-    print(f'{lang.upper()}: '+('draft A4 composition checked; color portrait still required' if preview else 'A4 /300 DPI/natural-color portrait/exact PDF raster/searchable/chronology — pass'))
+    print(f'{lang.upper()}: '+('draft A4 composition and real color portrait checked; LinkedIn source still required' if preview else 'A4 /300 DPI/natural-color portrait/exact PDF raster/searchable/chronology — pass'))
 print('Layout previews only — not a release approval.' if preview else 'All three redesigned CV editions passed release verification.')
