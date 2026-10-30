@@ -1,3 +1,5 @@
+> **Superseded — owner rejected this adaptation.** The corrected locked-master English edition is in [the current review package](../cv-locked-master-en-2026-10-30/REVIEW.md). Historical assets below are retained, not presented as approved.
+
 # English master — faithful approved-model adaptation
 
 Current review target: the owner's [attached approved model](approved-model.jpg).

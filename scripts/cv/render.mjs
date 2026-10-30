@@ -21,7 +21,7 @@ const sourceSHA256=createHash('sha256').update(sourceBytes).digest('hex');
 const data=JSON.parse(sourceBytes.toString('utf8'));
 const template = await readFile(join(DIR, 'template.html'), 'utf8');
 const productionSources={};
-for(const file of ['template.html','render.mjs','fashion-signature.svg'])productionSources[file]=createHash('sha256').update(await readFile(join(DIR,file))).digest('hex');
+for(const file of ['template.html','render.mjs','fashion-signature.svg','model-icons.mjs','fonts/MrsSaintDelafield-Regular.ttf'])productionSources[file]=createHash('sha256').update(await readFile(join(DIR,file))).digest('hex');
 const portraitSource = JSON.parse(await readFile(join(DIR, 'portrait-source.json'), 'utf8'));
 const portraitPath = join(DIR, portraitSource.file);
 const portraitBytes = await readFile(portraitPath);
@@ -34,14 +34,17 @@ if(!layoutPreview&&!requestedLocales.every(l=>data.workflow?.approvedLocales?.in
 const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const imageURI = async (file) => 'data:image/' + (file.endsWith('.png') ? 'png' : 'jpeg') + ';base64,' + (await readFile(file)).toString('base64');
 const fontSpecs = [
-  ['Archivo', '400 900', 'k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2'],
-  ['Inter', '400 900', 'UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2'],
+  ['Archivo', '100 900', 'k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2'],
+  ['Inter', '100 900', 'UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2'],
 ];
 let fonts = '';
 for (const [family, weight, file] of fontSpecs) {
   const binary = await readFile(join(ROOT, 'tests/fixtures/fonts', file));
   fonts += `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-stretch:75% 125%;src:url(data:font/woff2;base64,${binary.toString('base64')}) format('woff2');font-display:block}`;
 }
+const scriptFont=await readFile(join(DIR,'fonts/MrsSaintDelafield-Regular.ttf'));
+fonts+=`@font-face{font-family:'Mrs Saint Delafield';font-style:normal;font-weight:400;src:url(data:font/ttf;base64,${scriptFont.toString('base64')}) format('truetype');font-display:block}`;
+const {expertiseIcons}=await import('./model-icons.mjs');
 // Record 300 DPI as PNG pHYs metadata without resampling a single pixel.
 const printResolution = async (path) => {
   const png = await readFile(path);
@@ -73,8 +76,6 @@ try {
     console.log('English master for owner visual review; canonical data and original unmodified color portrait. No public asset replacement.');
   }
   const report = [];
-  const siteCSS=await readFile(join(ROOT,'src/styles/global.css'),'utf8');
-  const brandCSS=siteCSS.match(/\.brand \{[^}]+\}/)[0]+'\n'+siteCSS.match(/\.brand i \{[^}]+\}/)[0];
   const fashionSignature=await readFile(join(DIR,'fashion-signature.svg'),'utf8');
   for (const locale of requestedLocales) {
     const t = data.editions[locale];
@@ -88,14 +89,17 @@ try {
       };
       return names[locale][Number(m) - 1] + ' ' + year;
     };
-    const renderRole=(role,i)=>`<article class="role ${i===0?'role--current':''}" data-role="${role.id}"><div class="role__head"><h3 class="role__company">${escape(role.company)}${role.location?` <span class="role__location">· ${escape(role.location[locale])}</span>`:''}</h3><p class="role__meta"><time datetime="${role.start}">${escape(month(role.start))}</time> – ${role.end?`<time datetime="${role.end}">${escape(month(role.end))}</time>`:escape(t.present)}</p></div><p class="role__title">${escape(role.title[locale])}</p></article>`;
+    const renderRole=(role,i)=>`<article class="role ${i===0?'role--current':''}" data-role="${role.id}"><div class="role__head"><h3 class="role__company">${escape(role.company)}</h3><p class="role__meta"><time datetime="${role.start}">${escape(month(role.start))}</time> – ${role.end?`<time datetime="${role.end}">${escape(month(role.end))}</time>`:escape(t.present)}</p></div><p class="role__title">${escape(role.title[locale])}</p><p class="role__context">${escape(t.roleContext[role.id])}</p></article>`;
     const roles=data.roles.map(renderRole).join('');
-    const expertise=t.expertiseItems.map(s=>`<li>${escape(s)}</li>`).join('');
+    const expertise=t.expertiseItems.map((s,i)=>`<li><span class="expertise__icon" aria-hidden="true">${expertiseIcons[i]}</span><span class="expertise__text">${escape(s)}</span></li>`).join('');
     const displayTitle = t.displayTitle.map((line) => `<span>${escape(line)}</span>`).join('');
-    const software=data.software.map(s=>`<li>${escape(s)}</li>`).join('');
-    const languages=t.languageItems.map(s=>`<li>${escape(s)}</li>`).join('');
-    const fields = { ...t, displayTitle, locale, title: data.roles[0].title[locale], email: data.email, roles, expertise, fonts, brandCSS, fashionSignature, portrait, languages, practice:t.practice.map(p=>`<p>${escape(p)}</p>`).join(''), software };
-    const raw = new Set(['displayTitle', 'fonts', 'brandCSS', 'fashionSignature', 'roles', 'expertise', 'software', 'portrait', 'languages','practice']);
+    // Identical decorative bars restore the locked model without fabricating
+    // proficiency levels. No values, ratings, percentages or progress semantics.
+    const bar='<span class="meter" aria-hidden="true"></span>';
+    const software=data.software.map(s=>`<li><span>${escape(s)}</span>${bar}</li>`).join('');
+    const languages=t.languageItems.map(s=>`<li><span>${escape(s)}</span>${bar}</li>`).join('');
+    const fields = { ...t, displayTitle, locale, title: data.roles[0].title[locale], email: data.email, roles, expertise, fonts, fashionSignature, portrait, languages, software };
+    const raw = new Set(['displayTitle', 'fonts', 'fashionSignature', 'roles', 'expertise', 'software', 'portrait', 'languages']);
     const html = template.replace(/\{\{(\w+)\}\}/g, (_, key) => {
       if (!(key in fields)) throw new Error('Missing template field: ' + key);
       return raw.has(key) ? fields[key] : escape(fields[key]);
@@ -111,13 +115,15 @@ try {
       const sheet = document.querySelector('.sheet').getBoundingClientRect();
       const photo = document.querySelector('.portrait').getBoundingClientRect();
       const text = [...document.querySelectorAll('h1,h2,h3,p,a,time,span,li')].filter((n) => n.textContent.trim());
-      const clipped = text.filter((n) => { const r = n.getBoundingClientRect(); return r.left < 40 || r.right > sheet.width - 40 || r.bottom > footer.top && !n.closest('.footer') ; }).map((n) => n.textContent.trim());
+      const clipped = text.filter((n) => { const r = n.getBoundingClientRect(); return r.left < 25 || r.right > sheet.width - 25 || r.bottom > footer.top && !n.closest('.footer') ; }).map((n) => n.textContent.trim());
       const signature=document.querySelector('.fashion-signature').getBoundingClientRect();
       const photoStyle=getComputedStyle(document.querySelector('.portrait'));
-      const copyRight=Math.max(...[...document.querySelectorAll('.role__head,.role__title,.practice p')].map(n=>n.getBoundingClientRect().right));
-      return { footerTop: footer.top, lastRoleBottom: lastRole.bottom, languagesBottom: languages.bottom, sheet: {width:sheet.width,height:sheet.height}, clipped, copyRight, brand:document.querySelector('.brand').getBoundingClientRect().toJSON(), portrait:{x:photo.x,y:photo.y,width:photo.width,height:photo.height,filter:photoStyle.filter,maskImage:photoStyle.maskImage}, signature:{x:signature.x,y:signature.y,width:signature.width,height:signature.height,opacity:getComputedStyle(document.querySelector('.fashion-signature g')).opacity}, fonts: [...document.fonts].map((f) => ({ family: f.family, status: f.status })) };
+      const textOverflow=[...document.querySelectorAll('.contact__row,.tool-list li,.language-list li,.role__title')].filter(n=>n.scrollWidth>n.clientWidth+1).map(n=>n.textContent.trim());
+      const masterAnchors=Object.fromEntries(['.portrait-frame','.identity','.contact','.summary','.sidebar','.software','.languages','.main-copy','.column-divider','.footer','.fashion-signature'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();const scale=905/sheet.width;return[selector,{x:r.x*scale,y:r.y*scale,width:r.width*scale,height:r.height*scale}]}));
+      const textSafeBounds={left:Math.min(...text.map(n=>n.getBoundingClientRect().left)),right:Math.max(...text.map(n=>n.getBoundingClientRect().right)),top:Math.min(...text.map(n=>n.getBoundingClientRect().top)),bottom:Math.max(...text.map(n=>n.getBoundingClientRect().bottom))};
+      return { footerTop: footer.top, lastRoleBottom: lastRole.bottom, languagesBottom: languages.bottom, sheet: {width:sheet.width,height:sheet.height}, clipped, textOverflow, masterAnchors, textSafeBounds, portrait:{x:photo.x,y:photo.y,width:photo.width,height:photo.height,filter:photoStyle.filter,maskImage:photoStyle.maskImage}, signature:{x:signature.x,y:signature.y,width:signature.width,height:signature.height,opacity:getComputedStyle(document.querySelector('.fashion-signature g')).opacity}, decorativeBars:[...document.querySelectorAll('.meter')].map(n=>({ariaHidden:n.getAttribute('aria-hidden'),width:n.getBoundingClientRect().width,fill:getComputedStyle(n,'::before').right})), expertiseIcons:document.querySelectorAll('.expertise__icon svg').length, contactIcons:document.querySelectorAll('.contact__icon').length, fonts: [...document.fonts].map((f) => ({ family: f.family, status: f.status })) };
     });
-    if (geometry.clipped.length || geometry.lastRoleBottom > geometry.footerTop - 15 || geometry.languagesBottom > geometry.footerTop - 15 || geometry.fonts.some((f) => f.status !== 'loaded')) throw new Error(`${locale}: layout QA failed: ${JSON.stringify(geometry)}`);
+    if (geometry.clipped.length || geometry.textOverflow.length || geometry.lastRoleBottom > geometry.footerTop - 15 || geometry.languagesBottom > geometry.footerTop - 15 || geometry.fonts.some((f) => f.status !== 'loaded')) throw new Error(`${locale}: layout QA failed: ${JSON.stringify(geometry)}`);
     await writeFile(join(QA, `${stem}.html`), html);
     await p.evaluate(() => document.documentElement.dataset.render = 'png');
     await p.screenshot({ path: join(OUT, `${stem}.png`) });
@@ -125,6 +131,10 @@ try {
     // Retain the identical source text as a tagged searchable layer. Final
     // PDF production happens only after the image review, via finalize.py.
     await p.evaluate(() => { delete document.documentElement.dataset.render; });
+    // Browser PDF extraction inserts false word breaks into widely tracked
+    // capitals. Remove tracking only in this underlying search layer. The
+    // reviewed PNG remains the final PDF's exact visible artwork.
+    await p.addStyleTag({content:'@media print{.role__title,.title,.section-title,.masthead,.masthead__field,.footer__left,.footer__caption{letter-spacing:0!important}}'});
     await p.pdf({ path: join(QA, `${stem}-text.pdf`), width: '210mm', height: '297mm', margin: {top:0,left:0,right:0,bottom:0}, printBackground: true, preferCSSPageSize: true, tagged: true, outline: true });
     report.push({locale, stem, sourceSHA256, portraitSHA256, productionSources, layoutPreview, careerVerified:contentVerified, linkedinVerified:false, ownerVisualApproved:data.workflow.approvedLocales.includes(locale), portraitColor:color, geometry});
     await p.close();

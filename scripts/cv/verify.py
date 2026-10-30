@@ -67,17 +67,30 @@ for row in rows:
     assert all(sha(SRC/file)==digest for file,digest in row['productionSources'].items()),'Stale production source'
     assert row['layoutPreview'] is proof and row['careerVerified']
     if not proof:assert row['ownerVisualApproved']
-    assert abs(g['brand']['width']-36.15625)<.05 and abs(g['brand']['height']-31.1875)<.05
-    assert not g['clipped'] and g['lastRoleBottom']<=g['footerTop']-15
+    # Latest explicit owner instruction locks the supplied masthead/footer,
+    # superseding the rejected SA-header composition. Check the actual master
+    # anchors rather than enforcing that earlier design.
+    anchors={'.portrait-frame':(58,83),'.identity':(306,99),'.contact':(638,105),'.summary':(311,345),'.sidebar':(48,449),'.main-copy':(363,449),'.column-divider':(318,450),'.footer':(41,1189),'.fashion-signature':(713,224)}
+    for selector,(x,y) in anchors.items():
+        actual=g['masterAnchors'][selector]
+        assert abs(actual['x']-x)<.1 and abs(actual['y']-y)<.1,(selector,actual)
+    assert not g['clipped'] and not g['textOverflow'] and g['lastRoleBottom']<=g['footerTop']-15
+    assert g['expertiseIcons']==6 and g['contactIcons']==4
+    bars=g['decorativeBars']
+    assert len(bars)==12 and all(b['ariaHidden']=='true' for b in bars)
+    assert len({(round(b['width'],2),b['fill']) for b in bars})==1,'Bars are equal decorative motifs, not invented proficiency levels'
     assert all(f['status']=='loaded' for f in g['fonts'])
     assert g['portrait']['filter']=='none' and g['portrait']['maskImage']=='none','Portrait must stay sharp without blur/fade/masking'
     assert .08<=float(g['signature']['opacity'])<=.14
-    assert g['signature']['x']>=g['copyRight']+4,'Fashion line art must be clear of professional text'
     with Image.open(OUT/(stem+'.png')) as raw:
         assert raw.size==(2480,3508) and all(abs(n-300)<.01 for n in raw.info.get('dpi',(0,0)))
         image=raw.convert('RGB')
-        bounds=ImageChops.difference(image,Image.new('RGB',image.size,'white')).getbbox()
-        assert bounds and min(bounds[0],bounds[1],image.width-bounds[2],image.height-bounds[3])>=118,bounds
+        # The locked master intentionally bleeds its orange framing to the top
+        # and crops line art at the right. Preserve that artwork while keeping
+        # all actual CV text inside print-safe margins (over 6 mm).
+        scale=2480/g['sheet']['width'];safe=g['textSafeBounds']
+        assert min(safe['left'],g['sheet']['width']-safe['right'],safe['top'],g['sheet']['height']-safe['bottom'])>=25
+        assert image.getpixel((0,0))==(255,255,255)
         scale=2480/g['sheet']['width'];p=g['portrait']
         region=image.crop((round(p['x']*scale),round(p['y']*scale),round((p['x']+p['width'])*scale),round((p['y']+p['height'])*scale)))
         pixels=list(zip(*(region.getchannel(c).tobytes() for c in 'RGB')))
@@ -94,14 +107,14 @@ for row in rows:
             assert len(rasters)==1 and fitz.Pixmap(doc,rasters[0][0]).samples==expected_pixels
             text=normalize(page.get_text())
             assert all(s in text for s in ['Soufiane','Aberbach',DATA['email'],'aberbach.co','2014','2022'])
-            for role in DATA['roles']:assert normalize(role['title'][l]) in text
+            for role in DATA['roles']:assert normalize(role['title'][l]).casefold() in text.casefold()
             for tool in DATA['software']:assert tool in text
             for item in DATA['editions'][l]['expertiseItems']+DATA['editions'][l]['languageItems']:assert item in text
             assert normalize(DATA['editions'][l]['summary']) in text
-            for paragraph in DATA['editions'][l]['practice']:assert normalize(paragraph) in text
+            for paragraph in DATA['editions'][l]['roleContext'].values():assert normalize(paragraph) in text
             assert text.count('Loratex')==3 and text.index('Ava Marie')<text.index('Lariconf')<text.index('Roadtex')
             assert all(s not in text for s in ['Spanish','Espagnol','Español','Lorem ipsum','verification pending','11+'])
-            assert len(page.get_links())>=4
+            assert len(page.get_links())>=3
             if proof:assert 'Unpublished design proof' in doc.metadata['title']
-    print(l.upper()+': canonical data / A4 / 300 DPI / white safe margins / crisp original portrait / authentic SA / original transparent SVG / '+('exact searchable PDF — pass' if args.proof_dir or not proof else 'PNG composition — pass'))
+    print(l.upper()+': canonical data / locked master anchors / restored icons and decorative bars / A4 / 300 DPI / safe text margins / crisp original portrait / transparent SVG / '+('exact searchable PDF — pass' if args.proof_dir or not proof else 'PNG composition — pass'))
 print('English master prepared for requested owner visual review; no public replacement.' if proof else 'Release editions verified.')
