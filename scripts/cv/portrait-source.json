@@ -6,6 +6,8 @@
     1166,
     1280
   ],
-  "treatment": "Exact original JPEG bytes. No retouching, recoloring, resynthesis or facial modification. The document uses object-fit:cover and object-position:50% 34% for layout framing only.",
-  "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph."
+  "treatment": "Generated background-removal asset supplies alpha mask ONLY. All visible photographic RGB comes from the original attached JPEG. Face, skin, eyes, expression, hairline, glasses, age and jacket are not resynthesized or recolored. The mask and bottom-edge fade are applied in the editable page layout.",
+  "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph.",
+  "maskFile": "portrait-cutout.png",
+  "maskSHA256": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd"
 }

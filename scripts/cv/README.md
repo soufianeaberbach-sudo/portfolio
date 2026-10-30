@@ -1,92 +1,71 @@
-# ABERBACH — Editorial Precision CV master
+# ABERBACH — Fashion Editorial CV production
 
-The selected design is Concept A / Fashion Editorial, reconstructed from an
-image-generation composition study, then refined with accurate editable type.
-The old CV directions are unapproved. The owner's original color portrait was
-recovered from the new 2026-10-30 attachment and integrated into all three proofs.
-Final release is blocked only by the missing complete LinkedIn career source.
+The current visual direction is the new [30 October creative reset](../../docs/cv-creative-reset-2026-10-30/REVIEW.md).
+Earlier outlined-name/timeline/collar layouts are rejected history.
 
-## Authoritative content and real assets
+## Current factual and release status
 
-`career.json` schema 3 records the exact EN/FR/ES data and its verification state.
-The primary source is the owner's LinkedIn profile. Direct access returned HTTP
-999, rechecked on 2026-10-30; the public index only exposes a truncated About and incomplete experience /
-education. Therefore `authoritativeSource.status` is pending, not verified.
-Six historical roles/dates from the site are provisional until comparison with
-the full profile export. Education, qualifications and certifications are not
-inferred. Previous speculative employer-duty bullets have been removed.
+The complete LinkedIn profile remains inaccessible (HTTP 999 on 30 October 2026);
+no exported profile PDF is attached. About, complete employment descriptions,
+education, certifications and skills have not been fully verified from LinkedIn.
 
-After receiving the owner's exported profile PDF or complete screenshots:
-compare every role, date and description, record the evidence, rewrite naturally
-in all three languages, and mark the data verified only when the actual source
-has been inspected. Current 12+ years is derived from February 2014–October 2026;
-there are no current 11+ year statements in the master data. Eight tools and
-Arabic/Amazigh/French/English come from the owner brief. Spanish is an edition,
-not a claimed spoken language. Ambiguous brand exposure is omitted.
+The six roles/titles/dates are explicitly owner-supplied and agree with the current
+Experience page. Schema 4 separates this known-fact verification from the pending
+primary-source comparison. It contains no employer-duty claims. The profile and
+development-practice text describe owner-confirmed career-wide capabilities.
+Eight tools and four spoken languages are retained; Spanish is an edition only.
+Unsupported education, certifications, metrics and brand-contract claims are omitted.
 
-`template.html` faithfully implements the selected visual direction: filled /
-outlined name contrast, asymmetric portrait, dated chronology and lower-page
-professional scope. Brand colors and Archivo/Inter/JetBrains Mono match the site.
+Automatic approval review rejected replacement of public CV files while the full
+LinkedIn source remains unavailable. The source gate is retained. The six new
+review files are outside public/ and PDFs identify themselves as unpublished
+design proofs. Existing public downloads and Experience controls are unchanged.
+Do not describe proof QA as permission to publish or as complete LinkedIn review.
 
-The SA. markup uses the real span + orange-dot construction. Its CSS is read
-verbatim from `src/styles/global.css`. With root16px and the existing font files,
-it measures exactly36.15625×31.1875CSSpx, as on the site. Export waits for font
-settling; the independent verifier compares these source proportions.
+## Real portrait and photographic atmosphere
 
-`construction-detail.png` is an exact crop of the existing AB-W-SH-01 technical
-flat. `construction-detail-source.json` pins the source hash and crop; verification
-checks pixel equality. It is a discreet construction signature, never evidence of
-employment, a named project or a fictional new pattern.
+- portrait.jpg is the exact 1166 × 1280 owner color attachment, kept outside public/.
+- portrait-cutout.png is an image-tool background-removal edit used for ALPHA ONLY.
+  The layout's visible RGB comes from portrait.jpg, not model-generated face pixels.
+  The same mask/soft lower edge integrates the original portrait in every edition.
+- portrait-source.json pins original and mask hashes and explains their treatment.
+- atelier-dress-form.png is a separately generated photographic atmosphere,
+  never evidence of an actual workplace/employer. Its provenance/hash is recorded.
+- The rejected collar image and provenance file are removed.
+- The real SA span/orange-dot markup and CSS are reused from the current site.
+- Bodoni Moda is embedded with its OFL license; Archivo/Inter use existing fixtures.
 
-`portrait.jpg` is the owner's actual 1166×1280 color attachment, byte for byte.
-`portrait-source.json` records its hash, dimensions and treatment. No exposure,
-color, skin, facial geometry or generated detail has been changed. The supplied
-photograph already has strong natural lighting; its original color is retained.
-Framing is entirely a CSS layout crop, shared across editions. This source is
-outside public/; visitors receive only the composed document. The unused gray
-source has been removed. The renderer refuses any source-hash mismatch or
-monochrome input, including for design proofs.
+## Editable, image-first workflow
 
-## Image-first release
+career.json is the shared EN/FR/ES content. template.html implements selected
+Concept 01. render.mjs produces native 2480 × 3508 PNGs with 300 DPI metadata;
+the source text PDF remains temporary until images have been visually inspected.
 
-Use the pinned Playwright/browser and committed font fixtures, with the existing
-Pillow/PyMuPDF requirements. No external font download or new app package.
+Unpublished review render:
 
-```sh
-# Only after complete career-source verification:
-node scripts/cv/render.mjs
-# Inspect all three native 2480×3508 PNGs, content and portrait before conversion.
-python3 scripts/cv/finalize.py
-npm run test:cv
-```
+    CV_OUTPUT_DIR=docs/cv-creative-reset-2026-10-30/editions \
+    CV_QA_DIR=.qa-director/cv-reset/review \
+    node scripts/cv/render.mjs --layout-preview
 
-Render creates 300 DPI PNG masters first. It rejects unverified primary career
-content and monochrome photo input. `export-layout.json` is written only for a
-real release render. PDF conversion rejects previews/unverified career records;
-the exact reviewed PNG covers a 210×297mm page with searchable source text and
-contact links retained underneath. Independent QA checks white margins, chronology,
-three publication languages, four spoken languages, eight tools, SA. proportions,
-authentic construction pixels, natural photo color/consistency and exact PDF
-raster fidelity. Searchability does not establish PDF/UA certification.
+Use the repository-pinned Playwright browser via PLAYWRIGHT_BROWSERS_PATH where
+required. Independently inspect every native PNG. image-review.json must record
+each actual PNG hash and full-resolution review before conversion.
 
-Final paths remain `public/cv/Soufiane-Aberbach-CV-{EN,FR,ES}.{png,pdf}`.
-The Experience download controls are reused unchanged. The old six files are
-preserved until new release masters are actually ready; no placeholder is served.
+    CV_OUTPUT_DIR=docs/cv-creative-reset-2026-10-30/editions \
+    CV_QA_DIR=.qa-director/cv-reset/review \
+    python3 scripts/cv/finalize.py --proof
+    npm run test:cv -- --proof-dir docs/cv-creative-reset-2026-10-30/editions
 
-## Marked design proofs
+Proof rendering and conversion refuse public/ destinations. Normal production
+rendering remains blocked by pending primary-source verification/owner release
+authorization. The default test:cv remains a release check, not a proof shortcut.
 
-```sh
-CV_OUTPUT_DIR=.qa-director/cv-final/preview \
-CV_QA_DIR=.qa-director/cv-final/preview \
-node scripts/cv/render.mjs --layout-preview
-python3 scripts/cv/verify.py --layout-preview-dir .qa-director/cv-final/preview
-```
+PDF conversion uses the reviewed PNG itself on an exact 210 × 297 mm page. It
+retains tagged searchable text/contact links and removes redundant hidden photos.
+Independent QA checks pixel-identical embedded images, chronology, full text,
+source hashes, original color, consistent portraits, actual SA proportions,
+loaded fonts, white safe margins and mannequin/text separation. No PDF/UA
+certification is implied.
 
-Preview mode is barred from public/. It uses the real color photo and labels the
-footer as pending LinkedIn verification. It can never pass release PDF conversion.
-It proves composition and portrait integration, not professional-source approval.
-Use `CHROMIUM_PATH` solely for an appropriate fallback browser; exact-brand QA
-uses the repository's pinned browser and fonts.
-
-Concepts, full-size proofs, source-access audit and critique are in
-[the creative review](../../docs/cv-final-2026-10-29/REVIEW.md).
+Final website paths remain public/cv/Soufiane-Aberbach-CV-{EN,FR,ES}.{png,pdf}.
+They must only be replaced once the documented release blocker is resolved.

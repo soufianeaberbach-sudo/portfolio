@@ -1,5 +1,7 @@
 # Editorial Precision — visual conception and source audit
 
+**Superseded by the owner-rejected composition reset:** see [30 October creative reset](../cv-creative-reset-2026-10-30/REVIEW.md). This is historical evidence, not the current design.
+
 Continuation of PR #59 on `feat/cv-editorial-rebuild`, after rejected 9f44ffc.
 Parent remains the multilingual PR #58. No website, backend, photograph collection,
 garment data, Tech Pack or Cloudflare configuration is changed.

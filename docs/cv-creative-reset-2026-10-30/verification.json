@@ -1,0 +1,451 @@
+{
+  "status": "Unpublished design proofs; public replacement rejected by automatic approval review pending primary-source verification or explicit owner authorization",
+  "date": "2026-10-30",
+  "branch": "feat/cv-editorial-rebuild",
+  "basePR": 58,
+  "PR": 59,
+  "baselineMain": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
+  "selectedConcept": "01 — Fashion Editorial Luxury",
+  "primarySource": {
+    "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+    "status": "pending-full-profile-export",
+    "checked": "2026-10-30",
+    "directAccess": "HTTP 999 rechecked 2026-10-30; full profile unavailable",
+    "publicIndexAccess": "Partial About, Ava Marie name/location and incomplete education only. Other people’s posts/reactions excluded.",
+    "unverifiedSections": [
+      "Full About",
+      "Employment titles and exact dates",
+      "Employer responsibilities",
+      "Education qualifications",
+      "Certifications",
+      "Skills"
+    ],
+    "requiredInput": "Owner LinkedIn-exported PDF or screenshots of full sections"
+  },
+  "factualBasis": {
+    "status": "verified-owner-site-facts-only",
+    "basis": "Latest owner instruction permits conservative factual content when exact LinkedIn descriptions are unavailable. Six employers/titles/dates are explicitly supplied in the original and final creative briefs and agree with the current Experience source. Career-wide capabilities, eight tools and four spoken languages are explicitly owner-confirmed and supported by Expertise/portfolio.",
+    "excluded": [
+      "Employer-specific duties and achievements",
+      "Unverified education and certifications",
+      "Named client/employment implications",
+      "Proficiency levels and invented metrics"
+    ],
+    "linkedinComplete": false,
+    "reviewDate": "2026-10-30"
+  },
+  "portrait": {
+    "file": "portrait.jpg",
+    "source": "Owner color photograph attached on 2026-10-30",
+    "sourceSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+    "pixelSize": [
+      1166,
+      1280
+    ],
+    "treatment": "Generated background-removal asset supplies alpha mask ONLY. All visible photographic RGB comes from the original attached JPEG. Face, skin, eyes, expression, hairline, glasses, age and jacket are not resynthesized or recolored. The mask and bottom-edge fade are applied in the editable page layout.",
+    "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph.",
+    "maskFile": "portrait-cutout.png",
+    "maskSHA256": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd"
+  },
+  "portraitRGBPolicy": "Only original JPEG color channels are displayed. The generated edit supplies alpha/background removal only. No claim of pixel-identical composited color is made, since the alpha edge and lower fade blend with white.",
+  "atmosphere": {
+    "file": "atelier-dress-form.png",
+    "sha256": "cce5ebc088d03c7b15a396e0394ecf70130f7ed1cf9794e59e29ff0d8f63a277",
+    "origin": "Image-generated neutral linen dress-form photograph created for the owner-authorized CV atmosphere. Not a photograph of the owner’s actual workplace or evidence of a client/employer.",
+    "treatment": "Soft white-edge photographic atmosphere, low prominence, positioned below text with no drawing or invented technical diagram."
+  },
+  "layout": [
+    {
+      "locale": "en",
+      "stem": "Soufiane-Aberbach-CV-EN",
+      "sourceSHA256": "d2ecf7d9109d86026c7c621bc0581d733561b1b1e5f5286a46eeb246e437bd0f",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "portraitMaskSHA256": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+      "productionSources": {
+        "template.html": "7366a521b409928f97ca882c079a757f831b5c5fcafcb94c9cf91b42a93eb0a9",
+        "portrait-cutout.png": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+        "atelier-dress-form.png": "cce5ebc088d03c7b15a396e0394ecf70130f7ed1cf9794e59e29ff0d8f63a277",
+        "fonts/BodoniModa.ttf": "550f5e34ee0a828d7941b1fe9bc58b34e5260d3f33a61532e6d0a0114e79a5cf"
+      },
+      "layoutPreview": true,
+      "careerVerified": true,
+      "linkedinVerified": false,
+      "portraitColor": {
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
+      },
+      "geometry": {
+        "footerTop": 1074.515625,
+        "lastRoleBottom": 1039.03125,
+        "languagesBottom": 914.859375,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 41.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 41.40625,
+          "right": 82.15625,
+          "bottom": 72.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 432.6875,
+          "y": 48,
+          "width": 317,
+          "height": 347.984375
+        },
+        "atelier": {
+          "x": 46,
+          "y": 943,
+          "width": 205,
+          "height": 126
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "Bodoni Moda",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "fr",
+      "stem": "Soufiane-Aberbach-CV-FR",
+      "sourceSHA256": "d2ecf7d9109d86026c7c621bc0581d733561b1b1e5f5286a46eeb246e437bd0f",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "portraitMaskSHA256": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+      "productionSources": {
+        "template.html": "7366a521b409928f97ca882c079a757f831b5c5fcafcb94c9cf91b42a93eb0a9",
+        "portrait-cutout.png": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+        "atelier-dress-form.png": "cce5ebc088d03c7b15a396e0394ecf70130f7ed1cf9794e59e29ff0d8f63a277",
+        "fonts/BodoniModa.ttf": "550f5e34ee0a828d7941b1fe9bc58b34e5260d3f33a61532e6d0a0114e79a5cf"
+      },
+      "layoutPreview": true,
+      "careerVerified": true,
+      "linkedinVerified": false,
+      "portraitColor": {
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
+      },
+      "geometry": {
+        "footerTop": 1074.515625,
+        "lastRoleBottom": 1039.03125,
+        "languagesBottom": 932.984375,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 41.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 41.40625,
+          "right": 82.15625,
+          "bottom": 72.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 432.6875,
+          "y": 48,
+          "width": 317,
+          "height": 347.984375
+        },
+        "atelier": {
+          "x": 46,
+          "y": 943,
+          "width": 205,
+          "height": 126
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "Bodoni Moda",
+            "status": "loaded"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "es",
+      "stem": "Soufiane-Aberbach-CV-ES",
+      "sourceSHA256": "d2ecf7d9109d86026c7c621bc0581d733561b1b1e5f5286a46eeb246e437bd0f",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "portraitMaskSHA256": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+      "productionSources": {
+        "template.html": "7366a521b409928f97ca882c079a757f831b5c5fcafcb94c9cf91b42a93eb0a9",
+        "portrait-cutout.png": "3ee2ab92a569c959fc61cb558f69d033f308d00a2594de8196d4a5ef3cbb66fd",
+        "atelier-dress-form.png": "cce5ebc088d03c7b15a396e0394ecf70130f7ed1cf9794e59e29ff0d8f63a277",
+        "fonts/BodoniModa.ttf": "550f5e34ee0a828d7941b1fe9bc58b34e5260d3f33a61532e6d0a0114e79a5cf"
+      },
+      "layoutPreview": true,
+      "careerVerified": true,
+      "linkedinVerified": false,
+      "portraitColor": {
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
+      },
+      "geometry": {
+        "footerTop": 1074.515625,
+        "lastRoleBottom": 1039.03125,
+        "languagesBottom": 914.859375,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "brand": {
+          "x": 46,
+          "y": 41.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 41.40625,
+          "right": 82.15625,
+          "bottom": 72.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 432.6875,
+          "y": 48,
+          "width": 317,
+          "height": 347.984375
+        },
+        "atelier": {
+          "x": 46,
+          "y": 943,
+          "width": 205,
+          "height": 126
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "Bodoni Moda",
+            "status": "loaded"
+          }
+        ]
+      }
+    }
+  ],
+  "imageReview": {
+    "en": {
+      "pngSHA256": "dd057e862e66f7c8539bbe9635c0d15aecabf5c2c14ca32c90d94cf7a9bc03a2",
+      "fullResolutionInspected": true,
+      "reviewed": "2026-10-30",
+      "scope": "Unpublished design proof; no owner approval or full LinkedIn verification claimed",
+      "checks": [
+        "Native 2480x3508 inspection",
+        "Original portrait RGB; alpha-only mask",
+        "Natural EN FR ES typesetting and accents",
+        "All six owner-confirmed roles/dates",
+        "Software names kept intact",
+        "Mannequin clear of text",
+        "No clipping; safe white margins"
+      ]
+    },
+    "fr": {
+      "pngSHA256": "c2d7d5370728cdc2ffecb95491c808f5d7735d1b427a18f71b6ac5b0fe29e5d2",
+      "fullResolutionInspected": true,
+      "reviewed": "2026-10-30",
+      "scope": "Unpublished design proof; no owner approval or full LinkedIn verification claimed",
+      "checks": [
+        "Native 2480x3508 inspection",
+        "Original portrait RGB; alpha-only mask",
+        "Natural EN FR ES typesetting and accents",
+        "All six owner-confirmed roles/dates",
+        "Software names kept intact",
+        "Mannequin clear of text",
+        "No clipping; safe white margins"
+      ]
+    },
+    "es": {
+      "pngSHA256": "8c17284e619a591a4e795986617edd41927c8fd75bee775c973c5fea0cb5e0c8",
+      "fullResolutionInspected": true,
+      "reviewed": "2026-10-30",
+      "scope": "Unpublished design proof; no owner approval or full LinkedIn verification claimed",
+      "checks": [
+        "Native 2480x3508 inspection",
+        "Original portrait RGB; alpha-only mask",
+        "Natural EN FR ES typesetting and accents",
+        "All six owner-confirmed roles/dates",
+        "Software names kept intact",
+        "Mannequin clear of text",
+        "No clipping; safe white margins"
+      ]
+    }
+  },
+  "PDFs": [
+    {
+      "locale": "EN",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "79b4813cf0f7e3a429a2e539dcfee2c6dd75c0ef630a99bb3fa5c60566c22c62"
+    },
+    {
+      "locale": "FR",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "e60367d284ca70ceb7baddfb79ece49a4ded1e065777ef7da18424bdd7cc659a"
+    },
+    {
+      "locale": "ES",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "ab9305053cfb6b926d18d94ea20ec38582ec772d62c2fec80666953f5027068e"
+    }
+  ],
+  "reviewDownloads": [
+    {
+      "filename": "Soufiane-Aberbach-CV-EN.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1461048,
+      "sha256": "dd057e862e66f7c8539bbe9635c0d15aecabf5c2c14ca32c90d94cf7a9bc03a2"
+    },
+    {
+      "filename": "Soufiane-Aberbach-CV-EN.pdf",
+      "status": 200,
+      "contentType": "application/pdf",
+      "bytes": 4152202,
+      "sha256": "d323a81e2f53328e34590402ab6cce296a7f523a616a2265aabed921f46d473b"
+    },
+    {
+      "filename": "Soufiane-Aberbach-CV-FR.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1452951,
+      "sha256": "c2d7d5370728cdc2ffecb95491c808f5d7735d1b427a18f71b6ac5b0fe29e5d2"
+    },
+    {
+      "filename": "Soufiane-Aberbach-CV-FR.pdf",
+      "status": 200,
+      "contentType": "application/pdf",
+      "bytes": 4149599,
+      "sha256": "65f0eff9b265bfcccaf07b6f41112f2d86b574de212cf54224342afc047aad6b"
+    },
+    {
+      "filename": "Soufiane-Aberbach-CV-ES.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1462428,
+      "sha256": "8c17284e619a591a4e795986617edd41927c8fd75bee775c973c5fea0cb5e0c8"
+    },
+    {
+      "filename": "Soufiane-Aberbach-CV-ES.pdf",
+      "status": 200,
+      "contentType": "application/pdf",
+      "bytes": 4154862,
+      "sha256": "dd1d209f5955510403675cb700e049168f1a135dd3a19e1a4d8b9475e11425f3"
+    }
+  ],
+  "tests": {
+    "build": {
+      "pages": 36,
+      "passed": true
+    },
+    "worker": {
+      "passed": 509,
+      "failed": 0
+    },
+    "domain": {
+      "passed": 293,
+      "failed": 0
+    },
+    "productionChecker": {
+      "passed": 6,
+      "failed": 0
+    },
+    "smoke": {
+      "passed": 368,
+      "failed": 0
+    },
+    "i18n": {
+      "passed": 691,
+      "failed": 0
+    },
+    "sourceIntegrity": {
+      "originalFingerprintsPreserved": 108,
+      "passed": true
+    },
+    "photographicConfiguration": {
+      "passed": 30
+    },
+    "workerDryRun": {
+      "passed": true,
+      "deployed": false
+    },
+    "CVProofs": {
+      "editionsPassed": 3,
+      "defaultReleaseApproval": false
+    },
+    "releaseSourceGate": {
+      "expectedRefusalVerified": true
+    }
+  },
+  "publicWebsiteBackendConfigurationChanges": false,
+  "remaining": [
+    "Full LinkedIn profile comparison: About, employer duties, complete education/certifications/skills",
+    "Explicit owner authorization or complete primary source before public CV replacement",
+    "Owner creative/content acceptance; no approval claimed"
+  ]
+}
