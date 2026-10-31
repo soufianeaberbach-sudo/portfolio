@@ -1,0 +1,325 @@
+{
+  "state": "Corrected English locked-master adaptation for owner visual review; not a release or approved design",
+  "date": "2026-10-30",
+  "PR": 59,
+  "branch": "feat/cv-editorial-rebuild",
+  "master": {
+    "file": "../cv-approved-model-en-2026-10-30/approved-model.jpg",
+    "sha256": "c4ee657e1125e94fb679e7c2c7bd9bc20eec4eab97b18c1b7274e6d03abfda86",
+    "coordinateSystem": [
+      905,
+      1280
+    ]
+  },
+  "ownerVisualApproved": false,
+  "newFrenchSpanishEditionsGenerated": false,
+  "publicAssetsOrWebsiteSourcesModified": false,
+  "canonicalContentSource": {
+    "kind": "owner-canonical-fallback",
+    "status": "owner-confirmed",
+    "date": "2026-10-30",
+    "scope": "Identity, exact English title, contact, verbatim summary, six expertise areas, eight tools, four spoken languages and all six role titles/dates supplied explicitly in latest owner brief.",
+    "externalLinkedIn": {
+      "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+      "status": "inaccessible",
+      "httpStatus": 999,
+      "completeProfileVerified": false
+    },
+    "omitted": "Unverified education, certifications, achievements, employer-specific responsibilities and proficiency levels."
+  },
+  "portrait": {
+    "file": "portrait.jpg",
+    "source": "Owner color photograph attached on 2026-10-30",
+    "sourceSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+    "pixelSize": [
+      1166,
+      1280
+    ],
+    "treatment": "Unmodified owner JPEG, displayed sharply with object-fit cover in an upper-left geometric frame. No mask, fade, blur, filter, facial regeneration or tonal edits.",
+    "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph.",
+    "latestAttachmentByteMatchVerified": true
+  },
+  "layout": [
+    {
+      "locale": "en",
+      "stem": "Soufiane-Aberbach-CV-EN",
+      "sourceSHA256": "f3e694647bab34cb046671d3bdc98c9d3711918a93359532ab1689ad030b21a3",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "productionSources": {
+        "template.html": "572057f6a90786b437acbb24629ccf7255386a84b233a1408055a08eac9071b8",
+        "render.mjs": "84350198fdf1ee061732e38ea17ba95773e514746aeb7c5b13ca0136f06166bc",
+        "fashion-signature.svg": "050e065c912f43ac99846ee5428deafcf09da3bc9eae14080cf843abc2a3e1a7",
+        "model-icons.mjs": "a312d7288c72e81aa64d2bf0067721887ac0641c0be55aa56b6812618f65a098",
+        "fonts/MrsSaintDelafield-Regular.ttf": "77501352ab642949a4bc3cc15c82ac38c6ad29711fbf8e916e469541943b9aae"
+      },
+      "layoutPreview": true,
+      "careerVerified": true,
+      "linkedinVerified": false,
+      "ownerVisualApproved": false,
+      "portraitColor": {
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
+      },
+      "geometry": {
+        "footerTop": 1042.773681640625,
+        "lastRoleBottom": 1008.9537353515625,
+        "languagesBottom": 1008.570068359375,
+        "sheet": {
+          "width": 793.7008056640625,
+          "height": 1122.582275390625
+        },
+        "clipped": [],
+        "textOverflow": [],
+        "masterAnchors": {
+          ".portrait-frame": {
+            "x": 57.999998933020116,
+            "y": 83.00000042294697,
+            "width": 216.99998265917378,
+            "height": 264.9999757766729
+          },
+          ".identity": {
+            "x": 305.9999952706837,
+            "y": 99.00000102853015,
+            "width": 320.0000121116635,
+            "height": 206.60935440296265
+          },
+          ".contact": {
+            "x": 637.99996216547,
+            "y": 104.99999581859234,
+            "width": 230.00003806522824,
+            "height": 141.99999558789398
+          },
+          ".summary": {
+            "x": 310.9999764303182,
+            "y": 344.9999875038392,
+            "width": 433.00000388342227,
+            "height": 65.9999948861865
+          },
+          ".sidebar": {
+            "x": 47.99999746712433,
+            "y": 448.9999783912542,
+            "width": 249.00000126884092,
+            "height": 701.0000031528774
+          },
+          ".software": {
+            "x": 47.99999746712433,
+            "y": 750.9999539372287,
+            "width": 249.00000126884092,
+            "height": 232.00003052908204
+          },
+          ".languages": {
+            "x": 47.99999746712433,
+            "y": 1011.9999447861941,
+            "width": 249.00000126884092,
+            "height": 138.00003675793758
+          },
+          ".main-copy": {
+            "x": 362.99998927252653,
+            "y": 448.9999783912542,
+            "width": 494.99997904489953,
+            "height": 701.4374710569691
+          },
+          ".column-divider": {
+            "x": 317.9999848508081,
+            "y": 449.9999746231811,
+            "width": 0.9999962319268987,
+            "height": 709.9999692402196
+          },
+          ".footer": {
+            "x": 40.99999774588484,
+            "y": 1188.999904183284,
+            "width": 816.9999836204169,
+            "height": 50.00008997235772
+          },
+          ".fashion-signature": {
+            "x": 712.9999579360002,
+            "y": 223.99999107966366,
+            "width": 222.99999484773676,
+            "height": 942.9999960012285
+          }
+        },
+        "textSafeBounds": {
+          "left": 42.09683609008789,
+          "right": 761.2511596679688,
+          "top": 31.134119033813477,
+          "bottom": 1084.336181640625
+        },
+        "portrait": {
+          "x": 50.86701202392578,
+          "y": 72.79244995117188,
+          "width": 190.31277465820312,
+          "height": 232.40960693359375,
+          "filter": "none",
+          "maskImage": "none"
+        },
+        "signature": {
+          "x": 625.3134155273438,
+          "y": 196.451904296875,
+          "width": 195.57489013671875,
+          "height": 827.0274658203125,
+          "opacity": "0.12"
+        },
+        "decorativeBars": [
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          },
+          {
+            "ariaHidden": "true",
+            "width": 99.97999572753906,
+            "fill": "43.3125px"
+          }
+        ],
+        "expertiseIcons": 6,
+        "contactIcons": 4,
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          },
+          {
+            "family": "Mrs Saint Delafield",
+            "status": "loaded"
+          }
+        ]
+      }
+    }
+  ],
+  "imageReview": {
+    "en": {
+      "pngSHA256": "c00399f48059d1436b446b051bc8e108ed6b5817f9bf3658a8132f9c5109832c",
+      "fullResolutionInspected": true,
+      "date": "2026-10-30",
+      "ownerApproved": false,
+      "scope": "Internal full-page/native-resolution inspection against the locked owner model, after name-width, sidebar and footer alignment corrections. Owner review remains pending.",
+      "findings": [
+        "Original color portrait is sharp, intact and inside the master frame.",
+        "Master masthead, orange banner/base, upper-right circular contact icons and six expertise pictograms restored.",
+        "Software/language bar layout restored with equal decorative lengths and no proficiency claims.",
+        "Six canonical roles and dates; conservative title-derived contexts, no metrics or management claims.",
+        "Main headings, timeline nodes and aligned dates follow the locked model.",
+        "Abstract SVG remains secondary at 12% opacity and on the cropped right edge.",
+        "Script-style footer restores the master feeling; it is typeset owner name, not an asserted autograph.",
+        "No clipped text or broken contact/software rows; print text remains inside safe margins."
+      ]
+    }
+  },
+  "PDF": [
+    {
+      "locale": "EN",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "ff23bc16742bc1f027ca4d36042c3088d4a68add91ff1cce7373903a1bc007a7"
+    }
+  ],
+  "downloads": [
+    {
+      "file": "Soufiane-Aberbach-CV-EN.png",
+      "HTTP": 200,
+      "contentType": "image/png",
+      "bytes": 1235322,
+      "sha256": "c00399f48059d1436b446b051bc8e108ed6b5817f9bf3658a8132f9c5109832c"
+    },
+    {
+      "file": "Soufiane-Aberbach-CV-EN.pdf",
+      "HTTP": 200,
+      "contentType": "application/pdf",
+      "bytes": 1538989,
+      "sha256": "d6e23e69e36bb47f2aa461bfc378373a048a152154c26794de5ae16d72d81e06"
+    }
+  ],
+  "freshChecks": {
+    "englishCVProof": "pass",
+    "build": "36 pages pass",
+    "i18n": "691 passed, 0 failed",
+    "sourceIntegrity": "108 original fingerprints preserved",
+    "reviewBoundary": "FR rendering and EN release correctly refused before owner approval",
+    "publicSourceBackendConfigDiff": "no changes from 0529649"
+  },
+  "artDirectionReview": {
+    "restored": [
+      "Top orange banner and lower portrait base in the master positions",
+      "Master masthead and name/title structure",
+      "Four circular contact icons and six expertise pictograms",
+      "Eight software and four language bars",
+      "Section markers and separator rules",
+      "Six timeline nodes with aligned dates",
+      "Cropped right-edge abstract figure at 12% opacity",
+      "Short footer rule, tag line and script-style owner name"
+    ],
+    "factualAdaptations": [
+      "Real sharp unmodified portrait",
+      "Canonical contact, summary, expertise, tools, spoken languages and career chronology",
+      "Conservative title-derived supporting copy, no unverified achievements or detailed employer duty claims",
+      "Equal decorative bar fills without proficiency ratings",
+      "Typeset name, not a claim of a handwritten autograph"
+    ],
+    "reviewStatus": "Internal full-size inspection completed. Final visual acceptance belongs to the owner."
+  }
+}

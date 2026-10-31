@@ -1,14 +1,15 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 5,
   "verifiedAgainst": {
     "commit": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
-    "date": "2026-10-28",
+    "date": "2026-10-30",
     "sources": [
       "src/pages/experience.astro",
       "src/pages/expertise.astro",
       "src/pages/contact.astro",
       "src/pages/portfolio.astro"
-    ]
+    ],
+    "ownerBrief": "Latest approved-model adaptation brief supplies canonical identity, verbatim summary, six expertise areas, eight tools, four spoken languages and exact six-role chronology. LinkedIn fallback is explicitly authorized."
   },
   "name": "Soufiane Aberbach",
   "website": "https://aberbach.co",
@@ -17,12 +18,15 @@
     "Gerber AccuMark",
     "CLO3D",
     "Lectra",
-    "Optitex",
     "Vetigraph",
-    "Adobe Illustrator"
+    "Optitex",
+    "Adobe Illustrator",
+    "Adobe Photoshop",
+    "Microsoft Excel"
   ],
   "workingLanguages": [
     "ar",
+    "zgh",
     "fr",
     "en"
   ],
@@ -34,9 +38,21 @@
       "end": null,
       "title": {
         "en": "Senior Fashion Designer & Product Developer",
-        "fr": "Designer de mode senior & développeur produit",
+        "fr": "Styliste senior & développeur produit",
         "es": "Diseñador de moda sénior y desarrollador de producto"
-      }
+      },
+      "location": {
+        "en": "Tangier",
+        "fr": "Tanger",
+        "es": "Tánger"
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     },
     {
       "id": "lariconf-cad",
@@ -47,7 +63,14 @@
         "en": "CAD Fashion Developer",
         "fr": "Développeur mode CAO",
         "es": "Desarrollador de moda CAD"
-      }
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     },
     {
       "id": "loratex-cad",
@@ -58,7 +81,14 @@
         "en": "CAD Development Supervisor",
         "fr": "Superviseur du développement CAO",
         "es": "Supervisor de desarrollo CAD"
-      }
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     },
     {
       "id": "loratex-planning",
@@ -69,7 +99,14 @@
         "en": "Production Planning Coordinator",
         "fr": "Coordinateur de la planification de production",
         "es": "Coordinador de planificación de producción"
-      }
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     },
     {
       "id": "roadtex-quality",
@@ -80,7 +117,14 @@
         "en": "Quality Control & Production Specialist",
         "fr": "Spécialiste du contrôle qualité et de la production",
         "es": "Especialista en control de calidad y producción"
-      }
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     },
     {
       "id": "loratex-operations",
@@ -91,163 +135,210 @@
         "en": "Operations & Warehouse Coordinator",
         "fr": "Coordinateur des opérations et de l’entrepôt",
         "es": "Coordinador de operaciones y almacén"
-      }
+      },
+      "scope": {
+        "en": [],
+        "fr": [],
+        "es": []
+      },
+      "scopeSource": "Employer-specific duties omitted: complete LinkedIn descriptions inaccessible.",
+      "factSource": "owner-confirmed-and-current-site"
     }
   ],
   "editions": {
     "en": {
-      "edition": "CURRICULUM VITAE / ENGLISH",
+      "edition": "CURRICULUM VITAE / EN",
       "documentLabel": "Professional curriculum vitae",
       "location": "Tangier, Morocco",
       "profileLabel": "Profile",
       "expertiseLabel": "Expertise",
       "softwareLabel": "Software",
-      "languagesLabel": "Working languages",
-      "languages": "Arabic · French · English",
-      "experienceLabel": "Professional experience",
+      "languagesLabel": "Languages",
+      "languages": "Arabic · Amazigh · French · English",
+      "experienceLabel": "Experience",
       "present": "Present",
-      "footer": "Fashion design / Product development",
-      "summary": "Senior fashion designer and product developer working across womenswear and menswear. Combines design, garment construction, industrial pattern development, fit and technical documentation with a production perspective shaped by six positions since 2014.",
+      "footer": "Fashion design · Product development",
+      "summary": "Fashion design with industrial depth. Over 12 years linking womenswear and menswear concepts to pattern engineering, fit and production requirements.",
       "skills": [
         {
-          "heading": "Design & development",
+          "heading": "Design / product",
           "items": [
-            "Womenswear & menswear",
-            "Garment construction",
-            "Sample development"
+            "Silhouette, materials and construction."
           ]
         },
         {
-          "heading": "Pattern & fit",
+          "heading": "Pattern / fit",
           "items": [
-            "Industrial pattern development",
-            "Pattern grading",
-            "Fit development & garment evaluation"
+            "Industrial patterns, grading and fit."
           ]
         },
         {
-          "heading": "Technical communication",
+          "heading": "CAD / 3D",
           "items": [
-            "Technical flats & tech packs",
-            "Production specifications",
-            "3D garment simulation"
-          ]
-        },
-        {
-          "heading": "Production understanding",
-          "items": [
-            "Quality & pre-production control",
-            "Technical production communication"
+            "Digital evaluation and technical flats."
           ]
         }
       ],
       "displayTitle": [
-        "Senior Fashion Designer",
-        "& Product Developer"
-      ]
+        "Senior Fashion Designer &",
+        "Product Developer"
+      ],
+      "practiceLabel": "Development focus",
+      "practice": [
+        "Pattern development, grading and fit correction, supported by CAD and 3D workflows.",
+        "Technical flats, tech packs and construction details for sample and production follow-up."
+      ],
+      "expertiseItems": [
+        "Fashion Design & Product Development",
+        "Pattern Making & Grading",
+        "Fit & Construction",
+        "CAD / 3D",
+        "Technical Flats & Tech Packs",
+        "Womenswear & Menswear"
+      ],
+      "languageItems": [
+        "Arabic",
+        "Amazigh",
+        "French",
+        "English"
+      ],
+      "roleContext": {
+        "ava-marie-current": "Tangier, Morocco",
+        "lariconf-cad": "",
+        "loratex-cad": "",
+        "loratex-planning": "",
+        "roadtex-quality": "",
+        "loratex-operations": ""
+      }
     },
     "fr": {
-      "edition": "CURRICULUM VITÆ / FRANÇAIS",
+      "edition": "CURRICULUM VITÆ / FR",
       "documentLabel": "Curriculum vitæ professionnel",
       "location": "Tanger, Maroc",
       "profileLabel": "Profil",
       "expertiseLabel": "Expertise",
       "softwareLabel": "Logiciels",
-      "languagesLabel": "Langues de travail",
-      "languages": "Arabe · Français · Anglais",
-      "experienceLabel": "Expérience professionnelle",
+      "languagesLabel": "Langues",
+      "languages": "Arabe · Amazigh · Français · Anglais",
+      "experienceLabel": "Expérience",
       "present": "Aujourd’hui",
-      "footer": "Design de mode / Développement produit",
-      "summary": "Designer de mode senior et développeur produit, spécialisé en mode femme et homme. Associe design, construction du vêtement, développement des patrons industriels, bien-aller et documentation technique, avec une vision de la production nourrie par six postes depuis 2014.",
+      "footer": "Création de mode · Développement produit",
+      "summary": "Une création de mode nourrie par l’industrie. Plus de 12 ans pour relier collections femme et homme, patronage, bien-aller et exigences de fabrication.",
       "skills": [
         {
-          "heading": "Design & développement",
+          "heading": "Création / produit",
           "items": [
-            "Mode femme & homme",
-            "Construction du vêtement",
-            "Développement de prototypes"
+            "Silhouette, matières et construction."
           ]
         },
         {
-          "heading": "Patronage & bien-aller",
+          "heading": "Patronage / bien-aller",
           "items": [
-            "Patronage industriel",
-            "Gradation",
-            "Mise au point du bien-aller",
-            "Évaluation du vêtement"
+            "Patronage industriel, gradation, ajustements."
           ]
         },
         {
-          "heading": "Communication technique",
+          "heading": "CAO / 3D",
           "items": [
-            "Dessins à plat & dossiers techniques",
-            "Spécifications de production",
-            "Simulation 3D du vêtement"
-          ]
-        },
-        {
-          "heading": "Maîtrise de la production",
-          "items": [
-            "Qualité & contrôle de préproduction",
-            "Communication technique avec la production"
+            "Évaluation numérique et dessins à plat."
           ]
         }
       ],
       "displayTitle": [
-        "Designer de mode senior",
+        "Styliste senior",
         "& développeur produit"
+      ],
+      "practiceLabel": "Pratique du développement",
+      "practice": [
+        "Traduire les silhouettes en patrons, corrections de bien-aller et solutions de montage réalisables.",
+        "Relier création et fabrication : dessins à plat, mesures, tolérances, nomenclatures et détails de montage."
       ]
     },
     "es": {
-      "edition": "CURRÍCULUM / ESPAÑOL",
+      "edition": "CURRÍCULUM / ES",
       "documentLabel": "Currículum profesional",
       "location": "Tánger, Marruecos",
       "profileLabel": "Perfil",
-      "expertiseLabel": "Especialidades",
+      "expertiseLabel": "Especialización",
       "softwareLabel": "Software",
-      "languagesLabel": "Idiomas de trabajo",
-      "languages": "Árabe · Francés · Inglés",
-      "experienceLabel": "Experiencia profesional",
+      "languagesLabel": "Idiomas",
+      "languages": "Árabe · Amazigh · Francés · Inglés",
+      "experienceLabel": "Experiencia",
       "present": "Actualidad",
-      "footer": "Diseño de moda / Desarrollo de producto",
-      "summary": "Diseñador de moda sénior y desarrollador de producto, especializado en moda femenina y masculina. Combina diseño, confección, desarrollo de patrones industriales, ajuste y documentación técnica con una visión de la producción formada a lo largo de seis puestos desde 2014.",
+      "footer": "Diseño de moda · Desarrollo de producto",
+      "summary": "Diseño de moda con profundidad industrial. Más de 12 años conectando propuestas de mujer y hombre con patronaje, ajuste y requisitos de fabricación.",
       "skills": [
         {
-          "heading": "Diseño y desarrollo",
+          "heading": "Diseño / producto",
           "items": [
-            "Moda femenina y masculina",
-            "Confección de prendas",
-            "Desarrollo de muestras"
+            "Silueta, tejidos y confección."
           ]
         },
         {
-          "heading": "Patronaje y ajuste",
+          "heading": "Patronaje / ajuste",
           "items": [
-            "Desarrollo de patrones industriales",
-            "Escalado de tallas",
-            "Desarrollo del ajuste y evaluación de prendas"
+            "Patronaje industrial, escalado y ajuste."
           ]
         },
         {
-          "heading": "Comunicación técnica",
+          "heading": "CAD / 3D",
           "items": [
-            "Dibujos en plano y fichas técnicas",
-            "Especificaciones de producción",
-            "Simulación 3D de prendas"
-          ]
-        },
-        {
-          "heading": "Conocimiento de producción",
-          "items": [
-            "Calidad y control de preproducción",
-            "Comunicación técnica con producción"
+            "Evaluación digital y dibujos técnicos."
           ]
         }
       ],
       "displayTitle": [
         "Diseñador de moda sénior",
         "y desarrollador de producto"
+      ],
+      "practiceLabel": "Práctica de desarrollo",
+      "practice": [
+        "Traducir siluetas en patrones, correcciones de ajuste y soluciones de confección viables.",
+        "Conectar diseño y fabricación mediante dibujos técnicos, medidas, tolerancias, listas de materiales y detalles de montaje."
       ]
     }
+  },
+  "experienceYearsMinimum": 12,
+  "contentPolicy": {
+    "employersAndDates": "Six roles, titles and dates explicitly confirmed in the owner briefs and matching current Experience source; full LinkedIn cross-check remains unavailable.",
+    "responsibilities": "Unsupported employer responsibilities and title-derived remit descriptions are omitted. All six confirmed employer/title/date records remain. Current company location is owner-confirmed; broader expertise stays in the summary and skills column.",
+    "brands": "Omitted. No direct employment, client, endorsement or contract relationship inferred from brand exposure.",
+    "softwareAndLanguages": "Six tools and three languages from site; Photoshop, Excel and Amazigh added from owner confirmation in this brief.",
+    "omitted": "Education, certifications, revenue, production volumes, team sizes, proficiency ratings and unsupported named client contracts.",
+    "roleContext": "Only Ava Marie’s owner-confirmed Tangier, Morocco location is shown. No task list, responsibility, achievement or job description is inferred from a title."
+  },
+  "authoritativeSource": {
+    "kind": "owner-canonical-fallback",
+    "status": "owner-confirmed",
+    "date": "2026-10-30",
+    "scope": "Identity, exact English title, contact, verbatim summary, six expertise areas, eight tools, four spoken languages and all six role titles/dates supplied explicitly in latest owner brief.",
+    "externalLinkedIn": {
+      "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+      "status": "full-profile-inaccessible",
+      "lastChecked": "2026-10-31",
+      "authorizedConnection": "LinkedIn people search located the exact profile but returned no full professional sections.",
+      "publicProfileHTTPStatus": 429,
+      "earlierIndexedPreview": "Name, Ava marie association and Tangier region were visible in the indexed public preview earlier on 2026-10-31. Exact job titles/dates, full descriptions, skills and qualifications were not exposed.",
+      "completeProfileVerified": false
+    },
+    "omitted": "Unverified education, certifications, achievements, employer-specific responsibilities and proficiency levels."
+  },
+  "contentVerification": {
+    "status": "owner-confirmed-canonical",
+    "basis": "Owner-confirmed canonical identity, summary, expertise, tools, spoken languages and six exact career records. Unsupported title-derived role descriptions are removed; only the confirmed current company location is displayed. LinkedIn access does not block these established facts.",
+    "excluded": [
+      "Employer-specific duties and achievements",
+      "Unverified education and certifications",
+      "Named client/employment implications",
+      "Proficiency levels and invented metrics"
+    ],
+    "linkedinComplete": false,
+    "reviewDate": "2026-10-31"
+  },
+  "workflow": {
+    "stage": "english-master-visual-review",
+    "englishVisualApproved": false,
+    "approvedLocales": [],
+    "direction": "Locked owner master, unchanged visual system: original masthead, large geometric portrait frame, icon contact block, six expertise icons, decorative software/language bars, timeline, edge fashion gesture and script-name footer. English review only."
   }
 }

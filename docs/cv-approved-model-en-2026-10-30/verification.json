@@ -1,0 +1,188 @@
+{
+  "status": "English master ready for the owner-requested visual review; no public replacement and no FR/ES generation",
+  "branch": "feat/cv-editorial-rebuild",
+  "PR": 59,
+  "date": "2026-10-30",
+  "approvedModelSHA256": "c4ee657e1125e94fb679e7c2c7bd9bc20eec4eab97b18c1b7274e6d03abfda86",
+  "contentSource": {
+    "kind": "owner-canonical-fallback",
+    "status": "owner-confirmed",
+    "date": "2026-10-30",
+    "scope": "Identity, exact English title, contact, verbatim summary, six expertise areas, eight tools, four spoken languages and all six role titles/dates supplied explicitly in latest owner brief.",
+    "externalLinkedIn": {
+      "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+      "status": "inaccessible",
+      "httpStatus": 999,
+      "completeProfileVerified": false
+    },
+    "omitted": "Unverified education, certifications, achievements, employer-specific responsibilities and proficiency levels."
+  },
+  "portrait": {
+    "file": "portrait.jpg",
+    "source": "Owner color photograph attached on 2026-10-30",
+    "sourceSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+    "pixelSize": [
+      1166,
+      1280
+    ],
+    "treatment": "Unmodified owner JPEG, displayed sharply with object-fit cover in an upper-left geometric frame. No mask, fade, blur, filter, facial regeneration or tonal edits.",
+    "publicExposure": "Source asset is outside public/. Only the composed CV image contains the photograph.",
+    "latestAttachmentByteMatchVerified": true
+  },
+  "signature": {
+    "file": "fashion-signature.svg",
+    "sha256": "f369b2ffab16cbc0cac25f0d8fe9e1f730a3f7b37ac62870c5073e4d697a2601",
+    "origin": "Original hand-authored Bezier curves inspired by the owner approved model; abstract flowing couture gesture. Not a conventional dress form, technical pattern, or image-generated artwork.",
+    "style": "Transparent, no fill, no filter/shadow/glow; CSS stroke #D45F36, 1.35 units, opacity 0.12.",
+    "rejectedAsset": "The generated neon/glow mannequin was rejected and never copied into the repository or used as source."
+  },
+  "layout": [
+    {
+      "locale": "en",
+      "stem": "Soufiane-Aberbach-CV-EN",
+      "sourceSHA256": "96343729a0259cdbf3002ecf5207e08ca5d65fad8694d278ecf71d31d01b5929",
+      "portraitSHA256": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "productionSources": {
+        "template.html": "7f8bef309e3feff75ea9a410b23dee68aaac9ba168a3b25b344bf64664d4b3a3",
+        "render.mjs": "e48f3d64709ea1978b0ed278f04148f20ff74d1d9833a86dd8b964a507d7b996",
+        "fashion-signature.svg": "f369b2ffab16cbc0cac25f0d8fe9e1f730a3f7b37ac62870c5073e4d697a2601"
+      },
+      "layoutPreview": true,
+      "careerVerified": true,
+      "linkedinVerified": false,
+      "ownerVisualApproved": false,
+      "portraitColor": {
+        "fraction": 0.6755782322041166,
+        "width": 1166,
+        "height": 1280
+      },
+      "geometry": {
+        "footerTop": 1059.515625,
+        "lastRoleBottom": 1024.609375,
+        "languagesBottom": 1017.015625,
+        "sheet": {
+          "width": 793.6875,
+          "height": 1122.515625
+        },
+        "clipped": [],
+        "copyRight": 671.6875,
+        "brand": {
+          "x": 46,
+          "y": 40.40625,
+          "width": 36.15625,
+          "height": 31.1875,
+          "top": 40.40625,
+          "right": 82.15625,
+          "bottom": 71.59375,
+          "left": 46
+        },
+        "portrait": {
+          "x": 53,
+          "y": 100,
+          "width": 171,
+          "height": 217,
+          "filter": "none",
+          "maskImage": "none"
+        },
+        "signature": {
+          "x": 676.6875,
+          "y": 340,
+          "width": 71,
+          "height": 653,
+          "opacity": "0.12"
+        },
+        "fonts": [
+          {
+            "family": "Archivo",
+            "status": "loaded"
+          },
+          {
+            "family": "Inter",
+            "status": "loaded"
+          }
+        ]
+      }
+    }
+  ],
+  "imageReview": {
+    "en": {
+      "pngSHA256": "5573d1380dc2d308d79f331c86cbcec78ac9db0843612f1472e380c82725e0ae",
+      "fullResolutionInspected": true,
+      "date": "2026-10-30",
+      "scope": "English master reviewed internally at native A4 resolution; owner visual review pending.",
+      "checks": [
+        "Approved model composition retained",
+        "Original portrait crisp and controlled upper left",
+        "Contact block upper right",
+        "Canonical six roles/dates and exact supplied summary",
+        "Six expertise areas, eight software tools, four spoken languages",
+        "No proficiency ratings or invented employer duties",
+        "Original abstract Bezier line art at 12% opacity outside reading column",
+        "No glow, blur, fog, filters or portrait masks",
+        "No clipping or awkward final line ending"
+      ]
+    }
+  },
+  "PDF": [
+    {
+      "locale": "EN",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "52f52498dfb9d9ade2a85e0b0e29dda56eafdbcc9aec1139b15e340d0da39968"
+    }
+  ],
+  "tests": {
+    "build": {
+      "passed": true,
+      "pages": 36
+    },
+    "englishCVProof": {
+      "passed": true,
+      "PNG": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pageMm": [
+        210,
+        297
+      ],
+      "PDFExactPNG": true,
+      "searchable": true
+    },
+    "sourceIntegrity": {
+      "passed": true,
+      "originalFingerprintsPreserved": 108
+    }
+  },
+  "publicWebsiteBackendConfigurationChanges": false,
+  "newFrenchSpanishFilesGenerated": false,
+  "ownerVisualApproved": false,
+  "downloadChecks": [
+    {
+      "file": "Soufiane-Aberbach-CV-EN.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 975325,
+      "sha256": "5573d1380dc2d308d79f331c86cbcec78ac9db0843612f1472e380c82725e0ae"
+    },
+    {
+      "file": "Soufiane-Aberbach-CV-EN.pdf",
+      "status": 200,
+      "contentType": "application/pdf",
+      "bytes": 1280548,
+      "sha256": "e214a619c73f67128f5e24e34b7d67b55b3e5876e9a1e60ffdf81efba97332bf"
+    }
+  ],
+  "reviewBoundaryChecks": "Both translation and release requests correctly refused while owner English visual review is pending"
+}
