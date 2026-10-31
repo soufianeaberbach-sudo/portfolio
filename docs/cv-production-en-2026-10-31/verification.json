@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-31",
+  "status": "English edition rendered and inspected using existing editable source; ready for owner review",
+  "PR": 59,
+  "branch": "feat/cv-editorial-rebuild",
+  "ownerEnglishApprovalPending": true,
+  "sourcePolicy": "Owner-confirmed canonical source is sufficient for established facts. Full LinkedIn verification is not claimed and is not a release blocker for these facts.",
+  "baseline": "Fresh render before editing from e2d64cc8bd3dd9adb2527c6bc584f9e8f2e330bc",
+  "changes": [
+    "Removed six unsupported title-derived employer-context lines from career.json; retains current owner-confirmed Tangier location",
+    "Preserved exact six employer/title/date records, summary, six expertise areas, eight tools, four spoken languages",
+    "Single CSS min-height value freezes the last row at its measured baseline height to keep the timeline endpoint unchanged"
+  ],
+  "maintainedSourceFiles": [
+    "scripts/cv/career.json",
+    "scripts/cv/template.html"
+  ],
+  "rendererExporterVerifierChanged": false,
+  "portraitIconsArtworkFontsChanged": false,
+  "fullProfileLinkedInVerified": false,
+  "LinkedIn": {
+    "url": "https://www.linkedin.com/in/soufiane-aberbach-6799b7155",
+    "status": "full-profile-inaccessible",
+    "lastChecked": "2026-10-31",
+    "authorizedConnection": "LinkedIn people search located the exact profile but returned no full professional sections.",
+    "publicProfileHTTPStatus": 429,
+    "earlierIndexedPreview": "Name, Ava marie association and Tangier region were visible in the indexed public preview earlier on 2026-10-31. Exact job titles/dates, full descriptions, skills and qualifications were not exposed.",
+    "completeProfileVerified": false
+  },
+  "designPreservation": {
+    "baselineCommit": "e2d64cc8bd3dd9adb2527c6bc584f9e8f2e330bc",
+    "baselinePNGHash": "c00399f48059d1436b446b051bc8e108ed6b5817f9bf3658a8132f9c5109832c",
+    "correctedPNGHash": "1e7477137251b1cf6210c5daf49979ba2c638e17f4800eb8f3a9c406b7b38970",
+    "comparedNativePixels": [
+      2480,
+      3508
+    ],
+    "changedTextPixelCount": 78267,
+    "changedPixelsOutsideRoleContextBoxes": 0,
+    "textBoxesPNGCoordinates": [
+      [
+        1093,
+        1530,
+        2336,
+        1630
+      ],
+      [
+        1093,
+        1872,
+        2336,
+        1972
+      ],
+      [
+        1093,
+        2182,
+        2336,
+        2235
+      ],
+      [
+        1093,
+        2480,
+        2336,
+        2534
+      ],
+      [
+        1093,
+        2768,
+        2336,
+        2868
+      ],
+      [
+        1093,
+        3056,
+        2336,
+        3156
+      ]
+    ],
+    "protectedSourceHashesUnchanged": {
+      "scripts/cv/portrait.jpg": "6e4d546b2e9ae6dd39edd787f48df36c3143ac8e2f2ea0be154e6841387b3b46",
+      "scripts/cv/fashion-signature.svg": "050e065c912f43ac99846ee5428deafcf09da3bc9eae14080cf843abc2a3e1a7",
+      "scripts/cv/model-icons.mjs": "a312d7288c72e81aa64d2bf0067721887ac0641c0be55aa56b6812618f65a098",
+      "scripts/cv/fonts/MrsSaintDelafield-Regular.ttf": "77501352ab642949a4bc3cc15c82ac38c6ad29711fbf8e916e469541943b9aae",
+      "scripts/cv/render.mjs": "84350198fdf1ee061732e38ea17ba95773e514746aeb7c5b13ca0136f06166bc",
+      "scripts/cv/finalize.py": "a66a64ef64a4c7e1dd84f2814f108aa1d0118df827e33e83dd4fc24b7e88919e",
+      "scripts/cv/verify.py": "281c3f9c81dd9c3249d948151a670998f7cf3212b774df43565a3b2f4bc2a70a"
+    },
+    "protectedGeometryUnchanged": true,
+    "cssFix": "Last role min-height frozen at measured baseline 87.4375px so omitting unsupported text does not shorten the orange timeline. No other template change."
+  },
+  "PNGReview": {
+    "en": {
+      "pngSHA256": "1e7477137251b1cf6210c5daf49979ba2c638e17f4800eb8f3a9c406b7b38970",
+      "fullResolutionInspected": true,
+      "date": "2026-10-31",
+      "ownerApproved": false,
+      "scope": "Native 2480 x 3508 image and side-by-side reference comparison inspected after data correction and baseline timeline-height preservation.",
+      "findings": [
+        "Original sharp color portrait, crop and frame unchanged.",
+        "Name/title/contact hierarchy unchanged; all four contact icons retained.",
+        "Six expertise icons, eight software bars and four language bars retained.",
+        "Six exact confirmed employers/titles/dates remain in reverse chronology.",
+        "Unsupported title-derived duties removed; current Tangier location is confirmed.",
+        "Canonical profile, expertise, software and spoken languages remain accurate.",
+        "Fashion SVG and decorative footer name retained with unchanged source hashes and geometry.",
+        "All fixed geometry matches freshly rendered baseline, including timeline end.",
+        "No collision, text overflow, cut-off portrait, clipping or missing accent elements.",
+        "Rendered pixels outside the six edited role-context text boxes match the baseline exactly.",
+        "English only; owner content/visual review remains pending."
+      ]
+    }
+  },
+  "PDF": [
+    {
+      "locale": "EN",
+      "pageMm": [
+        210,
+        297
+      ],
+      "pixelSize": [
+        2480,
+        3508
+      ],
+      "dpi": 300,
+      "pages": 1,
+      "searchable": true,
+      "rasterIdentical": true,
+      "pixelSha256": "63830c47951ca8b8f51acbfe178a65b87fb74876621c7fae3f4b79b2a2e7b5b8"
+    }
+  ],
+  "downloads": [
+    {
+      "file": "Soufiane-Aberbach-CV-EN.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1167289,
+      "sha256": "1e7477137251b1cf6210c5daf49979ba2c638e17f4800eb8f3a9c406b7b38970"
+    },
+    {
+      "file": "Soufiane-Aberbach-CV-EN.pdf",
+      "status": 200,
+      "contentType": "application/pdf",
+      "bytes": 1478794,
+      "sha256": "a334b05fd499ba7246e762bb2d1c34b1ff272e8925779588f86f0828345450e2"
+    }
+  ],
+  "freshChecks": {
+    "EnglishCVProof": "passed",
+    "build": "36 pages, passed",
+    "i18n": "691 passed, 0 failed",
+    "fashionSourceIntegrity": "108 original source fingerprints preserved",
+    "scope": "No changes in public/, src/, worker, Cloudflare configuration or published CV files"
+  },
+  "newFrenchSpanishCVFiles": false,
+  "publishedAssetsReplaced": false,
+  "mergeOrDeployment": false,
+  "unresolvedExternalVerification": "Full LinkedIn headline/About, role duties/title/date cross-check, skills and complete qualifications remain inaccessible; unsupported details are omitted rather than blocking the English proof."
+}
