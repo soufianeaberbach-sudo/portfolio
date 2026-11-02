@@ -239,3 +239,26 @@ the same as meeting this assignment's full definition of done.
 - [Cloudflare Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
 - [R2 object lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/)
 - [schema.org/provider](https://schema.org/provider)
+
+## 8. Source release receipt
+
+Published as [PR #60](https://github.com/soufianeaberbach-sudo/portfolio/pull/60)
+from the latest baseline, with implementation commit
+`5aaa109d8e0aa6b5a752947c7c5e601d1f443985`.
+The only subsequent change for this receipt is documentation.
+
+[Implementation CI run 41451992319](https://github.com/soufianeaberbach-sudo/portfolio/actions/runs/41451992319)
+supersedes the interrupted local build attempt: production build, Wrangler
+dry-run, Worker backend tests, domain/canonical guards, production-checker tests,
+PNG/PDF/measurement integrity and browser smoke tests have passed. The
+multilingual/CV/Portfolio suites were still running at this receipt's timestamp;
+consult that run and the
+[final branch CI](https://github.com/soufianeaberbach-sudo/portfolio/actions?query=branch%3Afix%2Fseo-backend-final-2026-11)
+for their eventual complete results. Do not treat an in-progress run as passed.
+
+No Worker runtime, Contact component, resource binding, image, Tech Pack or CV
+file differs from the baseline. GitHub's eight-file diff confirms that scope.
+This source release does not establish a Cloudflare deployment, a corrected
+domain, lifecycle enforcement or search-account activation. The final merge SHA
+is recorded by PR #60; the **deployed SHA remains unverified** until checked in
+Cloudflare with account access.
