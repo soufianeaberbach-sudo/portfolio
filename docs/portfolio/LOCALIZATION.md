@@ -47,11 +47,16 @@ compact `CVDownloads.astro` action downloads the current language PDF; its
 native expandable options expose every PDF and PNG with descriptive filenames.
 The global page transition explicitly respects download links.
 
-`scripts/cv/career.json` is the shared CV career record; `template.html` is the
-editable deterministic layout. The retained portrait is a processed derivative
-of the owner's supplied photo. The original attachment is not published.
-PNG-first rendering, exact A4 conversion, searchable text and independent print
-checks are documented in [the production guide](../../scripts/cv/README.md).
+The final owner-supplied EN/FR/ES images approved on 2 November 2026 supersede
+the earlier generated CV artwork. Their original bytes, 1055 × 1491 dimensions,
+portraits, text, bars, QR codes, colors and layouts are preserved exactly.
+`scripts/cv/approved-images.json` pins the source and deliverable SHA-256 hashes.
+The PDFs contain the complete native images fitted losslessly to exact A4 pages,
+including the original FR/ES ICC profiles. They are image-based; no higher
+resolution or searchable-text claim is made. Conversion and independent checks
+are documented in [the production guide](../../scripts/cv/README.md). The old
+design generator must not replace these approved images. PR #59 stays separate
+and contributes no artwork to this release.
 
 ## Editing and verification
 

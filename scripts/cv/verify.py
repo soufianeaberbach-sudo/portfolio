@@ -1,70 +1,71 @@
 #!/usr/bin/env python3
-"""Verify the delivered CVs independently of the browser/render pipeline."""
+"""Independently verify the actual owner-approved deliverables.
+
+The 2 November 2026 images supersede generated-layout/content assumptions.
+Exact source hashes protect every word, portrait, bar, QR code and decoration.
+"""
 import hashlib
 import json
 import re
 from pathlib import Path
-
 import fitz
-from PIL import Image, ImageChops
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-CAREER = json.loads((ROOT / 'scripts/cv/career.json').read_text())
-OUT = ROOT / 'public/cv'
-expected_chronology = [
-    ('Ava Marie', '2022-05', None),
-    ('Lariconf', '2021-06', '2022-05'),
-    ('Loratex', '2018-09', '2021-05'),
-    ('Loratex', '2017-09', '2018-09'),
-    ('Roadtex', '2016-02', '2017-08'),
-    ('Loratex', '2014-02', '2016-01'),
-]
-assert [(r['company'], r['start'], r['end']) for r in CAREER['roles']] == expected_chronology
-assert set(CAREER['editions']) == {'en', 'fr', 'es'}
-assert CAREER['workingLanguages'] == ['ar', 'fr', 'en'], 'Publication languages must not become spoken-language claims'
-normalize = lambda text: re.sub(r'\s+', ' ', text).strip()
-portrait_reference = None
+manifest = json.loads(Path(__file__).with_name('approved-images.json').read_text())
+assert set(manifest['editions']) == {'en', 'fr', 'es'}
 checks = 0
-for locale in ['EN', 'FR', 'ES']:
-    stem = f'Soufiane-Aberbach-CV-{locale}'
-    png = OUT / f'{stem}.png'
-    pdf = OUT / f'{stem}.pdf'
-    with Image.open(png) as image:
-        assert image.size == (2480, 3508)
-        assert all(abs(n - 300) < .01 for n in image.info.get('dpi', (0, 0)))
-        image = image.convert('RGB')
-        # All four printer-safe edges must be true #FFFFFF, not transparent,
-        # cream, off-white, or a full-bleed photo/background.
-        white = Image.new('RGB', image.size, '#FFFFFF')
-        ink = ImageChops.difference(image, white).getbbox()
-        assert ink and min(ink[0], ink[1], image.width - ink[2], image.height - ink[3]) >= 118, ink
-        # One consistent photo composition in every edition. This rectangle is
-        # inside the portrait only, independent of translated text geometry.
-        portrait = image.crop((1900, 270, 2300, 810)).tobytes()
-        if portrait_reference is None:
-            portrait_reference = portrait
-        else:
-            assert portrait == portrait_reference, 'Portrait differs between editions'
-        expected_pixels = image.tobytes()
-    with fitz.open(pdf) as document:
-        assert len(document) == 1
-        page = document[0]
-        assert abs(page.rect.width * 25.4 / 72 - 210) < .001
-        assert abs(page.rect.height * 25.4 / 72 - 297) < .001
-        raster = [i for i in page.get_images() if i[2:4] == (2480, 3508)]
-        assert len(raster) == 1
-        assert fitz.Pixmap(document, raster[0][0]).samples == expected_pixels
-        text = normalize(page.get_text())
-        assert CAREER['email'] in text and 'aberbach.co' in text
-        assert all(normalize(role['title'][locale.lower()]) in text for role in CAREER['roles'])
-        assert all(tool in text for tool in CAREER['software'])
-        assert text.index('Ava Marie') < text.index('Lariconf') < text.index('Roadtex')
-        assert text.count('Loratex') == 3
-        for year in ['2014', '2016', '2017', '2018', '2021', '2022']:
-            assert year in text
-        assert CAREER['editions'][locale.lower()]['languages'] in text
-        assert 'Spanish' not in text and 'Espagnol' not in text and 'Español' not in text, 'Spanish proficiency is unverified'
-        assert page.get_links(), 'Public contact links should remain usable in the PDF'
+
+def check(condition, label):
+    global checks
+    assert condition, label
     checks += 1
-    print(f'{locale}: A4 / 300 DPI / white printer margins / six positions / consistent portrait / searchable / exact raster — pass')
-print(f'{checks} CV editions passed all print, content and image checks')
+
+for locale, record in manifest['editions'].items():
+    png, pdf = ROOT / record['png'], ROOT / record['pdf']
+    check(hashlib.sha256(png.read_bytes()).hexdigest() == record['pngSHA256'], f'{locale}: original PNG bytes')
+    check(hashlib.sha256(pdf.read_bytes()).hexdigest() == record['pdfSHA256'], f'{locale}: reviewed PDF bytes')
+    with Image.open(png) as image:
+        check(image.format == 'PNG' and list(image.size) == record['dimensions'], f'{locale}: native PNG dimensions')
+        check(image.mode == record['mode'], f'{locale}: original pixel mode')
+        if 'A' in image.getbands():
+            check(image.getchannel('A').getextrema() == (255, 255), f'{locale}: original opaque alpha')
+        pixels = image.convert('RGB').tobytes()
+        width, height = image.size
+        profile = image.info.get('icc_profile', b'')
+        check(hashlib.sha256(pixels).hexdigest() == record['rgbSHA256'], f'{locale}: approved native RGB pixels')
+        check((hashlib.sha256(profile).hexdigest() if profile else None) == record['iccSHA256'], f'{locale}: original color profile')
+    with fitz.open(pdf) as document:
+        check(len(document) == 1 and not document.is_encrypted, f'{locale}: one readable PDF page')
+        page = document[0]
+        check(abs(page.rect.width * 25.4 / 72 - 210) < .001 and
+              abs(page.rect.height * 25.4 / 72 - 297) < .001, f'{locale}: exact A4 portrait')
+        check(page.rotation == 0, f'{locale}: upright page')
+        images = page.get_images(full=True)
+        check(len(images) == 1 and images[0][2:5] == (width, height, 8), f'{locale}: one image at actual resolution')
+        image_ref = images[0][0]
+        check(fitz.Pixmap(document, image_ref).samples == pixels, f'{locale}: lossless embedded RGB pixels')
+        check(images[0][8] == 'FlateDecode', f'{locale}: lossless image compression')
+        color_type, color_space = document.xref_get_key(image_ref, 'ColorSpace')
+        if profile:
+            match = re.fullmatch(r'\[/ICCBased (\d+) 0 R\]', color_space)
+            check(color_type == 'array' and match is not None, f'{locale}: ICC color space retained')
+            check(document.xref_stream(int(match[1])) == profile, f'{locale}: exact ICC profile bytes embedded')
+        else:
+            check(color_space == '/DeviceRGB', f'{locale}: RGB source interpretation retained')
+        placements = page.get_image_rects(image_ref)
+        check(len(placements) == 1, f'{locale}: complete image placed exactly once')
+        box = placements[0]
+        check(abs(box.width / box.height - width / height) < .000001, f'{locale}: no distortion')
+        check(box.x0 >= -.001 and box.y0 >= -.001 and
+              box.x1 <= page.rect.width + .001 and box.y1 <= page.rect.height + .001, f'{locale}: no cropping')
+        scale = min(page.rect.width / width, page.rect.height / height)
+        check(abs(box.width - width * scale) < .001 and abs(box.height - height * scale) < .001,
+              f'{locale}: largest aspect-preserving fit, no additional margins')
+        check(abs(box.x0 - (page.rect.width - box.width) / 2) < .001 and
+              abs(box.y0 - (page.rect.height - box.height) / 2) < .001, f'{locale}: centered fit')
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(1, 1), alpha=False)
+        check(pixmap.width > 590 and pixmap.height > 840 and len(set(pixmap.samples)) > 100,
+              f'{locale}: PDF opens and renders the actual artwork')
+    print(f'{locale.upper()}: original bytes / native resolution / ICC / exact A4 / lossless pixels / no crop or distortion — pass')
+print(f'{checks} approved-CV checks passed across all three editions')

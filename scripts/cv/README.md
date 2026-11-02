@@ -1,56 +1,35 @@
-# ABERBACH CV production
+# Approved CV deliverables
 
-Three language editions of one factual career record and one A4 layout.
+The owner's final attachments of **2 November 2026** are the sole authority for
+the public CVs. They supersede the generated CVs in PR #58 and the artwork in
+PR #59. PR #59 stays separate; none of its artwork is used for this release.
 
-- `career.json`: verified employers, dates, translated titles, competencies,
-  software, actual working languages and public contact. English is factual
-  authority; the source commit and pages are recorded in this file.
-- `template.html`: editable deterministic layout. Archivo and Inter are embedded
-  from the existing committed font fixtures; no network fonts are required.
-- `portrait.png`: **processed derivative** of the owner-supplied photograph,
-  cropped and rendered in monochrome by the browser. The original attachment is
-  not copied into the repository or the public site. No generated portrait,
-  facial changes, background replacement or invented image detail is used.
-- `render.mjs`: typesets real text, checks font loading and page geometry,
-  produces 2480 × 3508 PNGs with 300 DPI metadata, and retains searchable HTML
-  text sources in ignored `.qa-director/cv/`.
-- `finalize.py`: converts each reviewed image into an exact 210 × 297 mm PDF.
-  The approved image covers the page; tagged text from the same HTML is retained
-  underneath for searching/copying and contact links. It verifies the PDF image
-  decodes to exactly the same RGB pixels as the approved PNG. This is a real
-  image-to-PDF conversion, without re-typesetting or a visual redesign.
-- `verify.py`: independent delivered-file checks: exact dimensions, resolution,
-  white print margins, portrait consistency, all six career positions, real
-  software/languages, searchable PDF text, working PDF links and pixel equality.
+`approved-images.json` records each attachment's actual language, original
+filename, SHA-256, native dimensions, pixel mode, RGB digest, color-profile
+digest, and reviewed PDF digest. The PNGs in `public/cv/` are byte-for-byte
+copies. All three are **1055 × 1491**; no upscaling or 300-DPI claim is made.
 
-## Reproduce
-
-Use the repository's existing Node/Playwright install. Install the print helpers
-in a Python environment (`python3 -m pip install -r scripts/cv/requirements.txt`).
+`approved-images.py` reads those exact PNGs and writes only matching PDFs.
+Each is one 210 × 297 mm portrait page. The native image is centered at its
+largest aspect-preserving fit, without cropping or resampling. Its unavoidable
+vertical fit allowance is about 0.107 mm per edge. RGB samples are embedded
+losslessly; the original Display P3 ICC profiles in FR/ES are embedded and bound
+to the PDF image. PNG metadata and all original bytes remain untouched.
 
 ```sh
-node scripts/cv/render.mjs
-# Inspect all three PNGs at native resolution before final PDF production.
-python3 scripts/cv/finalize.py
-node tests/cv.mjs
+python3 scripts/cv/approved-images.py
+npm run test:cv
 ```
 
-Use `CHROMIUM_PATH` only when the existing Playwright browser is unavailable and
-an appropriate local Chromium is already installed. `CV_OUTPUT_DIR` and
-`CV_QA_DIR` can point to alternative repository-relative production/review
-folders. The independent delivered-file test always checks `public/cv/`.
+The independent verifier pins approved PNG/PDF hashes and checks native pixels,
+ICC profile bytes, page count/size, fit, centering, lossless encoding and real PDF
+rendering. PDFs are image-based, as explicitly approved. They do not invent
+searchable text, higher resolution, or PDF/UA certification.
 
-To prepare a replacement **owner-authorized** portrait, supply its local path:
+`CVDownloads.astro` selects the page language's PDF and offers PDF/PNG for every
+edition. The i18n browser suite exercises actual downloads and filenames.
 
-```sh
-node scripts/cv/render.mjs --prepare-portrait /path/to/owner-portrait.jpg
-```
-
-This updates only the cropped monochrome derivative, then renders the editions.
-Review the real identity/crop before running final PDF production. The default
-render requires no access to the original attachment.
-
-The source retains the owner's real Arabic/French/English working languages.
-Spanish publication does not create a Spanish-proficiency claim. Education,
-certifications, metrics, employer responsibilities and proficiency levels are
-omitted because the verified source does not establish them.
+The older `career.json`, `template.html`, `portrait.png`, `render.mjs` and
+`finalize.py` remain historical production sources. **Do not run the old design
+generator against `public/cv/`.** It would overwrite the owner-approved files;
+the hash verifier deliberately rejects any such substitution.
