@@ -6,7 +6,10 @@ import WomenswearAct from '../components/portfolio/WomenswearAct.astro';
 import TechPackWorld from '../components/portfolio/TechPackWorld.astro';
 import SimulationWorld from '../components/portfolio/SimulationWorld.astro';
 import WorldNavigation from '../components/portfolio/WorldNavigation.astro';
-import { chapters, garmentWorlds, techPacks, simulationSessions } from '../data/portfolio';
+import { chapters as sourceChapters, garmentWorlds, techPacks as sourcePacks, simulationSessions as sourceSessions } from '../data/portfolio';
+import { getLocale, localizePath } from '../i18n/locales';
+import { pf, localizeChapter, localizeSession, localizeTechPack } from '../i18n/portfolio';
+import { ui } from '../i18n/ui';
 import '../styles/portfolio-director.css';
 import '../styles/portfolio-cinematic.css';
 import '../styles/portfolio-womenswear.css';
@@ -23,6 +26,13 @@ interface Props {
   lab?: { category: string; subject: Subject };
 }
 const { lab } = Astro.props as Props;
+/* The page's language. Chapters, sessions and packs keep their ids, order and
+   geometry; only their words are swapped (src/i18n/portfolio.ts). */
+const locale = getLocale(Astro.url);
+const t = pf[locale];
+const chapters = sourceChapters.map((chapter) => localizeChapter(chapter, locale));
+const techPacks = sourcePacks.map((pack) => localizeTechPack(pack, locale));
+const simulationSessions = sourceSessions.map((session, index) => localizeSession(session, index, locale));
 
 /* Every chapter opens. A chapter with nothing published still has an
    architecture worth walking into — its categories are listed, each marked
@@ -48,8 +58,8 @@ const split = (statement: string, word: string) => {
 ---
 
 <SiteLayout
-  title="Portfolio — Soufiane Aberbach"
-  description="Womenswear and menswear product development, garment-development tech packs and CLO3D garment simulation — shown as development evidence, not decoration."
+  title={t.title}
+  description={t.description}
   marker="SA-PORTFOLIO-V8"
   page="portfolio"
   noindex={!!lab}
@@ -142,17 +152,14 @@ const split = (statement: string, word: string) => {
             OUTRANKS THE OTHER: the difference between them is character, not
             size. The ampersand between them is set light at the middle of the
             axis — the hinge the two forces turn on. */}
-        <h1 class="pf-cinema__title" id="pf-cinema-title" data-cinema-title>
+        <h1 class="pf-cinema__title" id="pf-cinema-title" data-cinema-title lang="en" dir="ltr">
           <span class="pf-cinema__kicker">Between</span>
           <span class="pf-cinema__instinct">Instinct</span>
           <span class="pf-cinema__amp">&amp;</span>
           <span class="pf-cinema__construction">Construction</span>
         </h1>
 
-        <p class="pf-cinema__thesis" data-cinema-thesis>
-          Fashion design, pattern development and technical product work
-          — connected from concept to production.
-        </p>
+        <p class="pf-cinema__thesis" data-cinema-thesis>{t.thesis}</p>
 
         {/* THE WOMENSWEAR COVER. Not a separate screen: the last frame of the
             opening. Its type sits in the negative space the Womenswear plate
@@ -181,7 +188,7 @@ const split = (statement: string, word: string) => {
         </div>
 
         <p class="pf-cinema__scroll label" data-cinema-scroll>
-          <span>Scroll to open the practice</span><i aria-hidden="true"></i>
+          <span>{t.scroll}</span><i aria-hidden="true"></i>
         </p>
       </div>
       <span class="pf-cinema__entry-anchor" id="womenswear-entry" aria-hidden="true"></span>
@@ -247,7 +254,7 @@ const split = (statement: string, word: string) => {
                   <span class="pf-file__sheet pf-file__sheet--c" aria-hidden="true"></span>
                   <span class="pf-file__sheet pf-file__sheet--b" aria-hidden="true"></span>
                   {/* Behind the front page, so it slides out from under it. */}
-                  <span class="pf-file__tab label" aria-hidden="true">Style file</span>
+                  <span class="pf-file__tab label" aria-hidden="true">{t.styleFile}</span>
                   <figure class="pf-file__front" data-image-source={chapter.cover.credit.source}>
                     <img
                       src={chapter.cover.image.src}
@@ -321,11 +328,9 @@ const split = (statement: string, word: string) => {
         coloured word, and one thing to do next. */}
     <section class="pf-outro" id="portfolio-ending" aria-labelledby="pf-outro-title">
       <p class="pf-outro__rule" aria-hidden="true"></p>
-      <h2 class="pf-outro__title display" id="pf-outro-title">
-        One practice.<br />From design to <em>production</em>.
-      </h2>
-      <a class="pf-outro__brief button button--signal" href="/contact/">
-        Start a brief <span aria-hidden="true"><Arrow /></span>
+      <h2 class="pf-outro__title display" id="pf-outro-title" set:html={t.outro} />
+      <a class="pf-outro__brief button button--signal" href={localizePath('/contact/', locale)}>
+        {ui[locale].startBrief} <span aria-hidden="true"><Arrow /></span>
       </a>
     </section>
 
@@ -335,7 +340,7 @@ const split = (statement: string, word: string) => {
         says only where you are — `02 / 04 MENSWEAR`. Opened, by pointer or by
         keyboard, it is the four chapters. It is the only place in the journey
         that numbers anything. */}
-    <nav class="pf-where" aria-label="Portfolio chapters" data-where hidden>
+    <nav class="pf-where" aria-label={t.chaptersLabel} data-where hidden>
       <button type="button" class="pf-where__now label" data-where-toggle aria-expanded="false">
         <span class="pf-where__count" data-where-count>01 / 0{chapters.length}</span>
         <span class="pf-where__name" data-where-name>{chapters[0].title}</span>
@@ -367,7 +372,7 @@ const split = (statement: string, word: string) => {
       <TechPackWorld packs={techPacks} />
     </div>
     <dialog class="pf-evidence-reader" data-evidence-reader aria-labelledby="pf-evidence-title">
-      <div class="pf-evidence-reader__bar"><h2 id="pf-evidence-title" class="label"></h2><button type="button" data-evidence-close>Close <span aria-hidden="true">×</span></button></div>
+      <div class="pf-evidence-reader__bar"><h2 id="pf-evidence-title" class="label"></h2><button type="button" data-evidence-close>{t.close} <span aria-hidden="true">×</span></button></div>
       <div class="pf-evidence-reader__art" data-evidence-mount></div>
       <p class="label" data-evidence-caption></p>
     </dialog>
@@ -812,6 +817,8 @@ const split = (statement: string, word: string) => {
       import { initTechPackReaders } from '../scripts/techpack-reader';
       import { initWomenswear } from '../scripts/womenswear-reader';
       import { initMenswear } from '../scripts/menswear-reader';
+      import { clientLocale, terms as portfolioTerms } from '../i18n/portfolio-terms';
+      const say = portfolioTerms[clientLocale()].runtime;
       const root = document.querySelector<HTMLElement>('[data-pf-root]');
     if (root) {
       const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -849,7 +856,7 @@ const split = (statement: string, word: string) => {
           const art = opener.querySelector('img,.pf-plate__blank')!;
           evidenceReader.querySelector('[data-evidence-mount]')!.replaceChildren(art.cloneNode(true));
           evidenceReader.querySelector('[data-evidence-caption]')!.textContent =
-            opener.hasAttribute('data-evidence-demo') ? 'Demo plate / No project evidence supplied' : 'Development evidence / Full image';
+            opener.hasAttribute('data-evidence-demo') ? say.evidenceDemo : say.evidenceFull;
           evidenceReader.showModal();
         });
       }
@@ -1693,7 +1700,7 @@ const split = (statement: string, word: string) => {
       const render = (queue: Queue) => {
         queue.slots.forEach((slot, i) => slot.toggleAttribute('data-active', i === queue.index));
         if (queue.counter) {
-          const noun = queue.counter.dataset.noun ?? 'Project';
+          const noun = queue.counter.dataset.noun ?? say.project;
           queue.counter.textContent = `${noun} ${String(queue.index + 1).padStart(2, '0')}`;
         }
         if (queue.prev) (queue.prev as HTMLButtonElement).disabled = queue.slots.length < 2;
@@ -1789,7 +1796,7 @@ const split = (statement: string, word: string) => {
         if (!prepareWheel(queue, next)) return;
         const wheel = wheels.get(queue)!;
         queue.index = wheel.to;
-        if (queue.counter) queue.counter.textContent = `${queue.counter.dataset.noun ?? 'Project'} ${String(queue.index + 1).padStart(2, '0')}`;
+        if (queue.counter) queue.counter.textContent = `${queue.counter.dataset.noun ?? say.project} ${String(queue.index + 1).padStart(2, '0')}`;
         settleWheel(queue, true);
       };
       for (const queue of queues) {
@@ -1872,7 +1879,7 @@ const split = (statement: string, word: string) => {
                page load. */
             const frame = document.createElement('iframe');
             frame.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
-            frame.title = item.querySelector('h3')?.textContent ?? 'Simulation video';
+            frame.title = item.querySelector('h3')?.textContent ?? say.simulationVideo;
             frame.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
             frame.setAttribute('allowfullscreen', '');
             frame.setAttribute('loading', 'lazy');

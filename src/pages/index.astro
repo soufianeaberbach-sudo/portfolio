@@ -1,14 +1,28 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import { getLocale, localizePath } from '../i18n/locales';
+import { home } from '../i18n/pages/home';
+import { ui } from '../i18n/ui';
+import { fill } from '../i18n/dict';
 
-const stages = [
-  ['01', 'Brief / Intent lock', 'Design intent, missing information and open feasibility questions are settled before anything is cut.'],
-  ['02', 'Technical build', 'Pattern architecture, construction logic and initial measurements are built and tested against each other.'],
-  ['03', 'Fit / Validation', 'Proportion, balance, drape and construction corrections are worked through and recorded.'],
-  ['04', 'Size / Specification lock', 'Grading, points of measure and tolerances are fixed into technical documentation.'],
-  ['05', 'Pre-production / Handoff', 'Production works from the approved reference, with verification at first piece and pre-production.'],
-];
+const locale = getLocale(Astro.url);
+const t = home[locale];
+const l = (href: string) => localizePath(href, locale);
+const stages = t.process.stages.map(([title, text], i) => [String(i + 1).padStart(2, '0'), title, text]);
+const number = (n: number) => n.toLocaleString(locale === 'fr' ? 'fr-FR' : locale === 'es' ? 'es-ES' : 'en-US');
+const stats = [
+  { count: 12, suffix: '+' },
+  { count: 9000, suffix: '+', grouped: true },
+  { count: 16, suffix: '+' },
+  { count: 6 },
+  { count: 6 },
+].map((stat, i) => ({
+  ...stat,
+  text: `${stat.grouped ? number(stat.count) : stat.count}${stat.suffix ?? ''}`,
+  aria: stat.suffix ? fill(t.stats.plus, { n: stat.grouped ? number(stat.count) : stat.count }) : undefined,
+  label: t.stats.labels[i],
+}));
 
 // 16 logos = a 4 x 4 grid. Each is painted as a CSS mask so the single
 // artwork can be recoloured (white by default, --signal on hover) without
@@ -45,24 +59,24 @@ const brandLogos = [
 ---
 
 <SiteLayout
-  title="Soufiane Aberbach — Fashion Designer & Product Developer"
-  description="Senior fashion designer and product developer in Tangier, focused on production-ready pattern, fit and technical development."
+  title={t.title}
+  description={t.description}
   marker="SA-HOME-V5"
   page="home"
 >
   <!-- BUILD-MARKER: SA-HOME-V5 -->
   <section class="home-hero">
     <div class="home-hero__copy" data-reveal>
-      <p class="label home-hero__hello">Hello, my name is</p>
+      <p class="label home-hero__hello">{t.hello}</p>
       <div class="home-hero__title">
-        <h1 class="display"><span>Soufiane</span><span>Aberbach</span></h1>
+        <h1 class="display" lang="en"><span>Soufiane</span><span>Aberbach</span></h1>
       </div>
       <p class="home-hero__role">
-        <span>And I’m a</span>
-        <span class="home-hero__role-window" aria-hidden="true"><strong data-role-word></strong></span>
-        <span class="sr-only">Fashion Designer, Product Developer, Pattern Maker, Grading Specialist, 3D Simulation Developer, Tech Pack Author, and Production Follower.</span>
+        <span>{t.roleLead}</span>
+        <span class="home-hero__role-window" aria-hidden="true"><strong data-role-word data-roles={JSON.stringify(t.roles)}></strong></span>
+        <span class="sr-only">{t.rolesSentence}</span>
       </p>
-      <a class="button button--signal" href="/contact/">Start a brief <span aria-hidden="true"><Arrow /></span></a>
+      <a class="button button--signal" href={l('/contact/')}>{ui[locale].startBrief} <span aria-hidden="true"><Arrow /></span></a>
     </div>
     <figure class="home-hero__portrait" data-reveal>
       {/* WebP renditions generated from the same source with ffmpeg-static, so
@@ -76,7 +90,7 @@ const brandLogos = [
         sizes="(max-width: 900px) 82vw, 46vw"
         width="1200"
         height="1486"
-        alt="Soufiane Aberbach seated and drawing on a tablet"
+        alt={t.portraitAlt}
         fetchpriority="high"
         decoding="async"
       />
@@ -85,13 +99,12 @@ const brandLogos = [
 
   <section class="positioning section-shell">
     <div class="positioning__lead" data-reveal>
-      <p class="eyebrow">Positioning</p>
-      <h2 class="display">The expensive mistake happens <em>before</em> the sewing line.</h2>
+      <p class="eyebrow">{t.positioning.eyebrow}</p>
+      <h2 class="display" set:html={t.positioning.title} />
     </div>
     <div class="positioning__copy" data-reveal>
-      <p>Many expensive fitting rounds, fabric losses and sample delays begin with decisions made before the first metre is cut.</p>
-      <p>That decision is the work: defining the pattern, validating fit and translating intent into instructions a factory can repeat.</p>
-      <a href="/expertise/" class="button">View expertise <span><Arrow /></span></a>
+      {t.positioning.body.map((line) => <p>{line}</p>)}
+      <a href={l('/expertise/')} class="button">{t.positioning.cta} <span><Arrow /></span></a>
     </div>
   </section>
 
@@ -103,60 +116,40 @@ const brandLogos = [
   <section class="business-ready section-shell" aria-labelledby="business-ready-title">
     <div class="business-ready__inner" data-reveal>
       <p class="label business-ready__tag" id="business-ready-title">
-        <span class="business-ready__mark" aria-hidden="true"></span>Business ready
+        <span class="business-ready__mark" aria-hidden="true"></span>{t.business.tag}
       </p>
-      <p class="business-ready__lead">Ready for a direct professional engagement.</p>
+      <p class="business-ready__lead">{t.business.lead}</p>
       <dl class="business-ready__facts">
-        <div>
-          <dt>Status</dt>
-          <dd>Registered Moroccan Auto&#8209;Entrepreneur</dd>
-        </div>
-        <div>
-          <dt>Registered</dt>
-          <dd>Since 2018</dd>
-        </div>
-        <div>
-          <dt>Invoicing</dt>
-          <dd>B2B invoicing available</dd>
-        </div>
-        <div>
-          <dt>Based in</dt>
-          <dd>Tangier, Morocco</dd>
-        </div>
+        {t.business.facts.map(([term, value]) => (
+          <div>
+            <dt>{term}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
       </dl>
     </div>
   </section>
 
   <section class="home-stats section-shell section-rule" aria-labelledby="production-record-title">
     <div class="home-stats__head">
-      <p class="eyebrow" id="production-record-title" data-reveal>Production record</p>
+      <p class="eyebrow" id="production-record-title" data-reveal>{t.stats.eyebrow}</p>
     </div>
     <div class="home-stats__grid">
-      <article class="home-stat" data-reveal>
-        <strong data-count="12" data-suffix="+" aria-label="12 plus">12+</strong><span>Years in<br />production</span>
-      </article>
-      <article class="home-stat" data-reveal>
-        <strong data-count="9000" data-suffix="+" data-grouped aria-label="9,000 plus">9,000+</strong><span>Garments<br />engineered</span>
-      </article>
-      <article class="home-stat" data-reveal>
-        <strong data-count="16" data-suffix="+" aria-label="16 plus">16+</strong><span>Brand<br />programmes</span>
-      </article>
-      <article class="home-stat" data-reveal>
-        <strong data-count="6">6</strong><span>Career<br />roles</span>
-      </article>
-      <article class="home-stat" data-reveal>
-        <strong data-count="6">6</strong><span>Software<br />systems</span>
-      </article>
+      {stats.map((stat) => (
+        <article class="home-stat" data-reveal>
+          <strong data-count={stat.count} data-suffix={stat.suffix} data-grouped={stat.grouped ? '' : undefined} aria-label={stat.aria} dir="ltr">{stat.text}</strong><span set:html={stat.label} />
+        </article>
+      ))}
     </div>
   </section>
 
   <section class="brand-context">
     <div class="section-shell">
       <div class="brand-context__head" data-reveal>
-        <p class="eyebrow">Programme exposure</p>
-        <p class="label">16+ brand programmes / manufacturing development</p>
+        <p class="eyebrow">{t.brands.eyebrow}</p>
+        <p class="label">{t.brands.label}</p>
       </div>
-      <ul class="brand-context__logos" aria-label="Brand programme exposure">
+      <ul class="brand-context__logos" aria-label={t.brands.listLabel}>
         {brandLogos.map((logo) => (
           <li data-wide={logo.wide ? '' : undefined} style={`--mobile-order:${logo.mobileOrder}`}>
             <span
@@ -168,15 +161,15 @@ const brandLogos = [
           </li>
         ))}
       </ul>
-      <p class="brand-context__note">Programme exposure through manufacturing work across Loratex, Lariconf and Ava Marie — not direct employment or brand endorsement.</p>
+      <p class="brand-context__note">{t.brands.note}</p>
     </div>
   </section>
 
   <section class="home-process section-shell">
     <div class="home-process__head" data-reveal>
-      <p class="eyebrow">The development sequence</p>
-      <h2 class="display">Five stages.<br />Every stage ends with a decision.</h2>
-      <a class="button" href="/process/">Explore the process <span><Arrow /></span></a>
+      <p class="eyebrow">{t.process.eyebrow}</p>
+      <h2 class="display" set:html={t.process.title} />
+      <a class="button" href={l('/process/')}>{t.process.cta} <span><Arrow /></span></a>
     </div>
     <ol class="home-process__list">
       {stages.map(([index, title, text]) => (
@@ -192,10 +185,10 @@ const brandLogos = [
   <section class="home-next" aria-labelledby="simulation-title">
     <div class="section-shell home-next__grid">
       <div class="home-next__intro" data-reveal>
-        <p class="label">CLO3D simulation / selected work</p>
-        <h2 class="display" id="simulation-title"><em>See</em> it move.<br />Before you make it.</h2>
-        <p class="home-next__lede">CLO3D turns pattern, proportion and fabric behaviour into a moving prototype—so silhouette, proportion and drape can be explored before and alongside physical sampling.</p>
-        <a href="/portfolio/" class="button">View the portfolio <span><Arrow /></span></a>
+        <p class="label">{t.simulation.label}</p>
+        <h2 class="display" id="simulation-title" set:html={t.simulation.title} />
+        <p class="home-next__lede">{t.simulation.lede}</p>
+        <a href={l('/portfolio/')} class="button">{t.simulation.cta} <span><Arrow /></span></a>
       </div>
       <div class="home-next__media" data-reveal>
         <video
@@ -206,7 +199,7 @@ const brandLogos = [
           loop
           playsinline
           preload="none"
-          aria-label="Female and male digital fashion models walking, presented in CLO3D"
+          aria-label={t.simulation.videoLabel}
         >
           {/* Attached once by the observer below, so the 3.5 MB file is not
               fetched until the section is near the viewport. */}
@@ -218,17 +211,9 @@ const brandLogos = [
 </SiteLayout>
 
 <script>
-  const roles = [
-    'Fashion Designer',
-    'Product Developer',
-    'Pattern Maker',
-    'Grading Specialist',
-    '3D Simulation Developer',
-    'Tech Pack Author',
-    'Production Follower',
-  ];
-
   const roleWord = document.querySelector('[data-role-word]');
+  /* The roles are rendered into the page in its own language. */
+  const roles = JSON.parse(roleWord?.getAttribute('data-roles') ?? '[]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (roleWord && reduceMotion) {
@@ -339,7 +324,8 @@ const brandLogos = [
   }
 
   const metricNumbers = document.querySelectorAll('[data-count]');
-  const formatMetric = (value, grouped) => grouped ? Math.round(value).toLocaleString('en-US') : String(Math.round(value));
+  const numberLocale = { fr: 'fr-FR', es: 'es-ES' }[document.documentElement.lang] ?? 'en-US';
+  const formatMetric = (value, grouped) => grouped ? Math.round(value).toLocaleString(numberLocale) : String(Math.round(value));
 
   const revealMetric = (element) => {
     const target = Number(element.dataset.count || 0);

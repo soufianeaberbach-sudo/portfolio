@@ -1,10 +1,14 @@
 ---
+import {getLocale} from '../../i18n/locales';
+import {current} from '../../i18n/portfolio-current';
+import {fill} from '../../i18n/dict';
 interface Props { name: string; }
 const {name}=Astro.props;
+const t=current[getLocale(Astro.url)];
 ---
 <div class="edit-rail-controls">
- <p class="label">Browse all ten <span>· Swipe or use arrows</span></p>
- <div><button type="button" data-edit-step="-1" aria-label={`Previous ${name} looks`}>←</button><button type="button" data-edit-step="1" aria-label={`More ${name} looks`}>→</button></div>
+ <p class="label">{t.browseTen} <span>{t.swipeArrows}</span></p>
+ <div><button type="button" data-edit-step="-1" aria-label={fill(t.previousLooks,{name})}>←</button><button type="button" data-edit-step="1" aria-label={fill(t.moreLooks,{name})}>→</button></div>
 </div>
 <script>
  for(const section of document.querySelectorAll<HTMLElement>('.ww-exhibition,.mw-film')){

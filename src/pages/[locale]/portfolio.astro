@@ -1,0 +1,8 @@
+---
+/* The portfolio page in French or Spanish. One implementation serves
+   every language: the page reads its locale from the URL. */
+import Page from '../portfolio.astro';
+import { localeStaticPaths } from '../../i18n/locales';
+export const getStaticPaths = localeStaticPaths;
+---
+<Page />

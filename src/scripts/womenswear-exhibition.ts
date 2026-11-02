@@ -2,6 +2,7 @@ import {gsap} from 'gsap';
 import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import {directions,type Pose} from '../data/womenswear-direction';
 import {paintPhoto} from './garment-photo';
+import {clientLocale,term} from '../i18n/portfolio-terms';
 gsap.registerPlugin(ScrollTrigger);
 /** A shared photographic stage; each category supplies a deliberately directed edit. */
 export function initWomenswearExhibition(root:HTMLElement){
@@ -52,7 +53,7 @@ export function initWomenswearExhibition(root:HTMLElement){
     timeline.to(actors[role],{...pose(role,p),duration,ease:direction.id==='activewear'?'power3.inOut':'power1.inOut'},start);
     if(p.opacity===0)timeline.set(actors[role],{opacity:0},(p.floor??.97)<0?start:shot.at);
    }
-   timeline.set(label,{textContent:shot.label},shot.at);
+   timeline.set(label,{textContent:term(clientLocale(),'shots',shot.label)},shot.at);
    for(const[role,p]of Object.entries(shot.poses))settled[role]={...p,opacity:p.opacity??1};
    previous=shot.at;
   }

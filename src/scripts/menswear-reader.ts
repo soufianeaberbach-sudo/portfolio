@@ -5,6 +5,9 @@ import{initScrollContinuation}from'./scroll-continuation';
 import{menswearDirections}from'../data/menswear-direction';
 import type{MenswearCategory}from'../data/menswear-collection';
 import{gsap}from'gsap';
+import{clientLocale,terms,term,categoryName}from'../i18n/portfolio-terms';
+/* Runtime words in the page language (<html lang>). */
+const say=terms[clientLocale()].runtime;
 
 /** Scoped media/controller adapter. It never pushes history or opens/closes router layers. */
 export function initMenswear(root:HTMLElement){
@@ -24,19 +27,19 @@ export function initMenswear(root:HTMLElement){
  const paint=()=>{
   const current=Math.round(position),direction=menswearDirections[category];
   paintMenswear(film.querySelector<HTMLElement>('[data-mw-frame]')!,position,reduce.matches,heldActor);
-  world.querySelectorAll<HTMLElement>('[data-mw-scene]').forEach(b=>{b.setAttribute('aria-pressed',String(Number(b.dataset.mwScene)===current));b.setAttribute('aria-label',`${Number(b.dataset.mwScene)+1}: ${direction.scenes[Number(b.dataset.mwScene)]}`);});
-  film.querySelector<HTMLElement>('[data-mw-scene-caption]')!.textContent=direction.scenes[current];
+  world.querySelectorAll<HTMLElement>('[data-mw-scene]').forEach(b=>{b.setAttribute('aria-pressed',String(Number(b.dataset.mwScene)===current));b.setAttribute('aria-label',`${Number(b.dataset.mwScene)+1}: ${term(clientLocale(),'scenes',direction.scenes[Number(b.dataset.mwScene)])}`);});
+  film.querySelector<HTMLElement>('[data-mw-scene-caption]')!.textContent=term(clientLocale(),'scenes',direction.scenes[current]);
  };
  const stop=()=>{motion?.kill();motion=null;cancelAnimationFrame(raf);};
  const scene=(n:number,immediate=false)=>{
   stop();archive=false;heldActor=undefined;requested=clamp(n);const target=requested;
-  const done=()=>{motion=null;world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=`${menswearDirections[category].name}. ${menswearDirections[category].scenes[target]}`;};
+  const done=()=>{motion=null;world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=`${categoryName(clientLocale(),category)}. ${term(clientLocale(),'scenes',menswearDirections[category].scenes[target])}`;};
   if(immediate||reduce.matches){position=target;experience.scrollTop=start()+range()*target/4;paint();done();return;}
   // The film renderer owns shot easing/holds. A second ease rushed its central comparisons.
   const state={p:position};motion=gsap.to(state,{p:target,duration:Math.abs(target-position)>.99?.95:.65,ease:'none',onUpdate:()=>{position=state.p;experience.scrollTop=start()+range()*position/4;paint();},onComplete:done});
  };
  const setPresent=(on:boolean)=>{
-  present=on;world.toggleAttribute('data-present',on);presentButton.setAttribute('aria-pressed',String(on));presentButton.textContent=on?'Exit presentation':'Present';fullscreen.hidden=!on;
+  present=on;world.toggleAttribute('data-present',on);presentButton.setAttribute('aria-pressed',String(on));presentButton.textContent=on?say.exitPresent:say.present;fullscreen.hidden=!on;
   if(on){scene(Math.round(position),true);experience.focus({preventScroll:true});}
   else if(document.fullscreenElement===world)void document.exitFullscreen().catch(()=>{});
  };
@@ -95,7 +98,7 @@ export function initMenswear(root:HTMLElement){
  toggle.addEventListener('click',()=>menuState(menu.hidden,true));
  world.querySelectorAll('[data-mw-world-link]').forEach(a=>a.addEventListener('click',()=>menuState(false)));
  presentButton.addEventListener('click',()=>setPresent(!present));
- fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement===world)await document.exitFullscreen();else await world.requestFullscreen();}catch{world.querySelector<HTMLElement>('[data-mw-live]')!.textContent='Fullscreen is unavailable. In-page presentation remains available.';} });
+ fullscreen.addEventListener('click',async()=>{try{if(document.fullscreenElement===world)await document.exitFullscreen();else await world.requestFullscreen();}catch{world.querySelector<HTMLElement>('[data-mw-live]')!.textContent=say.fullscreenUnavailable;} });
  world.querySelectorAll<HTMLButtonElement>('[data-mw-scene]').forEach(b=>b.addEventListener('click',()=>scene(Number(b.dataset.mwScene))));
  world.querySelector('[data-mw-prev]')!.addEventListener('click',()=>step(-1));world.querySelector('[data-mw-next]')!.addEventListener('click',()=>step(1));
  world.querySelector('[data-mw-archive-open]')!.addEventListener('click',()=>{stop();archive=true;heldActor=undefined;if(present)setPresent(false);menuState(false);experience.scrollTo({top:start()+range()+experience.clientHeight,behavior:'instant'});film.querySelector<HTMLElement>('.mw-rail')!.focus({preventScroll:true});});
@@ -119,7 +122,7 @@ export function initMenswear(root:HTMLElement){
  new MutationObserver(()=>{if(!world.hasAttribute('data-open')){stop();cancel();setPresent(false);menuState(false);}}).observe(world,{attributes:true,attributeFilter:['data-open']});
  activate(null);
  return{focusTarget:()=>experience,ownsWorld:(el:HTMLElement)=>el===world,get category(){return category;},activate,cancel,owns:(reader:HTMLElement)=>reader.hasAttribute('data-mw-reader'),returnHash:(reader:HTMLElement)=>`#menswear/${reader.dataset.returnWorld??reader.dataset.of}`,
-  enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){cancel();stop();reader.dataset.returnWorld=category;const back=reader.querySelector<HTMLAnchorElement>('[data-subject-close]')!;back.href=`#menswear/${category}`;back.textContent=reader.dataset.of===category?`← ${menswearDirections[category].name}`:'← Full reference collection';heldActor=Number(source?.closest<HTMLElement>('[data-mw-actor]')?.dataset.mwActor)||undefined;archive=experience.scrollTop>start()+range()+1||!!source?.closest('.mw-rail');active=reader;exhibition.inert=true;readerStates.get(reader)!.select();match(reader,source,true,instant,()=>{});},
+  enter(reader:HTMLElement,source:HTMLElement|null,instant:boolean){cancel();stop();reader.dataset.returnWorld=category;const back=reader.querySelector<HTMLAnchorElement>('[data-subject-close]')!;back.href=`#menswear/${category}`;back.textContent=reader.dataset.of===category?`← ${categoryName(clientLocale(),category)}`:say.fullCollectionBack;heldActor=Number(source?.closest<HTMLElement>('[data-mw-actor]')?.dataset.mwActor)||undefined;archive=experience.scrollTop>start()+range()+1||!!source?.closest('.mw-rail');active=reader;exhibition.inert=true;readerStates.get(reader)!.select();match(reader,source,true,instant,()=>{});},
   leave(reader:HTMLElement,source:HTMLElement|null,instant:boolean,done:()=>void){cancel();exhibition.inert=false;const token=epoch;const finish=()=>{if(token!==epoch)return;active=null;returnFinish=null;done();};returnFinish=finish;match(reader,location.hash===`#menswear/${reader.dataset.returnWorld??reader.dataset.of}`?source:null,false,instant,finish);},
  };
 }

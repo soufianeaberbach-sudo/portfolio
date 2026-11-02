@@ -10,5 +10,17 @@ export const indexableRoutes = [
   { path: '/privacy/', title: 'Privacy & Confidentiality', trust: true },
   { path: '/before-we-start/', title: 'Before We Start', trust: true },
   { path: '/working-terms/', title: 'Working Terms', trust: true },
+  { path: '/techpacks/material-credits/', title: 'Material image credits' },
 ];
 export const trustRoutes = indexableRoutes.filter((route) => route.trust);
+
+/** The site's languages, mirrored from src/i18n/locales.ts so plain-Node
+ * tests and diagnostics can read them without a TypeScript loader. English
+ * keeps the original unprefixed URLs; the others add a prefix. */
+export const siteLocales = ['en', 'fr', 'es'];
+export const localizedPath = (path, locale) => (locale === 'en' ? path : `/${locale}${path}`);
+
+/** Every indexable page in every language: 10 pages x 3 languages = 30. */
+export const localizedRoutes = indexableRoutes.flatMap((route) =>
+  siteLocales.map((locale) => ({ ...route, locale, base: route.path, path: localizedPath(route.path, locale) })),
+);

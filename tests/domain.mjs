@@ -18,7 +18,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { indexableRoutes, trustRoutes } from '../src/data/site-routes.mjs';
+import { localizedRoutes, trustRoutes, siteLocales, localizedPath } from '../src/data/site-routes.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/[\\\/]$/, '');
 /* A line may name the old domain on purpose — this guard has to declare what
@@ -88,7 +88,9 @@ group('the public contact email is exactly the chosen form');
   const expected = [
     'src/components/BriefForm.astro',
     'src/pages/contact.astro',
-    'src/pages/privacy.astro',
+    /* Privacy's sections render through the shared, localized
+       TrustSections component, which inserts the mailto link. */
+    'src/components/TrustSections.astro',
     'wrangler.jsonc',
   ];
   for (const file of expected) {
@@ -144,10 +146,12 @@ if (!hasDist) {
   console.log('\nNo dist/ — run `npm run build` first to check the built output.');
   failures.push('dist/ missing: the built-output assertions did not run');
 } else {
-  const ROUTES = indexableRoutes.map(({ path }) => path.replace(/^\/|\/$/g, ''));
+  /* Every language version is canonical in its own right, so the apex,
+     og:url and no-www guarantees below cover all 30 localized pages. */
+  const ALL_ROUTES = localizedRoutes.map(({ path }) => path.replace(/^\/|\/$/g, ''));
 
   group('built pages canonicalize to the apex');
-  for (const route of ROUTES) {
+  for (const route of ALL_ROUTES) {
     const file = join(distPath, route, 'index.html');
     const html = await readFile(file, 'utf8');
     const label = `/${route}${route ? '/' : ''}`;
@@ -162,18 +166,21 @@ if (!hasDist) {
 
   group('built mailto links use the chosen address');
 {
-  for (const route of ['contact', 'privacy']) {
+  for (const route of ['contact', 'privacy', 'fr/contact', 'fr/privacy', 'es/contact', 'es/privacy']) {
     const html = await readFile(join(distPath, route, 'index.html'), 'utf8');
     const mailtos = [...html.matchAll(/href="mailto:([^"?]+)/g)].map((m) => m[1]);
     check(`/${route}/ renders at least one mailto link`, mailtos.length > 0, `${mailtos.length} found`);
     check(`/${route}/ mailto links all use ${PUBLIC_EMAIL}`, mailtos.every((m) => m === PUBLIC_EMAIL), mailtos.join(' '));
     check(`/${route}/ shows no dotted address anywhere`, !html.includes(DOTTED_EMAIL));
   }
-  /* The no-JavaScript fallback on Contact is the one route a visitor without
-     scripting has, so its address is asserted separately. */
-  const contact = await readFile(join(distPath, 'contact', 'index.html'), 'utf8');
-  const noscript = contact.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] ?? '';
-  check('the no-JavaScript fallback carries the chosen address', noscript.includes(PUBLIC_EMAIL), noscript.slice(0, 120));
+  /* The no-JavaScript fallback remains usable in each language, so its
+     approved public address is asserted separately. */
+  for (const locale of siteLocales) {
+    const path = localizedPath('/contact/', locale);
+    const contact = await readFile(join(distPath, path.slice(1), 'index.html'), 'utf8');
+    const noscript = contact.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1] ?? '';
+    check(`${path} no-JavaScript fallback carries the chosen address`, noscript.includes(PUBLIC_EMAIL), noscript.slice(0, 120));
+  }
 }
 
 group('built social image is absolute on the apex');
@@ -222,14 +229,14 @@ group('built social image is absolute on the apex');
     const xml = await readFile(join(distPath, 'sitemap.xml'), 'utf8');
     check('no old domain in the sitemap', !xml.includes(OLD_WEBSITE_DOMAIN));
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    const expected = ROUTES.map((r) => `${NEW_ORIGIN}/${r}${r ? '/' : ''}`);
-    check(`lists exactly ${expected.length} URLs`, locs.length === expected.length, `${locs.length} found`);
-    check('lists exactly the English routes', JSON.stringify(locs) === JSON.stringify(expected), locs.join(' '));
+    const expected = ALL_ROUTES.map((r) => `${NEW_ORIGIN}/${r}${r ? '/' : ''}`);
+    check(`lists exactly ${expected.length} URLs`, locs.length === expected.length && expected.length === 30, `${locs.length} found`);
+    check('lists exactly the localized indexable routes', [...locs].sort().join(' ') === [...expected].sort().join(' '), locs.join(' '));
     check('every URL is https on the apex', locs.every((l) => l.startsWith(`${NEW_ORIGIN}/`)));
     check('no www URL', !locs.some((l) => l.includes('//www.')));
     check('no duplicates', new Set(locs).size === locs.length);
-    /* Phase A is English-only, and noindex routes must never be listed. */
-    for (const banned of ['/contact/sent', '/404', '/fr/', '/es/', '/ar/']) {
+    /* Noindex flow routes must never be listed, in any language. */
+    for (const banned of ['/contact/sent', '/404', '/lab/', '/api/', '/ar/', '/it/']) {
       check(`sitemap excludes ${banned}`, !locs.some((l) => l.includes(banned)));
     }
   }
@@ -244,32 +251,40 @@ group('built social image is absolute on the apex');
   }
 
   group('noindex routes stayed noindex');
-  for (const route of ['contact/sent', '404']) {
-    const file = route === '404' ? join(distPath, '404.html') : join(distPath, route, 'index.html');
+  for (const locale of siteLocales) for (const route of ['contact/sent', '404']) {
+    const prefix = locale === 'en' ? '' : locale;
+    const file = route === '404' ? join(distPath, prefix, '404.html') : join(distPath, prefix, route, 'index.html');
     const html = await readFile(file, 'utf8');
-    check(`/${route} is noindex`, /<meta name="robots" content="noindex/.test(html));
-    check(`/${route} carries no old domain`, !html.includes(OLD_WEBSITE_DOMAIN));
+    const label = localizedPath(`/${route}`, locale);
+    check(`${label} is noindex`, /<meta name="robots" content="noindex/.test(html));
+    check(`${label} carries no old domain`, !html.includes(OLD_WEBSITE_DOMAIN));
+    check(`${label} declares its own language`, html.includes(`lang="${locale}"`));
   }
 
   group('trust pages build, remain indexable and share navigation');
-  for (const path of ['/privacy/', '/working-terms/', '/before-we-start/']) {
-    check(`${path} is in the route manifest`, trustRoutes.some((route) => route.path === path));
+  for (const locale of siteLocales) for (const basePath of ['/privacy/', '/working-terms/', '/before-we-start/']) {
+    const path = localizedPath(basePath, locale);
+    check(`${path} is in the route manifest`, localizedRoutes.some((route) => route.path === path));
     const html = await readFile(join(distPath, path.slice(1), 'index.html'), 'utf8');
     check(`${path} has one main heading`, (html.match(/<h1\b/g) ?? []).length === 1);
     check(`${path} is not noindex`, !/<meta name="robots" content="noindex/.test(html));
     check(`${path} has a description and social metadata`, /<meta name="description" content="[^"<>]+"/.test(html) &&
       /<meta property="og:title" content="[^"<>]+"/.test(html) && /<meta name="twitter:title" content="[^"<>]+"/.test(html));
     const footer = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? '';
-    for (const route of trustRoutes) check(`${path} footer links to ${route.path}`, footer.includes(`href="${route.path}"`));
+    for (const route of trustRoutes) {
+      const href = localizedPath(route.path, locale);
+      check(`${path} footer links to ${href}`, footer.includes(`href="${href}"`));
+    }
   }
 
-  group('Phase A added no multilingual routes and no trackers');
+  group('exactly the three approved languages exist, with no trackers');
   {
     const entries = await readdir(distPath, { withFileTypes: true });
     const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
-    for (const locale of ['fr', 'es', 'ar', 'it']) {
-      check(`no /${locale}/ route exists yet`, !dirs.includes(locale), dirs.join(' '));
+    for (const locale of ['fr', 'es']) {
+      check(`/${locale}/ route exists`, dirs.includes(locale), dirs.join(' '));
     }
+    for (const locale of ['ar', 'it']) check(`no unapproved /${locale}/ route exists`, !dirs.includes(locale), dirs.join(' '));
     const html = await readFile(join(distPath, 'index.html'), 'utf8');
     for (const tracker of [
       'googletagmanager', 'google-analytics', 'gtag(', 'connect.facebook.net',
@@ -277,8 +292,8 @@ group('built social image is absolute on the apex');
     ]) {
       check(`no ${tracker} on the home page`, !html.includes(tracker));
     }
-    check('no hreflang alternates yet', !html.includes('hreflang'));
-    check('html lang is still en', /<html lang="en"/.test(html));
+    check('home declares reciprocal hreflang alternates', ['en', 'fr', 'es', 'x-default'].every((code) => html.includes(`hreflang="${code}"`)));
+    check('English html lang is still en', /<html lang="en"/.test(html));
   }
 }
 

@@ -4,6 +4,13 @@ import Arrow from '../components/Arrow.astro';
 import BriefForm from '../components/BriefForm.astro';
 import References from '../components/References.astro';
 import { profiles } from '../components/SocialLinks.astro';
+import { getLocale, localizePath } from '../i18n/locales';
+import { contact } from '../i18n/pages/contact';
+import { ui } from '../i18n/ui';
+const locale = getLocale(Astro.url);
+const t = contact[locale];
+const u = ui[locale];
+const l = (href: string) => localizePath(href, locale);
 
 /* Contact — the first step of the process, not another sales page.
  *
@@ -20,33 +27,12 @@ const phoneDial = '+212657872090';
 const whatsapp = 'https://wa.me/212657872090';
 const marketplaceProfiles = profiles.filter((profile) => profile.name !== 'LinkedIn');
 
-const faqs = [
-  {
-    q: 'Do I need a finished design?',
-    a: 'No. A rough sketch, a reference photo or a written description is enough to discuss whether the garment is producible.',
-  },
-  {
-    q: 'Can I come to you with an existing fit or development problem?',
-    a: 'Yes. A pattern plus fit photos often makes a balance problem visible faster than starting the garment again.',
-  },
-  {
-    q: 'Do you work remotely and internationally?',
-    a: 'Yes. Work is coordinated remotely from Tangier, with strong overlap with European working hours, and companies can be invoiced directly.',
-  },
-  {
-    q: 'How do I share files?',
-    a: 'The form supports one PDF, JPEG, PNG or WebP file up to 10 MB when uploads are active, or a reference link. Larger technical material can follow after first contact.',
-  },
-  {
-    q: 'How is project material handled?',
-    a: 'Client material is private by default. It is not published or used in the Portfolio without written permission. Cloudflare Turnstile checks submissions when enabled; validation and other spam screens also apply. Provider and retention details are on Privacy & Confidentiality.',
-  },
-];
+const faqs = t.faqs.map(([q, a]) => ({ q, a }));
 ---
 
 <SiteLayout
-  title="Contact — Soufiane Aberbach"
-  description="Start a development brief with Soufiane Aberbach in Tangier. A sketch, a reference, an existing sample, a fit issue or a production question is enough to begin."
+  title={t.title}
+  description={t.description}
   marker="SA-CONTACT-V6"
   page="contact"
 >
@@ -55,15 +41,12 @@ const faqs = [
   <section class="ct-hero">
     <div class="section-shell ct-hero__grid">
       <div class="ct-hero__copy" data-reveal>
-        <p class="eyebrow">Contact / 05</p>
-        <h1 class="display ct-hero__title">Start with<br />what you <em>have</em>.</h1>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="display ct-hero__title" set:html={t.heroTitle} />
       </div>
       <aside class="ct-hero__aside" data-reveal>
-        <p>
-          A sketch, a reference, an existing sample, a fit issue or a production
-          question is enough to begin. Nothing has to be resolved before you write.
-        </p>
-        <p class="label ct-hero__availability">Available for selected freelance and professional opportunities</p>
+        <p>{t.heroAside}</p>
+        <p class="label ct-hero__availability">{t.availability}</p>
       </aside>
     </div>
   </section>
@@ -71,34 +54,31 @@ const faqs = [
   <section class="ct-direct" aria-labelledby="ct-direct-title">
     <div class="section-shell ct-direct__composition">
       <div class="ct-reach" data-reveal>
-        <p class="eyebrow">Direct contact</p>
-        <h2 class="display ct-reach__title" id="ct-direct-title">Reach Soufiane<br /><em>directly</em>.</h2>
+        <p class="eyebrow">{t.directEyebrow}</p>
+        <h2 class="display ct-reach__title" id="ct-direct-title" set:html={t.directTitle} />
         {/* One number, stated once, with two small actions beside it. It was
             printed twice as two display-size rows — the same eleven digits
             immediately below themselves, which read as duplicated content
             rather than as two ways to use it. */}
         <ul class="ct-reach__list">
           <li>
-            <span class="label">Email</span>
+            <span class="label">{t.emailLabel}</span>
             <a class="ct-reach__value" href={`mailto:${email}`}>
-              {email}<i aria-hidden="true"><Arrow /></i>
+              <bdi dir="ltr">{email}</bdi><i aria-hidden="true"><Arrow /></i>
             </a>
           </li>
           <li>
-            <span class="label">Phone / WhatsApp</span>
-            <p class="ct-reach__value ct-reach__value--static">{phoneDisplay}</p>
+            <span class="label">{t.phoneLabel}</span>
+            <p class="ct-reach__value ct-reach__value--static"><bdi dir="ltr">{phoneDisplay}</bdi></p>
             <p class="ct-reach__actions">
-              <a href={`tel:${phoneDial}`}>Call<i aria-hidden="true"><Arrow /></i></a>
+              <a href={`tel:${phoneDial}`}>{t.call}<i aria-hidden="true"><Arrow /></i></a>
               <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                WhatsApp<span class="sr-only"> (opens in a new tab)</span><i aria-hidden="true"><Arrow /></i>
+                WhatsApp<span class="sr-only"> {u.newTab}</span><i aria-hidden="true"><Arrow /></i>
               </a>
             </p>
           </li>
         </ul>
-        <p class="ct-reach__note">
-          Tangier, Morocco &middot; Remote collaboration. The development brief reaches the
-          same inbox and keeps your reference associated with it.
-        </p>
+        <p class="ct-reach__note">{t.reachNote}</p>
       </div>
 
       {/* The caption sits BELOW the image, never over it. It used to be an
@@ -112,11 +92,11 @@ const faqs = [
           sizes="(max-width: 900px) 100vw, 54vw"
           width="1510"
           height="980"
-          alt="Soufiane Aberbach at his desk beside a monitor displaying his current portfolio website"
+          alt={t.figureAlt}
           loading="lazy"
           decoding="async"
         />
-        <figcaption>Freelance workspace &middot; Tangier</figcaption>
+        <figcaption>{t.figcaption}</figcaption>
       </figure>
     </div>
   </section>
@@ -124,12 +104,10 @@ const faqs = [
   <section class="ct-brief" id="brief" aria-labelledby="ct-brief-title">
     <div class="section-shell ct-brief__grid">
       <div class="ct-brief__intro" data-reveal>
-        <p class="eyebrow">Start a development brief</p>
-        <h2 class="display ct-brief__title" id="ct-brief-title">Upload what<br />you <em>have</em>.</h2>
+        <p class="eyebrow">{t.briefEyebrow}</p>
+        <h2 class="display ct-brief__title" id="ct-brief-title" set:html={t.briefTitle} />
         <ol class="ct-steps">
-          <li><span class="label">01</span><p>Describe the garment or the production problem.</p></li>
-          <li><span class="label">02</span><p>Attach one approved reference file or share a link.</p></li>
-          <li><span class="label">03</span><p>Receive an honest scope and a realistic next step.</p></li>
+          {t.steps.map((step, i) => <li><span class="label">{String(i + 1).padStart(2, '0')}</span><p>{step}</p></li>)}
         </ol>
       </div>
 
@@ -142,33 +120,22 @@ const faqs = [
   <section class="ct-business" aria-labelledby="ct-credential-title">
     <div class="section-shell ct-business__grid">
       <div class="ct-business__intro" data-reveal>
-        <p class="eyebrow">Procurement ready</p>
+        <p class="eyebrow">{t.businessEyebrow}</p>
         <p class="ct-signature" aria-label="Soufiane Aberbach"><span>Soufiane</span><span>Aberbach</span></p>
-        <p>Direct engagement is supported by a registered Moroccan business and clear invoicing.</p>
+        <p>{t.businessLine}</p>
       </div>
       <aside class="ct-credential" data-reveal>
-          <p class="eyebrow" id="ct-credential-title">Registered business</p>
-          <p class="ct-credential__head">
-            Registered Moroccan<br />Auto&#8209;Entrepreneur
-          </p>
+          <p class="eyebrow" id="ct-credential-title">{t.credentialEyebrow}</p>
+          <p class="ct-credential__head" set:html={t.credentialHead} />
           <dl class="ct-credential__facts">
-            <div>
-              <dt>Registered since</dt>
-              <dd>2018</dd>
-            </div>
-            <div>
-              <dt>Invoicing</dt>
-              <dd><em>B2B invoicing available</em></dd>
-            </div>
-            <div>
-              <dt>Based in</dt>
-              <dd>Tangier, Morocco</dd>
-            </div>
+            {t.credentialFacts.map(([term, value], i) => (
+              <div>
+                <dt>{term}</dt>
+                <dd>{i === 1 ? <em>{value}</em> : value}</dd>
+              </div>
+            ))}
           </dl>
-          <p class="ct-credential__note">
-            Formal engagement with a company is straightforward — contracts and invoices
-            in your own procurement process.
-          </p>
+          <p class="ct-credential__note">{t.credentialNote}</p>
       </aside>
     </div>
   </section>
@@ -176,21 +143,21 @@ const faqs = [
   <section class="ct-proof" aria-labelledby="ct-refs-title">
     <div class="section-shell">
       <div class="ct-proof__head" data-reveal>
-        <p class="eyebrow">Professional references</p>
-        <h2 class="display" id="ct-refs-title">In their own <em>words</em>.</h2>
+        <p class="eyebrow">{t.refsEyebrow}</p>
+        <h2 class="display" id="ct-refs-title" set:html={t.refsTitle} />
       </div>
       <References mode="full" />
     </div>
   </section>
 
-  <section class="ct-platforms" aria-label="Marketplace profiles">
+  <section class="ct-platforms" aria-label={t.marketplaceLabel}>
     <p class="section-shell ct-platforms__line" data-reveal>
-      <span>Need a marketplace workflow?</span>
+      <span>{t.marketplaceLine}</span>
       {marketplaceProfiles.map((profile, index) => (
         <>
           {index > 0 && <span aria-hidden="true"> · </span>}
           <a href={profile.href} target="_blank" rel="noopener noreferrer">
-            {profile.name}<span class="sr-only"> (opens in a new tab)</span>
+            {profile.name}<span class="sr-only"> {u.newTab}</span>
           </a>
         </>
       ))}
@@ -199,18 +166,18 @@ const faqs = [
 
   <section class="ct-faq section-shell" aria-labelledby="ct-faq-title">
     <div class="ct-faq__head" data-reveal>
-      <p class="eyebrow">Before you write</p>
-      <h2 class="display" id="ct-faq-title">Useful answers.</h2>
+      <p class="eyebrow">{t.faqEyebrow}</p>
+      <h2 class="display" id="ct-faq-title">{t.faqTitle}</h2>
     </div>
     <div class="ct-faq__list" data-reveal>
       {faqs.map((item) => (
         <details><summary>{item.q}</summary><p>{item.a}</p></details>
       ))}
     </div>
-    <nav class="ct-faq__guides" aria-label="Project information">
-      <a href="/before-we-start/">Before We Start</a>
-      <a href="/working-terms/">Working Terms</a>
-      <a href="/privacy/">Privacy & Confidentiality</a>
+    <nav class="ct-faq__guides" aria-label={u.footer.projectInfo}>
+      <a href={l('/before-we-start/')}>{u.trust.before}</a>
+      <a href={l('/working-terms/')}>{u.trust.terms}</a>
+      <a href={l('/privacy/')}>{u.trust.privacy}</a>
     </nav>
   </section>
 

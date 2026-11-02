@@ -2,6 +2,8 @@
 import SocialLinks from './SocialLinks.astro';
 import Arrow from './Arrow.astro';
 import { trustRoutes } from '../data/site-routes.mjs';
+import { getLocale, localizePath } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 
 interface Props {
   page?: string;
@@ -9,22 +11,30 @@ interface Props {
 }
 
 const { page = '', showCallout = true } = Astro.props;
+const locale = getLocale(Astro.url);
+const t = ui[locale];
+const l = (href: string) => localizePath(href, locale);
 
 const footerLinks = [
-  { href: '/', label: 'Home', page: 'home' },
-  { href: '/expertise/', label: 'Expertise', page: 'expertise' },
-  { href: '/portfolio/', label: 'Portfolio', page: 'portfolio' },
-  { href: '/process/', label: 'Process', page: 'process' },
-  { href: '/experience/', label: 'Experience', page: 'experience' },
-  { href: '/contact/', label: 'Contact', page: 'contact' },
+  { href: '/', label: t.nav.home, page: 'home' },
+  { href: '/expertise/', label: t.nav.expertise, page: 'expertise' },
+  { href: '/portfolio/', label: t.nav.portfolio, page: 'portfolio' },
+  { href: '/process/', label: t.nav.process, page: 'process' },
+  { href: '/experience/', label: t.nav.experience, page: 'experience' },
+  { href: '/contact/', label: t.nav.contact, page: 'contact' },
 ];
+const trustLabel: Record<string, string> = {
+  '/privacy/': t.trust.privacy,
+  '/before-we-start/': t.trust.before,
+  '/working-terms/': t.trust.terms,
+};
 
 /* One closing statement for the whole site. The per-page variants ended on
    "Start with what you have." — accurate but generic for the last thing a
    visitor reads, and it repeated the Contact hero. This says what the work is
    actually for. */
-const calloutEyebrow = 'Before the next round';
-const calloutLines = ['Make the next decision', 'before it becomes', 'a production problem.'];
+const calloutEyebrow = t.footer.eyebrow;
+const calloutLines = t.footer.lines;
 ---
 
 <footer class="site-footer">
@@ -34,27 +44,27 @@ const calloutLines = ['Make the next decision', 'before it becomes', 'a producti
       <p class="footer-callout__statement">
         {calloutLines.map((line) => <span>{line}</span>)}
       </p>
-      <a class="footer-callout__cta" href="/contact/">
-        Start a brief
+      <a class="footer-callout__cta" href={l('/contact/')}>
+        {t.startBrief}
         <i aria-hidden="true"><Arrow /></i>
       </a>
     </div>
   )}
   <div class="footer-grid">
-    <a class="footer-signature" href="/" aria-label="Soufiane Aberbach — Home"><span>SA</span><i aria-hidden="true"></i></a>
-    <nav aria-label="Footer navigation">
+    <a class="footer-signature" href={l('/')} aria-label={t.homeLabel}><span>SA</span><i aria-hidden="true"></i></a>
+    <nav aria-label={t.footer.nav}>
       {footerLinks.map((link) => (
-        <a href={link.href} aria-current={page === link.page ? 'page' : undefined}>{link.label}</a>
+        <a href={l(link.href)} aria-current={page === link.page ? 'page' : undefined}>{link.label}</a>
       ))}
     </nav>
     <div class="footer-profiles">
-      <p class="label">Professional profiles</p>
+      <p class="label">{t.footer.profiles}</p>
       <SocialLinks />
     </div>
     <div class="footer-meta">
-      <span>Tangier, Morocco</span>
-      <nav class="footer-trust" aria-label="Project information">
-        {trustRoutes.map(({ path, title }) => <a href={path}>{title}</a>)}
+      <span>{t.place}</span>
+      <nav class="footer-trust" aria-label={t.footer.projectInfo}>
+        {trustRoutes.map(({ path }) => <a href={l(path)}>{trustLabel[path]}</a>)}
       </nav>
       <span>© 2026</span>
     </div>

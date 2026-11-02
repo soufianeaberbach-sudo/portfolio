@@ -37,6 +37,13 @@ import Arrow from './Arrow.astro';
  * activation note in wrangler.jsonc — the secret and the site key have to go
  * live together.
  */
+import { getLocale, localizePath } from '../i18n/locales';
+import { contact } from '../i18n/pages/contact';
+import { ui } from '../i18n/ui';
+import { fill } from '../i18n/dict';
+/* VALUES ARE THE MACHINE CONTRACT. The Worker validates these exact English
+   strings (STAGES in worker/index.ts), so they are submitted unchanged in
+   every language; only the visible label is translated. */
 const stages = [
   'Idea / reference',
   'In development',
@@ -44,6 +51,14 @@ const stages = [
   'Pre-production',
   'Production issue',
 ];
+const locale = getLocale(Astro.url);
+const f = contact[locale].form;
+/* Client-side words for the inline script, plus a lookup from the Worker's
+   English refusals to the same message in this language. */
+const serverMessages = Object.fromEntries(contact.en.form.serverErrors.map((message, i) => [message, f.serverErrors[i]]));
+const clientText = JSON.stringify({ ...f.messages, server: serverMessages });
+const [noscriptBefore, noscriptAfter] = f.noscript.split('{email}');
+const [doneBefore, doneAfter] = f.doneBody.split('{email}');
 
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
 const email = 'soufianeaberbach@gmail.com';
@@ -59,9 +74,7 @@ const email = 'soufianeaberbach@gmail.com';
       everyone else, and the form is visually unchanged with JavaScript. */}
   <noscript>
     <p class="bf__noscript">
-      This form needs JavaScript. Email the brief straight to
-      <a href={`mailto:${email}`}>{email}</a> instead — a sketch, a reference, a
-      fit issue or a production question is enough to begin.
+      {noscriptBefore}<a href={`mailto:${email}`}><bdi dir="ltr">{email}</bdi></a>{noscriptAfter}
     </p>
   </noscript>
 
@@ -73,25 +86,26 @@ const email = 'soufianeaberbach@gmail.com';
     data-brief-form
     data-endpoint="/api/brief"
     data-email={email}
+    data-text={clientText}
   >
     <!-- Spam screens. Never announced, never focusable. -->
     <div class="bf__trap" aria-hidden="true">
-      <label for="website">Website</label>
+      <label for="website">{f.website}</label>
       <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
     </div>
     <input type="hidden" name="t" value="" data-started />
 
     <fieldset class="bf__group">
-      <legend class="label">Who are you?</legend>
+      <legend class="label">{f.who}</legend>
       <div class="bf__row">
         <p class="field">
-          <label for="bf-name">Your name</label>
+          <label for="bf-name">{f.name}</label>
           <input id="bf-name" name="name" type="text" autocomplete="name" maxlength="120" required
                  aria-describedby="bf-name-err" />
           <span class="field__err" id="bf-name-err" data-err="name" hidden></span>
         </p>
         <p class="field">
-          <label for="bf-company">Company or brand <span class="field__opt">optional</span></label>
+          <label for="bf-company">{f.company} <span class="field__opt">{f.optional}</span></label>
           <input id="bf-company" name="company" type="text" autocomplete="organization" maxlength="120"
                  aria-describedby="bf-company-err" />
           <span class="field__err" id="bf-company-err" data-err="company" hidden></span>
@@ -100,9 +114,9 @@ const email = 'soufianeaberbach@gmail.com';
     </fieldset>
 
     <fieldset class="bf__group">
-      <legend class="label">How can I reply?</legend>
+      <legend class="label">{f.reply}</legend>
       <p class="field">
-        <label for="bf-email">Email</label>
+        <label for="bf-email">{f.email}</label>
         <input id="bf-email" name="email" type="email" inputmode="email" autocomplete="email"
                maxlength="254" required aria-describedby="bf-email-err" />
         <span class="field__err" id="bf-email-err" data-err="email" hidden></span>
@@ -110,13 +124,13 @@ const email = 'soufianeaberbach@gmail.com';
     </fieldset>
 
     <fieldset class="bf__group bf__group--stage">
-      <legend class="label">Where is the product now?</legend>
+      <legend class="label">{f.stageLegend}</legend>
       <div class="bf__stages" aria-describedby="bf-stage-err">
         {stages.map((stage, i) => (
           <label class="stage">
             <input type="radio" name="stage" value={stage} required={i === 0} />
             <span class="stage__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <span class="stage__text">{stage}</span>
+            <span class="stage__text">{f.stages[i]}</span>
             <span class="stage__pick" aria-hidden="true"></span>
           </label>
         ))}
@@ -125,23 +139,20 @@ const email = 'soufianeaberbach@gmail.com';
     </fieldset>
 
     <fieldset class="bf__group">
-      <legend class="label">What needs solving?</legend>
+      <legend class="label">{f.solving}</legend>
       <p class="field">
-        <label for="bf-message">Describe it in your own words</label>
+        <label for="bf-message">{f.describe}</label>
         <textarea id="bf-message" name="message" rows="6" maxlength="5000" required
                   aria-describedby="bf-message-err bf-message-hint"
-                  placeholder="The garment, the problem, and any deadline that matters."></textarea>
-        <span class="field__hint" id="bf-message-hint">A sentence or two is enough to start.</span>
+                  placeholder={f.placeholder}></textarea>
+        <span class="field__hint" id="bf-message-hint">{f.messageHint}</span>
         <span class="field__err" id="bf-message-err" data-err="message" hidden></span>
       </p>
     </fieldset>
 
     <fieldset class="field bf__attach">
-      <legend class="label">Upload a reference <span class="field__opt">optional</span></legend>
-      <p class="bf__attach-lede">
-        A sketch, a photo of a fitting, a tech pack, a screenshot — whatever you already
-        have, as a PDF or an image. It goes straight to Soufiane; nothing is published.
-      </p>
+      <legend class="label">{f.uploadLegend} <span class="field__opt">{f.optional}</span></legend>
+      <p class="bf__attach-lede">{f.uploadLede}</p>
 
       {/* The input is the control; the label is its visible surface. Clicking or
           pressing Enter/Space on the label opens the picker, which on a phone is
@@ -160,8 +171,8 @@ const email = 'soufianeaberbach@gmail.com';
 
       <div class="bf__drop" data-drop>
         <label class="bf__drop-label" for="bf-file">
-          <span class="bf__drop-action">Choose a file</span>
-          <span class="bf__drop-or" aria-hidden="true">or drag it here</span>
+          <span class="bf__drop-action">{f.choose}</span>
+          <span class="bf__drop-or" aria-hidden="true">{f.drag}</span>
         </label>
       </div>
 
@@ -173,24 +184,19 @@ const email = 'soufianeaberbach@gmail.com';
           <span data-file-size></span>
         </span>
         <button class="bf__file-remove" type="button" data-file-remove>
-          Remove<span class="sr-only"> the selected file</span>
+          {f.remove}<span class="sr-only">{f.removeSr}</span>
         </button>
       </div>
 
-      <span class="field__hint" id="bf-file-hint">
-        PDF or image (JPEG, PNG, WebP). Up to 10 MB. For anything else, add a link below.
-      </span>
+      <span class="field__hint" id="bf-file-hint">{f.fileHint}</span>
       <span class="field__err" id="bf-file-err" data-err="file" hidden></span>
 
       <p class="bf__attach-alt">
-        <span class="bf__attach-alt-tag">or add a link</span>
-        <label class="sr-only" for="bf-link">Link to a reference</label>
-        <input id="bf-link" name="link" type="url" inputmode="url" maxlength="2000"
+        <span class="bf__attach-alt-tag">{f.linkTag}</span>
+        <label class="sr-only" for="bf-link">{f.linkLabel}</label>
+        <input id="bf-link" name="link" type="url" inputmode="url" maxlength="2000" dir="ltr"
                placeholder="https://" aria-describedby="bf-link-err bf-link-hint" />
-        <span class="field__hint" id="bf-link-hint">
-          Google Drive, Dropbox, Figma or a web reference — useful if the file is
-          large or already online. A link you paste is only as private as that link.
-        </span>
+        <span class="field__hint" id="bf-link-hint">{f.linkHint}</span>
         <span class="field__err" id="bf-link-err" data-err="link" hidden></span>
       </p>
     </fieldset>
@@ -207,12 +213,10 @@ const email = 'soufianeaberbach@gmail.com';
 
     <div class="bf__submit">
       <button class="button button--signal" type="submit" data-submit>
-        <span data-submit-text>Send the brief</span> <span><Arrow /></span>
+        <span data-submit-text>{f.submit}</span> <span><Arrow /></span>
       </button>
       <p class="bf__note">
-        Submitted material is processed through this site&rsquo;s hosting and email
-        providers only to receive and respond to the brief. It is not published or
-        used as portfolio material without written permission. <a href="/privacy/">Privacy & Confidentiality</a>.
+        {f.note} <a href={localizePath('/privacy/', locale)}>{ui[locale].trust.privacy}</a>.
       </p>
     </div>
 
@@ -220,21 +224,19 @@ const email = 'soufianeaberbach@gmail.com';
     <div class="bf__alert" data-alert role="alert" hidden>
       <p data-alert-text></p>
       <p class="bf__alert-fallback">
-        <a href={`mailto:${email}`} data-mailto>Email the brief directly instead <span><Arrow /></span></a>
+        <a href={`mailto:${email}`} data-mailto>{f.emailInstead} <span><Arrow /></span></a>
       </p>
     </div>
   </form>
 
   <!-- Shown in place of the form once the Worker confirms the brief is stored. -->
   <div class="bf__done" data-done hidden>
-    <p class="label">Brief received</p>
-    <h3 class="display" data-done-heading tabindex="-1">That’s everything needed to start.</h3>
+    <p class="label">{f.doneLabel}</p>
+    <h3 class="display" data-done-heading tabindex="-1">{f.doneHeading}</h3>
     <p>
-      The brief has been received. The reply comes back to
-      <strong data-done-email></strong> in writing, with an honest scope and a
-      realistic next step — not a booking link.
+      {doneBefore}<strong data-done-email dir="ltr"></strong>{doneAfter}
     </p>
-    <p class="bf__done-ref">Reference <span data-done-ref></span></p>
+    <p class="bf__done-ref">{f.reference} <span data-done-ref dir="ltr"></span></p>
   </div>
 </div>
 
@@ -525,6 +527,12 @@ const email = 'soufianeaberbach@gmail.com';
     const mailto = form.querySelector('[data-mailto]');
     const done = wrap.querySelector('[data-done]');
     const idleLabel = buttonText.textContent;
+    /* Every word the script shows, in the page's language. */
+    const text = JSON.parse(form.dataset.text || '{}');
+    /* English keeps showing any server message verbatim, exactly as before;
+       another language shows its own wording, or its generic line for a
+       message it does not know, never an untranslated sentence. */
+    const say = (message) => text.server?.[message] ?? (document.documentElement.lang === 'en' ? message : null);
 
     /* Stamped from the client so the Worker can reject instant submissions. */
     started.value = String(Date.now());
@@ -576,14 +584,14 @@ const email = 'soufianeaberbach@gmail.com';
     function validate() {
       const problems = [];
       const value = (n) => (controlFor(n)?.value ?? '').trim();
-      if (!value('name')) problems.push(['name', 'Please add your name.']);
+      if (!value('name')) problems.push(['name', text.name]);
       const email = value('email');
-      if (!email) problems.push(['email', 'Please add an email address so a reply can reach you.']);
-      else if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) problems.push(['email', 'That email address does not look complete.']);
-      if (!form.querySelector('[name="stage"]:checked')) problems.push(['stage', 'Please choose where the product is now.']);
-      if (value('message').length < 10) problems.push(['message', 'A sentence or two about what needs solving is enough.']);
+      if (!email) problems.push(['email', text.email]);
+      else if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) problems.push(['email', text.emailFormat]);
+      if (!form.querySelector('[name="stage"]:checked')) problems.push(['stage', text.stage]);
+      if (value('message').length < 10) problems.push(['message', text.message]);
       const link = value('link');
-      if (link && !/^https?:\/\/.+/i.test(link)) problems.push(['link', 'Links need to start with http:// or https://']);
+      if (link && !/^https?:\/\/.+/i.test(link)) problems.push(['link', text.link]);
       const badFile = fileProblem();
       if (badFile) problems.push(['file', badFile]);
       return problems;
@@ -592,24 +600,24 @@ const email = 'soufianeaberbach@gmail.com';
     function setBusy(busy) {
       button.disabled = busy;
       form.setAttribute('aria-busy', busy ? 'true' : 'false');
-      buttonText.textContent = busy ? 'Sending brief…' : idleLabel;
-      status.textContent = busy ? 'Sending the brief…' : '';
+      buttonText.textContent = busy ? text.sendingButton : idleLabel;
+      status.textContent = busy ? text.sendingStatus : '';
     }
 
     /* Keeps everything typed recoverable when the network is the problem. */
     function updateMailto(data) {
       const lines = [
-        `Name: ${data.name || ''}`,
-        `Company: ${data.company || ''}`,
-        `Email: ${data.email || ''}`,
-        `Stage: ${data.stage || ''}`,
-        `Link: ${data.link || ''}`,
+        `${text.mailName}: ${data.name || ''}`,
+        `${text.mailCompany}: ${data.company || ''}`,
+        `${text.mailEmail}: ${data.email || ''}`,
+        `${text.mailStage}: ${data.stage || ''}`,
+        `${text.mailLink}: ${data.link || ''}`,
         '',
         data.message || '',
       ].join('\n');
       mailto.href =
         `mailto:${form.dataset.email}` +
-        `?subject=${encodeURIComponent('Development brief')}` +
+        `?subject=${encodeURIComponent(text.mailSubject)}` +
         `&body=${encodeURIComponent(lines)}`;
     }
 
@@ -649,9 +657,9 @@ const email = 'soufianeaberbach@gmail.com';
     const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
 
     function prettySize(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      if (bytes < 1024) return bytes + ' ' + text.bytes;
+      if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' ' + text.kilobytes;
+      return (bytes / (1024 * 1024)).toFixed(1) + ' ' + text.megabytes;
     }
 
     function showChosen() {
@@ -680,11 +688,11 @@ const email = 'soufianeaberbach@gmail.com';
       if (!file) return null;
       const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
       if (!ALLOWED_EXT.includes(ext)) {
-        return 'That file type is not accepted. Please choose a PDF or an image, or add a link to it below.';
+        return text.fileType;
       }
-      if (file.size === 0) return 'That file appears to be empty. Please choose it again.';
+      if (file.size === 0) return text.fileEmpty;
       if (file.size > MAX_BYTES) {
-        return 'That file is larger than 10 MB. Please choose a smaller one, or add a link to it instead.';
+        return text.fileLarge;
       }
       return null;
     }
@@ -784,7 +792,7 @@ const email = 'soufianeaberbach@gmail.com';
         /* The client cannot know whether the server received the request and
            consumed the token, so assume it did. */
         resetTurnstile();
-        fail('The brief could not be sent — the connection failed. Nothing you typed has been lost.', data);
+        fail(text.network, data);
         return;
       }
 
@@ -815,13 +823,13 @@ const email = 'soufianeaberbach@gmail.com';
       resetTurnstile();
 
       if (payload.field) {
-        showFieldError(payload.field, payload.error || 'Please check this field.');
+        showFieldError(payload.field, say(payload.error) || text.checkField);
         const control = payload.field === 'stage' ? form.querySelector('[name="stage"]') : controlFor(payload.field);
         focusError(control);
         return;
       }
 
-      fail(payload.error || 'The brief could not be sent. Nothing you typed has been lost.', data);
+      fail(say(payload.error) || text.generic, data);
     });
   })();
 </script>

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { verifyProduction } from '../scripts/verify-production.mjs';
-import { indexableRoutes } from '../src/data/site-routes.mjs';
+import { localizedRoutes as indexableRoutes } from '../src/data/site-routes.mjs';
 
 const ORIGIN = 'https://aberbach.co';
 function fixtures(override = () => undefined) {
@@ -68,6 +68,8 @@ test('challenge HTML, accidental noindex, API routing and incomplete sitemap fai
   const cases = [
     ['/contact/', () => new Response('<html>Just a moment cf-chl-test</html>', { headers: { 'content-type': 'text/html' } }), 'HTTPS /contact/'],
     ['/privacy/', () => new Response(`<html><meta name="robots" content="noindex"><link rel="canonical" href="${ORIGIN}/privacy/"></html>`, { headers: { 'content-type': 'text/html' } }), 'HTTPS /privacy/'],
+    ['/fr/portfolio/', () => new Response('Missing localized route', { status: 404 }), 'HTTPS /fr/portfolio/'],
+    ['/es/experience/', () => new Response(`<html><link rel="canonical" href="${ORIGIN}/experience/"></html>`, { headers: { 'content-type': 'text/html' } }), 'HTTPS /es/experience/'],
     ['/api/brief', () => new Response('Not found', { status: 404 }), 'GET /api/brief'],
     ['/sitemap.xml', () => new Response('<urlset/>', { headers: { 'content-type': 'application/xml' } }), 'sitemap.xml'],
   ];

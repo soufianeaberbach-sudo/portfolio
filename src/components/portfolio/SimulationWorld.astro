@@ -21,6 +21,9 @@
 import type { SimulationSession } from '../../data/portfolio';
 import { chapterNumber } from '../../data/portfolio';
 import Arrow from '../Arrow.astro';
+import { getLocale } from '../../i18n/locales';
+import { pf } from '../../i18n/portfolio';
+import { fill } from '../../i18n/dict';
 import WorldNavigation from './WorldNavigation.astro';
 
 interface Props {
@@ -28,6 +31,9 @@ interface Props {
 }
 
 const { sessions } = Astro.props;
+const locale = getLocale(Astro.url);
+const t = pf[locale];
+const d = t.development;
 
 /* WHAT THE PUBLIC SEES IS WHAT EXISTS. Sessions without an id remain excluded;
  * the five supplied recordings render as equal rows, with no empty slots. */
@@ -41,17 +47,14 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   <div class="pf-screen" data-screen="index">
     <div class="pf-bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
-        <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio index
+        <i aria-hidden="true"><Arrow dir="left" /></i> {t.portfolioIndex}
       </a>
-      <p class="label pf-bar__tag"><b>{chapterNumber('3d-simulation')}</b> Pattern Development</p>
+      <p class="label pf-bar__tag"><b>{chapterNumber('3d-simulation')}</b> {d.title}</p>
     </div>
 
     <header class="pf-head">
-      <h2 class="display" id="simulation-title">Pattern Development</h2>
-      <p class="pf-head__descriptor">
-        Recorded development sessions from first pattern lines through 2D construction, CLO3D validation
-        and fit decisions — the part of the work a photograph cannot hold still.
-      </p>
+      <h2 class="display" id="simulation-title">{d.title}</h2>
+      <p class="pf-head__descriptor">{d.descriptor}</p>
     </header>
 
     {published.length > 0 ? (
@@ -76,28 +79,25 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
                   onerror="this.hidden=true"
                 />
               )}
-              <button type="button" class="pf-play" data-play aria-label={`Play ${session.title} — recorded development session`}>
+              <button type="button" class="pf-play" data-play aria-label={fill(d.playLabel, { title: session.title })}>
                 <span class="pf-play__mark" aria-hidden="true"></span>
-                <span class="pf-play__text label">Play</span>
+                <span class="pf-play__text label">{d.play}</span>
               </button>
               {/* Where the player is inserted on demand. Empty on load. */}
               <div class="pf-video__player" data-player hidden></div>
             </div>
 
             <p class="pf-video__desc">{session.description}</p>
-            <p class="pf-video__privacy">Playing this video loads a player from YouTube.</p>
+            <p class="pf-video__privacy">{d.privacy}</p>
           </li>
         ))}
       </ol>
     ) : (
       /* One composed state, not ten empty frames. */
       <div class="pf-soon" data-videos-empty data-capacity={capacity}>
-        <p class="label pf-soon__label">Recorded development sessions</p>
-        <p class="pf-soon__lead">Publishing soon.</p>
-        <p class="pf-soon__note">
-          The library is built for {capacity} sessions in the standard 16:9 format. Each one runs from the
-          first pattern lines through 2D construction, CLO3D validation and the fit decisions that follow.
-        </p>
+        <p class="label pf-soon__label">{d.soonLabel}</p>
+        <p class="pf-soon__lead">{d.soonLead}</p>
+        <p class="pf-soon__note">{fill(d.soonNote, { n: capacity })}</p>
         <span class="pf-soon__meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       </div>
     )}

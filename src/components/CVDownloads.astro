@@ -1,0 +1,41 @@
+---
+import { getLocale, locales, localeMeta } from '../i18n/locales';
+import { defineDict } from '../i18n/dict';
+const labels = defineDict({
+  primary: 'Download CV — English',
+  options: 'All editions · PDF / PNG',
+  formats: 'CV language editions and file formats',
+  file: 'Download Soufiane Aberbach’s CV — {language} ({format})',
+}, {
+  fr: { primary: 'Télécharger le CV — Français', options: 'Toutes les éditions · PDF / PNG', formats: 'Langues et formats du CV', file: 'Télécharger le CV de Soufiane Aberbach — {language} ({format})' },
+  es: { primary: 'Descargar CV — Español', options: 'Todas las ediciones · PDF / PNG', formats: 'Idiomas y formatos del CV', file: 'Descargar el CV de Soufiane Aberbach — {language} ({format})' },
+});
+const locale = getLocale(Astro.url);
+const t = labels[locale];
+const path = (code: string, format: string) => `/cv/Soufiane-Aberbach-CV-${code.toUpperCase()}.${format}`;
+const label = (code: typeof locale, format: string) => t.file.replace('{language}', localeMeta[code].name).replace('{format}', format.toUpperCase());
+---
+<div class="cv-downloads">
+  <a class="cv-primary" href={path(locale, 'pdf')} download aria-label={label(locale, 'pdf')}>{t.primary}<span aria-hidden="true">↓</span></a>
+  <details>
+    <summary>{t.options}</summary>
+    <nav aria-label={t.formats}>
+      {locales.map(code => <div class="cv-edition">
+        <span lang={code}>{localeMeta[code].name}</span>
+        <a href={path(code, 'pdf')} download aria-label={label(code, 'pdf')}>PDF<span class="sr-only"> — {localeMeta[code].name}</span></a>
+        <a href={path(code, 'png')} download aria-label={label(code, 'png')}>PNG<span class="sr-only"> — {localeMeta[code].name}</span></a>
+      </div>)}
+    </nav>
+  </details>
+</div>
+<style>
+.cv-downloads{margin-top:1.6rem;max-width:30rem}
+.cv-primary{display:inline-flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:44px;border-bottom:1px solid var(--ink);font:500 .7rem/1.5 var(--mono);letter-spacing:.04em}
+.cv-primary span{color:var(--signal);font-size:1.2rem}
+.cv-primary:hover{color:var(--signal)}
+summary{cursor:pointer;min-height:44px;padding:1rem 0 .5rem;font: .6rem/1.5 var(--mono);color:var(--ink-soft)}
+nav{padding:.4rem 0 .6rem}
+.cv-edition{display:grid;grid-template-columns:minmax(7rem,1fr) auto auto;align-items:center;gap:1.2rem;font: .65rem/1.5 var(--mono)}
+.cv-edition a{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+.cv-edition a:hover{color:var(--signal)}
+</style>

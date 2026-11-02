@@ -1,3 +1,5 @@
+import {clientLocale,terms} from '../i18n/portfolio-terms';
+import {current} from '../i18n/portfolio-current';
 import {paintPhoto,preparePhotograph} from './garment-photo';
 
 /** Each actual photograph owns its fit, zoom and pan; navigation stays router-owned. */
@@ -16,7 +18,7 @@ export function initPhotoInspection(reader:HTMLElement){
    photo.style.transform=zoom===1?'':`translate3d(${x}px,${y}px,0) scale(${zoom})`;
    viewport.toggleAttribute('data-zoomed',zoom>1);viewport.setAttribute('aria-pressed',String(zoom>1));
    viewport.setAttribute('aria-busy',String(!image.complete));
-   status.textContent=!image.complete?' · Loading photograph…':!image.naturalWidth?' · Photograph unavailable':zoom>1?` · ${Math.round(zoom*100)}%`:'';sync();
+   status.textContent=!image.complete?' · '+terms[clientLocale()].runtime.loading:!image.naturalWidth?' · '+current[clientLocale()].unavailable:zoom>1?` · ${Math.round(zoom*100)}%`:'';sync();
   };
   const reset=()=>{zoom=1;x=y=0;touch=null;drag=null;skipClick=false;draw();};
   const fit=()=>{

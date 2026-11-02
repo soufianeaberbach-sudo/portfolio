@@ -1,26 +1,31 @@
 ---
+import {getLocale} from '../../i18n/locales';
+import {categoryName} from '../../i18n/portfolio-terms';
+import {current} from '../../i18n/portfolio-current';
+import {fill} from '../../i18n/dict';
+import {localizedGarmentCopy} from '../../i18n/garment-copy';
 import type{Subject}from'../../data/portfolio';
 import{menswearCredit,menswearConcept,menswearDisplayed}from'../../data/menswear-collection';
 import type{MenswearCategory}from'../../data/menswear-collection';
 import{menswearDirections}from'../../data/menswear-direction';
-import {garmentCopy} from '../../data/garment-copy';
 import GarmentProvenance from './GarmentProvenance.astro';
 import GarmentInspection from'./GarmentInspection.astro';
 interface Props{subject:Subject;}
 const{subject}=Astro.props,credit=menswearCredit(subject.id),concept=menswearConcept(subject.id),direction=menswearDirections[subject.category as keyof typeof menswearDirections];
-const copy=garmentCopy(subject);
+const locale=getLocale(Astro.url),now=current[locale];
+const copy=localizedGarmentCopy(subject,locale);
 const sequence=menswearDisplayed(subject.category as MenswearCategory),at=sequence.findIndex(x=>x.id===subject.id);
 const neighbor=(delta:number)=>menswearConcept(sequence[(at+delta+sequence.length)%sequence.length].id);
 ---
 <article class="pf-rd__subject mw-reader" data-mw-reader data-ai-concept={concept?'true':undefined} data-subject={subject.id} data-of={subject.category} id={`menswear/${subject.category}/${subject.id}`} data-verified={subject.verified?'yes':'no'} hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby={`${subject.id}-title`}>
- <header class="mw-reader-head"><a href={`#menswear/${subject.category}`} data-nav data-subject-close>← {direction.name}</a></header>
+ <header class="mw-reader-head"><a href={`#menswear/${subject.category}`} data-nav data-subject-close>← {categoryName(locale,subject.category)}</a></header>
  <div class="mw-reader-floor">
   <div class="mw-reader-caption"><h3 id={`${subject.id}-title`}>{copy.title}</h3><p class="garment-description" data-garment-description>{copy.description}</p></div>
   <GarmentInspection subject={subject} gender="menswear"/>
-  {concept&&at>=0&&<nav class="mw-look-nav" aria-label={`${direction.name} looks`}>
-   <a href={`#menswear/${subject.category}/${neighbor(-1)!.id}`} data-nav data-mw-garment="previous" aria-label={`Previous look: ${neighbor(-1)!.title}`}>← Previous look</a>
-   <span aria-label={`Look ${at+1} of ${sequence.length}`}>{String(at+1).padStart(2,'0')} / {sequence.length}</span>
-   <a href={`#menswear/${subject.category}/${neighbor(1)!.id}`} data-nav data-mw-garment="next" aria-label={`Next look: ${neighbor(1)!.title}`}>Next look →</a>
+  {concept&&at>=0&&<nav class="mw-look-nav" aria-label={fill(now.looksLabel,{name:categoryName(locale,subject.category)})}>
+   <a href={`#menswear/${subject.category}/${neighbor(-1)!.id}`} data-nav data-mw-garment="previous" aria-label={fill(now.previousLabel,{name:localizedGarmentCopy(sequence[(at-1+sequence.length)%sequence.length],locale).title})}>{now.previousLook}</a>
+   <span aria-label={fill(now.lookPosition,{n:at+1,total:sequence.length})}>{String(at+1).padStart(2,'0')} / {sequence.length}</span>
+   <a href={`#menswear/${subject.category}/${neighbor(1)!.id}`} data-nav data-mw-garment="next" aria-label={fill(now.nextLabel,{name:localizedGarmentCopy(sequence[(at+1)%sequence.length],locale).title})}>{now.nextLook}</a>
   </nav>}
   <GarmentProvenance subject={subject} credit={credit} generated={!!concept}/>
 

@@ -1,0 +1,375 @@
+{
+  "verifiedAtUTC": "2026-11-02T09:57:08.931555+00:00",
+  "baseCommit": "37180aec58636b4373e0823fa4cc285a43688d12",
+  "scope": "Local preflight for PR #58; merge and deployed commit are verified separately using GitHub/Cloudflare records and live requests.",
+  "approvedCVManifest": "scripts/cv/approved-images.json",
+  "build": {
+    "result": "passed",
+    "pages": 36
+  },
+  "cloudflareDryRun": "passed, original wrangler.jsonc and bindings",
+  "checks": {
+    "worker": 509,
+    "domain": 293,
+    "localization": 691,
+    "smoke": 368,
+    "approvedCVs": 61,
+    "protectedSourceAndEvidence": 7485,
+    "historicalPhotoIdentities": 108
+  },
+  "productionCheckerFixtures": "passed",
+  "technicalDocuments": "five PDFs, fifty native PNG pages, fifty reading copies, measurement and credibility checks passed",
+  "continuitySuites": [
+    {
+      "command": "node tests/techpacks.mjs",
+      "checks": 915,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/portfolio-content.mjs",
+      "checks": 1321,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/portfolio-experience.mjs",
+      "checks": 946,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/business-browsing.mjs",
+      "checks": 487,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/business-touch.mjs",
+      "checks": 6,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-navigation.mjs",
+      "checks": 49,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-look-navigation.mjs",
+      "checks": 841,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-resize-return.mjs",
+      "checks": 12,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/womenswear-continuity.mjs",
+      "checks": 98,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/garment-match-cut.mjs",
+      "checks": 48,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/fashion-navigation.mjs",
+      "checks": 40,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/fashion-eight-worlds.mjs",
+      "checks": 617,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-presentation-seeks.mjs",
+      "checks": 264,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-historical-access.mjs",
+      "checks": 32,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-archive-keyboard.mjs",
+      "checks": 10,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/fashion-chapter-history.mjs",
+      "checks": 20,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/womenswear-route-origin.mjs",
+      "checks": 16,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/menswear-media-loading.mjs",
+      "checks": 21,
+      "result": "passed"
+    },
+    {
+      "command": "node tests/three-panel-photography.mjs",
+      "checks": 234,
+      "result": "passed"
+    }
+  ],
+  "continuityTotal": 5977,
+  "localizedReaderReview": {
+    "origin": "http://127.0.0.1:4339",
+    "checks": 560,
+    "records": [
+      {
+        "locale": "en",
+        "width": 1440,
+        "height": 900,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "en",
+        "width": 1366,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "en",
+        "width": 1024,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "en",
+        "width": 768,
+        "height": 1024,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "en",
+        "width": 430,
+        "height": 932,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "en",
+        "width": 390,
+        "height": 844,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 1440,
+        "height": 900,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 1366,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 1024,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 768,
+        "height": 1024,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 430,
+        "height": 932,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "fr",
+        "width": 390,
+        "height": 844,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 1440,
+        "height": 900,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 1366,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 1024,
+        "height": 768,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 768,
+        "height": 1024,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 430,
+        "height": 932,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      },
+      {
+        "locale": "es",
+        "width": 390,
+        "height": 844,
+        "pairedPhotographs": true,
+        "independentZoom": true,
+        "documentReaders": true,
+        "cvDownloads": true
+      }
+    ],
+    "errors": [],
+    "badResponses": [],
+    "systemChromium": "154.0.8037.57",
+    "physicalDeviceTest": false
+  },
+  "downloads": [
+    {
+      "language": "en",
+      "format": "png",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-EN.png",
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 1304758,
+      "sha256": "4d4be6ff75e340c7e6c07a5f14d408253973f7edda21c425a9bc86c9b5f04b7b",
+      "approvedBytesMatch": true
+    },
+    {
+      "language": "en",
+      "format": "pdf",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-EN.pdf",
+      "status": 200,
+      "mime": "application/pdf",
+      "bytes": 1275183,
+      "sha256": "da17bdd9d9a7582f2e4d0ab00d8c0f9993959f0786edfe87c080f6a948980f78",
+      "approvedBytesMatch": true
+    },
+    {
+      "language": "fr",
+      "format": "png",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-FR.png",
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 2813050,
+      "sha256": "04c86ea972ab98d853e5eaa1d7f23b037c3d9cfdabcdb4fc161b382cc8d53d38",
+      "approvedBytesMatch": true
+    },
+    {
+      "language": "fr",
+      "format": "pdf",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-FR.pdf",
+      "status": 200,
+      "mime": "application/pdf",
+      "bytes": 1035419,
+      "sha256": "66afdd700b6d21f02fa3a0bb5a6f2603353a329609755911b45ec15a6beff650",
+      "approvedBytesMatch": true
+    },
+    {
+      "language": "es",
+      "format": "png",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-ES.png",
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 2452715,
+      "sha256": "d462abdafa7c79f30d5032bb8fa85e72581d28ea56555a2e6139ba8a0516a904",
+      "approvedBytesMatch": true
+    },
+    {
+      "language": "es",
+      "format": "pdf",
+      "url": "http://127.0.0.1:4339/cv/Soufiane-Aberbach-CV-ES.pdf",
+      "status": 200,
+      "mime": "application/pdf",
+      "bytes": 916540,
+      "sha256": "c412feb80f0bf5374c02ee3ebbdd08b570bede7b74a508d43b024f34b985878b",
+      "approvedBytesMatch": true
+    }
+  ],
+  "PR59": {
+    "included": false,
+    "preservedHead": "1c6625e61f595cd9a459265a60bd224c2f55aaf4"
+  },
+  "environment": {
+    "node": "24.19.0",
+    "playwright": "1.56.1",
+    "chromium": "154.0.8037.57, existing system installation",
+    "ffmpeg": "existing system installation",
+    "dependencies": "locked npm ci in /tmp; no lockfile change or browser download",
+    "storage": "Generated output and fixture dist directories use /tmp. Only verified regenerable caches/duplicate build copies were removed. Sources, approved assets, commits and unmerged work preserved.",
+    "resolvedAttempts": [
+      "Astro outside-root staging exhausted workspace: normal project paths retained; generated output linked to /tmp.",
+      "Playwright video encoder not installed in cache: reused existing system FFmpeg.",
+      "Disposable fixture root/staging paths caused duplicate copies and module metadata error: physical project-local root retained; only fixture dist linked to /tmp."
+    ]
+  },
+  "limitations": [
+    "Browser checks use Chromium desktop/touch emulation, not physical iOS/Android devices.",
+    "No real contact/email submission was made."
+  ]
+}

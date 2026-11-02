@@ -1,0 +1,27 @@
+---
+/* The sections of an information page. Bodies are trusted, authored HTML from
+   src/i18n/pages/trust.ts; their internal links are resolved into the page's
+   language here, and the public address is inserted as a mailto link. */
+import { getLocale, localizePath } from '../i18n/locales';
+
+interface Props {
+  sections: { id: string; title: string; html: string }[];
+}
+const { sections } = Astro.props;
+const locale = getLocale(Astro.url);
+const email = 'soufianeaberbach@gmail.com';
+const links: Record<string, string> = {
+  privacy: localizePath('/privacy/', locale),
+  terms: localizePath('/working-terms/', locale),
+  before: localizePath('/before-we-start/', locale),
+  contact: localizePath('/contact/', locale),
+  emailLink: `<a href="mailto:${email}"><bdi dir="ltr">${email}</bdi></a>`,
+};
+const resolve = (html: string) => html.replace(/\{(privacy|terms|before|contact|emailLink)\}/g, (_, key) => links[key]);
+---
+{sections.map((section) => (
+  <section id={section.id} aria-labelledby={`${section.id}-title`}>
+    <h2 id={`${section.id}-title`}>{section.title}</h2>
+    <Fragment set:html={resolve(section.html)} />
+  </section>
+))}

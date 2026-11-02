@@ -1,5 +1,5 @@
 ---
-import {garmentCopy} from '../../data/garment-copy';
+import {localizedGarmentCopy} from '../../i18n/garment-copy';
 import type { GarmentWorld, MarketCategory, ImageAsset, Subject } from '../../data/portfolio';
 import { REFERENCE_DISCLAIMER, SUBJECT_STORY_PENDING, projectSubject, referenceSubject, worldPublication } from '../../data/portfolio';
 import { exhibitionImage } from '../../data/womenswear-exhibition';
@@ -9,13 +9,22 @@ import StoryPlate from './StoryPlate.astro';
 import ActFigure from './ActFigure.astro';
 import WomenswearExhibition from './WomenswearExhibition.astro';
 import FinalPhotoReader from './FinalPhotoReader.astro';
+import { getLocale } from '../../i18n/locales';
+import { pf } from '../../i18n/portfolio';
+import { categoryName, terms } from '../../i18n/portfolio-terms';
+import { ui } from '../../i18n/ui';
+import { fill } from '../../i18n/dict';
 interface Props { world: GarmentWorld; lab?: { category: string; subject: Subject }; }
 const { world, lab } = Astro.props;
+/* Words in the page's language; subjects keep every id, crop and URL. */
+const locale = getLocale(Astro.url);
+const t = pf[locale].women;
+const L = (subject: Subject) => subject;
 const publication = worldPublication(world);
 const noun = publication === 'published' ? 'Project' : 'Reference';
-const pool = (category: MarketCategory): Subject[] => publication === 'published'
+const pool = (category: MarketCategory): Subject[] => (publication === 'published'
   ? [...category.projects].sort((a,b) => Number(b.spotlight ?? false)-Number(a.spotlight ?? false)).map(p => projectSubject(p,world.id))
-  : lab ? category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id)) : referenceCollection(category,world.id);
+  : lab ? category.references.map(r => referenceSubject({...r,image:exhibitionImage(r.image)},world.id,category.id)) : referenceCollection(category,world.id)).map(L);
 // Editorial selection refers to actual archive IDs, never position-dependent geometry.
 const edit = [
   { id:'casualwear', hero:'rtw-ref-02', selected:['streetwear-ref-02','streetwear-ref-04'] },
@@ -26,7 +35,7 @@ const edit = [
 const territories = edit.flatMap(t => {
   const sourceCategories=world.categories.filter(c=>t.id==='casualwear'?['rtw','streetwear'].includes(c.id):c.id===t.id);
   const original=sourceCategories[0];
-  const category=original?{...original,id:t.id,label:womenswearWorlds.find(w=>w.id===t.id)!.label}:null;
+  const category=original?{...original,id:t.id,label:categoryName(locale,womenswearWorlds.find(w=>w.id===t.id)!.id)}:null;
   if (!category) return [];
   const slots = sourceCategories.flatMap(pool);
   if(lab?.category === t.id) slots.unshift(lab.subject);
@@ -60,9 +69,9 @@ const pad = (n:number) => String(n).padStart(2,'0');
         an abstraction anybody has to decode. */}
     <div class="pf-act__bar">
       <a class="pf-back" href="#portfolio-index" data-nav data-world-close>
-        <i aria-hidden="true"><Arrow dir="left" /></i> Portfolio
+        <i aria-hidden="true"><Arrow dir="left" /></i> {ui[locale].nav.portfolio}
       </a>
-      <nav class="pf-act__where" aria-label="Womenswear territories" data-act-where>
+      <nav class="pf-act__where" aria-label={t.territories} data-act-where>
         <button type="button" class="pf-act__now label" data-act-toggle aria-expanded="false">
           <span data-act-count>{pad(1)} / {pad(territories.length)}</span>
           <span class="pf-act__nowname" data-act-name>{territories[0]?.short}</span>
@@ -81,7 +90,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
       </nav>
     </div>
 
-    <h2 class="pf-act__sr" id={`${world.id}-title`}>{world.title}</h2>
+    <h2 class="pf-act__sr" id={`${world.id}-title`}>{terms[locale].worlds.womenswear}</h2>
 
     {territories.map((t,index) => (
       <article class="pf-tr" id={`${world.id}-${t.id}`} data-movement={t.id} data-territory={t.id}
@@ -110,7 +119,7 @@ const pad = (n:number) => String(n).padStart(2,'0');
       </article>
     ))}
 
-    <details class="ww-all-references" data-all-references><summary class="label">Full reference collection / {everySubject.length} preserved references</summary><p>Temporary reference photography. Original identities and source credits are preserved.</p><ul>{everySubject.map(({subject})=><li><a href={door(subject)} data-nav data-open-subject={subject.id} data-reference-link>{subject.id} — {garmentCopy(subject).title}</a></li>)}</ul></details>
+    <details class="ww-all-references" data-all-references><summary class="label">{fill(t.fullCollection,{n:everySubject.length})}</summary><p>{t.fullNote}</p><ul>{everySubject.map(({subject})=><li><a href={door(subject)} data-nav data-open-subject={subject.id} data-reference-link>{subject.id} — {localizedGarmentCopy(subject,locale).title}</a></li>)}</ul></details>
     <div class="pf-rd" data-subject-stack aria-live="off">
       {everySubject.map(({ subject, territory, index }) => {
         if(!lab) return <FinalPhotoReader subject={subject} world={world.id} credit={collectionCredit(world.categories.find(c=>c.id===subject.category)!,subject.id)}/>;
@@ -386,12 +395,12 @@ const pad = (n:number) => String(n).padStart(2,'0');
       </p>}
       {publication === 'reference-preview' && (
         <p class="pf-prov pf-act__prov" data-reference-notice>
-          <b class="label">Reference preview</b>
-          <span>{REFERENCE_DISCLAIMER}</span>
+          <b class="label">{t.previewLabel}</b>
+          <span>{locale === 'en' ? REFERENCE_DISCLAIMER : t.disclaimer}</span>
         </p>
       )}
       <a class="pf-act__next label" href="#menswear" data-nav data-chapter="menswear">
-        Menswear <Arrow />
+        {terms[locale].worlds.menswear} <Arrow />
       </a>
     </footer>
   </div>

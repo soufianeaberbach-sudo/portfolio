@@ -2,6 +2,8 @@
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { profiles } from '../components/SocialLinks.astro';
+import { getLocale, localeMeta, localizePath, locales, stripLocale } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 import '../styles/global.css';
 
 interface Props {
@@ -26,9 +28,24 @@ const {
   footerCallout = true,
   noindex = false,
 } = Astro.props;
+const locale = getLocale(Astro.url);
+const meta = localeMeta[locale];
+const t = ui[locale];
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const socialImageURL = new URL('/soufiane-drawing.png', Astro.site ?? Astro.url.origin);
 const origin = (Astro.site ?? new URL(Astro.url.origin)).origin;
+/* Every language version is its own canonical page. The alternates are
+   reciprocal by construction: each one is built from the same unprefixed path,
+   so /fr/process/ and /es/process/ list exactly the same set. A noindex flow
+   page (the no-JavaScript confirmation, 404) declares no alternates. */
+const basePath = stripLocale(Astro.url.pathname);
+const alternates = noindex
+  ? []
+  : [
+      ...locales.map((code) => ({ hreflang: code, href: new URL(localizePath(basePath, code), origin).href })),
+      { hreflang: 'x-default', href: new URL(basePath, origin).href },
+    ];
+const localeHome = new URL(localizePath('/', locale), origin).href;
 
 /* Structured data, emitted once on the home page. Every value here is already
    stated somewhere on the site: the name, the current job title, the city, the
@@ -44,28 +61,27 @@ const structuredData = {
     {
       '@type': 'WebSite',
       '@id': `${origin}/#website`,
-      url: origin + '/',
+      url: localeHome,
       name: 'Soufiane Aberbach',
-      inLanguage: 'en',
+      inLanguage: locale,
       publisher: { '@id': `${origin}/#soufiane` },
     },
     {
       '@type': 'Person',
       '@id': `${origin}/#soufiane`,
       name: 'Soufiane Aberbach',
-      url: origin + '/',
+      url: localeHome,
       image: socialImageURL.href,
-      jobTitle: 'Senior Fashion Designer & Product Developer',
+      jobTitle: t.schema.jobTitle,
       address: { '@type': 'PostalAddress', addressLocality: 'Tangier', addressCountry: 'MA' },
       sameAs: profiles.map((profile) => profile.href),
     },
     {
       '@type': 'ProfessionalService',
       '@id': `${origin}/#service`,
-      name: 'Soufiane Aberbach — Fashion Product Development',
-      url: origin + '/',
-      description:
-        'Fashion product development: pattern construction, fit validation, grading, technical documentation and pre-production handoff.',
+      name: t.schema.serviceName,
+      url: localeHome,
+      description: t.schema.serviceDescription,
       provider: { '@id': `${origin}/#soufiane` },
       address: { '@type': 'PostalAddress', addressLocality: 'Tangier', addressCountry: 'MA' },
     },
@@ -74,7 +90,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html lang="en" data-page={page}>
+<html lang={locale} dir={meta.dir} data-page={page}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -87,10 +103,12 @@ const structuredData = {
     {noindex && <meta name="robots" content="noindex, follow" />}
     <title>{title}</title>
     <link rel="canonical" href={canonicalURL} />
+    {alternates.map((alternate) => <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />)}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" sizes="any" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Soufiane Aberbach" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={meta.og} />
+    {!noindex && locales.filter((code) => code !== locale).map((code) => <meta property="og:locale:alternate" content={localeMeta[code].og} />)}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -100,7 +118,7 @@ const structuredData = {
         crop of it. */}
     <meta property="og:image:width" content="1127" />
     <meta property="og:image:height" content="1396" />
-    <meta property="og:image:alt" content="Soufiane Aberbach seated and drawing on a tablet" />
+    <meta property="og:image:alt" content={t.ogImageAlt} />
     {/* "summary", not "summary_large_image": the only social asset available is
         the 1127x1396 portrait, and declaring a large-image card with a
         portrait crops it badly. A dedicated 1200x630 asset is still outstanding — it
@@ -112,7 +130,7 @@ const structuredData = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
-    <meta name="twitter:image:alt" content="Soufiane Aberbach, fashion designer and product developer, seated and drawing on a tablet" />
+    <meta name="twitter:image:alt" content={t.twitterImageAlt} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -122,7 +140,7 @@ const structuredData = {
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{t.skip}</a>
     <div class="scroll-progress" aria-hidden="true"><i data-scroll-progress></i></div>
     <div class="page-wipe" aria-hidden="true" data-page-wipe></div>
     <SiteHeader />
@@ -149,7 +167,7 @@ const structuredData = {
           menu.setAttribute('aria-hidden', String(!open));
           root.classList.toggle('menu-open', open);
           document.body.classList.toggle('no-scroll', open);
-          toggle.querySelector('.sr-only').textContent = open ? 'Close menu' : 'Open menu';
+          toggle.querySelector('.sr-only').textContent = open ? toggle.dataset.closeLabel : toggle.dataset.openLabel;
           main?.toggleAttribute('inert', open);
           footer?.toggleAttribute('inert', open);
           if (open) {
@@ -204,9 +222,23 @@ const structuredData = {
           revealItems.forEach((item) => item.classList.add('is-visible'));
         }
 
+        /* LANGUAGE SWITCHING KEEPS YOUR PLACE. The switcher's links are plain
+           hrefs to the equivalent page, so they work without JavaScript. With
+           it, the current fragment rides along — a Portfolio chapter or garment
+           address is the same immutable id in every language. Read at click
+           time because the Portfolio router updates the address with
+           history.replaceState, which fires no event. */
+        document.querySelectorAll('[data-lang-link]').forEach((link) => {
+          link.addEventListener('click', () => {
+            const target = new URL(link.href, window.location.origin);
+            target.hash = window.location.hash;
+            link.href = target.href;
+          });
+        });
+
         document.querySelectorAll('a[href^="/"]').forEach((link) => {
           link.addEventListener('click', (event) => {
-            if (reduceMotion || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (link.hasAttribute('download') || reduceMotion || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
             const url = new URL(link.href, window.location.origin);
             if (url.pathname === window.location.pathname || link.target === '_blank') return;
             event.preventDefault();

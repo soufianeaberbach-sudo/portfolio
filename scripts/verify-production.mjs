@@ -2,7 +2,7 @@
  * Not a CI prerequisite: dashboard activation is deliberately pending. */
 import { lookup } from 'node:dns/promises';
 import { pathToFileURL } from 'node:url';
-import { indexableRoutes } from '../src/data/site-routes.mjs';
+import { localizedRoutes as indexableRoutes } from '../src/data/site-routes.mjs';
 
 const ORIGIN = 'https://aberbach.co';
 const PERMANENT = new Set([301, 308]);

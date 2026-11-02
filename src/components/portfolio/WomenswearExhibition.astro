@@ -1,35 +1,48 @@
 ---
-import {garmentCopy} from '../../data/garment-copy';
 import type {Subject} from '../../data/portfolio';
 import {directions} from '../../data/womenswear-direction';
 import {exhibitionPhotograph} from '../../data/final-photography';
 import {featuredIdentity,generatedPresentation} from '../../data/womenswear-collection';
 import FinalPhoto from './FinalPhoto.astro';
 import EditRailControls from './EditRailControls.astro';
+import {getLocale} from '../../i18n/locales';
+import {pf,caps} from '../../i18n/portfolio';
+import {categoryName,term,terms} from '../../i18n/portfolio-terms';
+import {fill} from '../../i18n/dict';
+import {current} from '../../i18n/portfolio-current';
+import {localizedGarmentCopy} from '../../i18n/garment-copy';
+
 interface Props{subjects:Subject[];world:string;category:string;}
 const{subjects,world,category}=Astro.props,direction=directions[category];
 const cast=direction.cast.flatMap(part=>{const subject=subjects.find(s=>s.id===featuredIdentity(part.id));return subject?[{...part,subject,photo:exhibitionPhotograph(subject)}]:[];});
 const door=(s:Subject)=>`#${world}/${s.category}/${s.id}`;
+/* Words in the page's language. The direction's geometry, cast and timing
+   are untouched; only its name, title lines and shot captions are swapped. */
+const locale=getLocale(Astro.url),t=pf[locale].women,name=categoryName(locale,category);
+const now=current[locale];
+const copy=(subject:Subject)=>localizedGarmentCopy(subject,locale);
+const titleLines=(terms[locale].womenTitles as Record<string,string[]>)[category]??direction.title;
+const nextName=term(locale,'shots',direction.next.name);
 const next=direction.next.id==='menswear'?'#menswear':`#${world}/${direction.next.id}`;
 ---
 <div class="ww-exhibition" data-ww-exhibition={category} style={`--journey:${direction.length}svh;--mobile-journey:${direction.mobileLength}svh;`}>
  <div class="ww-camera" data-ww-camera>
-  <div class="ww-stage" data-ww-stage aria-label={`${direction.name} selected looks`}>
-   <header class="ww-title" data-ww-title><p class="label">WOMENSWEAR / <b>{direction.number}</b></p><h3 class="display" id={`${world}-${category}-title`}>{direction.title.map((line,i)=><>{i>0&&<br/>}{line}</>)}</h3></header>
+  <div class="ww-stage" data-ww-stage aria-label={fill(t.selected,{name})}>
+   <header class="ww-title" data-ww-title><p class="label">{caps(terms[locale].worlds.womenswear,locale)} / <b>{direction.number}</b></p><h3 class="display" id={`${world}-${category}-title`}>{titleLines.map((line,i)=><>{i>0&&<br/>}{line}</>)}</h3></header>
    <div class="ww-cast">
     {cast.map(({subject,role,photo})=><a class="ww-actor" data-ww-actor={role} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} href={door(subject)} data-nav data-open-subject={subject.id}
-      aria-label={`Inspect ${garmentCopy(subject).title}`} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
+      aria-label={fill(pf[locale].men.inspect,{alt:copy(subject).title})} draggable="false"><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id}/></a>)}
    </div>
-   <button class="edit-browse label" type="button" data-edit-browse>Browse the edit ↓</button>
-   <p class="ww-shot label" data-ww-shot aria-hidden="true">{direction.desktop[0].label}</p>
+   <button class="edit-browse label" type="button" data-edit-browse>{now.browse}</button>
+   <p class="ww-shot label" data-ww-shot aria-hidden="true">{term(locale,'shots',direction.desktop[0].label)}</p>
   </div>
  </div>
- <section class="ww-archive" data-ww-archive={category} aria-label={`Complete ${direction.name} reference archive`}>
-  <div class="ww-archive-head"><p class="label">{direction.name.toUpperCase()} / ALL {subjects.length} {subjects.some(s=>s.verified)?'LOOKS':'REFERENCES'}</p><a class="edit-next label" href={next} data-nav>Next / {direction.next.name} ↗</a></div>
-  <EditRailControls name={direction.name}/>
-  <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={`${direction.name}. Swipe horizontally or use arrow keys to explore all ten looks.`}>
-   {subjects.map(subject=>{const photo=exhibitionPhotograph(subject);return <a href={door(subject)} data-nav data-open-subject={subject.id} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} draggable="false" aria-label={`Inspect ${garmentCopy(subject).title}`}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 92vw, 48vw"/></a>})}
+ <section class="ww-archive" data-ww-archive={category} aria-label={fill(t.archive,{name})}>
+  <div class="ww-archive-head"><p class="label">{fill(subjects.some(s=>s.verified)?t.allLooks:t.allReferences,{name:caps(name,locale),n:subjects.length})}</p><a class="edit-next label" href={next} data-nav>{fill(now.next,{name:nextName})}</a></div>
+  <EditRailControls name={name}/>
+  <div class:list={['ww-rail',{'ww-rail--pair':subjects.length===2}]} tabindex="0" aria-label={fill(now.rail,{name})}>
+   {subjects.map(subject=>{const photo=exhibitionPhotograph(subject);return <a href={door(subject)} data-nav data-open-subject={subject.id} data-exhibition-view={photo.key} data-fashion-fallback={photo.key!=='editorial'?'true':undefined} draggable="false" aria-label={fill(pf[locale].men.inspect,{alt:copy(subject).title})}><FinalPhoto image={photo.image} crop={photo.crop} subjectId={subject.id} sizes="(max-width:767px) 92vw, 48vw"/></a>})}
   </div>
-  <a class="ww-handoff label" href={next} data-nav><span>CONTINUE</span><b>{direction.next.name}</b><span aria-hidden="true">↗</span></a>
+  <a class="ww-handoff label" href={next} data-nav><span>{t.continue}</span><b>{nextName}</b><span aria-hidden="true">{t.handoffArrow}</span></a>
  </section>
 </div>

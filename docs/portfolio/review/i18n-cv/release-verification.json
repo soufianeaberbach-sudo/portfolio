@@ -1,0 +1,507 @@
+{
+  "executedUTC": "2026-10-29T08:01:21.859675+00:00",
+  "baseMain": "6a487817cd4a585c5140547aa9b74e2b8c6dac35",
+  "applicationCheckpoint": "b45041d02230426a7601b6539ac44f58cb769804",
+  "mandatoryChecks": [
+    {
+      "name": "dependencies",
+      "command": "npm ci",
+      "passed": 339,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/npm-ci.log",
+      "allPass": true
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "passed": 36,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/build.log",
+      "allPass": true
+    },
+    {
+      "name": "workerDryRun",
+      "command": "npx wrangler deploy --dry-run",
+      "passed": 1,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/wrangler.log",
+      "allPass": true
+    },
+    {
+      "name": "worker",
+      "command": "npm run test:worker",
+      "passed": 509,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/worker.log",
+      "allPass": true
+    },
+    {
+      "name": "domain",
+      "command": "npm run test:domain",
+      "passed": 293,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/domain.log",
+      "allPass": true
+    },
+    {
+      "name": "production",
+      "command": "npm run test:production",
+      "passed": 1,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/production.log",
+      "allPass": true
+    },
+    {
+      "name": "smoke",
+      "command": "npm run test:smoke",
+      "passed": 368,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/smoke.log",
+      "allPass": true
+    },
+    {
+      "name": "i18n",
+      "command": "npm run test:i18n",
+      "passed": 691,
+      "failed": 0,
+      "log": ".qa-director/release-2026-10-29/i18n.log",
+      "allPass": true
+    }
+  ],
+  "contracts": {
+    "executedUTC": "2026-10-29T07:48:36.222114+00:00",
+    "commit": "b45041d02230426a7601b6539ac44f58cb769804",
+    "checks": [
+      {
+        "name": "menswear-content",
+        "command": "node tests/menswear-content.mjs",
+        "exitCode": 0,
+        "seconds": 0.2,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/menswear-content.log",
+        "metrics": {
+          "checks": 207
+        }
+      },
+      {
+        "name": "menswear-ai-collection",
+        "command": "node tests/menswear-ai-collection.mjs --require-complete",
+        "exitCode": 0,
+        "seconds": 0.1,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/menswear-ai-collection.log",
+        "metrics": {
+          "checks": 571
+        }
+      },
+      {
+        "name": "menswear-web-images",
+        "command": "node tests/menswear-web-images.mjs",
+        "exitCode": 0,
+        "seconds": 0.4,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/menswear-web-images.log",
+        "metrics": {
+          "checks": 2883
+        }
+      },
+      {
+        "name": "menswear-studio-preservation",
+        "command": "node tests/menswear-studio-preservation.mjs",
+        "exitCode": 0,
+        "seconds": 1.9,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/menswear-studio-preservation.log",
+        "metrics": {
+          "checks": 7485,
+          "correctionEvidenceFiles": 1733
+        }
+      },
+      {
+        "name": "final-photography",
+        "command": "node tests/final-photography.mjs",
+        "exitCode": 0,
+        "seconds": 0.1,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/final-photography.log",
+        "metrics": {
+          "checks": 30
+        }
+      },
+      {
+        "name": "womenswear-ten-looks",
+        "command": "node tests/womenswear-ten-looks.mjs",
+        "exitCode": 0,
+        "seconds": 0.1,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/womenswear-ten-looks.log",
+        "metrics": {
+          "checks": 231
+        }
+      },
+      {
+        "name": "fashion-source-integrity",
+        "command": "node tests/fashion-source-integrity.mjs",
+        "exitCode": 0,
+        "seconds": 0.2,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/fashion-source-integrity.log",
+        "metrics": {
+          "preservedHistoricalIdentities": 108,
+          "worlds": 8,
+          "featuredLooks": 80,
+          "originalAssetsUnchanged": true
+        }
+      },
+      {
+        "name": "verify-documents",
+        "command": "python3 scripts/techpack-development/verify_documents.py",
+        "exitCode": 0,
+        "seconds": 16.9,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/verify-documents.log",
+        "metrics": {
+          "pdfs": 5,
+          "pages": 50,
+          "readingCopies": 50,
+          "pr54FoundationFilesPreservedExceptAuthorizedLocalization": true,
+          "localizedPR54Sources": [
+            "src/components/portfolio/GarmentInspection.astro",
+            "src/scripts/photo-inspection.ts",
+            "src/scripts/menswear-reader.ts"
+          ]
+        }
+      },
+      {
+        "name": "verify-credibility",
+        "command": "python3 scripts/techpack-development/verify_credibility.py",
+        "exitCode": 0,
+        "seconds": 2.5,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/verify-credibility.log"
+      },
+      {
+        "name": "cv",
+        "command": "node tests/cv.mjs",
+        "exitCode": 0,
+        "seconds": 1.3,
+        "counts": [],
+        "log": ".qa-director/release-2026-10-29/contracts/cv.log",
+        "metrics": {
+          "editions": 3,
+          "exactA4": true,
+          "png300DPI": true,
+          "searchablePDF": true,
+          "pixelIdenticalImagePDF": true
+        }
+      },
+      {
+        "name": "menswear-studio-background",
+        "command": "node tests/menswear-studio-background.mjs",
+        "exitCode": 0,
+        "metrics": {
+          "checks": 6812,
+          "looks": 40,
+          "views": 120,
+          "masters": 40,
+          "protectedPixels": 42812811,
+          "protectedLightPixels": 3785266,
+          "exactWhiteBackgroundPixels": 141215106
+        },
+        "log": ".qa-director/release-2026-10-29/contracts/menswear-studio-background.log"
+      }
+    ],
+    "completedUTC": "2026-10-29T07:50:01.367739+00:00",
+    "allPassed": true
+  },
+  "browsers": {
+    "executedUTC": "2026-10-29T07:59:19.358318+00:00",
+    "sourceCheckpoint": "b45041d02230426a7601b6539ac44f58cb769804",
+    "currentCommit": "24dfd4ec77a22dcf20b0c8cb7642c6cf00b2a099",
+    "allPass": true,
+    "suites": 19,
+    "reportedChecksTotal": 5977,
+    "checks": [
+      {
+        "suite": "techpacks",
+        "command": "node tests/techpacks.mjs",
+        "exitCode": 0,
+        "seconds": 63.01,
+        "log": ".qa-director/release-2026-10-29/browsers/techpacks.stable.log",
+        "tail": [
+          "915 Tech Pack asset, internal reading, gesture, download and return checks passed"
+        ],
+        "note": "Stable-build retry of earlier attempt overlapping Wrangler custom build",
+        "reportedChecks": 915
+      },
+      {
+        "suite": "portfolio-content",
+        "command": "node tests/portfolio-content.mjs",
+        "exitCode": 0,
+        "seconds": 9.45,
+        "log": ".qa-director/release-2026-10-29/browsers/portfolio-content.stable.log",
+        "tail": [
+          "1321 garment-content and provenance checks passed"
+        ],
+        "note": "Stable-build retry of earlier attempt overlapping Wrangler custom build",
+        "reportedChecks": 1321
+      },
+      {
+        "suite": "portfolio-experience",
+        "command": "node tests/portfolio-experience.mjs",
+        "exitCode": 0,
+        "seconds": 65.22,
+        "log": ".qa-director/release-2026-10-29/browsers/portfolio-experience.log",
+        "tail": [
+          "946 Portfolio experience acceptance checks passed"
+        ],
+        "reportedChecks": 946
+      },
+      {
+        "suite": "business-browsing",
+        "command": "node tests/business-browsing.mjs",
+        "exitCode": 0,
+        "seconds": 123.07,
+        "log": ".qa-director/release-2026-10-29/browsers/business-browsing.log",
+        "tail": [
+          "430 m-activewear curated edit",
+          "430 m-rtw curated edit",
+          "430 m-tailoring curated edit",
+          "390 casualwear curated edit",
+          "390 activewear curated edit",
+          "390 evening curated edit",
+          "390 swimwear curated edit",
+          "390 m-streetwear curated edit",
+          "390 m-activewear curated edit",
+          "390 m-rtw curated edit",
+          "390 m-tailoring curated edit",
+          "487 business-browsing checks passed"
+        ],
+        "reportedChecks": 487
+      },
+      {
+        "suite": "business-touch",
+        "command": "node tests/business-touch.mjs",
+        "exitCode": 0,
+        "seconds": 4.0,
+        "log": ".qa-director/release-2026-10-29/browsers/business-touch.log",
+        "tail": [
+          "6 native horizontal/vertical touch checks passed"
+        ],
+        "reportedChecks": 6
+      },
+      {
+        "suite": "menswear-navigation",
+        "command": "node tests/menswear-navigation.mjs",
+        "exitCode": 0,
+        "seconds": 32.59,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-navigation.log",
+        "tail": [
+          "49 Menswear history, interruption, touch and fallback checks passed"
+        ],
+        "reportedChecks": 49
+      },
+      {
+        "suite": "menswear-look-navigation",
+        "command": "node tests/menswear-look-navigation.mjs",
+        "exitCode": 0,
+        "seconds": 35.53,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-look-navigation.log",
+        "tail": [
+          "1440 no-preference m-activewear look sequence",
+          "1440 no-preference m-rtw look sequence",
+          "1440 no-preference m-tailoring look sequence",
+          "390 reduce m-streetwear look sequence",
+          "390 reduce m-activewear look sequence",
+          "390 reduce m-rtw look sequence",
+          "390 reduce m-tailoring look sequence",
+          "390 no-preference m-streetwear look sequence",
+          "390 no-preference m-activewear look sequence",
+          "390 no-preference m-rtw look sequence",
+          "390 no-preference m-tailoring look sequence",
+          "841 Menswear look-sequence, genuine-view and cinematic-origin checks passed"
+        ],
+        "reportedChecks": 841
+      },
+      {
+        "suite": "menswear-resize-return",
+        "command": "node tests/menswear-resize-return.mjs",
+        "exitCode": 0,
+        "seconds": 13.58,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-resize-return.log",
+        "tail": [
+          "12 cross-breakpoint source-return checks passed"
+        ],
+        "reportedChecks": 12
+      },
+      {
+        "suite": "womenswear-continuity",
+        "command": "node tests/womenswear-continuity.mjs",
+        "exitCode": 0,
+        "seconds": 49.99,
+        "log": ".qa-director/release-2026-10-29/browsers/womenswear-continuity.log",
+        "tail": [
+          "98 Womenswear continuity checks passed"
+        ],
+        "reportedChecks": 98
+      },
+      {
+        "suite": "garment-match-cut",
+        "command": "node tests/garment-match-cut.mjs",
+        "exitCode": 0,
+        "seconds": 13.34,
+        "log": ".qa-director/release-2026-10-29/browsers/garment-match-cut.log",
+        "tail": [
+          "48 paired-reader transition/midpoint/return checks passed"
+        ],
+        "reportedChecks": 48
+      },
+      {
+        "suite": "fashion-navigation",
+        "command": "node tests/fashion-navigation.mjs",
+        "exitCode": 0,
+        "seconds": 13.7,
+        "log": ".qa-director/release-2026-10-29/browsers/fashion-navigation.log",
+        "tail": [
+          "40 cold category/navigation checks passed"
+        ],
+        "reportedChecks": 40
+      },
+      {
+        "suite": "fashion-eight-worlds",
+        "command": "node tests/fashion-eight-worlds.mjs",
+        "exitCode": 0,
+        "seconds": 65.63,
+        "log": ".qa-director/release-2026-10-29/browsers/fashion-eight-worlds.log",
+        "tail": [
+          "womenswear 1440 native continuity recorded",
+          "menswear 1440 native continuity recorded",
+          "womenswear 390 native continuity recorded",
+          "menswear 390 native continuity recorded",
+          "617 owner-contract acceptance checks passed"
+        ],
+        "reportedChecks": 617
+      },
+      {
+        "suite": "menswear-presentation-seeks",
+        "command": "node tests/menswear-presentation-seeks.mjs",
+        "exitCode": 0,
+        "seconds": 40.93,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-presentation-seeks.log",
+        "tail": [
+          "264 endpoint/interruption/focus checks passed"
+        ],
+        "reportedChecks": 264
+      },
+      {
+        "suite": "menswear-historical-access",
+        "command": "node tests/menswear-historical-access.mjs",
+        "exitCode": 0,
+        "seconds": 5.5,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-historical-access.log",
+        "tail": [
+          "32 historical-list identity/context/history checks passed"
+        ],
+        "reportedChecks": 32
+      },
+      {
+        "suite": "menswear-archive-keyboard",
+        "command": "node tests/menswear-archive-keyboard.mjs",
+        "exitCode": 0,
+        "seconds": 1.98,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-archive-keyboard.log",
+        "tail": [
+          "10 horizontal-edit keyboard checks passed"
+        ],
+        "reportedChecks": 10
+      },
+      {
+        "suite": "fashion-chapter-history",
+        "command": "node tests/fashion-chapter-history.mjs",
+        "exitCode": 0,
+        "seconds": 4.67,
+        "log": ".qa-director/release-2026-10-29/browsers/fashion-chapter-history.log",
+        "tail": [
+          "20 bare-chapter Back/Forward/Escape checks passed"
+        ],
+        "reportedChecks": 20
+      },
+      {
+        "suite": "womenswear-route-origin",
+        "command": "node tests/womenswear-route-origin.mjs",
+        "exitCode": 0,
+        "seconds": 4.65,
+        "log": ".qa-director/release-2026-10-29/browsers/womenswear-route-origin.log",
+        "tail": [
+          "16 direct-route source identity checks passed"
+        ],
+        "reportedChecks": 16
+      },
+      {
+        "suite": "menswear-media-loading",
+        "command": "node tests/menswear-media-loading.mjs",
+        "exitCode": 0,
+        "seconds": 6.49,
+        "log": ".qa-director/release-2026-10-29/browsers/menswear-media-loading.log",
+        "tail": [
+          "21 Menswear delayed/failed-media checks passed"
+        ],
+        "reportedChecks": 21
+      },
+      {
+        "suite": "three-panel-photography",
+        "command": "node tests/three-panel-photography.mjs",
+        "exitCode": 0,
+        "seconds": 18.35,
+        "log": ".qa-director/release-2026-10-29/browsers/three-panel-photography.log",
+        "tail": [
+          "234 paired three-panel, source geometry, alpha, failure and independent inspection checks passed"
+        ],
+        "reportedChecks": 234
+      }
+    ],
+    "earlierInterruptedAttempts": [
+      {
+        "suite": "techpacks",
+        "command": "node tests/techpacks.mjs",
+        "exitCode": 1,
+        "seconds": 11.13,
+        "log": ".qa-director/release-2026-10-29/browsers/techpacks.log",
+        "tail": [
+          "node:internal/modules/run_main:107",
+          "    triggerUncaughtException(",
+          "    ^",
+          "",
+          "locator.evaluate: EncodingError: The source image cannot be decoded.",
+          "    at jump (/workspace/portfolio/tests/techpacks.mjs:12:254)",
+          "    at async file:///workspace/portfolio/tests/techpacks.mjs:19:463",
+          "",
+          "Node.js v24.19.0"
+        ]
+      },
+      {
+        "suite": "portfolio-content",
+        "command": "node tests/portfolio-content.mjs",
+        "exitCode": 1,
+        "seconds": 43.82,
+        "log": ".qa-director/release-2026-10-29/browsers/portfolio-content.log",
+        "tail": [
+          "    triggerUncaughtException(",
+          "    ^",
+          "",
+          "locator.textContent: Timeout 30000ms exceeded.",
+          "Call log:",
+          "\u001b[2m  - waiting for locator('[data-subject=\"rtw-ref-01\"]').locator('[data-garment-description]')\u001b[22m",
+          "",
+          "    at /workspace/portfolio/tests/portfolio-content.mjs:8:124 {",
+          "  name: 'TimeoutError'",
+          "}",
+          "",
+          "Node.js v24.19.0"
+        ]
+      }
+    ],
+    "rerunReason": "The first Tech Pack and content attempts overlapped Wrangler custom build replacing dist. Both passed against the stable build; original logs and records retained. No test or source was changed to resolve them."
+  },
+  "productionDeployment": "Not merged or deployed; existing production remains active"
+}
