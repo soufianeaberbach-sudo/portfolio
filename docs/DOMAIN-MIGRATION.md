@@ -65,70 +65,97 @@ Nothing below can be done from repository code. Do them in this order: the
 redirect must exist before any sitemap is submitted, and the Turnstile widget
 must be created **after** the domain is live so it is bound to the right host.
 
-### 1. DNS and HTTPS — Cloudflare dashboard
+### 1. DNS and HTTPS — current correction, 2 November 2026
 
-1. Add `aberbach.co` to Cloudflare and move its nameservers.
-2. Apex record, **proxied** (orange cloud), pointing at wherever the Worker is
-   served.
-3. `www` as a **proxied CNAME to the apex**. It must be proxied, or a redirect
-   rule cannot act on it.
-4. Wait for Universal SSL to issue for **both** the apex and `www`. A redirect
-   from `www` is useless if `https://www.aberbach.co` fails its TLS handshake
-   first.
-5. Turn on **Always Use HTTPS**.
-6. Leave **HSTS off** until the apex is confirmed serving correctly. It is hard
-   to walk back.
+This section supersedes the historical activation instructions. Current public
+checks still find www NXDOMAIN and HTTP apex returning 200. No Cloudflare account
+was authenticated during this audit. Do not recreate the working apex or infer
+the origin destination from Cloudflare's public anycast A/AAAA answers.
 
-### 2. www → apex redirect — Cloudflare dashboard
+1. Inspect Workers & Pages → portfolio → Settings → Domains & Routes, plus the
+   zone's DNS records. Record whether the apex uses a **Worker Custom Domain**
+   or a **Worker Route**. Preserve it and the existing `/api/*` Worker-first
+   routing. No routes are declared in the repository, so this is a dashboard fact.
+2. For a Custom Domain deployment, add `www.aberbach.co` to the **same Worker**
+   using Domains & Routes; let Cloudflare create the actual DNS and certificate.
+   Check existing records first. Do not also add a conflicting CNAME.
+3. For a Route deployment, a **proxied CNAME www → aberbach.co** is the existing
+   runbook's proposed alias, not an invented origin. Verify that the same Worker
+   route also covers www, including `/api/*`, before enabling the alias. A DNS
+   alias alone does not configure Worker routing. Preserve the apex destination.
+4. Verify active certificates covering both hosts, with trusted public chains.
+   Do not treat an intercepted workstation certificate as public TLS evidence.
+5. Use the explicit **308** HTTP rule below rather than a blanket 301 upgrade.
+   Do not enable Always Use HTTPS alongside a conflicting method-changing rule.
+   Inspect existing rules and their order before changing any of them.
+6. Keep HSTS deferred until both hosts, TLS, redirects and API exceptions are
+   independently verified. Leave email/security DNS records unchanged.
 
-This is the authoritative mechanism. Rules → **Redirect Rules** → create a
-rule with a **custom filter expression** (not the simple hostname builder — the
-`/api/` carve-out below needs an expression):
+Architecture references:
+[Worker Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+and [Worker Routes](https://developers.cloudflare.com/workers/configuration/routing/routes/).
 
-- **When incoming requests match** — edit as expression:
+### 2. Canonical redirects — ordered Cloudflare Single Redirect Rules
 
-  ```
-  http.host eq "www.aberbach.co" and not starts_with(http.request.uri.path, "/api/")
-  ```
+These are concrete proposed settings, **not deployed settings**. They run before
+the Worker/static asset router, so matching built pages cannot bypass them.
 
-- **Then** — Dynamic redirect
-- **Expression:** `concat("https://aberbach.co", http.request.uri.path)`
+**Rule 1: www → HTTPS apex, excluding the API namespace.**
+
+Custom filter expression:
+
+```
+http.host eq "www.aberbach.co" and http.request.uri.path ne "/api" and not starts_with(http.request.uri.path, "/api/")
+```
+
+- Dynamic target: `concat("https://aberbach.co", http.request.uri.path)`
 - **Preserve query string:** on
-- **Status:** `301` permanent
+- **Status:** `308` permanent, method and body preserved
 
-**The `/api/` exclusion is not optional.** Browsers downgrade a 301 on a POST
-to a GET and discard the request body, so a rule that redirected
-`www.aberbach.co/api/brief` would silently destroy a submitted brief instead of
-delivering it. The Worker fallback carries the identical carve-out, and
-`npm run test:worker` asserts that both layers agree — including that the
-expression above still excludes the prefix.
+**Rule 2: HTTP → HTTPS on the same host.**
 
-An API request on `www` should not arise in practice: the page GET is redirected
-long before a form exists to submit. But the rule must not be the thing that
-turns a rare case into a lost enquiry.
+Custom filter expression:
 
-Why a Redirect Rule rather than relying on the Worker: it runs at the edge
-before the Worker is invoked, costs no Worker invocation, and keeps working even
-if the Worker errors. The Worker carries the same redirect only as a fallback,
-in case this rule is ever removed or mis-scoped.
+```
+not ssl and http.host in {"aberbach.co" "www.aberbach.co"}
+```
 
-Verify with a **deep path and a query**, the apex, and the endpoint — not just
-the root:
+- Dynamic target: `concat("https://", http.host, http.request.uri.path)`
+- **Preserve query string:** on
+- **Status:** `308` permanent, method and body preserved
+
+Put Rule 1 first: an HTTP www page then reaches the HTTPS apex in one hop.
+Rule 1 never matches the apex, and Rule 2 never matches HTTPS, preventing loops.
+The www API remains on www; Rule 2 can upgrade its scheme without converting a
+POST to GET. HTTPS `/api/brief` must still answer for itself. Existing same-origin
+checks remain active: a caller carrying an HTTP Origin after an upgrade may be
+refused, rather than silently accepted with a lost body. The browser Contact page
+must reach HTTPS before it can render a form. Never test with a real submission
+without the owner's separate explicit authorization.
+
+The unchanged Worker fallback still uses 301 for **non-API** www requests and
+excludes both `/api` and `/api/*`. It is secondary only: matching static assets
+bypass it. The edge rules above are required for complete host/scheme coverage.
+
+Verify using GET requests (not real form posts):
 
 ```sh
-# 1. a normal page on www redirects, preserving path and query
-curl -sSI "https://www.aberbach.co/process/?utm_source=linkedin" | head -n 5
-# expect: HTTP/2 301
-#         location: https://aberbach.co/process/?utm_source=linkedin
-
-# 2. the apex does NOT redirect — anything else here is a loop
-curl -sSI "https://aberbach.co/process/" | head -n 3
-# expect: HTTP/2 200
-
-# 3. the endpoint on www is NOT redirected by the rule
-curl -sSI "https://www.aberbach.co/api/brief" | head -n 3
-# expect: 405 (the endpoint answering for itself), NOT 301
+curl -sS -D - -o /dev/null 'http://aberbach.co/fr/contact/?verify=production&source=read-only'
+curl -sS -D - -o /dev/null 'https://www.aberbach.co/es/portfolio/?verify=production&source=read-only'
+curl -sS -D - -o /dev/null 'http://www.aberbach.co/fr/process/?verify=production&source=read-only'
+curl -sS -D - -o /dev/null 'https://aberbach.co/fr/contact/'
+curl -sS -D - 'https://aberbach.co/api/brief'
+curl -sS -D - 'https://www.aberbach.co/api/brief'
+npm run verify:production
+npm run verify:production -- --agents
 ```
+
+Expect one 308 to the exact HTTPS apex path/query for page variants, then 200.
+HTTPS API GET must return 405 JSON and no-store, with no host redirect.
+Check the dashboard rule status codes and method preservation; GET alone cannot
+prove POST behavior. API method-preservation regression tests stay hermetic.
+
+[Cloudflare redirect status-code semantics](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/settings/).
 
 ### 3. Worker route
 

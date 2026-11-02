@@ -213,7 +213,9 @@ group('built social image is absolute on the apex');
     check('Person image is on the apex', String(person?.image).startsWith(`${NEW_ORIGIN}/`), String(person?.image));
     check('Service @id is on the apex', service?.['@id'] === `${NEW_ORIGIN}/#service`, String(service?.['@id']));
     check('Service url is the apex', service?.url === `${NEW_ORIGIN}/`, String(service?.url));
-    check('Service provider points at the Person', service?.provider?.['@id'] === `${NEW_ORIGIN}/#soufiane`);
+    // ProfessionalService inherits LocalBusiness, not Service. Keep the Person
+    // publisher assertion above; provider has no schema.org domain on this type.
+    check('ProfessionalService has no unsupported provider property', !Object.hasOwn(service, 'provider'));
     check('no old domain in the whole graph', !JSON.stringify(data).includes(OLD_WEBSITE_DOMAIN));
 
     /* Claim discipline, carried over from the pass that set these. */

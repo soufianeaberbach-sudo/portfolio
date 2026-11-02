@@ -96,7 +96,7 @@
     "src/layouts/SiteLayout.astro": {
       "baselineSHA1": "54858e651940a3133acb1955f662c47a711040c0",
       "previousMainSHA1": "54858e651940a3133acb1955f662c47a711040c0",
-      "authorizedSHA1": "4a1858c2594ce92e05709aa7961d76b40ba2a476"
+      "authorizedSHA1": "bc45b84d51aa24100c4784944d981f08b304079b"
     },
     "src/layouts/TrustLayout.astro": {
       "baselineSHA1": "248a693c2d3705a25ea9e0c8cb9e25df7262d511",
@@ -213,5 +213,13 @@
       "previousMainSHA1": "23d2c93acb47ec0ed00fe92dd495ead1d2474852",
       "authorizedSHA1": "b589241b7f26391ff70387e9ff9e56433c0af179"
     }
+  },
+  "seoBackendCorrection": {
+    "date": "2026-11-02",
+    "authorization": "Owner final SEO/backend brief: correct genuine schema errors without changing approved visual composition or Contact behavior.",
+    "path": "src/layouts/SiteLayout.astro",
+    "previousAuthorizedSHA1": "4a1858c2594ce92e05709aa7961d76b40ba2a476",
+    "authorizedSHA1": "bc45b84d51aa24100c4784944d981f08b304079b",
+    "exactChange": "Remove only the provider property from ProfessionalService; schema.org/provider does not apply to LocalBusiness. All visual markup and scripts remain byte-for-byte unchanged."
   }
 }
