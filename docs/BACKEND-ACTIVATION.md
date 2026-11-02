@@ -1,5 +1,12 @@
 # Backend activation — Contact brief pipeline
 
+> **2 November 2026 owner update:** real Contact emails are arriving. Preserve
+> the working pipeline, sender, recipient and secrets. The older activation
+> checklist below is not evidence of a current outage. See the
+> [final audit](operations/SEO-BACKEND-FINAL-2026-11.md) for current evidence and
+> the remaining account-only checks. Do not resend old emails or submit a real
+> test, rotate secrets or delete production data without separate owner approval.
+
 > TECHNICAL RUNBOOK — reconciled 19 October 2026. Commands below are operational
 > instructions, not authorization or proof they ran. External activation remains
 > unverified by this documentation task. Branch-relative “pending” statements refer
@@ -124,12 +131,24 @@ objects from `wrangler.jsonc`:
 
 ```sh
 npx wrangler r2 bucket lifecycle add portfolio-brief-files \
-  --name expire-briefs --prefix briefs/ --expire-days 90
+  expire-briefs briefs/ --expire-days 90
 npx wrangler r2 bucket lifecycle list portfolio-brief-files
 ```
 
 Check the flags against `npx wrangler r2 bucket lifecycle add --help` first —
 this is the one step in the runbook whose flag names are most likely to drift.
+**Before changing lifecycle:** list the existing rules and inspect object
+creation dates/counts under `briefs/` privately, without exporting client contents.
+A new age-based rule also affects existing matching objects; anything already
+90 days old can become eligible for deletion. Preserve unrelated rules and the
+default multipart cleanup. If any existing files would be affected, obtain the
+owner's separate deletion authorization before enabling the rule. Do not use a
+whole-configuration `lifecycle set` merely to add this one rule. The positional
+syntax above was checked against installed Wrangler 4.127.1 `--help` on
+2 November. The add command is prepared only; it was **not executed**.
+
+[Cloudflare lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
+
 **Without a verified lifecycle rule, automatic 90-day upload expiry is not
 established.** Privacy currently states the target and this verification gap.
 Update it only after the external setting is verified. KV expiry never deletes

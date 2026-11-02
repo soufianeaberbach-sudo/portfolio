@@ -829,7 +829,9 @@ group('the documented Cloudflare rule carries the same /api/ carve-out');
   check('a Cloudflare match expression is documented', expr.length > 0, expr);
   check('it pins the exact www host', expr.includes('http.host eq "www.aberbach.co"'), expr);
   check('it excludes the /api/ prefix', /not\s+starts_with\(http\.request\.uri\.path,\s*"\/api\/"\)/.test(expr), expr);
-  check('the rule is documented as a 301', /\b301\b/.test(doc));
+  check('the authoritative rules preserve methods with 308', /Status:\*\* `308` permanent, method and body preserved/.test(doc));
+  check('the host redirect also excludes bare /api', expr.includes('http.request.uri.path ne "/api"'), expr);
+  check('HTTP upgrade is documented as a separate same-host rule', doc.includes('not ssl and http.host in {"aberbach.co" "www.aberbach.co"}'));
   check('query-string preservation is documented', /[Pp]reserve query string/.test(doc));
 }
 
